@@ -13,8 +13,8 @@
 | [`../CLAUDE.md`](../CLAUDE.md) | 설계 정본 — 기둥·MVP 범위·로그인/광고 정책·스택·결정 로그 | ✅ |
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | 서버 경계(common_server vs 조각 서버)·신원 흐름·연동 계약 | ✅ |
 | [`DOC_DISCIPLINE.md`](./DOC_DISCIPLINE.md) | 문서 작업 규율 | ✅ |
-| `DIARY_SYSTEM.md` | 조각 도메인 — 로컬 스키마·감정·연속 작성일·검색 규칙 | ❌ 미작성 |
-| `DATABASE.md` | 로컬(expo-sqlite) + 조각 서버 DB 스키마·마이그레이션 | ❌ 미작성 |
+| [`DIARY_SYSTEM.md`](./DIARY_SYSTEM.md) | 조각 도메인 — 하루 조각 수·날짜·감정·연속 작성일·검색·삭제 규칙 | ✅ |
+| [`DATABASE.md`](./DATABASE.md) | 로컬(expo-sqlite) 스키마·마이그레이션 규약·백업 대비 | ✅ |
 | `AUTH_SYSTEM.md` | 구글 로그인·subject 토큰 | ❌ 미작성 |
 | `LOCK_SYSTEM.md` | 앱 잠금 — PIN·패턴(3×3)·생체·자동잠금·실패 처리 (정책은 CLAUDE.md §7.1) | ❌ 미작성 |
 | `MONETIZATION_SYSTEM.md` | 구독 상품·RevenueCat·엔타이틀먼트·광고 정책 상세 | ❌ 미작성 |
@@ -35,7 +35,8 @@
 | Expo 부트(SDK 54 · expo-router · TS strict) | ✅ | dev 서버 기동 + 실기기 접속 확인(2026-08-07) |
 | 테마 토큰(colors · spacing · radius · typography) | ✅ | 라이트만. 다크 팔레트 미정 |
 | Pretendard 폰트 | ✅ | 정적 OTF 3종. 로드 완료까지 스플래시 유지, 실패해도 앱은 진행 |
-| expo-sqlite 스키마·마이그레이션 | ❌ | 패키지만 설치됨 |
+| expo-sqlite 스키마·마이그레이션 | ✅ | `db/` — user_version 기반. 실기기 스모크 테스트 통과 |
+| 일기 CRUD·검색·streak·캘린더 집계 | ✅ | `features/diary/api/` — 화면은 아직 없음 |
 | Splash | ❌ | |
 | Home | ❌ | 임시 플레이스홀더만 존재(`app/index.tsx`) |
 | Write (+ 저장 후 광고) | ❌ | |
@@ -64,8 +65,8 @@
 | common_server SDK 복사 | ❌ | `client/` → `lib/common-server/` |
 | **common_server Phase 7**(subjects·토큰) | ❌ | 로그인·문의·구독·백업 전부 여기 막힘 |
 | **common_server Phase 9**(RevenueCat) | ❌ | 구독·광고제거 |
-| 조각 서버(Next.js) 생성 | ❌ | |
-| 조각 Supabase 프로젝트 | ❌ | Pro 조직 추가 시 $10/월 |
+| 조각 서버(Next.js) 생성 | ❌ | **월 결제 착수 시** — 그전엔 만들지 않는다 |
+| 조각 Supabase 프로젝트 | ❌ | **월 결제 착수 시**(2026-08-07 결정). Pro 조직 추가 시 $10/월 |
 
 🚫 = 안 하기로 결정 / ⏸ = 보류 / ❌ = 미착수 / ✅ = 완료
 
