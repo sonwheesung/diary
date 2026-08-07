@@ -1,0 +1,49 @@
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# CNG 네이티브 산출물(로컬 빌드용 — prebuild로 재생성)
+/android
+/ios
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+
+# typescript
+*.tsbuildinfo
+
+# 환경변수(dev/prod 분리 — 절대 커밋 금지)
+.env
+.env.*
+!.env.example
+
+# 로컬 서명 자격(절대 커밋 금지)
+credentials.json
+credentials/
+
+# 로컬 빌드 산출물
+dist-builds/
+
+.vercel
+.gstack/

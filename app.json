@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "조각",
+    "slug": "jogak",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "jogak",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#FAF7F2",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.son0925.jogak"
+    },
+    "android": {
+      "package": "com.son0925.jogak",
+      "versionCode": 1,
+      "backgroundColor": "#FAF7F2",
+      "allowBackup": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": false
+    },
+    "extra": {
+      "router": {}
+    },
+    "owner": "shs00925"
+  }
+}

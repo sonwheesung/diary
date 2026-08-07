@@ -1,0 +1,14 @@
+// Expo 기본 Metro 설정. expo/metro-config 를 확장한다.
+// https://docs.expo.dev/guides/customizing-metro/
+const { getDefaultConfig } = require('expo/metro-config');
+
+const config = getDefaultConfig(__dirname);
+
+// /server(백엔드 Next.js 앱)는 Metro 번들 대상이 아니다 — Metro가 루트에서 크롤하면
+// /server/node_modules의 중복 React·Haste 모듈명 충돌로 번들이 깨진다(volleyball 실전 사고).
+// server/ 디렉터리가 생기기 전부터 걸어둔다.
+const prev = config.resolver.blockList;
+const prevList = Array.isArray(prev) ? prev : prev ? [prev] : [];
+config.resolver.blockList = [...prevList, /[\\/]server[\\/].*/];
+
+module.exports = config;
