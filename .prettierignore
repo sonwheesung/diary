@@ -1,0 +1,10 @@
+node_modules/
+.expo/
+dist/
+android/
+ios/
+server/
+package-lock.json
+
+# 문서는 손으로 쓴 표·정렬을 유지한다 — Prettier가 재배치하면 diff만 커지고 읽기 나빠진다
+*.md

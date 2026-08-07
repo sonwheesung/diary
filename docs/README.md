@@ -52,7 +52,7 @@
 | AI 리포트(주간 우선·서버 프록시) | ❌ | 조각 서버 대기 |
 | 공통 컴포넌트 8종 | ❌ | |
 | Pretendard 폰트 | ❌ | |
-| ESLint · Prettier | ❌ | |
+| ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ❌ | |
 
 ### 서버 (조각 밖 선행 작업 포함)
@@ -76,6 +76,8 @@
 ```bash
 npm install         # 의존성
 npm run typecheck   # tsc --noEmit — 커밋 전 필수 통과
+npm run lint        # eslint — 커밋 전 필수 통과
+npm run format      # prettier --write (문서 *.md는 제외)
 npm start           # Expo dev 서버 (같은 Wi-Fi + LAN)
 npx expo start --tunnel   # LTE·방화벽 막힘 시 (느림)
 npm run web         # 웹으로 빠르게 화면 확인
