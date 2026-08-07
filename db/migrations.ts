@@ -26,6 +26,37 @@ const MIGRATIONS: readonly string[] = [
   CREATE INDEX IF NOT EXISTS idx_diaries_updated_at ON diaries (updated_at);
   CREATE INDEX IF NOT EXISTS idx_diaries_deleted_at ON diaries (deleted_at);
   `,
+
+  // v2 — 본문 블록 · 이미지 · 태그 (DATABASE.md §4 v2)
+  // content는 지우지 않고 '검색용 파생 평문'으로 역할만 바꾼다(Expand-only).
+  `
+  ALTER TABLE diaries ADD COLUMN content_blocks TEXT;
+
+  CREATE TABLE IF NOT EXISTS diary_images (
+    id          TEXT    PRIMARY KEY NOT NULL,
+    diary_id    TEXT    NOT NULL,
+    file_name   TEXT    NOT NULL,
+    width       INTEGER,
+    height      INTEGER,
+    created_at  INTEGER NOT NULL,
+    deleted_at  INTEGER
+  );
+  CREATE INDEX IF NOT EXISTS idx_diary_images_diary ON diary_images (diary_id);
+
+  CREATE TABLE IF NOT EXISTS tags (
+    id          TEXT    PRIMARY KEY NOT NULL,
+    name        TEXT    NOT NULL COLLATE NOCASE,
+    created_at  INTEGER NOT NULL
+  );
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_tags_name ON tags (name COLLATE NOCASE);
+
+  CREATE TABLE IF NOT EXISTS diary_tags (
+    diary_id  TEXT NOT NULL,
+    tag_id    TEXT NOT NULL,
+    PRIMARY KEY (diary_id, tag_id)
+  );
+  CREATE INDEX IF NOT EXISTS idx_diary_tags_tag ON diary_tags (tag_id);
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

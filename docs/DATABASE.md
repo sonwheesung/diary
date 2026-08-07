@@ -78,6 +78,51 @@ SQLite의 `PRAGMA user_version`을 버전 카운터로 쓴다. 마이그레이�
 | user_version | 내용 |
 |---|---|
 | 1 | `diaries` 테이블 + 인덱스 3종 (초기) |
+| 2 | 본문 블록 · 이미지 · 태그 — `diaries.content_blocks` 추가, `diary_images`·`tags`·`diary_tags` 신설 |
+
+### v2 (2026-08-07) — 본문 블록 · 이미지 · 태그
+
+```sql
+-- 본문 정본은 블록 JSON. 기존 content는 '검색용 파생 평문'으로 역할을 바꾼다.
+-- Expand-only 규약대로 컬럼을 지우거나 이름을 바꾸지 않고 추가만 한다.
+ALTER TABLE diaries ADD COLUMN content_blocks TEXT;
+
+CREATE TABLE IF NOT EXISTS diary_images (
+  id          TEXT    PRIMARY KEY NOT NULL,  -- UUID. 본문 블록이 이 값을 참조한다
+  diary_id    TEXT    NOT NULL,
+  file_name   TEXT    NOT NULL,              -- 앱 이미지 디렉터리 기준 '상대 경로'. 절대 경로 금지
+  width       INTEGER,
+  height      INTEGER,
+  created_at  INTEGER NOT NULL,
+  deleted_at  INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_diary_images_diary ON diary_images (diary_id);
+
+CREATE TABLE IF NOT EXISTS tags (
+  id          TEXT    PRIMARY KEY NOT NULL,
+  name        TEXT    NOT NULL COLLATE NOCASE,   -- 대소문자 무시 유일
+  created_at  INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_tags_name ON tags (name COLLATE NOCASE);
+
+CREATE TABLE IF NOT EXISTS diary_tags (
+  diary_id  TEXT NOT NULL,
+  tag_id    TEXT NOT NULL,
+  PRIMARY KEY (diary_id, tag_id)
+);
+CREATE INDEX IF NOT EXISTS idx_diary_tags_tag ON diary_tags (tag_id);
+```
+
+**설계 근거**
+
+| 결정 | 이유 |
+|---|---|
+| `content`는 남기고 **파생 평문**으로 역할 변경 | 블록 JSON을 `LIKE`로 긁으면 `"type"`·`"image"` 같은 구조 문자열이 검색에 걸린다. 정본은 `content_blocks`, `content`는 항상 블록에서 재생성되는 검색용 사본 |
+| `content_blocks`는 **NULL 허용** | Expand-only. v1에 저장된 조각은 이 값이 없다 — 읽을 때 평문 하나짜리 블록으로 간주한다 |
+| 이미지에 **절대 경로 금지** | 앱 업데이트·재설치 시 앱 컨테이너 절대 경로가 바뀐다. 저장해두면 어느 날 모든 이미지가 한꺼번에 깨진다 |
+| 태그를 **정규화**(`tags` + `diary_tags`) | 자동완성 후보·사용 빈도·태그별 목록이 필요하다. 문자열 컬럼에 몰아넣으면 이 셋이 전부 전체 스캔이 된다 |
+| `COLLATE NOCASE` 유일 인덱스 | `여행`/`Travel`/`travel`이 각각 따로 생기는 걸 DB 층에서 막는다 |
+| `diary_tags`에 소프트 삭제 없음 | 연결은 조각에 종속이다. 조각이 살아있는지로 판단하면 충분하고, 묘비를 두면 복잡도만 는다 |
 
 ---
 
