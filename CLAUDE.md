@@ -140,16 +140,18 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
 | 언어 | TypeScript ~5.9.2 (`strict`) | ✅ `any` 금지 |
 | 네비게이션 | expo-router ~6.0.24 | ✅ 설치 |
 | 상태 | Zustand | ✅ 설치 |
-| **로컬 DB** | **expo-sqlite** | ❌ 미설치 — 검색·캘린더·연속일 집계에 쿼리가 필요(2026-08-07 결정) |
+| **로컬 DB** | **expo-sqlite** | ✅ 설치 — 검색·캘린더·연속일 집계에 쿼리가 필요(2026-08-07 결정) |
+| 잠금 저장 | expo-secure-store | ✅ 설치 — PIN·패턴 해시, 암호화 키 보관 |
+| 생체인증 | expo-local-authentication | ✅ 설치 |
 | 광고 | react-native-google-mobile-ads (AdMob) | ❌ 미설치. volleyball에서 사용 중 |
 | 구독 | react-native-purchases (RevenueCat) | ❌ 미설치. common_server PLAN Phase 9와 짝 |
 | 로그인 | @react-native-google-signin/google-signin | ❌ 미설치 |
 | Server State | TanStack Query | ❌ 미설치 |
 | 폼 | React Hook Form + Zod | ❌ 미설치 |
 | 애니메이션 | Reanimated + Moti | ❌ 미설치 — SDK 54는 Reanimated 4 + worklets 설정 동반 |
-| 날짜 | dayjs | ❌ 미설치 |
+| 날짜 | dayjs | ✅ 설치 |
 | 아이콘 | Lucide | ❌ 미설치 |
-| 폰트 | Pretendard | ❌ 미설치 — expo-font로 로드 |
+| 폰트 | Pretendard | ✅ 적용 — 정적 OTF 3종(Regular·Medium·SemiBold, 각 1.5MB) |
 | 조각 서버 | Next.js(App Router) + Drizzle + Supabase Postgres · Vercel | ❌ 미생성 |
 | 배포 | Expo EAS(앱) · Vercel(서버) · Supabase(DB) | ❌ 미설정 |
 

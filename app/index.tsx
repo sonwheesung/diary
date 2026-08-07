@@ -2,6 +2,7 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { spacing } from '@/theme/spacing';
+import { typography } from '@/theme/typography';
 
 // 부트 확인용 임시 화면. MVP Home(오늘 날짜·조각 작성·최근 조각·연속 작성일)으로 교체 예정.
 export default function Index() {
@@ -27,13 +28,11 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   title: {
-    fontSize: 34,
-    fontWeight: '600',
-    letterSpacing: -0.5,
+    ...typography.display,
     color: colors.text,
   },
   subtitle: {
-    fontSize: 15,
+    ...typography.body,
     color: colors.textMuted,
   },
 });

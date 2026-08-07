@@ -33,8 +33,9 @@
 | 영역 | 상태 | 비고 |
 |---|---|---|
 | Expo 부트(SDK 54 · expo-router · TS strict) | ✅ | dev 서버 기동 + 실기기 접속 확인(2026-08-07) |
-| 테마 토큰(colors · spacing · radius) | ✅ | 라이트만. 다크 팔레트 미정 |
-| expo-sqlite 스키마·마이그레이션 | ❌ | |
+| 테마 토큰(colors · spacing · radius · typography) | ✅ | 라이트만. 다크 팔레트 미정 |
+| Pretendard 폰트 | ✅ | 정적 OTF 3종. 로드 완료까지 스플래시 유지, 실패해도 앱은 진행 |
+| expo-sqlite 스키마·마이그레이션 | ❌ | 패키지만 설치됨 |
 | Splash | ❌ | |
 | Home | ❌ | 임시 플레이스홀더만 존재(`app/index.tsx`) |
 | Write (+ 저장 후 광고) | ❌ | |
@@ -51,7 +52,6 @@
 | 백업/복원(클라이언트 암호화) | ❌ | 조각 서버 대기 |
 | AI 리포트(주간 우선·서버 프록시) | ❌ | 조각 서버 대기 |
 | 공통 컴포넌트 8종 | ❌ | |
-| Pretendard 폰트 | ❌ | |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ❌ | |
 
