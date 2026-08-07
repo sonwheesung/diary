@@ -37,8 +37,10 @@
 | Pretendard 폰트 | ✅ | 정적 OTF 3종. 로드 완료까지 스플래시 유지, 실패해도 앱은 진행 |
 | expo-sqlite 스키마·마이그레이션 | ✅ | `db/` — user_version 기반. 실기기 스모크 테스트 통과 |
 | 일기 CRUD·검색·streak·캘린더 집계 | ✅ | `features/diary/api/` — 화면은 아직 없음 |
+| 하단 탭 네비게이션(홈·캘린더·⊕·검색·설정) | ✅ | ⊕는 탭이 아니라 작성 화면을 띄우는 동작 |
+| 공통 컴포넌트 Button · Card | ✅ | 나머지 6종 미착수 |
 | Splash | ❌ | |
-| Home | ❌ | 임시 플레이스홀더만 존재(`app/index.tsx`) |
+| Home | ✅ | 오늘 날짜·인사·연속 기록·조각 쓰기·최근 조각(썸네일) |
 | Write (+ 저장 후 광고) | ❌ | |
 | Detail | ❌ | |
 | Calendar | ❌ | |
@@ -55,6 +57,13 @@
 | 공통 컴포넌트 8종 | ❌ | |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ❌ | |
+
+### ⚠ 출시 전에 반드시 처리할 것
+
+| 항목 | 내용 |
+|---|---|
+| Lucide 번들 비대 | `import { House } from 'lucide-react-native'`가 아이콘 세트 **전체**를 끌어온다(번들 6.5MB → 10.4MB, 3056 모듈). 개별 경로 import로 바꾸거나 트리셰이킹을 확인할 것 |
+| 패키지 설치 후 Metro 재시작 | 서버를 켠 채 설치하면 캐시가 낡아 `Unable to resolve module`이 난다(2026-08-07에 두 번 겪음). 설치 후 `--clear` 재시작이 기본 |
 
 ### 서버 (조각 밖 선행 작업 포함)
 

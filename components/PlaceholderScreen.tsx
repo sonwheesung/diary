@@ -5,13 +5,16 @@ import { colors } from '@/theme/colors';
 import { spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
-// 부트 확인용 임시 화면. MVP Home(오늘 날짜·조각 작성·최근 조각·연속 작성일)으로 교체 예정.
-export default function Index() {
+/**
+ * 아직 만들지 않은 화면의 자리. 라우팅 뼈대를 먼저 세우기 위한 것이며,
+ * 화면이 완성되면 이 컴포넌트를 쓰는 파일부터 사라진다.
+ */
+export function PlaceholderScreen({ title, note }: { title: string; note?: string }) {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <Text style={styles.title}>조각</Text>
-        <Text style={styles.subtitle}>하루를 하나의 조각으로</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.note}>{note ?? '준비 중입니다.'}</Text>
       </View>
     </SafeAreaView>
   );
@@ -29,11 +32,11 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   title: {
-    ...typography.display,
+    ...typography.title,
     color: colors.text,
   },
-  subtitle: {
-    ...typography.body,
+  note: {
+    ...typography.caption,
     color: colors.textMuted,
   },
 });
