@@ -81,7 +81,7 @@ export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
           // 스페이스로 확정하면 '제주 여행'처럼 띄어쓴 태그를 못 만든다 — 엔터만 받는다.
           blurOnSubmit={false}
           returnKeyType="done"
-          placeholder={tags.length >= MAX_TAGS ? t('tags.max', { count: MAX_TAGS }) : t('tags.add')}
+          placeholder={tags.length >= MAX_TAGS ? t('tags.max', { max: MAX_TAGS }) : t('tags.add')}
           editable={tags.length < MAX_TAGS}
           variant="boxed"
           tone="label"

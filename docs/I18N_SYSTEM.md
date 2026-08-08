@@ -36,7 +36,7 @@
 ```tsx
 const { t } = useTranslation();
 <Text>{t('home.recent')}</Text>
-<Text>{t('home.streak', { count: streak })}</Text>
+<Text>{t('home.streak', { days: streak })}</Text>   {/* 변수명에 count 금지 — §7 */}
 ```
 
 훅을 쓰는 이유는 문자열을 꺼내기 위해서만이 아니다 — **언어가 바뀐 순간 다시 그리기 위해서**다.
@@ -122,7 +122,7 @@ npm run check:i18n
 
 | 항목 | 비고 |
 |---|---|
-| 복수형(plural) | i18next는 `_one`/`_other`를 지원한다. 지금은 "{{count}}개의 조각"처럼 세지 않는 표현으로 피했다 — 영어 문구를 다듬을 때 도입한다 |
+| 복수형(plural) | ⚠ **보간 변수 이름에 `count`를 쓰지 않는다.** i18next는 `count`를 보면 `_one`/`_other` 키를 먼저 찾는다 — 그 키가 없는 지금은 조용히 폴백에 기대게 된다. 세는 값은 `days`·`total`·`dots`처럼 이름을 달리 준다. 복수형을 제대로 도입할 때 `count`로 되돌리고 두 형태를 함께 넣는다 |
 | RTL(아랍어·히브리어) | 언어 추가 시 `I18nManager` 처리 필요. 지금은 대상 언어가 없다 |
 | 스토어 등록 정보·개인정보처리방침 번역 | 출시 준비 단계 |
 | AI 리포트 언어 | 프록시에 사용자 언어를 함께 보내야 한다. 조각 서버 착수 시 |

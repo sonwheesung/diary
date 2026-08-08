@@ -117,7 +117,7 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
     setError(null);
     // 너무 짧은 패턴은 시도로 세지 않는다 — 손이 미끄러진 것까지 실패로 쌓으면 억울하다.
     if (pattern.split('-').length < PATTERN_MIN_POINTS) {
-      setError(t('lock.patternTooShort', { count: PATTERN_MIN_POINTS }));
+      setError(t('lock.patternTooShort', { dots: PATTERN_MIN_POINTS }));
       return;
     }
     void check(pattern);

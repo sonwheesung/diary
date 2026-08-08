@@ -99,7 +99,7 @@ export default function LockSetupScreen() {
 
   const onPattern = (pattern: string) => {
     if (pattern.split('-').length < PATTERN_MIN_POINTS) {
-      setError(t('lock.patternTooShort', { count: PATTERN_MIN_POINTS }));
+      setError(t('lock.patternTooShort', { dots: PATTERN_MIN_POINTS }));
       return;
     }
     setError(null);
@@ -138,7 +138,7 @@ export default function LockSetupScreen() {
           </View>
           <View style={styles.optionBody}>
             <Text style={styles.optionTitle}>PIN</Text>
-            <Text style={styles.optionNote}>{t('lock.setup.pinNote', { count: PIN_LENGTH })}</Text>
+            <Text style={styles.optionNote}>{t('lock.setup.pinNote', { digits: PIN_LENGTH })}</Text>
           </View>
         </Pressable>
 
@@ -156,7 +156,7 @@ export default function LockSetupScreen() {
           <View style={styles.optionBody}>
             <Text style={styles.optionTitle}>{t('lock.methodPattern')}</Text>
             <Text style={styles.optionNote}>
-              {t('lock.setup.patternNote', { count: PATTERN_MIN_POINTS })}
+              {t('lock.setup.patternNote', { dots: PATTERN_MIN_POINTS })}
             </Text>
           </View>
         </Pressable>
@@ -243,8 +243,8 @@ export default function LockSetupScreen() {
         <Text style={styles.subtitle}>
           {error ??
             (method === 'pin'
-            ? t('lock.setup.pinNote', { count: PIN_LENGTH })
-            : t('lock.setup.patternNote', { count: PATTERN_MIN_POINTS }))}
+            ? t('lock.setup.pinNote', { digits: PIN_LENGTH })
+            : t('lock.setup.patternNote', { dots: PATTERN_MIN_POINTS }))}
         </Text>
 
         <View style={styles.input}>

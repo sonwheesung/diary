@@ -45,7 +45,7 @@
   "home": {
     "greetingEmpty": "What piece of\ntoday will you\nkeep?",
     "greetingWritten": "Today's piece\nis saved.",
-    "streak": "{{count}}-day streak",
+    "streak": "{{days}}-day streak",
     "recent": "Recent pieces",
     "emptyTitle": "No pieces yet",
     "emptyBody": "Write your first one today.",
@@ -108,11 +108,11 @@
     "noTags": "Add tags and you can find them here.",
     "emptyTitle": "No matches",
     "emptyBody": "Try different words.",
-    "resultCount": "{{count}} pieces"
+    "resultCount": "{{total}} pieces"
   },
   "tags": {
     "add": "Add a tag",
-    "max": "Up to {{count}} tags",
+    "max": "Up to {{max}} tags",
     "remove": "Remove tag {{name}}",
     "frequentTitle": "Frequent tags — tap to add",
     "addNamed": "Add tag {{name}}"
@@ -164,15 +164,15 @@
     "biometricPrompt": "Unlock Jogak",
     "biometricCancel": "Use PIN or pattern",
     "forgot": "Forgot your lock?",
-    "patternTooShort": "Connect at least {{count}} dots.",
+    "patternTooShort": "Connect at least {{dots}} dots.",
     "clear": "Delete",
     "methodPin": "PIN",
     "methodPattern": "pattern",
     "setup": {
       "chooseTitle": "How should we lock it?",
       "chooseNote": "You can change this later in Settings.",
-      "pinNote": "{{count}} digits",
-      "patternNote": "3×3, at least {{count}} dots",
+      "pinNote": "{{digits}} digits",
+      "patternNote": "3×3, at least {{dots}} dots",
       "disclaimer": "The lock hides the screen. It does not encrypt the diary file itself.",
       "enterTitle": "Set a new lock",
       "confirmTitle": "Enter it once more",

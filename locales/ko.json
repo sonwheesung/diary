@@ -45,7 +45,7 @@
   "home": {
     "greetingEmpty": "오늘,\n어떤 조각을\n모으고 싶나요?",
     "greetingWritten": "오늘의 조각을\n남겼어요.",
-    "streak": "{{count}}일 연속 기록 중",
+    "streak": "{{days}}일 연속 기록 중",
     "recent": "최근의 조각들",
     "emptyTitle": "아직 모은 조각이 없어요",
     "emptyBody": "오늘의 첫 조각을 남겨보세요.",
@@ -108,11 +108,11 @@
     "noTags": "태그를 붙이면 여기서 바로 찾을 수 있어요.",
     "emptyTitle": "찾는 조각이 없어요",
     "emptyBody": "다른 말로 찾아보세요.",
-    "resultCount": "{{count}}개의 조각"
+    "resultCount": "{{total}}개의 조각"
   },
   "tags": {
     "add": "태그 추가",
-    "max": "태그는 {{count}}개까지예요",
+    "max": "태그는 {{max}}개까지예요",
     "remove": "태그 {{name}} 삭제",
     "frequentTitle": "자주 쓴 태그 — 눌러서 추가",
     "addNamed": "태그 {{name}} 추가"
@@ -164,15 +164,15 @@
     "biometricPrompt": "조각 잠금 해제",
     "biometricCancel": "PIN·패턴으로 열기",
     "forgot": "잠금을 잊으셨나요?",
-    "patternTooShort": "점을 {{count}}개 이상 이어주세요.",
+    "patternTooShort": "점을 {{dots}}개 이상 이어주세요.",
     "clear": "지우기",
     "methodPin": "PIN",
     "methodPattern": "패턴",
     "setup": {
       "chooseTitle": "어떻게 잠글까요?",
       "chooseNote": "나중에 설정에서 바꿀 수 있어요.",
-      "pinNote": "숫자 {{count}}자리",
-      "patternNote": "3×3, 점 {{count}}개 이상",
+      "pinNote": "숫자 {{digits}}자리",
+      "patternNote": "3×3, 점 {{dots}}개 이상",
       "disclaimer": "잠금은 화면을 가리는 기능이에요. 일기 파일 자체를 암호화하지는 않아요.",
       "enterTitle": "새 잠금을 정해 주세요",
       "confirmTitle": "한 번 더 입력해 주세요",

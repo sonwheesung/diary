@@ -48,7 +48,7 @@ export default function HomeScreen() {
       {streak > 0 && (
         <View style={styles.streak}>
           <Flame size={16} color={colors.accent} />
-          <Text style={styles.streakText}>{t('home.streak', { count: streak })}</Text>
+          <Text style={styles.streakText}>{t('home.streak', { days: streak })}</Text>
         </View>
       )}
 
