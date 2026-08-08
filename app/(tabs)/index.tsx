@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { BookOpen, Flame, Pencil, Search } from 'lucide-react-native';
+import { BookOpen, CalendarPlus, Flame, Pencil, Search } from 'lucide-react-native';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -11,7 +11,7 @@ import { findEmotion } from '@/features/diary/emotions';
 import { useHomeData } from '@/features/diary/hooks/use-home-data';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { today } from '@/lib/date';
-import { formatFullDate, formatRelativeDate, previewText } from '@/lib/format';
+import { formatFullDate, formatListDate, previewText, relativeDayLabel } from '@/lib/format';
 import { colors } from '@/theme/colors';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
@@ -62,6 +62,19 @@ export default function HomeScreen() {
         onPress={() => router.push(wroteToday ? `/diary/${todayDiaryId}` : '/write')}
       />
 
+      {/* 오늘 걸 썼다고 지난 날짜를 못 쓰게 되면 안 된다 — 옆길을 항상 열어둔다 */}
+      {wroteToday && (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/write')}
+          style={styles.secondaryAction}
+          hitSlop={8}
+        >
+          <CalendarPlus size={16} color={colors.accent} />
+          <Text style={styles.secondaryLabel}>지난 날의 조각 쓰기</Text>
+        </Pressable>
+      )}
+
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>최근의 조각들</Text>
         {recent.length > 0 && (
@@ -95,6 +108,7 @@ export default function HomeScreen() {
 
 function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
   const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+  const relative = relativeDayLabel(diary.entryDate);
 
   return (
     <Card onPress={() => router.push(`/diary/${diary.id}`)} flush>
@@ -109,7 +123,9 @@ function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | 
         )}
         <View style={styles.rowBody}>
           <View style={styles.rowMeta}>
-            <Text style={styles.rowDate}>{formatRelativeDate(diary.entryDate)}</Text>
+            <Text style={styles.rowDate}>{formatListDate(diary.entryDate)}</Text>
+            {/* 오늘·어제는 날짜 옆에 덧붙인다 — 이것만 보여주면 며칠에 쓴 글인지 알 수 없다 */}
+            {relative !== null && <Text style={styles.rowRelative}>{relative}</Text>}
             {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion.label}</Text>}
           </View>
           {diary.title !== null && (
@@ -156,6 +172,17 @@ const styles = StyleSheet.create({
     ...typography.label,
     color: colors.accent,
   },
+  secondaryAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    gap: spacing.xs,
+    marginTop: -spacing.sm,
+  },
+  secondaryLabel: {
+    ...typography.label,
+    color: colors.accent,
+  },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -196,6 +223,10 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   rowDate: {
+    ...typography.caption,
+    color: colors.text,
+  },
+  rowRelative: {
     ...typography.caption,
     color: colors.textMuted,
   },

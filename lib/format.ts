@@ -33,19 +33,27 @@ export function formatShortDate(entryDate: string): string {
   return `${target.month() + 1}.${String(target.date()).padStart(2, '0')}`;
 }
 
-/** 오늘/어제는 말로, 그 이전은 날짜로. 목록에서 시간 감각을 준다. */
-export function formatRelativeDate(entryDate: string): string {
+/**
+ * '8월 8일 (토)' — 목록용. 지난 해의 조각이면 연도를 붙인다.
+ *
+ * 목록에서 날짜를 '오늘'·'어제'로만 보여주면 **며칠에 쓴 글인지 알 수 없다**.
+ * 시간 감각(오늘/어제)은 [`relativeDayLabel`]이 따로 얹는다.
+ */
+export function formatListDate(entryDate: string): string {
   const target = dayjs(entryDate);
-  const todayValue = dayjs().format(DATE_FORMAT);
-  const yesterdayValue = dayjs().subtract(1, 'day').format(DATE_FORMAT);
+  const base = `${target.month() + 1}월 ${target.date()}일 (${WEEKDAYS[target.day()]})`;
+  return target.year() === dayjs().year() ? base : `${target.year()}년 ${base}`;
+}
 
-  if (entryDate === todayValue) {
+/** 오늘·어제만 말로 알려준다. 그 이전은 날짜만으로 충분하다 */
+export function relativeDayLabel(entryDate: string): string | null {
+  if (entryDate === dayjs().format(DATE_FORMAT)) {
     return '오늘';
   }
-  if (entryDate === yesterdayValue) {
+  if (entryDate === dayjs().subtract(1, 'day').format(DATE_FORMAT)) {
     return '어제';
   }
-  return `${target.month() + 1}월 ${target.date()}일`;
+  return null;
 }
 
 /** 목록 미리보기용 한 줄 요약. 줄바꿈을 공백으로 눕히고 길이를 자른다. */
