@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { daysInMonth, startOfMonth, today, weekdayIndex } from '@/lib/date';
 import { colors } from '@/theme/colors';
 import { radius, spacing } from '@/theme/spacing';
-import { typography } from '@/theme/typography';
+import { fonts, typography } from '@/theme/typography';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
@@ -82,7 +82,9 @@ export function MonthGrid({
                 style={[
                   styles.day,
                   isToday && styles.dayToday,
-                  // 이미 쓴 날은 눌리지 않지만 '있다'는 건 보여야 한다 — 옅은 배경으로 남긴다.
+                  // 조각을 쓴 날은 **한눈에** 보여야 한다. 점만으로는 눈에 안 들어온다.
+                  marked && !taken && styles.dayMarked,
+                  // 이미 쓴 날(고를 수 없는 날)은 '있다'는 것만 옅게 남긴다.
                   taken && styles.dayTaken,
                   isSelected && styles.daySelected,
                 ]}
@@ -90,6 +92,7 @@ export function MonthGrid({
                 <Text
                   style={[
                     styles.dayLabel,
+                    marked && !taken && styles.dayLabelMarked,
                     isSelected && styles.dayLabelSelected,
                     taken && styles.dayLabelTaken,
                     outOfRange && styles.dayLabelDisabled,
@@ -98,13 +101,8 @@ export function MonthGrid({
                   {day}
                 </Text>
               </View>
-              {/* 선택된 날은 배경이 진해서 같은 색 점이 묻힌다 — 밝은 색으로 뒤집는다 */}
-              <View
-                style={[
-                  styles.dot,
-                  marked && (isSelected ? styles.dotOnSelected : styles.dotVisible),
-                ]}
-              />
+              {/* 점은 원 바깥(배경 위)에 찍히므로 선택 여부와 무관하게 같은 색을 쓴다 */}
+              <View style={[styles.dot, marked && styles.dotVisible]} />
             </Pressable>
           );
         })}
@@ -159,15 +157,30 @@ const styles = StyleSheet.create({
   dayToday: {
     backgroundColor: colors.accentSoft,
   },
+  /*
+   * 배경색을 바꾸는 스타일마다 반지름을 **다시 적어준다**.
+   * 안드로이드에서 뒤에 오는 스타일이 배경색만 바꾸면 앞에서 준 borderRadius가 먹지 않고
+   * 네모로 그려지는 경우를 겪었다(2026-08-08).
+   */
+  dayMarked: {
+    borderRadius: radius.full,
+    backgroundColor: colors.accentSoft,
+  },
   dayTaken: {
+    borderRadius: radius.full,
     backgroundColor: colors.surfaceMuted,
   },
   daySelected: {
+    borderRadius: radius.full,
     backgroundColor: colors.accent,
   },
   dayLabel: {
     ...typography.label,
     color: colors.text,
+  },
+  dayLabelMarked: {
+    fontFamily: fonts.semibold,
+    color: colors.accent,
   },
   dayLabelSelected: {
     color: colors.textOnAccent,
@@ -180,16 +193,14 @@ const styles = StyleSheet.create({
     color: colors.border,
   },
   dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    marginTop: 2,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginTop: 3,
     backgroundColor: 'transparent',
   },
   dotVisible: {
-    backgroundColor: colors.accentMuted,
-  },
-  dotOnSelected: {
-    backgroundColor: colors.accentSoft,
+    borderRadius: 3,
+    backgroundColor: colors.accent,
   },
 });
