@@ -13,6 +13,7 @@ import {
   verifySecret,
 } from '@/features/lock/api/lock-store';
 import type { LockMethod } from '@/features/lock/api/lock-store';
+import { HintRecovery } from '@/features/lock/components/HintRecovery';
 import { PatternGrid } from '@/features/lock/components/PatternGrid';
 import { PinPad } from '@/features/lock/components/PinPad';
 import { colors } from '@/theme/colors';
@@ -32,6 +33,7 @@ export function UnlockView({ method, biometric, onUnlocked }: UnlockViewProps) {
   const [error, setError] = useState<string | null>(null);
   const [blockedUntil, setBlockedUntil] = useState(0);
   const [now, setNow] = useState(() => Date.now());
+  const [hintOpen, setHintOpen] = useState(false);
   const checkingRef = useRef(false);
 
   useEffect(() => {
@@ -113,6 +115,24 @@ export function UnlockView({ method, biometric, onUnlocked }: UnlockViewProps) {
     void check(pattern);
   };
 
+  if (hintOpen) {
+    return (
+      <View style={[styles.root, styles.rootCenter, { paddingTop: insets.top + spacing.xxl }]}>
+        <HintRecovery
+          method={method}
+          onClose={() => {
+            setHintOpen(false);
+            // 되찾기에서 지연이 풀렸을 수 있다 — 돌아오면 다시 읽는다.
+            void getFailureState().then((state) => {
+              setBlockedUntil(state.blockedUntil);
+              setNow(Date.now());
+            });
+          }}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.root, { paddingTop: insets.top + spacing.xxl }]}>
       <View style={styles.head}>
@@ -150,6 +170,10 @@ export function UnlockView({ method, biometric, onUnlocked }: UnlockViewProps) {
             <Text style={styles.biometricLabel}>생체인증으로 열기</Text>
           </Pressable>
         )}
+
+        <Pressable accessibilityRole="button" onPress={() => setHintOpen(true)} hitSlop={8}>
+          <Text style={styles.forgot}>잠금을 잊으셨나요?</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -161,6 +185,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  rootCenter: {
+    justifyContent: 'center',
+  },
+  forgot: {
+    ...typography.caption,
+    color: colors.textMuted,
   },
   head: {
     alignItems: 'center',

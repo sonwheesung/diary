@@ -24,6 +24,10 @@ const KEY_METHOD = 'jogak.lock.method';
 const KEY_SALT = 'jogak.lock.salt';
 const KEY_HASH = 'jogak.lock.hash';
 const KEY_BIOMETRIC = 'jogak.lock.biometric';
+const KEY_HINT_QUESTION = 'jogak.lock.hint.question';
+const KEY_HINT_SALT = 'jogak.lock.hint.salt';
+const KEY_HINT_HASH = 'jogak.lock.hint.hash';
+const KEY_HINT_CIPHER = 'jogak.lock.hint.cipher';
 
 export type LockMethod = 'pin' | 'pattern';
 export type LockDelay = 'immediate' | '1m' | '5m';
@@ -118,7 +122,96 @@ export async function disableLock(): Promise<void> {
   await SecureStore.deleteItemAsync(KEY_SALT);
   await SecureStore.deleteItemAsync(KEY_HASH);
   await SecureStore.deleteItemAsync(KEY_BIOMETRIC);
+  await SecureStore.deleteItemAsync(KEY_HINT_QUESTION);
+  await SecureStore.deleteItemAsync(KEY_HINT_SALT);
+  await SecureStore.deleteItemAsync(KEY_HINT_HASH);
+  await SecureStore.deleteItemAsync(KEY_HINT_CIPHER);
   await resetFailures();
+}
+
+/*
+ * ─── 힌트로 되찾기 ─────────────────────────────────────────────────────────
+ *
+ * 잠금을 잊었을 때 **힌트 질문에 답하면 PIN·패턴을 다시 보여준다.**
+ *
+ * 그러려면 비밀을 되돌릴 수 있어야 하는데, **평문으로 두지는 않는다**(§7.1).
+ * 힌트 답에서 유도한 키스트림으로 비밀을 XOR해 보관하고, 답이 맞을 때만 되돌린다.
+ * 답을 모르면 상자를 열 수 없다.
+ *
+ * ⚠ 정직하게: 이 문은 **힌트 답의 강도만큼만 강하다.** 답이 짐작하기 쉬우면 잠금도 그만큼 약하다.
+ * 그래서 설정 화면에서 "남이 못 맞힐 답"을 요구하고, 시도에는 잠금과 같은 지연을 건다.
+ */
+
+/** 답은 띄어쓰기·대소문자로 틀리는 일이 없게 다듬는다 — 되찾기 문턱을 오타로 만들지 않는다. */
+function normalizeAnswer(answer: string): string {
+  return answer.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+async function keystream(answer: string, salt: string, length: number): Promise<number[]> {
+  const bytes: number[] = [];
+  let block = 0;
+  while (bytes.length < length) {
+    const digest = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      `${salt}:${answer}:${block}`,
+    );
+    for (let index = 0; index + 1 < digest.length && bytes.length < length; index += 2) {
+      bytes.push(Number.parseInt(digest.slice(index, index + 2), 16));
+    }
+    block += 1;
+  }
+  return bytes;
+}
+
+async function sealSecret(secret: string, answer: string, salt: string): Promise<string> {
+  const codes = Array.from(secret, (char) => char.charCodeAt(0));
+  const stream = await keystream(answer, salt, codes.length);
+  return codes
+    .map((code, index) => (code ^ (stream[index] ?? 0)).toString(16).padStart(4, '0'))
+    .join('');
+}
+
+async function openSecret(cipher: string, answer: string, salt: string): Promise<string> {
+  const codes: number[] = [];
+  for (let index = 0; index + 3 < cipher.length; index += 4) {
+    codes.push(Number.parseInt(cipher.slice(index, index + 4), 16));
+  }
+  const stream = await keystream(answer, salt, codes.length);
+  return codes.map((code, index) => String.fromCharCode(code ^ (stream[index] ?? 0))).join('');
+}
+
+export async function setLockHint(question: string, answer: string, secret: string): Promise<void> {
+  const normalized = normalizeAnswer(answer);
+  const saltBytes = await Crypto.getRandomBytesAsync(16);
+  const salt = Array.from(saltBytes)
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+
+  await SecureStore.setItemAsync(KEY_HINT_QUESTION, question.trim());
+  await SecureStore.setItemAsync(KEY_HINT_SALT, salt);
+  await SecureStore.setItemAsync(KEY_HINT_HASH, await hashSecret(normalized, salt));
+  await SecureStore.setItemAsync(KEY_HINT_CIPHER, await sealSecret(secret, normalized, salt));
+}
+
+export async function getLockHintQuestion(): Promise<string | null> {
+  return SecureStore.getItemAsync(KEY_HINT_QUESTION);
+}
+
+/** 답이 맞으면 원래 PIN·패턴을 돌려준다. 틀리면 null — 무엇이 틀렸는지는 알려주지 않는다. */
+export async function revealSecretWithHint(answer: string): Promise<string | null> {
+  const [salt, hash, cipher] = await Promise.all([
+    SecureStore.getItemAsync(KEY_HINT_SALT),
+    SecureStore.getItemAsync(KEY_HINT_HASH),
+    SecureStore.getItemAsync(KEY_HINT_CIPHER),
+  ]);
+  if (salt === null || hash === null || cipher === null) {
+    return null;
+  }
+  const normalized = normalizeAnswer(answer);
+  if ((await hashSecret(normalized, salt)) !== hash) {
+    return null;
+  }
+  return openSecret(cipher, normalized, salt);
 }
 
 export async function setBiometricEnabled(enabled: boolean): Promise<void> {

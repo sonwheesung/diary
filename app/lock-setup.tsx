@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
-import { PATTERN_MIN_POINTS, PIN_LENGTH, setLockSecret } from '@/features/lock/api/lock-store';
+import { TextField } from '@/components/TextField';
+import {
+  PATTERN_MIN_POINTS,
+  PIN_LENGTH,
+  setLockHint,
+  setLockSecret,
+} from '@/features/lock/api/lock-store';
 import type { LockMethod } from '@/features/lock/api/lock-store';
 import { PatternGrid } from '@/features/lock/components/PatternGrid';
 import { PinPad } from '@/features/lock/components/PinPad';
@@ -12,7 +18,7 @@ import { colors } from '@/theme/colors';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
-type Step = 'choose' | 'enter' | 'confirm';
+type Step = 'choose' | 'enter' | 'confirm' | 'hint';
 
 /**
  * 잠금 설정 — 방식 고르기 → 입력 → 한 번 더 확인.
@@ -29,6 +35,9 @@ export default function LockSetupScreen() {
   const [first, setFirst] = useState('');
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const restart = (message: string) => {
     setError(message);
@@ -49,14 +58,27 @@ export default function LockSetupScreen() {
       restart('처음 입력한 것과 달라요. 다시 정해 주세요.');
       return;
     }
-    void setLockSecret(method, secret)
-      .then(() => {
+    // 비밀은 힌트까지 받은 뒤에 한 번에 저장한다 — 중간에 나가면 힌트 없는 잠금이 남는다.
+    setError(null);
+    setStep('hint');
+  };
+
+  const saveAll = () => {
+    if (saving || question.trim().length === 0 || answer.trim().length === 0) {
+      return;
+    }
+    setSaving(true);
+    void (async () => {
+      try {
+        await setLockSecret(method, first);
+        await setLockHint(question, answer, first);
         // 설정 화면으로 돌아간다. 방금 켠 잠금이 바로 덮치지 않게 게이트는 잠그지 않는다.
         router.back();
-      })
-      .catch(() => {
-        restart('저장하지 못했어요. 다시 시도해 주세요.');
-      });
+      } catch {
+        setSaving(false);
+        setError('저장하지 못했어요. 다시 시도해 주세요.');
+      }
+    })();
   };
 
   const onPinChange = (next: string) => {
@@ -137,6 +159,56 @@ export default function LockSetupScreen() {
     );
   }
 
+  if (step === 'hint') {
+    const ready = question.trim().length > 0 && answer.trim().length > 0;
+    return (
+      <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
+        <Text style={styles.title}>잊었을 때를 위한 힌트</Text>
+        <Text style={styles.subtitle}>
+          답을 맞히면 {method === 'pin' ? 'PIN' : '패턴'}을 다시 보여드려요.
+        </Text>
+
+        <TextField
+          value={question}
+          onChangeText={setQuestion}
+          placeholder="질문 (예: 처음 키운 강아지 이름은?)"
+          variant="boxed"
+        />
+        <TextField
+          value={answer}
+          onChangeText={setAnswer}
+          placeholder="답"
+          variant="boxed"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+
+        {/*
+          이 문은 답의 강도만큼만 강하다. 과장하지 말고 그대로 알려준다 — 사용자가
+          '생일'처럼 남이 아는 답을 넣으면 잠금이 그만큼 약해진다.
+        */}
+        <Text style={styles.disclaimer}>
+          남이 못 맞힐 답으로 정해 주세요. 이 답을 아는 사람은 잠금을 열 수 있어요. 띄어쓰기와
+          대소문자는 구분하지 않아요.
+        </Text>
+
+        {error !== null && <Text style={styles.errorText}>{error}</Text>}
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ disabled: !ready || saving }}
+          onPress={saveAll}
+          disabled={!ready || saving}
+          style={[styles.primary, (!ready || saving) && styles.primaryDisabled]}
+        >
+          <Text style={[styles.primaryLabel, (!ready || saving) && styles.primaryLabelDisabled]}>
+            잠금 켜기
+          </Text>
+        </Pressable>
+      </Screen>
+    );
+  }
+
   return (
     <Screen edges={['top', 'bottom', 'left', 'right']} scroll={false} header={header}>
       <View style={styles.center}>
@@ -206,6 +278,27 @@ const styles = StyleSheet.create({
   },
   disclaimer: {
     ...typography.caption,
+    color: colors.textMuted,
+  },
+  errorText: {
+    ...typography.caption,
+    color: colors.danger,
+  },
+  primary: {
+    alignItems: 'center',
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.accent,
+  },
+  primaryDisabled: {
+    borderRadius: radius.md,
+    backgroundColor: colors.surfaceMuted,
+  },
+  primaryLabel: {
+    ...typography.label,
+    color: colors.textOnAccent,
+  },
+  primaryLabelDisabled: {
     color: colors.textMuted,
   },
   center: {
