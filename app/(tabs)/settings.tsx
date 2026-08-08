@@ -1,9 +1,18 @@
 import Constants from 'expo-constants';
-import { Bell } from 'lucide-react-native';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
+import { Bell, ChevronRight, Fingerprint, Lock } from 'lucide-react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
+import {
+  disableLock,
+  getLockConfig,
+  isBiometricAvailable,
+  setBiometricEnabled,
+  setLockDelay,
+} from '@/features/lock/api/lock-store';
+import type { LockConfig, LockDelay } from '@/features/lock/api/lock-store';
 import {
   SETTING_KEYS,
   getBoolSetting,
@@ -19,8 +28,56 @@ import { typography } from '@/theme/typography';
  * 지금 있는 것만 둔다 — 눌러도 아무 일도 없는 줄을 미리 깔지 않는다.
  * 잠금·다크모드는 각 기능이 완성될 때 이 화면에 붙는다.
  */
+const DELAY_LABELS: Record<LockDelay, string> = {
+  immediate: '즉시',
+  '1m': '1분 후',
+  '5m': '5분 후',
+};
+
+const DELAY_ORDER: LockDelay[] = ['immediate', '1m', '5m'];
+
 export default function SettingsScreen() {
   const [notifications, setNotifications] = useState(false);
+  const [lock, setLock] = useState<LockConfig | null>(null);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+
+  // 잠금 설정 화면에 다녀오면 상태가 바뀌어 있다 — 돌아올 때마다 다시 읽는다.
+  useFocusEffect(
+    useCallback(() => {
+      void getLockConfig().then(setLock);
+      void isBiometricAvailable().then(setBiometricAvailable);
+    }, []),
+  );
+
+  const toggleLock = (next: boolean) => {
+    if (next) {
+      router.push('/lock-setup');
+      return;
+    }
+    Alert.alert('잠금을 끌까요?', '앱을 열 때 아무도 막지 않게 돼요.', [
+      { text: '그대로 두기', style: 'cancel' },
+      {
+        text: '끄기',
+        style: 'destructive',
+        onPress: () => {
+          void disableLock().then(() => void getLockConfig().then(setLock));
+        },
+      },
+    ]);
+  };
+
+  const toggleBiometric = (next: boolean) => {
+    void setBiometricEnabled(next).then(() => void getLockConfig().then(setLock));
+  };
+
+  const cycleDelay = () => {
+    if (lock === null) {
+      return;
+    }
+    const index = DELAY_ORDER.indexOf(lock.delay);
+    const next = DELAY_ORDER[(index + 1) % DELAY_ORDER.length] ?? 'immediate';
+    void setLockDelay(next).then(() => void getLockConfig().then(setLock));
+  };
 
   useEffect(() => {
     let alive = true;
@@ -51,6 +108,76 @@ export default function SettingsScreen() {
   return (
     <Screen>
       <Text style={styles.screenTitle}>설정</Text>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>앱 잠금</Text>
+
+        <View style={styles.row}>
+          <View style={styles.rowIcon}>
+            <Lock size={18} color={colors.accent} />
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>잠금 사용</Text>
+            <Text style={styles.rowNote}>
+              {lock?.enabled === true
+                ? `${lock.method === 'pin' ? 'PIN' : '패턴'}으로 잠겨 있어요`
+                : '앱을 열 때 잠금 화면을 띄워요'}
+            </Text>
+          </View>
+          <Switch
+            value={lock?.enabled === true}
+            onValueChange={toggleLock}
+            trackColor={{ false: colors.border, true: colors.accentMuted }}
+            thumbColor={lock?.enabled === true ? colors.accent : colors.surface}
+          />
+        </View>
+
+        {lock?.enabled === true && (
+          <>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push('/lock-setup')}
+              style={styles.row}
+            >
+              <View style={styles.rowBody}>
+                <Text style={styles.rowTitle}>잠금 방식 바꾸기</Text>
+                <Text style={styles.rowNote}>PIN · 패턴</Text>
+              </View>
+              <ChevronRight size={18} color={colors.textMuted} />
+            </Pressable>
+
+            <Pressable accessibilityRole="button" onPress={cycleDelay} style={styles.row}>
+              <View style={styles.rowBody}>
+                <Text style={styles.rowTitle}>잠기는 시점</Text>
+                <Text style={styles.rowNote}>앱을 나갔다가 돌아왔을 때</Text>
+              </View>
+              <Text style={styles.rowValue}>{DELAY_LABELS[lock.delay]}</Text>
+            </Pressable>
+
+            <View style={styles.row}>
+              <View style={styles.rowIcon}>
+                <Fingerprint size={18} color={colors.accent} />
+              </View>
+              <View style={styles.rowBody}>
+                <Text style={styles.rowTitle}>생체인증</Text>
+                {/* 생체는 단독 수단이 될 수 없다 — 항상 PIN/패턴이 뒤를 받친다(§7.1) */}
+                <Text style={styles.rowNote}>
+                  {biometricAvailable
+                    ? '실패하면 PIN·패턴으로 열 수 있어요'
+                    : '이 기기에 등록된 생체정보가 없어요'}
+                </Text>
+              </View>
+              <Switch
+                value={lock.biometric}
+                onValueChange={toggleBiometric}
+                disabled={!biometricAvailable}
+                trackColor={{ false: colors.border, true: colors.accentMuted }}
+                thumbColor={lock.biometric ? colors.accent : colors.surface}
+              />
+            </View>
+          </>
+        )}
+      </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>알림</Text>

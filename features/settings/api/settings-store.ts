@@ -10,6 +10,12 @@ import { getDatabase } from '@/db/client';
 export const SETTING_KEYS = {
   /** 알림 토글. 지금은 화면만 있고 실제 발송은 하지 않는다(CLAUDE.md §3, §9) */
   notificationsEnabled: 'notifications_enabled',
+  /** 잠금까지의 대기 시간: 'immediate' | '1m' | '5m' (CLAUDE.md §7.1) */
+  lockDelay: 'lock_delay',
+  /** 연속 실패 횟수. 지연(backoff) 계산에 쓴다 */
+  lockFailCount: 'lock_fail_count',
+  /** 이 시각(ms)까지는 시도를 막는다 */
+  lockBlockedUntil: 'lock_blocked_until',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];
@@ -45,4 +51,18 @@ export async function getBoolSetting(key: SettingKey, fallback: boolean): Promis
 
 export async function setBoolSetting(key: SettingKey, value: boolean): Promise<void> {
   await setSetting(key, value ? 'true' : 'false');
+}
+
+/** 숫자 설정. 값이 깨져 있으면 `fallback` — 설정 하나 때문에 잠금이 열리거나 잠기면 안 된다. */
+export async function getNumberSetting(key: SettingKey, fallback: number): Promise<number> {
+  const value = await getSetting(key);
+  if (value === null) {
+    return fallback;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+export async function setNumberSetting(key: SettingKey, value: number): Promise<void> {
+  await setSetting(key, String(value));
 }

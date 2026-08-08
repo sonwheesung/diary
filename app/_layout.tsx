@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { LockGate } from '@/features/lock/components/LockGate';
 import { colors } from '@/theme/colors';
 import { fontAssets } from '@/theme/typography';
 
@@ -45,20 +46,23 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.background },
-          animation: 'fade',
-        }}
-      >
-        <Stack.Screen name="(tabs)" />
-        {/* 작성은 탭 위에 덮이는 모달이다 — 쓰는 동안 하단 탭이 보이면 집중이 깨진다. */}
-        <Stack.Screen
-          name="write"
-          options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
-        />
-      </Stack>
+      {/* 잠금은 라우트가 아니라 앱 전체를 덮는 층이다 — 뒤로가기·딥링크로 지나칠 수 없어야 한다 */}
+      <LockGate>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.background },
+            animation: 'fade',
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+          {/* 작성은 탭 위에 덮이는 모달이다 — 쓰는 동안 하단 탭이 보이면 집중이 깨진다. */}
+          <Stack.Screen
+            name="write"
+            options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+          />
+        </Stack>
+      </LockGate>
     </SafeAreaProvider>
   );
 }
