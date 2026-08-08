@@ -152,7 +152,10 @@
     "version": "Sürüm",
     "delayImmediate": "Hemen",
     "delay1m": "1 dk sonra",
-    "delay5m": "5 dk sonra"
+    "delay5m": "5 dk sonra",
+    "sectionSupport": "Destek",
+    "notice": "Duyurular",
+    "support": "Bize ulaşın"
   },
   "lock": {
     "lockedTitle": "Parçaların kilitli",
@@ -216,5 +219,37 @@
     "emptyDiary": "İçeriği boş bir parça kaydedilemez.",
     "alreadyWritten": "O güne ait bir parçan zaten var. Günde bir tane.",
     "savedButUnreadable": "Parça kaydedildi ama geri okunamadı."
+  },
+  "notice": {
+    "title": "Duyurular",
+    "empty": "Henüz duyuru yok",
+    "emptyBody": "Yenilikler burada görünecek.",
+    "pinned": "Sabit",
+    "kindNotice": "Duyuru",
+    "kindEvent": "Etkinlik",
+    "kindUpdate": "Güncelleme"
+  },
+  "support": {
+    "title": "Bize ulaşın",
+    "categoryLabel": "Konu nedir?",
+    "categoryBug": "Hata",
+    "categorySuggestion": "Öneri",
+    "categoryQuestion": "Soru",
+    "categoryEtc": "Diğer",
+    "contentLabel": "Mesaj",
+    "contentPlaceholder": "Ne ters gitti?",
+    "privacyNote": "Günlüğünü asla göndermiyoruz. Yalnızca uygulama sürümü ve cihaz türü birlikte gider.",
+    "submit": "Gönder",
+    "sentTitle": "Mesaj alındı",
+    "sentBody": "Yazdığın için teşekkürler.",
+    "tooShort": "Lütfen en az {{min}} karakter yaz.",
+    "failNotConfigured": "Şu anda mesaj alamıyoruz. Lütfen sonra tekrar dene.",
+    "failOffline": "Bağlantı dengesiz görünüyor. Ağını kontrol edip tekrar dene.",
+    "failRateLimited": "Şu anda çok fazla mesaj var. Birazdan tekrar dene.",
+    "failError": "Gönderilemedi. Lütfen sonra tekrar dene.",
+    "loginRequiredTitle": "Önce giriş yap",
+    "loginRequiredBody": "Sana yanıt verebilmemiz için kim olduğunu bilmemiz gerekiyor.",
+    "loginNotRequiredForDiary": "Günlük yazmak için giriş yapmak hiçbir zaman gerekmez.",
+    "loginButton": "Giriş yap ve devam et"
   }
 }

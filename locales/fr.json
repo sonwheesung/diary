@@ -152,7 +152,10 @@
     "version": "Version",
     "delayImmediate": "Immédiatement",
     "delay1m": "Après 1 min",
-    "delay5m": "Après 5 min"
+    "delay5m": "Après 5 min",
+    "sectionSupport": "Aide",
+    "notice": "Annonces",
+    "support": "Nous contacter"
   },
   "lock": {
     "lockedTitle": "Tes fragments sont verrouillés",
@@ -216,5 +219,37 @@
     "emptyDiary": "Impossible d'enregistrer un fragment vide.",
     "alreadyWritten": "Tu as déjà un fragment pour ce jour-là. Un seul par jour.",
     "savedButUnreadable": "Le fragment a été enregistré mais n'a pas pu être relu."
+  },
+  "notice": {
+    "title": "Annonces",
+    "empty": "Aucune annonce pour l'instant",
+    "emptyBody": "Les nouveautés apparaîtront ici.",
+    "pinned": "Épinglé",
+    "kindNotice": "Annonce",
+    "kindEvent": "Événement",
+    "kindUpdate": "Mise à jour"
+  },
+  "support": {
+    "title": "Nous contacter",
+    "categoryLabel": "De quoi s'agit-il ?",
+    "categoryBug": "Bug",
+    "categorySuggestion": "Idée",
+    "categoryQuestion": "Question",
+    "categoryEtc": "Autre",
+    "contentLabel": "Message",
+    "contentPlaceholder": "Qu'est-ce qui n'a pas marché ?",
+    "privacyNote": "Nous n'envoyons jamais ton journal. Seuls la version de l'app et le type d'appareil sont joints.",
+    "submit": "Envoyer",
+    "sentTitle": "Message bien reçu",
+    "sentBody": "Merci d'avoir pris le temps.",
+    "tooShort": "Écris au moins {{min}} caractères.",
+    "failNotConfigured": "Nous ne pouvons pas recevoir de message pour l'instant. Réessaie plus tard.",
+    "failOffline": "La connexion semble instable. Vérifie ton réseau et réessaie.",
+    "failRateLimited": "Trop de messages en ce moment. Réessaie dans un instant.",
+    "failError": "Envoi impossible. Réessaie plus tard.",
+    "loginRequiredTitle": "Connexion nécessaire",
+    "loginRequiredBody": "Nous avons besoin de savoir qui tu es pour pouvoir te répondre.",
+    "loginNotRequiredForDiary": "Écrire ton journal ne demande jamais de connexion.",
+    "loginButton": "Se connecter et continuer"
   }
 }

@@ -23,4 +23,15 @@ module.exports = [
       ],
     },
   },
+  {
+    /*
+     * common_server에서 **복사해 온** SDK. 손으로 고치지 않는 것이 규약이므로
+     * (고치면 다음 복사 때 조용히 되돌아간다) 우리 린트 규칙을 강요하지 않는다.
+     * `client.ts`는 우리가 쓴 접착 코드라 제외 대상이 아니다.
+     */
+    files: ['lib/common-server/index.ts', 'lib/common-server/types.ts'],
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off',
+    },
+  },
 ];

@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
 import { LockGate } from '@/features/lock/components/LockGate';
+import { useNoticeStore } from '@/features/notice/store';
 import { useLanguageStore } from '@/features/settings/language-store';
 import { initI18n } from '@/lib/i18n';
 import { ThemeProvider, useTheme } from '@/theme/theme';
@@ -46,6 +47,12 @@ export default function RootLayout() {
   useEffect(() => {
     void loadLanguage();
   }, [loadLanguage]);
+
+  // 공지 부팅 조회 — 실행당 1회. 실패해도 아무 일도 일어나지 않는다(공지가 안 보일 뿐).
+  const loadNotices = useNoticeStore((state) => state.load);
+  useEffect(() => {
+    void loadNotices();
+  }, [loadNotices]);
 
   // 폰트 로드에 실패해도 앱을 막지 않는다(시스템 폰트로 폴백). 잠금 화면조차 못 여는 게 더 나쁘다.
   const ready = fontsLoaded || fontError !== null || fontWaitExpired;

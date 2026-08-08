@@ -152,7 +152,10 @@
     "delayImmediate": "즉시",
     "delay1m": "1분 후",
     "delay5m": "5분 후",
-    "languageSheet": "언어 선택"
+    "languageSheet": "언어 선택",
+    "sectionSupport": "지원",
+    "notice": "공지사항",
+    "support": "문의하기"
   },
   "lock": {
     "lockedTitle": "조각이 잠겨 있어요",
@@ -216,5 +219,37 @@
     "emptyDiary": "내용이 비어 있는 조각은 저장할 수 없습니다.",
     "alreadyWritten": "그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.",
     "savedButUnreadable": "조각을 저장했지만 다시 읽지 못했습니다."
+  },
+  "notice": {
+    "title": "공지사항",
+    "empty": "아직 공지가 없어요",
+    "emptyBody": "새 소식이 생기면 여기에 올려둘게요.",
+    "pinned": "고정",
+    "kindNotice": "공지",
+    "kindEvent": "이벤트",
+    "kindUpdate": "업데이트"
+  },
+  "support": {
+    "title": "문의하기",
+    "categoryLabel": "무엇에 대한 문의인가요?",
+    "categoryBug": "오류",
+    "categorySuggestion": "건의",
+    "categoryQuestion": "질문",
+    "categoryEtc": "기타",
+    "contentLabel": "내용",
+    "contentPlaceholder": "어떤 점이 불편하셨나요?",
+    "privacyNote": "일기 내용은 보내지 않아요. 앱 버전과 기기 종류만 함께 전달돼요.",
+    "submit": "보내기",
+    "sentTitle": "문의가 접수됐어요",
+    "sentBody": "소중한 의견 감사합니다.",
+    "tooShort": "{{min}}자 이상 입력해 주세요.",
+    "failNotConfigured": "지금은 문의를 받을 수 없어요. 잠시 후 다시 시도해 주세요.",
+    "failOffline": "연결이 원활하지 않아요. 네트워크를 확인하고 다시 시도해 주세요.",
+    "failRateLimited": "문의가 많아 잠시 제한됐어요. 잠시 후 다시 시도해 주세요.",
+    "failError": "보내지 못했어요. 잠시 후 다시 시도해 주세요.",
+    "loginRequiredTitle": "로그인이 필요해요",
+    "loginRequiredBody": "답변을 드리려면 누가 보냈는지 알아야 해요.",
+    "loginNotRequiredForDiary": "일기를 쓰는 데는 로그인이 필요하지 않아요.",
+    "loginButton": "로그인하고 문의하기"
   }
 }

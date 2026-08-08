@@ -152,7 +152,10 @@
     "version": "版本",
     "delayImmediate": "立即",
     "delay1m": "1 分钟后",
-    "delay5m": "5 分钟后"
+    "delay5m": "5 分钟后",
+    "sectionSupport": "支持",
+    "notice": "公告",
+    "support": "联系我们"
   },
   "lock": {
     "lockedTitle": "你的碎片已锁定",
@@ -216,5 +219,37 @@
     "emptyDiary": "内容为空的碎片无法保存。",
     "alreadyWritten": "那天已经有一片了。每天只能写一片。",
     "savedButUnreadable": "碎片已保存，但无法重新读取。"
+  },
+  "notice": {
+    "title": "公告",
+    "empty": "还没有公告",
+    "emptyBody": "有新消息会发布在这里。",
+    "pinned": "置顶",
+    "kindNotice": "公告",
+    "kindEvent": "活动",
+    "kindUpdate": "更新"
+  },
+  "support": {
+    "title": "联系我们",
+    "categoryLabel": "想反馈什么?",
+    "categoryBug": "问题",
+    "categorySuggestion": "建议",
+    "categoryQuestion": "提问",
+    "categoryEtc": "其他",
+    "contentLabel": "内容",
+    "contentPlaceholder": "遇到了什么不方便?",
+    "privacyNote": "我们不会发送你的日记内容，只会附上应用版本和设备类型。",
+    "submit": "发送",
+    "sentTitle": "已收到你的反馈",
+    "sentBody": "谢谢你的宝贵意见。",
+    "tooShort": "请至少输入 {{min}} 个字。",
+    "failNotConfigured": "暂时无法接收反馈，请稍后再试。",
+    "failOffline": "网络似乎不稳定，请检查后重试。",
+    "failRateLimited": "反馈过多，暂时受限，请稍后再试。",
+    "failError": "发送失败，请稍后再试。",
+    "loginRequiredTitle": "需要先登录",
+    "loginRequiredBody": "我们需要知道是谁发来的，才能回复你。",
+    "loginNotRequiredForDiary": "写日记完全不需要登录。",
+    "loginButton": "登录并继续"
   }
 }

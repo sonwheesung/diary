@@ -152,7 +152,10 @@
     "version": "Phiên bản",
     "delayImmediate": "Ngay lập tức",
     "delay1m": "Sau 1 phút",
-    "delay5m": "Sau 5 phút"
+    "delay5m": "Sau 5 phút",
+    "sectionSupport": "Hỗ trợ",
+    "notice": "Thông báo",
+    "support": "Liên hệ"
   },
   "lock": {
     "lockedTitle": "Các mảnh của bạn đang bị khóa",
@@ -216,5 +219,37 @@
     "emptyDiary": "Không thể lưu mảnh trống.",
     "alreadyWritten": "Ngày đó đã có một mảnh rồi. Mỗi ngày chỉ một mảnh.",
     "savedButUnreadable": "Đã lưu mảnh nhưng không đọc lại được."
+  },
+  "notice": {
+    "title": "Thông báo",
+    "empty": "Chưa có thông báo nào",
+    "emptyBody": "Có tin mới sẽ hiện ở đây.",
+    "pinned": "Ghim",
+    "kindNotice": "Thông báo",
+    "kindEvent": "Sự kiện",
+    "kindUpdate": "Cập nhật"
+  },
+  "support": {
+    "title": "Liên hệ",
+    "categoryLabel": "Bạn muốn phản hồi điều gì?",
+    "categoryBug": "Lỗi",
+    "categorySuggestion": "Góp ý",
+    "categoryQuestion": "Câu hỏi",
+    "categoryEtc": "Khác",
+    "contentLabel": "Nội dung",
+    "contentPlaceholder": "Có gì chưa ổn?",
+    "privacyNote": "Chúng tôi không bao giờ gửi nội dung nhật ký. Chỉ có phiên bản ứng dụng và loại thiết bị đi kèm.",
+    "submit": "Gửi",
+    "sentTitle": "Đã nhận phản hồi",
+    "sentBody": "Cảm ơn bạn đã dành thời gian.",
+    "tooShort": "Hãy viết ít nhất {{min}} ký tự.",
+    "failNotConfigured": "Hiện chưa nhận được phản hồi. Vui lòng thử lại sau.",
+    "failOffline": "Kết nối không ổn định. Hãy kiểm tra mạng rồi thử lại.",
+    "failRateLimited": "Hiện có quá nhiều phản hồi. Vui lòng thử lại sau ít phút.",
+    "failError": "Không gửi được. Vui lòng thử lại sau.",
+    "loginRequiredTitle": "Cần đăng nhập",
+    "loginRequiredBody": "Chúng tôi cần biết bạn là ai để có thể trả lời.",
+    "loginNotRequiredForDiary": "Viết nhật ký thì không bao giờ cần đăng nhập.",
+    "loginButton": "Đăng nhập và tiếp tục"
   }
 }

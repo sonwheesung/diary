@@ -20,8 +20,15 @@ export const SETTING_KEYS = {
   themeMode: 'theme_mode',
   /** 전면광고를 마지막으로 띄운 날짜(YYYY-MM-DD). 하루 1회 캡의 근거(CLAUDE.md §7) */
   adsInterstitialDate: 'ads_interstitial_date',
-  /** 언어: 'system' | 'ko' | 'en' */
+  /** 언어: 'system' | 지원 언어 코드 */
   language: 'language',
+  /**
+   * 읽은 공지 id 목록(JSON 배열).
+   *
+   * **서버에 읽음을 보내지 않는다** — 익명 접수라 서버가 "누가 읽었는지"를 알 방법이 없고,
+   * 알 수 있게 만들면 익명성이 깨진다(NOTICE_SYSTEM). 그래서 기기에만 쌓는다.
+   */
+  noticeReadIds: 'notice_read_ids',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

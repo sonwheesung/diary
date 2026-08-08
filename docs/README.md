@@ -15,6 +15,7 @@
 | [`DOC_DISCIPLINE.md`](./DOC_DISCIPLINE.md) | 문서 작업 규율 | ✅ |
 | [`DIARY_SYSTEM.md`](./DIARY_SYSTEM.md) | 조각 도메인 — 하루 조각 수·날짜·감정·연속 작성일·검색·삭제 규칙 | ✅ |
 | [`DATABASE.md`](./DATABASE.md) | 로컬(expo-sqlite) 스키마·마이그레이션 규약·백업 대비 | ✅ |
+| [`SUPPORT_SYSTEM.md`](./SUPPORT_SYSTEM.md) | 공지·문의 — common_server 연동·SDK 복사 규약·읽음 관리 | ✅ |
 | [`I18N_SYSTEM.md`](./I18N_SYSTEM.md) | 다국어 — 문자열 규약·날짜 현지화·언어 추가 절차 (정책은 CLAUDE.md §9.1) | ✅ |
 | `AUTH_SYSTEM.md` | 구글 로그인·subject 토큰 | ❌ 미작성 |
 | `LOCK_SYSTEM.md` | 앱 잠금 — PIN·패턴(3×3)·생체·자동잠금·실패 처리 (정책은 CLAUDE.md §7.1) | ❌ 미작성 |
@@ -52,8 +53,8 @@
 | 모든 조각 목록(홈의 더보기) | ✅ | `app/diaries.tsx` — 달 머리글 + 20개씩 '더 보기' |
 | Settings(다크모드·잠금 설정·알림 UI) | ❌ | |
 | 앱 잠금(PIN·패턴 3×3·생체) | ✅ | `features/lock/` · 힌트 되찾기 · 실패 backoff · 복귀 지연 · 앱 스위처 가림(Android). iOS 가림만 남음 |
-| 공지사항 | ❌ | common_server bootstrap |
-| 문의하기 | ❌ | **로그인 필수** — Phase 7 대기 |
+| 공지사항 | ✅ | `app/notice.tsx` — bootstrap 1회 조회. **서버에 `jogak` 등록 대기** |
+| 문의하기 | 🟡 | 화면·서버 전송 완료. **로그인 게이트는 이음매만**(`features/support/auth-gate.ts`) |
 | 구글 로그인(선택적) | ❌ | Phase 7 대기 |
 | 광고(AdMob) | ✅ | 전면=저장 완료 후 하루 1회 · 배너=탭 화면 상시. **테스트 광고 단위**(출시 전 교체) |
 | 월 구독(RevenueCat) | ❌ | Phase 9 대기 |

@@ -152,7 +152,10 @@
     "version": "Versi",
     "delayImmediate": "Langsung",
     "delay1m": "Setelah 1 mnt",
-    "delay5m": "Setelah 5 mnt"
+    "delay5m": "Setelah 5 mnt",
+    "sectionSupport": "Bantuan",
+    "notice": "Pengumuman",
+    "support": "Hubungi kami"
   },
   "lock": {
     "lockedTitle": "Kepinganmu terkunci",
@@ -216,5 +219,37 @@
     "emptyDiary": "Kepingan kosong tidak bisa disimpan.",
     "alreadyWritten": "Hari itu sudah ada kepingannya. Satu per hari saja.",
     "savedButUnreadable": "Kepingan tersimpan tapi tidak bisa dibaca ulang."
+  },
+  "notice": {
+    "title": "Pengumuman",
+    "empty": "Belum ada pengumuman",
+    "emptyBody": "Kabar baru akan muncul di sini.",
+    "pinned": "Disematkan",
+    "kindNotice": "Pengumuman",
+    "kindEvent": "Acara",
+    "kindUpdate": "Pembaruan"
+  },
+  "support": {
+    "title": "Hubungi kami",
+    "categoryLabel": "Soal apa?",
+    "categoryBug": "Kesalahan",
+    "categorySuggestion": "Saran",
+    "categoryQuestion": "Pertanyaan",
+    "categoryEtc": "Lainnya",
+    "contentLabel": "Pesan",
+    "contentPlaceholder": "Apa yang bermasalah?",
+    "privacyNote": "Isi buku harianmu tidak pernah dikirim. Hanya versi aplikasi dan jenis perangkat yang ikut.",
+    "submit": "Kirim",
+    "sentTitle": "Pesan diterima",
+    "sentBody": "Terima kasih sudah menulis.",
+    "tooShort": "Tulis minimal {{min}} karakter.",
+    "failNotConfigured": "Saat ini kami belum bisa menerima pesan. Coba lagi nanti.",
+    "failOffline": "Koneksi kurang stabil. Periksa jaringan lalu coba lagi.",
+    "failRateLimited": "Terlalu banyak pesan saat ini. Coba lagi sebentar lagi.",
+    "failError": "Gagal mengirim. Coba lagi nanti.",
+    "loginRequiredTitle": "Masuk dulu",
+    "loginRequiredBody": "Kami perlu tahu siapa kamu supaya bisa membalas.",
+    "loginNotRequiredForDiary": "Menulis buku harian tidak pernah butuh masuk akun.",
+    "loginButton": "Masuk dan lanjutkan"
   }
 }

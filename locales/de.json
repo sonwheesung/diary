@@ -152,7 +152,10 @@
     "version": "Version",
     "delayImmediate": "Sofort",
     "delay1m": "Nach 1 Min.",
-    "delay5m": "Nach 5 Min."
+    "delay5m": "Nach 5 Min.",
+    "sectionSupport": "Hilfe",
+    "notice": "Mitteilungen",
+    "support": "Kontakt"
   },
   "lock": {
     "lockedTitle": "Deine Stücke sind gesperrt",
@@ -216,5 +219,37 @@
     "emptyDiary": "Ein leeres Stück kann nicht gespeichert werden.",
     "alreadyWritten": "Für diesen Tag gibt es schon ein Stück. Nur eines pro Tag.",
     "savedButUnreadable": "Das Stück wurde gespeichert, konnte aber nicht wieder gelesen werden."
+  },
+  "notice": {
+    "title": "Mitteilungen",
+    "empty": "Noch keine Mitteilungen",
+    "emptyBody": "Neues erscheint hier.",
+    "pinned": "Angeheftet",
+    "kindNotice": "Hinweis",
+    "kindEvent": "Event",
+    "kindUpdate": "Update"
+  },
+  "support": {
+    "title": "Kontakt",
+    "categoryLabel": "Worum geht es?",
+    "categoryBug": "Fehler",
+    "categorySuggestion": "Idee",
+    "categoryQuestion": "Frage",
+    "categoryEtc": "Sonstiges",
+    "contentLabel": "Nachricht",
+    "contentPlaceholder": "Was ist schiefgelaufen?",
+    "privacyNote": "Dein Tagebuch senden wir nie mit. Mitgeschickt werden nur App-Version und Gerätetyp.",
+    "submit": "Senden",
+    "sentTitle": "Nachricht angekommen",
+    "sentBody": "Danke, dass du dir die Zeit genommen hast.",
+    "tooShort": "Bitte schreib mindestens {{min}} Zeichen.",
+    "failNotConfigured": "Wir können gerade keine Nachrichten annehmen. Versuch es später noch einmal.",
+    "failOffline": "Die Verbindung wirkt instabil. Prüf dein Netz und versuch es noch einmal.",
+    "failRateLimited": "Gerade zu viele Nachrichten. Versuch es gleich noch einmal.",
+    "failError": "Konnte nicht gesendet werden. Versuch es später noch einmal.",
+    "loginRequiredTitle": "Bitte zuerst anmelden",
+    "loginRequiredBody": "Wir müssen wissen, wer du bist, um antworten zu können.",
+    "loginNotRequiredForDiary": "Zum Schreiben deines Tagebuchs brauchst du nie eine Anmeldung.",
+    "loginButton": "Anmelden und fortfahren"
   }
 }

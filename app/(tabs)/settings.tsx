@@ -1,6 +1,16 @@
 import Constants from 'expo-constants';
 import { router, useFocusEffect } from 'expo-router';
-import { Bell, ChevronRight, Fingerprint, Globe, Lock, Moon, Sun } from 'lucide-react-native';
+import {
+  Bell,
+  ChevronRight,
+  Fingerprint,
+  Globe,
+  Lock,
+  Megaphone,
+  MessageSquare,
+  Moon,
+  Sun,
+} from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
@@ -15,6 +25,7 @@ import {
 } from '@/features/lock/api/lock-store';
 import type { LockDelay } from '@/features/lock/api/lock-store';
 import { useLockStore } from '@/features/lock/store';
+import { useNoticeStore } from '@/features/notice/store';
 import { LanguageSheet } from '@/features/settings/components/LanguageSheet';
 import { useLanguageStore } from '@/features/settings/language-store';
 import {
@@ -57,6 +68,7 @@ export default function SettingsScreen() {
   const languageMode = useLanguageStore((state) => state.mode);
   const setLanguageMode = useLanguageStore((state) => state.setMode);
   const [languageSheetOpen, setLanguageSheetOpen] = useState(false);
+  const unreadNotices = useNoticeStore((state) => state.unreadCount);
   const [notifications, setNotifications] = useState(false);
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
   const lock = useLockStore((state) => state.config);
@@ -276,6 +288,40 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t('settings.sectionSupport')}</Text>
+
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/notice')}
+          style={styles.row}
+        >
+          <View style={styles.rowIcon}>
+            <Megaphone size={18} color={colors.accent} />
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.notice')}</Text>
+          </View>
+          {/* 숫자를 쓰지 않는다 — 몇 개인지보다 '새 게 있다'가 필요한 정보다 */}
+          {unreadNotices > 0 && <View style={styles.badge} />}
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/support')}
+          style={styles.row}
+        >
+          <View style={styles.rowIcon}>
+            <MessageSquare size={18} color={colors.accent} />
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.support')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+      </View>
+
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionNotifications')}</Text>
         <View style={styles.row}>
           <View style={styles.rowIcon}>
@@ -367,6 +413,12 @@ const createStyles = (colors: Palette) =>
     rowValue: {
       ...typography.label,
       color: colors.textMuted,
+    },
+    badge: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: colors.danger,
     },
     segmented: {
       flexDirection: 'row',

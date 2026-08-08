@@ -152,7 +152,10 @@
     "version": "バージョン",
     "delayImmediate": "すぐに",
     "delay1m": "1分後",
-    "delay5m": "5分後"
+    "delay5m": "5分後",
+    "sectionSupport": "サポート",
+    "notice": "お知らせ",
+    "support": "お問い合わせ"
   },
   "lock": {
     "lockedTitle": "かけらはロックされています",
@@ -216,5 +219,37 @@
     "emptyDiary": "中身が空のかけらは保存できません。",
     "alreadyWritten": "その日のかけらはすでにあります。1日に1つだけです。",
     "savedButUnreadable": "かけらを保存しましたが読み直せませんでした。"
+  },
+  "notice": {
+    "title": "お知らせ",
+    "empty": "まだお知らせはありません",
+    "emptyBody": "新しい知らせができたらここに載せます。",
+    "pinned": "固定",
+    "kindNotice": "お知らせ",
+    "kindEvent": "イベント",
+    "kindUpdate": "アップデート"
+  },
+  "support": {
+    "title": "お問い合わせ",
+    "categoryLabel": "どんな内容ですか?",
+    "categoryBug": "不具合",
+    "categorySuggestion": "ご提案",
+    "categoryQuestion": "質問",
+    "categoryEtc": "その他",
+    "contentLabel": "内容",
+    "contentPlaceholder": "どんな点が不便でしたか?",
+    "privacyNote": "日記の内容は送りません。アプリのバージョンと端末の種類だけが一緒に送られます。",
+    "submit": "送信",
+    "sentTitle": "お問い合わせを受け付けました",
+    "sentBody": "ご意見ありがとうございます。",
+    "tooShort": "{{min}}文字以上入力してください。",
+    "failNotConfigured": "今はお問い合わせを受け付けられません。しばらくしてからお試しください。",
+    "failOffline": "接続が不安定です。ネットワークを確認してもう一度お試しください。",
+    "failRateLimited": "お問い合わせが多く、一時的に制限されています。しばらくしてからお試しください。",
+    "failError": "送信できませんでした。しばらくしてからお試しください。",
+    "loginRequiredTitle": "ログインが必要です",
+    "loginRequiredBody": "お返事するために、どなたからのご連絡か知る必要があります。",
+    "loginNotRequiredForDiary": "日記を書くのにログインは要りません。",
+    "loginButton": "ログインして問い合わせる"
   }
 }

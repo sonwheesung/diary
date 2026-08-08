@@ -152,7 +152,10 @@
     "version": "版本",
     "delayImmediate": "立即",
     "delay1m": "1 分鐘後",
-    "delay5m": "5 分鐘後"
+    "delay5m": "5 分鐘後",
+    "sectionSupport": "支援",
+    "notice": "公告",
+    "support": "聯絡我們"
   },
   "lock": {
     "lockedTitle": "你的碎片已鎖定",
@@ -216,5 +219,37 @@
     "emptyDiary": "內容空白的碎片無法儲存。",
     "alreadyWritten": "那天已經有一片了。每天只能寫一片。",
     "savedButUnreadable": "碎片已儲存，但無法重新讀取。"
+  },
+  "notice": {
+    "title": "公告",
+    "empty": "還沒有公告",
+    "emptyBody": "有新消息會發布在這裡。",
+    "pinned": "置頂",
+    "kindNotice": "公告",
+    "kindEvent": "活動",
+    "kindUpdate": "更新"
+  },
+  "support": {
+    "title": "聯絡我們",
+    "categoryLabel": "想回報什麼?",
+    "categoryBug": "問題",
+    "categorySuggestion": "建議",
+    "categoryQuestion": "提問",
+    "categoryEtc": "其他",
+    "contentLabel": "內容",
+    "contentPlaceholder": "遇到了什麼不方便?",
+    "privacyNote": "我們不會傳送你的日記內容，只會附上應用程式版本和裝置類型。",
+    "submit": "傳送",
+    "sentTitle": "已收到你的回報",
+    "sentBody": "謝謝你寶貴的意見。",
+    "tooShort": "請至少輸入 {{min}} 個字。",
+    "failNotConfigured": "暫時無法接收回報，請稍後再試。",
+    "failOffline": "網路似乎不穩定，請檢查後重試。",
+    "failRateLimited": "回報過多，暫時受限，請稍後再試。",
+    "failError": "傳送失敗，請稍後再試。",
+    "loginRequiredTitle": "需要先登入",
+    "loginRequiredBody": "我們需要知道是誰傳來的，才能回覆你。",
+    "loginNotRequiredForDiary": "寫日記完全不需要登入。",
+    "loginButton": "登入並繼續"
   }
 }

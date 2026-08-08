@@ -152,7 +152,10 @@
     "version": "Versione",
     "delayImmediate": "Subito",
     "delay1m": "Dopo 1 min",
-    "delay5m": "Dopo 5 min"
+    "delay5m": "Dopo 5 min",
+    "sectionSupport": "Assistenza",
+    "notice": "Avvisi",
+    "support": "Contattaci"
   },
   "lock": {
     "lockedTitle": "I tuoi pezzi sono bloccati",
@@ -216,5 +219,37 @@
     "emptyDiary": "Non si può salvare un pezzo vuoto.",
     "alreadyWritten": "Hai già un pezzo per quel giorno. Solo uno al giorno.",
     "savedButUnreadable": "Il pezzo è stato salvato ma non è stato possibile rileggerlo."
+  },
+  "notice": {
+    "title": "Avvisi",
+    "empty": "Ancora nessun avviso",
+    "emptyBody": "Le novità compariranno qui.",
+    "pinned": "In evidenza",
+    "kindNotice": "Avviso",
+    "kindEvent": "Evento",
+    "kindUpdate": "Aggiornamento"
+  },
+  "support": {
+    "title": "Contattaci",
+    "categoryLabel": "Di cosa si tratta?",
+    "categoryBug": "Errore",
+    "categorySuggestion": "Idea",
+    "categoryQuestion": "Domanda",
+    "categoryEtc": "Altro",
+    "contentLabel": "Messaggio",
+    "contentPlaceholder": "Cosa non ha funzionato?",
+    "privacyNote": "Il tuo diario non viene mai inviato. Partono solo la versione dell'app e il tipo di dispositivo.",
+    "submit": "Invia",
+    "sentTitle": "Messaggio ricevuto",
+    "sentBody": "Grazie per averci scritto.",
+    "tooShort": "Scrivi almeno {{min}} caratteri.",
+    "failNotConfigured": "Al momento non possiamo ricevere messaggi. Riprova più tardi.",
+    "failOffline": "La connessione sembra instabile. Controlla la rete e riprova.",
+    "failRateLimited": "Troppi messaggi in questo momento. Riprova tra poco.",
+    "failError": "Invio non riuscito. Riprova più tardi.",
+    "loginRequiredTitle": "Accedi prima",
+    "loginRequiredBody": "Ci serve sapere chi sei per poterti rispondere.",
+    "loginNotRequiredForDiary": "Scrivere il diario non richiede mai l'accesso.",
+    "loginButton": "Accedi e continua"
   }
 }
