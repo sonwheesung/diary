@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { initializeAds } from '@/features/ads/api/ads';
 import { LockGate } from '@/features/lock/components/LockGate';
 import { ThemeProvider, useTheme } from '@/theme/theme';
 import { fontAssets } from '@/theme/typography';
@@ -28,6 +29,11 @@ export default function RootLayout() {
   useEffect(() => {
     const timer = setTimeout(() => setFontWaitExpired(true), FONT_TIMEOUT_MS);
     return () => clearTimeout(timer);
+  }, []);
+
+  // 광고 SDK 초기화. 실패해도 앱 사용을 막지 않는다(CLAUDE.md §7).
+  useEffect(() => {
+    void initializeAds();
   }, []);
 
   // 폰트 로드에 실패해도 앱을 막지 않는다(시스템 폰트로 폴백). 잠금 화면조차 못 여는 게 더 나쁘다.

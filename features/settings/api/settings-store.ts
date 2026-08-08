@@ -18,6 +18,8 @@ export const SETTING_KEYS = {
   lockBlockedUntil: 'lock_blocked_until',
   /** 테마: 'system' | 'light' | 'dark' (⏭ 스킨이 생기면 스킨 id도 여기 들어온다) */
   themeMode: 'theme_mode',
+  /** 전면광고를 마지막으로 띄운 날짜(YYYY-MM-DD). 하루 1회 캡의 근거(CLAUDE.md §7) */
+  adsInterstitialDate: 'ads_interstitial_date',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

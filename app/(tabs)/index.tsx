@@ -6,6 +6,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
+import { AdBanner } from '@/features/ads/components/AdBanner';
 import { resolveImageUri } from '@/features/diary/api/image-store';
 import { findEmotion } from '@/features/diary/emotions';
 import { useHomeData } from '@/features/diary/hooks/use-home-data';
@@ -25,7 +26,7 @@ export default function HomeScreen() {
   const wroteToday = todayDiaryId !== null;
 
   return (
-    <Screen>
+    <Screen footer={<AdBanner />}>
       <View style={styles.header}>
         <Text style={styles.date}>{formatFullDate(today())}</Text>
         <Pressable

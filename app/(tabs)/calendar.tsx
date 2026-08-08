@@ -7,6 +7,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { Card } from '@/components/Card';
 import { MonthGrid } from '@/components/MonthGrid';
 import { Screen } from '@/components/Screen';
+import { AdBanner } from '@/features/ads/components/AdBanner';
 import { getWrittenDates, listDiariesByDate } from '@/features/diary/api/diary-repository';
 import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image-store';
 import { findEmotion } from '@/features/diary/emotions';
@@ -72,7 +73,7 @@ export default function CalendarScreen() {
   };
 
   return (
-    <Screen>
+    <Screen footer={<AdBanner />}>
       <View style={styles.monthRow}>
         <Pressable
           accessibilityRole="button"

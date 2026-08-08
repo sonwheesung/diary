@@ -23,6 +23,11 @@ interface ScreenProps {
   contentStyle?: StyleProp<ViewStyle>;
   /** 화면 상단 고정 영역(헤더). 스크롤에 딸려 올라가지 않는다 */
   header?: ReactNode;
+  /**
+   * 화면 하단 고정 영역(배너 광고). 스크롤 밖에 있어 같이 밀려 올라가지 않는다.
+   * **탭 화면에만 넘긴다** — 작성·상세는 쓰고 읽는 자리라 비운다(CLAUDE.md §7).
+   */
+  footer?: ReactNode;
 }
 
 /** 포커스된 입력창과 키보드 사이에 남길 여유 */
@@ -41,6 +46,7 @@ export function Screen({
   scroll = true,
   contentStyle,
   header,
+  footer,
 }: ScreenProps) {
   const styles = useStyles(createStyles);
   const keyboard = useKeyboard();
@@ -129,6 +135,8 @@ export function Screen({
           {children}
         </View>
       )}
+      {/* 키보드가 올라오면 배너는 숨긴다 — 입력창 위를 광고가 덮으면 최악이다 */}
+      {footer !== undefined && keyboard.height === 0 && footer}
     </SafeAreaView>
   );
 }

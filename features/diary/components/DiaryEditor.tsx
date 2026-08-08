@@ -23,6 +23,7 @@ import {
   saveImage,
   softDeleteImages,
 } from '@/features/diary/api/image-store';
+import { prepareInterstitial, showInterstitialIfReady } from '@/features/ads/api/interstitial';
 import { listTagsByUsage } from '@/features/diary/api/tag-repository';
 import { hasContent, usedImageIds } from '@/features/diary/blocks';
 import { BlockEditor } from '@/features/diary/components/BlockEditor';
@@ -208,6 +209,13 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       .catch(() => setTakenDates(new Set()));
   }, []);
 
+  // 저장 직후에 로드를 시작하면 몇 초 뒤에 뜬다 — 늦게 뜨는 전면광고가 가장 짜증난다.
+  useEffect(() => {
+    if (editingId === null) {
+      void prepareInterstitial();
+    }
+  }, [editingId]);
+
   useEffect(() => {
     void listTagsByUsage(8)
       .then((rows) => setSuggestions(rows.map((row) => row.name)))
@@ -333,6 +341,15 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       await reconcileImages();
       savedRef.current = true;
       onSaved();
+
+      /*
+       * 광고는 **저장과 화면 전환이 끝난 뒤**에 띄운다(CLAUDE.md §7).
+       * 저장 앞에 두면 광고 실패가 저장을 막고, 전환 앞에 두면 "저장됐나?" 싶은 채로
+       * 광고를 보게 된다. 수정에는 띄우지 않는다 — 등록(저장)된 순간만이다.
+       */
+      if (editingId === null) {
+        void showInterstitialIfReady();
+      }
     } catch (error) {
       setSaving(false);
       Alert.alert(

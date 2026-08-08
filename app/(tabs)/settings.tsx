@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
+import { AdBanner } from '@/features/ads/components/AdBanner';
 import {
   disableLock,
   isBiometricAvailable,
@@ -119,7 +120,7 @@ export default function SettingsScreen() {
   const version = Constants.expoConfig?.version ?? '—';
 
   return (
-    <Screen>
+    <Screen footer={<AdBanner />}>
       <Text style={styles.screenTitle}>설정</Text>
 
       <View style={styles.section}>

@@ -6,6 +6,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
+import { AdBanner } from '@/features/ads/components/AdBanner';
 import { TextField } from '@/components/TextField';
 import { searchDiaries } from '@/features/diary/api/diary-repository';
 import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image-store';
@@ -119,7 +120,7 @@ export default function SearchScreen() {
   );
 
   return (
-    <Screen header={header}>
+    <Screen header={header} footer={<AdBanner />}>
       {trimmed.length === 0 ? (
         <>
           <Text style={styles.sectionTitle}>자주 쓴 태그</Text>

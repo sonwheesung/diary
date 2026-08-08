@@ -53,7 +53,7 @@
 | 공지사항 | ❌ | common_server bootstrap |
 | 문의하기 | ❌ | **로그인 필수** — Phase 7 대기 |
 | 구글 로그인(선택적) | ❌ | Phase 7 대기 |
-| 광고(AdMob) | ❌ | 저장 완료 후 + 빈도 캡 |
+| 광고(AdMob) | ✅ | 전면=저장 완료 후 하루 1회 · 배너=탭 화면 상시. **테스트 광고 단위**(출시 전 교체) |
 | 월 구독(RevenueCat) | ❌ | Phase 9 대기 |
 | 백업/복원(클라이언트 암호화) | ❌ | 조각 서버 대기 |
 | AI 리포트(주간 우선·서버 프록시) | ❌ | 조각 서버 대기 |
@@ -91,10 +91,26 @@ npm install         # 의존성
 npm run typecheck   # tsc --noEmit — 커밋 전 필수 통과
 npm run lint        # eslint — 커밋 전 필수 통과
 npm run format      # prettier --write (문서 *.md는 제외)
-npm start           # Expo dev 서버 (같은 Wi-Fi + LAN)
-npx expo start --tunnel   # LTE·방화벽 막힘 시 (느림)
-npm run web         # 웹으로 빠르게 화면 확인
 ```
+
+### ⚠ Expo Go를 떠났다 (2026-08-09)
+
+광고 SDK가 네이티브 모듈이라 **Expo Go에서 돌지 않는다.** 이제 dev build로 개발한다.
+
+```bash
+npx expo run:android --port 8084   # 최초 1회: prebuild + gradle 빌드 + 설치 (수 분)
+npm start                          # 이후에는 Metro만 (앱은 설치된 dev client)
+```
+
+- `android/`·`ios/`는 **CNG 산출물이라 커밋하지 않는다.** 새 클론에서는 위 명령이 알아서 만든다.
+- 네이티브 의존성(`app.json` plugins, 네이티브 패키지)을 건드리면 **다시 빌드**해야 한다.
+  JS만 고쳤으면 Metro 리로드로 충분하다.
+- 빌드 환경: `JAVA_HOME`은 JDK 21, `ANDROID_HOME`은 `%LOCALAPPDATA%\Android\Sdk`.
+
+> ⚠ **Kotlin 메타데이터 충돌**(2026-08-09 겪음): `react-native-google-mobile-ads` 16.4.0이 끌어오는
+> `play-services-ads 25.4.0`은 Kotlin 2.3.0으로 컴파일돼 있고 Expo SDK 54는 2.1.20을 쓴다 →
+> `compileDebugKotlin` 실패. **16.0.0으로 고정**(ads sdk 24.6.0)해서 해결했다.
+> 이 라이브러리를 올릴 때는 pinned ads sdk의 Kotlin 버전을 먼저 확인한다.
 
 > 실기기 접속이 안 되면 ① 폰이 Wi-Fi인지 ② Windows 방화벽 인바운드 ③ 포트를 잡고 있는 기존 expo
 > 프로세스 순으로 확인한다(2026-08-07 실제로 셋 다 겪음).

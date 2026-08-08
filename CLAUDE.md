@@ -157,7 +157,8 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
 | **로컬 DB** | **expo-sqlite** | ✅ 설치 — 검색·캘린더·연속일 집계에 쿼리가 필요(2026-08-07 결정) |
 | 잠금 저장 | expo-secure-store | ✅ 설치 — PIN·패턴 해시, 암호화 키 보관 |
 | 생체인증 | expo-local-authentication | ✅ 설치 |
-| 광고 | react-native-google-mobile-ads (AdMob) | ❌ 미설치 — **네이티브 모듈이라 Expo Go 불가**. dev build 전환 시 함께. volleyball에서 사용 중 |
+| 광고 | react-native-google-mobile-ads (AdMob) | ✅ 설치 — **네이티브 모듈이라 Expo Go 불가**. 이것 때문에 dev build로 전환(2026-08-09) |
+| 개발 실행 | ~~Expo Go~~ → **dev build** (`npx expo run:android`) | 2026-08-09 전환. `android/`는 CNG 산출물이라 커밋 안 함 |
 | 구독 | react-native-purchases (RevenueCat) | ❌ 미설치. common_server PLAN Phase 9와 짝 |
 | 로그인 | @react-native-google-signin/google-signin | ❌ 미설치 |
 | Server State | TanStack Query | ❌ 미설치 |
@@ -197,8 +198,33 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
   저장 완료 시점은 반대로 정책이 권장하는 *logical break between content*에 해당한다.
 - 광고 SDK 초기화 실패가 앱 사용을 막지 않는다.
 
-⚠ **구현은 dev build 전환 후.** `react-native-google-mobile-ads`는 네이티브 모듈이라
-Expo Go에서 돌지 않는다. 지금 설치하면 Expo Go 워크플로 자체가 깨지므로 **설치도 그때 한다.**
+### 구현 (2026-08-09)
+
+| 것 | 어디 |
+|---|---|
+| SDK 초기화·캡·구독 게이트 | `features/ads/api/ads.ts` |
+| 전면광고 | `features/ads/api/interstitial.ts` |
+| 배너 | `features/ads/components/AdBanner.tsx` |
+| 배너 자리 | `components/Screen`의 `footer` prop — **탭 화면만** 넘긴다 |
+
+- **광고 단위는 지금 Google 공식 테스트 값이다.** 출시 전에 실제 단위로 바꾼다.
+  개발 중 실제 단위를 쓰면 무효 트래픽으로 계정이 정지될 수 있다.
+- 전면광고는 작성 화면 진입 시 **미리 로드**한다. 저장 직후 로드를 시작하면 몇 초 뒤에 뜨는데,
+  늦게 뜨는 전면광고가 가장 짜증난다. 캡에 걸려 있으면 아예 부르지 않는다(트래픽 낭비).
+- 띄우는 순서: **저장 → 화면 전환 → 광고.** 저장 앞에 두면 광고 실패가 저장을 막고,
+  전환 앞에 두면 "저장됐나?" 싶은 채로 광고를 본다.
+- **수정에는 띄우지 않는다.** '등록(저장)된 순간'만이다.
+- 배너는 **키보드가 올라오면 숨긴다.** 입력창 위를 광고가 덮으면 최악이다.
+- 배너를 못 받으면 **자리를 차지하지 않는다.** 빈 회색 띠가 남으면 고장 난 것처럼 보인다.
+- 구독자 제외는 `adsEnabled()` 한 곳을 거친다 — 엔타이틀먼트가 생기면 그 함수만 바꾸면 된다.
+
+⚠ **Expo Go를 떠났다.** `react-native-google-mobile-ads`는 네이티브 모듈이라 Expo Go에서 돌지 않는다.
+2026-08-09부터 **dev build**(`npx expo run:android`)로 개발한다. `android/`·`ios/`는 CNG 산출물이라
+커밋하지 않는다(`.gitignore`). 새 기기·새 클론에서는 `npx expo prebuild` 후 빌드가 필요하다.
+
+⚠ **라이브러리 버전을 16.0.0으로 고정했다.** 16.4.0이 끌어오는 `play-services-ads 25.4.0`은
+Kotlin 2.3.0으로 컴파일돼 있는데 Expo SDK 54는 2.1.20이라 `compileDebugKotlin`이 깨진다.
+올릴 때는 **pinned ads sdk의 Kotlin 버전을 먼저 확인**한다.
 
 ---
 
@@ -443,6 +469,7 @@ PIN·패턴은 **UI 게이트**일 뿐이다. 로컬 SQLite 파일 자체는 평
 | 2026-08-07 | 광고는 저장 완료 후 + 빈도 캡 | 기둥 4. 작성 진입 차단은 AdMob 정책상도 위험 |
 | 2026-08-08 | 광고 지면 확정 — **전면은 저장 완료 시 하루 1회, 배너는 탭 화면만 상시** | 작성·상세는 쓰고 읽는 자리라 비운다(기둥 2). 진입 전면광고는 AdMob 정책 위반 소지(§7) |
 | 2026-08-08 | 다크모드 + **팔레트 N개 구조**(`theme/palettes.ts`) | 스킨(보상형 광고 1개월·구독)이 예정돼 있어 라이트/다크 이분법으로 짜면 갈아엎게 된다(§9) |
+| 2026-08-09 | **Expo Go → dev build 전환** | 광고 SDK가 네이티브 모듈이다. 미루려던 전환을 광고 착수가 앞당겼다 |
 | 2026-08-07 | 공통(공지·문의·신원·엔타이틀먼트)은 common_server, 도메인(백업·AI)은 조각 서버 | 개인정보 등급·배포 반경·워크로드 성질이 다름 |
 | 2026-08-07 | ~~백업 평문 저장(AI를 위해)~~ → **클라이언트 암호화 + AI는 앱이 평문을 프록시로 전송** | 저장물 유출 리스크 제거와 AI 상품을 동시에 살림(§5.1) |
 | 2026-08-07 | 암호화 키 = 기기 SecureStore + 복구 코드. 서버 미보유 | 아래 근거 참조 |
