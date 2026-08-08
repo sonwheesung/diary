@@ -12,7 +12,8 @@ import { typography } from '@/theme/typography';
 
 interface DatePickerSheetProps {
   visible: boolean;
-  value: string;
+  /** 고른 날짜. `null`이면 아직 안 골랐다 — 이번 달부터 보여준다 */
+  value: string | null;
   onSelect: (entryDate: string) => void;
   onClose: () => void;
   /** 이 날짜 이후는 고를 수 없다 */
@@ -33,12 +34,12 @@ export function DatePickerSheet({
   takenDates,
   onMonthChange,
 }: DatePickerSheetProps) {
-  const [month, setMonth] = useState(value);
+  const [month, setMonth] = useState(value ?? today());
 
   // 닫았다 다시 열면 고른 날짜가 있는 달에서 시작한다. 지난달을 보다 닫았다고 그 달이 남으면 헷갈린다.
   useEffect(() => {
     if (visible) {
-      setMonth(value);
+      setMonth(value ?? today());
     }
   }, [visible, value]);
 

@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { BookOpen, CalendarPlus, Flame, Pencil, Search } from 'lucide-react-native';
+import { Flame, Pencil, Search } from 'lucide-react-native';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -46,34 +46,15 @@ export default function HomeScreen() {
       )}
 
       {/*
-        하루에 조각은 하나다(DIARY_SYSTEM §2). 오늘 이미 썼는데 *쓰기*로 보내면
-        저장할 수 없는 화면에 데려다 놓는 꼴이다 — 주 동선을 *보기*로 바꾼다.
+        버튼은 언제나 '조각 쓰기' 하나다. 오늘 썼는지에 따라 목적지를 바꾸면
+        지난 날짜로 쓰러 들어갈 문이 사라진다 — 날짜는 작성 화면이 정한다(DIARY_SYSTEM §2).
       */}
       <Button
-        label={wroteToday ? '오늘의 조각 보기' : '조각 쓰기'}
+        label="조각 쓰기"
         fullWidth
-        icon={
-          wroteToday ? (
-            <BookOpen size={18} color={colors.textOnAccent} />
-          ) : (
-            <Pencil size={18} color={colors.textOnAccent} />
-          )
-        }
-        onPress={() => router.push(wroteToday ? `/diary/${todayDiaryId}` : '/write')}
+        icon={<Pencil size={18} color={colors.textOnAccent} />}
+        onPress={() => router.push('/write')}
       />
-
-      {/* 오늘 걸 썼다고 지난 날짜를 못 쓰게 되면 안 된다 — 옆길을 항상 열어둔다 */}
-      {wroteToday && (
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => router.push('/write')}
-          style={styles.secondaryAction}
-          hitSlop={8}
-        >
-          <CalendarPlus size={16} color={colors.accent} />
-          <Text style={styles.secondaryLabel}>지난 날의 조각 쓰기</Text>
-        </Pressable>
-      )}
 
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>최근의 조각들</Text>
@@ -169,17 +150,6 @@ const styles = StyleSheet.create({
     marginTop: -spacing.sm,
   },
   streakText: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  secondaryAction: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    gap: spacing.xs,
-    marginTop: -spacing.sm,
-  },
-  secondaryLabel: {
     ...typography.label,
     color: colors.accent,
   },

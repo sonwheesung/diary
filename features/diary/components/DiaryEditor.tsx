@@ -1,6 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import * as ImagePicker from 'expo-image-picker';
-import { ChevronDown, CircleAlert, ImagePlus, Smile, Tag, X } from 'lucide-react-native';
+import { ChevronDown, ImagePlus, Smile, Tag, X } from 'lucide-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -81,12 +81,15 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
   const [tags, setTags] = useState<string[]>([]);
   const [emotion, setEmotion] = useState<EmotionCode | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [entryDate, setEntryDate] = useState(today);
+  /**
+   * 조각의 날짜. **아직 못 정한 상태(`null`)가 있다** —
+   * 오늘 조각이 이미 있으면 오늘로 시작할 수 없으므로 비워두고 고르게 한다(DIARY_SYSTEM §2).
+   */
+  const [entryDate, setEntryDate] = useState<string | null>(null);
   const [openSheet, setOpenSheet] = useState<'date' | 'emotion' | 'tag' | null>(null);
   const [takenDates, setTakenDates] = useState<ReadonlySet<string>>(new Set());
-  const [dateTaken, setDateTaken] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(editingId !== null);
+  const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const snapshot = JSON.stringify({ blocks, title, emotion, tags, entryDate });
@@ -154,37 +157,40 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
   }, [loading, snapshot]);
 
   /*
-   * 고른 날짜에 이미 조각이 있는지 **미리** 본다.
+   * 새 조각의 날짜를 정한다.
    *
-   * 저장할 때 막으면 다 쓰고 나서 못 쓴다는 말을 듣게 된다 — 그건 화가 나는 일이다.
-   * 들어온 순간 알려주고, 저장 버튼을 처음부터 죽여둔다.
+   * 오늘이 비어 있으면 **오늘**로 시작한다 — 대부분은 오늘 걸 쓰러 들어오므로 날짜를 묻지 않는다.
+   * 오늘이 이미 차 있으면 **비워둔 채 날짜 시트를 먼저 연다**. 다 쓰고 나서 "저장할 수 없다"는
+   * 말을 듣는 것보다, 처음에 날짜부터 고르는 편이 낫다.
    */
   useEffect(() => {
+    if (editingId !== null) {
+      return;
+    }
     let alive = true;
-    void getDiaryIdOnDate(entryDate)
+    void getDiaryIdOnDate(today())
       .then((id) => {
-        if (alive) {
-          // 수정 중인 자기 자신은 충돌이 아니다.
-          setDateTaken(id !== null && id !== editingId);
+        if (!alive) {
+          return;
         }
+        if (id === null) {
+          setEntryDate(today());
+        } else {
+          setOpenSheet('date');
+        }
+        setLoading(false);
       })
-      // 확인에 실패하면 막지 않는다. 저장 시점에 저장소가 한 번 더 본다.
+      // 확인에 실패하면 오늘로 둔다. 저장 시점에 저장소가 한 번 더 막아준다.
       .catch(() => {
         if (alive) {
-          setDateTaken(false);
+          setEntryDate(today());
+          setLoading(false);
         }
       });
     return () => {
       alive = false;
     };
-  }, [entryDate, editingId]);
-
-  // 오늘 이미 썼다면 글을 쓰기 전에 날짜부터 고르게 한다.
-  useEffect(() => {
-    if (dateTaken) {
-      setOpenSheet((current) => (current === null ? 'date' : current));
-    }
-  }, [dateTaken]);
+  }, [editingId]);
 
   // 하루에 조각은 하나다(DIARY_SYSTEM §2). 이미 쓴 날은 날짜 시트에서 고를 수 없어야 한다.
   const loadTakenDates = useCallback((month: string) => {
@@ -305,7 +311,7 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
   };
 
   const save = async () => {
-    if (!hasContent(blocks) || saving) {
+    if (!hasContent(blocks) || saving || entryDate === null) {
       return;
     }
     setSaving(true);
@@ -328,7 +334,18 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
     }
   };
 
-  const dirty = baselineRef.current !== null && baselineRef.current !== snapshot;
+  /*
+   * 나갈 때 물어볼 만큼 잃을 게 있는가.
+   * 새 조각에서 날짜만 골라둔 상태는 잃을 게 없다 — 여기서 붙잡으면 성가시기만 하다.
+   */
+  const changed = baselineRef.current !== null && baselineRef.current !== snapshot;
+  const worthKeeping =
+    editingId !== null ||
+    hasContent(blocks) ||
+    title.trim().length > 0 ||
+    tags.length > 0 ||
+    emotion !== null;
+  const dirty = changed && worthKeeping;
 
   const close = () => {
     // 쓰다 만 글을 말없이 버리지 않는다. 손댄 게 없으면 묻지 않는다.
@@ -346,7 +363,7 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
     onCancel();
   };
 
-  const canSave = hasContent(blocks) && !saving && !dateTaken && !loading;
+  const canSave = hasContent(blocks) && !saving && !loading && entryDate !== null;
   const selectedEmotion = emotion === null ? undefined : findEmotion(emotion);
 
   /*
@@ -414,16 +431,26 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
           style={styles.dateButton}
           hitSlop={8}
         >
-          <Text style={styles.dateDay}>{formatDayNumber(entryDate)}</Text>
-          {/*
-            아이콘에는 베이스라인이 없다. 큰 숫자와 같은 줄에 그냥 두면 혼자 아래로 떨어지고,
-            바깥에서 가운데 정렬하면 이번엔 큰 숫자를 기준으로 가운데라 작은 글씨와 어긋난다.
-            **작은 글씨와 한 덩어리로 묶어** 그 안에서 가운데 정렬해야 높이가 맞는다.
-          */}
-          <View style={styles.dateRestGroup}>
-            <Text style={styles.dateRest}>{formatMonthYearWeekday(entryDate)}</Text>
-            <ChevronDown size={14} color={colors.textMuted} />
-          </View>
+          {entryDate === null ? (
+            // 날짜를 못 정한 상태. 눌러야 할 곳이라는 게 보여야 하므로 강조색을 쓴다.
+            <View style={styles.dateRestGroup}>
+              <Text style={styles.datePlaceholder}>날짜를 골라주세요</Text>
+              <ChevronDown size={16} color={colors.accent} />
+            </View>
+          ) : (
+            <>
+              <Text style={styles.dateDay}>{formatDayNumber(entryDate)}</Text>
+              {/*
+                아이콘에는 베이스라인이 없다. 큰 숫자와 같은 줄에 그냥 두면 혼자 아래로 떨어지고,
+                바깥에서 가운데 정렬하면 이번엔 큰 숫자를 기준으로 가운데라 작은 글씨와 어긋난다.
+                **작은 글씨와 한 덩어리로 묶어** 그 안에서 가운데 정렬해야 높이가 맞는다.
+              */}
+              <View style={styles.dateRestGroup}>
+                <Text style={styles.dateRest}>{formatMonthYearWeekday(entryDate)}</Text>
+                <ChevronDown size={14} color={colors.textMuted} />
+              </View>
+            </>
+          )}
         </Pressable>
 
         <Pressable
@@ -441,20 +468,6 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
           )}
         </Pressable>
       </View>
-
-      {dateTaken && (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="다른 날짜 고르기"
-          onPress={() => setOpenSheet('date')}
-          style={styles.notice}
-        >
-          <CircleAlert size={16} color={colors.danger} />
-          <Text style={styles.noticeText}>
-            이 날에는 이미 조각이 있어요. 눌러서 다른 날짜를 골라주세요.
-          </Text>
-        </Pressable>
-      )}
 
       <TextField value={title} onChangeText={setTitle} placeholder="제목 (선택)" tone="title" />
 
@@ -638,19 +651,9 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.danger,
   },
-  notice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-  },
-  noticeText: {
-    ...typography.caption,
-    color: colors.danger,
-    flex: 1,
+  datePlaceholder: {
+    ...typography.subtitle,
+    color: colors.accent,
   },
   tagRow: {
     flexDirection: 'row',
