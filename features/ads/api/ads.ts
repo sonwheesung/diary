@@ -17,14 +17,21 @@ import { today } from '@/lib/date';
  */
 
 /**
- * ⚠ **아직 실제 광고 단위가 없다.** AdMob 콘솔에서 발급받으면 아래 상수만 채우면 된다.
+ * 실제 광고 단위 (2026-08-09 AdMob 발급).
+ *
+ * AdMob 앱: 조각 / Android — `ca-app-pub-2731473780180274~6800808068`
+ * 앱 ID는 여기가 아니라 `app.json`의 config plugin이 갖는다(네이티브 매니페스트에 박혀야 한다).
  *
  * 개발 빌드에서는 **항상 테스트 단위를 쓴다** — 실제 단위로 개발하면 내가 만든 노출·클릭이
  * 무효 트래픽으로 잡혀 계정이 정지될 수 있다. 그래서 `__DEV__` 분기를 남겨둔다.
+ *
+ * ⚠ 지금 이 앱은 AdMob에서 **'검토 필요 · 광고 게재 제한'** 상태다. 스토어에 올라간 뒤
+ * AdMob에서 스토어를 연결하고 승인을 받아야 실제 광고가 나간다. 그전까지는 릴리스 빌드로
+ * 돌려도 노출이 0이다 — 코드가 잘못된 게 아니다.
  */
 const RELEASE_AD_UNITS: { banner: string | null; interstitial: string | null } = {
-  banner: null,
-  interstitial: null,
+  banner: 'ca-app-pub-2731473780180274/4105647957',
+  interstitial: 'ca-app-pub-2731473780180274/5718112528',
 };
 
 export const AD_UNITS = {
