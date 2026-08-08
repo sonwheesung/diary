@@ -46,7 +46,7 @@ export function MonthGrid({
     <View>
       <View style={styles.week}>
         {WEEKDAYS.map((label) => (
-          <View key={label} style={styles.cell}>
+          <View key={label} style={styles.headerCell}>
             <Text style={styles.weekday}>{label}</Text>
           </View>
         ))}
@@ -108,6 +108,15 @@ export function MonthGrid({
             </Pressable>
           );
         })}
+
+        {/*
+          뒤를 빈 칸으로 채워 **항상 6주**를 그린다.
+          달마다 주 수가 4~6으로 달라지면 시트 높이가 매번 바뀌어, 날짜를 고를 때마다
+          화면이 위아래로 튄다(2026-08-08).
+        */}
+        {Array.from({ length: WEEKS * 7 - leading - total }, (_, index) => (
+          <View key={`tail-${index}`} style={styles.cell} />
+        ))}
       </View>
     </View>
   );
@@ -115,6 +124,10 @@ export function MonthGrid({
 
 /** 7칸을 정확히 나눈 값. 100/7을 계산해 넣으면 타입이 string으로 넓어져 style에 못 들어간다 */
 const CELL = '14.2857%';
+/** 날짜 원(36) + 점(6) + 위아래 여백 */
+const CELL_HEIGHT = 50;
+/** 어떤 달이든 6주로 그린다 — 4·5·6주가 섞이면 시트 높이가 매번 달라진다 */
+const WEEKS = 6;
 
 const styles = StyleSheet.create({
   week: {
@@ -123,13 +136,18 @@ const styles = StyleSheet.create({
   },
   cell: {
     width: CELL,
+    height: CELL_HEIGHT,
     alignItems: 'center',
-    paddingVertical: spacing.xs,
+    justifyContent: 'center',
+  },
+  headerCell: {
+    width: CELL,
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
   },
   weekday: {
     ...typography.caption,
     color: colors.textMuted,
-    paddingVertical: spacing.xs,
   },
   day: {
     width: 36,

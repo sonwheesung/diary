@@ -311,7 +311,8 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
   };
 
   const save = async () => {
-    if (!hasContent(blocks) || saving || entryDate === null) {
+    // entryDate는 canSave에도 들어 있지만, 여기서 좁혀야 타입이 통과한다.
+    if (!canSave || entryDate === null) {
       return;
     }
     setSaving(true);
@@ -363,7 +364,10 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
     onCancel();
   };
 
-  const canSave = hasContent(blocks) && !saving && !loading && entryDate !== null;
+  // 제목은 **필수**다(DIARY_SYSTEM §1, 2026-08-08 사용자 결정).
+  const hasTitle = title.trim().length > 0;
+  const titleMissing = !hasTitle && hasContent(blocks);
+  const canSave = hasTitle && hasContent(blocks) && !saving && !loading && entryDate !== null;
   const selectedEmotion = emotion === null ? undefined : findEmotion(emotion);
 
   /*
@@ -469,7 +473,13 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
         </Pressable>
       </View>
 
-      <TextField value={title} onChangeText={setTitle} placeholder="제목 (선택)" tone="title" />
+      <TextField value={title} onChangeText={setTitle} placeholder="제목" tone="title" />
+
+      {/*
+        제목이 비어 저장을 못 하는 상태를 말없이 두지 않는다. 다만 빈 화면에서부터 잔소리하지 않도록
+        **뭔가 쓰기 시작한 뒤에만** 띄운다.
+      */}
+      {titleMissing && <Text style={styles.hint}>제목을 입력해 주세요</Text>}
 
       <BlockEditor
         blocks={blocks}
@@ -654,6 +664,11 @@ const styles = StyleSheet.create({
   datePlaceholder: {
     ...typography.subtitle,
     color: colors.accent,
+  },
+  hint: {
+    ...typography.caption,
+    color: colors.danger,
+    marginTop: -spacing.sm,
   },
   tagRow: {
     flexDirection: 'row',
