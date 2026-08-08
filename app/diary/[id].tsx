@@ -4,6 +4,7 @@ import { ChevronLeft, Pencil, Trash2 } from 'lucide-react-native';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { ImageViewer } from '@/components/ImageViewer';
 import { Screen } from '@/components/Screen';
 import { deleteDiary, getDiaryById } from '@/features/diary/api/diary-repository';
 import { getImagesForDiary, resolveImageUri } from '@/features/diary/api/image-store';
@@ -28,6 +29,8 @@ export default function DiaryDetailScreen() {
   const [images, setImages] = useState<Map<string, DiaryImage>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  /** 전체 보기로 열린 사진의 위치. 닫혀 있으면 null */
+  const [viewerIndex, setViewerIndex] = useState<number | null>(null);
 
   // 수정하고 돌아왔을 때 낡은 내용이 보이면 안 된다 — 돌아올 때마다 다시 읽는다.
   useFocusEffect(
@@ -92,21 +95,25 @@ export default function DiaryDetailScreen() {
         <View style={styles.headerActions}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="수정"
-            onPress={() => router.push(`/write?id=${id}`)}
-            hitSlop={12}
-            style={styles.headerButton}
-          >
-            <Pencil size={20} color={colors.text} />
-          </Pressable>
-          <Pressable
-            accessibilityRole="button"
             accessibilityLabel="삭제"
             onPress={confirmDelete}
             hitSlop={12}
             style={styles.headerButton}
           >
             <Trash2 size={20} color={colors.danger} />
+          </Pressable>
+          {/*
+            아이콘만 두면 '누르면 뭐가 되는지'가 안 읽힌다. 상세는 읽기 전용이고
+            여기가 유일한 편집 입구라, 작성 화면의 저장 버튼과 같은 모양으로 글자를 붙였다.
+          */}
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="수정"
+            onPress={() => router.push(`/write?id=${id}`)}
+            style={styles.editButton}
+          >
+            <Pencil size={15} color={colors.textOnAccent} />
+            <Text style={styles.editLabel}>수정</Text>
           </Pressable>
         </View>
       )}
@@ -128,6 +135,13 @@ export default function DiaryDetailScreen() {
   }
 
   const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+
+  // 전체 보기에서 넘겨볼 수 있게, 본문에 실제로 실린 사진만 순서대로 모은다.
+  const viewableUris = diary.blocks
+    .filter((block): block is Extract<typeof block, { type: 'image' }> => block.type === 'image')
+    .map((block) => images.get(block.imageId))
+    .filter((image): image is DiaryImage => image !== undefined)
+    .map((image) => resolveImageUri(image.fileName));
 
   return (
     <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
@@ -166,14 +180,17 @@ export default function DiaryDetailScreen() {
             </View>
           );
         }
+        // 본문에서는 4:3으로 잘라 보여준다 — 누르면 자르지 않은 전체를 본다.
+        const uri = resolveImageUri(image.fileName);
         return (
-          <Image
+          <Pressable
             key={`image-${block.imageId}`}
-            source={{ uri: resolveImageUri(image.fileName) }}
-            style={styles.image}
-            contentFit="cover"
-            transition={150}
-          />
+            accessibilityRole="imagebutton"
+            accessibilityLabel="사진 전체 보기"
+            onPress={() => setViewerIndex(viewableUris.indexOf(uri))}
+          >
+            <Image source={{ uri }} style={styles.image} contentFit="cover" transition={150} />
+          </Pressable>
         );
       })}
 
@@ -186,6 +203,13 @@ export default function DiaryDetailScreen() {
           ))}
         </View>
       )}
+
+      <ImageViewer
+        visible={viewerIndex !== null}
+        uris={viewableUris}
+        initialIndex={viewerIndex ?? 0}
+        onClose={() => setViewerIndex(null)}
+      />
     </Screen>
   );
 }
@@ -200,13 +224,28 @@ const styles = StyleSheet.create({
   },
   headerActions: {
     flexDirection: 'row',
-    gap: spacing.xs,
+    alignItems: 'center',
+    gap: spacing.sm,
   },
   headerButton: {
     width: 40,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  editButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    height: 34,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.accent,
+  },
+  editLabel: {
+    ...typography.label,
+    color: colors.textOnAccent,
   },
   center: {
     flex: 1,

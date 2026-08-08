@@ -100,7 +100,22 @@ export default function WriteScreen() {
           setLoading(false);
           return;
         }
-        setBlocks(diary.blocks.length > 0 ? diary.blocks : [{ type: 'text', value: '' }]);
+        const loaded: DiaryBlock[] =
+          diary.blocks.length > 0 ? diary.blocks : [{ type: 'text', value: '' }];
+        setBlocks(loaded);
+        /*
+         * 커서 기본 위치를 **마지막 문단 끝**으로 둔다.
+         * 수정 모드는 자동 포커스가 없어서, 글을 건드리지 않고 사진부터 넣으면 커서가
+         * (0, 0)에 남아 사진이 글 맨 앞에 끼어든다.
+         */
+        const lastTextIndex = loaded.reduce(
+          (found, block, index) => (block.type === 'text' ? index : found),
+          -1,
+        );
+        const lastText = loaded[lastTextIndex];
+        if (lastText !== undefined && lastText.type === 'text') {
+          caretRef.current = { index: lastTextIndex, position: lastText.value.length };
+        }
         setImages(new Map(existing.map((image) => [image.id, image])));
         setTitle(diary.title ?? '');
         setTags(diary.tags);
