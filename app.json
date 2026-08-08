@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "scheme": "jogak",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#FAF7F2",
+    "backgroundColor": "#F5F7FA",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.son0925.jogak"
@@ -14,14 +14,25 @@
     "android": {
       "package": "com.son0925.jogak",
       "versionCode": 1,
-      "backgroundColor": "#FAF7F2",
+      "backgroundColor": "#F5F7FA",
       "allowBackup": false
     },
     "web": {
       "bundler": "metro",
       "output": "single"
     },
-    "plugins": ["expo-router", "expo-sqlite", "expo-secure-store"],
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "조각에 넣을 사진을 고르기 위해 사진 접근이 필요해요.",
+          "cameraPermission": false
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": false
     },

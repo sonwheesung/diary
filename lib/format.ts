@@ -10,6 +10,23 @@ export function formatFullDate(entryDate: string): string {
   return `${target.year()}년 ${target.month() + 1}월 ${target.date()}일 (${WEEKDAYS[target.day()]})`;
 }
 
+/** '08' — 작성 화면 날짜의 큰 숫자 */
+export function formatDayNumber(entryDate: string): string {
+  return String(dayjs(entryDate).date()).padStart(2, '0');
+}
+
+/** '8월 2026 (금)' — 큰 숫자 옆에 붙는 나머지 */
+export function formatMonthYearWeekday(entryDate: string): string {
+  const target = dayjs(entryDate);
+  return `${target.month() + 1}월 ${target.year()} (${WEEKDAYS[target.day()]})`;
+}
+
+/** '2026년 8월' — 캘린더 헤더용 */
+export function formatMonthLabel(entryDate: string): string {
+  const target = dayjs(entryDate);
+  return `${target.year()}년 ${target.month() + 1}월`;
+}
+
 /** '8.07' — 목록 카드용 */
 export function formatShortDate(entryDate: string): string {
   const target = dayjs(entryDate);

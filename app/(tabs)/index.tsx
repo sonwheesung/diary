@@ -1,11 +1,11 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Flame, Pencil, Search } from 'lucide-react-native';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
+import { Screen } from '@/components/Screen';
 import { resolveImageUri } from '@/features/diary/api/image-store';
 import { findEmotion } from '@/features/diary/emotions';
 import { useHomeData } from '@/features/diary/hooks/use-home-data';
@@ -20,71 +20,65 @@ export default function HomeScreen() {
   const { recent, thumbnails, streak, loading, error } = useHomeData();
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.date}>{formatFullDate(today())}</Text>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="검색"
-            onPress={() => router.push('/search')}
-            hitSlop={12}
-          >
-            <Search size={22} color={colors.textMuted} />
+    <Screen>
+      <View style={styles.header}>
+        <Text style={styles.date}>{formatFullDate(today())}</Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="검색"
+          onPress={() => router.push('/search')}
+          hitSlop={12}
+        >
+          <Search size={22} color={colors.textMuted} />
+        </Pressable>
+      </View>
+
+      <Text style={styles.greeting}>
+        오늘,{'\n'}어떤 조각을{'\n'}모으고 싶나요?
+      </Text>
+
+      {streak > 0 && (
+        <View style={styles.streak}>
+          <Flame size={16} color={colors.accent} />
+          <Text style={styles.streakText}>{streak}일 연속 기록 중</Text>
+        </View>
+      )}
+
+      <Button
+        label="조각 쓰기"
+        fullWidth
+        icon={<Pencil size={18} color={colors.textOnAccent} />}
+        onPress={() => router.push('/write')}
+      />
+
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>최근의 조각들</Text>
+        {recent.length > 0 && (
+          <Pressable accessibilityRole="button" onPress={() => router.push('/diaries')} hitSlop={8}>
+            <Text style={styles.more}>더보기</Text>
           </Pressable>
-        </View>
-
-        <Text style={styles.greeting}>
-          오늘,{'\n'}어떤 조각을{'\n'}모으고 싶나요?
-        </Text>
-
-        {streak > 0 && (
-          <View style={styles.streak}>
-            <Flame size={16} color={colors.accent} />
-            <Text style={styles.streakText}>{streak}일 연속 기록 중</Text>
-          </View>
         )}
+      </View>
 
-        <Button
-          label="조각 쓰기"
-          fullWidth
-          icon={<Pencil size={18} color={colors.textOnAccent} />}
-          onPress={() => router.push('/write')}
-        />
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>최근의 조각들</Text>
-          {recent.length > 0 && (
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => router.push('/diaries')}
-              hitSlop={8}
-            >
-              <Text style={styles.more}>더보기</Text>
-            </Pressable>
-          )}
+      {loading ? (
+        <ActivityIndicator color={colors.accentMuted} style={styles.loading} />
+      ) : error !== null ? (
+        <Card>
+          <Text style={styles.errorText}>{error}</Text>
+        </Card>
+      ) : recent.length === 0 ? (
+        <Card>
+          <Text style={styles.emptyTitle}>아직 모은 조각이 없어요</Text>
+          <Text style={styles.emptyBody}>오늘의 첫 조각을 남겨보세요.</Text>
+        </Card>
+      ) : (
+        <View style={styles.list}>
+          {recent.map((diary) => (
+            <DiaryRow key={diary.id} diary={diary} thumbnail={thumbnails.get(diary.id)} />
+          ))}
         </View>
-
-        {loading ? (
-          <ActivityIndicator color={colors.accentMuted} style={styles.loading} />
-        ) : error !== null ? (
-          <Card>
-            <Text style={styles.errorText}>{error}</Text>
-          </Card>
-        ) : recent.length === 0 ? (
-          <Card>
-            <Text style={styles.emptyTitle}>아직 모은 조각이 없어요</Text>
-            <Text style={styles.emptyBody}>오늘의 첫 조각을 남겨보세요.</Text>
-          </Card>
-        ) : (
-          <View style={styles.list}>
-            {recent.map((diary) => (
-              <DiaryRow key={diary.id} diary={diary} thumbnail={thumbnails.get(diary.id)} />
-            ))}
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+      )}
+    </Screen>
   );
 }
 
@@ -122,15 +116,6 @@ function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | 
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  scroll: {
-    paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xxl,
-    gap: spacing.lg,
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

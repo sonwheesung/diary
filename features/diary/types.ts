@@ -40,6 +40,11 @@ export interface Diary {
 
 /** 새 조각 입력. 본문(blocks)만 필수 (DIARY_SYSTEM §1). */
 export interface DiaryDraft {
+  /**
+   * 작성 화면이 미리 만들어 둔 id. 이미지는 조각이 저장되기 **전에** 삽입되므로
+   * 그 시점에 붙일 diary_id가 먼저 있어야 한다. 생략하면 새로 만든다.
+   */
+  id?: string;
   blocks: DiaryBlock[];
   title?: string | null;
   emotion?: EmotionCode | null;

@@ -126,6 +126,30 @@ export async function getImagesForDiaries(diaryIds: string[]): Promise<Map<strin
 }
 
 /**
+ * 저장하지 않고 나간 작성 화면의 이미지를 정리한다.
+ *
+ * 여기서만 **하드 삭제**한다 — 조각이 애초에 만들어지지 않았으므로 되살릴 대상이 없고,
+ * 그냥 두면 사용자가 작성을 취소할 때마다 사진이 기기에 영구히 쌓인다.
+ */
+export async function discardDraftImages(diaryId: string): Promise<void> {
+  const images = await getImagesForDiary(diaryId);
+
+  for (const image of images) {
+    try {
+      const file = new File(imageDirectory(), image.fileName);
+      if (file.exists) {
+        file.delete();
+      }
+    } catch {
+      // 파일 삭제 실패가 화면 이탈을 막으면 안 된다. DB 행은 아래에서 지운다.
+    }
+  }
+
+  const db = await getDatabase();
+  await db.runAsync('DELETE FROM diary_images WHERE diary_id = ?', diaryId);
+}
+
+/**
  * 이미지를 소프트 삭제한다. **실제 파일은 지우지 않는다.**
  * 지금 지우면 조각을 되살릴 방법이 없고, 백업 복원 시에도 빈 자리가 된다.
  * 실제 파일 정리 시점은 백업 착수 시 정한다(DIARY_SYSTEM §1.2).

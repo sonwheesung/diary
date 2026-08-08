@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Screen } from '@/components/Screen';
 import { colors } from '@/theme/colors';
 import { spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
@@ -11,24 +11,21 @@ import { typography } from '@/theme/typography';
  */
 export function PlaceholderScreen({ title, note }: { title: string; note?: string }) {
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
+    <Screen scroll={false} contentStyle={styles.center}>
+      <View style={styles.body}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.note}>{note ?? '준비 중입니다.'}</Text>
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
+  center: {
     justifyContent: 'center',
+  },
+  body: {
+    alignItems: 'center',
     gap: spacing.sm,
   },
   title: {

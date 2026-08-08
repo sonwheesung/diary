@@ -51,7 +51,14 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.background },
           animation: 'fade',
         }}
-      />
+      >
+        <Stack.Screen name="(tabs)" />
+        {/* 작성은 탭 위에 덮이는 모달이다 — 쓰는 동안 하단 탭이 보이면 집중이 깨진다. */}
+        <Stack.Screen
+          name="write"
+          options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+        />
+      </Stack>
     </SafeAreaProvider>
   );
 }

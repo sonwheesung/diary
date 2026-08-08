@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Calendar, House, Plus, Search, Settings } from 'lucide-react-native';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/typography';
@@ -16,16 +17,27 @@ function WriteTabIcon() {
   );
 }
 
+const TAB_BAR_CONTENT_HEIGHT = 60;
+
 export default function TabsLayout() {
+  // 제스처 내비게이션 기기에서 탭바가 시스템 바 아래로 깔리는 것을 막는다.
+  // 고정 높이를 쓰면 기기마다 어긋난다 — 인셋을 더해서 계산한다.
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [
+          styles.tabBar,
+          { height: TAB_BAR_CONTENT_HEIGHT + insets.bottom, paddingBottom: insets.bottom },
+        ],
         tabBarLabelStyle: styles.tabLabel,
         sceneStyle: { backgroundColor: colors.background },
+        // 키보드가 올라오면 탭바를 숨긴다 — 안 그러면 입력창 위에 탭바가 겹쳐 보인다.
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen
@@ -73,7 +85,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    height: Platform.OS === 'ios' ? 88 : 68,
     paddingTop: 8,
   },
   tabLabel: {

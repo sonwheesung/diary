@@ -25,6 +25,31 @@ export function addDays(entryDate: string, days: number): string {
   return dayjs(entryDate).add(days, 'day').format(DATE_FORMAT);
 }
 
+export function addMonths(entryDate: string, months: number): string {
+  return dayjs(entryDate).add(months, 'month').format(DATE_FORMAT);
+}
+
+export function startOfMonth(entryDate: string): string {
+  return dayjs(entryDate).startOf('month').format(DATE_FORMAT);
+}
+
+export function daysInMonth(entryDate: string): number {
+  return dayjs(entryDate).daysInMonth();
+}
+
+/** 요일 번호. 0 = 일요일 — 캘린더 격자의 빈 칸 수를 여기서 얻는다. */
+export function weekdayIndex(entryDate: string): number {
+  return dayjs(entryDate).day();
+}
+
+/**
+ * 'YYYY-MM-DD'는 사전순 비교가 곧 시간순 비교라 문자열로 비교한다.
+ * Date로 바꿔 비교하면 타임존·시각이 끼어들어 같은 날이 미래로 판정되는 사고가 난다.
+ */
+export function isAfterToday(entryDate: string): boolean {
+  return entryDate > today();
+}
+
 /** 해당 월의 첫날·마지막날. 캘린더 범위 질의에 쓴다. */
 export function monthRange(entryDate: string): { from: string; to: string } {
   const target = dayjs(entryDate);

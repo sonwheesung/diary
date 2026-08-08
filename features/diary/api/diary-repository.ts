@@ -62,7 +62,8 @@ export async function createDiary(draft: DiaryDraft): Promise<Diary> {
 
   const db = await getDatabase();
   const now = Date.now();
-  const id = Crypto.randomUUID();
+  // 작성 화면이 이미지보다 먼저 id를 만들어 두는 경우가 있다(DiaryDraft.id 주석 참고).
+  const id = draft.id ?? Crypto.randomUUID();
   const tags = normalizeTagNames(draft.tags ?? []);
 
   // 본문 정본(blocks)과 검색용 파생 평문(content)을 같은 트랜잭션에서 쓴다 —
