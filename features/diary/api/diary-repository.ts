@@ -46,6 +46,31 @@ async function toDiaries(rows: DiaryRow[]): Promise<Diary[]> {
   return rows.map((row) => toDiary(row, tagMap.get(row.id) ?? []));
 }
 
+/**
+ * 하루에 조각은 하나다 (DIARY_SYSTEM §2, 2026-08-08 사용자 결정).
+ *
+ * DB UNIQUE 제약이 아니라 여기서 막는다. 제약을 걸면 나중에 다른 기기의 백업을 복원할 때
+ * 같은 날짜가 부딪혀 **복원 전체가 실패**한다 — 그때는 사람이 고를 문제이지 INSERT가 죽을 문제가 아니다.
+ */
+async function findDiaryIdOnDate(
+  db: Awaited<ReturnType<typeof getDatabase>>,
+  entryDate: string,
+  exceptId?: string,
+): Promise<string | null> {
+  const row = await db.getFirstAsync<{ id: string }>(
+    `SELECT id FROM diaries WHERE entry_date = ? AND ${ALIVE} AND id IS NOT ? LIMIT 1`,
+    entryDate,
+    exceptId ?? null,
+  );
+  return row?.id ?? null;
+}
+
+/** 그날 이미 쓴 조각의 id. 없으면 null — 작성 진입 전에 "이어쓰기"로 보낼지 판단할 때 쓴다. */
+export async function getDiaryIdOnDate(entryDate: string): Promise<string | null> {
+  const db = await getDatabase();
+  return findDiaryIdOnDate(db, entryDate);
+}
+
 function normalizeTitle(title: string | null | undefined): string | null {
   if (title === null || title === undefined) {
     return null;
@@ -65,16 +90,21 @@ export async function createDiary(draft: DiaryDraft): Promise<Diary> {
   // 작성 화면이 이미지보다 먼저 id를 만들어 두는 경우가 있다(DiaryDraft.id 주석 참고).
   const id = draft.id ?? Crypto.randomUUID();
   const tags = normalizeTagNames(draft.tags ?? []);
+  const entryDate = draft.entryDate ?? today();
 
   // 본문 정본(blocks)과 검색용 파생 평문(content)을 같은 트랜잭션에서 쓴다 —
   // 어긋나면 검색이 조용히 틀린다(DIARY_SYSTEM §1.1).
   await db.withTransactionAsync(async () => {
+    // 트랜잭션 안에서 확인한다 — 밖에서 보면 확인과 INSERT 사이에 끼어들 틈이 생긴다.
+    if ((await findDiaryIdOnDate(db, entryDate)) !== null) {
+      throw new Error('그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.');
+    }
     await db.runAsync(
       `INSERT INTO diaries
          (id, entry_date, title, content, content_blocks, emotion, created_at, updated_at, deleted_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)`,
       id,
-      draft.entryDate ?? today(),
+      entryDate,
       normalizeTitle(draft.title),
       extractPlainText(blocks),
       serializeBlocks(blocks),
@@ -133,6 +163,12 @@ export async function updateDiary(id: string, patch: DiaryPatch): Promise<Diary 
   values.push(Date.now(), id);
 
   await db.withTransactionAsync(async () => {
+    // 날짜를 옮기는 수정도 하루 하나 규칙을 지켜야 한다. 자기 자신은 제외한다.
+    if (patch.entryDate !== undefined) {
+      if ((await findDiaryIdOnDate(db, patch.entryDate, id)) !== null) {
+        throw new Error('그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.');
+      }
+    }
     await db.runAsync(
       `UPDATE diaries SET ${columns.join(', ')} WHERE id = ? AND ${ALIVE}`,
       ...values,

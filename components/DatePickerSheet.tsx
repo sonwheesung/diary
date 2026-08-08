@@ -17,6 +17,10 @@ interface DatePickerSheetProps {
   onClose: () => void;
   /** 이 날짜 이후는 고를 수 없다 */
   maxDate?: string;
+  /** 이미 차지된 날짜 — 점이 찍힌 채로 눌리지 않는다 */
+  takenDates?: ReadonlySet<string>;
+  /** 보고 있는 달이 바뀔 때. 그 달의 `takenDates`를 불러오라는 신호다 */
+  onMonthChange?: (month: string) => void;
 }
 
 /** 날짜를 고르는 시트. 고르는 즉시 닫힌다 — 확인 버튼을 한 번 더 누르게 하지 않는다. */
@@ -26,6 +30,8 @@ export function DatePickerSheet({
   onSelect,
   onClose,
   maxDate,
+  takenDates,
+  onMonthChange,
 }: DatePickerSheetProps) {
   const [month, setMonth] = useState(value);
 
@@ -36,8 +42,16 @@ export function DatePickerSheet({
     }
   }, [visible, value]);
 
+  useEffect(() => {
+    if (visible) {
+      onMonthChange?.(month);
+    }
+  }, [visible, month, onMonthChange]);
+
   const nextMonth = addMonths(month, 1);
   const canGoNext = maxDate === undefined || startOfMonth(nextMonth) <= maxDate;
+  // 오늘 이미 썼다면 '오늘로'도 막아야 한다 — 눌러서 못 고를 날로 보내면 안 된다.
+  const todayTaken = takenDates?.has(today()) === true;
 
   return (
     <BottomSheet visible={visible} onClose={onClose}>
@@ -63,14 +77,27 @@ export function DatePickerSheet({
         </Pressable>
       </View>
 
-      <MonthGrid month={month} selected={value} onSelect={onSelect} maxDate={maxDate} />
+      <MonthGrid
+        month={month}
+        selected={value}
+        onSelect={onSelect}
+        markedDates={takenDates}
+        disabledDates={takenDates}
+        maxDate={maxDate}
+      />
+
+      {takenDates !== undefined && takenDates.size > 0 && (
+        <Text style={styles.hint}>점이 찍힌 날은 이미 조각을 썼어요</Text>
+      )}
 
       <Pressable
         accessibilityRole="button"
+        accessibilityState={{ disabled: todayTaken }}
+        disabled={todayTaken}
         onPress={() => onSelect(today())}
-        style={styles.todayButton}
+        style={[styles.todayButton, todayTaken && styles.todayButtonDisabled]}
       >
-        <Text style={styles.todayLabel}>오늘로</Text>
+        <Text style={[styles.todayLabel, todayTaken && styles.todayLabelDisabled]}>오늘로</Text>
       </Pressable>
     </BottomSheet>
   );
@@ -86,6 +113,11 @@ const styles = StyleSheet.create({
     ...typography.subtitle,
     color: colors.text,
   },
+  hint: {
+    ...typography.caption,
+    color: colors.textMuted,
+    textAlign: 'center',
+  },
   todayButton: {
     alignSelf: 'center',
     paddingHorizontal: spacing.lg,
@@ -93,8 +125,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
     backgroundColor: colors.surfaceMuted,
   },
+  todayButtonDisabled: {
+    opacity: 0.5,
+  },
   todayLabel: {
     ...typography.label,
     color: colors.accent,
+  },
+  todayLabelDisabled: {
+    color: colors.textMuted,
   },
 });

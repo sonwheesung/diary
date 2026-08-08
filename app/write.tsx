@@ -1,8 +1,8 @@
 import * as Crypto from 'expo-crypto';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { ChevronDown, ImagePlus, Smile, Tag, X } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { ChevronDown, CircleAlert, ImagePlus, Smile, Tag, X } from 'lucide-react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -10,7 +10,11 @@ import { BottomSheet } from '@/components/BottomSheet';
 import { DatePickerSheet } from '@/components/DatePickerSheet';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
-import { createDiary } from '@/features/diary/api/diary-repository';
+import {
+  createDiary,
+  getDiaryIdOnDate,
+  getWrittenDates,
+} from '@/features/diary/api/diary-repository';
 import { discardDraftImages, saveImage } from '@/features/diary/api/image-store';
 import { listTagsByUsage } from '@/features/diary/api/tag-repository';
 import { hasContent } from '@/features/diary/blocks';
@@ -20,7 +24,7 @@ import { TagInput } from '@/features/diary/components/TagInput';
 import { findEmotion } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
-import { today } from '@/lib/date';
+import { monthRange, today } from '@/lib/date';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
 import { colors } from '@/theme/colors';
 import { radius, spacing } from '@/theme/spacing';
@@ -48,7 +52,50 @@ export default function WriteScreen() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [entryDate, setEntryDate] = useState(today);
   const [openSheet, setOpenSheet] = useState<'date' | 'emotion' | 'tag' | null>(null);
+  const [takenDates, setTakenDates] = useState<ReadonlySet<string>>(new Set());
+  const [dateTaken, setDateTaken] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  /*
+   * 고른 날짜에 이미 조각이 있는지 **미리** 본다.
+   *
+   * 저장할 때 막으면 다 쓰고 나서 못 쓴다는 말을 듣게 된다 — 그건 화가 나는 일이다.
+   * 들어온 순간 알려주고, 저장 버튼을 처음부터 죽여둔다.
+   */
+  useEffect(() => {
+    let alive = true;
+    void getDiaryIdOnDate(entryDate)
+      .then((id) => {
+        if (alive) {
+          setDateTaken(id !== null);
+        }
+      })
+      // 확인에 실패하면 막지 않는다. 저장 시점에 저장소가 한 번 더 본다.
+      .catch(() => {
+        if (alive) {
+          setDateTaken(false);
+        }
+      });
+    return () => {
+      alive = false;
+    };
+  }, [entryDate]);
+
+  // 오늘 이미 썼다면 글을 쓰기 전에 날짜부터 고르게 한다.
+  useEffect(() => {
+    if (dateTaken) {
+      setOpenSheet((current) => (current === null ? 'date' : current));
+    }
+  }, [dateTaken]);
+
+  // 하루에 조각은 하나다(DIARY_SYSTEM §2). 이미 쓴 날은 날짜 시트에서 고를 수 없어야 한다.
+  const loadTakenDates = useCallback((month: string) => {
+    const { from, to } = monthRange(month);
+    void getWrittenDates(from, to)
+      .then((dates) => setTakenDates(new Set(dates)))
+      // 못 불러와도 달력은 열려야 한다. 저장 시점에 저장소가 한 번 더 막아준다.
+      .catch(() => setTakenDates(new Set()));
+  }, []);
 
   useEffect(() => {
     void listTagsByUsage(8)
@@ -170,7 +217,7 @@ export default function WriteScreen() {
     router.back();
   };
 
-  const canSave = hasContent(blocks) && !saving;
+  const canSave = hasContent(blocks) && !saving && !dateTaken;
   const selectedEmotion = emotion === null ? undefined : findEmotion(emotion);
 
   const header = (
@@ -211,8 +258,15 @@ export default function WriteScreen() {
           hitSlop={8}
         >
           <Text style={styles.dateDay}>{formatDayNumber(entryDate)}</Text>
-          <Text style={styles.dateRest}>{formatMonthYearWeekday(entryDate)}</Text>
-          <ChevronDown size={16} color={colors.textMuted} />
+          {/*
+            아이콘에는 베이스라인이 없다. 큰 숫자와 같은 줄에 그냥 두면 혼자 아래로 떨어지고,
+            바깥에서 가운데 정렬하면 이번엔 큰 숫자를 기준으로 가운데라 작은 글씨와 어긋난다.
+            **작은 글씨와 한 덩어리로 묶어** 그 안에서 가운데 정렬해야 높이가 맞는다.
+          */}
+          <View style={styles.dateRestGroup}>
+            <Text style={styles.dateRest}>{formatMonthYearWeekday(entryDate)}</Text>
+            <ChevronDown size={14} color={colors.textMuted} />
+          </View>
         </Pressable>
 
         <Pressable
@@ -230,6 +284,20 @@ export default function WriteScreen() {
           )}
         </Pressable>
       </View>
+
+      {dateTaken && (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="다른 날짜 고르기"
+          onPress={() => setOpenSheet('date')}
+          style={styles.notice}
+        >
+          <CircleAlert size={16} color={colors.danger} />
+          <Text style={styles.noticeText}>
+            이 날에는 이미 조각이 있어요. 눌러서 다른 날짜를 골라주세요.
+          </Text>
+        </Pressable>
+      )}
 
       <TextField value={title} onChangeText={setTitle} placeholder="제목 (선택)" tone="title" />
 
@@ -271,6 +339,8 @@ export default function WriteScreen() {
         value={entryDate}
         // 아직 오지 않은 하루는 기록할 수 없다(DIARY_SYSTEM §3).
         maxDate={today()}
+        takenDates={takenDates}
+        onMonthChange={loadTakenDates}
         onSelect={(date) => {
           setEntryDate(date);
           setOpenSheet(null);
@@ -339,11 +409,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
   },
   saveButton: {
-    minWidth: 72,
+    minWidth: 60,
     alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
+    justifyContent: 'center',
+    height: 34,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.md,
     backgroundColor: colors.accent,
   },
   saveButtonDisabled: {
@@ -368,8 +439,13 @@ const styles = StyleSheet.create({
   },
   dateButton: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     gap: spacing.sm,
+  },
+  dateRestGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
   },
   dateDay: {
     ...typography.display,
@@ -380,10 +456,10 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   emotionButton: {
-    minWidth: 44,
-    height: 44,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.full,
+    minWidth: 38,
+    height: 34,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.surfaceMuted,
@@ -394,6 +470,20 @@ const styles = StyleSheet.create({
   emotionLabel: {
     ...typography.label,
     color: colors.accent,
+  },
+  notice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.md,
+    backgroundColor: colors.surfaceMuted,
+  },
+  noticeText: {
+    ...typography.caption,
+    color: colors.danger,
+    flex: 1,
   },
   tagRow: {
     flexDirection: 'row',

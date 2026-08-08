@@ -61,13 +61,19 @@ export function Screen({
       setOverlap(0);
       return;
     }
-    // 창이 줄어드는 기기라면 레이아웃이 끝난 뒤에 재야 제대로 나온다.
-    const timer = setTimeout(() => {
+    const measure = () => {
       rootRef.current?.measureInWindow((_x, y, _width, height) => {
         setOverlap(Math.max(0, y + height - keyboard.screenY));
       });
-    }, 60);
-    return () => clearTimeout(timer);
+    };
+    // 두 번 잰다. 창이 줄어드는 기기는 레이아웃이 끝난 뒤라야 값이 맞고,
+    // 키보드가 뜬 뒤 제안 줄·툴바가 붙어 높이가 한 번 더 커지는 경우가 있다(Gboard).
+    const early = setTimeout(measure, 60);
+    const late = setTimeout(measure, 350);
+    return () => {
+      clearTimeout(early);
+      clearTimeout(late);
+    };
   }, [keyboard.height, keyboard.screenY]);
 
   /*

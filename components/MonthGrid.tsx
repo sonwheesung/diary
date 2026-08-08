@@ -14,6 +14,12 @@ interface MonthGridProps {
   onSelect: (entryDate: string) => void;
   /** 점을 찍을 날짜들. 캘린더 탭에서 '조각을 쓴 날' 표시에 쓴다 */
   markedDates?: ReadonlySet<string>;
+  /**
+   * 누를 수 없는 날짜들. `markedDates`와 겹치면 **점 찍힌 채로 비활성**이 된다 —
+   * 작성 화면에서 "이미 쓴 날"을 그렇게 표시한다. 아직 안 온 날(`maxDate` 밖)과 구분되어야 해서
+   * 흐리게 죽이는 색을 다르게 쓴다.
+   */
+  disabledDates?: ReadonlySet<string>;
   /** 이 날짜 이후는 누를 수 없다 */
   maxDate?: string;
 }
@@ -22,7 +28,14 @@ interface MonthGridProps {
  * 한 달 날짜 격자. 작성 화면의 날짜 변경과 캘린더 탭이 같은 격자를 쓴다 —
  * 두 벌을 만들면 '오늘 표시'나 첫 요일 규칙이 어느 순간 서로 어긋난다.
  */
-export function MonthGrid({ month, selected, onSelect, markedDates, maxDate }: MonthGridProps) {
+export function MonthGrid({
+  month,
+  selected,
+  onSelect,
+  markedDates,
+  disabledDates,
+  maxDate,
+}: MonthGridProps) {
   const first = startOfMonth(month);
   const leading = weekdayIndex(first);
   const total = daysInMonth(month);
@@ -50,7 +63,10 @@ export function MonthGrid({ month, selected, onSelect, markedDates, maxDate }: M
           const date = `${prefix}${String(day).padStart(2, '0')}`;
           const isSelected = date === selected;
           const isToday = date === todayValue;
-          const disabled = maxDate !== undefined && date > maxDate;
+          const marked = markedDates?.has(date) === true;
+          const taken = disabledDates?.has(date) === true;
+          const outOfRange = maxDate !== undefined && date > maxDate;
+          const disabled = taken || outOfRange;
 
           return (
             <Pressable
@@ -63,13 +79,20 @@ export function MonthGrid({ month, selected, onSelect, markedDates, maxDate }: M
               style={styles.cell}
             >
               <View
-                style={[styles.day, isToday && styles.dayToday, isSelected && styles.daySelected]}
+                style={[
+                  styles.day,
+                  isToday && styles.dayToday,
+                  // 이미 쓴 날은 눌리지 않지만 '있다'는 건 보여야 한다 — 옅은 배경으로 남긴다.
+                  taken && styles.dayTaken,
+                  isSelected && styles.daySelected,
+                ]}
               >
                 <Text
                   style={[
                     styles.dayLabel,
                     isSelected && styles.dayLabelSelected,
-                    disabled && styles.dayLabelDisabled,
+                    taken && styles.dayLabelTaken,
+                    outOfRange && styles.dayLabelDisabled,
                   ]}
                 >
                   {day}
@@ -79,8 +102,7 @@ export function MonthGrid({ month, selected, onSelect, markedDates, maxDate }: M
               <View
                 style={[
                   styles.dot,
-                  markedDates?.has(date) === true &&
-                    (isSelected ? styles.dotOnSelected : styles.dotVisible),
+                  marked && (isSelected ? styles.dotOnSelected : styles.dotVisible),
                 ]}
               />
             </Pressable>
@@ -119,6 +141,9 @@ const styles = StyleSheet.create({
   dayToday: {
     backgroundColor: colors.accentSoft,
   },
+  dayTaken: {
+    backgroundColor: colors.surfaceMuted,
+  },
   daySelected: {
     backgroundColor: colors.accent,
   },
@@ -128,6 +153,10 @@ const styles = StyleSheet.create({
   },
   dayLabelSelected: {
     color: colors.textOnAccent,
+  },
+  // 이미 쓴 날 — 아직 안 온 날과 같은 회색으로 죽이면 둘을 구분할 수 없다.
+  dayLabelTaken: {
+    color: colors.accentMuted,
   },
   dayLabelDisabled: {
     color: colors.border,
