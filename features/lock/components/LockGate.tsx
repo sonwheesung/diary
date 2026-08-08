@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import * as ScreenCapture from 'expo-screen-capture';
+import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { AppState, StyleSheet, View } from 'react-native';
 import type { AppStateStatus } from 'react-native';
 
-import { LOCK_DELAY_MS, getLockConfig } from '@/features/lock/api/lock-store';
-import type { LockConfig } from '@/features/lock/api/lock-store';
+import { LOCK_DELAY_MS } from '@/features/lock/api/lock-store';
 import { UnlockView } from '@/features/lock/components/UnlockView';
+import { useLockStore } from '@/features/lock/store';
 
 /**
  * 앱 잠금 게이트 (CLAUDE.md §7.1).
@@ -14,9 +15,12 @@ import { UnlockView } from '@/features/lock/components/UnlockView';
  * 지나칠 구멍이 생긴다 — 여기서 막으면 통과할 길이 없다.
  *
  * 잠기는 시점: 앱을 켤 때 + 백그라운드로 나갔다가 설정한 시간이 지난 뒤 돌아올 때.
+ * 설정은 `useLockStore`가 단일 출처다 — 설정 화면에서 켠 잠금이 여기 즉시 반영돼야 한다.
  */
 export function LockGate({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState<LockConfig | null>(null);
+  const config = useLockStore((state) => state.config);
+  const refresh = useLockStore((state) => state.refresh);
+
   const [locked, setLocked] = useState(false);
   /**
    * 초기화 후 아래 화면을 통째로 새로 그리기 위한 키.
@@ -26,22 +30,37 @@ export function LockGate({ children }: { children: ReactNode }) {
   const [treeKey, setTreeKey] = useState(0);
   const backgroundedAtRef = useRef<number | null>(null);
 
-  const reload = useCallback(async () => {
-    const next = await getLockConfig();
-    setConfig(next);
-    // 잠금을 방금 켠 경우까지 즉시 잠그면 설정 화면에서 바로 튕긴다 — 켤 때는 잠그지 않는다.
-    setLocked((current) => current && next.enabled);
-    return next;
-  }, []);
-
   // 앱을 켤 때 한 번. 잠금이 걸려 있으면 처음부터 잠근다.
   useEffect(() => {
+    void refresh().then((next) => setLocked(next.enabled));
+  }, [refresh]);
+
+  /*
+   * 앱 스위처 가림 (CLAUDE.md §7.1).
+   *
+   * 잠금을 걸어도 최근 앱 미리보기에 일기가 그대로 보이면 잠금의 절반이 무의미하다.
+   * 안드로이드는 `FLAG_SECURE`로 미리보기를 빈 화면으로 만든다.
+   *
+   * **잠금을 켠 사람에게만 건다.** 이 플래그는 스크린샷도 함께 막는다 —
+   * 잠그지도 않은 사람이 자기 일기를 캡처하지 못하게 되는 건 부당하다.
+   * 잠금을 켠 것은 "남에게 안 보이게 해달라"는 뜻이므로 그 대가는 감수할 만하다.
+   *
+   * ⚠ iOS는 스크린샷·녹화만 막힌다. 앱 스위처 가림은 별도 오버레이가 필요하다(미구현).
+   */
+  useEffect(() => {
+    const enabled = config?.enabled === true;
     void (async () => {
-      const next = await getLockConfig();
-      setConfig(next);
-      setLocked(next.enabled);
+      try {
+        if (enabled) {
+          await ScreenCapture.preventScreenCaptureAsync();
+        } else {
+          await ScreenCapture.allowScreenCaptureAsync();
+        }
+      } catch {
+        // 지원하지 않는 환경(웹 등)에서 앱이 죽으면 안 된다. 가림이 안 될 뿐이다.
+      }
     })();
-  }, []);
+  }, [config?.enabled]);
 
   useEffect(() => {
     const handle = (state: AppStateStatus) => {
@@ -54,7 +73,7 @@ export function LockGate({ children }: { children: ReactNode }) {
       }
       void (async () => {
         // 설정을 바꾸고 돌아왔을 수도 있다 — 돌아올 때마다 다시 읽는다.
-        const next = await reload();
+        const next = await refresh();
         const leftAt = backgroundedAtRef.current;
         backgroundedAtRef.current = null;
         if (!next.enabled || leftAt === null) {
@@ -68,7 +87,7 @@ export function LockGate({ children }: { children: ReactNode }) {
 
     const subscription = AppState.addEventListener('change', handle);
     return () => subscription.remove();
-  }, [reload]);
+  }, [refresh]);
 
   return (
     <>
@@ -82,8 +101,8 @@ export function LockGate({ children }: { children: ReactNode }) {
           onUnlocked={() => setLocked(false)}
           onWiped={() => {
             setLocked(false);
-            setConfig({ enabled: false, method: null, biometric: false, delay: 'immediate' });
             setTreeKey((current) => current + 1);
+            void refresh();
           }}
         />
       )}

@@ -48,7 +48,7 @@
 | Search | ✅ | 제목·본문·태그 부분 문자열. 250ms 디바운스. 빈 검색어면 자주 쓴 태그를 보여준다 |
 | 모든 조각 목록(홈의 더보기) | ✅ | `app/diaries.tsx` — 달 머리글 + 20개씩 '더 보기' |
 | Settings(다크모드·잠금 설정·알림 UI) | ❌ | |
-| 앱 잠금(PIN·패턴 3×3·생체) | ✅ | `features/lock/` · 실패 backoff · 복귀 지연. **앱 스위처 가림은 미구현**(CLAUDE.md §7.1) |
+| 앱 잠금(PIN·패턴 3×3·생체) | ✅ | `features/lock/` · 힌트 되찾기 · 실패 backoff · 복귀 지연 · 앱 스위처 가림(Android). iOS 가림만 남음 |
 | 공지사항 | ❌ | common_server bootstrap |
 | 문의하기 | ❌ | **로그인 필수** — Phase 7 대기 |
 | 구글 로그인(선택적) | ❌ | Phase 7 대기 |

@@ -7,12 +7,12 @@ import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 import { Screen } from '@/components/Screen';
 import {
   disableLock,
-  getLockConfig,
   isBiometricAvailable,
   setBiometricEnabled,
   setLockDelay,
 } from '@/features/lock/api/lock-store';
-import type { LockConfig, LockDelay } from '@/features/lock/api/lock-store';
+import type { LockDelay } from '@/features/lock/api/lock-store';
+import { useLockStore } from '@/features/lock/store';
 import {
   SETTING_KEYS,
   getBoolSetting,
@@ -38,15 +38,17 @@ const DELAY_ORDER: LockDelay[] = ['immediate', '1m', '5m'];
 
 export default function SettingsScreen() {
   const [notifications, setNotifications] = useState(false);
-  const [lock, setLock] = useState<LockConfig | null>(null);
+  // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
+  const lock = useLockStore((state) => state.config);
+  const refreshLock = useLockStore((state) => state.refresh);
   const [biometricAvailable, setBiometricAvailable] = useState(false);
 
   // 잠금 설정 화면에 다녀오면 상태가 바뀌어 있다 — 돌아올 때마다 다시 읽는다.
   useFocusEffect(
     useCallback(() => {
-      void getLockConfig().then(setLock);
+      void refreshLock();
       void isBiometricAvailable().then(setBiometricAvailable);
-    }, []),
+    }, [refreshLock]),
   );
 
   const toggleLock = (next: boolean) => {
@@ -60,14 +62,14 @@ export default function SettingsScreen() {
         text: '끄기',
         style: 'destructive',
         onPress: () => {
-          void disableLock().then(() => void getLockConfig().then(setLock));
+          void disableLock().then(() => void refreshLock());
         },
       },
     ]);
   };
 
   const toggleBiometric = (next: boolean) => {
-    void setBiometricEnabled(next).then(() => void getLockConfig().then(setLock));
+    void setBiometricEnabled(next).then(() => void refreshLock());
   };
 
   const cycleDelay = () => {
@@ -76,7 +78,7 @@ export default function SettingsScreen() {
     }
     const index = DELAY_ORDER.indexOf(lock.delay);
     const next = DELAY_ORDER[(index + 1) % DELAY_ORDER.length] ?? 'immediate';
-    void setLockDelay(next).then(() => void getLockConfig().then(setLock));
+    void setLockDelay(next).then(() => void refreshLock());
   };
 
   useEffect(() => {
@@ -118,10 +120,14 @@ export default function SettingsScreen() {
           </View>
           <View style={styles.rowBody}>
             <Text style={styles.rowTitle}>잠금 사용</Text>
+            {/*
+              잠금을 켜면 스크린샷이 막힌다. 켜고 나서 "왜 캡처가 안 되지"를 겪게 두지 않는다 —
+              켜기 전에 미리 알려준다(CLAUDE.md §7.1 앱 스위처 가림).
+            */}
             <Text style={styles.rowNote}>
               {lock?.enabled === true
-                ? `${lock.method === 'pin' ? 'PIN' : '패턴'}으로 잠겨 있어요`
-                : '앱을 열 때 잠금 화면을 띄워요'}
+                ? `${lock.method === 'pin' ? 'PIN' : '패턴'}으로 잠겨 있어요 · 미리보기와 스크린샷이 가려져요`
+                : '앱을 열 때 잠금 화면을 띄워요. 켜면 최근 앱 미리보기와 스크린샷도 가려져요'}
             </Text>
           </View>
           <Switch
