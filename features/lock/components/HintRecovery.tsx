@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import {
@@ -10,6 +10,7 @@ import {
   revealSecretWithHint,
 } from '@/features/lock/api/lock-store';
 import type { LockMethod } from '@/features/lock/api/lock-store';
+import { wipeAllData } from '@/features/settings/api/reset-app';
 import { colors } from '@/theme/colors';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
@@ -17,7 +18,20 @@ import { typography } from '@/theme/typography';
 interface HintRecoveryProps {
   method: LockMethod;
   onClose: () => void;
+  /** 초기화까지 간 경우. 잠금이 사라졌으니 게이트를 열어야 한다 */
+  onWiped: () => void;
 }
+
+/*
+ * 힌트도 못 맞히면?
+ *
+ * **기존 조각을 여는 방법은 없다.** 그게 잠금의 정의다. 남는 길은 전부 지우고 새로 시작하는 것뿐이고,
+ * 그건 앱을 지웠다 다시 깔면 어차피 벌어지는 일이다 — 그래서 앱 안에 길을 둔다.
+ * 막다른 화면에 사용자를 세워두고 "재설치하세요"라고 알아서 깨닫게 하지 않는다.
+ *
+ * 훔친 폰으로 초기화해도 **읽을 수 있게 되는 건 없다**. 잃는 건 가용성뿐이고
+ * 그건 앱 삭제로도 똑같이 잃는다.
+ */
 
 /**
  * 힌트로 잠금 되찾기.
@@ -28,7 +42,7 @@ interface HintRecoveryProps {
  * 시도는 잠금 화면과 **같은 지연(backoff)** 을 공유한다 — 여기가 뚫리면 잠금이 뚫린 것이라,
  * 이쪽만 무제한으로 두면 문을 하나 열어두는 셈이다.
  */
-export function HintRecovery({ method, onClose }: HintRecoveryProps) {
+export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
   const [question, setQuestion] = useState<string | null>(null);
   const [answer, setAnswer] = useState('');
   const [revealed, setRevealed] = useState<string | null>(null);
@@ -61,6 +75,35 @@ export function HintRecovery({ method, onClose }: HintRecoveryProps) {
     } finally {
       setChecking(false);
     }
+  };
+
+  // 되돌릴 수 없는 동작이라 **두 번** 묻는다. 한 번은 실수로 누를 수 있다.
+  const confirmWipe = () => {
+    Alert.alert(
+      '전부 지우고 처음부터 시작할까요?',
+      '잠금을 열 방법이 없으면 남은 길은 이것뿐이에요. 지금까지 쓴 조각과 사진이 모두 사라져요.',
+      [
+        { text: '아니요', style: 'cancel' },
+        {
+          text: '계속',
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert('정말 지울까요?', '되돌릴 수 없어요.', [
+              { text: '아니요', style: 'cancel' },
+              {
+                text: '전부 지우기',
+                style: 'destructive',
+                onPress: () => {
+                  void wipeAllData()
+                    .then(onWiped)
+                    .catch(() => setError('지우지 못했어요. 다시 시도해 주세요.'));
+                },
+              },
+            ]);
+          },
+        },
+      ],
+    );
   };
 
   if (revealed !== null) {
@@ -120,6 +163,11 @@ export function HintRecovery({ method, onClose }: HintRecoveryProps) {
 
       <Pressable accessibilityRole="button" onPress={onClose} hitSlop={8}>
         <Text style={styles.cancel}>돌아가기</Text>
+      </Pressable>
+
+      {/* 마지막 길. 눈에 띄지 않게 두되, 숨기지도 않는다 */}
+      <Pressable accessibilityRole="button" onPress={confirmWipe} hitSlop={8}>
+        <Text style={styles.wipe}>답도 기억나지 않아요</Text>
       </Pressable>
     </View>
   );
@@ -191,6 +239,10 @@ const styles = StyleSheet.create({
   cancel: {
     ...typography.label,
     color: colors.textMuted,
+  },
+  wipe: {
+    ...typography.caption,
+    color: colors.danger,
   },
   pin: {
     ...typography.display,

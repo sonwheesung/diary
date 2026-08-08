@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { AppState } from 'react-native';
+import { AppState, StyleSheet, View } from 'react-native';
 import type { AppStateStatus } from 'react-native';
 
 import { LOCK_DELAY_MS, getLockConfig } from '@/features/lock/api/lock-store';
@@ -18,6 +18,12 @@ import { UnlockView } from '@/features/lock/components/UnlockView';
 export function LockGate({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<LockConfig | null>(null);
   const [locked, setLocked] = useState(false);
+  /**
+   * 초기화 후 아래 화면을 통째로 새로 그리기 위한 키.
+   * 잠금 덮개 뒤의 화면들은 포커스를 잃은 적이 없어서 스스로 다시 읽지 않는다 —
+   * 지웠는데 지운 조각이 그대로 보이면 지워진 게 맞나 싶어진다.
+   */
+  const [treeKey, setTreeKey] = useState(0);
   const backgroundedAtRef = useRef<number | null>(null);
 
   const reload = useCallback(async () => {
@@ -66,14 +72,27 @@ export function LockGate({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {children}
+      <View key={treeKey} style={styles.fill}>
+        {children}
+      </View>
       {locked && config !== null && config.method !== null && (
         <UnlockView
           method={config.method}
           biometric={config.biometric}
           onUnlocked={() => setLocked(false)}
+          onWiped={() => {
+            setLocked(false);
+            setConfig({ enabled: false, method: null, biometric: false, delay: 'immediate' });
+            setTreeKey((current) => current + 1);
+          }}
         />
       )}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  fill: {
+    flex: 1,
+  },
+});

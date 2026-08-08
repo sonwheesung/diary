@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import {
+  HINT_QUESTIONS,
   PATTERN_MIN_POINTS,
   PIN_LENGTH,
   setLockHint,
@@ -168,12 +169,26 @@ export default function LockSetupScreen() {
           답을 맞히면 {method === 'pin' ? 'PIN' : '패턴'}을 다시 보여드려요.
         </Text>
 
-        <TextField
-          value={question}
-          onChangeText={setQuestion}
-          placeholder="질문 (예: 처음 키운 강아지 이름은?)"
-          variant="boxed"
-        />
+        {/* 질문은 고르게 한다 — 자유 입력은 답이 그대로 적힌 질문을 만든다 */}
+        <View style={styles.questionList}>
+          {HINT_QUESTIONS.map((item) => {
+            const selected = item === question;
+            return (
+              <Pressable
+                key={item}
+                accessibilityRole="button"
+                accessibilityState={{ selected }}
+                onPress={() => setQuestion(item)}
+                style={[styles.questionItem, selected && styles.questionItemOn]}
+              >
+                <Text style={[styles.questionLabel, selected && styles.questionLabelOn]}>
+                  {item}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
         <TextField
           value={answer}
           onChangeText={setAnswer}
@@ -283,6 +298,30 @@ const styles = StyleSheet.create({
   errorText: {
     ...typography.caption,
     color: colors.danger,
+  },
+  questionList: {
+    gap: spacing.sm,
+  },
+  questionItem: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  questionItemOn: {
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.accent,
+    backgroundColor: colors.accentSoft,
+  },
+  questionLabel: {
+    ...typography.body,
+    color: colors.text,
+  },
+  questionLabelOn: {
+    color: colors.accent,
   },
   primary: {
     alignItems: 'center',

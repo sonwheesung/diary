@@ -24,10 +24,12 @@ interface UnlockViewProps {
   method: LockMethod;
   biometric: boolean;
   onUnlocked: () => void;
+  /** 초기화까지 갔을 때. 잠금이 사라지고 데이터도 비었으니 화면을 새로 그려야 한다 */
+  onWiped: () => void;
 }
 
 /** 잠금 해제 화면. 라우트가 아니라 **덮개**다 — 뒤로가기나 딥링크로 지나칠 수 없어야 한다. */
-export function UnlockView({ method, biometric, onUnlocked }: UnlockViewProps) {
+export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockViewProps) {
   const insets = useSafeAreaInsets();
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -120,6 +122,7 @@ export function UnlockView({ method, biometric, onUnlocked }: UnlockViewProps) {
       <View style={[styles.root, styles.rootCenter, { paddingTop: insets.top + spacing.xxl }]}>
         <HintRecovery
           method={method}
+          onWiped={onWiped}
           onClose={() => {
             setHintOpen(false);
             // 되찾기에서 지연이 풀렸을 수 있다 — 돌아오면 다시 읽는다.
