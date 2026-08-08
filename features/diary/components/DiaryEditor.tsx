@@ -40,6 +40,8 @@ import { typography } from '@/theme/typography';
 interface DiaryEditorProps {
   /** 수정할 조각 id. `null`이면 새로 쓴다 */
   diaryId: string | null;
+  /** 새 조각의 기본 날짜. 캘린더에서 특정 날을 눌러 들어올 때 쓴다. 없으면 오늘 */
+  initialDate?: string;
   /** 저장이 끝났을 때 */
   onSaved: () => void;
   /** 저장하지 않고 나갈 때 */
@@ -60,7 +62,7 @@ interface DiaryEditorProps {
  * 스크롤한다. 감정·태그처럼 가끔 쓰는 선택은 본문 아래에 늘어놓지 않고 하단 툴바에서 시트로 연다 —
  * 글을 쓸 때마다 아래 요소가 밀리고, 뭔가 고르려면 스크롤부터 해야 하는 게 실제로 거슬렸다.
  */
-export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
+export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEditorProps) {
   const editingId = diaryId;
 
   // 이미지는 조각이 저장되기 전에 삽입되므로, 붙일 diary_id가 먼저 있어야 한다.
@@ -168,29 +170,30 @@ export function DiaryEditor({ diaryId, onSaved, onCancel }: DiaryEditorProps) {
       return;
     }
     let alive = true;
-    void getDiaryIdOnDate(today())
+    const desired = initialDate ?? today();
+    void getDiaryIdOnDate(desired)
       .then((id) => {
         if (!alive) {
           return;
         }
         if (id === null) {
-          setEntryDate(today());
+          setEntryDate(desired);
         } else {
           setOpenSheet('date');
         }
         setLoading(false);
       })
-      // 확인에 실패하면 오늘로 둔다. 저장 시점에 저장소가 한 번 더 막아준다.
+      // 확인에 실패하면 그대로 둔다. 저장 시점에 저장소가 한 번 더 막아준다.
       .catch(() => {
         if (alive) {
-          setEntryDate(today());
+          setEntryDate(desired);
           setLoading(false);
         }
       });
     return () => {
       alive = false;
     };
-  }, [editingId]);
+  }, [editingId, initialDate]);
 
   // 하루에 조각은 하나다(DIARY_SYSTEM §2). 이미 쓴 날은 날짜 시트에서 고를 수 없어야 한다.
   const loadTakenDates = useCallback((month: string) => {
