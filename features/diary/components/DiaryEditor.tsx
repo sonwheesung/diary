@@ -3,6 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ChevronDown, ImagePlus, Smile, Tag, X } from 'lucide-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { BottomSheet } from '@/components/BottomSheet';
@@ -29,7 +30,7 @@ import { hasContent, usedImageIds } from '@/features/diary/blocks';
 import { BlockEditor } from '@/features/diary/components/BlockEditor';
 import { EmotionPicker } from '@/features/diary/components/EmotionPicker';
 import { TagInput } from '@/features/diary/components/TagInput';
-import { findEmotion } from '@/features/diary/emotions';
+import { emotionLabel } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
 import { monthRange, today } from '@/lib/date';
@@ -66,6 +67,7 @@ interface DiaryEditorProps {
  * 글을 쓸 때마다 아래 요소가 밀리고, 뭔가 고르려면 스크롤부터 해야 하는 게 실제로 거슬렸다.
  */
 export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEditorProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const editingId = diaryId;
@@ -117,7 +119,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
           return;
         }
         if (diary === null) {
-          setLoadError('조각을 찾지 못했어요.');
+          setLoadError(t('write.notFound'));
           setLoading(false);
           return;
         }
@@ -146,7 +148,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         setLoading(false);
       } catch (error) {
         if (alive) {
-          setLoadError(error instanceof Error ? error.message : '조각을 불러오지 못했어요.');
+          setLoadError(error instanceof Error ? error.message : t('write.loadFailed'));
           setLoading(false);
         }
       }
@@ -154,7 +156,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
     return () => {
       alive = false;
     };
-  }, [editingId]);
+  }, [editingId, t]);
 
   // 불러오기가 끝난 시점(작성 모드는 첫 렌더)을 '바뀐 것 없음'의 기준으로 삼는다.
   useEffect(() => {
@@ -281,7 +283,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
   const addImage = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
-      Alert.alert('사진 접근 권한이 필요해요', '설정에서 사진 접근을 허용해 주세요.');
+      Alert.alert(t('write.photoPermissionTitle'), t('write.photoPermissionBody'));
       return;
     }
 
@@ -309,7 +311,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       addedImageIdsRef.current.push(image.id);
       insertImageAtCaret(image.id);
     } catch {
-      Alert.alert('사진을 넣지 못했어요', '다시 시도해 주세요.');
+      Alert.alert(t('write.photoFailedTitle'), t('common.retry'));
     }
   };
 
@@ -353,8 +355,8 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
     } catch (error) {
       setSaving(false);
       Alert.alert(
-        '저장하지 못했어요',
-        error instanceof Error ? error.message : '다시 시도해 주세요.',
+        t('write.saveFailedTitle'),
+        error instanceof Error ? error.message : t('common.retry'),
       );
     }
   };
@@ -376,11 +378,11 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
     // 쓰다 만 글을 말없이 버리지 않는다. 손댄 게 없으면 묻지 않는다.
     if (dirty) {
       Alert.alert(
-        editingId === null ? '작성을 그만둘까요?' : '수정을 그만둘까요?',
-        '지금까지 바꾼 내용은 저장되지 않아요.',
+        editingId === null ? t('write.discardWriteTitle') : t('write.discardEditTitle'),
+        t('write.discardBody'),
         [
-          { text: '계속 쓰기', style: 'cancel' },
-          { text: '그만두기', style: 'destructive', onPress: onCancel },
+          { text: t('write.discardContinue'), style: 'cancel' },
+          { text: t('write.discardLeave'), style: 'destructive', onPress: onCancel },
         ],
       );
       return;
@@ -392,7 +394,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
   const hasTitle = title.trim().length > 0;
   const titleMissing = !hasTitle && hasContent(blocks);
   const canSave = hasTitle && hasContent(blocks) && !saving && !loading && entryDate !== null;
-  const selectedEmotion = emotion === null ? undefined : findEmotion(emotion);
+  const selectedEmotion = emotion === null ? undefined : emotionLabel(emotion);
 
   /*
    * 수정 중인 조각이 차지한 날짜는 '이미 쓴 날'이 아니다.
@@ -410,7 +412,12 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
 
   const header = (
     <View style={styles.header}>
-      <Pressable accessibilityRole="button" accessibilityLabel="닫기" onPress={close} hitSlop={12}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('common.close')}
+        onPress={close}
+        hitSlop={12}
+      >
         <X size={24} color={colors.text} />
       </Pressable>
       <Pressable
@@ -423,7 +430,9 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         {saving ? (
           <ActivityIndicator size="small" color={colors.textOnAccent} />
         ) : (
-          <Text style={[styles.saveLabel, !canSave && styles.saveLabelDisabled]}>저장</Text>
+          <Text style={[styles.saveLabel, !canSave && styles.saveLabelDisabled]}>
+            {t('common.save')}
+          </Text>
         )}
       </Pressable>
     </View>
@@ -454,7 +463,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       <View style={styles.topRow}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="날짜 바꾸기"
+          accessibilityLabel={t('write.changeDate')}
           onPress={() => setOpenSheet('date')}
           style={styles.dateButton}
           hitSlop={8}
@@ -462,7 +471,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
           {entryDate === null ? (
             // 날짜를 못 정한 상태. 눌러야 할 곳이라는 게 보여야 하므로 강조색을 쓴다.
             <View style={styles.dateRestGroup}>
-              <Text style={styles.datePlaceholder}>날짜를 골라주세요</Text>
+              <Text style={styles.datePlaceholder}>{t('write.pickDate')}</Text>
               <ChevronDown size={16} color={colors.accent} />
             </View>
           ) : (
@@ -484,7 +493,9 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={
-            selectedEmotion === undefined ? '기분 고르기' : `기분 ${selectedEmotion.label}`
+            selectedEmotion === undefined
+              ? t('write.pickMood')
+              : t('write.moodOf', { label: selectedEmotion })
           }
           onPress={() => setOpenSheet('emotion')}
           style={[styles.emotionButton, selectedEmotion !== undefined && styles.emotionButtonSet]}
@@ -492,18 +503,23 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
           {selectedEmotion === undefined ? (
             <Smile size={18} color={colors.textMuted} />
           ) : (
-            <Text style={styles.emotionLabel}>{selectedEmotion.label}</Text>
+            <Text style={styles.emotionLabel}>{selectedEmotion}</Text>
           )}
         </Pressable>
       </View>
 
-      <TextField value={title} onChangeText={setTitle} placeholder="제목" tone="title" />
+      <TextField
+        value={title}
+        onChangeText={setTitle}
+        placeholder={t('write.titlePlaceholder')}
+        tone="title"
+      />
 
       {/*
         제목이 비어 저장을 못 하는 상태를 말없이 두지 않는다. 다만 빈 화면에서부터 잔소리하지 않도록
         **뭔가 쓰기 시작한 뒤에만** 띄운다.
       */}
-      {titleMissing && <Text style={styles.hint}>제목을 입력해 주세요</Text>}
+      {titleMissing && <Text style={styles.hint}>{t('write.titleRequired')}</Text>}
 
       <BlockEditor
         blocks={blocks}
@@ -528,13 +544,13 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       )}
 
       <View style={styles.toolbar}>
-        <ToolbarButton label="사진" onPress={() => void addImage()}>
+        <ToolbarButton label={t('write.photo')} onPress={() => void addImage()}>
           <ImagePlus size={22} color={colors.text} />
         </ToolbarButton>
-        <ToolbarButton label="태그" onPress={() => setOpenSheet('tag')} badge={tags.length}>
+        <ToolbarButton label={t('write.tag')} onPress={() => setOpenSheet('tag')} badge={tags.length}>
           <Tag size={22} color={colors.text} />
         </ToolbarButton>
-        <ToolbarButton label="기분" onPress={() => setOpenSheet('emotion')}>
+        <ToolbarButton label={t('write.mood')} onPress={() => setOpenSheet('emotion')}>
           <Smile size={22} color={colors.text} />
         </ToolbarButton>
       </View>
@@ -556,7 +572,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       <BottomSheet
         visible={openSheet === 'emotion'}
         onClose={() => setOpenSheet(null)}
-        title="오늘의 기분"
+        title={t('write.moodSheet')}
       >
         <EmotionPicker
           value={emotion}
@@ -570,7 +586,11 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         />
       </BottomSheet>
 
-      <BottomSheet visible={openSheet === 'tag'} onClose={() => setOpenSheet(null)} title="태그">
+      <BottomSheet
+        visible={openSheet === 'tag'}
+        onClose={() => setOpenSheet(null)}
+        title={t('write.tagSheet')}
+      >
         <TagInput tags={tags} onChange={setTags} suggestions={suggestions} />
       </BottomSheet>
     </Screen>

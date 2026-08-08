@@ -1,25 +1,38 @@
+import { translate } from '@/lib/i18n';
+
 /**
  * 감정 목록 (DIARY_SYSTEM §4).
  *
  * Expand-only — 코드를 **추가만** 한다. 기존 코드의 의미를 바꾸거나 지우면
  * 이미 저장된 조각이 의미를 잃는다.
  *
- * ⚠ 표시 라벨은 디자인 시안에 맞춰 조정될 수 있다. 코드 값(영문)은 고정이다.
+ * **DB에는 코드만 저장한다.** 라벨은 언어마다 다르므로 `locales/*.json`의 `emotion.*`에서 꺼낸다 —
+ * 라벨을 저장했다면 언어를 바꾼 순간 옛 조각의 감정이 다른 언어로 남았을 것이다.
  */
-export const EMOTIONS = [
-  { code: 'joy', label: '기쁨' },
-  { code: 'excited', label: '설렘' },
-  { code: 'calm', label: '평온' },
-  { code: 'proud', label: '뿌듯' },
-  { code: 'neutral', label: '그저그럼' },
-  { code: 'tired', label: '지침' },
-  { code: 'sad', label: '슬픔' },
-  { code: 'angry', label: '화남' },
+export const EMOTION_CODES_ORDER = [
+  'joy',
+  'excited',
+  'calm',
+  'proud',
+  'neutral',
+  'tired',
+  'sad',
+  'angry',
 ] as const;
 
-export type EmotionCode = (typeof EMOTIONS)[number]['code'];
+export type EmotionCode = (typeof EMOTION_CODES_ORDER)[number];
 
-const EMOTION_CODES: ReadonlySet<string> = new Set(EMOTIONS.map((emotion) => emotion.code));
+export interface Emotion {
+  code: EmotionCode;
+  label: string;
+}
+
+const EMOTION_CODE_SET: ReadonlySet<string> = new Set(EMOTION_CODES_ORDER);
+
+/** 현재 언어의 라벨이 붙은 목록. 언어가 바뀌면 다시 부른다 */
+export function emotions(): Emotion[] {
+  return EMOTION_CODES_ORDER.map((code) => ({ code, label: translate(`emotion.${code}`) }));
+}
 
 /**
  * DB에서 읽은 문자열이 아는 감정 코드인지 확인한다.
@@ -27,9 +40,9 @@ const EMOTION_CODES: ReadonlySet<string> = new Set(EMOTIONS.map((emotion) => emo
  * 조각 자체는 정상적으로 보여준다(내용을 못 읽게 만드는 것이 더 나쁘다).
  */
 export function isEmotionCode(value: string | null): value is EmotionCode {
-  return value !== null && EMOTION_CODES.has(value);
+  return value !== null && EMOTION_CODE_SET.has(value);
 }
 
-export function findEmotion(code: EmotionCode) {
-  return EMOTIONS.find((emotion) => emotion.code === code);
+export function emotionLabel(code: EmotionCode): string {
+  return translate(`emotion.${code}`);
 }

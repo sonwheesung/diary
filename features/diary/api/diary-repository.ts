@@ -18,6 +18,7 @@ import {
 import { isEmotionCode } from '@/features/diary/emotions';
 import type { Diary, DiaryDraft, DiaryPatch, DiaryRow } from '@/features/diary/types';
 import { addDays, today } from '@/lib/date';
+import { translate } from '@/lib/i18n';
 
 // 살아있는 조각만 본다 — 소프트 삭제(DIARY_SYSTEM §7). 모든 조회에 붙는다.
 const ALIVE = 'deleted_at IS NULL';
@@ -82,7 +83,7 @@ function normalizeTitle(title: string | null | undefined): string | null {
 export async function createDiary(draft: DiaryDraft): Promise<Diary> {
   const blocks = normalizeBlocks(draft.blocks);
   if (!hasContent(blocks)) {
-    throw new Error('내용이 비어 있는 조각은 저장할 수 없습니다.');
+    throw new Error(translate('errors.emptyDiary'));
   }
 
   const db = await getDatabase();
@@ -97,7 +98,7 @@ export async function createDiary(draft: DiaryDraft): Promise<Diary> {
   await db.withTransactionAsync(async () => {
     // 트랜잭션 안에서 확인한다 — 밖에서 보면 확인과 INSERT 사이에 끼어들 틈이 생긴다.
     if ((await findDiaryIdOnDate(db, entryDate)) !== null) {
-      throw new Error('그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.');
+      throw new Error(translate('errors.alreadyWritten'));
     }
     await db.runAsync(
       `INSERT INTO diaries
@@ -117,7 +118,7 @@ export async function createDiary(draft: DiaryDraft): Promise<Diary> {
 
   const created = await getDiaryById(id);
   if (created === null) {
-    throw new Error('조각을 저장했지만 다시 읽지 못했습니다.');
+    throw new Error(translate('errors.savedButUnreadable'));
   }
   return created;
 }
@@ -134,7 +135,7 @@ export async function updateDiary(id: string, patch: DiaryPatch): Promise<Diary 
   if (patch.blocks !== undefined) {
     const blocks = normalizeBlocks(patch.blocks);
     if (!hasContent(blocks)) {
-      throw new Error('내용이 비어 있는 조각은 저장할 수 없습니다.');
+      throw new Error(translate('errors.emptyDiary'));
     }
     columns.push('content = ?', 'content_blocks = ?');
     values.push(extractPlainText(blocks), serializeBlocks(blocks));
@@ -166,7 +167,7 @@ export async function updateDiary(id: string, patch: DiaryPatch): Promise<Diary 
     // 날짜를 옮기는 수정도 하루 하나 규칙을 지켜야 한다. 자기 자신은 제외한다.
     if (patch.entryDate !== undefined) {
       if ((await findDiaryIdOnDate(db, patch.entryDate, id)) !== null) {
-        throw new Error('그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.');
+        throw new Error(translate('errors.alreadyWritten'));
       }
     }
     await db.runAsync(

@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { X } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Modal,
   Pressable,
@@ -34,6 +35,7 @@ interface ImageViewerProps {
  * 밝은 사진의 경계가 사라진다. 여기만 테마를 따르지 않는 이유다.
  */
 export function ImageViewer({ visible, uris, initialIndex, onClose }: ImageViewerProps) {
+  const { t } = useTranslation();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
@@ -75,7 +77,7 @@ export function ImageViewer({ visible, uris, initialIndex, onClose }: ImageViewe
               // 사진을 눌러도 닫힌다 — 전체 보기에서 나가는 길이 X 하나뿐이면 답답하다.
               onPress={onClose}
               accessibilityRole="button"
-              accessibilityLabel="닫기"
+              accessibilityLabel={t('common.close')}
               style={{ width, height }}
             >
               <Image source={{ uri }} style={styles.image} contentFit="contain" transition={120} />
@@ -85,7 +87,7 @@ export function ImageViewer({ visible, uris, initialIndex, onClose }: ImageViewe
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="닫기"
+          accessibilityLabel={t('common.close')}
           onPress={onClose}
           hitSlop={12}
           style={[styles.close, { top: insets.top + spacing.md }]}

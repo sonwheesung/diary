@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
 import { Search, X } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Card } from '@/components/Card';
@@ -11,7 +12,7 @@ import { TextField } from '@/components/TextField';
 import { searchDiaries } from '@/features/diary/api/diary-repository';
 import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image-store';
 import { listTagsByUsage } from '@/features/diary/api/tag-repository';
-import { findEmotion } from '@/features/diary/emotions';
+import { emotionLabel } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatListDate, previewText } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -30,6 +31,7 @@ const DEBOUNCE_MS = 250;
  * 눌러서 바로 찾을 수 있는 단서를 주는 편이 낫다.
  */
 export default function SearchScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const [keyword, setKeyword] = useState('');
@@ -100,7 +102,7 @@ export default function SearchScreen() {
         <TextField
           value={keyword}
           onChangeText={setKeyword}
-          placeholder="제목·본문·태그로 찾기"
+          placeholder={t('search.placeholder')}
           returnKeyType="search"
           autoCorrect={false}
           style={styles.input}
@@ -108,7 +110,7 @@ export default function SearchScreen() {
         {keyword.length > 0 && (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="지우기"
+            accessibilityLabel={t('search.clear')}
             onPress={() => setKeyword('')}
             hitSlop={10}
           >
@@ -123,9 +125,9 @@ export default function SearchScreen() {
     <Screen header={header} footer={<AdBanner />}>
       {trimmed.length === 0 ? (
         <>
-          <Text style={styles.sectionTitle}>자주 쓴 태그</Text>
+          <Text style={styles.sectionTitle}>{t('search.frequentTags')}</Text>
           {tags.length === 0 ? (
-            <Text style={styles.hint}>태그를 붙이면 여기서 바로 찾을 수 있어요.</Text>
+            <Text style={styles.hint}>{t('search.noTags')}</Text>
           ) : (
             <View style={styles.tagRow}>
               {tags.map((tag) => (
@@ -145,12 +147,12 @@ export default function SearchScreen() {
         <ActivityIndicator color={colors.accentMuted} style={styles.loading} />
       ) : results.length === 0 ? (
         <Card>
-          <Text style={styles.emptyTitle}>찾는 조각이 없어요</Text>
-          <Text style={styles.emptyBody}>다른 말로 찾아보세요.</Text>
+          <Text style={styles.emptyTitle}>{t('search.emptyTitle')}</Text>
+          <Text style={styles.emptyBody}>{t('search.emptyBody')}</Text>
         </Card>
       ) : (
         <>
-          <Text style={styles.sectionTitle}>{results.length}개의 조각</Text>
+          <Text style={styles.sectionTitle}>{t('search.resultCount', { count: results.length })}</Text>
           {results.map((diary) => (
             <ResultRow key={diary.id} diary={diary} thumbnail={thumbnails.get(diary.id)} />
           ))}
@@ -162,7 +164,7 @@ export default function SearchScreen() {
 
 function ResultRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
   const styles = useStyles(createStyles);
-  const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+  const emotion = diary.emotion === null ? undefined : emotionLabel(diary.emotion);
 
   return (
     <Card onPress={() => router.push(`/diary/${diary.id}`)} flush>
@@ -178,7 +180,7 @@ function ResultRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage |
         <View style={styles.rowBody}>
           <View style={styles.rowMeta}>
             <Text style={styles.rowDate}>{formatListDate(diary.entryDate)}</Text>
-            {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion.label}</Text>}
+            {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion}</Text>}
           </View>
           {diary.title !== null && (
             <Text style={styles.rowTitle} numberOfLines={1}>

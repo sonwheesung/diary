@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { BottomSheet } from '@/components/BottomSheet';
@@ -36,6 +37,7 @@ export function DatePickerSheet({
   takenDates,
   onMonthChange,
 }: DatePickerSheetProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const [month, setMonth] = useState(value ?? today());
@@ -63,7 +65,7 @@ export function DatePickerSheet({
       <View style={styles.header}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="이전 달"
+          accessibilityLabel={t('calendar.prevMonth')}
           onPress={() => setMonth(addMonths(month, -1))}
           hitSlop={12}
         >
@@ -72,7 +74,7 @@ export function DatePickerSheet({
         <Text style={styles.monthLabel}>{formatMonthLabel(month)}</Text>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="다음 달"
+          accessibilityLabel={t('calendar.nextMonth')}
           accessibilityState={{ disabled: !canGoNext }}
           disabled={!canGoNext}
           onPress={() => setMonth(nextMonth)}
@@ -92,7 +94,7 @@ export function DatePickerSheet({
       />
 
       {takenDates !== undefined && takenDates.size > 0 && (
-        <Text style={styles.hint}>점이 찍힌 날은 이미 조각을 썼어요</Text>
+        <Text style={styles.hint}>{t('calendar.takenHint')}</Text>
       )}
 
       <Pressable
@@ -102,7 +104,9 @@ export function DatePickerSheet({
         onPress={() => onSelect(today())}
         style={[styles.todayButton, todayTaken && styles.todayButtonDisabled]}
       >
-        <Text style={[styles.todayLabel, todayTaken && styles.todayLabelDisabled]}>오늘로</Text>
+        <Text style={[styles.todayLabel, todayTaken && styles.todayLabelDisabled]}>
+            {t('calendar.goToday')}
+          </Text>
       </Pressable>
     </BottomSheet>
   );

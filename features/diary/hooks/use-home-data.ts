@@ -9,6 +9,7 @@ import {
 import { getImagesForDiaries } from '@/features/diary/api/image-store';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { today } from '@/lib/date';
+import { translate } from '@/lib/i18n';
 
 interface HomeData {
   recent: Diary[];
@@ -63,7 +64,7 @@ export function useHomeData(): HomeData & { reload: () => void } {
       setState((prev) => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : '조각을 불러오지 못했습니다.',
+        error: error instanceof Error ? error.message : translate('home.loadError'),
       }));
     }
   }, []);

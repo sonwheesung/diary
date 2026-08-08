@@ -15,6 +15,7 @@
 | [`DOC_DISCIPLINE.md`](./DOC_DISCIPLINE.md) | 문서 작업 규율 | ✅ |
 | [`DIARY_SYSTEM.md`](./DIARY_SYSTEM.md) | 조각 도메인 — 하루 조각 수·날짜·감정·연속 작성일·검색·삭제 규칙 | ✅ |
 | [`DATABASE.md`](./DATABASE.md) | 로컬(expo-sqlite) 스키마·마이그레이션 규약·백업 대비 | ✅ |
+| [`I18N_SYSTEM.md`](./I18N_SYSTEM.md) | 다국어 — 문자열 규약·날짜 현지화·언어 추가 절차 (정책은 CLAUDE.md §9.1) | ✅ |
 | `AUTH_SYSTEM.md` | 구글 로그인·subject 토큰 | ❌ 미작성 |
 | `LOCK_SYSTEM.md` | 앱 잠금 — PIN·패턴(3×3)·생체·자동잠금·실패 처리 (정책은 CLAUDE.md §7.1) | ❌ 미작성 |
 | `MONETIZATION_SYSTEM.md` | 구독 상품·RevenueCat·엔타이틀먼트·광고 정책 상세 | ❌ 미작성 |
@@ -35,6 +36,7 @@
 | Expo 부트(SDK 54 · expo-router · TS strict) | ✅ | dev 서버 기동 + 실기기 접속 확인(2026-08-07) |
 | 테마(팔레트 · spacing · radius · typography) | ✅ | 라이트 + 다크. `theme/palettes.ts`에 팔레트를 더하면 스킨이 된다 |
 | 다크모드 | ✅ | 설정 → 화면 → 시스템·라이트·다크. 선택은 `app_settings`에 저장 |
+| 다국어(i18n) | ✅ | ko·en. 기기 언어 기본, 폴백은 영어. 설정에서 변경. `npm run check:i18n`으로 키 검사 |
 | Pretendard 폰트 | ✅ | 정적 OTF 3종. 로드 완료까지 스플래시 유지, 실패해도 앱은 진행 |
 | expo-sqlite 스키마·마이그레이션 | ✅ | `db/` — user_version 기반. 실기기 스모크 테스트 통과 |
 | 일기 CRUD·검색·streak·캘린더 집계 | ✅ | `features/diary/api/` |

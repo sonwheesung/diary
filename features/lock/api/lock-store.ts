@@ -2,6 +2,7 @@ import * as Crypto from 'expo-crypto';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 
+import { translate } from '@/lib/i18n';
 import {
   SETTING_KEYS,
   getNumberSetting,
@@ -45,16 +46,32 @@ export const LOCK_DELAY_MS: Record<LockDelay, number> = {
  * ("내 PIN은 1234")을 만든다. 고르는 편이 빠르기도 하다.
  *
  * **문구를 고를 때의 기준**: 오래 지나도 답이 변하지 않고, SNS만 봐서는 알기 어려운 것.
- * 저장은 고른 **문구 그대로** 한다 — 나중에 목록을 손봐도 이미 저장된 힌트는 그대로 보여야 한다.
+ *
+ * 저장은 **id로** 한다(문구가 아니라). 문구를 저장하면 언어를 바꾼 뒤 힌트만 옛 언어로
+ * 남는다 — 잠금을 잊었을 때 보는 화면이라 하필 가장 곤란한 자리다.
  */
-export const HINT_QUESTIONS: readonly string[] = [
-  '졸업한 고등학교 이름은?',
-  '가장 좋아하는 음식은?',
-  '요즘 빠져 있는 취미는?',
-  '처음 키운 반려동물 이름은?',
-  '어릴 때 살던 동네 이름은?',
-  '가장 기억에 남는 여행지는?',
-];
+export const HINT_QUESTION_IDS = [
+  'highschool',
+  'food',
+  'hobby',
+  'pet',
+  'hometown',
+  'trip',
+] as const;
+
+export type HintQuestionId = (typeof HINT_QUESTION_IDS)[number];
+
+/**
+ * 저장된 값을 화면에 보여줄 문구로 바꾼다.
+ *
+ * id가 아니면 **그대로 돌려준다** — i18n 이전 버전에서 문구를 그대로 저장했다.
+ * 알아보지 못한다고 빈칸을 보여주면 그 사용자는 힌트를 영영 쓸 수 없다.
+ */
+export function hintQuestionText(stored: string): string {
+  return (HINT_QUESTION_IDS as readonly string[]).includes(stored)
+    ? translate(`lock.questions.${stored}`)
+    : stored;
+}
 
 export const PIN_LENGTH = 4;
 /** 패턴은 PIN보다 추측 공간이 좁고 화면 얼룩에 약하다 — 최소 길이를 강제한다(§7.1) */
@@ -198,14 +215,18 @@ async function openSecret(cipher: string, answer: string, salt: string): Promise
   return codes.map((code, index) => String.fromCharCode(code ^ (stream[index] ?? 0))).join('');
 }
 
-export async function setLockHint(question: string, answer: string, secret: string): Promise<void> {
+export async function setLockHint(
+  question: HintQuestionId,
+  answer: string,
+  secret: string,
+): Promise<void> {
   const normalized = normalizeAnswer(answer);
   const saltBytes = await Crypto.getRandomBytesAsync(16);
   const salt = Array.from(saltBytes)
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
 
-  await SecureStore.setItemAsync(KEY_HINT_QUESTION, question.trim());
+  await SecureStore.setItemAsync(KEY_HINT_QUESTION, question);
   await SecureStore.setItemAsync(KEY_HINT_SALT, salt);
   await SecureStore.setItemAsync(KEY_HINT_HASH, await hashSecret(normalized, salt));
   await SecureStore.setItemAsync(KEY_HINT_CIPHER, await sealSecret(secret, normalized, salt));
@@ -251,10 +272,10 @@ export async function isBiometricAvailable(): Promise<boolean> {
 
 export async function authenticateWithBiometric(): Promise<boolean> {
   const result = await LocalAuthentication.authenticateAsync({
-    promptMessage: '조각 잠금 해제',
+    promptMessage: translate('lock.biometricPrompt'),
     // 생체가 실패했을 때 기기 암호로 넘어가면 우리 PIN/패턴을 우회하는 셈이 된다.
     disableDeviceFallback: true,
-    cancelLabel: 'PIN·패턴으로 열기',
+    cancelLabel: translate('lock.biometricCancel'),
   });
   return result.success;
 }

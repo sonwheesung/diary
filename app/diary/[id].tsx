@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, Pencil, Trash2 } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -17,7 +18,7 @@ import { Screen } from '@/components/Screen';
 import { deleteDiary, getDiaryById } from '@/features/diary/api/diary-repository';
 import { getImagesForDiary, resolveImageUri } from '@/features/diary/api/image-store';
 import { DiaryEditor } from '@/features/diary/components/DiaryEditor';
-import { findEmotion } from '@/features/diary/emotions';
+import { emotionLabel } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -33,6 +34,7 @@ import { typography } from '@/theme/typography';
  * 블록·이미지·태그 로직이 복제되고 한쪽만 고치는 사고가 난다.
  */
 export default function DiaryDetailScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const params = useLocalSearchParams<{ id?: string }>();
@@ -52,13 +54,13 @@ export default function DiaryDetailScreen() {
       const [found, imageList] = await Promise.all([getDiaryById(id), getImagesForDiary(id)]);
       setDiary(found);
       setImages(new Map(imageList.map((image) => [image.id, image])));
-      setError(found === null ? '조각을 찾지 못했어요.' : null);
+      setError(found === null ? t('detail.notFound') : null);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : '조각을 불러오지 못했어요.');
+      setError(caught instanceof Error ? caught.message : t('detail.loadFailed'));
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
 
   // 다른 화면에 다녀와도 낡은 내용이 보이면 안 된다.
   useFocusEffect(
@@ -80,18 +82,18 @@ export default function DiaryDetailScreen() {
   }, [editing]);
 
   const confirmDelete = () => {
-    Alert.alert('이 조각을 지울까요?', '지운 조각은 목록과 검색에서 사라져요.', [
-      { text: '그대로 두기', style: 'cancel' },
+    Alert.alert(t('detail.deleteTitle'), t('detail.deleteBody'), [
+      { text: t('common.keep'), style: 'cancel' },
       {
-        text: '지우기',
+        text: t('detail.deleteConfirm'),
         style: 'destructive',
         onPress: () => {
           void deleteDiary(id)
             .then(() => router.back())
             .catch((caught: unknown) =>
               Alert.alert(
-                '지우지 못했어요',
-                caught instanceof Error ? caught.message : '다시 시도해 주세요.',
+                t('detail.deleteFailed'),
+                caught instanceof Error ? caught.message : t('common.retry'),
               ),
             );
         },
@@ -103,7 +105,7 @@ export default function DiaryDetailScreen() {
     <View style={styles.header}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="뒤로"
+        accessibilityLabel={t('common.back')}
         onPress={() => router.back()}
         hitSlop={12}
       >
@@ -113,7 +115,7 @@ export default function DiaryDetailScreen() {
         <View style={styles.headerActions}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="삭제"
+            accessibilityLabel={t('common.delete')}
             onPress={confirmDelete}
             hitSlop={12}
             style={styles.headerButton}
@@ -126,12 +128,12 @@ export default function DiaryDetailScreen() {
           */}
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="수정"
+            accessibilityLabel={t('common.edit')}
             onPress={() => setEditing(true)}
             style={styles.editButton}
           >
             <Pencil size={15} color={colors.textOnAccent} />
-            <Text style={styles.editLabel}>수정</Text>
+            <Text style={styles.editLabel}>{t('common.edit')}</Text>
           </Pressable>
         </View>
       )}
@@ -165,7 +167,7 @@ export default function DiaryDetailScreen() {
     );
   }
 
-  const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+  const emotion = diary.emotion === null ? undefined : emotionLabel(diary.emotion);
 
   // 전체 보기에서 넘겨볼 수 있게, 본문에 실제로 실린 사진만 순서대로 모은다.
   const viewableUris = diary.blocks
@@ -183,7 +185,7 @@ export default function DiaryDetailScreen() {
         </View>
         {emotion !== undefined && (
           <View style={styles.emotionChip}>
-            <Text style={styles.emotionLabel}>{emotion.label}</Text>
+            <Text style={styles.emotionLabel}>{emotion}</Text>
           </View>
         )}
       </View>
@@ -207,7 +209,7 @@ export default function DiaryDetailScreen() {
         if (image === undefined) {
           return (
             <View key={`image-${block.imageId}`} style={styles.imageMissing}>
-              <Text style={styles.imageMissingText}>이미지를 불러오지 못했어요</Text>
+              <Text style={styles.imageMissingText}>{t('detail.imageLoadFailed')}</Text>
             </View>
           );
         }
@@ -217,7 +219,7 @@ export default function DiaryDetailScreen() {
           <Pressable
             key={`image-${block.imageId}`}
             accessibilityRole="imagebutton"
-            accessibilityLabel="사진 전체 보기"
+            accessibilityLabel={t('detail.viewImage')}
             onPress={() => setViewerIndex(viewableUris.indexOf(uri))}
           >
             <Image source={{ uri }} style={styles.image} contentFit="cover" transition={150} />

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import {
   getFailureState,
   getLockHintQuestion,
+  hintQuestionText,
   recordFailure,
   resetFailures,
   revealSecretWithHint,
@@ -44,6 +46,7 @@ interface HintRecoveryProps {
  * 이쪽만 무제한으로 두면 문을 하나 열어두는 셈이다.
  */
 export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
+  const { t } = useTranslation();
   const styles = useStyles(createStyles);
   const [question, setQuestion] = useState<string | null>(null);
   const [answer, setAnswer] = useState('');
@@ -67,7 +70,7 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
       if (secret === null) {
         const state = await recordFailure();
         setBlocked(state.blockedUntil > Date.now());
-        setError('답이 맞지 않아요.');
+        setError(t('lock.hint.wrongAnswer'));
         return;
       }
       // 답을 맞혔으면 지금까지의 실패는 털어준다 — 본인이라는 게 확인됐다.
@@ -82,23 +85,23 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
   // 되돌릴 수 없는 동작이라 **두 번** 묻는다. 한 번은 실수로 누를 수 있다.
   const confirmWipe = () => {
     Alert.alert(
-      '전부 지우고 처음부터 시작할까요?',
-      '잠금을 열 방법이 없으면 남은 길은 이것뿐이에요. 지금까지 쓴 조각과 사진이 모두 사라져요.',
+      t('lock.hint.wipeTitle'),
+      t('lock.hint.wipeBody'),
       [
-        { text: '아니요', style: 'cancel' },
+        { text: t('lock.hint.wipeNo'), style: 'cancel' },
         {
-          text: '계속',
+          text: t('lock.hint.wipeContinue'),
           style: 'destructive',
           onPress: () => {
-            Alert.alert('정말 지울까요?', '되돌릴 수 없어요.', [
-              { text: '아니요', style: 'cancel' },
+            Alert.alert(t('lock.hint.wipeFinalTitle'), t('lock.hint.wipeFinalBody'), [
+              { text: t('lock.hint.wipeNo'), style: 'cancel' },
               {
-                text: '전부 지우기',
+                text: t('lock.hint.wipeFinalConfirm'),
                 style: 'destructive',
                 onPress: () => {
                   void wipeAllData()
                     .then(onWiped)
-                    .catch(() => setError('지우지 못했어요. 다시 시도해 주세요.'));
+                    .catch(() => setError(t('lock.hint.wipeFailed')));
                 },
               },
             ]);
@@ -111,14 +114,16 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
   if (revealed !== null) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{method === 'pin' ? '이 PIN이에요' : '이 패턴이에요'}</Text>
+        <Text style={styles.title}>
+          {method === 'pin' ? t('lock.hint.revealPin') : t('lock.hint.revealPattern')}
+        </Text>
         {method === 'pin' ? (
           <Text style={styles.pin}>{revealed}</Text>
         ) : (
           <PatternPreview pattern={revealed} />
         )}
         <Pressable accessibilityRole="button" onPress={onClose} style={styles.primary}>
-          <Text style={styles.primaryLabel}>확인했어요</Text>
+          <Text style={styles.primaryLabel}>{t('lock.hint.acknowledged')}</Text>
         </Pressable>
       </View>
     );
@@ -126,19 +131,19 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>힌트로 찾기</Text>
+      <Text style={styles.title}>{t('lock.hint.title')}</Text>
       {question === null ? (
-        <Text style={styles.note}>이 기기에는 힌트가 저장돼 있지 않아요.</Text>
+        <Text style={styles.note}>{t('lock.hint.none')}</Text>
       ) : (
         <>
-          <Text style={styles.question}>{question}</Text>
+          <Text style={styles.question}>{hintQuestionText(question)}</Text>
           <TextField
             value={answer}
             onChangeText={(next) => {
               setError(null);
               setAnswer(next);
             }}
-            placeholder="답"
+            placeholder={t('lock.setup.answerPlaceholder')}
             variant="boxed"
             autoCapitalize="none"
             autoCorrect={false}
@@ -147,7 +152,7 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
           />
           {error !== null && <Text style={styles.error}>{error}</Text>}
           {blocked && (
-            <Text style={styles.error}>여러 번 틀렸어요. 잠시 후 다시 시도해 주세요.</Text>
+            <Text style={styles.error}>{t('lock.blockedMessage')}</Text>
           )}
           <Pressable
             accessibilityRole="button"
@@ -158,18 +163,18 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
               (blocked || answer.trim().length === 0) && styles.primaryDisabled,
             ]}
           >
-            <Text style={styles.primaryLabel}>확인</Text>
+            <Text style={styles.primaryLabel}>{t('common.confirm')}</Text>
           </Pressable>
         </>
       )}
 
       <Pressable accessibilityRole="button" onPress={onClose} hitSlop={8}>
-        <Text style={styles.cancel}>돌아가기</Text>
+        <Text style={styles.cancel}>{t('lock.hint.goBack')}</Text>
       </Pressable>
 
       {/* 마지막 길. 눈에 띄지 않게 두되, 숨기지도 않는다 */}
       <Pressable accessibilityRole="button" onPress={confirmWipe} hitSlop={8}>
-        <Text style={styles.wipe}>답도 기억나지 않아요</Text>
+        <Text style={styles.wipe}>{t('lock.hint.forgotAnswer')}</Text>
       </Pressable>
     </View>
   );

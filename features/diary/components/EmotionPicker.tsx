@@ -1,6 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { EMOTIONS } from '@/features/diary/emotions';
+import { emotions } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
 import type { Palette } from '@/theme/palettes';
 import { useStyles } from '@/theme/use-styles';
@@ -20,9 +21,11 @@ interface EmotionPickerProps {
  */
 export function EmotionPicker({ value, onChange }: EmotionPickerProps) {
   const styles = useStyles(createStyles);
+  // 라벨은 언어를 탄다. 훅을 구독해야 언어를 바꾼 순간 다시 그려진다.
+  useTranslation();
   return (
     <View style={styles.row}>
-      {EMOTIONS.map((emotion) => {
+      {emotions().map((emotion) => {
         const selected = emotion.code === value;
         return (
           <Pressable

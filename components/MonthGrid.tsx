@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { daysInMonth, startOfMonth, today, weekdayIndex } from '@/lib/date';
@@ -5,8 +6,6 @@ import type { Palette } from '@/theme/palettes';
 import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { fonts, typography } from '@/theme/typography';
-
-const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
 interface MonthGridProps {
   /** 그릴 달. 그 달 안의 아무 날짜나 넘기면 된다 */
@@ -37,7 +36,10 @@ export function MonthGrid({
   disabledDates,
   maxDate,
 }: MonthGridProps) {
+  const { t } = useTranslation();
   const styles = useStyles(createStyles);
+  // 요일 이름은 언어를 탄다. 배열 통째로 꺼낸다(i18n `returnObjects`).
+  const weekdays = t('date.weekdays', { returnObjects: true }) as string[];
   const first = startOfMonth(month);
   const leading = weekdayIndex(first);
   const total = daysInMonth(month);
@@ -47,7 +49,7 @@ export function MonthGrid({
   return (
     <View>
       <View style={styles.week}>
-        {WEEKDAYS.map((label) => (
+        {weekdays.map((label) => (
           <View key={label} style={styles.headerCell}>
             <Text style={styles.weekday}>{label}</Text>
           </View>
@@ -75,7 +77,7 @@ export function MonthGrid({
               key={date}
               accessibilityRole="button"
               accessibilityState={{ selected: isSelected, disabled }}
-              accessibilityLabel={`${day}일`}
+              accessibilityLabel={t('calendar.dayLabel', { day })}
               disabled={disabled}
               onPress={() => onSelect(date)}
               style={styles.cell}

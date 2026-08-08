@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
@@ -11,13 +12,14 @@ import { typography } from '@/theme/typography';
  * 화면이 완성되면 이 컴포넌트를 쓰는 파일부터 사라진다.
  */
 export function PlaceholderScreen({ title, note }: { title: string; note?: string }) {
+  const { t } = useTranslation();
   const styles = useStyles(createStyles);
 
   return (
     <Screen scroll={false} contentStyle={styles.center}>
       <View style={styles.body}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.note}>{note ?? '준비 중입니다.'}</Text>
+        <Text style={styles.note}>{note ?? t('common.comingSoon')}</Text>
       </View>
     </Screen>
   );

@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
 import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react-native';
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Card } from '@/components/Card';
@@ -10,7 +11,7 @@ import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
 import { getWrittenDates, listDiariesByDate } from '@/features/diary/api/diary-repository';
 import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image-store';
-import { findEmotion } from '@/features/diary/emotions';
+import { emotionLabel } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { addMonths, isAfterToday, monthRange, today } from '@/lib/date';
 import { formatListDate, formatMonthLabel, previewText } from '@/lib/format';
@@ -27,6 +28,7 @@ import { typography } from '@/theme/typography';
  * '쓰겠다'가 아니라 '보겠다'이고, 못 누르게 하면 다음 달을 넘겨볼 수도 없다.
  */
 export default function CalendarScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const [month, setMonth] = useState(today);
@@ -77,7 +79,7 @@ export default function CalendarScreen() {
       <View style={styles.monthRow}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="이전 달"
+          accessibilityLabel={t('calendar.prevMonth')}
           onPress={() => goMonth(-1)}
           hitSlop={12}
         >
@@ -86,7 +88,7 @@ export default function CalendarScreen() {
         <Text style={styles.monthLabel}>{formatMonthLabel(month)}</Text>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="다음 달"
+          accessibilityLabel={t('calendar.nextMonth')}
           onPress={() => goMonth(1)}
           hitSlop={12}
         >
@@ -113,7 +115,7 @@ export default function CalendarScreen() {
         ))
       ) : (
         <Card>
-          <Text style={styles.emptyTitle}>이 날엔 조각이 없어요</Text>
+          <Text style={styles.emptyTitle}>{t('calendar.emptyDay')}</Text>
           {/* 아직 오지 않은 날은 쓸 수 없다(DIARY_SYSTEM §3) — 권하지도 않는다 */}
           {!isAfterToday(selected) && (
             <Pressable
@@ -122,7 +124,7 @@ export default function CalendarScreen() {
               style={styles.emptyAction}
             >
               <Pencil size={15} color={colors.accent} />
-              <Text style={styles.emptyActionLabel}>이 날의 조각 쓰기</Text>
+              <Text style={styles.emptyActionLabel}>{t('calendar.writeThisDay')}</Text>
             </Pressable>
           )}
         </Card>
@@ -133,7 +135,7 @@ export default function CalendarScreen() {
 
 function DayCard({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
   const styles = useStyles(createStyles);
-  const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+  const emotion = diary.emotion === null ? undefined : emotionLabel(diary.emotion);
 
   return (
     <Card onPress={() => router.push(`/diary/${diary.id}`)} flush>
@@ -147,7 +149,7 @@ function DayCard({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | u
           />
         )}
         <View style={styles.rowBody}>
-          {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion.label}</Text>}
+          {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion}</Text>}
           {diary.title !== null && (
             <Text style={styles.rowTitle} numberOfLines={1}>
               {diary.title}

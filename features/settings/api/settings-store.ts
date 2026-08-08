@@ -20,6 +20,8 @@ export const SETTING_KEYS = {
   themeMode: 'theme_mode',
   /** 전면광고를 마지막으로 띄운 날짜(YYYY-MM-DD). 하루 1회 캡의 근거(CLAUDE.md §7) */
   adsInterstitialDate: 'ads_interstitial_date',
+  /** 언어: 'system' | 'ko' | 'en' */
+  language: 'language',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Calendar, House, Plus, Search, Settings } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -24,6 +25,7 @@ function WriteTabIcon() {
 const TAB_BAR_CONTENT_HEIGHT = 60;
 
 export default function TabsLayout() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   // 제스처 내비게이션 기기에서 탭바가 시스템 바 아래로 깔리는 것을 막는다.
@@ -49,14 +51,14 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: '홈',
+          title: t('tabs.home'),
           tabBarIcon: ({ color }) => <House size={ICON_SIZE} color={color} />,
         }}
       />
       <Tabs.Screen
         name="calendar"
         options={{
-          title: '캘린더',
+          title: t('tabs.calendar'),
           tabBarIcon: ({ color }) => <Calendar size={ICON_SIZE} color={color} />,
         }}
       />
@@ -65,20 +67,20 @@ export default function TabsLayout() {
         options={{
           title: '',
           tabBarIcon: () => <WriteTabIcon />,
-          tabBarAccessibilityLabel: '조각 쓰기',
+          tabBarAccessibilityLabel: t('tabs.write'),
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          title: '검색',
+          title: t('tabs.search'),
           tabBarIcon: ({ color }) => <Search size={ICON_SIZE} color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: '설정',
+          title: t('tabs.settings'),
           tabBarIcon: ({ color }) => <Settings size={ICON_SIZE} color={color} />,
         }}
       />

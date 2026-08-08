@@ -1,18 +1,20 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { Grid3x3, KeyRound, X } from 'lucide-react-native';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import {
-  HINT_QUESTIONS,
+  HINT_QUESTION_IDS,
+  hintQuestionText,
   PATTERN_MIN_POINTS,
   PIN_LENGTH,
   setLockHint,
   setLockSecret,
 } from '@/features/lock/api/lock-store';
-import type { LockMethod } from '@/features/lock/api/lock-store';
+import type { HintQuestionId, LockMethod } from '@/features/lock/api/lock-store';
 import { PatternGrid } from '@/features/lock/components/PatternGrid';
 import { PinPad } from '@/features/lock/components/PinPad';
 import type { Palette } from '@/theme/palettes';
@@ -29,6 +31,7 @@ type Step = 'choose' | 'enter' | 'confirm' | 'hint';
  * 확인 단계를 빼지 않는다. 잘못 정한 PIN·패턴은 **자기 일기를 자기가 못 여는** 결과가 된다.
  */
 export default function LockSetupScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const params = useLocalSearchParams<{ method?: string }>();
@@ -40,7 +43,7 @@ export default function LockSetupScreen() {
   const [first, setFirst] = useState('');
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [question, setQuestion] = useState('');
+  const [question, setQuestion] = useState<HintQuestionId | null>(null);
   const [answer, setAnswer] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -60,7 +63,7 @@ export default function LockSetupScreen() {
       return;
     }
     if (secret !== first) {
-      restart('처음 입력한 것과 달라요. 다시 정해 주세요.');
+      restart(t('lock.setup.mismatch'));
       return;
     }
     // 비밀은 힌트까지 받은 뒤에 한 번에 저장한다 — 중간에 나가면 힌트 없는 잠금이 남는다.
@@ -69,7 +72,7 @@ export default function LockSetupScreen() {
   };
 
   const saveAll = () => {
-    if (saving || question.trim().length === 0 || answer.trim().length === 0) {
+    if (saving || question === null || answer.trim().length === 0) {
       return;
     }
     setSaving(true);
@@ -81,7 +84,7 @@ export default function LockSetupScreen() {
         router.back();
       } catch {
         setSaving(false);
-        setError('저장하지 못했어요. 다시 시도해 주세요.');
+        setError(t('lock.setup.saveFailed'));
       }
     })();
   };
@@ -96,7 +99,7 @@ export default function LockSetupScreen() {
 
   const onPattern = (pattern: string) => {
     if (pattern.split('-').length < PATTERN_MIN_POINTS) {
-      setError(`점을 ${PATTERN_MIN_POINTS}개 이상 이어주세요.`);
+      setError(t('lock.patternTooShort', { count: PATTERN_MIN_POINTS }));
       return;
     }
     setError(null);
@@ -107,7 +110,7 @@ export default function LockSetupScreen() {
     <View style={styles.header}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="닫기"
+        accessibilityLabel={t('common.close')}
         onPress={() => router.back()}
         hitSlop={12}
       >
@@ -119,8 +122,8 @@ export default function LockSetupScreen() {
   if (step === 'choose') {
     return (
       <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
-        <Text style={styles.title}>어떻게 잠글까요?</Text>
-        <Text style={styles.subtitle}>나중에 설정에서 바꿀 수 있어요.</Text>
+        <Text style={styles.title}>{t('lock.setup.chooseTitle')}</Text>
+        <Text style={styles.subtitle}>{t('lock.setup.chooseNote')}</Text>
 
         <Pressable
           accessibilityRole="button"
@@ -135,7 +138,7 @@ export default function LockSetupScreen() {
           </View>
           <View style={styles.optionBody}>
             <Text style={styles.optionTitle}>PIN</Text>
-            <Text style={styles.optionNote}>숫자 {PIN_LENGTH}자리</Text>
+            <Text style={styles.optionNote}>{t('lock.setup.pinNote', { count: PIN_LENGTH })}</Text>
           </View>
         </Pressable>
 
@@ -151,31 +154,35 @@ export default function LockSetupScreen() {
             <Grid3x3 size={20} color={colors.accent} />
           </View>
           <View style={styles.optionBody}>
-            <Text style={styles.optionTitle}>패턴</Text>
-            <Text style={styles.optionNote}>3×3, 점 {PATTERN_MIN_POINTS}개 이상</Text>
+            <Text style={styles.optionTitle}>{t('lock.methodPattern')}</Text>
+            <Text style={styles.optionNote}>
+              {t('lock.setup.patternNote', { count: PATTERN_MIN_POINTS })}
+            </Text>
           </View>
         </Pressable>
 
         {/* 과장하지 않는다 — 잠금은 UI 게이트이지 암호화가 아니다(CLAUDE.md §7.1) */}
         <Text style={styles.disclaimer}>
-          잠금은 화면을 가리는 기능이에요. 일기 파일 자체를 암호화하지는 않아요.
+          {t('lock.setup.disclaimer')}
         </Text>
       </Screen>
     );
   }
 
   if (step === 'hint') {
-    const ready = question.trim().length > 0 && answer.trim().length > 0;
+    const ready = question !== null && answer.trim().length > 0;
     return (
       <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
-        <Text style={styles.title}>잊었을 때를 위한 힌트</Text>
+        <Text style={styles.title}>{t('lock.setup.hintTitle')}</Text>
         <Text style={styles.subtitle}>
-          답을 맞히면 {method === 'pin' ? 'PIN' : '패턴'}을 다시 보여드려요.
+          {t('lock.setup.hintNote', {
+            method: method === 'pin' ? t('lock.methodPin') : t('lock.methodPattern'),
+          })}
         </Text>
 
         {/* 질문은 고르게 한다 — 자유 입력은 답이 그대로 적힌 질문을 만든다 */}
         <View style={styles.questionList}>
-          {HINT_QUESTIONS.map((item) => {
+          {HINT_QUESTION_IDS.map((item) => {
             const selected = item === question;
             return (
               <Pressable
@@ -186,7 +193,7 @@ export default function LockSetupScreen() {
                 style={[styles.questionItem, selected && styles.questionItemOn]}
               >
                 <Text style={[styles.questionLabel, selected && styles.questionLabelOn]}>
-                  {item}
+                  {hintQuestionText(item)}
                 </Text>
               </Pressable>
             );
@@ -196,7 +203,7 @@ export default function LockSetupScreen() {
         <TextField
           value={answer}
           onChangeText={setAnswer}
-          placeholder="답"
+          placeholder={t('lock.setup.answerPlaceholder')}
           variant="boxed"
           autoCapitalize="none"
           autoCorrect={false}
@@ -207,8 +214,7 @@ export default function LockSetupScreen() {
           '생일'처럼 남이 아는 답을 넣으면 잠금이 그만큼 약해진다.
         */}
         <Text style={styles.disclaimer}>
-          남이 못 맞힐 답으로 정해 주세요. 이 답을 아는 사람은 잠금을 열 수 있어요. 띄어쓰기와
-          대소문자는 구분하지 않아요.
+          {t('lock.setup.hintDisclaimer')}
         </Text>
 
         {error !== null && <Text style={styles.errorText}>{error}</Text>}
@@ -221,7 +227,7 @@ export default function LockSetupScreen() {
           style={[styles.primary, (!ready || saving) && styles.primaryDisabled]}
         >
           <Text style={[styles.primaryLabel, (!ready || saving) && styles.primaryLabelDisabled]}>
-            잠금 켜기
+            {t('lock.setup.turnOn')}
           </Text>
         </Pressable>
       </Screen>
@@ -232,11 +238,13 @@ export default function LockSetupScreen() {
     <Screen edges={['top', 'bottom', 'left', 'right']} scroll={false} header={header}>
       <View style={styles.center}>
         <Text style={styles.title}>
-          {step === 'enter' ? '새 잠금을 정해 주세요' : '한 번 더 입력해 주세요'}
+          {step === 'enter' ? t('lock.setup.enterTitle') : t('lock.setup.confirmTitle')}
         </Text>
         <Text style={styles.subtitle}>
           {error ??
-            (method === 'pin' ? `숫자 ${PIN_LENGTH}자리` : `점 ${PATTERN_MIN_POINTS}개 이상`)}
+            (method === 'pin'
+            ? t('lock.setup.pinNote', { count: PIN_LENGTH })
+            : t('lock.setup.patternNote', { count: PATTERN_MIN_POINTS }))}
         </Text>
 
         <View style={styles.input}>

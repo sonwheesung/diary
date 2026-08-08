@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { Flame, Pencil, Search } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -8,7 +9,7 @@ import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
 import { resolveImageUri } from '@/features/diary/api/image-store';
-import { findEmotion } from '@/features/diary/emotions';
+import { emotionLabel } from '@/features/diary/emotions';
 import { useHomeData } from '@/features/diary/hooks/use-home-data';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { today } from '@/lib/date';
@@ -20,6 +21,7 @@ import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const { recent, thumbnails, streak, todayDiaryId, loading, error } = useHomeData();
@@ -31,7 +33,7 @@ export default function HomeScreen() {
         <Text style={styles.date}>{formatFullDate(today())}</Text>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="검색"
+          accessibilityLabel={t('common.search')}
           onPress={() => router.push('/search')}
           hitSlop={12}
         >
@@ -40,13 +42,13 @@ export default function HomeScreen() {
       </View>
 
       <Text style={styles.greeting}>
-        {wroteToday ? '오늘의 조각을\n남겼어요.' : '오늘,\n어떤 조각을\n모으고 싶나요?'}
+        {wroteToday ? t('home.greetingWritten') : t('home.greetingEmpty')}
       </Text>
 
       {streak > 0 && (
         <View style={styles.streak}>
           <Flame size={16} color={colors.accent} />
-          <Text style={styles.streakText}>{streak}일 연속 기록 중</Text>
+          <Text style={styles.streakText}>{t('home.streak', { count: streak })}</Text>
         </View>
       )}
 
@@ -55,17 +57,17 @@ export default function HomeScreen() {
         지난 날짜로 쓰러 들어갈 문이 사라진다 — 날짜는 작성 화면이 정한다(DIARY_SYSTEM §2).
       */}
       <Button
-        label="조각 쓰기"
+        label={t('tabs.write')}
         fullWidth
         icon={<Pencil size={18} color={colors.textOnAccent} />}
         onPress={() => router.push('/write')}
       />
 
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>최근의 조각들</Text>
+        <Text style={styles.sectionTitle}>{t('home.recent')}</Text>
         {recent.length > 0 && (
           <Pressable accessibilityRole="button" onPress={() => router.push('/diaries')} hitSlop={8}>
-            <Text style={styles.more}>더보기</Text>
+            <Text style={styles.more}>{t('common.more')}</Text>
           </Pressable>
         )}
       </View>
@@ -78,8 +80,8 @@ export default function HomeScreen() {
         </Card>
       ) : recent.length === 0 ? (
         <Card>
-          <Text style={styles.emptyTitle}>아직 모은 조각이 없어요</Text>
-          <Text style={styles.emptyBody}>오늘의 첫 조각을 남겨보세요.</Text>
+          <Text style={styles.emptyTitle}>{t('home.emptyTitle')}</Text>
+          <Text style={styles.emptyBody}>{t('home.emptyBody')}</Text>
         </Card>
       ) : (
         <View style={styles.list}>
@@ -94,7 +96,7 @@ export default function HomeScreen() {
 
 function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
   const styles = useStyles(createStyles);
-  const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+  const emotion = diary.emotion === null ? undefined : emotionLabel(diary.emotion);
   const relative = relativeDayLabel(diary.entryDate);
 
   return (
@@ -113,7 +115,7 @@ function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | 
             <Text style={styles.rowDate}>{formatListDate(diary.entryDate)}</Text>
             {/* 오늘·어제는 날짜 옆에 덧붙인다 — 이것만 보여주면 며칠에 쓴 글인지 알 수 없다 */}
             {relative !== null && <Text style={styles.rowRelative}>{relative}</Text>}
-            {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion.label}</Text>}
+            {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion}</Text>}
           </View>
           {diary.title !== null && (
             <Text style={styles.rowTitle} numberOfLines={1}>

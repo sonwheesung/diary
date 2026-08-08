@@ -1,4 +1,5 @@
 import { Delete } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PIN_LENGTH } from '@/features/lock/api/lock-store';
@@ -23,6 +24,7 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'] as co
  * 잠금 화면에서 그런 게 뜨면 안 된다. 입력한 자리는 점으로만 보여준다.
  */
 export function PinPad({ value, onChange, disabled = false }: PinPadProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const press = (key: string) => {
@@ -55,7 +57,7 @@ export function PinPad({ value, onChange, disabled = false }: PinPadProps) {
             <Pressable
               key={key}
               accessibilityRole="button"
-              accessibilityLabel={key === 'del' ? '지우기' : key}
+              accessibilityLabel={key === 'del' ? t('lock.clear') : key}
               onPress={() => press(key)}
               disabled={disabled}
               style={({ pressed }) => [styles.key, pressed && !disabled && styles.keyPressed]}

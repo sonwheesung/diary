@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { TextField } from '@/components/TextField';
@@ -56,6 +57,7 @@ export function BlockEditor({
   onCaretChange,
   autoFocus = false,
 }: BlockEditorProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   // 남는 공간의 실제 높이. 레이아웃 전에는 0이라 첫 그림에만 대체값을 쓴다.
@@ -97,7 +99,7 @@ export function BlockEditor({
                 key={`text-${index}`}
                 value={block.value}
                 onChangeText={(value) => updateText(index, value)}
-                placeholder={index === firstTextIndex ? '오늘 하루는 어땠나요?' : ''}
+                placeholder={index === firstTextIndex ? t('write.bodyPlaceholder') : ''}
                 multiline
                 textAlignVertical="top"
                 autoFocus={autoFocus && index === firstTextIndex}
@@ -122,7 +124,7 @@ export function BlockEditor({
               {image === undefined ? (
                 // 이미지 메타를 못 찾는 경우(파일 유실·데이터 불일치)에도 본문 전체를 죽이지 않는다.
                 <View style={styles.imageMissing}>
-                  <Text style={styles.imageMissingText}>이미지를 불러오지 못했어요</Text>
+                  <Text style={styles.imageMissingText}>{t('write.imageLoadFailed')}</Text>
                 </View>
               ) : (
                 <Image
@@ -134,7 +136,7 @@ export function BlockEditor({
               )}
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel="이미지 삭제"
+                accessibilityLabel={t('write.removeImage')}
                 onPress={() => removeBlock(index)}
                 hitSlop={8}
                 style={styles.imageRemove}

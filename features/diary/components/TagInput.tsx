@@ -1,5 +1,6 @@
 import { Plus, X } from 'lucide-react-native';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { TextField } from '@/components/TextField';
@@ -20,6 +21,7 @@ interface TagInputProps {
 const MAX_TAGS = 10;
 
 export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const [draft, setDraft] = useState('');
@@ -56,7 +58,7 @@ export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
             <Pressable
               key={tag}
               accessibilityRole="button"
-              accessibilityLabel={`태그 ${tag} 삭제`}
+              accessibilityLabel={t('tags.remove', { name: tag })}
               onPress={() => remove(tag)}
               style={styles.chip}
             >
@@ -79,7 +81,7 @@ export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
           // 스페이스로 확정하면 '제주 여행'처럼 띄어쓴 태그를 못 만든다 — 엔터만 받는다.
           blurOnSubmit={false}
           returnKeyType="done"
-          placeholder={tags.length >= MAX_TAGS ? `태그는 ${MAX_TAGS}개까지예요` : '태그 추가'}
+          placeholder={tags.length >= MAX_TAGS ? t('tags.max', { count: MAX_TAGS }) : t('tags.add')}
           editable={tags.length < MAX_TAGS}
           variant="boxed"
           tone="label"
@@ -87,7 +89,7 @@ export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
         />
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="태그 추가"
+          accessibilityLabel={t('tags.add')}
           onPress={() => add(draft)}
           disabled={canAdd === false}
           style={[styles.addButton, canAdd === false && styles.addButtonDisabled]}
@@ -102,13 +104,13 @@ export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
       */}
       {unusedSuggestions.length > 0 && (
         <View style={styles.suggestionBlock}>
-          <Text style={styles.suggestionTitle}>자주 쓴 태그 — 눌러서 추가</Text>
+          <Text style={styles.suggestionTitle}>{t('tags.frequentTitle')}</Text>
           <View style={styles.chips}>
             {unusedSuggestions.slice(0, 8).map((suggestion) => (
               <Pressable
                 key={suggestion}
                 accessibilityRole="button"
-                accessibilityLabel={`태그 ${suggestion} 추가`}
+                accessibilityLabel={t('tags.addNamed', { name: suggestion })}
                 onPress={() => add(suggestion)}
                 style={styles.suggestion}
               >

@@ -2,13 +2,14 @@ import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { listRecentDiaries } from '@/features/diary/api/diary-repository';
 import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image-store';
-import { findEmotion } from '@/features/diary/emotions';
+import { emotionLabel } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatListDate, formatMonthLabel, previewText } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -26,6 +27,7 @@ const PAGE_SIZE = 20;
  * 끝에 도달했는지 알 수 없고, 목록 끝에 뭐가 있는지도 알 수 없다.
  */
 export default function DiariesScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const [pages, setPages] = useState(1);
@@ -75,13 +77,13 @@ export default function DiariesScreen() {
     <View style={styles.header}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="뒤로"
+        accessibilityLabel={t('common.back')}
         onPress={() => router.back()}
         hitSlop={12}
       >
         <ChevronLeft size={26} color={colors.text} />
       </Pressable>
-      <Text style={styles.headerTitle}>모든 조각</Text>
+      <Text style={styles.headerTitle}>{t('diaries.title')}</Text>
       {/* 좌우 균형을 맞추는 빈 자리 — 제목이 가운데 오게 한다 */}
       <View style={styles.headerSpacer} />
     </View>
@@ -101,7 +103,7 @@ export default function DiariesScreen() {
     return (
       <Screen edges={['top', 'bottom', 'left', 'right']} scroll={false} header={header}>
         <View style={styles.center}>
-          <Text style={styles.emptyTitle}>아직 모은 조각이 없어요</Text>
+          <Text style={styles.emptyTitle}>{t('diaries.empty')}</Text>
         </View>
       </Screen>
     );
@@ -131,7 +133,7 @@ export default function DiariesScreen() {
           onPress={() => setPages((current) => current + 1)}
           style={styles.more}
         >
-          <Text style={styles.moreLabel}>더 보기</Text>
+          <Text style={styles.moreLabel}>{t('common.loadMore')}</Text>
         </Pressable>
       )}
     </Screen>
@@ -140,7 +142,7 @@ export default function DiariesScreen() {
 
 function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
   const styles = useStyles(createStyles);
-  const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
+  const emotion = diary.emotion === null ? undefined : emotionLabel(diary.emotion);
 
   return (
     <Card onPress={() => router.push(`/diary/${diary.id}`)} flush>
@@ -156,7 +158,7 @@ function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | 
         <View style={styles.rowBody}>
           <View style={styles.rowMeta}>
             <Text style={styles.rowDate}>{formatListDate(diary.entryDate)}</Text>
-            {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion.label}</Text>}
+            {emotion !== undefined && <Text style={styles.rowEmotion}>{emotion}</Text>}
           </View>
           {diary.title !== null && (
             <Text style={styles.rowTitle} numberOfLines={1}>

@@ -1,5 +1,6 @@
 import { Fingerprint, Lock } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -32,6 +33,7 @@ interface UnlockViewProps {
 
 /** 잠금 해제 화면. 라우트가 아니라 **덮개**다 — 뒤로가기나 딥링크로 지나칠 수 없어야 한다. */
 export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockViewProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
   const insets = useSafeAreaInsets();
@@ -76,14 +78,14 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
         setPin('');
         setError(
           state.blockedUntil > Date.now()
-            ? '여러 번 틀렸어요. 잠시 후 다시 시도해 주세요.'
-            : '다시 시도해 주세요.',
+            ? t('lock.blockedMessage')
+            : t('lock.wrong'),
         );
       } finally {
         checkingRef.current = false;
       }
     },
-    [blocked, onUnlocked],
+    [blocked, onUnlocked, t],
   );
 
   const tryBiometric = useCallback(async () => {
@@ -115,7 +117,7 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
     setError(null);
     // 너무 짧은 패턴은 시도로 세지 않는다 — 손이 미끄러진 것까지 실패로 쌓으면 억울하다.
     if (pattern.split('-').length < PATTERN_MIN_POINTS) {
-      setError(`점을 ${PATTERN_MIN_POINTS}개 이상 이어주세요.`);
+      setError(t('lock.patternTooShort', { count: PATTERN_MIN_POINTS }));
       return;
     }
     void check(pattern);
@@ -146,9 +148,9 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
         <View style={styles.badge}>
           <Lock size={22} color={colors.accent} />
         </View>
-        <Text style={styles.title}>조각이 잠겨 있어요</Text>
+        <Text style={styles.title}>{t('lock.lockedTitle')}</Text>
         <Text style={styles.subtitle}>
-          {method === 'pin' ? 'PIN을 입력해 주세요' : '패턴을 그려주세요'}
+          {method === 'pin' ? t('lock.enterPin') : t('lock.drawPattern')}
         </Text>
       </View>
 
@@ -162,7 +164,7 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
 
       <View style={[styles.foot, { paddingBottom: insets.bottom + spacing.xl }]}>
         {blocked ? (
-          <Text style={styles.blocked}>{remainSeconds}초 후에 다시 시도할 수 있어요</Text>
+          <Text style={styles.blocked}>{t('lock.blockedCountdown', { seconds: remainSeconds })}</Text>
         ) : (
           error !== null && <Text style={styles.error}>{error}</Text>
         )}
@@ -174,12 +176,12 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
             style={styles.biometric}
           >
             <Fingerprint size={18} color={colors.accent} />
-            <Text style={styles.biometricLabel}>생체인증으로 열기</Text>
+            <Text style={styles.biometricLabel}>{t('lock.openWithBiometric')}</Text>
           </Pressable>
         )}
 
         <Pressable accessibilityRole="button" onPress={() => setHintOpen(true)} hitSlop={8}>
-          <Text style={styles.forgot}>잠금을 잊으셨나요?</Text>
+          <Text style={styles.forgot}>{t('lock.forgot')}</Text>
         </Pressable>
       </View>
     </View>

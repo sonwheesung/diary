@@ -7,6 +7,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
 import { LockGate } from '@/features/lock/components/LockGate';
+import { useLanguageStore } from '@/features/settings/language-store';
+import { initI18n } from '@/lib/i18n';
 import { ThemeProvider, useTheme } from '@/theme/theme';
 import { fontAssets } from '@/theme/typography';
 
@@ -22,6 +24,9 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 // 폰트는 뒤늦게 도착해도 리렌더로 적용되므로, 기다리지 않는 쪽이 항상 낫다.
 const FONT_TIMEOUT_MS = 3000;
 
+// 첫 렌더 전에 켠다. 렌더 중에 초기화하면 키 문자열('home.recent')이 한 프레임 보인다.
+initI18n();
+
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(fontAssets);
   const [fontWaitExpired, setFontWaitExpired] = useState(false);
@@ -35,6 +40,12 @@ export default function RootLayout() {
   useEffect(() => {
     void initializeAds();
   }, []);
+
+  // 저장된 언어 선택을 읽어 적용한다. 읽기 전에는 기기 언어로 그려진다.
+  const loadLanguage = useLanguageStore((state) => state.load);
+  useEffect(() => {
+    void loadLanguage();
+  }, [loadLanguage]);
 
   // 폰트 로드에 실패해도 앱을 막지 않는다(시스템 폰트로 폴백). 잠금 화면조차 못 여는 게 더 나쁘다.
   const ready = fontsLoaded || fontError !== null || fontWaitExpired;

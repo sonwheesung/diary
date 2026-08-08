@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -22,6 +23,7 @@ interface BottomSheetProps {
  * 필요할 때만 덮어 띄운다(2026-08-08).
  */
 export function BottomSheet({ visible, onClose, title, children }: BottomSheetProps) {
+  const { t } = useTranslation();
   const styles = useStyles(createStyles);
   const insets = useSafeAreaInsets();
   const keyboard = useKeyboard();
@@ -31,7 +33,7 @@ export function BottomSheet({ visible, onClose, title, children }: BottomSheetPr
       {/* 바깥을 눌러 닫는 길을 항상 열어둔다 — 안드로이드 뒤로가기는 onRequestClose가 받는다 */}
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="닫기"
+        accessibilityLabel={t('common.close')}
         style={styles.backdrop}
         onPress={onClose}
       />
