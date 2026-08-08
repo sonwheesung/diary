@@ -2,7 +2,9 @@ import { forwardRef } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 import type { TextInputProps } from 'react-native';
 
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -22,6 +24,9 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
   { variant = 'plain', tone = 'body', style, ...rest },
   ref,
 ) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
+
   return (
     <TextInput
       ref={ref}
@@ -33,19 +38,20 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
   );
 });
 
-const styles = StyleSheet.create({
-  base: {
-    color: colors.text,
-    // RN 기본 padding이 플랫폼마다 달라 줄 간격이 어긋난다. 0으로 맞추고 variant에서 준다.
-    padding: 0,
-  },
-  plain: {
-    backgroundColor: 'transparent',
-  },
-  boxed: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    base: {
+      color: colors.text,
+      // RN 기본 padding이 플랫폼마다 달라 줄 간격이 어긋난다. 0으로 맞추고 variant에서 준다.
+      padding: 0,
+    },
+    plain: {
+      backgroundColor: 'transparent',
+    },
+    boxed: {
+      backgroundColor: colors.surfaceMuted,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+    },
+  });

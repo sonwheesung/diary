@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
 import { PanResponder, StyleSheet, View } from 'react-native';
 
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useStyles } from '@/theme/use-styles';
 import { spacing } from '@/theme/spacing';
 
 interface PatternGridProps {
@@ -25,6 +26,7 @@ const HIT_RADIUS = 34;
  * 어깨너머로 보는 사람에게 그대로 노출된다.
  */
 export function PatternGrid({ onComplete, disabled = false }: PatternGridProps) {
+  const styles = useStyles(createStyles);
   const [touched, setTouched] = useState<number[]>([]);
   const touchedRef = useRef<number[]>([]);
 
@@ -90,34 +92,35 @@ export function PatternGrid({ onComplete, disabled = false }: PatternGridProps) 
   );
 }
 
-const styles = StyleSheet.create({
-  grid: {
-    width: GRID,
-    height: GRID,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  cell: {
-    width: GRID / SIZE,
-    height: GRID / SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dot: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 2,
-    borderColor: colors.accentMuted,
-    backgroundColor: 'transparent',
-  },
-  dotOn: {
-    borderRadius: 11,
-    borderWidth: 2,
-    borderColor: colors.accent,
-    backgroundColor: colors.accent,
-  },
-  spacer: {
-    height: spacing.md,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    grid: {
+      width: GRID,
+      height: GRID,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    cell: {
+      width: GRID / SIZE,
+      height: GRID / SIZE,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    dot: {
+      width: 22,
+      height: 22,
+      borderRadius: 11,
+      borderWidth: 2,
+      borderColor: colors.accentMuted,
+      backgroundColor: 'transparent',
+    },
+    dotOn: {
+      borderRadius: 11,
+      borderWidth: 2,
+      borderColor: colors.accent,
+      backgroundColor: colors.accent,
+    },
+    spacer: {
+      height: spacing.md,
+    },
+  });

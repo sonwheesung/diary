@@ -16,7 +16,9 @@ import type { LockMethod } from '@/features/lock/api/lock-store';
 import { HintRecovery } from '@/features/lock/components/HintRecovery';
 import { PatternGrid } from '@/features/lock/components/PatternGrid';
 import { PinPad } from '@/features/lock/components/PinPad';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -30,6 +32,8 @@ interface UnlockViewProps {
 
 /** 잠금 해제 화면. 라우트가 아니라 **덮개**다 — 뒤로가기나 딥링크로 지나칠 수 없어야 한다. */
 export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockViewProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const insets = useSafeAreaInsets();
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -182,68 +186,69 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  rootCenter: {
-    justifyContent: 'center',
-  },
-  forgot: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  head: {
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  badge: {
-    width: 48,
-    height: 48,
-    borderRadius: radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.accentSoft,
-    marginBottom: spacing.sm,
-  },
-  title: {
-    ...typography.title,
-    color: colors.text,
-  },
-  subtitle: {
-    ...typography.body,
-    color: colors.textMuted,
-  },
-  body: {
-    alignItems: 'center',
-  },
-  foot: {
-    alignItems: 'center',
-    gap: spacing.md,
-    minHeight: 96,
-  },
-  error: {
-    ...typography.label,
-    color: colors.danger,
-  },
-  blocked: {
-    ...typography.label,
-    color: colors.danger,
-  },
-  biometric: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.surfaceMuted,
-  },
-  biometricLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    root: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    rootCenter: {
+      justifyContent: 'center',
+    },
+    forgot: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    head: {
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    badge: {
+      width: 48,
+      height: 48,
+      borderRadius: radius.full,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.accentSoft,
+      marginBottom: spacing.sm,
+    },
+    title: {
+      ...typography.title,
+      color: colors.text,
+    },
+    subtitle: {
+      ...typography.body,
+      color: colors.textMuted,
+    },
+    body: {
+      alignItems: 'center',
+    },
+    foot: {
+      alignItems: 'center',
+      gap: spacing.md,
+      minHeight: 96,
+    },
+    error: {
+      ...typography.label,
+      color: colors.danger,
+    },
+    blocked: {
+      ...typography.label,
+      color: colors.danger,
+    },
+    biometric: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      backgroundColor: colors.surfaceMuted,
+    },
+    biometricLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+  });

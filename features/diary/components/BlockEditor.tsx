@@ -6,7 +6,9 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TextField } from '@/components/TextField';
 import { resolveImageUri } from '@/features/diary/api/image-store';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -54,6 +56,8 @@ export function BlockEditor({
   onCaretChange,
   autoFocus = false,
 }: BlockEditorProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   // 남는 공간의 실제 높이. 레이아웃 전에는 0이라 첫 그림에만 대체값을 쓴다.
   const [areaHeight, setAreaHeight] = useState(0);
   const cap = areaHeight > 0 ? areaHeight : FALLBACK_HEIGHT;
@@ -145,45 +149,46 @@ export function BlockEditor({
   );
 }
 
-const styles = StyleSheet.create({
-  area: {
-    flex: 1,
-  },
-  flex: {
-    flex: 1,
-  },
-  container: {
-    gap: spacing.md,
-  },
-  imageBlock: {
-    borderRadius: radius.md,
-    overflow: 'hidden',
-    backgroundColor: colors.surfaceMuted,
-  },
-  image: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-  },
-  imageMissing: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  imageMissingText: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  imageRemove: {
-    position: 'absolute',
-    top: spacing.sm,
-    right: spacing.sm,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    // 사진 위라 배경이 예측 불가 — 반투명 검정으로 대비를 보장한다.
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    area: {
+      flex: 1,
+    },
+    flex: {
+      flex: 1,
+    },
+    container: {
+      gap: spacing.md,
+    },
+    imageBlock: {
+      borderRadius: radius.md,
+      overflow: 'hidden',
+      backgroundColor: colors.surfaceMuted,
+    },
+    image: {
+      width: '100%',
+      aspectRatio: 4 / 3,
+    },
+    imageMissing: {
+      width: '100%',
+      aspectRatio: 4 / 3,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    imageMissingText: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    imageRemove: {
+      position: 'absolute',
+      top: spacing.sm,
+      right: spacing.sm,
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      // 사진 위라 배경이 예측 불가 — 반투명 검정으로 대비를 보장한다.
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });

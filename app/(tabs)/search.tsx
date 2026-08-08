@@ -13,7 +13,9 @@ import { listTagsByUsage } from '@/features/diary/api/tag-repository';
 import { findEmotion } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatListDate, previewText } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -27,6 +29,8 @@ const DEBOUNCE_MS = 250;
  * 눌러서 바로 찾을 수 있는 단서를 주는 편이 낫다.
  */
 export default function SearchScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState<Diary[]>([]);
   const [thumbnails, setThumbnails] = useState<Map<string, DiaryImage>>(new Map());
@@ -156,6 +160,7 @@ export default function SearchScreen() {
 }
 
 function ResultRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
+  const styles = useStyles(createStyles);
   const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
 
   return (
@@ -193,99 +198,100 @@ function ResultRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage |
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
-  },
-  field: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    height: 46,
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-  },
-  input: {
-    flex: 1,
-  },
-  sectionTitle: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  hint: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginTop: -spacing.sm,
-  },
-  loading: {
-    marginTop: spacing.lg,
-  },
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginTop: -spacing.sm,
-  },
-  tagChip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.accentSoft,
-  },
-  tagLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  emptyTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  emptyBody: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginTop: spacing.xs,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  thumbnail: {
-    width: 84,
-    height: 84,
-    backgroundColor: colors.surfaceMuted,
-  },
-  rowBody: {
-    flex: 1,
-    padding: spacing.md,
-    gap: 2,
-  },
-  rowMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  rowDate: {
-    ...typography.caption,
-    color: colors.text,
-  },
-  rowEmotion: {
-    ...typography.caption,
-    color: colors.accentMuted,
-  },
-  rowTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  rowPreview: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  rowTags: {
-    ...typography.caption,
-    color: colors.accentMuted,
-    marginTop: spacing.xs,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.md,
+      paddingBottom: spacing.sm,
+    },
+    field: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      paddingHorizontal: spacing.md,
+      height: 46,
+      borderRadius: radius.md,
+      backgroundColor: colors.surfaceMuted,
+    },
+    input: {
+      flex: 1,
+    },
+    sectionTitle: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    hint: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginTop: -spacing.sm,
+    },
+    loading: {
+      marginTop: spacing.lg,
+    },
+    tagRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+      marginTop: -spacing.sm,
+    },
+    tagChip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      backgroundColor: colors.accentSoft,
+    },
+    tagLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    emptyTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    emptyBody: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginTop: spacing.xs,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    thumbnail: {
+      width: 84,
+      height: 84,
+      backgroundColor: colors.surfaceMuted,
+    },
+    rowBody: {
+      flex: 1,
+      padding: spacing.md,
+      gap: 2,
+    },
+    rowMeta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    rowDate: {
+      ...typography.caption,
+      color: colors.text,
+    },
+    rowEmotion: {
+      ...typography.caption,
+      color: colors.accentMuted,
+    },
+    rowTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    rowPreview: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    rowTags: {
+      ...typography.caption,
+      color: colors.accentMuted,
+      marginTop: spacing.xs,
+    },
+  });

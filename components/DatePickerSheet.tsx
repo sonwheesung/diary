@@ -6,7 +6,9 @@ import { BottomSheet } from '@/components/BottomSheet';
 import { MonthGrid } from '@/components/MonthGrid';
 import { addMonths, startOfMonth, today } from '@/lib/date';
 import { formatMonthLabel } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -34,6 +36,8 @@ export function DatePickerSheet({
   takenDates,
   onMonthChange,
 }: DatePickerSheetProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const [month, setMonth] = useState(value ?? today());
 
   // 닫았다 다시 열면 고른 날짜가 있는 달에서 시작한다. 지난달을 보다 닫았다고 그 달이 남으면 헷갈린다.
@@ -104,36 +108,37 @@ export function DatePickerSheet({
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  monthLabel: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  hint: {
-    ...typography.caption,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
-  todayButton: {
-    alignSelf: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.surfaceMuted,
-  },
-  todayButtonDisabled: {
-    opacity: 0.5,
-  },
-  todayLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  todayLabelDisabled: {
-    color: colors.textMuted,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    monthLabel: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    hint: {
+      ...typography.caption,
+      color: colors.textMuted,
+      textAlign: 'center',
+    },
+    todayButton: {
+      alignSelf: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      backgroundColor: colors.surfaceMuted,
+    },
+    todayButtonDisabled: {
+      opacity: 0.5,
+    },
+    todayLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    todayLabelDisabled: {
+      color: colors.textMuted,
+    },
+  });

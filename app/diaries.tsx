@@ -11,7 +11,9 @@ import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image
 import { findEmotion } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatListDate, formatMonthLabel, previewText } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -24,6 +26,8 @@ const PAGE_SIZE = 20;
  * 끝에 도달했는지 알 수 없고, 목록 끝에 뭐가 있는지도 알 수 없다.
  */
 export default function DiariesScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const [pages, setPages] = useState(1);
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [thumbnails, setThumbnails] = useState<Map<string, DiaryImage>>(new Map());
@@ -135,6 +139,7 @@ export default function DiariesScreen() {
 }
 
 function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
+  const styles = useStyles(createStyles);
   const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
 
   return (
@@ -167,82 +172,83 @@ function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | 
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  headerTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  headerSpacer: {
-    width: 26,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emptyTitle: {
-    ...typography.body,
-    color: colors.textMuted,
-  },
-  item: {
-    gap: spacing.sm,
-  },
-  monthLabel: {
-    ...typography.label,
-    color: colors.textMuted,
-    marginTop: spacing.sm,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  thumbnail: {
-    width: 84,
-    height: 84,
-    backgroundColor: colors.surfaceMuted,
-  },
-  rowBody: {
-    flex: 1,
-    padding: spacing.md,
-    gap: 2,
-  },
-  rowMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  rowDate: {
-    ...typography.caption,
-    color: colors.text,
-  },
-  rowEmotion: {
-    ...typography.caption,
-    color: colors.accentMuted,
-  },
-  rowTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  rowPreview: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  more: {
-    alignSelf: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.surfaceMuted,
-  },
-  moreLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    headerTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    headerSpacer: {
+      width: 26,
+    },
+    center: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    emptyTitle: {
+      ...typography.body,
+      color: colors.textMuted,
+    },
+    item: {
+      gap: spacing.sm,
+    },
+    monthLabel: {
+      ...typography.label,
+      color: colors.textMuted,
+      marginTop: spacing.sm,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    thumbnail: {
+      width: 84,
+      height: 84,
+      backgroundColor: colors.surfaceMuted,
+    },
+    rowBody: {
+      flex: 1,
+      padding: spacing.md,
+      gap: 2,
+    },
+    rowMeta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    rowDate: {
+      ...typography.caption,
+      color: colors.text,
+    },
+    rowEmotion: {
+      ...typography.caption,
+      color: colors.accentMuted,
+    },
+    rowTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    rowPreview: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    more: {
+      alignSelf: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      backgroundColor: colors.surfaceMuted,
+    },
+    moreLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+  });

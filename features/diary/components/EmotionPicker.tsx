@@ -2,7 +2,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { EMOTIONS } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -18,6 +19,7 @@ interface EmotionPickerProps {
  * 8개는 두 줄이면 다 보인다(2026-08-08).
  */
 export function EmotionPicker({ value, onChange }: EmotionPickerProps) {
+  const styles = useStyles(createStyles);
   return (
     <View style={styles.row}>
       {EMOTIONS.map((emotion) => {
@@ -38,26 +40,27 @@ export function EmotionPicker({ value, onChange }: EmotionPickerProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.surfaceMuted,
-  },
-  chipSelected: {
-    backgroundColor: colors.accent,
-  },
-  label: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  labelSelected: {
-    color: colors.textOnAccent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    row: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+    },
+    chip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      backgroundColor: colors.surfaceMuted,
+    },
+    chipSelected: {
+      backgroundColor: colors.accent,
+    },
+    label: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    labelSelected: {
+      color: colors.textOnAccent,
+    },
+  });

@@ -3,13 +3,17 @@ import { Calendar, House, Plus, Search, Settings } from 'lucide-react-native';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { fonts } from '@/theme/typography';
 
 const ICON_SIZE = 22;
 
 /** 가운데 작성 버튼. 탭이 아니라 화면을 띄우는 동작이라 탭 자체는 비워두고 눌림만 가로챈다. */
 function WriteTabIcon() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   return (
     <View style={styles.writeButton}>
       <Plus size={26} color={colors.textOnAccent} strokeWidth={2.2} />
@@ -20,6 +24,8 @@ function WriteTabIcon() {
 const TAB_BAR_CONTENT_HEIGHT = 60;
 
 export default function TabsLayout() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   // 제스처 내비게이션 기기에서 탭바가 시스템 바 아래로 깔리는 것을 막는다.
   // 고정 높이를 쓰면 기기마다 어긋난다 — 인셋을 더해서 계산한다.
   const insets = useSafeAreaInsets();
@@ -80,25 +86,26 @@ export default function TabsLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: 8,
-  },
-  tabLabel: {
-    fontFamily: fonts.medium,
-    fontSize: 11,
-  },
-  writeButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // 탭바 위로 떠 보이게. Shadow 대신 위치로 위계를 만든다.
-    marginBottom: 14,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    tabBar: {
+      backgroundColor: colors.surface,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      paddingTop: 8,
+    },
+    tabLabel: {
+      fontFamily: fonts.medium,
+      fontSize: 11,
+    },
+    writeButton: {
+      width: 52,
+      height: 52,
+      borderRadius: 26,
+      backgroundColor: colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+      // 탭바 위로 떠 보이게. Shadow 대신 위치로 위계를 만든다.
+      marginBottom: 14,
+    },
+  });

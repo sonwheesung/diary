@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 import { router, useFocusEffect } from 'expo-router';
-import { Bell, ChevronRight, Fingerprint, Lock } from 'lucide-react-native';
+import { Bell, ChevronRight, Fingerprint, Lock, Moon, Sun } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
@@ -18,7 +18,9 @@ import {
   getBoolSetting,
   setBoolSetting,
 } from '@/features/settings/api/settings-store';
-import { colors } from '@/theme/colors';
+import type { Palette, ThemeMode } from '@/theme/palettes';
+import { useColors, useTheme } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -36,7 +38,16 @@ const DELAY_LABELS: Record<LockDelay, string> = {
 
 const DELAY_ORDER: LockDelay[] = ['immediate', '1m', '5m'];
 
+const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
+  { value: 'system', label: '시스템' },
+  { value: 'light', label: '라이트' },
+  { value: 'dark', label: '다크' },
+];
+
 export default function SettingsScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
+  const { mode, paletteId, setMode } = useTheme();
   const [notifications, setNotifications] = useState(false);
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
   const lock = useLockStore((state) => state.config);
@@ -186,6 +197,45 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.section}>
+        <Text style={styles.sectionTitle}>화면</Text>
+        <View style={styles.row}>
+          <View style={styles.rowIcon}>
+            {paletteId === 'dark' ? (
+              <Moon size={18} color={colors.accent} />
+            ) : (
+              <Sun size={18} color={colors.accent} />
+            )}
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>테마</Text>
+            <Text style={styles.rowNote}>
+              {mode === 'system' ? '기기 설정을 따라가요' : '직접 고른 테마를 유지해요'}
+            </Text>
+          </View>
+        </View>
+
+        {/* 세 갈래뿐이라 시트를 여는 것보다 늘어놓는 편이 빠르다 */}
+        <View style={styles.segmented}>
+          {THEME_OPTIONS.map((option) => {
+            const selected = option.value === mode;
+            return (
+              <Pressable
+                key={option.value}
+                accessibilityRole="button"
+                accessibilityState={{ selected }}
+                onPress={() => setMode(option.value)}
+                style={[styles.segment, selected && styles.segmentOn]}
+              >
+                <Text style={[styles.segmentLabel, selected && styles.segmentLabelOn]}>
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
+
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>알림</Text>
         <View style={styles.row}>
           <View style={styles.rowIcon}>
@@ -221,49 +271,72 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screenTitle: {
-    ...typography.title,
-    color: colors.text,
-    paddingTop: spacing.md,
-  },
-  section: {
-    gap: spacing.sm,
-  },
-  sectionTitle: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.surface,
-  },
-  rowIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.accentSoft,
-  },
-  rowBody: {
-    flex: 1,
-    gap: 2,
-  },
-  rowTitle: {
-    ...typography.body,
-    color: colors.text,
-  },
-  rowNote: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  rowValue: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    screenTitle: {
+      ...typography.title,
+      color: colors.text,
+      paddingTop: spacing.md,
+    },
+    section: {
+      gap: spacing.sm,
+    },
+    sectionTitle: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+      padding: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.surface,
+    },
+    rowIcon: {
+      width: 34,
+      height: 34,
+      borderRadius: radius.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.accentSoft,
+    },
+    rowBody: {
+      flex: 1,
+      gap: 2,
+    },
+    rowTitle: {
+      ...typography.body,
+      color: colors.text,
+    },
+    rowNote: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    rowValue: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    segmented: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+    },
+    segment: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.surface,
+    },
+    segmentOn: {
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+    },
+    segmentLabel: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    segmentLabelOn: {
+      color: colors.textOnAccent,
+    },
+  });

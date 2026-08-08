@@ -11,7 +11,8 @@ import {
 } from '@/features/lock/api/lock-store';
 import type { LockMethod } from '@/features/lock/api/lock-store';
 import { wipeAllData } from '@/features/settings/api/reset-app';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -43,6 +44,7 @@ interface HintRecoveryProps {
  * 이쪽만 무제한으로 두면 문을 하나 열어두는 셈이다.
  */
 export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
+  const styles = useStyles(createStyles);
   const [question, setQuestion] = useState<string | null>(null);
   const [answer, setAnswer] = useState('');
   const [revealed, setRevealed] = useState<string | null>(null);
@@ -175,6 +177,7 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
 
 /** 패턴은 숫자로 보여줘야 재현할 수 있다 — 지나온 순서를 점 위에 적는다. */
 function PatternPreview({ pattern }: { pattern: string }) {
+  const styles = useStyles(createStyles);
   const order = pattern.split('-').map((value) => Number(value));
 
   return (
@@ -193,91 +196,92 @@ function PatternPreview({ pattern }: { pattern: string }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: 300,
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  title: {
-    ...typography.title,
-    color: colors.text,
-  },
-  question: {
-    ...typography.body,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
-  note: {
-    ...typography.body,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
-  input: {
-    width: '100%',
-  },
-  error: {
-    ...typography.caption,
-    color: colors.danger,
-  },
-  primary: {
-    minWidth: 140,
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-  },
-  primaryDisabled: {
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-  },
-  primaryLabel: {
-    ...typography.label,
-    color: colors.textOnAccent,
-  },
-  cancel: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  wipe: {
-    ...typography.caption,
-    color: colors.danger,
-  },
-  pin: {
-    ...typography.display,
-    color: colors.accent,
-    letterSpacing: 8,
-  },
-  grid: {
-    width: 180,
-    height: 180,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  gridCell: {
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  gridDot: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    borderWidth: 2,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  gridDotOn: {
-    borderRadius: 17,
-    borderWidth: 2,
-    borderColor: colors.accent,
-    backgroundColor: colors.accent,
-  },
-  gridStep: {
-    ...typography.caption,
-    color: colors.textOnAccent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    container: {
+      width: 300,
+      alignItems: 'center',
+      gap: spacing.md,
+    },
+    title: {
+      ...typography.title,
+      color: colors.text,
+    },
+    question: {
+      ...typography.body,
+      color: colors.textMuted,
+      textAlign: 'center',
+    },
+    note: {
+      ...typography.body,
+      color: colors.textMuted,
+      textAlign: 'center',
+    },
+    input: {
+      width: '100%',
+    },
+    error: {
+      ...typography.caption,
+      color: colors.danger,
+    },
+    primary: {
+      minWidth: 140,
+      alignItems: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+    },
+    primaryDisabled: {
+      borderRadius: radius.md,
+      backgroundColor: colors.surfaceMuted,
+    },
+    primaryLabel: {
+      ...typography.label,
+      color: colors.textOnAccent,
+    },
+    cancel: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    wipe: {
+      ...typography.caption,
+      color: colors.danger,
+    },
+    pin: {
+      ...typography.display,
+      color: colors.accent,
+      letterSpacing: 8,
+    },
+    grid: {
+      width: 180,
+      height: 180,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    gridCell: {
+      width: 60,
+      height: 60,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    gridDot: {
+      width: 34,
+      height: 34,
+      borderRadius: 17,
+      borderWidth: 2,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    gridDotOn: {
+      borderRadius: 17,
+      borderWidth: 2,
+      borderColor: colors.accent,
+      backgroundColor: colors.accent,
+    },
+    gridStep: {
+      ...typography.caption,
+      color: colors.textOnAccent,
+    },
+  });

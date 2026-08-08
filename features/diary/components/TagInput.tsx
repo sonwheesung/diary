@@ -4,7 +4,9 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import { normalizeTagName } from '@/features/diary/api/tag-repository';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -18,6 +20,8 @@ interface TagInputProps {
 const MAX_TAGS = 10;
 
 export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const [draft, setDraft] = useState('');
 
   const add = (raw: string) => {
@@ -119,66 +123,67 @@ export function TagInput({ tags, onChange, suggestions = [] }: TagInputProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    gap: spacing.sm,
-  },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    gap: spacing.sm,
-  },
-  input: {
-    flex: 1,
-  },
-  addButton: {
-    width: 48,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addButtonDisabled: {
-    backgroundColor: colors.surfaceMuted,
-  },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    backgroundColor: colors.accentSoft,
-  },
-  chipLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  suggestionBlock: {
-    gap: spacing.sm,
-    marginTop: spacing.xs,
-  },
-  suggestionTitle: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  suggestion: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  suggestionLabel: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    container: {
+      gap: spacing.sm,
+    },
+    chips: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+    },
+    inputRow: {
+      flexDirection: 'row',
+      alignItems: 'stretch',
+      gap: spacing.sm,
+    },
+    input: {
+      flex: 1,
+    },
+    addButton: {
+      width: 48,
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    addButtonDisabled: {
+      backgroundColor: colors.surfaceMuted,
+    },
+    chip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      backgroundColor: colors.accentSoft,
+    },
+    chipLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    suggestionBlock: {
+      gap: spacing.sm,
+      marginTop: spacing.xs,
+    },
+    suggestionTitle: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    suggestion: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    suggestionLabel: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+  });

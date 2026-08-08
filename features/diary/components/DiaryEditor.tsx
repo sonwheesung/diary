@@ -33,7 +33,9 @@ import type { EmotionCode } from '@/features/diary/emotions';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
 import { monthRange, today } from '@/lib/date';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -63,6 +65,8 @@ interface DiaryEditorProps {
  * 글을 쓸 때마다 아래 요소가 밀리고, 뭔가 고르려면 스크롤부터 해야 하는 게 실제로 거슬렸다.
  */
 export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEditorProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const editingId = diaryId;
 
   // 이미지는 조각이 저장되기 전에 삽입되므로, 붙일 diary_id가 먼저 있어야 한다.
@@ -567,6 +571,7 @@ function ToolbarButton({
   badge?: number;
   children: ReactNode;
 }) {
+  const styles = useStyles(createStyles);
   return (
     <Pressable
       accessibilityRole="button"
@@ -584,144 +589,145 @@ function ToolbarButton({
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  saveButton: {
-    minWidth: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 34,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-  },
-  saveButtonDisabled: {
-    backgroundColor: colors.surfaceMuted,
-  },
-  saveLabel: {
-    ...typography.label,
-    color: colors.textOnAccent,
-  },
-  saveLabelDisabled: {
-    color: colors.textMuted,
-  },
-  content: {
-    gap: spacing.md,
-    // 툴바가 바닥에 붙으므로 아래 여백을 두지 않는다.
-    paddingBottom: 0,
-  },
-  topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  dateButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  dateRestGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-  },
-  dateDay: {
-    ...typography.display,
-    color: colors.text,
-  },
-  dateRest: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  emotionButton: {
-    minWidth: 38,
-    height: 34,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surfaceMuted,
-  },
-  emotionButtonSet: {
-    backgroundColor: colors.accentSoft,
-  },
-  emotionLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loadError: {
-    ...typography.body,
-    color: colors.danger,
-  },
-  datePlaceholder: {
-    ...typography.subtitle,
-    color: colors.accent,
-  },
-  hint: {
-    ...typography.caption,
-    color: colors.danger,
-    marginTop: -spacing.sm,
-  },
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  tagChip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.full,
-    backgroundColor: colors.accentSoft,
-  },
-  tagChipLabel: {
-    ...typography.caption,
-    color: colors.accent,
-  },
-  toolbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    // 화면 양옆 여백을 뚫고 바닥에 붙는 띠로 보이게 한다.
-    marginHorizontal: -spacing.lg,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  toolButton: {
-    width: 48,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badge: {
-    position: 'absolute',
-    top: 4,
-    right: 6,
-    minWidth: 16,
-    height: 16,
-    paddingHorizontal: 4,
-    borderRadius: 8,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeLabel: {
-    ...typography.caption,
-    fontSize: 10,
-    lineHeight: 16,
-    color: colors.textOnAccent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    saveButton: {
+      minWidth: 60,
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 34,
+      paddingHorizontal: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+    },
+    saveButtonDisabled: {
+      backgroundColor: colors.surfaceMuted,
+    },
+    saveLabel: {
+      ...typography.label,
+      color: colors.textOnAccent,
+    },
+    saveLabelDisabled: {
+      color: colors.textMuted,
+    },
+    content: {
+      gap: spacing.md,
+      // 툴바가 바닥에 붙으므로 아래 여백을 두지 않는다.
+      paddingBottom: 0,
+    },
+    topRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    dateButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    dateRestGroup: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
+    dateDay: {
+      ...typography.display,
+      color: colors.text,
+    },
+    dateRest: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    emotionButton: {
+      minWidth: 38,
+      height: 34,
+      paddingHorizontal: spacing.sm,
+      borderRadius: radius.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.surfaceMuted,
+    },
+    emotionButtonSet: {
+      backgroundColor: colors.accentSoft,
+    },
+    emotionLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    center: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    loadError: {
+      ...typography.body,
+      color: colors.danger,
+    },
+    datePlaceholder: {
+      ...typography.subtitle,
+      color: colors.accent,
+    },
+    hint: {
+      ...typography.caption,
+      color: colors.danger,
+      marginTop: -spacing.sm,
+    },
+    tagRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+    },
+    tagChip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+      borderRadius: radius.full,
+      backgroundColor: colors.accentSoft,
+    },
+    tagChipLabel: {
+      ...typography.caption,
+      color: colors.accent,
+    },
+    toolbar: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      // 화면 양옆 여백을 뚫고 바닥에 붙는 띠로 보이게 한다.
+      marginHorizontal: -spacing.lg,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    toolButton: {
+      width: 48,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    badge: {
+      position: 'absolute',
+      top: 4,
+      right: 6,
+      minWidth: 16,
+      height: 16,
+      paddingHorizontal: 4,
+      borderRadius: 8,
+      backgroundColor: colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    badgeLabel: {
+      ...typography.caption,
+      fontSize: 10,
+      lineHeight: 16,
+      color: colors.textOnAccent,
+    },
+  });

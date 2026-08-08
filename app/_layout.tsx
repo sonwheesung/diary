@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { LockGate } from '@/features/lock/components/LockGate';
-import { colors } from '@/theme/colors';
+import { ThemeProvider, useTheme } from '@/theme/theme';
 import { fontAssets } from '@/theme/typography';
 
 // 폰트가 준비되기 전에 화면이 보이면 시스템 폰트로 한 번 그려졌다가 바뀌는 깜빡임이 생긴다.
@@ -45,7 +45,22 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" />
+      {/* 테마는 잠금 화면까지 덮어야 한다 — 게이트보다 바깥에 둔다 */}
+      <ThemeProvider>
+        <ThemedApp />
+      </ThemeProvider>
+    </SafeAreaProvider>
+  );
+}
+
+/** 팔레트를 읽어야 해서 Provider 안쪽에 따로 둔다 */
+function ThemedApp() {
+  const { colors, paletteId } = useTheme();
+
+  return (
+    <>
+      {/* 상태바 글자색은 배경 밝기를 따라간다 — 다크에서 검은 글자면 안 보인다 */}
+      <StatusBar style={paletteId === 'dark' ? 'light' : 'dark'} />
       {/* 잠금은 라우트가 아니라 앱 전체를 덮는 층이다 — 뒤로가기·딥링크로 지나칠 수 없어야 한다 */}
       <LockGate>
         <Stack
@@ -63,6 +78,6 @@ export default function RootLayout() {
           />
         </Stack>
       </LockGate>
-    </SafeAreaProvider>
+    </>
   );
 }

@@ -2,7 +2,9 @@ import { Delete } from 'lucide-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PIN_LENGTH } from '@/features/lock/api/lock-store';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -21,6 +23,8 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'] as co
  * 잠금 화면에서 그런 게 뜨면 안 된다. 입력한 자리는 점으로만 보여준다.
  */
 export function PinPad({ value, onChange, disabled = false }: PinPadProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const press = (key: string) => {
     if (disabled) {
       return;
@@ -69,48 +73,49 @@ export function PinPad({ value, onChange, disabled = false }: PinPadProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    gap: spacing.xl,
-  },
-  dots: {
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  dot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 1,
-    borderColor: colors.accentMuted,
-    backgroundColor: 'transparent',
-  },
-  dotFilled: {
-    borderRadius: 7,
-    borderColor: colors.accent,
-    backgroundColor: colors.accent,
-  },
-  pad: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    width: 280,
-    gap: spacing.md,
-  },
-  key: {
-    width: 80,
-    height: 64,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: radius.md,
-  },
-  keyPressed: {
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-  },
-  keyLabel: {
-    ...typography.title,
-    color: colors.text,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      gap: spacing.xl,
+    },
+    dots: {
+      flexDirection: 'row',
+      gap: spacing.md,
+    },
+    dot: {
+      width: 14,
+      height: 14,
+      borderRadius: 7,
+      borderWidth: 1,
+      borderColor: colors.accentMuted,
+      backgroundColor: 'transparent',
+    },
+    dotFilled: {
+      borderRadius: 7,
+      borderColor: colors.accent,
+      backgroundColor: colors.accent,
+    },
+    pad: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      width: 280,
+      gap: spacing.md,
+    },
+    key: {
+      width: 80,
+      height: 64,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: radius.md,
+    },
+    keyPressed: {
+      borderRadius: radius.md,
+      backgroundColor: colors.surfaceMuted,
+    },
+    keyLabel: {
+      ...typography.title,
+      color: colors.text,
+    },
+  });

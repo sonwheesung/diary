@@ -15,7 +15,9 @@ import {
 import type { LockMethod } from '@/features/lock/api/lock-store';
 import { PatternGrid } from '@/features/lock/components/PatternGrid';
 import { PinPad } from '@/features/lock/components/PinPad';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -27,6 +29,8 @@ type Step = 'choose' | 'enter' | 'confirm' | 'hint';
  * 확인 단계를 빼지 않는다. 잘못 정한 PIN·패턴은 **자기 일기를 자기가 못 여는** 결과가 된다.
  */
 export default function LockSetupScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const params = useLocalSearchParams<{ method?: string }>();
   const preset: LockMethod | null =
     params.method === 'pin' || params.method === 'pattern' ? params.method : null;
@@ -247,106 +251,107 @@ export default function LockSetupScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  title: {
-    ...typography.title,
-    color: colors.text,
-  },
-  subtitle: {
-    ...typography.body,
-    color: colors.textMuted,
-    marginTop: -spacing.sm,
-  },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.surface,
-  },
-  optionIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.accentSoft,
-  },
-  optionBody: {
-    flex: 1,
-    gap: 2,
-  },
-  optionTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  optionNote: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  disclaimer: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  errorText: {
-    ...typography.caption,
-    color: colors.danger,
-  },
-  questionList: {
-    gap: spacing.sm,
-  },
-  questionItem: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  questionItemOn: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.accent,
-    backgroundColor: colors.accentSoft,
-  },
-  questionLabel: {
-    ...typography.body,
-    color: colors.text,
-  },
-  questionLabelOn: {
-    color: colors.accent,
-  },
-  primary: {
-    alignItems: 'center',
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-  },
-  primaryDisabled: {
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-  },
-  primaryLabel: {
-    ...typography.label,
-    color: colors.textOnAccent,
-  },
-  primaryLabelDisabled: {
-    color: colors.textMuted,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.sm,
-  },
-  input: {
-    marginTop: spacing.xl,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    title: {
+      ...typography.title,
+      color: colors.text,
+    },
+    subtitle: {
+      ...typography.body,
+      color: colors.textMuted,
+      marginTop: -spacing.sm,
+    },
+    option: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+      padding: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.surface,
+    },
+    optionIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: radius.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.accentSoft,
+    },
+    optionBody: {
+      flex: 1,
+      gap: 2,
+    },
+    optionTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    optionNote: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    disclaimer: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    errorText: {
+      ...typography.caption,
+      color: colors.danger,
+    },
+    questionList: {
+      gap: spacing.sm,
+    },
+    questionItem: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    questionItemOn: {
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: colors.accent,
+      backgroundColor: colors.accentSoft,
+    },
+    questionLabel: {
+      ...typography.body,
+      color: colors.text,
+    },
+    questionLabelOn: {
+      color: colors.accent,
+    },
+    primary: {
+      alignItems: 'center',
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+    },
+    primaryDisabled: {
+      borderRadius: radius.md,
+      backgroundColor: colors.surfaceMuted,
+    },
+    primaryLabel: {
+      ...typography.label,
+      color: colors.textOnAccent,
+    },
+    primaryLabelDisabled: {
+      color: colors.textMuted,
+    },
+    center: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.sm,
+    },
+    input: {
+      marginTop: spacing.xl,
+    },
+  });

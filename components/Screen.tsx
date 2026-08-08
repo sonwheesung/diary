@@ -6,7 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { Edge } from 'react-native-safe-area-context';
 
 import { useKeyboard } from '@/hooks/use-keyboard';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useStyles } from '@/theme/use-styles';
 import { spacing } from '@/theme/spacing';
 
 interface ScreenProps {
@@ -41,6 +42,7 @@ export function Screen({
   contentStyle,
   header,
 }: ScreenProps) {
+  const styles = useStyles(createStyles);
   const keyboard = useKeyboard();
   const rootRef = useRef<View>(null);
   const scrollRef = useRef<ScrollView>(null);
@@ -131,17 +133,18 @@ export function Screen({
   );
 }
 
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  flex: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xxl,
-    gap: spacing.lg,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    safe: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    flex: {
+      flex: 1,
+    },
+    content: {
+      paddingHorizontal: spacing.lg,
+      paddingBottom: spacing.xxl,
+      gap: spacing.lg,
+    },
+  });

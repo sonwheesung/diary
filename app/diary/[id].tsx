@@ -20,7 +20,9 @@ import { DiaryEditor } from '@/features/diary/components/DiaryEditor';
 import { findEmotion } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -31,6 +33,8 @@ import { typography } from '@/theme/typography';
  * 블록·이미지·태그 로직이 복제되고 한쪽만 고치는 사고가 난다.
  */
 export default function DiaryDetailScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const params = useLocalSearchParams<{ id?: string }>();
   const id = typeof params.id === 'string' ? params.id : '';
 
@@ -241,115 +245,116 @@ export default function DiaryDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  editButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.xs,
-    height: 34,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.accent,
-  },
-  editLabel: {
-    ...typography.label,
-    color: colors.textOnAccent,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  error: {
-    ...typography.body,
-    color: colors.danger,
-  },
-  topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  dateGroup: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: spacing.sm,
-  },
-  dateDay: {
-    ...typography.display,
-    color: colors.text,
-  },
-  dateRest: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  emotionChip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
-    backgroundColor: colors.accentSoft,
-  },
-  emotionLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  title: {
-    ...typography.title,
-    color: colors.text,
-  },
-  body: {
-    ...typography.body,
-    color: colors.text,
-  },
-  image: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-  },
-  imageMissing: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceMuted,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  imageMissingText: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  tagChip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.full,
-    backgroundColor: colors.accentSoft,
-  },
-  tagLabel: {
-    ...typography.caption,
-    color: colors.accent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    headerButton: {
+      width: 40,
+      height: 40,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    editButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.xs,
+      height: 34,
+      paddingHorizontal: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+    },
+    editLabel: {
+      ...typography.label,
+      color: colors.textOnAccent,
+    },
+    center: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    error: {
+      ...typography.body,
+      color: colors.danger,
+    },
+    topRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    dateGroup: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      gap: spacing.sm,
+    },
+    dateDay: {
+      ...typography.display,
+      color: colors.text,
+    },
+    dateRest: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    emotionChip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.md,
+      backgroundColor: colors.accentSoft,
+    },
+    emotionLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    title: {
+      ...typography.title,
+      color: colors.text,
+    },
+    body: {
+      ...typography.body,
+      color: colors.text,
+    },
+    image: {
+      width: '100%',
+      aspectRatio: 4 / 3,
+      borderRadius: radius.md,
+      backgroundColor: colors.surfaceMuted,
+    },
+    imageMissing: {
+      width: '100%',
+      aspectRatio: 4 / 3,
+      borderRadius: radius.md,
+      backgroundColor: colors.surfaceMuted,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    imageMissingText: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    tagRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+    },
+    tagChip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+      borderRadius: radius.full,
+      backgroundColor: colors.accentSoft,
+    },
+    tagLabel: {
+      ...typography.caption,
+      color: colors.accent,
+    },
+  });

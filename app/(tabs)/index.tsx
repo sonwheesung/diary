@@ -12,11 +12,15 @@ import { useHomeData } from '@/features/diary/hooks/use-home-data';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { today } from '@/lib/date';
 import { formatFullDate, formatListDate, previewText, relativeDayLabel } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
 export default function HomeScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const { recent, thumbnails, streak, todayDiaryId, loading, error } = useHomeData();
   const wroteToday = todayDiaryId !== null;
 
@@ -88,6 +92,7 @@ export default function HomeScreen() {
 }
 
 function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
+  const styles = useStyles(createStyles);
   const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
   const relative = relativeDayLabel(diary.entryDate);
 
@@ -123,106 +128,107 @@ function DiaryRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | 
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: spacing.md,
-  },
-  date: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  greeting: {
-    ...typography.display,
-    color: colors.text,
-  },
-  streak: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: spacing.xs,
-    backgroundColor: colors.accentSoft,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.full,
-    marginTop: -spacing.sm,
-  },
-  streakText: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  sectionTitle: {
-    ...typography.title,
-    color: colors.text,
-  },
-  more: {
-    ...typography.label,
-    color: colors.textMuted,
-  },
-  loading: {
-    marginTop: spacing.lg,
-  },
-  list: {
-    gap: spacing.sm,
-    marginTop: -spacing.sm,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  thumbnail: {
-    width: 84,
-    height: 84,
-    backgroundColor: colors.surfaceMuted,
-  },
-  rowBody: {
-    flex: 1,
-    padding: spacing.md,
-    gap: 2,
-  },
-  rowMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  rowDate: {
-    ...typography.caption,
-    color: colors.text,
-  },
-  rowRelative: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  rowEmotion: {
-    ...typography.caption,
-    color: colors.accentMuted,
-  },
-  rowTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  rowPreview: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  emptyTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  emptyBody: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginTop: spacing.xs,
-  },
-  errorText: {
-    ...typography.caption,
-    color: colors.danger,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: spacing.md,
+    },
+    date: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    greeting: {
+      ...typography.display,
+      color: colors.text,
+    },
+    streak: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      gap: spacing.xs,
+      backgroundColor: colors.accentSoft,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.full,
+      marginTop: -spacing.sm,
+    },
+    streakText: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    sectionHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    sectionTitle: {
+      ...typography.title,
+      color: colors.text,
+    },
+    more: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    loading: {
+      marginTop: spacing.lg,
+    },
+    list: {
+      gap: spacing.sm,
+      marginTop: -spacing.sm,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    thumbnail: {
+      width: 84,
+      height: 84,
+      backgroundColor: colors.surfaceMuted,
+    },
+    rowBody: {
+      flex: 1,
+      padding: spacing.md,
+      gap: 2,
+    },
+    rowMeta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    rowDate: {
+      ...typography.caption,
+      color: colors.text,
+    },
+    rowRelative: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    rowEmotion: {
+      ...typography.caption,
+      color: colors.accentMuted,
+    },
+    rowTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    rowPreview: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    emptyTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    emptyBody: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginTop: spacing.xs,
+    },
+    errorText: {
+      ...typography.caption,
+      color: colors.danger,
+    },
+  });

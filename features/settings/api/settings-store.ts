@@ -16,6 +16,8 @@ export const SETTING_KEYS = {
   lockFailCount: 'lock_fail_count',
   /** 이 시각(ms)까지는 시도를 막는다 */
   lockBlockedUntil: 'lock_blocked_until',
+  /** 테마: 'system' | 'light' | 'dark' (⏭ 스킨이 생기면 스킨 id도 여기 들어온다) */
+  themeMode: 'theme_mode',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

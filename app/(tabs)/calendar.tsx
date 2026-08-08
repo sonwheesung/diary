@@ -13,7 +13,9 @@ import { findEmotion } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { addMonths, isAfterToday, monthRange, today } from '@/lib/date';
 import { formatListDate, formatMonthLabel, previewText } from '@/lib/format';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -24,6 +26,8 @@ import { typography } from '@/theme/typography';
  * '쓰겠다'가 아니라 '보겠다'이고, 못 누르게 하면 다음 달을 넘겨볼 수도 없다.
  */
 export default function CalendarScreen() {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const [month, setMonth] = useState(today);
   const [selected, setSelected] = useState(today);
   const [writtenDates, setWrittenDates] = useState<ReadonlySet<string>>(new Set());
@@ -127,6 +131,7 @@ export default function CalendarScreen() {
 }
 
 function DayCard({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | undefined }) {
+  const styles = useStyles(createStyles);
   const emotion = diary.emotion === null ? undefined : findEmotion(diary.emotion);
 
   return (
@@ -156,63 +161,64 @@ function DayCard({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage | u
   );
 }
 
-const styles = StyleSheet.create({
-  monthRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: spacing.md,
-  },
-  monthLabel: {
-    ...typography.title,
-    color: colors.text,
-  },
-  dayHeader: {
-    marginTop: -spacing.sm,
-  },
-  dayLabel: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  emptyTitle: {
-    ...typography.body,
-    color: colors.textMuted,
-  },
-  emptyAction: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: spacing.xs,
-    marginTop: spacing.md,
-  },
-  emptyActionLabel: {
-    ...typography.label,
-    color: colors.accent,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  thumbnail: {
-    width: 84,
-    height: 84,
-    backgroundColor: colors.surfaceMuted,
-  },
-  rowBody: {
-    flex: 1,
-    padding: spacing.md,
-    gap: 2,
-  },
-  rowEmotion: {
-    ...typography.caption,
-    color: colors.accentMuted,
-  },
-  rowTitle: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-  rowPreview: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    monthRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: spacing.md,
+    },
+    monthLabel: {
+      ...typography.title,
+      color: colors.text,
+    },
+    dayHeader: {
+      marginTop: -spacing.sm,
+    },
+    dayLabel: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    emptyTitle: {
+      ...typography.body,
+      color: colors.textMuted,
+    },
+    emptyAction: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      gap: spacing.xs,
+      marginTop: spacing.md,
+    },
+    emptyActionLabel: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    thumbnail: {
+      width: 84,
+      height: 84,
+      backgroundColor: colors.surfaceMuted,
+    },
+    rowBody: {
+      flex: 1,
+      padding: spacing.md,
+      gap: 2,
+    },
+    rowEmotion: {
+      ...typography.caption,
+      color: colors.accentMuted,
+    },
+    rowTitle: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+    rowPreview: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+  });

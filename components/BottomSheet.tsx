@@ -3,7 +3,8 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useKeyboard } from '@/hooks/use-keyboard';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -21,6 +22,7 @@ interface BottomSheetProps {
  * 필요할 때만 덮어 띄운다(2026-08-08).
  */
 export function BottomSheet({ visible, onClose, title, children }: BottomSheetProps) {
+  const styles = useStyles(createStyles);
   const insets = useSafeAreaInsets();
   const keyboard = useKeyboard();
 
@@ -48,30 +50,31 @@ export function BottomSheet({ visible, onClose, title, children }: BottomSheetPr
   );
 }
 
-const styles = StyleSheet.create({
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(31,42,68,0.35)',
-  },
-  sheet: {
-    marginTop: 'auto',
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
-    gap: spacing.md,
-  },
-  grabber: {
-    alignSelf: 'center',
-    width: 36,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.border,
-    marginBottom: spacing.xs,
-  },
-  title: {
-    ...typography.subtitle,
-    color: colors.text,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    backdrop: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: 'rgba(31,42,68,0.35)',
+    },
+    sheet: {
+      marginTop: 'auto',
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: radius.lg,
+      borderTopRightRadius: radius.lg,
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.md,
+      gap: spacing.md,
+    },
+    grabber: {
+      alignSelf: 'center',
+      width: 36,
+      height: 4,
+      borderRadius: 2,
+      backgroundColor: colors.border,
+      marginBottom: spacing.xs,
+    },
+    title: {
+      ...typography.subtitle,
+      color: colors.text,
+    },
+  });

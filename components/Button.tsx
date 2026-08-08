@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useColors } from '@/theme/theme';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
@@ -27,6 +29,8 @@ export function Button({
   loading = false,
   fullWidth = false,
 }: ButtonProps) {
+  const colors = useColors();
+  const styles = useStyles(createStyles);
   const isBlocked = disabled || loading;
 
   return (
@@ -56,49 +60,50 @@ export function Button({
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    minHeight: 52,
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-  },
-  fullWidth: {
-    alignSelf: 'stretch',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  blocked: {
-    opacity: 0.4,
-  },
-  primary: {
-    backgroundColor: colors.accent,
-  },
-  secondary: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-  label: {
-    ...typography.subtitle,
-  },
-  primaryLabel: {
-    color: colors.textOnAccent,
-  },
-  secondaryLabel: {
-    color: colors.text,
-  },
-  ghostLabel: {
-    color: colors.accent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    base: {
+      minHeight: 52,
+      paddingHorizontal: spacing.lg,
+      borderRadius: radius.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    content: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    fullWidth: {
+      alignSelf: 'stretch',
+    },
+    pressed: {
+      opacity: 0.7,
+    },
+    blocked: {
+      opacity: 0.4,
+    },
+    primary: {
+      backgroundColor: colors.accent,
+    },
+    secondary: {
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+    },
+    label: {
+      ...typography.subtitle,
+    },
+    primaryLabel: {
+      color: colors.textOnAccent,
+    },
+    secondaryLabel: {
+      color: colors.text,
+    },
+    ghostLabel: {
+      color: colors.accent,
+    },
+  });

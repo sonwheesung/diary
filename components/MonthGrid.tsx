@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { daysInMonth, startOfMonth, today, weekdayIndex } from '@/lib/date';
-import { colors } from '@/theme/colors';
+import type { Palette } from '@/theme/palettes';
+import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { fonts, typography } from '@/theme/typography';
 
@@ -36,6 +37,7 @@ export function MonthGrid({
   disabledDates,
   maxDate,
 }: MonthGridProps) {
+  const styles = useStyles(createStyles);
   const first = startOfMonth(month);
   const leading = weekdayIndex(first);
   const total = daysInMonth(month);
@@ -127,80 +129,81 @@ const CELL_HEIGHT = 50;
 /** 어떤 달이든 6주로 그린다 — 4·5·6주가 섞이면 시트 높이가 매번 달라진다 */
 const WEEKS = 6;
 
-const styles = StyleSheet.create({
-  week: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  cell: {
-    width: CELL,
-    height: CELL_HEIGHT,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerCell: {
-    width: CELL,
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-  },
-  weekday: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-  day: {
-    width: 36,
-    height: 36,
-    borderRadius: radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dayToday: {
-    backgroundColor: colors.accentSoft,
-  },
-  /*
-   * 배경색을 바꾸는 스타일마다 반지름을 **다시 적어준다**.
-   * 안드로이드에서 뒤에 오는 스타일이 배경색만 바꾸면 앞에서 준 borderRadius가 먹지 않고
-   * 네모로 그려지는 경우를 겪었다(2026-08-08).
-   */
-  dayMarked: {
-    borderRadius: radius.full,
-    backgroundColor: colors.accentSoft,
-  },
-  dayTaken: {
-    borderRadius: radius.full,
-    backgroundColor: colors.surfaceMuted,
-  },
-  daySelected: {
-    borderRadius: radius.full,
-    backgroundColor: colors.accent,
-  },
-  dayLabel: {
-    ...typography.label,
-    color: colors.text,
-  },
-  dayLabelMarked: {
-    fontFamily: fonts.semibold,
-    color: colors.accent,
-  },
-  dayLabelSelected: {
-    color: colors.textOnAccent,
-  },
-  // 이미 쓴 날 — 아직 안 온 날과 같은 회색으로 죽이면 둘을 구분할 수 없다.
-  dayLabelTaken: {
-    color: colors.accentMuted,
-  },
-  dayLabelDisabled: {
-    color: colors.border,
-  },
-  dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginTop: 3,
-    backgroundColor: 'transparent',
-  },
-  dotVisible: {
-    borderRadius: 3,
-    backgroundColor: colors.accent,
-  },
-});
+const createStyles = (colors: Palette) =>
+  StyleSheet.create({
+    week: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    cell: {
+      width: CELL,
+      height: CELL_HEIGHT,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    headerCell: {
+      width: CELL,
+      alignItems: 'center',
+      paddingVertical: spacing.sm,
+    },
+    weekday: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    day: {
+      width: 36,
+      height: 36,
+      borderRadius: radius.full,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    dayToday: {
+      backgroundColor: colors.accentSoft,
+    },
+    /*
+     * 배경색을 바꾸는 스타일마다 반지름을 **다시 적어준다**.
+     * 안드로이드에서 뒤에 오는 스타일이 배경색만 바꾸면 앞에서 준 borderRadius가 먹지 않고
+     * 네모로 그려지는 경우를 겪었다(2026-08-08).
+     */
+    dayMarked: {
+      borderRadius: radius.full,
+      backgroundColor: colors.accentSoft,
+    },
+    dayTaken: {
+      borderRadius: radius.full,
+      backgroundColor: colors.surfaceMuted,
+    },
+    daySelected: {
+      borderRadius: radius.full,
+      backgroundColor: colors.accent,
+    },
+    dayLabel: {
+      ...typography.label,
+      color: colors.text,
+    },
+    dayLabelMarked: {
+      fontFamily: fonts.semibold,
+      color: colors.accent,
+    },
+    dayLabelSelected: {
+      color: colors.textOnAccent,
+    },
+    // 이미 쓴 날 — 아직 안 온 날과 같은 회색으로 죽이면 둘을 구분할 수 없다.
+    dayLabelTaken: {
+      color: colors.accentMuted,
+    },
+    dayLabelDisabled: {
+      color: colors.border,
+    },
+    dot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      marginTop: 3,
+      backgroundColor: 'transparent',
+    },
+    dotVisible: {
+      borderRadius: 3,
+      backgroundColor: colors.accent,
+    },
+  });
