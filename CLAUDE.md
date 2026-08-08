@@ -165,7 +165,7 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
 | 폼 | React Hook Form + Zod | ❌ 미설치 |
 | 애니메이션 | Reanimated + Moti | ❌ 미설치 — SDK 54는 Reanimated 4 + worklets 설정 동반 |
 | 날짜 | dayjs | ✅ 설치 |
-| 다국어 | i18next · react-i18next · expo-localization | ✅ 적용 — ko·en (§9.1) |
+| 다국어 | i18next · react-i18next · expo-localization | ✅ 적용 — **15개 언어** (§9.1) |
 | 아이콘 | Lucide | ❌ 미설치 |
 | 폰트 | Pretendard | ✅ 적용 — 정적 OTF 3종(Regular·Medium·SemiBold, 각 1.5MB) |
 | 조각 서버 | Next.js(App Router) + Drizzle + Supabase Postgres · Vercel | ❌ **월 결제 착수 시 생성**(2026-08-07 결정) |
@@ -422,8 +422,10 @@ PIN·패턴은 **UI 게이트**일 뿐이다. 로컬 SQLite 파일 자체는 평
 | 항목 | 결정 |
 |---|---|
 | 라이브러리 | i18next + react-i18next + expo-localization |
-| 1차 언어 | **ko · en**. 언어 추가는 `locales/<code>.json` 하나 더 넣는 일이어야 한다 |
-| 사용자 선택 | 설정 → 화면 → 언어. `system` / 각 언어. `app_settings.language`에 저장 |
+| 언어 | **15개** — ko · en · ja · zh-Hans · zh-Hant · es · pt-BR · fr · de · it · ru · id · vi · th · tr |
+| 추가 | `locales/<code>.json` 하나 + `lib/i18n.ts`의 `LANGUAGES`·`LANGUAGE_LABELS`·`LANGUAGE_ORDER` 등록. **설정 화면은 안 건드린다** |
+| RTL | ❌ 아랍어·히브리어 없음. JSON만으로 안 되고 `I18nManager`+레이아웃 반전이 필요하다 |
+| 사용자 선택 | 설정 → 화면 → 언어 → **선택 시트**(목록). `app_settings.language`에 저장 |
 | 검사 | `npm run check:i18n` — 키 누락·언어 간 불일치를 잡는다 |
 
 ### 반드시 지킬 것
@@ -434,8 +436,12 @@ PIN·패턴은 **UI 게이트**일 뿐이다. 로컬 SQLite 파일 자체는 평
 3. **날짜는 조각을 갈아끼우지 말고 문장 틀을 통째로 번역한다.** "2026년 8월 8일"과
    "August 8, 2026"은 순서가 다르다 — `lib/format.ts`는 조각만 넘기고 틀은 `date.*` 키가 갖는다.
 4. **언어 이름은 그 언어로 적는다.** 영어 화면에서 'Korean'이면 한국어 사용자가 자기 언어를 못 찾는다.
-5. **문자열 길이를 전제한 레이아웃을 만들지 않는다.** 영어는 한국어보다 길다 —
-   고정 폭 버튼과 `numberOfLines={1}`은 잘린 라벨을 만든다. 새 UI는 **영어로 한 번 보고** 넘어간다.
+5. **문자열 길이를 전제한 레이아웃을 만들지 않는다.** 독일어는 한국어의 두 배까지 길어진다 —
+   고정 폭 칸과 `numberOfLines={1}`은 잘린 라벨을 만든다. 새 UI는 **독일어로 한 번 보고** 넘어간다.
+   실제로 겪음(2026-08-09): 720px 기기 독일어에서 탭 라벨이 `Einstellun…`으로 잘렸다.
+   탭 라벨은 자르지 않고 **줄여서** 넣는다(`adjustsFontSizeToFit`, `app/(tabs)/_layout.tsx`).
+6. **선택지가 늘면 세그먼트를 버린다.** 테마 3개는 늘어놓지만 언어 15개는 시트 목록이다 —
+   가로로 늘어놓으면 글자가 잘리고, 옆으로 밀어야 보이는 항목은 사실상 안 고른다(§10).
 
 상세 규약·언어 추가 절차는 [`docs/I18N_SYSTEM.md`](./docs/I18N_SYSTEM.md).
 

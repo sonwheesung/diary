@@ -18,9 +18,10 @@
 
 | 파일 | 역할 |
 |---|---|
-| `locales/ko.json` · `locales/en.json` | 문자열 카탈로그. **키 구조가 서로 같아야 한다** |
+| `locales/*.json` (15개) | 문자열 카탈로그. **키 구조가 서로 같아야 한다** |
 | `lib/i18n.ts` | i18next 초기화 · 기기 언어 판별 · `translate()` |
 | `features/settings/language-store.ts` | 사용자 선택(zustand) · `app_settings.language`에 저장 |
+| `features/settings/components/LanguageSheet.tsx` | 언어 선택 시트(목록) |
 | `scripts/check-i18n.mjs` | 키 누락·언어 간 불일치 검사 (`npm run check:i18n`) |
 
 - 기본 언어는 **기기 언어**다. 우리가 가진 언어가 없으면 **영어**로 떨어진다(`fallbackLng: 'en'`).
@@ -94,12 +95,25 @@ throw new Error(translate('errors.alreadyWritten'));
 ## 5. 언어 추가 절차
 
 1. `locales/<code>.json` 추가 — `en.json`을 복사해 값만 번역한다. **키를 빼지 않는다.**
-2. `lib/i18n.ts`의 `LANGUAGES`에 `import` + 등록, `LANGUAGE_LABELS`에 그 언어로 된 이름 추가.
-3. `npm run check:i18n` — 키 누락·불일치가 없어야 한다.
-4. 설정 화면은 손대지 않아도 된다. 선택지는 `LANGUAGES`에서 자동으로 나온다.
+2. `lib/i18n.ts`에서 세 곳: `LANGUAGES`(import + 등록) · `LANGUAGE_LABELS`(그 언어로 된 이름) ·
+   `LANGUAGE_ORDER`(목록에 보일 자리).
+3. 스크립트·지역이 붙는 코드(`zh-Hant`, `pt-BR`)라면 `BASE_LANGUAGE_FALLBACK`도 본다 —
+   기기가 스크립트 없이 `zh`로 보내올 때 어디로 갈지 정해두지 않으면 영어로 떨어진다.
+4. `npm run check:i18n` — 키 누락·불일치가 없어야 한다.
+5. **독일어 다음으로 긴 언어라면 좁은 화면(720px)에서 한 번 본다.** 탭 라벨은 줄어들지만
+   버튼·세그먼트는 그렇지 않다.
 
-`isLanguageMode()`도 `LANGUAGES`를 보도록 되어 있는지 확인한다 — 여기만 하드코딩으로 남으면
+**설정 화면은 손대지 않는다.** 선택지는 `LANGUAGE_ORDER`에서 자동으로 나온다.
+`isLanguageMode()`도 `LANGUAGES`에서 파생된다 — 어느 하나가 하드코딩으로 남으면
 저장된 선택이 조용히 무시된다.
+
+### 지역·스크립트 매칭
+
+기기 로케일은 좁은 것부터 넓은 순으로 본다 — `zh-Hant-TW` → `zh-Hant` → `zh`.
+`languageCode`만 보면 대만·홍콩 사용자가 간체를 받는다. 읽히긴 해도 명백히 틀린 화면이다.
+
+i18next 쪽도 함께 잠가야 한다: `load: 'currentOnly'` + `nonExplicitSupportedLngs: false`.
+끄지 않으면 `zh-Hans` 리소스를 두고도 없는 `zh`를 찾다가 영어로 폴백한다.
 
 ---
 
@@ -124,5 +138,6 @@ npm run check:i18n
 |---|---|
 | 복수형(plural) | ⚠ **보간 변수 이름에 `count`를 쓰지 않는다.** i18next는 `count`를 보면 `_one`/`_other` 키를 먼저 찾는다 — 그 키가 없는 지금은 조용히 폴백에 기대게 된다. 세는 값은 `days`·`total`·`dots`처럼 이름을 달리 준다. 복수형을 제대로 도입할 때 `count`로 되돌리고 두 형태를 함께 넣는다 |
 | RTL(아랍어·히브리어) | 언어 추가 시 `I18nManager` 처리 필요. 지금은 대상 언어가 없다 |
-| 스토어 등록 정보·개인정보처리방침 번역 | 출시 준비 단계 |
+| **원어민 검수** | ⚠ 15개 언어 모두 기계 번역 수준이다. 뜻은 맞아도 원어민에게 "번역체"로 읽힐 수 있다. 감성 일기라 문장의 결이 상품의 일부이므로, 최소한 주요 언어는 출시 전 검수를 받는다 |
+| 스토어 등록 정보·개인정보처리방침 번역 | 출시 준비 단계. **앱 안이 번역돼도 스토어 설명이 한국어면 그 나라 사용자에게 걸리지 않는다** |
 | AI 리포트 언어 | 프록시에 사용자 언어를 함께 보내야 한다. 조각 서버 착수 시 |

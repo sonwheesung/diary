@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Calendar, House, Plus, Search, Settings } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Palette } from '@/theme/palettes';
@@ -23,6 +23,28 @@ function WriteTabIcon() {
 }
 
 const TAB_BAR_CONTENT_HEIGHT = 60;
+
+/**
+ * 탭 라벨.
+ *
+ * 기본 라벨은 폭이 모자라면 **잘라버린다**(`Einstellun…`). 독일어 720px 기기에서 실제로 겪었다 —
+ * 탭 다섯 칸은 폭이 고정인데 언어마다 단어 길이가 다르므로, 자르는 대신 **줄여서** 넣는다.
+ * 언어를 하나 더 얹을 때마다 라벨 길이를 재는 대신 여기서 한 번에 막는다(CLAUDE.md §9.1).
+ */
+function TabLabel({ label, color }: { label: string; color: string }) {
+  const styles = useStyles(createStyles);
+  return (
+    <Text
+      numberOfLines={1}
+      adjustsFontSizeToFit
+      // 이보다 더 줄면 읽히지 않는다. 여기까지 줄여도 안 들어가면 그 라벨이 너무 긴 것이다.
+      minimumFontScale={0.75}
+      style={[styles.tabLabel, { color }]}
+    >
+      {label}
+    </Text>
+  );
+}
 
 export default function TabsLayout() {
   const { t } = useTranslation();
@@ -52,6 +74,7 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: t('tabs.home'),
+          tabBarLabel: ({ color }) => <TabLabel label={t('tabs.home')} color={color} />,
           tabBarIcon: ({ color }) => <House size={ICON_SIZE} color={color} />,
         }}
       />
@@ -59,6 +82,7 @@ export default function TabsLayout() {
         name="calendar"
         options={{
           title: t('tabs.calendar'),
+          tabBarLabel: ({ color }) => <TabLabel label={t('tabs.calendar')} color={color} />,
           tabBarIcon: ({ color }) => <Calendar size={ICON_SIZE} color={color} />,
         }}
       />
@@ -74,6 +98,7 @@ export default function TabsLayout() {
         name="search"
         options={{
           title: t('tabs.search'),
+          tabBarLabel: ({ color }) => <TabLabel label={t('tabs.search')} color={color} />,
           tabBarIcon: ({ color }) => <Search size={ICON_SIZE} color={color} />,
         }}
       />
@@ -81,6 +106,7 @@ export default function TabsLayout() {
         name="settings"
         options={{
           title: t('tabs.settings'),
+          tabBarLabel: ({ color }) => <TabLabel label={t('tabs.settings')} color={color} />,
           tabBarIcon: ({ color }) => <Settings size={ICON_SIZE} color={color} />,
         }}
       />

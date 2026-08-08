@@ -60,6 +60,9 @@ const createStyles = (colors: Palette) =>
     },
     sheet: {
       marginTop: 'auto',
+      // 목록이 긴 시트(언어 15개)가 화면을 넘어 위로 자라지 않게 한다.
+      // 상한이 없으면 제목과 닫을 자리가 화면 밖으로 밀려난다.
+      maxHeight: '85%',
       backgroundColor: colors.surface,
       borderTopLeftRadius: radius.lg,
       borderTopRightRadius: radius.lg,

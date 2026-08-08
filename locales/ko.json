@@ -151,7 +151,8 @@
     "version": "버전",
     "delayImmediate": "즉시",
     "delay1m": "1분 후",
-    "delay5m": "5분 후"
+    "delay5m": "5분 후",
+    "languageSheet": "언어 선택"
   },
   "lock": {
     "lockedTitle": "조각이 잠겨 있어요",

@@ -15,14 +15,14 @@ import {
 } from '@/features/lock/api/lock-store';
 import type { LockDelay } from '@/features/lock/api/lock-store';
 import { useLockStore } from '@/features/lock/store';
+import { LanguageSheet } from '@/features/settings/components/LanguageSheet';
 import { useLanguageStore } from '@/features/settings/language-store';
 import {
   SETTING_KEYS,
   getBoolSetting,
   setBoolSetting,
 } from '@/features/settings/api/settings-store';
-import { LANGUAGES, LANGUAGE_LABELS } from '@/lib/i18n';
-import type { LanguageMode } from '@/lib/i18n';
+import { LANGUAGE_LABELS } from '@/lib/i18n';
 import type { Palette, ThemeMode } from '@/theme/palettes';
 import { useColors, useTheme } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -49,14 +49,6 @@ const THEME_KEYS: Record<ThemeMode, string> = {
   dark: 'settings.themeOptionDark',
 };
 
-/**
- * 고를 수 있는 언어.
- *
- * `system`만 번역하고 나머지는 **그 언어 이름을 그 언어로** 적는다 — 영어 화면에서
- * '한국어'가 'Korean'으로 보이면 한국어 사용자가 자기 언어를 못 찾는다.
- */
-const LANGUAGE_OPTIONS: LanguageMode[] = ['system', ...(Object.keys(LANGUAGES) as (keyof typeof LANGUAGES)[])];
-
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const colors = useColors();
@@ -64,6 +56,7 @@ export default function SettingsScreen() {
   const { mode, paletteId, setMode } = useTheme();
   const languageMode = useLanguageStore((state) => state.mode);
   const setLanguageMode = useLanguageStore((state) => state.setMode);
+  const [languageSheetOpen, setLanguageSheetOpen] = useState(false);
   const [notifications, setNotifications] = useState(false);
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
   const lock = useLockStore((state) => state.config);
@@ -154,8 +147,7 @@ export default function SettingsScreen() {
             <Text style={styles.rowNote}>
               {lock?.enabled === true
                 ? t('settings.lockOnNote', {
-                    method:
-                      lock.method === 'pin' ? t('lock.methodPin') : t('lock.methodPattern'),
+                    method: lock.method === 'pin' ? t('lock.methodPin') : t('lock.methodPattern'),
                   })
                 : t('settings.lockOffNote')}
             </Text>
@@ -253,7 +245,15 @@ export default function SettingsScreen() {
           })}
         </View>
 
-        <View style={styles.row}>
+        {/*
+          테마는 세 갈래라 늘어놓지만 언어는 15개다 — 세그먼트로는 글자가 잘린다.
+          눌러서 목록을 여는 형태로 간다.
+        */}
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => setLanguageSheetOpen(true)}
+          style={styles.row}
+        >
           <View style={styles.rowIcon}>
             <Globe size={18} color={colors.accent} />
           </View>
@@ -265,29 +265,14 @@ export default function SettingsScreen() {
                 : t('settings.languageManual')}
             </Text>
           </View>
-        </View>
-
-        {/* 테마와 같은 모양으로 둔다 — 같은 성질의 선택은 같게 생겨야 배울 게 없다 */}
-        <View style={styles.segmented}>
-          {LANGUAGE_OPTIONS.map((option) => {
-            const selected = option === languageMode;
-            return (
-              <Pressable
-                key={option}
-                accessibilityRole="button"
-                accessibilityState={{ selected }}
-                onPress={() => setLanguageMode(option)}
-                style={[styles.segment, selected && styles.segmentOn]}
-              >
-                <Text style={[styles.segmentLabel, selected && styles.segmentLabelOn]}>
-                  {option === 'system'
-                    ? t('settings.languageOptionSystem')
-                    : LANGUAGE_LABELS[option]}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+          {/* 지금 무엇으로 되어 있는지가 열기 전에 보여야 한다 */}
+          <Text style={styles.rowValue}>
+            {languageMode === 'system'
+              ? t('settings.languageOptionSystem')
+              : LANGUAGE_LABELS[languageMode]}
+          </Text>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
       </View>
 
       <View style={styles.section}>
@@ -312,6 +297,17 @@ export default function SettingsScreen() {
           />
         </View>
       </View>
+
+      <LanguageSheet
+        visible={languageSheetOpen}
+        value={languageMode}
+        onSelect={(next) => {
+          setLanguageMode(next);
+          // 고르면 닫는다 — 언어는 한 번 고르면 끝나는 선택이다
+          setLanguageSheetOpen(false);
+        }}
+        onClose={() => setLanguageSheetOpen(false)}
+      />
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionAbout')}</Text>

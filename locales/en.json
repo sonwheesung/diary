@@ -151,7 +151,8 @@
     "version": "Version",
     "delayImmediate": "Immediately",
     "delay1m": "After 1 min",
-    "delay5m": "After 5 min"
+    "delay5m": "After 5 min",
+    "languageSheet": "Choose language"
   },
   "lock": {
     "lockedTitle": "Your pieces are locked",

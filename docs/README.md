@@ -36,7 +36,7 @@
 | Expo 부트(SDK 54 · expo-router · TS strict) | ✅ | dev 서버 기동 + 실기기 접속 확인(2026-08-07) |
 | 테마(팔레트 · spacing · radius · typography) | ✅ | 라이트 + 다크. `theme/palettes.ts`에 팔레트를 더하면 스킨이 된다 |
 | 다크모드 | ✅ | 설정 → 화면 → 시스템·라이트·다크. 선택은 `app_settings`에 저장 |
-| 다국어(i18n) | ✅ | ko·en. 기기 언어 기본, 폴백은 영어. 설정에서 변경. `npm run check:i18n`으로 키 검사 |
+| 다국어(i18n) | ✅ | **15개 언어**. 기기 언어 기본, 폴백은 영어. 설정 → 언어 시트에서 변경. `npm run check:i18n`으로 키 검사. ⚠ 원어민 검수 전 |
 | Pretendard 폰트 | ✅ | 정적 OTF 3종. 로드 완료까지 스플래시 유지, 실패해도 앱은 진행 |
 | expo-sqlite 스키마·마이그레이션 | ✅ | `db/` — user_version 기반. 실기기 스모크 테스트 통과 |
 | 일기 CRUD·검색·streak·캘린더 집계 | ✅ | `features/diary/api/` |
