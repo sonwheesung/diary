@@ -57,6 +57,17 @@ const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX IF NOT EXISTS idx_diary_tags_tag ON diary_tags (tag_id);
   `,
+
+  // v3 — 앱 설정 키-값 (DATABASE.md §4 v3)
+  // 알림 토글·다크모드·잠금 대기시간처럼 '조각이 아닌' 값들이 갈 곳.
+  // SecureStore는 비밀(PIN 해시·암호화 키) 전용으로 남긴다 — 설정을 섞으면 무엇이 비밀인지 흐려진다.
+  `
+  CREATE TABLE IF NOT EXISTS app_settings (
+    key         TEXT    PRIMARY KEY NOT NULL,
+    value       TEXT    NOT NULL,
+    updated_at  INTEGER NOT NULL
+  );
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

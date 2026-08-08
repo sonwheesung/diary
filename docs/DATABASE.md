@@ -124,6 +124,23 @@ CREATE INDEX IF NOT EXISTS idx_diary_tags_tag ON diary_tags (tag_id);
 | `COLLATE NOCASE` 유일 인덱스 | `여행`/`Travel`/`travel`이 각각 따로 생기는 걸 DB 층에서 막는다 |
 | `diary_tags`에 소프트 삭제 없음 | 연결은 조각에 종속이다. 조각이 살아있는지로 판단하면 충분하고, 묘비를 두면 복잡도만 는다 |
 
+### v3 — 앱 설정 (2026-08-08)
+
+```sql
+CREATE TABLE IF NOT EXISTS app_settings (
+  key         TEXT    PRIMARY KEY NOT NULL,
+  value       TEXT    NOT NULL,
+  updated_at  INTEGER NOT NULL
+);
+```
+
+| 결정 | 이유 |
+|---|---|
+| 설정을 **DB 키-값**으로 | 알림 토글·다크모드·잠금 대기시간처럼 늘어날 값들이다. 컬럼을 만들면 하나 늘 때마다 마이그레이션이 붙는다 |
+| **SecureStore와 분리** | SecureStore는 비밀(PIN 해시·암호화 키) 전용으로 남긴다. 섞으면 무엇이 비밀인지 흐려지고, 백업에 실어도 되는 값인지 판단할 수 없게 된다 |
+| 값은 **문자열 하나로** | 불리언·숫자·enum을 한 컬럼에 담는다. 타입은 읽는 쪽이 안다(`getBoolSetting` 등) |
+| 소프트 삭제 없음 | 설정은 기기에 종속이고 되살릴 이유가 없다 |
+
 ---
 
 ## 5. 백업 대비 (아직 구현 안 함)
