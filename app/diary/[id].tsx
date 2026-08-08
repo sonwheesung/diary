@@ -1,13 +1,22 @@
 import { Image } from 'expo-image';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, Pencil, Trash2 } from 'lucide-react-native';
-import { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { ImageViewer } from '@/components/ImageViewer';
 import { Screen } from '@/components/Screen';
 import { deleteDiary, getDiaryById } from '@/features/diary/api/diary-repository';
 import { getImagesForDiary, resolveImageUri } from '@/features/diary/api/image-store';
+import { DiaryEditor } from '@/features/diary/components/DiaryEditor';
 import { findEmotion } from '@/features/diary/emotions';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
@@ -31,35 +40,40 @@ export default function DiaryDetailScreen() {
   const [error, setError] = useState<string | null>(null);
   /** 전체 보기로 열린 사진의 위치. 닫혀 있으면 null */
   const [viewerIndex, setViewerIndex] = useState<number | null>(null);
+  /** 같은 화면에서 읽기 ↔ 수정을 오간다. 화면을 새로 띄우지 않는다 */
+  const [editing, setEditing] = useState(false);
 
-  // 수정하고 돌아왔을 때 낡은 내용이 보이면 안 된다 — 돌아올 때마다 다시 읽는다.
+  const load = useCallback(async () => {
+    try {
+      const [found, imageList] = await Promise.all([getDiaryById(id), getImagesForDiary(id)]);
+      setDiary(found);
+      setImages(new Map(imageList.map((image) => [image.id, image])));
+      setError(found === null ? '조각을 찾지 못했어요.' : null);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : '조각을 불러오지 못했어요.');
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  // 다른 화면에 다녀와도 낡은 내용이 보이면 안 된다.
   useFocusEffect(
     useCallback(() => {
-      let alive = true;
-      void (async () => {
-        try {
-          const [found, imageList] = await Promise.all([getDiaryById(id), getImagesForDiary(id)]);
-          if (!alive) {
-            return;
-          }
-          setDiary(found);
-          setImages(new Map(imageList.map((image) => [image.id, image])));
-          setError(found === null ? '조각을 찾지 못했어요.' : null);
-        } catch (caught) {
-          if (alive) {
-            setError(caught instanceof Error ? caught.message : '조각을 불러오지 못했어요.');
-          }
-        } finally {
-          if (alive) {
-            setLoading(false);
-          }
-        }
-      })();
-      return () => {
-        alive = false;
-      };
-    }, [id]),
+      void load();
+    }, [load]),
   );
+
+  // 수정 중에 안드로이드 뒤로가기는 화면을 닫는 게 아니라 **수정을 취소**해야 한다.
+  useEffect(() => {
+    if (!editing) {
+      return;
+    }
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      setEditing(false);
+      return true;
+    });
+    return () => subscription.remove();
+  }, [editing]);
 
   const confirmDelete = () => {
     Alert.alert('이 조각을 지울까요?', '지운 조각은 목록과 검색에서 사라져요.', [
@@ -109,7 +123,7 @@ export default function DiaryDetailScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="수정"
-            onPress={() => router.push(`/write?id=${id}`)}
+            onPress={() => setEditing(true)}
             style={styles.editButton}
           >
             <Pencil size={15} color={colors.textOnAccent} />
@@ -119,6 +133,19 @@ export default function DiaryDetailScreen() {
       )}
     </View>
   );
+
+  if (editing) {
+    return (
+      <DiaryEditor
+        diaryId={id}
+        onSaved={() => {
+          setEditing(false);
+          void load();
+        }}
+        onCancel={() => setEditing(false)}
+      />
+    );
+  }
 
   if (loading || diary === null) {
     return (
