@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { Flame, Pencil, Search } from 'lucide-react-native';
+import { BookOpen, Flame, Pencil, Search } from 'lucide-react-native';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -17,7 +17,8 @@ import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
 export default function HomeScreen() {
-  const { recent, thumbnails, streak, loading, error } = useHomeData();
+  const { recent, thumbnails, streak, todayDiaryId, loading, error } = useHomeData();
+  const wroteToday = todayDiaryId !== null;
 
   return (
     <Screen>
@@ -34,7 +35,7 @@ export default function HomeScreen() {
       </View>
 
       <Text style={styles.greeting}>
-        오늘,{'\n'}어떤 조각을{'\n'}모으고 싶나요?
+        {wroteToday ? '오늘의 조각을\n남겼어요.' : '오늘,\n어떤 조각을\n모으고 싶나요?'}
       </Text>
 
       {streak > 0 && (
@@ -44,11 +45,21 @@ export default function HomeScreen() {
         </View>
       )}
 
+      {/*
+        하루에 조각은 하나다(DIARY_SYSTEM §2). 오늘 이미 썼는데 *쓰기*로 보내면
+        저장할 수 없는 화면에 데려다 놓는 꼴이다 — 주 동선을 *보기*로 바꾼다.
+      */}
       <Button
-        label="조각 쓰기"
+        label={wroteToday ? '오늘의 조각 보기' : '조각 쓰기'}
         fullWidth
-        icon={<Pencil size={18} color={colors.textOnAccent} />}
-        onPress={() => router.push('/write')}
+        icon={
+          wroteToday ? (
+            <BookOpen size={18} color={colors.textOnAccent} />
+          ) : (
+            <Pencil size={18} color={colors.textOnAccent} />
+          )
+        }
+        onPress={() => router.push(wroteToday ? `/diary/${todayDiaryId}` : '/write')}
       />
 
       <View style={styles.sectionHeader}>

@@ -42,8 +42,8 @@
 | 공통 컴포넌트 Button · Card · TextField · MonthGrid · DatePickerSheet | ✅ | Modal · Header · BottomSheet · Avatar · Loading 미착수 |
 | Splash | ❌ | |
 | Home | ✅ | 오늘 날짜·인사·연속 기록·조각 쓰기·최근 조각(썸네일) |
-| Write | ✅ | 제목·본문·**커서 위치 사진 삽입**·태그·감정·날짜 변경. 저장 후 광고는 AdMob 대기 |
-| Detail | ❌ | |
+| Write / Edit | ✅ | 한 화면이 둘을 겸한다(`/write?id=`). 커서 위치 사진 삽입·태그·감정·날짜 변경. 저장 후 광고는 AdMob 대기 |
+| Detail | ✅ | `app/diary/[id].tsx` — 조회·수정·삭제. 돌아올 때마다 다시 읽는다 |
 | Calendar | ❌ | |
 | Search | ❌ | |
 | Settings(다크모드·잠금 설정·JSON 내보내기) | ❌ | |

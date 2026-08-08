@@ -133,20 +133,60 @@ export async function getImagesForDiaries(diaryIds: string[]): Promise<Map<strin
  */
 export async function discardDraftImages(diaryId: string): Promise<void> {
   const images = await getImagesForDiary(diaryId);
+  deleteFiles(images.map((image) => image.fileName));
 
-  for (const image of images) {
+  const db = await getDatabase();
+  await db.runAsync('DELETE FROM diary_images WHERE diary_id = ?', diaryId);
+}
+
+function deleteFiles(fileNames: string[]): void {
+  for (const fileName of fileNames) {
     try {
-      const file = new File(imageDirectory(), image.fileName);
+      const file = new File(imageDirectory(), fileName);
       if (file.exists) {
         file.delete();
       }
     } catch {
-      // 파일 삭제 실패가 화면 이탈을 막으면 안 된다. DB 행은 아래에서 지운다.
+      // 파일 삭제 실패가 화면 이탈을 막으면 안 된다. DB 행은 호출부가 지운다.
     }
   }
+}
 
+/**
+ * 이번 편집에서 넣었다가 저장 전에 빠진 이미지를 지운다. **하드 삭제**다.
+ *
+ * 저장된 적이 없으므로 되살릴 대상이 없다 — 소프트 삭제로 남기면 아무도 참조하지 않는
+ * 파일이 기기와 백업 용량만 먹는다.
+ */
+export async function discardImages(imageIds: string[]): Promise<void> {
+  if (imageIds.length === 0) {
+    return;
+  }
   const db = await getDatabase();
-  await db.runAsync('DELETE FROM diary_images WHERE diary_id = ?', diaryId);
+  const placeholders = imageIds.map(() => '?').join(', ');
+  const rows = await db.getAllAsync<DiaryImageRow>(
+    `SELECT * FROM diary_images WHERE id IN (${placeholders})`,
+    ...imageIds,
+  );
+  deleteFiles(rows.map((row) => row.file_name));
+  await db.runAsync(`DELETE FROM diary_images WHERE id IN (${placeholders})`, ...imageIds);
+}
+
+/**
+ * 이미 저장됐던 이미지를 본문에서 뺐을 때. **파일은 남긴다**(§1.2와 같은 이유 —
+ * 지금 지우면 되살릴 방법이 없다).
+ */
+export async function softDeleteImages(imageIds: string[]): Promise<void> {
+  if (imageIds.length === 0) {
+    return;
+  }
+  const db = await getDatabase();
+  const placeholders = imageIds.map(() => '?').join(', ');
+  await db.runAsync(
+    `UPDATE diary_images SET deleted_at = ? WHERE id IN (${placeholders}) AND deleted_at IS NULL`,
+    Date.now(),
+    ...imageIds,
+  );
 }
 
 /**
