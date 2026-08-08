@@ -17,13 +17,21 @@ import { today } from '@/lib/date';
  */
 
 /**
- * ⚠ **지금은 Google 공식 테스트 광고 단위다.** 출시 전에 실제 단위로 바꾼다.
- * 개발 중 실제 단위를 쓰면 무효 트래픽으로 계정이 정지될 수 있다 —
- * 그래서 개발 빌드에서는 테스트 단위를 강제한다.
+ * ⚠ **아직 실제 광고 단위가 없다.** AdMob 콘솔에서 발급받으면 아래 상수만 채우면 된다.
+ *
+ * 개발 빌드에서는 **항상 테스트 단위를 쓴다** — 실제 단위로 개발하면 내가 만든 노출·클릭이
+ * 무효 트래픽으로 잡혀 계정이 정지될 수 있다. 그래서 `__DEV__` 분기를 남겨둔다.
  */
+const RELEASE_AD_UNITS: { banner: string | null; interstitial: string | null } = {
+  banner: null,
+  interstitial: null,
+};
+
 export const AD_UNITS = {
-  banner: __DEV__ ? TestIds.BANNER : TestIds.BANNER,
-  interstitial: __DEV__ ? TestIds.INTERSTITIAL : TestIds.INTERSTITIAL,
+  banner: __DEV__ ? TestIds.BANNER : (RELEASE_AD_UNITS.banner ?? TestIds.BANNER),
+  interstitial: __DEV__
+    ? TestIds.INTERSTITIAL
+    : (RELEASE_AD_UNITS.interstitial ?? TestIds.INTERSTITIAL),
 } as const;
 
 let initialized = false;
