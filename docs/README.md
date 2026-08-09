@@ -44,7 +44,7 @@
 | 하단 탭 네비게이션(홈·캘린더·⊕·검색·설정) | ✅ | ⊕는 탭이 아니라 작성 화면을 띄우는 동작 |
 | 화면 틀 `components/Screen` | ✅ | 세이프에어리어·키보드 여백 단일 처리. CLAUDE.md §10 |
 | 공통 컴포넌트 Button · Card · TextField · MonthGrid · DatePickerSheet | ✅ | Modal · Header · BottomSheet · Avatar · Loading 미착수 |
-| Splash | ❌ | |
+| Splash · 아이콘 | ✅ | `scripts/make-assets.py`로 코드 생성. 라이트/다크 스플래시 분리. 적응형 아이콘 안전영역 확인 |
 | Home | ✅ | 오늘 날짜·인사·연속 기록·조각 쓰기·최근 조각(썸네일) |
 | Write / Edit | ✅ | 한 화면이 둘을 겸한다(`/write?id=`). 커서 위치 사진 삽입·태그·감정·날짜 변경. 저장 후 광고는 AdMob 대기 |
 | Detail | ✅ | `app/diary/[id].tsx` — 조회·수정·삭제. 돌아올 때마다 다시 읽는다 |

@@ -15,14 +15,32 @@
       "package": "com.son0925.jogak",
       "versionCode": 1,
       "backgroundColor": "#F5F7FA",
-      "allowBackup": false
+      "allowBackup": false,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#F5F7FA"
+      }
     },
     "web": {
       "bundler": "metro",
-      "output": "single"
+      "output": "single",
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#F5F7FA",
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#12161F"
+          }
+        }
+      ],
       "expo-sqlite",
       "expo-secure-store",
       [
@@ -48,6 +66,7 @@
     "extra": {
       "router": {}
     },
-    "owner": "shs00925"
+    "owner": "shs00925",
+    "icon": "./assets/images/icon.png"
   }
 }
