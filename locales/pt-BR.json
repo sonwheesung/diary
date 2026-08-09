@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Entre primeiro",
     "loginRequiredBody": "Precisamos saber quem é você para poder responder.",
     "loginNotRequiredForDiary": "Escrever no diário nunca exige login.",
-    "loginButton": "Entrar e continuar"
+    "loginButton": "Entrar e continuar",
+    "failSignInAgain": "Sua sessão expirou. Entre novamente."
   }
 }

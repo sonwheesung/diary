@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Connexion nécessaire",
     "loginRequiredBody": "Nous avons besoin de savoir qui tu es pour pouvoir te répondre.",
     "loginNotRequiredForDiary": "Écrire ton journal ne demande jamais de connexion.",
-    "loginButton": "Se connecter et continuer"
+    "loginButton": "Se connecter et continuer",
+    "failSignInAgain": "Ta session a expiré. Reconnecte-toi."
   }
 }

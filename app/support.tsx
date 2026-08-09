@@ -10,7 +10,7 @@ import {
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
@@ -57,6 +57,9 @@ const FAIL_KEYS: Record<FailReason, string> = {
   offline: 'support.failOffline',
   'rate-limited': 'support.failRateLimited',
   'too-short': 'support.tooShort',
+  // 세션이 도중에 죽은 경우. SDK가 이 시점에 로컬 세션을 이미 버렸으므로 다시 로그인하면 된다.
+  unauthorized: 'support.failSignInAgain',
+  'not-signed-in': 'support.failSignInAgain',
   error: 'support.failError',
 };
 
@@ -70,7 +73,7 @@ export default function SupportScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
-  const { signedIn, signIn } = useSupportAuth();
+  const { signedIn, ready, signIn } = useSupportAuth();
 
   const [category, setCategory] = useState<SupportCategory>('bug');
   const [content, setContent] = useState('');
@@ -115,6 +118,21 @@ export default function SupportScreen() {
       <Text style={styles.headerTitle}>{t('support.title')}</Text>
     </View>
   );
+
+  if (!ready) {
+    // 세션 확인 중. 여기서 바로 '로그인 필요'를 그리면 이미 로그인한 사람에게 한 번 깜빡인다.
+    return (
+      <Screen
+        edges={['top', 'bottom', 'left', 'right']}
+        header={header}
+        contentStyle={styles.content}
+      >
+        <View style={styles.gate}>
+          <ActivityIndicator color={colors.accentMuted} />
+        </View>
+      </Screen>
+    );
+  }
 
   if (!signedIn) {
     return (

@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Sign in first",
     "loginRequiredBody": "We need to know who you are so we can reply.",
     "loginNotRequiredForDiary": "Writing your diary never requires signing in.",
-    "loginButton": "Sign in and continue"
+    "loginButton": "Sign in and continue",
+    "failSignInAgain": "Your session ended. Please sign in again."
   }
 }

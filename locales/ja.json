@@ -250,6 +250,7 @@
     "loginRequiredTitle": "ログインが必要です",
     "loginRequiredBody": "お返事するために、どなたからのご連絡か知る必要があります。",
     "loginNotRequiredForDiary": "日記を書くのにログインは要りません。",
-    "loginButton": "ログインして問い合わせる"
+    "loginButton": "ログインして問い合わせる",
+    "failSignInAgain": "ログインが切れました。もう一度ログインしてください。"
   }
 }

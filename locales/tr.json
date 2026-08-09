@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Önce giriş yap",
     "loginRequiredBody": "Sana yanıt verebilmemiz için kim olduğunu bilmemiz gerekiyor.",
     "loginNotRequiredForDiary": "Günlük yazmak için giriş yapmak hiçbir zaman gerekmez.",
-    "loginButton": "Giriş yap ve devam et"
+    "loginButton": "Giriş yap ve devam et",
+    "failSignInAgain": "Oturumun sona erdi. Lütfen tekrar giriş yap."
   }
 }

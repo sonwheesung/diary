@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Inicia sesión primero",
     "loginRequiredBody": "Necesitamos saber quién eres para poder responderte.",
     "loginNotRequiredForDiary": "Escribir tu diario nunca requiere iniciar sesión.",
-    "loginButton": "Iniciar sesión y continuar"
+    "loginButton": "Iniciar sesión y continuar",
+    "failSignInAgain": "Tu sesión ha terminado. Vuelve a iniciar sesión."
   }
 }

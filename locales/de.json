@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Bitte zuerst anmelden",
     "loginRequiredBody": "Wir müssen wissen, wer du bist, um antworten zu können.",
     "loginNotRequiredForDiary": "Zum Schreiben deines Tagebuchs brauchst du nie eine Anmeldung.",
-    "loginButton": "Anmelden und fortfahren"
+    "loginButton": "Anmelden und fortfahren",
+    "failSignInAgain": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
   }
 }

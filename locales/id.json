@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Masuk dulu",
     "loginRequiredBody": "Kami perlu tahu siapa kamu supaya bisa membalas.",
     "loginNotRequiredForDiary": "Menulis buku harian tidak pernah butuh masuk akun.",
-    "loginButton": "Masuk dan lanjutkan"
+    "loginButton": "Masuk dan lanjutkan",
+    "failSignInAgain": "Sesimu berakhir. Silakan masuk lagi."
   }
 }

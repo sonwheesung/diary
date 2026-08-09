@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Accedi prima",
     "loginRequiredBody": "Ci serve sapere chi sei per poterti rispondere.",
     "loginNotRequiredForDiary": "Scrivere il diario non richiede mai l'accesso.",
-    "loginButton": "Accedi e continua"
+    "loginButton": "Accedi e continua",
+    "failSignInAgain": "La sessione è scaduta. Accedi di nuovo."
   }
 }

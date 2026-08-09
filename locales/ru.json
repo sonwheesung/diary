@@ -250,6 +250,7 @@
     "loginRequiredTitle": "Сначала войдите",
     "loginRequiredBody": "Чтобы ответить, нам нужно знать, кто вы.",
     "loginNotRequiredForDiary": "Для ведения дневника вход никогда не нужен.",
-    "loginButton": "Войти и продолжить"
+    "loginButton": "Войти и продолжить",
+    "failSignInAgain": "Сессия завершилась. Войдите снова."
   }
 }

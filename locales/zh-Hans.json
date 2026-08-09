@@ -250,6 +250,7 @@
     "loginRequiredTitle": "需要先登录",
     "loginRequiredBody": "我们需要知道是谁发来的，才能回复你。",
     "loginNotRequiredForDiary": "写日记完全不需要登录。",
-    "loginButton": "登录并继续"
+    "loginButton": "登录并继续",
+    "failSignInAgain": "登录已失效，请重新登录。"
   }
 }

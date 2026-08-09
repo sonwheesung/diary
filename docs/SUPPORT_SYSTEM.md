@@ -87,14 +87,31 @@ common_server 규약이다 — 앱 4~5개 규모에서 monorepo·npm 패키지 �
 - 실패 사유별로 다른 문구를 띄우되, `not-found`(앱 미등록)는 `not-configured`와 **같은 문구**로 묶는다.
   우리 쪽 사정을 설명해봐야 사용자가 할 수 있는 일이 없다.
 
-### ⏭ 로그인 필수 — 아직 이음매만 있다
+### 로그인 (2026-08-09 서버·SDK 준비 완료)
 
-문의는 로그인 필수다(CLAUDE.md §4). 판정은 `features/support/auth-gate.ts` **한 파일**이 갖고,
-화면은 `signedIn`만 보고 갈라진다 — 로그인이 붙으면 이 파일만 갈아끼우면 된다.
+문의는 로그인 필수다(CLAUDE.md §4) — **답변을 드리려면 누가 보냈는지 알아야** 하기 때문이다.
+서버가 이제 그걸 받는다: `tickets.subject_id`로 귀속되고 `fetchMyInquiries()`로 답변을 읽는다.
 
-⚠ **로그인만으로는 답변이 되지 않는다.** 현재 `POST /api/v1/tickets`는 익명 단방향이고
-`subjectId` 컬럼이 없다. 답변 경로는 common_server **Phase 7**(`subjects` + 토큰 발급 +
-`tickets.subjectId`)이 들어와야 열린다. 로그인을 연결할 때 이 사실을 화면 문구에 반영할지 함께 정한다.
+| 서버·SDK | 상태 |
+|---|---|
+| `POST /api/v1/auth/login` (구글 토큰 검증) | ✅ |
+| `GET`·`DELETE /api/v1/auth/me` (세션 확인·탈퇴) | ✅ |
+| `GET /api/v1/tickets/mine` (내 문의·답변) | ✅ |
+| SDK `login` · `restoreSession` · `logout` · `deleteAccount` · `fetchMyInquiries` | ✅ |
+
+세션 판정은 `features/support/auth-gate.ts`가 전부 갖고, 화면은 `signedIn`만 보고 갈라진다.
+
+**세션 토큰은 SecureStore에 둔다**(`lib/common-server/client.ts`). 토큰을 쥔 사람이 곧 그 계정이라
+PIN 해시·암호화 키와 같은 급의 자격증명이다 — `app_settings`(평문 SQLite)에 두지 않는다(§7.1).
+
+⚠ **오프라인에서 로그아웃시키지 않는다.** 세션 폐기는 서버가 401로 명시적으로 거절했을 때만이다.
+지하철에서 앱을 켰다고 로그아웃되면 안 된다. 오프라인이면 "기기에 토큰이 있는지"로 판단한다.
+
+⏭ **남은 것은 `signIn()` 한 줄.** 구글 `idToken`을 받아올 라이브러리가 미설치다.
+
+⚠ **탈퇴(계정 삭제)는 Google Play 정책상 필수다.** 계정을 만드는 앱은 앱 안에 삭제 경로가 있어야 하고
+스토어 등록 정보에 웹 삭제 URL도 적어야 한다. SDK에 `deleteAccount()`가 있으니 **로그인 화면을 만들 때
+설정에 탈퇴도 같이 넣는다** — 나중에 붙이면 심사에서 막힌다.
 
 ---
 
@@ -104,8 +121,11 @@ common_server 규약이다 — 앱 4~5개 규모에서 monorepo·npm 패키지 �
 |---|---|---|
 | `jogak` 앱 등록 | ❌ **미등록** (`bootstrap?app=jogak` → 404) | common_server에서 `node --env-file=.env.local tools/seed.ts jogak "조각"` |
 | `EXPO_PUBLIC_SERVER_URL` | ✅ `.env` | 값을 바꾸면 **dev 서버 재시작**(빌드 시점 인라인) |
-| 구글 로그인 | ❌ | 진행 중 |
-| common_server Phase 7 | ❌ 로드맵 | 답변 경로가 열리는 조건 |
+| common_server 인증(Phase 7) | ✅ 2026-08-09 완료·배포 | `auth/login`·`auth/me`·`tickets/mine` |
+| SDK auth | ✅ 복사 완료 | |
+| `app_auth_providers`에 구글 클라이언트 ID | ❌ 0건 | 관리자 콘솔 → 앱 설정 → 소셜 로그인 |
+| Google Cloud OAuth 클라이언트 ID | ❌ | **사용자**가 콘솔에서 발급 |
+| `@react-native-google-signin/google-signin` | ❌ 미설치 | |
 
 등록 전에는 모든 호출이 404로 떨어지고, 앱은 "공지 없음 / 문의 받을 수 없음"으로 조용히 동작한다.
 
