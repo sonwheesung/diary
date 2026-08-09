@@ -88,8 +88,16 @@ ${sections}
 </html>
 `;
 
-mkdirSync('legal', { recursive: true });
-writeFileSync('legal/privacy.html', html, 'utf8');
+/*
+ * `docs/privacy.html` — GitHub Pages(`docs/` 소스)로 게시된다.
+ * my_word가 같은 구조다(docs/privacy-policy.html → sonwheesung.github.io/my_word/...).
+ *
+ * 출력이 한 곳뿐인 것이 중요하다. 손으로 복사하는 단계를 남겨두면 반드시 잊고,
+ * 그 순간 게시본이 정본에서 드리프트한다 — 배구명가에서 정확히 그렇게 법정 필수 항목이 누락됐다.
+ */
+mkdirSync('docs', { recursive: true });
+writeFileSync('docs/privacy.html', html, 'utf8');
 console.log(
-  `legal/privacy.html 생성 — ${doc.sections.length}개 섹션, ${(html.length / 1024).toFixed(1)}KB`,
+  `docs/privacy.html 생성 — ${doc.sections.length}개 섹션, ${(html.length / 1024).toFixed(1)}KB`,
 );
+console.log('게시: https://sonwheesung.github.io/diary/privacy.html (push하면 반영)');
