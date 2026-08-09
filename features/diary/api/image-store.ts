@@ -1,5 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import { Directory, File, Paths } from 'expo-file-system';
+import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
 
 import { getDatabase } from '@/db/client';
 import type { DiaryImage, DiaryImageRow } from '@/features/diary/types';
@@ -13,9 +14,26 @@ import type { DiaryImage, DiaryImageRow } from '@/features/diary/types';
  *
  * DB에는 **파일명만** 저장한다. iOS·Android 모두 앱 재설치·업데이트 시 컨테이너 절대 경로가
  * 바뀌므로, 절대 경로를 넣어두면 어느 날 모든 이미지가 한꺼번에 깨진다.
+ *
+ * 복사 전에 **긴 변 기준으로 줄인다**(아래 MAX_EDGE). 이유는 두 가지다:
+ * ① 요즘 폰 사진은 장당 2~4MB라 일기 몇 백 개면 기기 용량이 눈에 띄게 준다.
+ * ② ⚠ **백업이 E2EE라 서버가 사진을 줄일 수 없다** — 서버에 닿을 땐 이미 암호문이다.
+ *    기기에서, 암호화하기 전에 줄이는 것 말고는 방법이 없다(CLAUDE.md §5.1).
+ *    그래서 백업보다 **먼저** 넣었다. 나중에 넣으면 그 전에 저장된 사진은 원본 크기로 남는다.
  */
 
 const IMAGE_DIR_NAME = 'diary-images';
+
+/**
+ * 저장할 사진의 긴 변 최대 픽셀.
+ *
+ * 1600은 폰 화면(1080~1440)보다 넉넉해 확대해도 뭉개지지 않으면서, 4000px 원본 대비
+ * 파일이 대략 한 자릿수 배 작아진다. 일기에 넣는 사진은 인화용이 아니라 보는 용이다.
+ */
+const MAX_EDGE = 1600;
+
+/** JPEG 압축률. 0.8 아래로 내리면 하늘·피부 같은 완만한 그라데이션에서 띠가 보이기 시작한다. */
+const COMPRESS = 0.8;
 
 function imageDirectory(): Directory {
   const dir = new Directory(Paths.document, IMAGE_DIR_NAME);
@@ -37,6 +55,38 @@ function extensionOf(uri: string): string {
 }
 
 /**
+ * 긴 변이 MAX_EDGE를 넘으면 줄인다. 넘지 않으면 **손대지 않는다** —
+ * 이미 작은 사진을 다시 인코딩하면 화질만 깎이고 용량은 줄지 않는다.
+ *
+ * 실패하면 원본을 그대로 쓴다. 사진을 줄이지 못한 것보다 **사진을 잃는 것이 훨씬 나쁘다.**
+ */
+async function shrinkIfNeeded(params: {
+  uri: string;
+  width?: number | null;
+  height?: number | null;
+}): Promise<{ uri: string; width: number | null; height: number | null }> {
+  const { uri, width = null, height = null } = params;
+  const longEdge = Math.max(width ?? 0, height ?? 0);
+
+  // 크기를 모르면(둘 다 0/null) 손대지 않는다 — 어느 변을 줄여야 할지 알 수 없다
+  if (longEdge <= MAX_EDGE) {
+    return { uri, width, height };
+  }
+
+  try {
+    // 긴 변만 지정하면 나머지는 비율대로 계산된다(ActionResize 문서)
+    const resize = (width ?? 0) >= (height ?? 0) ? { width: MAX_EDGE } : { height: MAX_EDGE };
+    const result = await manipulateAsync(uri, [{ resize }], {
+      compress: COMPRESS,
+      format: SaveFormat.JPEG,
+    });
+    return { uri: result.uri, width: result.width, height: result.height };
+  } catch {
+    return { uri, width, height };
+  }
+}
+
+/**
  * 고른 사진을 앱 디렉터리로 복사하고 DB에 등록한다.
  * 아직 조각이 저장되기 전에도 호출된다(작성 중 삽입) — 그래서 diaryId를 먼저 받는다.
  */
@@ -47,18 +97,29 @@ export async function saveImage(params: {
   height?: number | null;
 }): Promise<DiaryImage> {
   const id = Crypto.randomUUID();
-  const fileName = `${id}${extensionOf(params.sourceUri)}`;
+  const shrunk = await shrinkIfNeeded({
+    uri: params.sourceUri,
+    width: params.width,
+    height: params.height,
+  });
 
-  const source = new File(params.sourceUri);
+  /*
+   * 확장자는 **줄인 뒤의 URI**에서 뽑는다. 줄였다면 결과는 JPEG인데 원본이 PNG·HEIC였을 수 있다 —
+   * 원본 확장자를 붙이면 내용과 이름이 어긋난 파일이 남는다.
+   */
+  const fileName = `${id}${extensionOf(shrunk.uri)}`;
+
+  const source = new File(shrunk.uri);
   const destination = new File(imageDirectory(), fileName);
   source.copy(destination);
 
   const image: DiaryImage = {
     id,
     diaryId: params.diaryId,
+    // 줄였으면 줄인 뒤 크기를 넣는다. DB 값이 실제 파일과 어긋나면 레이아웃이 틀어진다
     fileName,
-    width: params.width ?? null,
-    height: params.height ?? null,
+    width: shrunk.width,
+    height: shrunk.height,
     createdAt: Date.now(),
   };
 

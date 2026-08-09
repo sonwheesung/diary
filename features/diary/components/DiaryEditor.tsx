@@ -315,7 +315,11 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      quality: 0.8,
+      /*
+       * 여기서 압축하지 않는다(1 = 재인코딩 없음). 축소·압축은 `saveImage`가 한 번만 한다 —
+       * 여기서 0.8로 굽고 저장할 때 또 0.8로 구우면 화질만 두 번 깎이고 용량은 그만큼 안 준다.
+       */
+      quality: 1,
     });
     if (result.canceled) {
       return;
