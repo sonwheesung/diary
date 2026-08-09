@@ -11,11 +11,28 @@ export function serializeBlocks(blocks: DiaryBlock[]): string {
   return JSON.stringify(blocks);
 }
 
-/** 텍스트 블록만 이어붙인 검색용 평문. */
+/**
+ * 글자가 든 블록을 이어붙인 검색용 평문.
+ *
+ * **목록 항목도 반드시 포함한다.** 빠뜨리면 "감사한 것 3가지"를 목록으로만 적은 조각이
+ * 검색에서 통째로 사라진다 — 분명히 썼는데 안 찾아지는 게 가장 나쁘다.
+ * 실제로 겪음(2026-08-09): 목록을 추가하면서 이 함수를 안 고쳐 검색이 0건이 됐다.
+ */
 export function extractPlainText(blocks: DiaryBlock[]): string {
   return blocks
-    .filter((block): block is Extract<DiaryBlock, { type: 'text' }> => block.type === 'text')
-    .map((block) => block.value.trim())
+    .map((block) => {
+      if (block.type === 'text') {
+        return block.value.trim();
+      }
+      if (block.type === 'list') {
+        return block.items
+          .map((item) => item.trim())
+          .filter((item) => item.length > 0)
+          .join('\n');
+      }
+      // 이미지 블록은 글자가 없다.
+      return '';
+    })
     .filter((value) => value.length > 0)
     .join('\n');
 }
