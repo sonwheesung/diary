@@ -1,6 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import * as ImagePicker from 'expo-image-picker';
-import { ChevronDown, ImagePlus, Smile, Tag, X } from 'lucide-react-native';
+import { ChevronDown, ImagePlus, List, Smile, Tag, X } from 'lucide-react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -280,6 +280,32 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
     caretRef.current = { index: index + 2, position: 0 };
   };
 
+  /**
+   * 커서가 있던 자리에 빈 목록을 끼운다 — 사진과 같은 규칙이다(DIARY_SYSTEM §1.2).
+   * 항목 하나로 시작하고 그 칸에 포커스가 간다. 빈 목록만 덩그러니 두면 뭘 하라는지 모른다.
+   */
+  const insertList = () => {
+    const { index, position } = caretRef.current;
+    const target = blocks[index];
+
+    if (target === undefined || target.type !== 'text') {
+      setBlocks([...blocks, { type: 'list', items: [''] }, { type: 'text', value: '' }]);
+      caretRef.current = { index: blocks.length + 1, position: 0 };
+      return;
+    }
+
+    const next = [...blocks];
+    next.splice(
+      index,
+      1,
+      { type: 'text', value: target.value.slice(0, position) },
+      { type: 'list', items: [''] },
+      { type: 'text', value: target.value.slice(position) },
+    );
+    setBlocks(next);
+    caretRef.current = { index: index + 2, position: 0 };
+  };
+
   const addImage = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
@@ -547,7 +573,14 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         <ToolbarButton label={t('write.photo')} onPress={() => void addImage()}>
           <ImagePlus size={22} color={colors.text} />
         </ToolbarButton>
-        <ToolbarButton label={t('write.tag')} onPress={() => setOpenSheet('tag')} badge={tags.length}>
+        <ToolbarButton label={t('write.list')} onPress={insertList}>
+          <List size={22} color={colors.text} />
+        </ToolbarButton>
+        <ToolbarButton
+          label={t('write.tag')}
+          onPress={() => setOpenSheet('tag')}
+          badge={tags.length}
+        >
           <Tag size={22} color={colors.text} />
         </ToolbarButton>
         <ToolbarButton label={t('write.mood')} onPress={() => setOpenSheet('emotion')}>

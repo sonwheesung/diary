@@ -76,7 +76,10 @@
     "discardContinue": "继续写",
     "discardLeave": "放弃",
     "notFound": "找不到这片碎片。",
-    "loadFailed": "无法加载这片碎片。"
+    "loadFailed": "无法加载这片碎片。",
+    "list": "列表",
+    "listItemPlaceholder": "条目",
+    "removeListItem": "删除条目"
   },
   "detail": {
     "deleteTitle": "要删除这片碎片吗?",

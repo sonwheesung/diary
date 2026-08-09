@@ -205,6 +205,19 @@ export default function DiaryDetailScreen() {
           );
         }
 
+        if (block.type === 'list') {
+          return (
+            <View key={`list-${index}`} style={styles.listBlock}>
+              {block.items.map((item, itemIndex) => (
+                <View key={itemIndex} style={styles.listRow}>
+                  <View style={styles.bullet} />
+                  <Text style={styles.listItem}>{item}</Text>
+                </View>
+              ))}
+            </View>
+          );
+        }
+
         const image = images.get(block.imageId);
         if (image === undefined) {
           return (
@@ -331,6 +344,28 @@ const createStyles = (colors: Palette) =>
       aspectRatio: 4 / 3,
       borderRadius: radius.md,
       backgroundColor: colors.surfaceMuted,
+    },
+    listBlock: {
+      gap: spacing.xs,
+    },
+    listRow: {
+      flexDirection: 'row',
+      // 항목이 두 줄이 되면 불릿은 첫 줄에 붙어야 한다 — 가운데 정렬하면 가운데로 내려간다.
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+    },
+    bullet: {
+      width: 5,
+      height: 5,
+      borderRadius: 2.5,
+      marginTop: 9,
+      backgroundColor: colors.textMuted,
+    },
+    listItem: {
+      ...typography.body,
+      flex: 1,
+      color: colors.text,
+      lineHeight: 24,
     },
     imageMissing: {
       width: '100%',

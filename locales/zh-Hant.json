@@ -76,7 +76,10 @@
     "discardContinue": "繼續寫",
     "discardLeave": "放棄",
     "notFound": "找不到這片碎片。",
-    "loadFailed": "無法載入這片碎片。"
+    "loadFailed": "無法載入這片碎片。",
+    "list": "清單",
+    "listItemPlaceholder": "項目",
+    "removeListItem": "刪除項目"
   },
   "detail": {
     "deleteTitle": "要刪除這片碎片嗎?",

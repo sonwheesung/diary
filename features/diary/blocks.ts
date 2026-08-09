@@ -28,6 +28,11 @@ function isDiaryBlock(value: unknown): value is DiaryBlock {
   if (candidate.type === 'text') {
     return typeof candidate.value === 'string';
   }
+  if (candidate.type === 'list') {
+    return (
+      Array.isArray(candidate.items) && candidate.items.every((item) => typeof item === 'string')
+    );
+  }
   if (candidate.type === 'image') {
     return typeof candidate.imageId === 'string';
   }
@@ -64,7 +69,15 @@ export function parseBlocks(contentBlocks: string | null, plainText: string): Di
 
 /** 저장할 내용이 있는지. 글이 없어도 이미지가 있으면 성립한다(DIARY_SYSTEM §1). */
 export function hasContent(blocks: DiaryBlock[]): boolean {
-  return blocks.some((block) => (block.type === 'image' ? true : block.value.trim().length > 0));
+  return blocks.some((block) => {
+    if (block.type === 'image') {
+      return true;
+    }
+    if (block.type === 'list') {
+      return block.items.some((item) => item.trim().length > 0);
+    }
+    return block.value.trim().length > 0;
+  });
 }
 
 /** 빈 텍스트 블록을 제거하고 연속된 텍스트 블록을 합친다. 저장 직전에 한 번 돌린다. */
@@ -74,6 +87,15 @@ export function normalizeBlocks(blocks: DiaryBlock[]): DiaryBlock[] {
   for (const block of blocks) {
     if (block.type === 'image') {
       result.push(block);
+      continue;
+    }
+
+    if (block.type === 'list') {
+      // 빈 항목은 버린다. 전부 비었으면 목록 자체를 버린다 — 눌러만 보고 안 쓴 경우다.
+      const items = block.items.map((item) => item.trim()).filter((item) => item.length > 0);
+      if (items.length > 0) {
+        result.push({ type: 'list', items });
+      }
       continue;
     }
 

@@ -76,7 +76,10 @@
     "discardContinue": "Viết tiếp",
     "discardLeave": "Bỏ",
     "notFound": "Không tìm thấy mảnh này.",
-    "loadFailed": "Không tải được mảnh này."
+    "loadFailed": "Không tải được mảnh này.",
+    "list": "Danh sách",
+    "listItemPlaceholder": "Mục",
+    "removeListItem": "Xóa mục"
   },
   "detail": {
     "deleteTitle": "Xóa mảnh này?",

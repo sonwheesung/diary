@@ -76,7 +76,10 @@
     "discardContinue": "書き続ける",
     "discardLeave": "やめる",
     "notFound": "かけらが見つかりませんでした。",
-    "loadFailed": "かけらを読み込めませんでした。"
+    "loadFailed": "かけらを読み込めませんでした。",
+    "list": "リスト",
+    "listItemPlaceholder": "項目",
+    "removeListItem": "項目を削除"
   },
   "detail": {
     "deleteTitle": "このかけらを削除しますか?",

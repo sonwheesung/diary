@@ -76,7 +76,10 @@
     "discardContinue": "เขียนต่อ",
     "discardLeave": "ทิ้งไป",
     "notFound": "ไม่พบชิ้นนี้",
-    "loadFailed": "โหลดชิ้นนี้ไม่สำเร็จ"
+    "loadFailed": "โหลดชิ้นนี้ไม่สำเร็จ",
+    "list": "รายการ",
+    "listItemPlaceholder": "รายการย่อย",
+    "removeListItem": "ลบรายการย่อย"
   },
   "detail": {
     "deleteTitle": "ลบชิ้นนี้ไหม?",

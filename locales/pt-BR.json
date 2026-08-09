@@ -76,7 +76,10 @@
     "discardContinue": "Continuar escrevendo",
     "discardLeave": "Descartar",
     "notFound": "Não encontramos este pedaço.",
-    "loadFailed": "Não foi possível carregar este pedaço."
+    "loadFailed": "Não foi possível carregar este pedaço.",
+    "list": "Lista",
+    "listItemPlaceholder": "Item",
+    "removeListItem": "Remover item"
   },
   "detail": {
     "deleteTitle": "Excluir este pedaço?",

@@ -76,7 +76,10 @@
     "discardContinue": "Continua a scrivere",
     "discardLeave": "Scarta",
     "notFound": "Non troviamo questo pezzo.",
-    "loadFailed": "Non è stato possibile caricare questo pezzo."
+    "loadFailed": "Non è stato possibile caricare questo pezzo.",
+    "list": "Elenco",
+    "listItemPlaceholder": "Voce",
+    "removeListItem": "Rimuovi voce"
   },
   "detail": {
     "deleteTitle": "Eliminare questo pezzo?",

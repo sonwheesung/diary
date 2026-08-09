@@ -5,7 +5,15 @@ import type { EmotionCode } from './emotions';
  * 마크다운·HTML이 아닌 이유: RN에서 인라인 리치 편집은 제약이 크고,
  * 블록이면 AI 요약에 텍스트만 뽑기 쉽고 백업 암호화도 단순해진다.
  */
-export type DiaryBlock = { type: 'text'; value: string } | { type: 'image'; imageId: string };
+export type DiaryBlock =
+  | { type: 'text'; value: string }
+  /**
+   * 목록. 항목 문자열만 갖는다 — **불릿 모양은 저장하지 않는다.**
+   * 모양은 표시 문제라 나중에 스킨(§9)에서 갈아끼울 수 있어야 하고, 저장해두면
+   * 스킨을 바꿔도 옛 조각만 옛 모양으로 남는다(감정 라벨을 코드로 저장한 것과 같은 이유).
+   */
+  | { type: 'list'; items: string[] }
+  | { type: 'image'; imageId: string };
 
 export interface DiaryImage {
   id: string;

@@ -76,7 +76,10 @@
     "discardContinue": "Seguir escribiendo",
     "discardLeave": "Descartar",
     "notFound": "No encontramos esta pieza.",
-    "loadFailed": "No se pudo cargar esta pieza."
+    "loadFailed": "No se pudo cargar esta pieza.",
+    "list": "Lista",
+    "listItemPlaceholder": "Elemento",
+    "removeListItem": "Quitar elemento"
   },
   "detail": {
     "deleteTitle": "¿Eliminar esta pieza?",

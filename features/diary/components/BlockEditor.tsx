@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Trash2 } from 'lucide-react-native';
+import { Trash2, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -65,6 +65,51 @@ export function BlockEditor({
   const cap = areaHeight > 0 ? areaHeight : FALLBACK_HEIGHT;
 
   const firstTextIndex = blocks.findIndex((block) => block.type === 'text');
+
+  const updateListItem = (blockIndex: number, itemIndex: number, value: string) => {
+    const target = blocks[blockIndex];
+    if (target === undefined || target.type !== 'list') {
+      return;
+    }
+    const items = [...target.items];
+    items[itemIndex] = value;
+    const next = [...blocks];
+    next[blockIndex] = { type: 'list', items };
+    onChange(next);
+  };
+
+  /** 엔터: 항목 추가. 단 **빈 항목에서 누르면 목록을 끝낸다**(그 항목을 지우고 빠져나온다). */
+  const submitListItem = (blockIndex: number, itemIndex: number) => {
+    const target = blocks[blockIndex];
+    if (target === undefined || target.type !== 'list') {
+      return;
+    }
+    if ((target.items[itemIndex] ?? '').trim().length === 0) {
+      removeListItem(blockIndex, itemIndex);
+      return;
+    }
+    const items = [...target.items];
+    items.splice(itemIndex + 1, 0, '');
+    const next = [...blocks];
+    next[blockIndex] = { type: 'list', items };
+    onChange(next);
+  };
+
+  /** 항목 삭제. 마지막 하나를 지우면 **목록 블록 자체를 걷어낸다** — 빈 목록이 남으면 지저분하다. */
+  const removeListItem = (blockIndex: number, itemIndex: number) => {
+    const target = blocks[blockIndex];
+    if (target === undefined || target.type !== 'list') {
+      return;
+    }
+    const items = target.items.filter((_, i) => i !== itemIndex);
+    const next = [...blocks];
+    if (items.length === 0) {
+      next.splice(blockIndex, 1);
+    } else {
+      next[blockIndex] = { type: 'list', items };
+    }
+    onChange(next);
+  };
   const isSoleBlock = blocks.length === 1;
 
   const updateText = (index: number, value: string) => {
@@ -118,6 +163,41 @@ export function BlockEditor({
             );
           }
 
+          if (block.type === 'list') {
+            return (
+              <View key={`list-${index}`} style={styles.listBlock}>
+                {block.items.map((item, itemIndex) => (
+                  <View key={itemIndex} style={styles.listRow}>
+                    <View style={styles.bullet} />
+                    <TextField
+                      value={item}
+                      onChangeText={(value) => updateListItem(index, itemIndex, value)}
+                      placeholder={t('write.listItemPlaceholder')}
+                      autoFocus={item.length === 0 && itemIndex === block.items.length - 1}
+                      /*
+                       * 엔터로 다음 항목을 만든다. 목록은 연달아 쓰는 물건이라 매번 +를 누르게 하면
+                       * 리듬이 끊긴다. 다만 **빈 항목에서 엔터를 치면 목록을 끝낸다** —
+                       * 그게 목록을 빠져나오는 유일하게 자연스러운 손동작이다.
+                       */
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      onSubmitEditing={() => submitListItem(index, itemIndex)}
+                      style={styles.listInput}
+                    />
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={t('write.removeListItem')}
+                      onPress={() => removeListItem(index, itemIndex)}
+                      hitSlop={8}
+                    >
+                      <X size={14} color={colors.textMuted} />
+                    </Pressable>
+                  </View>
+                ))}
+              </View>
+            );
+          }
+
           const image = images.get(block.imageId);
           return (
             <View key={`image-${block.imageId}`} style={styles.imageBlock}>
@@ -161,6 +241,24 @@ const createStyles = (colors: Palette) =>
     },
     container: {
       gap: spacing.md,
+    },
+    listBlock: {
+      gap: spacing.xs,
+      paddingVertical: spacing.xs,
+    },
+    listRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    bullet: {
+      width: 5,
+      height: 5,
+      borderRadius: 2.5,
+      backgroundColor: colors.textMuted,
+    },
+    listInput: {
+      flex: 1,
     },
     imageBlock: {
       borderRadius: radius.md,

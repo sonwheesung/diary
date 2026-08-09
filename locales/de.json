@@ -76,7 +76,10 @@
     "discardContinue": "Weiterschreiben",
     "discardLeave": "Verwerfen",
     "notFound": "Dieses Stück wurde nicht gefunden.",
-    "loadFailed": "Dieses Stück konnte nicht geladen werden."
+    "loadFailed": "Dieses Stück konnte nicht geladen werden.",
+    "list": "Liste",
+    "listItemPlaceholder": "Eintrag",
+    "removeListItem": "Eintrag entfernen"
   },
   "detail": {
     "deleteTitle": "Dieses Stück löschen?",

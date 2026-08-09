@@ -76,7 +76,10 @@
     "discardContinue": "Yazmaya devam et",
     "discardLeave": "Vazgeç",
     "notFound": "Bu parça bulunamadı.",
-    "loadFailed": "Bu parça yüklenemedi."
+    "loadFailed": "Bu parça yüklenemedi.",
+    "list": "Liste",
+    "listItemPlaceholder": "Madde",
+    "removeListItem": "Maddeyi kaldır"
   },
   "detail": {
     "deleteTitle": "Bu parça silinsin mi?",

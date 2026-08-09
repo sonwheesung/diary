@@ -76,7 +76,10 @@
     "discardContinue": "Continuer à écrire",
     "discardLeave": "Abandonner",
     "notFound": "Fragment introuvable.",
-    "loadFailed": "Impossible de charger ce fragment."
+    "loadFailed": "Impossible de charger ce fragment.",
+    "list": "Liste",
+    "listItemPlaceholder": "Élément",
+    "removeListItem": "Retirer l'élément"
   },
   "detail": {
     "deleteTitle": "Supprimer ce fragment ?",

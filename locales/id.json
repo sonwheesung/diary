@@ -76,7 +76,10 @@
     "discardContinue": "Lanjut menulis",
     "discardLeave": "Buang",
     "notFound": "Kepingan ini tidak ditemukan.",
-    "loadFailed": "Tidak bisa memuat kepingan ini."
+    "loadFailed": "Tidak bisa memuat kepingan ini.",
+    "list": "Daftar",
+    "listItemPlaceholder": "Butir",
+    "removeListItem": "Hapus butir"
   },
   "detail": {
     "deleteTitle": "Hapus kepingan ini?",

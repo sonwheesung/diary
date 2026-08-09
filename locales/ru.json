@@ -76,7 +76,10 @@
     "discardContinue": "Продолжить писать",
     "discardLeave": "Отменить",
     "notFound": "Запись не найдена.",
-    "loadFailed": "Не удалось загрузить эту запись."
+    "loadFailed": "Не удалось загрузить эту запись.",
+    "list": "Список",
+    "listItemPlaceholder": "Пункт",
+    "removeListItem": "Удалить пункт"
   },
   "detail": {
     "deleteTitle": "Удалить эту запись?",

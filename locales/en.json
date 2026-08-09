@@ -76,7 +76,10 @@
     "discardContinue": "Keep writing",
     "discardLeave": "Discard",
     "notFound": "We couldn't find this piece.",
-    "loadFailed": "Couldn't load this piece."
+    "loadFailed": "Couldn't load this piece.",
+    "list": "List",
+    "listItemPlaceholder": "Item",
+    "removeListItem": "Remove item"
   },
   "detail": {
     "deleteTitle": "Delete this piece?",

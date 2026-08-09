@@ -76,7 +76,10 @@
     "discardContinue": "계속 쓰기",
     "discardLeave": "그만두기",
     "notFound": "조각을 찾지 못했어요.",
-    "loadFailed": "조각을 불러오지 못했어요."
+    "loadFailed": "조각을 불러오지 못했어요.",
+    "list": "목록",
+    "listItemPlaceholder": "항목",
+    "removeListItem": "항목 삭제"
   },
   "detail": {
     "deleteTitle": "이 조각을 지울까요?",
