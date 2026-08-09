@@ -24,7 +24,15 @@
     "write": "Novo registro"
   },
   "date": {
-    "weekdays": ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"],
+    "weekdays": [
+      "dom",
+      "seg",
+      "ter",
+      "qua",
+      "qui",
+      "sex",
+      "sáb"
+    ],
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} de {{monthName}} de {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Precisamos saber quem é você para poder responder.",
     "loginNotRequiredForDiary": "Escrever no diário nunca exige login.",
     "loginButton": "Entrar e continuar",
-    "failSignInAgain": "Sua sessão expirou. Entre novamente."
+    "failSignInAgain": "Sua sessão expirou. Entre novamente.",
+    "signedIn": "Conectado",
+    "signOut": "Sair",
+    "signOutTitle": "Sair da conta?",
+    "signOutBody": "Seu diário continua neste dispositivo.",
+    "deleteAccount": "Excluir conta",
+    "deleteTitle": "Excluir sua conta?",
+    "deleteBody": "Sua conta e os dados do remetente nos seus contatos serão apagados. Não é possível desfazer. O diário neste dispositivo não é excluído.",
+    "deleteConfirm": "Excluir",
+    "deleteDone": "Sua conta foi excluída."
   }
 }

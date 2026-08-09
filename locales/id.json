@@ -24,7 +24,15 @@
     "write": "Tulis baru"
   },
   "date": {
-    "weekdays": ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+    "weekdays": [
+      "Min",
+      "Sen",
+      "Sel",
+      "Rab",
+      "Kam",
+      "Jum",
+      "Sab"
+    ],
     "full": "{{weekday}}, {{day}} {{monthName}} {{year}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Kami perlu tahu siapa kamu supaya bisa membalas.",
     "loginNotRequiredForDiary": "Menulis buku harian tidak pernah butuh masuk akun.",
     "loginButton": "Masuk dan lanjutkan",
-    "failSignInAgain": "Sesimu berakhir. Silakan masuk lagi."
+    "failSignInAgain": "Sesimu berakhir. Silakan masuk lagi.",
+    "signedIn": "Sudah masuk",
+    "signOut": "Keluar",
+    "signOutTitle": "Keluar dari akun?",
+    "signOutBody": "Buku harian tetap ada di perangkat ini.",
+    "deleteAccount": "Hapus akun",
+    "deleteTitle": "Hapus akun Anda?",
+    "deleteBody": "Akun dan data pengirim pada pertanyaan Anda akan dihapus. Tindakan ini tidak bisa dibatalkan. Buku harian di perangkat ini tidak dihapus.",
+    "deleteConfirm": "Hapus",
+    "deleteDone": "Akun Anda telah dihapus."
   }
 }

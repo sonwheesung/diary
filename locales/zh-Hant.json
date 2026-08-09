@@ -24,7 +24,15 @@
     "write": "寫一片"
   },
   "date": {
-    "weekdays": ["日", "一", "二", "三", "四", "五", "六"],
+    "weekdays": [
+      "日",
+      "一",
+      "二",
+      "三",
+      "四",
+      "五",
+      "六"
+    ],
     "full": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "list": "{{month}}月{{day}}日 星期{{weekday}}",
     "listWithYear": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "我們需要知道是誰傳來的，才能回覆你。",
     "loginNotRequiredForDiary": "寫日記完全不需要登入。",
     "loginButton": "登入並繼續",
-    "failSignInAgain": "登入已失效，請重新登入。"
+    "failSignInAgain": "登入已失效，請重新登入。",
+    "signedIn": "已登入",
+    "signOut": "登出",
+    "signOutTitle": "要登出嗎？",
+    "signOutBody": "日記會保留在本機。",
+    "deleteAccount": "刪除帳號",
+    "deleteTitle": "要刪除帳號嗎？",
+    "deleteBody": "帳號以及意見回饋中的寄件者資訊將被刪除，且無法復原。本機中的日記不會被刪除。",
+    "deleteConfirm": "刪除",
+    "deleteDone": "帳號已刪除。"
   }
 }

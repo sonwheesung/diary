@@ -24,7 +24,15 @@
     "write": "Nouvelle entrée"
   },
   "date": {
-    "weekdays": ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"],
+    "weekdays": [
+      "dim",
+      "lun",
+      "mar",
+      "mer",
+      "jeu",
+      "ven",
+      "sam"
+    ],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Nous avons besoin de savoir qui tu es pour pouvoir te répondre.",
     "loginNotRequiredForDiary": "Écrire ton journal ne demande jamais de connexion.",
     "loginButton": "Se connecter et continuer",
-    "failSignInAgain": "Ta session a expiré. Reconnecte-toi."
+    "failSignInAgain": "Ta session a expiré. Reconnecte-toi.",
+    "signedIn": "Connecté",
+    "signOut": "Se déconnecter",
+    "signOutTitle": "Se déconnecter ?",
+    "signOutBody": "Votre journal reste sur cet appareil.",
+    "deleteAccount": "Supprimer le compte",
+    "deleteTitle": "Supprimer votre compte ?",
+    "deleteBody": "Votre compte et les coordonnées de l'expéditeur de vos messages seront effacés. Action irréversible. Le journal présent sur cet appareil n'est pas supprimé.",
+    "deleteConfirm": "Supprimer",
+    "deleteDone": "Votre compte a été supprimé."
   }
 }

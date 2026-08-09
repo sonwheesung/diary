@@ -24,7 +24,15 @@
     "write": "かけらを書く"
   },
   "date": {
-    "weekdays": ["日", "月", "火", "水", "木", "金", "土"],
+    "weekdays": [
+      "日",
+      "月",
+      "火",
+      "水",
+      "木",
+      "金",
+      "土"
+    ],
     "full": "{{year}}年{{month}}月{{day}}日（{{weekday}}）",
     "list": "{{month}}月{{day}}日（{{weekday}}）",
     "listWithYear": "{{year}}年{{month}}月{{day}}日（{{weekday}}）",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "お返事するために、どなたからのご連絡か知る必要があります。",
     "loginNotRequiredForDiary": "日記を書くのにログインは要りません。",
     "loginButton": "ログインして問い合わせる",
-    "failSignInAgain": "ログインが切れました。もう一度ログインしてください。"
+    "failSignInAgain": "ログインが切れました。もう一度ログインしてください。",
+    "signedIn": "ログイン中",
+    "signOut": "ログアウト",
+    "signOutTitle": "ログアウトしますか？",
+    "signOutBody": "日記はこの端末に残ります。",
+    "deleteAccount": "退会",
+    "deleteTitle": "退会しますか？",
+    "deleteBody": "アカウントとお問い合わせの送信者情報が削除されます。元に戻せません。端末内の日記は削除されません。",
+    "deleteConfirm": "退会する",
+    "deleteDone": "退会が完了しました。"
   }
 }

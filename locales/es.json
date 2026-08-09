@@ -24,7 +24,15 @@
     "write": "Nueva entrada"
   },
   "date": {
-    "weekdays": ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+    "weekdays": [
+      "dom",
+      "lun",
+      "mar",
+      "mié",
+      "jue",
+      "vie",
+      "sáb"
+    ],
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} de {{monthName}} de {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Necesitamos saber quién eres para poder responderte.",
     "loginNotRequiredForDiary": "Escribir tu diario nunca requiere iniciar sesión.",
     "loginButton": "Iniciar sesión y continuar",
-    "failSignInAgain": "Tu sesión ha terminado. Vuelve a iniciar sesión."
+    "failSignInAgain": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
+    "signedIn": "Sesión iniciada",
+    "signOut": "Cerrar sesión",
+    "signOutTitle": "¿Cerrar sesión?",
+    "signOutBody": "Tu diario permanece en este dispositivo.",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteTitle": "¿Eliminar tu cuenta?",
+    "deleteBody": "Se borrarán tu cuenta y los datos del remitente en tus consultas. No se puede deshacer. El diario de este dispositivo no se elimina.",
+    "deleteConfirm": "Eliminar",
+    "deleteDone": "Tu cuenta ha sido eliminada."
   }
 }

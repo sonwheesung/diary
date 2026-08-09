@@ -24,7 +24,15 @@
     "write": "조각 쓰기"
   },
   "date": {
-    "weekdays": ["일", "월", "화", "수", "목", "금", "토"],
+    "weekdays": [
+      "일",
+      "월",
+      "화",
+      "수",
+      "목",
+      "금",
+      "토"
+    ],
     "full": "{{year}}년 {{month}}월 {{day}}일 ({{weekday}})",
     "list": "{{month}}월 {{day}}일 ({{weekday}})",
     "listWithYear": "{{year}}년 {{month}}월 {{day}}일 ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "답변을 드리려면 누가 보냈는지 알아야 해요.",
     "loginNotRequiredForDiary": "일기를 쓰는 데는 로그인이 필요하지 않아요.",
     "loginButton": "로그인하고 문의하기",
-    "failSignInAgain": "로그인이 풀렸어요. 다시 로그인해 주세요."
+    "failSignInAgain": "로그인이 풀렸어요. 다시 로그인해 주세요.",
+    "signedIn": "로그인됨",
+    "signOut": "로그아웃",
+    "signOutTitle": "로그아웃할까요?",
+    "signOutBody": "일기는 기기에 그대로 남아요.",
+    "deleteAccount": "탈퇴",
+    "deleteTitle": "탈퇴할까요?",
+    "deleteBody": "계정과 문의 내역의 작성자 정보가 지워져요. 되돌릴 수 없어요. 기기에 있는 일기는 지워지지 않아요.",
+    "deleteConfirm": "탈퇴하기",
+    "deleteDone": "탈퇴가 완료됐어요."
   }
 }

@@ -24,7 +24,15 @@
     "write": "Viết mảnh mới"
   },
   "date": {
-    "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+    "weekdays": [
+      "CN",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ],
     "full": "{{weekday}}, {{day}} tháng {{month}} năm {{year}}",
     "list": "{{day}} tháng {{month}} ({{weekday}})",
     "listWithYear": "{{day}} tháng {{month}} năm {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Chúng tôi cần biết bạn là ai để có thể trả lời.",
     "loginNotRequiredForDiary": "Viết nhật ký thì không bao giờ cần đăng nhập.",
     "loginButton": "Đăng nhập và tiếp tục",
-    "failSignInAgain": "Phiên đăng nhập đã hết. Hãy đăng nhập lại."
+    "failSignInAgain": "Phiên đăng nhập đã hết. Hãy đăng nhập lại.",
+    "signedIn": "Đã đăng nhập",
+    "signOut": "Đăng xuất",
+    "signOutTitle": "Đăng xuất?",
+    "signOutBody": "Nhật ký vẫn ở trên thiết bị này.",
+    "deleteAccount": "Xóa tài khoản",
+    "deleteTitle": "Xóa tài khoản của bạn?",
+    "deleteBody": "Tài khoản và thông tin người gửi trong các câu hỏi của bạn sẽ bị xóa. Không thể hoàn tác. Nhật ký trên thiết bị này không bị xóa.",
+    "deleteConfirm": "Xóa",
+    "deleteDone": "Tài khoản của bạn đã được xóa."
   }
 }

@@ -16,6 +16,7 @@ import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { useSupportAuth } from '@/features/support/auth-gate';
+import type { SignInOutcome } from '@/features/support/auth-gate';
 import { CONTENT_MAX, CONTENT_MIN } from '@/lib/common-server';
 import { commonServer } from '@/lib/common-server/client';
 import type { FailReason, SupportCategory } from '@/lib/common-server/types';
@@ -73,7 +74,7 @@ export default function SupportScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
-  const { signedIn, ready, signIn } = useSupportAuth();
+  const { signedIn, ready, busy, subject, signIn, signOut, deleteAccount } = useSupportAuth();
 
   const [category, setCategory] = useState<SupportCategory>('bug');
   const [content, setContent] = useState('');
@@ -103,6 +104,51 @@ export default function SupportScreen() {
     } finally {
       setSending(false);
     }
+  };
+
+  /**
+   * 로그인 결과 안내.
+   *
+   * 취소는 사용자가 스스로 한 일이라 아무 말도 하지 않는다 — 닫자마자 오류창이 뜨면
+   * 실패한 것처럼 보인다.
+   */
+  const handleSignIn = async () => {
+    const outcome: SignInOutcome = await signIn();
+    if (outcome === null || outcome === 'cancelled') {
+      return;
+    }
+    Alert.alert(t(FAIL_KEYS[outcome], { min: CONTENT_MIN }));
+  };
+
+  const confirmSignOut = () => {
+    Alert.alert(t('support.signOutTitle'), t('support.signOutBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('support.signOut'), onPress: () => void signOut() },
+    ]);
+  };
+
+  /**
+   * 탈퇴 — **Play 정책상 앱 안에 이 경로가 있어야 한다.** 로그인을 만든 순간 의무가 생긴다.
+   * 되돌릴 수 없으므로 한 번 더 묻는다. 일기는 기기에 있어 지워지지 않는다는 것도 함께 밝힌다.
+   */
+  const confirmDelete = () => {
+    Alert.alert(t('support.deleteTitle'), t('support.deleteBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('support.deleteConfirm'),
+        style: 'destructive',
+        onPress: () => {
+          void (async () => {
+            const reason = await deleteAccount();
+            Alert.alert(
+              reason === null
+                ? t('support.deleteDone')
+                : t(FAIL_KEYS[reason], { min: CONTENT_MIN }),
+            );
+          })();
+        },
+      },
+    ]);
   };
 
   const header = (
@@ -151,7 +197,13 @@ export default function SupportScreen() {
           {/* 일기를 쓰는 길에는 로그인이 없다는 것을 여기서 못 박는다(기둥 1) */}
           <Text style={styles.gateNote}>{t('support.loginNotRequiredForDiary')}</Text>
           <View style={styles.gateAction}>
-            <Button label={t('support.loginButton')} onPress={signIn} fullWidth />
+            <Button
+              label={t('support.loginButton')}
+              onPress={() => void handleSignIn()}
+              loading={busy}
+              disabled={busy}
+              fullWidth
+            />
           </View>
         </View>
       </Screen>
@@ -209,6 +261,25 @@ export default function SupportScreen() {
         loading={sending}
         fullWidth
       />
+
+      {/*
+        계정 줄 — 로그인이 생긴 순간 나가는 문(로그아웃)과 지우는 문(탈퇴)이 함께 있어야 한다.
+        탈퇴는 Play 정책상 앱 안에 경로가 있어야 하고, 계정을 쓰는 자리가 여기뿐이라 여기에 둔다.
+        보내기 아래에 두는 이유: 이 화면에 온 목적은 문의이지 계정 관리가 아니다.
+      */}
+      <View style={styles.account}>
+        <Text style={styles.accountLabel} numberOfLines={1}>
+          {subject?.email ?? t('support.signedIn')}
+        </Text>
+        <View style={styles.accountActions}>
+          <Pressable accessibilityRole="button" onPress={confirmSignOut} disabled={busy} hitSlop={8}>
+            <Text style={styles.accountAction}>{t('support.signOut')}</Text>
+          </Pressable>
+          <Pressable accessibilityRole="button" onPress={confirmDelete} disabled={busy} hitSlop={8}>
+            <Text style={styles.accountDanger}>{t('support.deleteAccount')}</Text>
+          </Pressable>
+        </View>
+      </View>
     </Screen>
   );
 }
@@ -314,5 +385,29 @@ const createStyles = (colors: Palette) =>
     gateAction: {
       alignSelf: 'stretch',
       marginTop: spacing.lg,
+    },
+    account: {
+      gap: spacing.sm,
+      paddingTop: spacing.lg,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+    },
+    accountLabel: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    accountActions: {
+      flexDirection: 'row',
+      // 독일어에서 두 라벨이 한 줄에 안 들어간다(CLAUDE.md §9.1) — 자르지 말고 줄바꿈한다
+      flexWrap: 'wrap',
+      gap: spacing.lg,
+    },
+    accountAction: {
+      ...typography.label,
+      color: colors.textMuted,
+    },
+    accountDanger: {
+      ...typography.label,
+      color: colors.danger,
     },
   });

@@ -24,7 +24,15 @@
     "write": "New entry"
   },
   "date": {
-    "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "weekdays": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
     "full": "{{weekday}}, {{monthName}} {{day}}, {{year}}",
     "list": "{{monthName}} {{day}} ({{weekday}})",
     "listWithYear": "{{monthName}} {{day}}, {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "We need to know who you are so we can reply.",
     "loginNotRequiredForDiary": "Writing your diary never requires signing in.",
     "loginButton": "Sign in and continue",
-    "failSignInAgain": "Your session ended. Please sign in again."
+    "failSignInAgain": "Your session ended. Please sign in again.",
+    "signedIn": "Signed in",
+    "signOut": "Sign out",
+    "signOutTitle": "Sign out?",
+    "signOutBody": "Your diary stays on this device.",
+    "deleteAccount": "Delete account",
+    "deleteTitle": "Delete your account?",
+    "deleteBody": "Your account and the sender details on your inquiries will be erased. This cannot be undone. The diary on this device is not deleted.",
+    "deleteConfirm": "Delete",
+    "deleteDone": "Your account has been deleted."
   }
 }

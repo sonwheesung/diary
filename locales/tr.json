@@ -24,7 +24,15 @@
     "write": "Yeni parça"
   },
   "date": {
-    "weekdays": ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+    "weekdays": [
+      "Paz",
+      "Pzt",
+      "Sal",
+      "Çar",
+      "Per",
+      "Cum",
+      "Cmt"
+    ],
     "full": "{{day}} {{monthName}} {{year}} {{weekday}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Sana yanıt verebilmemiz için kim olduğunu bilmemiz gerekiyor.",
     "loginNotRequiredForDiary": "Günlük yazmak için giriş yapmak hiçbir zaman gerekmez.",
     "loginButton": "Giriş yap ve devam et",
-    "failSignInAgain": "Oturumun sona erdi. Lütfen tekrar giriş yap."
+    "failSignInAgain": "Oturumun sona erdi. Lütfen tekrar giriş yap.",
+    "signedIn": "Oturum açık",
+    "signOut": "Çıkış yap",
+    "signOutTitle": "Çıkış yapılsın mı?",
+    "signOutBody": "Günlüğünüz bu cihazda kalır.",
+    "deleteAccount": "Hesabı sil",
+    "deleteTitle": "Hesabınız silinsin mi?",
+    "deleteBody": "Hesabınız ve iletilerinizdeki gönderen bilgileri silinir. Bu işlem geri alınamaz. Bu cihazdaki günlük silinmez.",
+    "deleteConfirm": "Sil",
+    "deleteDone": "Hesabınız silindi."
   }
 }

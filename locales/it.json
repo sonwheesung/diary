@@ -24,7 +24,15 @@
     "write": "Nuova voce"
   },
   "date": {
-    "weekdays": ["dom", "lun", "mar", "mer", "gio", "ven", "sab"],
+    "weekdays": [
+      "dom",
+      "lun",
+      "mar",
+      "mer",
+      "gio",
+      "ven",
+      "sab"
+    ],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Ci serve sapere chi sei per poterti rispondere.",
     "loginNotRequiredForDiary": "Scrivere il diario non richiede mai l'accesso.",
     "loginButton": "Accedi e continua",
-    "failSignInAgain": "La sessione è scaduta. Accedi di nuovo."
+    "failSignInAgain": "La sessione è scaduta. Accedi di nuovo.",
+    "signedIn": "Accesso effettuato",
+    "signOut": "Esci",
+    "signOutTitle": "Vuoi uscire?",
+    "signOutBody": "Il tuo diario resta su questo dispositivo.",
+    "deleteAccount": "Elimina account",
+    "deleteTitle": "Vuoi eliminare il tuo account?",
+    "deleteBody": "L'account e i dati del mittente delle tue richieste verranno cancellati. L'operazione è irreversibile. Il diario su questo dispositivo non viene eliminato.",
+    "deleteConfirm": "Elimina",
+    "deleteDone": "Il tuo account è stato eliminato."
   }
 }

@@ -24,7 +24,15 @@
     "write": "เขียนชิ้นใหม่"
   },
   "date": {
-    "weekdays": ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
+    "weekdays": [
+      "อา",
+      "จ",
+      "อ",
+      "พ",
+      "พฤ",
+      "ศ",
+      "ส"
+    ],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "เราต้องรู้ว่าคุณเป็นใครจึงจะตอบกลับได้",
     "loginNotRequiredForDiary": "การเขียนไดอารีไม่ต้องเข้าสู่ระบบเลย",
     "loginButton": "เข้าสู่ระบบแล้วไปต่อ",
-    "failSignInAgain": "เซสชันหมดอายุ โปรดเข้าสู่ระบบอีกครั้ง"
+    "failSignInAgain": "เซสชันหมดอายุ โปรดเข้าสู่ระบบอีกครั้ง",
+    "signedIn": "เข้าสู่ระบบแล้ว",
+    "signOut": "ออกจากระบบ",
+    "signOutTitle": "ออกจากระบบไหม",
+    "signOutBody": "ไดอารีจะยังอยู่ในเครื่องนี้",
+    "deleteAccount": "ลบบัญชี",
+    "deleteTitle": "ลบบัญชีของคุณไหม",
+    "deleteBody": "บัญชีและข้อมูลผู้ส่งในคำถามของคุณจะถูกลบ และไม่สามารถย้อนกลับได้ ไดอารีในเครื่องนี้จะไม่ถูกลบ",
+    "deleteConfirm": "ลบ",
+    "deleteDone": "ลบบัญชีของคุณแล้ว"
   }
 }

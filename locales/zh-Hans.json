@@ -24,7 +24,15 @@
     "write": "写一片"
   },
   "date": {
-    "weekdays": ["日", "一", "二", "三", "四", "五", "六"],
+    "weekdays": [
+      "日",
+      "一",
+      "二",
+      "三",
+      "四",
+      "五",
+      "六"
+    ],
     "full": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "list": "{{month}}月{{day}}日 星期{{weekday}}",
     "listWithYear": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "我们需要知道是谁发来的，才能回复你。",
     "loginNotRequiredForDiary": "写日记完全不需要登录。",
     "loginButton": "登录并继续",
-    "failSignInAgain": "登录已失效，请重新登录。"
+    "failSignInAgain": "登录已失效，请重新登录。",
+    "signedIn": "已登录",
+    "signOut": "退出登录",
+    "signOutTitle": "要退出登录吗？",
+    "signOutBody": "日记会保留在本机。",
+    "deleteAccount": "注销账号",
+    "deleteTitle": "要注销账号吗？",
+    "deleteBody": "账号以及反馈中的发件人信息将被删除，且无法恢复。本机中的日记不会被删除。",
+    "deleteConfirm": "注销",
+    "deleteDone": "账号已注销。"
   }
 }

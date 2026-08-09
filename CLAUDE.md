@@ -72,9 +72,12 @@ AI 리포트는 앱이 로컬 평문을 서버 프록시로 흘려보내 만들�
 - 필수 지점에서 로그인 화면을 띄우되, **일기 진입 경로에는 절대 세우지 않는다**(기둥 1).
 - ⚠ common_server v1의 문의는 **익명 단방향**(신원 없음)으로 설계돼 있다. 조각의 "문의 로그인 필수"는
   common_server **Phase 7(subjects + 토큰 발급)** 이 선행돼야 성립한다 — `docs/ARCHITECTURE.md` §4.
-- **구현 현황(2026-08-09)**: 공지·문의 화면과 서버 전송은 붙었다(`docs/SUPPORT_SYSTEM.md`).
-  로그인 게이트는 `features/support/auth-gate.ts` **한 파일**이 갖고 있고 지금은 항상 '미로그인'이다 —
-  구글 로그인이 붙으면 그 파일만 갈아끼운다. ⚠ **로그인만으로는 답변이 되지 않는다**(Phase 7 필요).
+- **구현 현황(2026-08-09)**: 공지·문의 화면과 서버 전송, **구글 로그인·로그아웃·탈퇴**까지 붙었다
+  (`docs/SUPPORT_SYSTEM.md`). 세션 판정과 구글 SDK 호출은 `features/support/auth-gate.ts`
+  **한 파일**이 갖고, 화면은 상태만 보고 갈라진다.
+  ⚠ **서버에 `jogak`이 등록되기 전에는 로그인이 성공할 수 없다** — `bootstrap?app=jogak`이 아직 404다.
+- **탈퇴는 선택이 아니다.** 계정을 만드는 앱은 Play 정책상 앱 안에 삭제 경로가 있어야 한다.
+  로그인을 붙이는 커밋에 탈퇴를 같이 넣는다 — 나중에 붙이면 심사에서 막힌다.
 
 ### 한 번 뒤집었다가 되돌린 기록 (2026-08-08)
 
@@ -163,7 +166,7 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
 | 광고 | react-native-google-mobile-ads (AdMob) | ✅ 설치 — **네이티브 모듈이라 Expo Go 불가**. 이것 때문에 dev build로 전환(2026-08-09) |
 | 개발 실행 | ~~Expo Go~~ → **dev build** (`npx expo run:android`) | 2026-08-09 전환. `android/`는 CNG 산출물이라 커밋 안 함 |
 | 구독 | react-native-purchases (RevenueCat) | ❌ 미설치. common_server PLAN Phase 9와 짝 |
-| 로그인 | @react-native-google-signin/google-signin | ❌ 미설치 |
+| 로그인 | @react-native-google-signin/google-signin | ✅ 16.1.4 — 문의하기에 연결(2026-08-09) |
 | Server State | TanStack Query | ❌ 미설치 |
 | 폼 | React Hook Form + Zod | ❌ 미설치 |
 | 애니메이션 | Reanimated + Moti | ❌ 미설치 — SDK 54는 Reanimated 4 + worklets 설정 동반 |

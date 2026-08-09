@@ -24,7 +24,15 @@
     "write": "Neuer Eintrag"
   },
   "date": {
-    "weekdays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    "weekdays": [
+      "So",
+      "Mo",
+      "Di",
+      "Mi",
+      "Do",
+      "Fr",
+      "Sa"
+    ],
     "full": "{{weekday}}, {{day}}. {{monthName}} {{year}}",
     "list": "{{day}}. {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}}. {{monthName}} {{year}} ({{weekday}})",
@@ -255,6 +263,15 @@
     "loginRequiredBody": "Wir müssen wissen, wer du bist, um antworten zu können.",
     "loginNotRequiredForDiary": "Zum Schreiben deines Tagebuchs brauchst du nie eine Anmeldung.",
     "loginButton": "Anmelden und fortfahren",
-    "failSignInAgain": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
+    "failSignInAgain": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.",
+    "signedIn": "Angemeldet",
+    "signOut": "Abmelden",
+    "signOutTitle": "Abmelden?",
+    "signOutBody": "Dein Tagebuch bleibt auf diesem Gerät.",
+    "deleteAccount": "Konto löschen",
+    "deleteTitle": "Konto löschen?",
+    "deleteBody": "Dein Konto und die Absenderdaten deiner Anfragen werden gelöscht. Das lässt sich nicht rückgängig machen. Das Tagebuch auf diesem Gerät wird nicht gelöscht.",
+    "deleteConfirm": "Löschen",
+    "deleteDone": "Dein Konto wurde gelöscht."
   }
 }
