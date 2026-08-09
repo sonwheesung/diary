@@ -47,3 +47,6 @@ dist-builds/
 
 .vercel
 .gstack/
+
+# EAS 빌드 산출물(AAB/APK). 용량이 크고 재생성 가능하다
+/build
