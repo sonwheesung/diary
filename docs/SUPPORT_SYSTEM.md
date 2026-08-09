@@ -141,18 +141,39 @@ Google Cloud 프로젝트 **`google-oauth-test`** (volleyball 클라이언트와
 |---|---|---|
 | 웹 | `jogak-web` | `281316002652-v3959n7417plarerr1i1m7k9h71v5bgb.apps.googleusercontent.com` |
 | Android | `jogak-android` | `281316002652-jndkfokpt09ogqgqgcu0579c29k97nbq.apps.googleusercontent.com` |
-
-Android 클라이언트에 넣은 값: 패키지 `com.son0925.jogak` /
-SHA-1 `7F:F6:08:2D:6A:E8:72:0F:10:70:A1:C5:20:53:17:E2:09:74:F7:1B` (**로컬 디버그 키스토어**).
+| Android | `jogak-android-play` | `281316002652-vi7mgog3h2p803q8ihrrp3rj0hklpon6.apps.googleusercontent.com` |
 
 ⚠ **웹 클라이언트 ID가 audience다.** 안드로이드 네이티브 로그인이어도 `idToken`은 웹 클라이언트 ID로
 발급된다. `GoogleSignin`의 `webClientId`와 서버 콘솔의 audience **둘 다** 웹 ID여야 한다 —
 안드로이드 ID만 넣으면 전부 `unauthorized`로만 보여 진단이 어렵다.
 앱 쪽 값은 `.env`의 `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
 
-⚠ **출시 후 SHA-1을 하나 더 넣어야 한다.** Google Play 앱 서명이 업로드 키와 **다른 키로 재서명**하므로,
-Play Console → 앱 무결성 → 앱 서명 인증서의 SHA-1을 `jogak-android` 클라이언트에 추가한다.
-안 하면 "개발 중엔 됐는데 스토어 버전만 로그인 실패"가 난다.
+#### SHA-1은 빌드마다 다르다 — 클라이언트를 하나씩 만든다 (2026-08-09에 걸림)
+
+**Android OAuth 클라이언트 하나는 `패키지 + SHA-1` 한 쌍만 갖는다.** 지문이 늘면 클라이언트를 늘린다
+(volleyball도 `volleyball-android` / `volleyball-android-play` 둘이다).
+
+| 어떤 빌드 | SHA-1 | 클라이언트 |
+|---|---|---|
+| 로컬 `npx expo run:android` | `7F:F6:08:2D:6A:E8:72:0F:10:70:A1:C5:20:53:17:E2:09:74:F7:1B` | `jogak-android` ✅ |
+| EAS `development` APK | `5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25` | ❌ 없음 — 필요하면 만든다 |
+| **Play 배포(내부 테스트 포함)** | `CD:86:BB:DB:BB:78:A0:CA:6D:38:1C:8A:DD:B6:2F:E8:37:9E:AC:CB` | `jogak-android-play` ✅ |
+
+Play 앱 서명 SHA-1은 **Play Console → Google Play로 보호됨 → Play 스토어 보호 → Play 앱 서명 관리**
+→ 기존 키의 *SHA-1 인증서 지문*(클릭하면 클립보드로 복사된다). 화면에 글자로 렌더링되지 않는다.
+
+⚠ **실제로 겪음(2026-08-09).** 에뮬레이터에 EAS `development` APK를 깔고 로그인했더니 실패했다.
+`unauthorized`가 아니라 포괄 오류였는데 — 구글이 `DEVELOPER_ERROR`로 **서버에 닿기도 전에** 끊은 것이다.
+로컬 debug 키만 등록돼 있었고 EAS의 debug 키(`5E:8F:…`)는 등록돼 있지 않았다.
+
+**판별법**: `unauthorized`면 서버/audience, 그 외 오류면 **지문/패키지**를 먼저 본다.
+설치된 APK의 실제 지문은 이렇게 확인한다 — 어느 키로 서명됐는지 짐작하지 않는다:
+
+```
+adb shell pm path <package>          # base.apk 경로
+adb pull <경로> installed.apk
+apksigner verify --print-certs installed.apk
+```
 
 ⚠ **탈퇴(계정 삭제)는 Google Play 정책상 필수다.** 계정을 만드는 앱은 앱 안에 삭제 경로가 있어야 한다.
 ✅ 문의 화면 하단 계정 줄에 넣었다(2026-08-09) — 계정을 쓰는 자리가 여기뿐이라 여기에 둔다.
