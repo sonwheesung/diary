@@ -109,6 +109,27 @@ PIN 해시·암호화 키와 같은 급의 자격증명이다 — `app_settings`
 
 ⏭ **남은 것은 `signIn()` 한 줄.** 구글 `idToken`을 받아올 라이브러리가 미설치다.
 
+#### OAuth 클라이언트 (2026-08-09 발급)
+
+Google Cloud 프로젝트 **`google-oauth-test`** (volleyball 클라이언트와 같은 프로젝트).
+
+| 유형 | 이름 | 클라이언트 ID |
+|---|---|---|
+| 웹 | `jogak-web` | `281316002652-v3959n7417plarerr1i1m7k9h71v5bgb.apps.googleusercontent.com` |
+| Android | `jogak-android` | `281316002652-jndkfokpt09ogqgqgcu0579c29k97nbq.apps.googleusercontent.com` |
+
+Android 클라이언트에 넣은 값: 패키지 `com.son0925.jogak` /
+SHA-1 `7F:F6:08:2D:6A:E8:72:0F:10:70:A1:C5:20:53:17:E2:09:74:F7:1B` (**로컬 디버그 키스토어**).
+
+⚠ **웹 클라이언트 ID가 audience다.** 안드로이드 네이티브 로그인이어도 `idToken`은 웹 클라이언트 ID로
+발급된다. `GoogleSignin`의 `webClientId`와 서버 콘솔의 audience **둘 다** 웹 ID여야 한다 —
+안드로이드 ID만 넣으면 전부 `unauthorized`로만 보여 진단이 어렵다.
+앱 쪽 값은 `.env`의 `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
+
+⚠ **출시 후 SHA-1을 하나 더 넣어야 한다.** Google Play 앱 서명이 업로드 키와 **다른 키로 재서명**하므로,
+Play Console → 앱 무결성 → 앱 서명 인증서의 SHA-1을 `jogak-android` 클라이언트에 추가한다.
+안 하면 "개발 중엔 됐는데 스토어 버전만 로그인 실패"가 난다.
+
 ⚠ **탈퇴(계정 삭제)는 Google Play 정책상 필수다.** 계정을 만드는 앱은 앱 안에 삭제 경로가 있어야 하고
 스토어 등록 정보에 웹 삭제 URL도 적어야 한다. SDK에 `deleteAccount()`가 있으니 **로그인 화면을 만들 때
 설정에 탈퇴도 같이 넣는다** — 나중에 붙이면 심사에서 막힌다.
@@ -124,7 +145,7 @@ PIN 해시·암호화 키와 같은 급의 자격증명이다 — `app_settings`
 | common_server 인증(Phase 7) | ✅ 2026-08-09 완료·배포 | `auth/login`·`auth/me`·`tickets/mine` |
 | SDK auth | ✅ 복사 완료 | |
 | `app_auth_providers`에 구글 클라이언트 ID | ❌ 0건 | 관리자 콘솔 → 앱 설정 → 소셜 로그인 |
-| Google Cloud OAuth 클라이언트 ID | ❌ | **사용자**가 콘솔에서 발급 |
+| Google Cloud OAuth 클라이언트 ID | ✅ 2026-08-09 발급 | 위 표 |
 | `@react-native-google-signin/google-signin` | ❌ 미설치 | |
 
 등록 전에는 모든 호출이 404로 떨어지고, 앱은 "공지 없음 / 문의 받을 수 없음"으로 조용히 동작한다.
