@@ -158,7 +158,8 @@
     "delay5m": "Après 5 min",
     "sectionSupport": "Aide",
     "notice": "Annonces",
-    "support": "Nous contacter"
+    "support": "Nous contacter",
+    "privacy": "Politique de confidentialité"
   },
   "lock": {
     "lockedTitle": "Tes fragments sont verrouillés",

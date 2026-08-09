@@ -158,7 +158,8 @@
     "delay5m": "5 分钟后",
     "sectionSupport": "支持",
     "notice": "公告",
-    "support": "联系我们"
+    "support": "联系我们",
+    "privacy": "隐私政策"
   },
   "lock": {
     "lockedTitle": "你的碎片已锁定",

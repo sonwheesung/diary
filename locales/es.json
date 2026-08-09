@@ -158,7 +158,8 @@
     "delay5m": "Tras 5 min",
     "sectionSupport": "Ayuda",
     "notice": "Avisos",
-    "support": "Contacto"
+    "support": "Contacto",
+    "privacy": "Política de privacidad"
   },
   "lock": {
     "lockedTitle": "Tus piezas están bloqueadas",

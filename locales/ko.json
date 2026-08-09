@@ -158,7 +158,8 @@
     "languageSheet": "언어 선택",
     "sectionSupport": "지원",
     "notice": "공지사항",
-    "support": "문의하기"
+    "support": "문의하기",
+    "privacy": "개인정보처리방침"
   },
   "lock": {
     "lockedTitle": "조각이 잠겨 있어요",

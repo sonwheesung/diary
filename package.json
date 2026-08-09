@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "legal:html": "node scripts/make-legal-html.mjs"
   },
   "dependencies": {
     "@react-native-google-signin/google-signin": "^16.1.4",

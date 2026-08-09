@@ -158,7 +158,8 @@
     "languageSheet": "Choose language",
     "sectionSupport": "Support",
     "notice": "Notices",
-    "support": "Contact us"
+    "support": "Contact us",
+    "privacy": "Privacy policy"
   },
   "lock": {
     "lockedTitle": "Your pieces are locked",

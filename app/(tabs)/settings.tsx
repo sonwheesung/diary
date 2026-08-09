@@ -357,6 +357,17 @@ export default function SettingsScreen() {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionAbout')}</Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/privacy')}
+          style={styles.row}
+        >
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.privacy')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+
         <View style={styles.row}>
           <View style={styles.rowBody}>
             <Text style={styles.rowTitle}>{t('settings.version')}</Text>

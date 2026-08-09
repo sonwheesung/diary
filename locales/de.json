@@ -158,7 +158,8 @@
     "delay5m": "Nach 5 Min.",
     "sectionSupport": "Hilfe",
     "notice": "Mitteilungen",
-    "support": "Kontakt"
+    "support": "Kontakt",
+    "privacy": "Datenschutzerklärung"
   },
   "lock": {
     "lockedTitle": "Deine Stücke sind gesperrt",

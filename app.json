@@ -19,7 +19,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#F5F7FA"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -64,7 +67,10 @@
       "typedRoutes": false
     },
     "extra": {
-      "router": {}
+      "router": {},
+      "eas": {
+        "projectId": "cb72932c-858b-4725-bde8-97bd9e36b718"
+      }
     },
     "owner": "shs00925",
     "icon": "./assets/images/icon.png"

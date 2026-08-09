@@ -158,7 +158,8 @@
     "delay5m": "Após 5 min",
     "sectionSupport": "Suporte",
     "notice": "Avisos",
-    "support": "Fale conosco"
+    "support": "Fale conosco",
+    "privacy": "Política de privacidade"
   },
   "lock": {
     "lockedTitle": "Seus pedaços estão bloqueados",

@@ -158,7 +158,8 @@
     "delay5m": "5分後",
     "sectionSupport": "サポート",
     "notice": "お知らせ",
-    "support": "お問い合わせ"
+    "support": "お問い合わせ",
+    "privacy": "プライバシーポリシー"
   },
   "lock": {
     "lockedTitle": "かけらはロックされています",

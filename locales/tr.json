@@ -158,7 +158,8 @@
     "delay5m": "5 dk sonra",
     "sectionSupport": "Destek",
     "notice": "Duyurular",
-    "support": "Bize ulaşın"
+    "support": "Bize ulaşın",
+    "privacy": "Gizlilik politikası"
   },
   "lock": {
     "lockedTitle": "Parçaların kilitli",

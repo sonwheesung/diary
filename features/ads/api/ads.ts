@@ -34,11 +34,26 @@ const RELEASE_AD_UNITS: { banner: string | null; interstitial: string | null } =
   interstitial: 'ca-app-pub-2731473780180274/5718112528',
 };
 
+/**
+ * 실제 광고를 쓸 빌드인가.
+ *
+ * `__DEV__`만으로는 부족하다 — **내부 테스트 빌드도 릴리스 빌드**라 `__DEV__`가 false다.
+ * 그대로 두면 우리가 테스트하면서 만든 노출·클릭이 실제 광고에 잡히고, 그건 Google이
+ * 명시적으로 금지하는 **무효 트래픽**이다(계정 정지 사유).
+ *
+ * 그래서 `EXPO_PUBLIC_ADS_REAL=1`이 **명시적으로** 켜져 있을 때만 실제 단위를 쓴다.
+ * 기본값이 안전한 쪽(테스트 광고)이어야 한다 — 실수로 빠뜨렸을 때 잃는 것이
+ * "수익 며칠"과 "계정"으로 크게 다르기 때문이다.
+ *
+ * 프로덕션 출시 빌드에서만 `eas.json`의 production 프로필이 이 값을 켠다.
+ */
+const USE_REAL_ADS = !__DEV__ && process.env.EXPO_PUBLIC_ADS_REAL === '1';
+
 export const AD_UNITS = {
-  banner: __DEV__ ? TestIds.BANNER : (RELEASE_AD_UNITS.banner ?? TestIds.BANNER),
-  interstitial: __DEV__
-    ? TestIds.INTERSTITIAL
-    : (RELEASE_AD_UNITS.interstitial ?? TestIds.INTERSTITIAL),
+  banner: USE_REAL_ADS ? (RELEASE_AD_UNITS.banner ?? TestIds.BANNER) : TestIds.BANNER,
+  interstitial: USE_REAL_ADS
+    ? (RELEASE_AD_UNITS.interstitial ?? TestIds.INTERSTITIAL)
+    : TestIds.INTERSTITIAL,
 } as const;
 
 let initialized = false;
