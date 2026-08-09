@@ -272,6 +272,7 @@
     "deleteTitle": "Hapus akun Anda?",
     "deleteBody": "Akun dan data pengirim pada pertanyaan Anda akan dihapus. Tindakan ini tidak bisa dibatalkan. Buku harian di perangkat ini tidak dihapus.",
     "deleteConfirm": "Hapus",
-    "deleteDone": "Akun Anda telah dihapus."
+    "deleteDone": "Akun Anda telah dihapus.",
+    "loginFailed": "Tidak bisa masuk. Coba lagi sebentar lagi."
   }
 }

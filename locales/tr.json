@@ -272,6 +272,7 @@
     "deleteTitle": "Hesabınız silinsin mi?",
     "deleteBody": "Hesabınız ve iletilerinizdeki gönderen bilgileri silinir. Bu işlem geri alınamaz. Bu cihazdaki günlük silinmez.",
     "deleteConfirm": "Sil",
-    "deleteDone": "Hesabınız silindi."
+    "deleteDone": "Hesabınız silindi.",
+    "loginFailed": "Giriş yapılamadı. Lütfen birazdan tekrar deneyin."
   }
 }

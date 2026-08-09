@@ -272,6 +272,7 @@
     "deleteTitle": "¿Eliminar tu cuenta?",
     "deleteBody": "Se borrarán tu cuenta y los datos del remitente en tus consultas. No se puede deshacer. El diario de este dispositivo no se elimina.",
     "deleteConfirm": "Eliminar",
-    "deleteDone": "Tu cuenta ha sido eliminada."
+    "deleteDone": "Tu cuenta ha sido eliminada.",
+    "loginFailed": "No se pudo iniciar sesión. Inténtalo de nuevo en un momento."
   }
 }

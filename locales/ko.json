@@ -272,6 +272,7 @@
     "deleteTitle": "탈퇴할까요?",
     "deleteBody": "계정과 문의 내역의 작성자 정보가 지워져요. 되돌릴 수 없어요. 기기에 있는 일기는 지워지지 않아요.",
     "deleteConfirm": "탈퇴하기",
-    "deleteDone": "탈퇴가 완료됐어요."
+    "deleteDone": "탈퇴가 완료됐어요.",
+    "loginFailed": "로그인하지 못했어요. 잠시 후 다시 시도해 주세요."
   }
 }

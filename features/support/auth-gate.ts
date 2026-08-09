@@ -130,6 +130,19 @@ export function useSupportAuth(): SupportAuth {
       if (isErrorWithCode(error) && error.code === statusCodes.SIGN_IN_CANCELLED) {
         return 'cancelled';
       }
+      /*
+       * 구글 SDK 오류는 화면에 그대로 못 쓴다(사용자가 할 수 있는 게 없다). 대신 코드를 남긴다.
+       *
+       * 실제로 겪음(2026-08-09): SHA-1이 등록된 값과 다른 APK에서 `DEVELOPER_ERROR`(code 10)가 났는데,
+       * 로그가 없어서 "서버가 거절했나"를 먼저 뒤졌다. 이 한 줄이면 5초에 갈린다.
+       * DEVELOPER_ERROR면 의심 순서는 ① APK 서명 SHA-1 ② 패키지명 ③ webClientId다.
+       */
+      if (__DEV__) {
+        console.warn(
+          '[auth] google sign-in failed:',
+          isErrorWithCode(error) ? error.code : String(error),
+        );
+      }
       return 'error';
     } finally {
       setBusy(false);

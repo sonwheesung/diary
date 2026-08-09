@@ -272,6 +272,7 @@
     "deleteTitle": "Excluir sua conta?",
     "deleteBody": "Sua conta e os dados do remetente nos seus contatos serão apagados. Não é possível desfazer. O diário neste dispositivo não é excluído.",
     "deleteConfirm": "Excluir",
-    "deleteDone": "Sua conta foi excluída."
+    "deleteDone": "Sua conta foi excluída.",
+    "loginFailed": "Não foi possível entrar. Tente novamente em instantes."
   }
 }

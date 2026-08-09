@@ -272,6 +272,7 @@
     "deleteTitle": "要刪除帳號嗎？",
     "deleteBody": "帳號以及意見回饋中的寄件者資訊將被刪除，且無法復原。本機中的日記不會被刪除。",
     "deleteConfirm": "刪除",
-    "deleteDone": "帳號已刪除。"
+    "deleteDone": "帳號已刪除。",
+    "loginFailed": "登入失敗，請稍後再試。"
   }
 }

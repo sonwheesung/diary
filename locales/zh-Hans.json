@@ -272,6 +272,7 @@
     "deleteTitle": "要注销账号吗？",
     "deleteBody": "账号以及反馈中的发件人信息将被删除，且无法恢复。本机中的日记不会被删除。",
     "deleteConfirm": "注销",
-    "deleteDone": "账号已注销。"
+    "deleteDone": "账号已注销。",
+    "loginFailed": "登录失败，请稍后再试。"
   }
 }

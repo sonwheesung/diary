@@ -272,6 +272,7 @@
     "deleteTitle": "Konto löschen?",
     "deleteBody": "Dein Konto und die Absenderdaten deiner Anfragen werden gelöscht. Das lässt sich nicht rückgängig machen. Das Tagebuch auf diesem Gerät wird nicht gelöscht.",
     "deleteConfirm": "Löschen",
-    "deleteDone": "Dein Konto wurde gelöscht."
+    "deleteDone": "Dein Konto wurde gelöscht.",
+    "loginFailed": "Anmeldung fehlgeschlagen. Bitte versuche es gleich noch einmal."
   }
 }

@@ -272,6 +272,7 @@
     "deleteTitle": "Supprimer votre compte ?",
     "deleteBody": "Votre compte et les coordonnées de l'expéditeur de vos messages seront effacés. Action irréversible. Le journal présent sur cet appareil n'est pas supprimé.",
     "deleteConfirm": "Supprimer",
-    "deleteDone": "Votre compte a été supprimé."
+    "deleteDone": "Votre compte a été supprimé.",
+    "loginFailed": "Connexion impossible. Réessayez dans un instant."
   }
 }

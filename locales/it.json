@@ -272,6 +272,7 @@
     "deleteTitle": "Vuoi eliminare il tuo account?",
     "deleteBody": "L'account e i dati del mittente delle tue richieste verranno cancellati. L'operazione è irreversibile. Il diario su questo dispositivo non viene eliminato.",
     "deleteConfirm": "Elimina",
-    "deleteDone": "Il tuo account è stato eliminato."
+    "deleteDone": "Il tuo account è stato eliminato.",
+    "loginFailed": "Accesso non riuscito. Riprova tra poco."
   }
 }

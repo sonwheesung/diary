@@ -111,10 +111,18 @@ export default function SupportScreen() {
    *
    * 취소는 사용자가 스스로 한 일이라 아무 말도 하지 않는다 — 닫자마자 오류창이 뜨면
    * 실패한 것처럼 보인다.
+   *
+   * ⚠ `FAIL_KEYS`를 그대로 쓰지 않는다. 그건 **문의 전송** 실패 문구라서 로그인 실패에
+   * "보내지 못했어요"가 뜬다 — 아무것도 보낸 적 없는 사용자에게는 무슨 말인지 알 수 없다.
+   * 보낼 것이 없는 사유(error·unauthorized)는 로그인 문구로 바꿔 말한다.
    */
   const handleSignIn = async () => {
     const outcome: SignInOutcome = await signIn();
     if (outcome === null || outcome === 'cancelled') {
+      return;
+    }
+    if (outcome === 'error' || outcome === 'unauthorized' || outcome === 'not-signed-in') {
+      Alert.alert(t('support.loginFailed'));
       return;
     }
     Alert.alert(t(FAIL_KEYS[outcome], { min: CONTENT_MIN }));

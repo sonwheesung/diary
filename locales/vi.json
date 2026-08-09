@@ -272,6 +272,7 @@
     "deleteTitle": "Xóa tài khoản của bạn?",
     "deleteBody": "Tài khoản và thông tin người gửi trong các câu hỏi của bạn sẽ bị xóa. Không thể hoàn tác. Nhật ký trên thiết bị này không bị xóa.",
     "deleteConfirm": "Xóa",
-    "deleteDone": "Tài khoản của bạn đã được xóa."
+    "deleteDone": "Tài khoản của bạn đã được xóa.",
+    "loginFailed": "Không thể đăng nhập. Vui lòng thử lại sau giây lát."
   }
 }

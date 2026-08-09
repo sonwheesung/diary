@@ -272,6 +272,7 @@
     "deleteTitle": "Delete your account?",
     "deleteBody": "Your account and the sender details on your inquiries will be erased. This cannot be undone. The diary on this device is not deleted.",
     "deleteConfirm": "Delete",
-    "deleteDone": "Your account has been deleted."
+    "deleteDone": "Your account has been deleted.",
+    "loginFailed": "Couldn't sign in. Please try again in a moment."
   }
 }
