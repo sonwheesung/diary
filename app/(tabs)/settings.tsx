@@ -3,7 +3,6 @@ import { router, useFocusEffect } from 'expo-router';
 import {
   Bell,
   ChevronRight,
-  Fingerprint,
   Globe,
   Lock,
   Megaphone,
@@ -13,17 +12,10 @@ import {
 } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
-import {
-  disableLock,
-  isBiometricAvailable,
-  setBiometricEnabled,
-  setLockDelay,
-} from '@/features/lock/api/lock-store';
-import type { LockDelay } from '@/features/lock/api/lock-store';
 import { useLockStore } from '@/features/lock/store';
 import { useNoticeStore } from '@/features/notice/store';
 import { LanguageSheet } from '@/features/settings/components/LanguageSheet';
@@ -46,13 +38,6 @@ import { typography } from '@/theme/typography';
  * 지금 있는 것만 둔다 — 눌러도 아무 일도 없는 줄을 미리 깔지 않는다.
  * 잠금·다크모드는 각 기능이 완성될 때 이 화면에 붙는다.
  */
-const DELAY_ORDER: LockDelay[] = ['immediate', '1m', '5m'];
-const DELAY_KEYS: Record<LockDelay, string> = {
-  immediate: 'settings.delayImmediate',
-  '1m': 'settings.delay1m',
-  '5m': 'settings.delay5m',
-};
-
 const THEME_OPTIONS: ThemeMode[] = ['system', 'light', 'dark'];
 const THEME_KEYS: Record<ThemeMode, string> = {
   system: 'settings.themeOptionSystem',
@@ -73,44 +58,23 @@ export default function SettingsScreen() {
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
   const lock = useLockStore((state) => state.config);
   const refreshLock = useLockStore((state) => state.refresh);
-  const [biometricAvailable, setBiometricAvailable] = useState(false);
 
   // 잠금 설정 화면에 다녀오면 상태가 바뀌어 있다 — 돌아올 때마다 다시 읽는다.
   useFocusEffect(
     useCallback(() => {
       void refreshLock();
-      void isBiometricAvailable().then(setBiometricAvailable);
     }, [refreshLock]),
   );
 
+  /*
+   * 끄기·바꾸기 모두 **현재 비밀을 먼저 확인**한다(CLAUDE.md §7.1).
+   *
+   * 확인이 막는 것은 열람이 아니다 — 폰이 열려 있는 사람은 이미 일기를 본다.
+   * 막는 것은 **그 사람이 PIN을 바꿔 주인을 잠가버리는 것**이다. 힌트까지 새로 정해지면
+   * 되찾기 경로도 사라지고 남는 건 초기화(전부 삭제)뿐이다.
+   */
   const toggleLock = (next: boolean) => {
-    if (next) {
-      router.push('/lock-setup');
-      return;
-    }
-    Alert.alert(t('settings.lockOffTitle'), t('settings.lockOffBody'), [
-      { text: t('common.keep'), style: 'cancel' },
-      {
-        text: t('settings.lockOffConfirm'),
-        style: 'destructive',
-        onPress: () => {
-          void disableLock().then(() => void refreshLock());
-        },
-      },
-    ]);
-  };
-
-  const toggleBiometric = (next: boolean) => {
-    void setBiometricEnabled(next).then(() => void refreshLock());
-  };
-
-  const cycleDelay = () => {
-    if (lock === null) {
-      return;
-    }
-    const index = DELAY_ORDER.indexOf(lock.delay);
-    const next = DELAY_ORDER[(index + 1) % DELAY_ORDER.length] ?? 'immediate';
-    void setLockDelay(next).then(() => void refreshLock());
+    router.push(next ? '/lock-setup' : '/lock-setup?intent=disable');
   };
 
   useEffect(() => {
@@ -173,49 +137,17 @@ export default function SettingsScreen() {
         </View>
 
         {lock?.enabled === true && (
-          <>
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => router.push('/lock-setup')}
-              style={styles.row}
-            >
-              <View style={styles.rowBody}>
-                <Text style={styles.rowTitle}>{t('settings.lockChange')}</Text>
-                <Text style={styles.rowNote}>{t('settings.lockChangeNote')}</Text>
-              </View>
-              <ChevronRight size={18} color={colors.textMuted} />
-            </Pressable>
-
-            <Pressable accessibilityRole="button" onPress={cycleDelay} style={styles.row}>
-              <View style={styles.rowBody}>
-                <Text style={styles.rowTitle}>{t('settings.lockDelay')}</Text>
-                <Text style={styles.rowNote}>{t('settings.lockDelayNote')}</Text>
-              </View>
-              <Text style={styles.rowValue}>{t(DELAY_KEYS[lock.delay])}</Text>
-            </Pressable>
-
-            <View style={styles.row}>
-              <View style={styles.rowIcon}>
-                <Fingerprint size={18} color={colors.accent} />
-              </View>
-              <View style={styles.rowBody}>
-                <Text style={styles.rowTitle}>{t('settings.biometric')}</Text>
-                {/* 생체는 단독 수단이 될 수 없다 — 항상 PIN/패턴이 뒤를 받친다(§7.1) */}
-                <Text style={styles.rowNote}>
-                  {biometricAvailable
-                    ? t('settings.biometricAvailable')
-                    : t('settings.biometricUnavailable')}
-                </Text>
-              </View>
-              <Switch
-                value={lock.biometric}
-                onValueChange={toggleBiometric}
-                disabled={!biometricAvailable}
-                trackColor={{ false: colors.border, true: colors.accentMuted }}
-                thumbColor={lock.biometric ? colors.accent : colors.surface}
-              />
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/lock-setup?intent=change')}
+            style={styles.row}
+          >
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitle}>{t('settings.lockChange')}</Text>
+              <Text style={styles.rowNote}>{t('settings.lockChangeNote')}</Text>
             </View>
-          </>
+            <ChevronRight size={18} color={colors.textMuted} />
+          </Pressable>
         )}
       </View>
 

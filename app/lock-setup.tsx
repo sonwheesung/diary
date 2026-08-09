@@ -1,13 +1,14 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { Grid3x3, KeyRound, X } from 'lucide-react-native';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import {
   HINT_QUESTION_IDS,
+  disableLock,
   hintQuestionText,
   PATTERN_MIN_POINTS,
   PIN_LENGTH,
@@ -17,29 +18,50 @@ import {
 import type { HintQuestionId, LockMethod } from '@/features/lock/api/lock-store';
 import { PatternGrid } from '@/features/lock/components/PatternGrid';
 import { PinPad } from '@/features/lock/components/PinPad';
+import { UnlockView } from '@/features/lock/components/UnlockView';
+import { useLockStore } from '@/features/lock/store';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
 import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
-type Step = 'choose' | 'enter' | 'confirm' | 'hint';
+type Step = 'verify' | 'choose' | 'enter' | 'confirm' | 'hint';
 
 /**
- * 잠금 설정 — 방식 고르기 → 입력 → 한 번 더 확인.
+ * 잠금 설정 — (현재 비밀 확인 →) 방식 고르기 → 입력 → 한 번 더 확인 → 힌트.
  *
  * 확인 단계를 빼지 않는다. 잘못 정한 PIN·패턴은 **자기 일기를 자기가 못 여는** 결과가 된다.
+ *
+ * `intent`로 세 갈래다(CLAUDE.md §7.1):
+ * - 없음      신규 설정 — 바로 방식 고르기
+ * - `change`  비밀 바꾸기 — **현재 비밀을 먼저 통과**해야 한다
+ * - `disable` 잠금 끄기  — 마찬가지. 통과하면 끄고 나간다
+ *
+ * 확인이 막는 것은 열람이 아니다(폰이 열려 있으면 이미 다 본다). 막는 것은 **남이 비밀을 바꿔
+ * 주인을 잠가버리는 것**이다 — 힌트까지 새로 정해지면 되찾기 경로도 사라지고 초기화만 남는다.
  */
 export default function LockSetupScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
-  const params = useLocalSearchParams<{ method?: string }>();
+  const params = useLocalSearchParams<{ method?: string; intent?: string }>();
   const preset: LockMethod | null =
     params.method === 'pin' || params.method === 'pattern' ? params.method : null;
+  const intent = params.intent === 'change' || params.intent === 'disable' ? params.intent : null;
 
-  const [step, setStep] = useState<Step>(preset === null ? 'choose' : 'enter');
+  const lock = useLockStore((state) => state.config);
+  const refreshLock = useLockStore((state) => state.refresh);
+  // 잠금이 없는데 확인을 요구하면 열 방법이 없다 — 켜져 있을 때만 verify로 시작한다
+  const needsVerify = intent !== null && lock?.enabled === true && lock.method !== null;
+
+  const [step, setStep] = useState<Step>(
+    needsVerify ? 'verify' : preset === null ? 'choose' : 'enter',
+  );
   const [method, setMethod] = useState<LockMethod>(preset ?? 'pin');
+  /* 뒤로가기 콜백은 등록 시점의 step에 묶인다 — ref로 지금 값을 본다 */
+  const stepRef = useRef(step);
+  stepRef.current = step;
   const [first, setFirst] = useState('');
   const [pin, setPin] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -78,8 +100,18 @@ export default function LockSetupScreen() {
     setSaving(true);
     void (async () => {
       try {
-        await setLockSecret(method, first);
+        /*
+         * ⚠ **힌트를 먼저, 비밀을 나중에** 저장한다(§7.1).
+         *
+         * 반대로 하면 힌트 저장이 실패했을 때 *되찾을 수 없는 잠금*이 남는다 — 잊으면 초기화뿐이다.
+         * 이 순서면 실패해도 잠금이 안 켜질 뿐이라 무해하다(`getLockConfig`는 해시 유무로 판정한다).
+         *
+         * 비밀을 **바꿀 때도** 힌트를 반드시 다시 봉인한다. 힌트는 옛 비밀을 XOR해 보관하므로
+         * 새 비밀만 저장하면 되찾기가 **옛 PIN을 보여준다.**
+         */
         await setLockHint(question, answer, first);
+        await setLockSecret(method, first);
+        await refreshLock();
         // 설정 화면으로 돌아간다. 방금 켠 잠금이 바로 덮치지 않게 게이트는 잠그지 않는다.
         router.back();
       } catch {
@@ -88,6 +120,44 @@ export default function LockSetupScreen() {
       }
     })();
   };
+
+  /** 현재 비밀을 통과했다. 끄기면 여기서 끝, 바꾸기면 새 비밀을 받으러 간다. */
+  const onVerified = () => {
+    if (intent === 'disable') {
+      void disableLock()
+        .then(() => refreshLock())
+        .then(() => router.back());
+      return;
+    }
+    setStep('choose');
+  };
+
+  /**
+   * 나가기. `enter` 이후에 나가면 **아무것도 저장되지 않는다** — 조용히 실패하면
+   * 사용자는 잠금을 켠 줄 안다. 한 번 물어보고 나간다.
+   */
+  const leave = useCallback(() => {
+    if (stepRef.current === 'verify' || stepRef.current === 'choose') {
+      router.back();
+      return;
+    }
+    Alert.alert(t('lock.setup.abandonTitle'), t('lock.setup.abandonBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('lock.setup.abandonConfirm'), style: 'destructive', onPress: () => router.back() },
+    ]);
+  }, [t]);
+
+  /*
+   * 안드로이드 하드웨어 뒤로가기도 같은 문을 지나야 한다.
+   * X만 막으면 뒤로가기로 그냥 빠져나가고, 그러면 물어보는 의미가 없다.
+   */
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      leave();
+      return true; // 기본 동작(그냥 나가기)을 막는다
+    });
+    return () => subscription.remove();
+  }, [leave]);
 
   const onPinChange = (next: string) => {
     setError(null);
@@ -111,13 +181,30 @@ export default function LockSetupScreen() {
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('common.close')}
-        onPress={() => router.back()}
+        onPress={leave}
         hitSlop={12}
       >
         <X size={24} color={colors.text} />
       </Pressable>
     </View>
   );
+
+  if (step === 'verify' && lock?.method != null) {
+    /*
+     * 잠금 화면을 그대로 쓴다. 같은 화면이어야 "지금 뭘 넣으라는 거지"를 겪지 않고,
+     * **backoff도 자동으로 공유**된다 — 설정이 잠금 화면보다 약한 문이 되면 안 된다(§7.1).
+     */
+    return (
+      <UnlockView
+        method={lock.method}
+        onUnlocked={onVerified}
+        onWiped={() => {
+          // 여기서 초기화까지 갔으면 잠금도 데이터도 없다. 더 물을 것이 없다.
+          void refreshLock().then(() => router.back());
+        }}
+      />
+    );
+  }
 
   if (step === 'choose') {
     return (

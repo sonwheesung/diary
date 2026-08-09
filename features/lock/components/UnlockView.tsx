@@ -1,4 +1,4 @@
-import { Fingerprint, Lock } from 'lucide-react-native';
+import { Lock } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   PATTERN_MIN_POINTS,
   PIN_LENGTH,
-  authenticateWithBiometric,
   getFailureState,
   recordFailure,
   resetFailures,
@@ -25,14 +24,13 @@ import { typography } from '@/theme/typography';
 
 interface UnlockViewProps {
   method: LockMethod;
-  biometric: boolean;
   onUnlocked: () => void;
   /** 초기화까지 갔을 때. 잠금이 사라지고 데이터도 비었으니 화면을 새로 그려야 한다 */
   onWiped: () => void;
 }
 
 /** 잠금 해제 화면. 라우트가 아니라 **덮개**다 — 뒤로가기나 딥링크로 지나칠 수 없어야 한다. */
-export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockViewProps) {
+export function UnlockView({ method, onUnlocked, onWiped }: UnlockViewProps) {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
@@ -87,23 +85,6 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
     },
     [blocked, onUnlocked, t],
   );
-
-  const tryBiometric = useCallback(async () => {
-    if (blocked) {
-      return;
-    }
-    if (await authenticateWithBiometric()) {
-      await resetFailures();
-      onUnlocked();
-    }
-  }, [blocked, onUnlocked]);
-
-  // 생체를 켜뒀다면 들어오자마자 한 번 물어본다 — 매번 눌러서 부르게 하면 켠 의미가 없다.
-  useEffect(() => {
-    if (biometric) {
-      void tryBiometric();
-    }
-  }, [biometric, tryBiometric]);
 
   const onPinChange = (next: string) => {
     setError(null);
@@ -169,17 +150,6 @@ export function UnlockView({ method, biometric, onUnlocked, onWiped }: UnlockVie
           error !== null && <Text style={styles.error}>{error}</Text>
         )}
 
-        {biometric && !blocked && (
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => void tryBiometric()}
-            style={styles.biometric}
-          >
-            <Fingerprint size={18} color={colors.accent} />
-            <Text style={styles.biometricLabel}>{t('lock.openWithBiometric')}</Text>
-          </Pressable>
-        )}
-
         <Pressable accessibilityRole="button" onPress={() => setHintOpen(true)} hitSlop={8}>
           <Text style={styles.forgot}>{t('lock.forgot')}</Text>
         </Pressable>
@@ -239,18 +209,5 @@ const createStyles = (colors: Palette) =>
     blocked: {
       ...typography.label,
       color: colors.danger,
-    },
-    biometric: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-      paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.sm,
-      borderRadius: radius.full,
-      backgroundColor: colors.surfaceMuted,
-    },
-    biometricLabel: {
-      ...typography.label,
-      color: colors.accent,
     },
   });

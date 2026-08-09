@@ -30,6 +30,7 @@ import { hasContent, usedImageIds } from '@/features/diary/blocks';
 import { BlockEditor } from '@/features/diary/components/BlockEditor';
 import { EmotionPicker } from '@/features/diary/components/EmotionPicker';
 import { TagInput } from '@/features/diary/components/TagInput';
+import { withExcursion } from '@/features/lock/excursion';
 import { emotionLabel } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
@@ -307,20 +308,29 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
   };
 
   const addImage = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
+    /*
+     * 권한 다이얼로그와 선택기는 앱을 백그라운드로 보낸다. 잠금은 나가면 즉시 걸리므로
+     * 감싸지 않으면 **사진을 넣을 때마다 잠금 화면을 만난다** — 사용자는 앱을 떠난 적이 없다(§7.1).
+     */
+    const result = await withExcursion(async () => {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        return null;
+      }
+      return ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        /*
+         * 여기서 압축하지 않는다(1 = 재인코딩 없음). 축소·압축은 `saveImage`가 한 번만 한다 —
+         * 여기서 0.8로 굽고 저장할 때 또 0.8로 구우면 화질만 두 번 깎이고 용량은 그만큼 안 준다.
+         */
+        quality: 1,
+      });
+    });
+
+    if (result === null) {
       Alert.alert(t('write.photoPermissionTitle'), t('write.photoPermissionBody'));
       return;
     }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      /*
-       * 여기서 압축하지 않는다(1 = 재인코딩 없음). 축소·압축은 `saveImage`가 한 번만 한다 —
-       * 여기서 0.8로 굽고 저장할 때 또 0.8로 구우면 화질만 두 번 깎이고 용량은 그만큼 안 준다.
-       */
-      quality: 1,
-    });
     if (result.canceled) {
       return;
     }

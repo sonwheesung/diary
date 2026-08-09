@@ -6,6 +6,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { useCallback, useEffect, useState } from 'react';
 
+import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
 import type { FailReason, Subject } from '@/lib/common-server/types';
 
@@ -99,7 +100,11 @@ export function useSupportAuth(): SupportAuth {
        */
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
-      const response = await GoogleSignin.signIn();
+      /*
+       * 계정 선택 창은 앱을 백그라운드로 보낸다. 잠금은 나가면 즉시 걸리므로 감싸지 않으면
+       * 로그인하고 돌아온 순간 잠금 화면을 만난다 — 사용자는 앱을 떠난 적이 없다(§7.1).
+       */
+      const response = await withExcursion(() => GoogleSignin.signIn());
       if (!isSuccessResponse(response)) {
         return 'cancelled'; // 사용자가 창을 닫음 — 오류 문구를 띄우지 않는다
       }

@@ -3,15 +3,17 @@ import { getDatabase } from '@/db/client';
 /**
  * 앱 설정 키-값 저장소.
  *
- * 조각이 아닌 값(알림 토글·다크모드·잠금 대기시간)이 여기 모인다.
+ * 조각이 아닌 값(알림 토글·다크모드·잠금 실패 횟수)이 여기 모인다.
  * **비밀은 여기 두지 않는다** — PIN 해시·암호화 키는 SecureStore가 맡는다(CLAUDE.md §7.1).
  * 섞어두면 무엇이 비밀인지 흐려지고, 백업에 실어도 되는지 판단할 수 없게 된다.
  */
 export const SETTING_KEYS = {
   /** 알림 토글. 지금은 화면만 있고 실제 발송은 하지 않는다(CLAUDE.md §3, §9) */
   notificationsEnabled: 'notifications_enabled',
-  /** 잠금까지의 대기 시간: 'immediate' | '1m' | '5m' (CLAUDE.md §7.1) */
-  lockDelay: 'lock_delay',
+  /*
+   * ⚠ 예전에 있던 `lock_delay`는 없앴다(2026-08-10) — 잠금은 나가면 즉시다.
+   * 이미 저장된 행은 아무도 읽지 않으니 그대로 둔다. 마이그레이션으로 지울 값이 아니다.
+   */
   /** 연속 실패 횟수. 지연(backoff) 계산에 쓴다 */
   lockFailCount: 'lock_fail_count',
   /** 이 시각(ms)까지는 시도를 막는다 */

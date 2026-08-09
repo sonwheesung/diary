@@ -1,14 +1,11 @@
 import * as Crypto from 'expo-crypto';
-import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 
 import { translate } from '@/lib/i18n';
 import {
   SETTING_KEYS,
   getNumberSetting,
-  getSetting,
   setNumberSetting,
-  setSetting,
 } from '@/features/settings/api/settings-store';
 
 /**
@@ -18,26 +15,20 @@ import {
  * 루팅·탈옥 기기나 기기 백업 추출로는 잠금을 우회해 읽을 수 있다. 사용자에게 "암호화된다"고
  * 표기하지 않는다 — 막는 위협은 "폰을 잠깐 남에게 보여줄 때"다.
  *
- * 비밀(해시·솔트)은 SecureStore에, 비밀이 아닌 설정(대기 시간·실패 횟수)은 app_settings에 둔다.
+ * 비밀(해시·솔트)은 SecureStore에, 비밀이 아닌 값(실패 횟수)은 app_settings에 둔다.
+ *
+ * 잠금은 **나가면 즉시** 걸린다 — 지연 설정도 생체인증도 없다(2026-08-10 결정).
  */
 
 const KEY_METHOD = 'jogak.lock.method';
 const KEY_SALT = 'jogak.lock.salt';
 const KEY_HASH = 'jogak.lock.hash';
-const KEY_BIOMETRIC = 'jogak.lock.biometric';
 const KEY_HINT_QUESTION = 'jogak.lock.hint.question';
 const KEY_HINT_SALT = 'jogak.lock.hint.salt';
 const KEY_HINT_HASH = 'jogak.lock.hint.hash';
 const KEY_HINT_CIPHER = 'jogak.lock.hint.cipher';
 
 export type LockMethod = 'pin' | 'pattern';
-export type LockDelay = 'immediate' | '1m' | '5m';
-
-export const LOCK_DELAY_MS: Record<LockDelay, number> = {
-  immediate: 0,
-  '1m': 60_000,
-  '5m': 300_000,
-};
 
 /**
  * 힌트 질문 목록.
@@ -89,9 +80,6 @@ const HASH_ROUNDS = 600;
 export interface LockConfig {
   enabled: boolean;
   method: LockMethod | null;
-  /** 생체인증 사용 여부. **단독 수단이 될 수 없다** — 항상 PIN/패턴이 함께 설정돼 있다 */
-  biometric: boolean;
-  delay: LockDelay;
 }
 
 async function hashSecret(secret: string, salt: string): Promise<string> {
@@ -106,24 +94,16 @@ function isLockMethod(value: string | null): value is LockMethod {
   return value === 'pin' || value === 'pattern';
 }
 
-function isLockDelay(value: string | null): value is LockDelay {
-  return value === 'immediate' || value === '1m' || value === '5m';
-}
-
 export async function getLockConfig(): Promise<LockConfig> {
-  const [method, hash, biometric, delay] = await Promise.all([
+  const [method, hash] = await Promise.all([
     SecureStore.getItemAsync(KEY_METHOD),
     SecureStore.getItemAsync(KEY_HASH),
-    SecureStore.getItemAsync(KEY_BIOMETRIC),
-    getSetting(SETTING_KEYS.lockDelay),
   ]);
 
   return {
     // 해시가 없으면 잠금이 걸려 있다고 볼 수 없다 — 열 방법이 없는 잠금은 사고다.
     enabled: isLockMethod(method) && hash !== null,
     method: isLockMethod(method) ? method : null,
-    biometric: biometric === 'true',
-    delay: isLockDelay(delay) ? delay : 'immediate',
   };
 }
 
@@ -156,7 +136,8 @@ export async function disableLock(): Promise<void> {
   await SecureStore.deleteItemAsync(KEY_METHOD);
   await SecureStore.deleteItemAsync(KEY_SALT);
   await SecureStore.deleteItemAsync(KEY_HASH);
-  await SecureStore.deleteItemAsync(KEY_BIOMETRIC);
+  // 생체인증은 없어졌지만(2026-08-10) 예전 버전이 남긴 키가 있을 수 있어 같이 지운다
+  await SecureStore.deleteItemAsync('jogak.lock.biometric');
   await SecureStore.deleteItemAsync(KEY_HINT_QUESTION);
   await SecureStore.deleteItemAsync(KEY_HINT_SALT);
   await SecureStore.deleteItemAsync(KEY_HINT_HASH);
@@ -251,33 +232,6 @@ export async function revealSecretWithHint(answer: string): Promise<string | nul
     return null;
   }
   return openSecret(cipher, normalized, salt);
-}
-
-export async function setBiometricEnabled(enabled: boolean): Promise<void> {
-  await SecureStore.setItemAsync(KEY_BIOMETRIC, enabled ? 'true' : 'false');
-}
-
-export async function setLockDelay(delay: LockDelay): Promise<void> {
-  await setSetting(SETTING_KEYS.lockDelay, delay);
-}
-
-/** 기기가 생체인증을 지원하고 실제로 등록돼 있는가. 둘 다여야 켤 수 있다. */
-export async function isBiometricAvailable(): Promise<boolean> {
-  const [hardware, enrolled] = await Promise.all([
-    LocalAuthentication.hasHardwareAsync(),
-    LocalAuthentication.isEnrolledAsync(),
-  ]);
-  return hardware && enrolled;
-}
-
-export async function authenticateWithBiometric(): Promise<boolean> {
-  const result = await LocalAuthentication.authenticateAsync({
-    promptMessage: translate('lock.biometricPrompt'),
-    // 생체가 실패했을 때 기기 암호로 넘어가면 우리 PIN/패턴을 우회하는 셈이 된다.
-    disableDeviceFallback: true,
-    cancelLabel: translate('lock.biometricCancel'),
-  });
-  return result.success;
 }
 
 /*
