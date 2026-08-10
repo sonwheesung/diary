@@ -167,11 +167,15 @@ Google Cloud → 인증 플랫폼 → **대상**의 게시 상태가 `테스트 
 | 어떤 빌드 | SHA-1 | 클라이언트 |
 |---|---|---|
 | 로컬 `npx expo run:android` | `7F:F6:08:2D:6A:E8:72:0F:10:70:A1:C5:20:53:17:E2:09:74:F7:1B` | `jogak-android` ✅ |
-| EAS `development` APK | `5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25` | ❌ 없음 — 필요하면 만든다 |
+| EAS `development` APK | `5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25` | `jogak-android-eas` ✅ |
 | **Play 배포(내부 테스트 포함)** | `CD:86:BB:DB:BB:78:A0:CA:6D:38:1C:8A:DD:B6:2F:E8:37:9E:AC:CB` | `jogak-android-play` ✅ |
 
 Play 앱 서명 SHA-1은 **Play Console → Google Play로 보호됨 → Play 스토어 보호 → Play 앱 서명 관리**
 → 기존 키의 *SHA-1 인증서 지문*(클릭하면 클립보드로 복사된다). 화면에 글자로 렌더링되지 않는다.
+
+✅ **2026-08-10 로그인 성공.** `jogak-android-eas`를 추가하자 에뮬레이터에서 전 경로가 통과했다 —
+구글 계정 선택 → `idToken` → `/auth/login` → 세션 토큰 → 문의 폼. **서버·audience는 처음부터 정상이었고
+원인은 SHA-1 하나였다.**
 
 ⚠ **실제로 겪음(2026-08-09).** 에뮬레이터에 EAS `development` APK를 깔고 로그인했더니 실패했다.
 `unauthorized`가 아니라 포괄 오류였는데 — 구글이 `DEVELOPER_ERROR`로 **서버에 닿기도 전에** 끊은 것이다.

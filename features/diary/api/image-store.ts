@@ -1,6 +1,5 @@
 import * as Crypto from 'expo-crypto';
 import { Directory, File, Paths } from 'expo-file-system';
-import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
 
 import { getDatabase } from '@/db/client';
 import type { DiaryImage, DiaryImageRow } from '@/features/diary/types';
@@ -59,6 +58,11 @@ function extensionOf(uri: string): string {
  * 이미 작은 사진을 다시 인코딩하면 화질만 깎이고 용량은 줄지 않는다.
  *
  * 실패하면 원본을 그대로 쓴다. 사진을 줄이지 못한 것보다 **사진을 잃는 것이 훨씬 나쁘다.**
+ *
+ * ⚠ `expo-image-manipulator`를 **동적으로 불러온다.** 파일 상단에서 `import`하면
+ *   네이티브 모듈이 없는 빌드에서 *모듈 로드 시점에* `Cannot find native module`이 터진다 —
+ *   try/catch가 닿지 않는 자리다. 실제로 겪었다(2026-08-10): 리사이즈를 넣은 커밋을
+ *   재빌드 전 dev 빌드에서 열자 앱이 바로 죽었다. 동적 import면 그 실패가 여기 catch로 들어온다.
  */
 async function shrinkIfNeeded(params: {
   uri: string;
@@ -74,6 +78,7 @@ async function shrinkIfNeeded(params: {
   }
 
   try {
+    const { SaveFormat, manipulateAsync } = await import('expo-image-manipulator');
     // 긴 변만 지정하면 나머지는 비율대로 계산된다(ActionResize 문서)
     const resize = (width ?? 0) >= (height ?? 0) ? { width: MAX_EDGE } : { height: MAX_EDGE };
     const result = await manipulateAsync(uri, [{ resize }], {
