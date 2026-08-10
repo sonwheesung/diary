@@ -394,6 +394,35 @@ Kotlin 2.3.0으로 컴파일돼 있는데 Expo SDK 54는 2.1.20이라 `compileDe
 **해시에 대한 정직한 한 줄**: 반복 해시를 쓰지만 이건 KDF가 아니다. 4자리 PIN은 해시를
 탈취당하면 전수 대입에 버티지 못한다. 해시의 목적은 "평문을 저장하지 않는다"까지다.
 
+### 안드로이드 권한은 **빼는 쪽으로** 관리한다 (2026-08-10)
+
+라이브러리가 자기 매니페스트에 권한을 넣으면 우리가 안 써도 앱에 박힌다. 일기 앱에 마이크·카메라가
+보이면 그 자체로 신뢰를 깎고, Play 정책에도 걸린다.
+
+`app.json`의 `android.blockedPermissions`와 플러그인 옵션으로 5개를 걷어냈다:
+
+| 뺀 것 | 어디서 들어왔나 |
+|---|---|
+| `READ_MEDIA_IMAGES` | expo-image-picker. **Play가 "빈번하지 않은 접근은 사진 선택 도구를 쓰라"고 명시한 그 권한** |
+| `RECORD_AUDIO` · `CAMERA` | expo-image-picker (`microphonePermission`·`cameraPermission: false`) |
+| `USE_BIOMETRIC` · `USE_FINGERPRINT` | **`expo-secure-store`가 `androidx.biometric`을 끌어온다.** 생체인증 코드를 지워도 남는다 |
+
+**검증은 EAS 빌드 전에 로컬에서 한다** — 20분을 쓰고 매니페스트를 확인할 이유가 없다:
+
+```
+npx expo prebuild --platform android --no-install
+grep uses-permission android/app/src/main/AndroidManifest.xml     # tools:node="remove" 확인
+cd android && ANDROID_HOME=<sdk> ./gradlew processDebugMainManifest --rerun-tasks
+grep -o 'android:name="[a-z.]*permission[^"]*"'   app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml
+```
+
+⚠ **소스 매니페스트만 보고 판단하지 않는다.** `blockedPermissions`는 지우는 게 아니라
+`tools:node="remove"`를 붙이므로 **문자열은 그대로 남는다** — 병합 결과를 봐야 실제로 빠졌는지 안다.
+(실제로 한 번 "아직 있음"으로 잘못 읽었다.)
+
+⏭ `READ_EXTERNAL_STORAGE`·`WRITE_EXTERNAL_STORAGE`는 남겼다. 구버전 안드로이드에서 사진 선택에
+필요할 수 있어 확인 전까지 건드리지 않는다.
+
 ### ⚠ 잠금은 암호화가 아니다
 
 PIN·패턴은 **UI 게이트**일 뿐이다. 로컬 SQLite 파일 자체는 평문이므로, 루팅·탈옥 기기나 기기 백업 추출로는
