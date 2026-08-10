@@ -6,7 +6,12 @@
  *   여기서는 한쪽만 정본으로 두고 나머지를 **뽑아낸다** — 어긋날 수가 없다.
  *
  * 실행: npm run legal:html
- * 결과: legal/privacy.html  (어디에 올려도 되는 의존성 0의 정적 파일)
+ * 결과: docs/privacy.html · docs/delete-account.html
+ *       (어디에 올려도 되는 의존성 0의 정적 파일)
+ *
+ * 계정 삭제 안내가 여기 함께 있는 이유: Play 데이터 보안 선언이 **웹 삭제 URL**을 요구한다.
+ * 앱 안의 탈퇴만으로는 부족하다 — 앱을 이미 지운 사람이 요청할 길이 있어야 한다.
+ * 사업자 정보가 두 문서에서 어긋나지 않도록 **같은 정본에서 함께** 뽑는다.
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -19,17 +24,18 @@ const json = execFileSync(
     '--experimental-strip-types',
     '--no-warnings',
     '-e',
-    "import('./features/legal/legal-text.ts').then(m => console.log(JSON.stringify({ doc: m.PRIVACY, operator: m.OPERATOR })))",
+    "import('./features/legal/legal-text.ts').then(m => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, operator: m.OPERATOR })))",
   ],
   { encoding: 'utf8', cwd: process.cwd() },
 );
-const { doc, operator } = JSON.parse(json);
+const { privacy, deleteAccount, operator } = JSON.parse(json);
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** 본문 줄 안의 URL을 링크로. 처리방침에 Google 정책 링크가 들어간다 */
 const linkify = (s) => esc(s).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" rel="noopener">$1</a>');
 
+const render = (doc) => {
 const sections = doc.sections
   .map(
     (s) => `    <section>
@@ -39,7 +45,7 @@ ${s.body.map((line) => `      <p>${linkify(line)}</p>`).join('\n')}
   )
   .join('\n');
 
-const html = `<!doctype html>
+return `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -87,6 +93,7 @@ ${sections}
 </body>
 </html>
 `;
+};
 
 /*
  * `docs/privacy.html` — GitHub Pages(`docs/` 소스)로 게시된다.
@@ -96,8 +103,13 @@ ${sections}
  * 그 순간 게시본이 정본에서 드리프트한다 — 배구명가에서 정확히 그렇게 법정 필수 항목이 누락됐다.
  */
 mkdirSync('docs', { recursive: true });
-writeFileSync('docs/privacy.html', html, 'utf8');
-console.log(
-  `docs/privacy.html 생성 — ${doc.sections.length}개 섹션, ${(html.length / 1024).toFixed(1)}KB`,
-);
-console.log('게시: https://sonwheesung.github.io/diary/privacy.html (push하면 반영)');
+for (const [file, doc] of [
+  ['privacy.html', privacy],
+  ['delete-account.html', deleteAccount],
+]) {
+  const out = render(doc);
+  writeFileSync(`docs/${file}`, out, 'utf8');
+  console.log(`docs/${file} 생성 — ${doc.sections.length}개 섹션, ${(out.length / 1024).toFixed(1)}KB`);
+}
+console.log('게시: https://sonwheesung.github.io/diary/privacy.html');
+console.log('      https://sonwheesung.github.io/diary/delete-account.html  (push하면 반영)');
