@@ -75,7 +75,8 @@ AI 리포트는 앱이 로컬 평문을 서버 프록시로 흘려보내 만들�
 - **구현 현황(2026-08-09)**: 공지·문의 화면과 서버 전송, **구글 로그인·로그아웃·탈퇴**까지 붙었다
   (`docs/SUPPORT_SYSTEM.md`). 세션 판정과 구글 SDK 호출은 `features/support/auth-gate.ts`
   **한 파일**이 갖고, 화면은 상태만 보고 갈라진다.
-  ⚠ **서버에 `jogak`이 등록되기 전에는 로그인이 성공할 수 없다** — `bootstrap?app=jogak`이 아직 404다.
+  ~~⚠ **서버에 `jogak`이 등록되기 전에는 로그인이 성공할 수 없다** — `bootstrap?app=jogak`이 아직 404다.~~
+  → **해소(2026-08-11 실측)**: `bootstrap?app=jogak`이 **200**이다. 앱 등록이 끝나 로그인 경로가 열렸다.
 - **탈퇴는 선택이 아니다.** 계정을 만드는 앱은 Play 정책상 앱 안에 삭제 경로가 있어야 한다.
   로그인을 붙이는 커밋에 탈퇴를 같이 넣는다 — 나중에 붙이면 심사에서 막힌다.
 
@@ -185,7 +186,7 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
 | 상태 | Zustand | ✅ 설치 |
 | **로컬 DB** | **expo-sqlite** | ✅ 설치 — 검색·캘린더·연속일 집계에 쿼리가 필요(2026-08-07 결정) |
 | 잠금 저장 | expo-secure-store | ✅ 설치 — PIN·패턴 해시, 암호화 키 보관 |
-| 생체인증 | expo-local-authentication | ✅ 설치 |
+| ~~생체인증~~ | ~~expo-local-authentication~~ | 🚫 **제거(2026-08-10 결정 §7.1). 패키지도 미설치** — 이 줄이 "✅ 설치"로 남아 있었다(2026-08-11 정정) |
 | 광고 | react-native-google-mobile-ads (AdMob) | ✅ 설치 — **네이티브 모듈이라 Expo Go 불가**. 이것 때문에 dev build로 전환(2026-08-09) |
 | 개발 실행 | ~~Expo Go~~ → **dev build** (`npx expo run:android`) | 2026-08-09 전환. `android/`는 CNG 산출물이라 커밋 안 함 |
 | 구독 | react-native-purchases (RevenueCat) | ❌ 미설치. common_server PLAN Phase 9와 짝 |
