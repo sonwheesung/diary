@@ -1,12 +1,8 @@
-import { and, eq } from 'drizzle-orm';
-
-import { db } from '@/db';
-import { generationParts, generations, vaultGrants, vaults } from '@/db/schema';
 import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
-import { removeObjects, storageConfigured } from '@/lib/storage';
-import { authKeyMatches, ensureGrant, findVault } from '@/lib/vault';
+import { storageConfigured } from '@/lib/storage';
+import { authKeyMatches, ensureGrant, findVault, purgeVault } from '@/lib/vault';
 
 export const dynamic = 'force-dynamic';
 
@@ -82,30 +78,4 @@ export async function POST(req: Request) {
     reportError(error, 'backup/delete');
     return fail('error');
   }
-}
-
-/**
- * 객체와 행을 지우고 **툼스톤을 남긴다.**
- *
- * ⚠ 행까지 지우면 404밖에 못 준다. 404를 받은 사용자는 자기 일기가 지워졌다는 사실을
- *   **영원히 모른다** — "서버가 이상한가 보다"로 읽는다. 410을 주려면 이 행이 필요하다.
- * ⚠ 툼스톤에 `subject_id`를 남기지 않는다(`vault_grants`를 함께 지운다) —
- *   탈퇴자의 식별자가 남으면 "지체 없이 파기"와 충돌한다.
- */
-export async function purgeVault(vaultId: string): Promise<void> {
-  const parts = await db
-    .select({ objectPath: generationParts.objectPath })
-    .from(generationParts)
-    .where(eq(generationParts.vaultId, vaultId));
-
-  // 객체를 먼저 지운다 — 행을 먼저 지우면 **경로를 잃어 객체가 영원히 남는다.**
-  await removeObjects(parts.map((part) => part.objectPath));
-
-  await db.delete(generationParts).where(eq(generationParts.vaultId, vaultId));
-  await db.delete(generations).where(eq(generations.vaultId, vaultId));
-  await db.delete(vaultGrants).where(eq(vaultGrants.vaultId, vaultId));
-  await db
-    .update(vaults)
-    .set({ purgedAt: new Date(), proExpiresAt: null })
-    .where(and(eq(vaults.id, vaultId)));
 }

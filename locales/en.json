@@ -346,6 +346,9 @@
       "error": "Something went wrong.",
       "no-keys": "There is no recovery code on this device.",
       "unreadable": "This backup was made by a newer version. Please update the app."
-    }
+    },
+    "graceTitle": "Your backup will be deleted in {{days}} days",
+    "graceBody": "It will be removed on {{date}}. Resubscribing before then keeps it.",
+    "offGraceNotice": "If your subscription ends, the backup is deleted after {{days}} days. This notice may not reach you unless you open the app."
   }
 }

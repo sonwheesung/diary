@@ -5,7 +5,15 @@ import { generationParts, generations, vaults } from '@/db/schema';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { removeObjects, storageConfigured } from '@/lib/storage';
-import { purgeVault } from '@/app/api/v1/backup/delete/route';
+import { purgeVault } from '@/lib/vault';
+import {
+  ABANDONED_MS,
+  GRACE_MS,
+  KEEP_GENERATIONS,
+  RESERVED_TTL_MS,
+  TOMBSTONE_TTL_MS,
+} from '@/lib/policy';
+
 
 export const dynamic = 'force-dynamic';
 
@@ -19,41 +27,7 @@ export const dynamic = 'force-dynamic';
  *   그래서 응답에 처리 건수를 담는다. 수동 호출로 확인할 수 있어야 한다.
  */
 
-/**
- * `reserved`인 채 방치된 파트를 치우는 기준.
- *
- * 서명 URL TTL이 2시간이라 그 뒤엔 못 올린다. 그래도 24시간을 두는 건
- * **느린 재시도를 죽이지 않기 위해서**다 — `reserve`는 멱등이라 URL을 재발급받아 이어갈 수 있다.
- */
-const RESERVED_TTL_MS = 24 * 60 * 60 * 1000;
 
-/**
- * 보관하는 세대 수.
- *
- * ⚠ 잘못된 복원을 되돌릴 여지를 남긴다. 1개만 두면 "복원했더니 아니었다"에 답이 없다.
- */
-const KEEP_GENERATIONS = 3;
-
-/** 툼스톤(파기 기록)을 남겨두는 기간. 이걸 지나면 행도 지운다 */
-const TOMBSTONE_TTL_MS = 365 * 24 * 60 * 60 * 1000;
-
-/**
- * 구독이 끊긴 뒤 백업을 지우기까지의 유예.
- *
- * ⚠ **시계의 출처는 `vaults.pro_expires_at` 스냅샷이다.** 만료는 이벤트로 오지 않는다 —
- *   common_server가 `active`를 저장하지 않고 읽을 때 계산하므로 만료 순간에 DB를 쓰는
- *   주체가 없다. 그래서 introspect로 받아둔 값을 우리가 센다.
- */
-const GRACE_MS = 90 * 24 * 60 * 60 * 1000;
-
-/**
- * 접근이 끊긴 금고를 정리하는 기준.
- *
- * ⚠ **탈퇴 없이 앱만 지운 사용자의 금고는 아무도 지워주지 않는다.**
- *   `common_server`가 수정 금지라 아웃박스를 못 만들어서, 이게 유일한 안전망이다.
- *   처리방침에 이 기간을 명시한다.
- */
-const ABANDONED_MS = 3 * 365 * 24 * 60 * 60 * 1000;
 
 export async function POST(req: Request) {
   const secret = process.env.CRON_SECRET ?? '';

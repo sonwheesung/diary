@@ -33,6 +33,11 @@ interface EntitlementState {
   hydrated: boolean;
   /** 결제 실패 유예 중. 활성이지만 곧 끊긴다는 안내를 띄울 수 있다 */
   inGracePeriod: boolean;
+  /**
+   * 캐시된 만료 시각(ISO 또는 `'never'`). **백업 파기 예정일의 유일한 근거다** —
+   * 만료는 이벤트로 오지 않으므로 이 값에서 앱이 직접 센다.
+   */
+  proUntil: string | null;
   /** 캐시에서 즉시 판정. 앱 시작 시 1회 */
   hydrate: () => Promise<void>;
   /** 서버 조회 후 캐시 갱신. 실패하면 캐시를 **건드리지 않는다** */
@@ -55,11 +60,12 @@ export const useEntitlementStore = create<EntitlementState>((set) => ({
   pro: false,
   hydrated: false,
   inGracePeriod: false,
+  proUntil: null,
 
   hydrate: async () => {
     try {
       const until = await getSetting(SETTING_KEYS.proUntil);
-      set({ pro: stillValid(until), hydrated: true });
+      set({ pro: stillValid(until), proUntil: until, hydrated: true });
     } catch {
       // 캐시를 못 읽으면 무료로 본다. 곧 이어지는 refresh가 바로잡는다.
       set({ hydrated: true });
@@ -78,16 +84,17 @@ export const useEntitlementStore = create<EntitlementState>((set) => ({
     const pro = result.entitlements.pro;
     if (pro === undefined || !pro.active) {
       await setSetting(SETTING_KEYS.proUntil, '');
-      set({ pro: false, inGracePeriod: false, hydrated: true });
+      set({ pro: false, inGracePeriod: false, proUntil: null, hydrated: true });
       return;
     }
-    await setSetting(SETTING_KEYS.proUntil, pro.expiresAt ?? NEVER);
-    set({ pro: true, inGracePeriod: pro.inGracePeriod, hydrated: true });
+    const until = pro.expiresAt ?? NEVER;
+    await setSetting(SETTING_KEYS.proUntil, until);
+    set({ pro: true, inGracePeriod: pro.inGracePeriod, proUntil: until, hydrated: true });
   },
 
   clear: async () => {
     await setSetting(SETTING_KEYS.proUntil, '').catch(() => undefined);
-    set({ pro: false, inGracePeriod: false, hydrated: true });
+    set({ pro: false, inGracePeriod: false, proUntil: null, hydrated: true });
   },
 }));
 

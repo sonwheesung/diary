@@ -54,6 +54,25 @@ export default function RootLayout() {
     void hydrateEntitlement().then(() => refreshEntitlement());
   }, [hydrateEntitlement, refreshEntitlement]);
 
+  /*
+   * 실기기 점검 — **명시적으로 켰을 때만** 돈다(`EXPO_PUBLIC_DEVICE_CHECK=1`).
+   *
+   * ⚠ `__DEV__`로 게이트하면 **릴리스 번들에서 잴 수 없다.** 암호 처리량은 dev 번들이
+   *   프로덕션보다 훨씬 느려서(Hermes가 dev에서는 런타임 lazy 컴파일) dev 수치로
+   *   라이브러리를 판정하면 틀린 결론이 나온다. 그래서 환경변수로 연다.
+   *
+   * ⚠ 기본값이 꺼짐이어야 한다 — 켜진 채 출시하면 매 실행마다 5MB를 올리고 DB를 스왑한다.
+   */
+  useEffect(() => {
+    if (process.env.EXPO_PUBLIC_DEVICE_CHECK !== '1') return;
+    const timer = setTimeout(() => {
+      void import('@/features/backup/api/device-check').then(({ runDeviceChecks }) =>
+        runDeviceChecks(process.env.EXPO_PUBLIC_BACKUP_SERVER_URL ?? ''),
+      );
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // 저장된 언어 선택을 읽어 적용한다. 읽기 전에는 기기 언어로 그려진다.
   const loadLanguage = useLanguageStore((state) => state.load);
   useEffect(() => {

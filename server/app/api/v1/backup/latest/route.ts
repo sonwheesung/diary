@@ -6,9 +6,11 @@ import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { signDownload, storageConfigured } from '@/lib/storage';
+import { GRACE_MS } from '@/lib/policy';
 import { findVault, touchVault } from '@/lib/vault';
 
 export const dynamic = 'force-dynamic';
+
 
 /**
  * 복원 — 가장 최근에 **완성된** 세대의 다운로드 URL을 준다.
@@ -124,7 +126,18 @@ export async function POST(req: Request) {
       downloads.push({ part: part.part, url });
     }
 
+    /*
+     * 유예 상태를 함께 준다 — 앱이 배너와 삭제 예정일을 띄우는 유일한 근거다.
+     *
+     * ⚠ **만료는 이벤트로 오지 않는다**(common_server가 `active`를 저장하지 않고 읽을 때
+     *   계산한다). introspect로 받아 스냅샷해둔 값에서 우리가 센다.
+     */
+    const purgeAt =
+      vault.proExpiresAt === null ? null : new Date(vault.proExpiresAt.getTime() + GRACE_MS);
+
     return ok({
+      /** 구독이 끊긴 뒤 이 시각에 백업이 파기된다. `null`이면 구독 중 */
+      purgeAt: purgeAt === null || purgeAt.getTime() < Date.now() ? null : purgeAt.toISOString(),
       seq: generation.seq,
       genId: generation.genId,
       partCount: generation.partCount,

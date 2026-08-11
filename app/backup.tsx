@@ -20,6 +20,7 @@ import { runBackup } from '@/features/backup/api/run-backup';
 import type { BackupProgress } from '@/features/backup/api/run-backup';
 import { RecoveryCodeView } from '@/features/backup/components/RecoveryCodeView';
 import { useEntitlementStore } from '@/features/entitlement/store';
+import { GRACE_DAYS, daysUntil, purgeAtFrom } from '@/features/backup/policy';
 import { formatDateTime } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { radius, spacing } from '@/theme/spacing';
@@ -39,6 +40,12 @@ export default function BackupScreen() {
   const colors = useColors();
   const styles = useStyles(createStyles);
   const pro = useEntitlementStore((s) => s.pro);
+  const proUntil = useEntitlementStore((s) => s.proUntil);
+  /*
+   * 구독이 끊긴 뒤 파기까지 남은 시간. **만료는 이벤트로 오지 않으므로**
+   * 캐시된 만료 시각에서 앱이 직접 센다(`features/backup/policy.ts`).
+   */
+  const purgeAt = pro ? null : purgeAtFrom(proUntil);
 
   const [state, setState] = useState<BackupState | null>(null);
   const [code, setCode] = useState<string | null>(null);
@@ -122,6 +129,22 @@ export default function BackupScreen() {
         <Text style={styles.notice}>{t('backup.noticeMetadata')}</Text>
       </View>
 
+      {/*
+        ⚠ 유예 안내. `CLAUDE.md` §7.2의 "반드시 알린다"는 지킬 수 없어서 정정했고,
+          그 자리를 이게 대신한다 — **못 하는 것도 같이 적는다.**
+          폰을 잃은 사람은 앱을 안 열어서 이 배너가 닿지 않는다.
+      */}
+      {purgeAt !== null && state?.enabled === true && (
+        <View style={styles.graceBox}>
+          <Text style={styles.graceTitle}>
+            {t('backup.graceTitle', { days: daysUntil(purgeAt) })}
+          </Text>
+          <Text style={styles.graceBody}>
+            {t('backup.graceBody', { date: formatDateTime(purgeAt) })}
+          </Text>
+        </View>
+      )}
+
       {state === null ? (
         <ActivityIndicator color={colors.accentMuted} />
       ) : state.enabled ? (
@@ -189,6 +212,11 @@ export default function BackupScreen() {
             <CloudUpload size={26} color={colors.accent} />
           </View>
           <Text style={styles.emptyBody}>{t('backup.offBody')}</Text>
+          {/*
+            ⚠ **켜기 전에** 말한다. 나중에 배너로만 알리면 폰을 잃은 사람에게는 닿지 않는다 —
+              그래서 "앱을 열지 않으면 안내가 닿지 않는다"까지 여기서 같이 적는다.
+          */}
+          <Text style={styles.subtle}>{t('backup.offGraceNotice', { days: GRACE_DAYS })}</Text>
           <Button
             label={t('backup.turnOn')}
             onPress={() => void enable()}
@@ -263,6 +291,23 @@ const createStyles = (colors: Palette) =>
     statusValue: {
       ...typography.label,
       color: colors.text,
+    },
+    graceBox: {
+      gap: spacing.xs,
+      padding: spacing.md,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: colors.danger,
+      backgroundColor: colors.surface,
+    },
+    graceTitle: {
+      ...typography.label,
+      color: colors.danger,
+    },
+    graceBody: {
+      ...typography.caption,
+      color: colors.textMuted,
+      lineHeight: 19,
     },
     warnRow: {
       flexDirection: 'row',

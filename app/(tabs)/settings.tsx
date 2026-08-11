@@ -322,6 +322,35 @@ export default function SettingsScreen() {
         onClose={() => setLanguageSheetOpen(false)}
       />
 
+      {/*
+        ⚠ **개발 빌드에서만 보인다.** 실기기에서만 답이 나오는 세 가지를 재는 진단이다 —
+          암호 처리량 · RN의 큰 바이너리 PUT · backupDatabaseAsync가 열린 커넥션을 받는가.
+          결과는 `adb logcat -s ReactNativeJS`로 읽는다(화면에 띄우면 i18n이 필요하고,
+          이건 사용자에게 보일 것이 아니다).
+      */}
+      {__DEV__ && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>DEV</Text>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => {
+              void import('@/features/backup/api/device-check').then(({ runDeviceChecks }) =>
+                runDeviceChecks(process.env.EXPO_PUBLIC_BACKUP_SERVER_URL ?? ''),
+              );
+            }}
+            style={styles.row}
+          >
+            <View style={styles.rowIcon}>
+              <CloudUpload size={18} color={colors.accent} />
+            </View>
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitle}>백업 실기기 점검 (logcat)</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textMuted} />
+          </Pressable>
+        </View>
+      )}
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionAbout')}</Text>
         <Pressable
