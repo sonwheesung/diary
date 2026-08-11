@@ -202,6 +202,19 @@ export default function SupportScreen() {
           <Text style={styles.gateBody}>{t('support.loginRequiredBody')}</Text>
           {/* 일기를 쓰는 길에는 로그인이 없다는 것을 여기서 못 박는다(기둥 1) */}
           <Text style={styles.gateNote}>{t('support.loginNotRequiredForDiary')}</Text>
+          {/*
+            수집이 실제로 시작되는 지점이 여기다 — 버튼을 누르는 순간 이메일과 구글 sub를 받는다.
+            그런데 지금까지 이 화면에는 고지가 한 줄도 없었고, 처리방침은 설정 탭에서만 닿았다.
+            무엇을 받는지·왜 받는지·언제 지우는지를 **누르기 전에** 여기서 밝힌다.
+          */}
+          <Text style={styles.gateNote}>{t('support.loginPrivacyNote')}</Text>
+          <Pressable
+            accessibilityRole="link"
+            onPress={() => router.push('/privacy')}
+            hitSlop={8}
+          >
+            <Text style={styles.gateLink}>{t('settings.privacy')}</Text>
+          </Pressable>
           <View style={styles.gateAction}>
             <Button
               label={t('support.loginButton')}
@@ -387,6 +400,12 @@ const createStyles = (colors: Palette) =>
       color: colors.textMuted,
       textAlign: 'center',
       lineHeight: 19,
+    },
+    gateLink: {
+      ...typography.caption,
+      color: colors.accent,
+      textAlign: 'center',
+      textDecorationLine: 'underline',
     },
     gateAction: {
       alignSelf: 'stretch',
