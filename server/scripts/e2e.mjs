@@ -180,7 +180,13 @@ await check('큰 파트 — 5MB 서명 URL PUT (Vercel 4.5MB 한도 밖임을 �
   const committed = await api('commit', { vaultId: bigVault, seq: 1, genId });
   assert(committed.status === 200, `commit HTTP ${committed.status} ${JSON.stringify(committed.json)}`);
   assert(committed.json.totalBytes === big, `totalBytes=${committed.json.totalBytes}`);
-  console.log(`       5MB 업로드 ${seconds.toFixed(2)}초 (로컬 루프백 — 실망 속도가 아니다)`);
+  /*
+   * ⚠ 어디에 올렸는지 함께 찍는다. 로컬 스택이면 루프백이라 이 숫자는 실망 속도가 아니고,
+   *   클라우드면 이 개발 머신 기준의 실제 속도다 — 구분 없이 숫자만 남기면 나중에 오독한다.
+   *   그리고 **기기 속도는 아니다.** 그건 device-check가 잰다.
+   */
+  const target = new URL(reachable(uploads[0].signedUrl)).host;
+  console.log(`       5MB 업로드 ${seconds.toFixed(2)}초 → ${target}`);
 });
 
 // ── 7. 읽기는 grant를 요구하지 않는다 (순환 제거 확인) ────────────────────────
