@@ -6,14 +6,17 @@
 #   여기서 도는 Storage는 프로덕션과 같은 구현이다.
 project_id = "jogak"
 
+# ⚠ 기본 포트(5432x)는 다른 프로젝트의 Supabase 스택이 이미 쓰고 있다.
+#   544xx 대역으로 옮겨 공존시킨다 — 남의 스택을 내리지 않는다.
+
 [api]
 enabled = true
-port = 54321
+port = 54421
 schemas = ["public", "storage"]
 max_rows = 1000
 
 [db]
-port = 54322
+port = 54422
 # ⚠ 프로덕션 Supabase와 major를 맞춘다. 다르면 로컬에서 통과한 DDL이 배포에서 깨질 수 있다.
 major_version = 17
 
@@ -25,11 +28,13 @@ file_size_limit = "20MiB"
 
 [studio]
 enabled = true
-port = 54323
+port = 54423
 
-# 조각 서버는 자체 로그인을 만들지 않는다. 신원의 단일 진실은 common_server다(CLAUDE.md §5).
+# ⚠ 조각 서버는 **자체 로그인을 만들지 않는다** — 신원의 단일 진실은 common_server다(§5).
+#   그런데 로컬 스택에서는 이 서비스가 API 키(anon·service_role)를 발급하는 주체라,
+#   끄면 service_role 키가 아예 안 나와 Storage에 붙을 수 없다. 켜두되 **쓰지 않는다.**
 [auth]
-enabled = false
+enabled = true
 
 [analytics]
 enabled = false

@@ -9,7 +9,7 @@ import * as schema from './schema';
 // 연결은 첫 쿼리 때 시도되고, 실패는 /api/health 가 db:"down" 으로 보고한다.
 // 기본값은 Supabase 로컬 스택(`supabase start`)의 포트다.
 const DATABASE_URL =
-  process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
+  process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54422/postgres';
 
 const g = globalThis as unknown as { __pg?: ReturnType<typeof postgres> };
 // prepare:false — Supabase Transaction 풀러(:6543)는 prepared statement 미지원이라 필수.

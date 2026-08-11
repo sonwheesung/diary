@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start -p 3200",
     "typecheck": "tsc --noEmit",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "e2e": "node scripts/e2e.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",

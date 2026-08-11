@@ -78,6 +78,17 @@ export async function identify(req: Request): Promise<Identity | AuthFailure> {
     return 'unauthenticated';
   }
 
+  /*
+   * 로컬 왕복 검증용 우회. common_server를 함께 띄우지 않고 **서버 계약만** 시험할 때 쓴다.
+   *
+   * ⚠ 두 겹으로 막는다: 환경변수를 **명시적으로** 켜야 하고, 프로덕션 빌드에서는
+   *   아예 무시한다. 기본값이 안전한 쪽이어야 한다 — 실수로 빠뜨렸을 때 잃는 것이
+   *   "테스트 편의"와 "전 사용자 금고"로 크게 다르다.
+   */
+  if (process.env.AUTH_STUB === '1' && process.env.NODE_ENV !== 'production') {
+    return { subjectId: `stub:${token}`, pro: true, proExpiresAt: null };
+  }
+
   const hit = cache.get(token);
   if (hit !== undefined && Date.now() - hit.at < CACHE_TTL_MS) {
     return hit.identity;
