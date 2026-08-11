@@ -11,6 +11,7 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "check:i18n": "node scripts/check-i18n.mjs",
+    "check:i18n-roundtrip": "node --experimental-strip-types --no-warnings scripts/check-i18n-roundtrip.mjs",
     "check:backup-crypto": "node --experimental-strip-types --no-warnings scripts/check-backup-crypto.mjs",
     "check:bundle": "node scripts/check-bundle.mjs",
     "lint": "eslint .",

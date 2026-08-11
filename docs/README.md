@@ -20,7 +20,7 @@
 | `AUTH_SYSTEM.md` | 구글 로그인·subject 토큰 | ❌ 미작성 |
 | `LOCK_SYSTEM.md` | 앱 잠금 — PIN·패턴(3×3)·생체·자동잠금·실패 처리 (정책은 CLAUDE.md §7.1) | ❌ 미작성 |
 | `MONETIZATION_SYSTEM.md` | 구독 상품·RevenueCat·엔타이틀먼트·광고 정책 상세 | ❌ 미작성 |
-| `BACKUP_SYSTEM.md` | 백업/복원 단위·충돌 규칙·키 관리 (정책은 ARCHITECTURE §6) | ❌ 미작성 |
+| [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) | 백업/복원 — 키 유도·봉투·매니페스트·서버 계약·전체 교체 (정책은 CLAUDE.md §5.1) | ✅ |
 | `AI_REPORT_SYSTEM.md` | 주간/월간/연간 리포트 생성·비용·계층 요약 (정책은 ARCHITECTURE §6) | ❌ 미작성 |
 | `UI_GUIDE.md` | 컬러·타이포·여백·공통 컴포넌트 사용법 | ❌ 미작성 |
 | `CHANGELOG.md` | 릴리스 변경 이력 | ❌ 미작성(첫 빌드 시점부터) |
@@ -51,12 +51,16 @@
 | Calendar | ✅ | 월 격자(쓴 날 점 표시)·날짜 선택·그날 조각 카드·빈 날엔 그 날짜로 쓰기 |
 | Search | ✅ | 제목·본문·태그 부분 문자열. 250ms 디바운스. 빈 검색어면 자주 쓴 태그를 보여준다 |
 | 모든 조각 목록(홈의 더보기) | ✅ | `app/diaries.tsx` — 달 머리글 + 20개씩 '더 보기' |
-| Settings(다크모드·잠금 설정·알림 UI) | ❌ | |
+| Settings(다크모드·잠금·언어·알림 UI) | ✅ | 2026-08-11 정정 — ❌로 남아 있었다 |
 | 앱 잠금(PIN·패턴 3×3·생체) | ✅ | `features/lock/` · 힌트 되찾기 · 실패 backoff · 복귀 지연 · 앱 스위처 가림(Android). iOS 가림만 남음 |
 | 공지사항 | ✅ | `app/notice.tsx` — bootstrap 1회 조회. **서버에 `jogak` 등록 대기** |
-| 문의하기 | 🟡 | 화면·서버 전송 완료. **로그인 게이트는 이음매만**(`features/support/auth-gate.ts`) |
-| 구글 로그인(선택적) | ❌ | Phase 7 대기 |
-| 광고(AdMob) | ✅ | 전면=저장 완료 후 하루 1회 · 배너=탭 화면 상시. **테스트 광고 단위**(출시 전 교체) |
+| 문의하기 | ✅ | 화면·서버 전송·로그인·탈퇴까지. 로그인 게이트 화면에 처리방침 고지 추가(2026-08-11) |
+| 구글 로그인(선택적) | ✅ | 2026-08-11 정정 — Phase 7이 끝났고 `bootstrap?app=jogak`도 200이다 |
+| 광고(AdMob) | ✅ | 전면=저장 완료 후 하루 1회 · 배너=탭 화면 상시. 개발은 테스트 단위(`EXPO_PUBLIC_ADS_REAL=1`일 때만 실제 단위) |
+| **광고 제거(구독자)** | ✅ | `features/entitlement/store.ts` — 캐시 먼저·서버 나중. 조회 실패에 캐시를 지우지 않는다 |
+| **백업/복원 — 앱 쪽** | ✅ | 암호 계층·매니페스트·클라이언트·화면. [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
+| **백업/복원 — 실기기 검증** | ❌ | RN의 5MB PUT · `backupDatabaseAsync` 동작 · 암호 처리량 |
+| 사진 백업(2차) | ❌ | 1차는 텍스트만. 복원 후 사진 자리는 `blob_state='missing'` |
 | 월 구독(RevenueCat) | ❌ | Phase 9 대기 |
 | 백업/복원(클라이언트 암호화) | ❌ | 조각 서버 대기 |
 | AI 리포트(주간 우선·서버 프록시) | ❌ | 조각 서버 대기 |
@@ -90,11 +94,35 @@
 ## 3. 검증 루틴
 
 ```bash
-npm install         # 의존성
-npm run typecheck   # tsc --noEmit — 커밋 전 필수 통과
-npm run lint        # eslint — 커밋 전 필수 통과
-npm run format      # prettier --write (문서 *.md는 제외)
+npm install                    # 의존성
+
+# 커밋 전 필수 (CLAUDE.md §11 ④)
+npm run typecheck              # tsc --noEmit
+npm run lint                   # eslint
+npm run check:i18n             # 키 누락·언어 간 불일치
+
+# 백업을 건드렸으면
+npm run check:backup-crypto    # 43개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
+npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니페스트 왕복
+
+# 새 런타임 의존성이 들어가는 커밋 / AAB 굽기 직전에만 (콜드 수 분)
+npm run check:bundle           # 번들 상한. 기준선 3.67MB
+
+npm run format                 # prettier --write (문서 *.md는 제외)
 ```
+
+### 조각 서버 (`server/`)
+
+```bash
+cd server
+npx supabase start   # Postgres :54422 · Storage :54421 · Studio :54423 (전부 Docker)
+npm run db:push
+npm run dev          # :3200
+npm run e2e          # 9개 — reserve→서명 URL PUT→commit→latest→다운로드
+```
+
+⚠ 기본 포트(5432x)를 다른 프로젝트의 Supabase 스택이 쓰고 있어 **544xx로 옮겼다.**
+자세한 것은 [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §7.
 
 ### ⚠ Expo Go를 떠났다 (2026-08-09)
 

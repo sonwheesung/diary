@@ -34,4 +34,14 @@ module.exports = [
       '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
+  {
+    /*
+     * `scripts/`는 **Node에서 도는 검증 도구**다(앱 번들에 안 들어간다).
+     * 기본 설정이 RN 환경이라 Buffer·process 같은 Node 전역을 모른다.
+     */
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: { Buffer: 'readonly', process: 'readonly', console: 'readonly' },
+    },
+  },
 ];
