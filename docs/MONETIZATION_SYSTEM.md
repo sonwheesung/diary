@@ -202,7 +202,7 @@ AI가 붙는 릴리스에서 그 표시를 뗀다.
 | 오퍼링 | ✅ Monthly · Yearly. **Lifetime은 뺐다**(단일 구독 2종) |
 | Play 앱 설정 | ✅ `com.son0925.jogak` · 서비스 계정 **Valid credentials** |
 | SDK 공개 키 | ✅ `goog_…` → `eas.json`(internal·production) + 개발 `.env.local` |
-| **Play 상품 등록** | ❌ **사용자** — 여기가 관문이다(아래) |
+| **Play 상품 등록** | ❌ **빌링 권한이 든 빌드가 먼저다**(아래) |
 | RC 상품 import·attach | ❌ Play 상품이 있어야 가능 |
 | §13⑥ 전환 동의 플로우 | ✅ 체험이 붙은 상품에만. 체크박스 없이는 결제 버튼이 죽어 있다 |
 | 체험 기간 계산(순수) | ✅ `features/subscription/trial.ts` · `npm run check:subscription` 8개 — **법적 고지의 근거라 Node에서 검사한다** |
