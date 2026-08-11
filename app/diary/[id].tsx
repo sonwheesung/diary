@@ -111,8 +111,23 @@ export default function DiaryDetailScreen() {
       >
         <ChevronLeft size={26} color={colors.text} />
       </Pressable>
+      {/*
+        아이콘 둘만 나란히 둔다(2026-08-10 사용자 결정, DIARY_SYSTEM §8.1).
+        ⚠ 삭제가 오른쪽 끝 — 엄지가 가장 쉽게 닿는 자리다. 되돌릴 수 없는 동작이라
+          `confirmDelete`의 확인창이 형식이 아니라 실질적인 안전장치다. 걷어내지 않는다.
+        글자가 없어진 만큼 `accessibilityLabel`이 유일한 설명이 된다 — 반드시 남긴다.
+      */}
       {diary !== null && (
         <View style={styles.headerActions}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('common.edit')}
+            onPress={() => setEditing(true)}
+            hitSlop={12}
+            style={styles.headerButton}
+          >
+            <Pencil size={20} color={colors.accent} />
+          </Pressable>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t('common.delete')}
@@ -121,19 +136,6 @@ export default function DiaryDetailScreen() {
             style={styles.headerButton}
           >
             <Trash2 size={20} color={colors.danger} />
-          </Pressable>
-          {/*
-            아이콘만 두면 '누르면 뭐가 되는지'가 안 읽힌다. 상세는 읽기 전용이고
-            여기가 유일한 편집 입구라, 작성 화면의 저장 버튼과 같은 모양으로 글자를 붙였다.
-          */}
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('common.edit')}
-            onPress={() => setEditing(true)}
-            style={styles.editButton}
-          >
-            <Pencil size={15} color={colors.textOnAccent} />
-            <Text style={styles.editLabel}>{t('common.edit')}</Text>
           </Pressable>
         </View>
       )}
@@ -279,20 +281,6 @@ const createStyles = (colors: Palette) =>
       height: 40,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    editButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: spacing.xs,
-      height: 34,
-      paddingHorizontal: spacing.md,
-      borderRadius: radius.md,
-      backgroundColor: colors.accent,
-    },
-    editLabel: {
-      ...typography.label,
-      color: colors.textOnAccent,
     },
     center: {
       flex: 1,

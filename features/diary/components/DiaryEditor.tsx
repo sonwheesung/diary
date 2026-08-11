@@ -402,6 +402,30 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
   };
 
   /*
+   * 저장 전 확인 (DIARY_SYSTEM §8.1, 2026-08-10 사용자 결정).
+   *
+   * 기둥 1(쓰기 마찰 최소화)과 맞바꾼 탭 하나다. 수정 저장이 옛 내용을 **되돌릴 수 없게**
+   * 덮어쓰기 때문이고, 새 조각도 같은 흐름으로 둬야 "어떤 저장은 묻고 어떤 저장은 안 묻는"
+   * 예측 불가가 안 생긴다.
+   *
+   * 취소해도 편집 상태는 그대로 남는다 — 돌아와 이어 쓸 수 있어야 한다.
+   */
+  const confirmSave = () => {
+    if (!canSave) {
+      return;
+    }
+    const isNew = editingId === null;
+    Alert.alert(
+      isNew ? t('write.confirmSaveTitle') : t('write.confirmUpdateTitle'),
+      isNew ? t('write.confirmSaveBody') : t('write.confirmUpdateBody'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.save'), onPress: () => void save() },
+      ],
+    );
+  };
+
+  /*
    * 나갈 때 물어볼 만큼 잃을 게 있는가.
    * 새 조각에서 날짜만 골라둔 상태는 잃을 게 없다 — 여기서 붙잡으면 성가시기만 하다.
    */
@@ -463,7 +487,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       <Pressable
         accessibilityRole="button"
         accessibilityState={{ disabled: !canSave }}
-        onPress={() => void save()}
+        onPress={confirmSave}
         disabled={!canSave}
         style={[styles.saveButton, !canSave && styles.saveButtonDisabled]}
       >
