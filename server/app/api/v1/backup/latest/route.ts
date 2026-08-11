@@ -6,7 +6,7 @@ import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { signDownload, storageConfigured } from '@/lib/storage';
-import { findVault } from '@/lib/vault';
+import { findVault, touchVault } from '@/lib/vault';
 
 export const dynamic = 'force-dynamic';
 
@@ -67,6 +67,9 @@ export async function POST(req: Request) {
      *   요구하면 순환이 생긴다: 읽기에 grant가 필요한데 grant를 옮기는 되찾기는
      *   복원 뒤에 오고, 복원이 곧 읽기다.
      */
+
+    // 접근 시각과 구독 만료 스냅샷을 남긴다 — 유예·방치 정리의 유일한 근거다.
+    await touchVault(vaultId, identity.proExpiresAt);
 
     const [generation] = await db
       .select()

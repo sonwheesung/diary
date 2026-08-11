@@ -1,13 +1,21 @@
 import { openManifest, sealManifest } from '@/features/backup/api/package';
 import { buildManifest } from '@/features/backup/api/manifest-builder';
-import { loadBackupKeys } from '@/features/backup/api/key-store';
+import { deleteBackupSecret, loadBackupKeys } from '@/features/backup/api/key-store';
 import type { BackupKeys } from '@/features/backup/api/key-store';
 import {
   getBackupState,
   markBackupCommitted,
 } from '@/features/backup/api/backup-state';
 import type { BackupFail } from '@/features/backup/api/client';
-import { commit, downloadPart, latest, rebind, reserve, uploadPart } from '@/features/backup/api/client';
+import {
+  commit,
+  deleteVault,
+  downloadPart,
+  latest,
+  rebind,
+  reserve,
+  uploadPart,
+} from '@/features/backup/api/client';
 import { assertReadable } from '@/features/backup/manifest';
 import type { Manifest } from '@/features/backup/manifest';
 import { LATEST_DB_VERSION } from '@/db/migrations';
@@ -98,6 +106,33 @@ export async function takeOverWriter(): Promise<{ ok: true } | { ok: false; reas
   }
   const result = await rebind(keys.vaultId, keys.authKey);
   return result.ok ? { ok: true } : { ok: false, reason: result.reason };
+}
+
+/**
+ * 서버의 백업을 지운다. **탈퇴 직전에 부른다.**
+ *
+ * 백업을 켠 적이 없으면(`no-keys`) 지울 것도 없으므로 **성공으로 답한다** —
+ * 여기서 막으면 백업을 안 쓰는 사람이 탈퇴를 못 한다.
+ */
+export async function purgeBackup(): Promise<{ ok: true } | { ok: false; reason: BackupFailure }> {
+  const keys = await loadBackupKeys();
+  if (keys === null) {
+    return { ok: true };
+  }
+  const result = await deleteVault(keys.vaultId, keys.authKey);
+  if (result.ok) {
+    // 서버에서 지웠으면 기기의 비밀도 지운다 — 남겨두면 없는 금고를 계속 조회한다.
+    await deleteBackupSecret();
+    return { ok: true };
+  }
+  /*
+   * ⚠ 서버 URL이 안 박힌 빌드에서는 지울 금고 자체가 없다. 그걸 실패로 보면
+   *   백업을 쓴 적 없는 사용자의 탈퇴가 막힌다.
+   */
+  if (result.reason === 'not-configured') {
+    return { ok: true };
+  }
+  return { ok: false, reason: result.reason };
 }
 
 export type RestoreOutcome =

@@ -100,6 +100,23 @@ export interface VaultRow {
   seq: number;
   purgedAt: Date | null;
   authHash: string | null;
+  proExpiresAt: Date | null;
+}
+
+/**
+ * 접근 시각과 구독 만료 스냅샷을 갱신한다. **모든 인증된 요청이 부른다.**
+ *
+ * ⚠ `updatedAt`이 없으면 방치 금고를 영원히 못 지운다.
+ * ⚠ `proExpiresAt`이 없으면 유예 90일을 셀 시작점이 없다 — 만료는 이벤트로 오지 않는다.
+ */
+export async function touchVault(vaultId: string, proExpiresAt: string | null): Promise<void> {
+  await db
+    .update(vaults)
+    .set({
+      updatedAt: new Date(),
+      proExpiresAt: proExpiresAt === null ? null : new Date(proExpiresAt),
+    })
+    .where(eq(vaults.id, vaultId));
 }
 
 /** `auth_key`(hex 64자)의 저장 형태 */
@@ -123,7 +140,13 @@ export function authKeyMatches(vault: VaultRow, authKey: string | null): boolean
 /** 금고를 읽는다. 없으면 `null`, 파기됐으면 행은 있고 `purgedAt`이 찍혀 있다 */
 export async function findVault(vaultId: string): Promise<VaultRow | null> {
   const [row] = await db
-    .select({ id: vaults.id, seq: vaults.seq, purgedAt: vaults.purgedAt, authHash: vaults.authHash })
+    .select({
+      id: vaults.id,
+      seq: vaults.seq,
+      purgedAt: vaults.purgedAt,
+      authHash: vaults.authHash,
+      proExpiresAt: vaults.proExpiresAt,
+    })
     .from(vaults)
     .where(eq(vaults.id, vaultId))
     .limit(1);

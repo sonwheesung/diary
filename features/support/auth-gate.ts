@@ -6,6 +6,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { useCallback, useEffect, useState } from 'react';
 
+import { purgeBackup } from '@/features/backup/api/run-backup';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
@@ -178,6 +179,23 @@ export function useSupportAuth(): SupportAuth {
   const deleteAccount = useCallback(async (): Promise<FailReason | null> => {
     setBusy(true);
     try {
+      /*
+       * ⚠ **백업을 먼저 지운다.** `common_server`가 수정 금지라 `subject_events` 아웃박스를
+       *   만들 수 없어서, 탈퇴 이벤트를 조각 서버가 받을 길이 없다. 앱이 직접 지운다.
+       *
+       * ⚠ **실패하면 탈퇴를 진행하지 않는다.** "탈퇴하면 백업도 삭제됩니다"가 처리방침과
+       *   Play 데이터 보안 선언에 들어가므로, 계정만 지우고 백업이 남으면 그 진술이 거짓이 된다.
+       *   새 실패 모드가 아니다 — `deleteAccount()` 자체가 네트워크 작업이라 오프라인이면
+       *   어차피 탈퇴가 안 된다. 순서만 하나 늘어난다.
+       *
+       * ⚠ 순서가 이쪽인 이유: 백업만 사라지고 계정이 남으면 사용자는 다시 시도할 수 있지만,
+       *   계정이 사라지고 백업이 남으면 **지울 권한이 있는 사람이 없어진다.**
+       */
+      const purged = await purgeBackup();
+      if (!purged.ok) {
+        return purged.reason === 'offline' ? 'offline' : 'error';
+      }
+
       const result = await commonServer.deleteAccount();
       if (!result.ok) {
         return result.reason;

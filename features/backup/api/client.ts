@@ -191,6 +191,21 @@ export function latest(
   return post('latest', seq === undefined ? { vaultId } : { vaultId, seq });
 }
 
+/**
+ * 금고를 지운다. **탈퇴 흐름이 이걸 먼저 부른다.**
+ *
+ * `common_server`가 수정 금지라 `subject_events` 아웃박스를 만들 수 없다 —
+ * 그래서 앱이 탈퇴 직전에 직접 지우고, **실패하면 탈퇴를 진행하지 않는다.**
+ * 새 실패 모드가 아니다: `deleteAccount()` 자체가 네트워크 작업이라
+ * 오프라인이면 어차피 탈퇴가 안 된다.
+ */
+export function deleteVault(
+  vaultId: string,
+  authKey: string,
+): Promise<BackupResult<{ alreadyGone?: boolean }>> {
+  return post('delete', { vaultId, authKey });
+}
+
 /** Storage에서 파트를 받는다. 서명 URL이라 인증 헤더가 없다 */
 export async function downloadPart(url: string): Promise<BackupResult<{ bytes: Uint8Array }>> {
   try {

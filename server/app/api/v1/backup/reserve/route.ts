@@ -6,7 +6,7 @@ import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { manifestPath, signUpload, storageConfigured } from '@/lib/storage';
-import { ensureGrant, ensureVault } from '@/lib/vault';
+import { ensureGrant, ensureVault, touchVault } from '@/lib/vault';
 
 export const dynamic = 'force-dynamic';
 
@@ -81,6 +81,9 @@ export async function POST(req: Request) {
     if (vault.purgedAt !== null) {
       return fail('vault-purged', { purgedAt: vault.purgedAt.toISOString() });
     }
+
+    // 접근 시각과 구독 만료 스냅샷을 남긴다 — 유예·방치 정리의 유일한 근거다.
+    await touchVault(vaultId, identity.proExpiresAt);
 
     const grant = await ensureGrant(vaultId, identity);
     if (grant.kind === 'taken') {

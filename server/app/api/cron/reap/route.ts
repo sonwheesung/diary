@@ -5,6 +5,7 @@ import { generationParts, generations, vaults } from '@/db/schema';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { removeObjects, storageConfigured } from '@/lib/storage';
+import { purgeVault } from '@/app/api/v1/backup/delete/route';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +36,24 @@ const KEEP_GENERATIONS = 3;
 
 /** 툼스톤(파기 기록)을 남겨두는 기간. 이걸 지나면 행도 지운다 */
 const TOMBSTONE_TTL_MS = 365 * 24 * 60 * 60 * 1000;
+
+/**
+ * 구독이 끊긴 뒤 백업을 지우기까지의 유예.
+ *
+ * ⚠ **시계의 출처는 `vaults.pro_expires_at` 스냅샷이다.** 만료는 이벤트로 오지 않는다 —
+ *   common_server가 `active`를 저장하지 않고 읽을 때 계산하므로 만료 순간에 DB를 쓰는
+ *   주체가 없다. 그래서 introspect로 받아둔 값을 우리가 센다.
+ */
+const GRACE_MS = 90 * 24 * 60 * 60 * 1000;
+
+/**
+ * 접근이 끊긴 금고를 정리하는 기준.
+ *
+ * ⚠ **탈퇴 없이 앱만 지운 사용자의 금고는 아무도 지워주지 않는다.**
+ *   `common_server`가 수정 금지라 아웃박스를 못 만들어서, 이게 유일한 안전망이다.
+ *   처리방침에 이 기간을 명시한다.
+ */
+const ABANDONED_MS = 3 * 365 * 24 * 60 * 60 * 1000;
 
 export async function POST(req: Request) {
   const secret = process.env.CRON_SECRET ?? '';
@@ -137,7 +156,37 @@ export async function POST(req: Request) {
       reapedGenerations += removed.length;
     }
 
-    // ── 4. 보관 기간이 지난 툼스톤 ────────────────────────────────────────────
+    // ── 4. 구독 만료 후 유예가 지난 금고 ──────────────────────────────────────
+    let purgedExpired = 0;
+    const lapsed = await db
+      .select({ id: vaults.id })
+      .from(vaults)
+      .where(
+        and(
+          sql`${vaults.purgedAt} is null`,
+          sql`${vaults.proExpiresAt} is not null`,
+          lt(vaults.proExpiresAt, new Date(now - GRACE_MS)),
+        ),
+      )
+      .limit(200);
+    for (const vault of lapsed) {
+      await purgeVault(vault.id);
+      purgedExpired += 1;
+    }
+
+    // ── 5. 3년 무접근 금고 (탈퇴 없이 앱만 지운 경우) ─────────────────────────
+    let purgedAbandoned = 0;
+    const abandoned = await db
+      .select({ id: vaults.id })
+      .from(vaults)
+      .where(and(sql`${vaults.purgedAt} is null`, lt(vaults.updatedAt, new Date(now - ABANDONED_MS))))
+      .limit(200);
+    for (const vault of abandoned) {
+      await purgeVault(vault.id);
+      purgedAbandoned += 1;
+    }
+
+    // ── 6. 보관 기간이 지난 툼스톤 ────────────────────────────────────────────
     const expired = await db
       .delete(vaults)
       .where(
@@ -149,7 +198,7 @@ export async function POST(req: Request) {
       .returning({ id: vaults.id });
     reapedTombstones = expired.length;
 
-    return ok({ reapedParts, reapedGenerations, reapedTombstones });
+    return ok({ reapedParts, reapedGenerations, purgedExpired, purgedAbandoned, reapedTombstones });
   } catch (error) {
     reportError(error, 'cron/reap');
     return fail('error');

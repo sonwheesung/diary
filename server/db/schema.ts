@@ -43,7 +43,22 @@ export const vaults = pgTable(
      */
     authHash: text('auth_hash'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    /**
+     * 마지막으로 이 금고에 접근한 시각(읽기·쓰기 모두).
+     *
+     * ⚠ **방치 금고를 정리하는 유일한 근거다.** 탈퇴 없이 앱만 지운 사용자의 금고는
+     *   아무도 지워주지 않는다 — 3년 무접근이면 리퍼가 파기한다(처리방침에 명시).
+     */
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    /**
+     * 구독 만료 시각의 **스냅샷**. 유예 90일을 여기서부터 센다.
+     *
+     * ⚠ **만료는 이벤트로 오지 않는다.** common_server는 `active`를 저장하지 않고
+     *   읽을 때 계산하므로, 만료되는 순간 DB를 쓰는 주체가 없다.
+     *   그래서 introspect로 받은 값을 여기 저장해두고 **우리가 센다.**
+     *   NULL = 만료 없음(구독 중이거나 아직 확인 전).
+     */
+    proExpiresAt: timestamp('pro_expires_at', { withTimezone: true }),
     /**
      * 유예 만료 후 파기되면 여기에 시각이 찍히고 **행은 남는다**(툼스톤).
      *

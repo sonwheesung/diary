@@ -247,7 +247,58 @@ await check('되찾기 — 금고 생성 후에는 auth_key를 덮어쓸 수 없
   assert(res.status === 403, `덮어쓰기가 통했다 (HTTP ${res.status})`);
 });
 
-// ── 9. 리퍼 ───────────────────────────────────────────────────────────────────
+// ── 9. 삭제 (탈퇴 흐름) ───────────────────────────────────────────────────────
+await check('삭제 — grant가 있으면 지운다', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  const r = await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  await fetch(r.json.uploads[0].signedUrl, { method: 'PUT', body: new Uint8Array(2048) });
+  await api('commit', { vaultId: v, seq: 1, genId });
+
+  const del = await api('delete', { vaultId: v });
+  assert(del.status === 200, `HTTP ${del.status} ${JSON.stringify(del.json)}`);
+
+  // 파기 후에는 404가 아니라 **410**이어야 한다 — 404면 지워진 걸 영원히 모른다
+  const after = await api('latest', { vaultId: v });
+  assert(after.status === 410, `파기 후 HTTP ${after.status} (410이어야 한다)`);
+});
+
+await check('삭제 — 재호출은 성공으로 답한다 (탈퇴가 막히면 안 된다)', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  await api('delete', { vaultId: v });
+  const again = await api('delete', { vaultId: v });
+  assert(again.status === 200 && again.json.alreadyGone === true, `HTTP ${again.status}`);
+});
+
+await check('삭제 — 없는 금고도 성공 (백업 안 쓴 사람의 탈퇴)', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  const del = await api('delete', { vaultId: v });
+  assert(del.status === 200 && del.json.alreadyGone === true, `HTTP ${del.status}`);
+});
+
+await check('삭제 — grant도 auth_key도 없으면 거부', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  const res = await fetch(`${BASE}/api/v1/backup/delete`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer intruder' },
+    body: JSON.stringify({ vaultId: v }),
+  });
+  assert(res.status === 403, `HTTP ${res.status}`);
+});
+
+await check('삭제 — auth_key만 있어도 지운다 (계정이 바뀐 사람)', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  const res = await fetch(`${BASE}/api/v1/backup/delete`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer changed-account' },
+    body: JSON.stringify({ vaultId: v, authKey: AUTH }),
+  });
+  assert(res.status === 200, `HTTP ${res.status} ${await res.text()}`);
+});
+
+// ── 10. 리퍼 ──────────────────────────────────────────────────────────────────
 await check('리퍼 — CRON_SECRET 없이는 거부', async () => {
   const res = await fetch(`${BASE}/api/cron/reap`, { method: 'POST' });
   assert(res.status === 401, `HTTP ${res.status}`);
@@ -263,7 +314,7 @@ await check('리퍼 — 시크릿이 맞으면 돌고 건수를 돌려준다', a
   assert(res.status === 200, `HTTP ${res.status} ${JSON.stringify(json)}`);
   assert(typeof json.reapedParts === 'number', '건수가 없다 — 조용히 죽으면 아무도 모른다');
   console.log(
-    `       파트 ${json.reapedParts} · 세대 ${json.reapedGenerations} · 툼스톤 ${json.reapedTombstones}`,
+    `       파트 ${json.reapedParts} · 세대 ${json.reapedGenerations} · 만료파기 ${json.purgedExpired} · 방치파기 ${json.purgedAbandoned} · 툼스톤 ${json.reapedTombstones}`,
   );
 });
 
