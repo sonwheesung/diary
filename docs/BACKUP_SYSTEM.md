@@ -501,7 +501,7 @@ stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까�
 - [x] 기기 점검 **15/18** — 남은 3은 dev 빌드의 암호 속도 게이트(릴리스에서 잰다)
 - [x] 서명 URL PUT이 실제 Storage에서 5MB를 받는다 — **0.96초**(개발 머신 기준, 기기 속도 아님)
 - [x] 사진 왕복이 **HTTPS 클라우드 경로**에서 통과 — 백업 전체 9.0초(사진 1장 + 매니페스트)
-- [ ] 서울 리전 왕복 지연 — introspect가 태평양을 건너지 않는지(`CLAUDE.md` §5 ⚠). ⏭ Vercel 배포 후
+- [x] 서울 리전 왕복 지연 — **건넌다.** 아래 참조
 
 ### 실제로 세운 것 (2026-08-11)
 
@@ -512,6 +512,40 @@ stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까�
 | **Data API** | **껐다.** 우리는 PostgREST를 쓰지 않는데, 켜두면 drizzle이 만든 테이블(RLS 미적용)이 anon 키로 HTTP에서 읽힌다 — `vault_id`·용량·시각이 그대로 나간다. **끄고도 Storage는 정상**임을 왕복으로 확인했다 |
 | 버킷 | `backups` **비공개** · `npm run setup:storage`가 만든다 |
 | 연결 | Session pooler `:5432`(DDL). ⏭ Vercel에서는 Transaction 풀러 `:6543` + `prepare:false` |
+
+### 배포 (2026-08-11)
+
+| | |
+|---|---|
+| URL | `https://jogak-stg.vercel.app` |
+| 리전 | `icn1`(서울) — `vercel.json`에 명시. **기본값에 맡기지 않는다** |
+| 크론 | `/api/cron/reap` 매일 18:00 UTC(=03:00 KST) |
+| 환경변수 | 6개. **`AUTH_STUB`은 넣지 않았다** |
+
+배포본에서 확인한 것:
+
+| 검사 | 결과 |
+|---|---|
+| 스텁 토큰(`stub-token`) | **401** — `AUTH_STUB`이 정말 꺼졌다 |
+| 토큰 없음 | 401 |
+| 크론 시크릿 없이 | 401 |
+
+### 🔴 introspect가 태평양을 왕복한다 (측정, 2026-08-11)
+
+| 경로 | 시간(개발 머신 기준) |
+|---|---|
+| `/api/health` (introspect 없음) | **0.10초** |
+| 인가가 필요한 경로 (introspect 탐) | **0.32초**(웜) · 0.64 · 2.13(콜드) |
+
+차이 **약 200ms**가 조각 서버(icn1) → common_server 왕복이다. `CLAUDE.md` §5가 *"introspect가
+태평양을 왕복하면 매 요청 수백 ms다 — 착수 전에 실측한다"* 로 남겨둔 항목의 답이다.
+
+- **원인은 common_server의 `vercel.json`에 `regions` 키가 없다는 것**이다(크론만 있다).
+  조각이 고칠 수 없다 — common_server 쪽 작업이다.
+- **지금 당장 아프지는 않다.** 유효한 토큰은 60초 캐시되므로 사용자 한 명당 분당 1회다.
+  위 측정이 매번 200ms인 이유는 **실패한 토큰을 캐시하지 않기 때문**이고, 그건 옳다.
+- ⏭ common_server에 `"regions": ["icn1"]`을 넣으면 사라진다. 조각과 무관하게
+  my_word·배구명가의 모든 요청에도 같은 이득이 있다.
 
 ⚠ **`AUTH_STUB=1`은 로컬 전용이다.** 지금 구조는 *로컬 Next → 클라우드 Supabase*라 서버가
    외부에 열려 있지 않다. Vercel에 올리는 순간 이 값이 있으면 **아무 Bearer나 통과한다.**

@@ -8,3 +8,6 @@ next-env.d.ts
 # Supabase 로컬 스택 산출물 — 컨테이너 상태라 커밋 대상이 아니다
 supabase/.branches/
 supabase/.temp/
+
+.vercel
+.env*
