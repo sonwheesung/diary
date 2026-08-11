@@ -1,7 +1,9 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Directory, Paths } from 'expo-file-system';
 
 import { getDatabase } from '@/db/client';
 import { disableLock } from '@/features/lock/api/lock-store';
+import { commonServer } from '@/lib/common-server/client';
 
 /**
  * 앱 초기화 — 조각·사진·태그·설정·잠금을 **전부** 지운다.
@@ -35,6 +37,15 @@ export async function wipeAllData(): Promise<void> {
   } catch {
     // 파일 정리에 실패해도 초기화 자체는 끝나야 한다. DB에서 이미 참조가 사라졌다.
   }
+
+  /*
+   * 로그인 흔적도 지운다. 안 지우면 "전부 지웠다"고 해놓고 **이전 사용자의 세션 토큰이 남아**,
+   * 폰이 남의 손에 넘어간 뒤 초기화한 사람이 문의 화면에서 곧바로 그 사람 계정이 된다.
+   * 구글 SDK 캐시까지 함께 끊어야 다음 로그인이 계정 선택부터 시작한다.
+   * ⚠ 실패해도 초기화 자체는 끝내야 한다 — 여기서 던지면 일기는 지워졌는데 잠금이 남는다.
+   */
+  await commonServer.logout().catch(() => undefined);
+  await GoogleSignin.signOut().catch(() => undefined);
 
   await disableLock();
 }
