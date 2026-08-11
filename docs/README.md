@@ -19,7 +19,7 @@
 | [`I18N_SYSTEM.md`](./I18N_SYSTEM.md) | 다국어 — 문자열 규약·날짜 현지화·언어 추가 절차 (정책은 CLAUDE.md §9.1) | ✅ |
 | `AUTH_SYSTEM.md` | 구글 로그인·subject 토큰 | ❌ 미작성 |
 | `LOCK_SYSTEM.md` | 앱 잠금 — PIN·패턴(3×3)·생체·자동잠금·실패 처리 (정책은 CLAUDE.md §7.1) | ❌ 미작성 |
-| `MONETIZATION_SYSTEM.md` | 구독 상품·RevenueCat·엔타이틀먼트·광고 정책 상세 | ❌ 미작성 |
+| [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) | 구독 — 단일 상품·로그인 게이트·RevenueCat 연결·전자상거래법 (정책은 CLAUDE.md §7.2) | ✅ |
 | [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) | 백업/복원 — 키 유도·봉투·매니페스트·서버 계약·전체 교체 (정책은 CLAUDE.md §5.1) | ✅ |
 | `AI_REPORT_SYSTEM.md` | 주간/월간/연간 리포트 생성·비용·계층 요약 (정책은 ARCHITECTURE §6) | ❌ 미작성 |
 | `UI_GUIDE.md` | 컬러·타이포·여백·공통 컴포넌트 사용법 | ❌ 미작성 |

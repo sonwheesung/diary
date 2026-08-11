@@ -3,6 +3,7 @@ import { router, useFocusEffect } from 'expo-router';
 import Bell from 'lucide-react-native/icons/bell';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
 import CloudUpload from 'lucide-react-native/icons/cloud-upload';
+import Sparkles from 'lucide-react-native/icons/sparkles';
 import Globe from 'lucide-react-native/icons/globe';
 import Lock from 'lucide-react-native/icons/lock';
 import Megaphone from 'lucide-react-native/icons/megaphone';
@@ -17,6 +18,7 @@ import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
 import { useLockStore } from '@/features/lock/store';
 import { getBackupState } from '@/features/backup/api/backup-state';
+import { useEntitlementStore } from '@/features/entitlement/store';
 import { useNoticeStore } from '@/features/notice/store';
 import { LanguageSheet } from '@/features/settings/components/LanguageSheet';
 import { useLanguageStore } from '@/features/settings/language-store';
@@ -66,6 +68,7 @@ export default function SettingsScreen() {
    * 기기를 잃으면 되찾을 방법이 없다. 여기서 계속 알리지 않으면 알 길이 없다.
    */
   const [backupNeedsAttention, setBackupNeedsAttention] = useState(false);
+  const isPro = useEntitlementStore((state) => state.pro);
 
   // 잠금·백업 설정 화면에 다녀오면 상태가 바뀌어 있다 — 돌아올 때마다 다시 읽는다.
   useFocusEffect(
@@ -122,6 +125,27 @@ export default function SettingsScreen() {
         백업은 잠금보다 위다 — "내 기록을 지키는 것" 중 사용자가 먼저 떠올리는 것이
         기기 분실이고, 잠금은 그 다음이다.
       */}
+      {/* 구독은 백업보다 위다 — 백업이 잠겨 있는 이유가 여기 있다 */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t('settings.sectionSubscription')}</Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/subscribe')}
+          style={styles.row}
+        >
+          <View style={styles.rowIcon}>
+            <Sparkles size={18} color={colors.accent} />
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.subscription')}</Text>
+            <Text style={styles.rowSub}>
+              {isPro ? t('settings.subscriptionActive') : t('settings.subscriptionInactive')}
+            </Text>
+          </View>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+      </View>
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionBackup')}</Text>
 
@@ -408,6 +432,10 @@ const createStyles = (colors: Palette) =>
     rowBody: {
       flex: 1,
       gap: 2,
+    },
+    rowSub: {
+      ...typography.caption,
+      color: colors.textMuted,
     },
     rowTitle: {
       ...typography.body,

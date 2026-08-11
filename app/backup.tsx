@@ -186,7 +186,11 @@ export default function BackupScreen() {
             />
           )}
 
-          {!pro && <Text style={styles.subtle}>{t('backup.needsSubscription')}</Text>}
+          {!pro && (
+            <Pressable accessibilityRole="button" onPress={() => router.push('/subscribe')} hitSlop={8}>
+              <Text style={styles.linkCenter}>{t('backup.needsSubscription')}</Text>
+            </Pressable>
+          )}
 
           <Pressable
             accessibilityRole="button"
@@ -223,7 +227,11 @@ export default function BackupScreen() {
             disabled={!pro}
             fullWidth
           />
-          {!pro && <Text style={styles.subtle}>{t('backup.needsSubscription')}</Text>}
+          {!pro && (
+            <Pressable accessibilityRole="button" onPress={() => router.push('/subscribe')} hitSlop={8}>
+              <Text style={styles.linkCenter}>{t('backup.needsSubscription')}</Text>
+            </Pressable>
+          )}
 
           {/* 백업을 켠 적 없는 기기에서도 복원은 들어갈 수 있어야 한다 — 새 폰의 주 경로다 */}
           <Pressable
@@ -361,5 +369,11 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
       textAlign: 'center',
+    },
+    linkCenter: {
+      ...typography.caption,
+      color: colors.accent,
+      textAlign: 'center',
+      textDecorationLine: 'underline',
     },
   });

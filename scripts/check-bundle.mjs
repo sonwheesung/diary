@@ -17,10 +17,18 @@ import { join } from 'node:path';
 /**
  * 안드로이드 Hermes 바이트코드 상한.
  *
- * 2026-08-11 실측 **3.67MB** (lucide를 개별 경로 임포트로 바꾼 뒤, @noble/* 2종 포함).
- * 여유를 두되 배럴 임포트 같은 사고는 잡히게 잡는다.
+ * 실측 이력:
+ *   2026-08-11  **3.67MB**  lucide 개별 경로 임포트 + `@noble/*` 2종
+ *   2026-08-11  **4.88MB**  `react-native-purchases` 추가 (**+1.21MB**)
+ *
+ * ⚠ RevenueCat SDK 하나가 번들의 4분의 1이다. `@revenuecat/purchases-typescript-internal`과
+ *   `purchases-js-hybrid-mappings`를 통째로 끌어오기 때문이다 — 서브패스 임포트로 줄일
+ *   방법이 없다(단일 진입점 패키지다).
+ *
+ * 상한을 6MB로 올린다. **여유가 아니라 관측을 위한 값**이다 — 배럴 임포트 같은 사고는
+ * 한 번에 3~4MB를 더하므로 이 정도 상한으로도 잡힌다.
  */
-const LIMIT_BYTES = 5 * 1024 * 1024;
+const LIMIT_BYTES = 6 * 1024 * 1024;
 
 const outDir = mkdtempSync(join(tmpdir(), 'jogak-bundle-'));
 try {

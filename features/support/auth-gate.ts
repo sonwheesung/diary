@@ -7,6 +7,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import { purgeBackup } from '@/features/backup/api/run-backup';
+import { forgetPurchaseIdentity } from '@/features/subscription/api/purchases';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
@@ -171,6 +172,11 @@ export function useSupportAuth(): SupportAuth {
       setSignedIn(false);
       // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.
       await useEntitlementStore.getState().clear();
+      /*
+       * ⚠ RC 신원도 끊는다. 안 끊으면 **다음 사람이 남의 구독을 물려받는다** —
+       *   같은 기기에서 다른 계정으로 로그인했을 때 RC는 여전히 앞 사람의 appUserID다.
+       */
+      await forgetPurchaseIdentity();
     } finally {
       setBusy(false);
     }
@@ -210,6 +216,7 @@ export function useSupportAuth(): SupportAuth {
       setSignedIn(false);
       // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.
       await useEntitlementStore.getState().clear();
+      await forgetPurchaseIdentity();
       return null;
     } finally {
       setBusy(false);
