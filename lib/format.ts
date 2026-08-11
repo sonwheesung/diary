@@ -62,6 +62,24 @@ export function formatMonthLabel(entryDate: string): string {
   return translate('date.monthYear', parts(entryDate));
 }
 
+/**
+ * 날짜 + 시각. "마지막 백업" 같은 **시점**을 보여줄 때 쓴다.
+ *
+ * ⚠ 다른 포맷터와 달리 `entryDate`(YYYY-MM-DD)가 아니라 **epoch ms**를 받는다 —
+ *   조각은 날짜 단위지만 백업은 시각 단위라서다.
+ */
+export function formatDateTime(epochMs: number): string {
+  const target = dayjs(epochMs);
+  return translate('date.dateTime', {
+    year: target.year(),
+    month: target.month() + 1,
+    monthName: monthName(target),
+    day: target.date(),
+    hour: String(target.hour()).padStart(2, '0'),
+    minute: String(target.minute()).padStart(2, '0'),
+  });
+}
+
 /** 목록 카드용 짧은 표기 */
 export function formatShortDate(entryDate: string): string {
   const target = dayjs(entryDate);

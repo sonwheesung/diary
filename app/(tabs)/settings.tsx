@@ -2,6 +2,7 @@ import Constants from 'expo-constants';
 import { router, useFocusEffect } from 'expo-router';
 import Bell from 'lucide-react-native/icons/bell';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
+import CloudUpload from 'lucide-react-native/icons/cloud-upload';
 import Globe from 'lucide-react-native/icons/globe';
 import Lock from 'lucide-react-native/icons/lock';
 import Megaphone from 'lucide-react-native/icons/megaphone';
@@ -15,6 +16,7 @@ import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
 import { useLockStore } from '@/features/lock/store';
+import { getBackupState } from '@/features/backup/api/backup-state';
 import { useNoticeStore } from '@/features/notice/store';
 import { LanguageSheet } from '@/features/settings/components/LanguageSheet';
 import { useLanguageStore } from '@/features/settings/language-store';
@@ -57,10 +59,21 @@ export default function SettingsScreen() {
   const lock = useLockStore((state) => state.config);
   const refreshLock = useLockStore((state) => state.refresh);
 
-  // 잠금 설정 화면에 다녀오면 상태가 바뀌어 있다 — 돌아올 때마다 다시 읽는다.
+  /**
+   * 백업을 켰는데 **복구 코드를 확인하지 않은** 상태.
+   *
+   * 그 사람은 백업이 정상으로 돌아가는 동안 앱이 "안전합니다"를 보여주지만,
+   * 기기를 잃으면 되찾을 방법이 없다. 여기서 계속 알리지 않으면 알 길이 없다.
+   */
+  const [backupNeedsAttention, setBackupNeedsAttention] = useState(false);
+
+  // 잠금·백업 설정 화면에 다녀오면 상태가 바뀌어 있다 — 돌아올 때마다 다시 읽는다.
   useFocusEffect(
     useCallback(() => {
       void refreshLock();
+      void getBackupState().then((state) =>
+        setBackupNeedsAttention(state.enabled && state.codeConfirmedAt === null),
+      );
     }, [refreshLock]),
   );
 
@@ -104,6 +117,30 @@ export default function SettingsScreen() {
   return (
     <Screen footer={<AdBanner />}>
       <Text style={styles.screenTitle}>{t('settings.title')}</Text>
+
+      {/*
+        백업은 잠금보다 위다 — "내 기록을 지키는 것" 중 사용자가 먼저 떠올리는 것이
+        기기 분실이고, 잠금은 그 다음이다.
+      */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t('settings.sectionBackup')}</Text>
+
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/backup')}
+          style={styles.row}
+        >
+          <View style={styles.rowIcon}>
+            <CloudUpload size={18} color={colors.accent} />
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.backup')}</Text>
+          </View>
+          {/* 복구 코드를 확인 안 한 사람은 백업이 돌아도 되찾을 수 없다 — 배지로 계속 알린다 */}
+          {backupNeedsAttention && <View style={styles.badge} />}
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+      </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionLock')}</Text>

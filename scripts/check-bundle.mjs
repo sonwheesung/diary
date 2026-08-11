@@ -25,11 +25,12 @@ const LIMIT_BYTES = 5 * 1024 * 1024;
 const outDir = mkdtempSync(join(tmpdir(), 'jogak-bundle-'));
 try {
   console.log('번들 만드는 중… (콜드 실행은 수 분 걸린다)');
-  execFileSync(
-    process.platform === 'win32' ? 'npx.cmd' : 'npx',
-    ['expo', 'export', '--platform', 'android', '--output-dir', outDir],
-    { stdio: ['ignore', 'ignore', 'inherit'] },
-  );
+  // ⚠ Windows에서 `.cmd`는 실행 파일이 아니라 셸이 해석하는 스크립트다 —
+  //   `shell: true` 없이 spawn하면 EINVAL로 죽는다.
+  execFileSync('npx', ['expo', 'export', '--platform', 'android', '--output-dir', outDir], {
+    stdio: ['ignore', 'ignore', 'inherit'],
+    shell: true,
+  });
 
   const jsDir = join(outDir, '_expo', 'static', 'js', 'android');
   const bundles = readdirSync(jsDir).filter((name) => name.endsWith('.hbc') || name.endsWith('.js'));

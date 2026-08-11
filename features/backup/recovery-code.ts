@@ -26,7 +26,8 @@ export const SECRET_LENGTH = 16;
 export const DATA_SYMBOLS = 26;
 /** 데이터 + 체크심볼 1 */
 export const TOTAL_SYMBOLS = DATA_SYMBOLS + 1;
-const GROUP_SIZE = 4;
+/** 표시·입력 그룹 크기. `XXXX-XXXX-…` */
+export const GROUP_SIZE = 4;
 
 export class RecoveryCodeError extends Error {
   /** ⚠ parameter property는 Node 타입 스트리핑이 못 지운다(`erasableSyntaxOnly`가 잡는다) */
