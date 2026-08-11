@@ -15,6 +15,13 @@ async function open(): Promise<SQLite.SQLiteDatabase> {
   await db.execAsync('PRAGMA journal_mode = WAL');
   // 외래키는 지금 스키마엔 없지만, 나중에 추가될 때 기본으로 켜져 있도록 미리 켠다.
   await db.execAsync('PRAGMA foreign_keys = ON');
+  /*
+   * ⚠ 기본값은 0이다 — 락이 잡혀 있으면 **기다리지 않고 즉시 `database is locked`로 실패**한다.
+   * WAL이라 읽기·쓰기는 안 부딪히지만 쓰기끼리는 여전히 부딪히고, 그 순간 실패하는 쪽이
+   * 잠금 해제(`resetFailures`)처럼 실패하면 안 되는 경로일 수 있다.
+   * 5초를 기다려 주면 사람이 만드는 정도의 경합은 전부 흡수된다.
+   */
+  await db.execAsync('PRAGMA busy_timeout = 5000');
 
   await migrate(db);
   return db;
