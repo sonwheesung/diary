@@ -1,0 +1,91 @@
+/**
+ * 복구 코드에서 키를 유도한다 — HKDF-SHA256 (RFC 5869), **Extract + Expand**.
+ *
+ * ⚠ **프로젝트 내부 임포트 0.** 새 기기가 복구 코드만으로 `vault_id`를 계산해 조회하는 것이
+ *   부트스트랩의 전제라 이 층이 순수해야 하고, KAT를 Node에서 돌려야 한다.
+ *
+ * ⚠⚠ **한때 "Expand only로 간다"고 정했는데 성립하지 않는다.** RFC 5869 §2.3이
+ *    *"PRK: a pseudorandom key of **at least HashLen** octets"* 를 요구하므로 16바이트
+ *    복구 코드는 PRK 자리에 올 수 없다(noble도 거부한다 — KAT가 이걸 잡았다).
+ *    "입력이 이미 균일하니 Extract가 불필요하다"는 **엔트로피** 얘기였고, 길이 요건은 별개다.
+ *    Extract가 정확히 이 일(짧은 IKM → HashLen PRK)을 하라고 있는 단계다. salt는 비운다.
+ *
+ * ⚠ 그리고 "자체 Expand 구현으로 못박는다"도 틀렸었다 — `@noble/hashes/hkdf.js`가
+ *   `hkdf()`·`extract()`·`expand()`를 전부 export한다. 감사받은 암호 코드를 손으로
+ *   다시 쓸 이유가 없다.
+ */
+import { hkdf } from '@noble/hashes/hkdf.js';
+import { sha256 } from '@noble/hashes/sha2.js';
+
+/** XChaCha20-Poly1305 키 길이 */
+export const DEK_LENGTH = 32;
+export const VAULT_ID_LENGTH = 16;
+export const KID_LENGTH = 4;
+
+/*
+ * ⚠ info 문자열은 **US-ASCII 바이트 그대로**다. NUL 종단도, 길이 접두도 없다.
+ *   여기가 어긋나면 키가 통째로 달라지는데 **자기 왕복 테스트로는 100% 통과한다**
+ *   (양쪽이 같은 코드를 쓰니까). 그래서 KAT에 고정 벡터로 박아둔다.
+ *
+ * ⚠ 출력 길이 L은 **필요한 바이트 수와 정확히 같다.** 긴 걸 뽑아 잘라 쓰지 않는다 —
+ *   SHA-256에서는 우연히 같은 값이 나와 규칙이 없다는 걸 아무도 못 깨닫다가,
+ *   해시를 바꾸는 날 전부 깨진다.
+ */
+const INFO_DEK = asciiBytes('jogak/dek/v1');
+const INFO_VAULT_ID = asciiBytes('jogak/vault-id/v1');
+const INFO_KID = asciiBytes('jogak/kid/v1');
+
+/** `TextEncoder`를 쓰지 않는다 — RN과 Node 양쪽에서 임포트 0으로 돌아야 한다 */
+function asciiBytes(text: string): Uint8Array {
+  const out = new Uint8Array(text.length);
+  for (let i = 0; i < text.length; i += 1) {
+    const code = text.charCodeAt(i);
+    if (code > 0x7f) {
+      throw new Error(`info는 ASCII여야 한다: ${text}`);
+    }
+    out[i] = code;
+  }
+  return out;
+}
+
+/**
+ * RFC 5869 HKDF-SHA256. **salt는 비운다**(RFC 규정대로 HashLen 길이의 0으로 대체된다) —
+ * 복구 코드는 CSPRNG 출력이라 salt가 더할 것이 없고, 새 기기가 코드만으로 같은 값을
+ * 재현해야 하므로 salt를 둘 곳도 없다.
+ */
+export function deriveKey(secret: Uint8Array, info: Uint8Array, length: number): Uint8Array {
+  return hkdf(sha256, secret, undefined, info, length);
+}
+
+/** 실제 암·복호에 쓰는 256비트 키 */
+export function deriveDek(secret: Uint8Array): Uint8Array {
+  return deriveKey(secret, INFO_DEK, DEK_LENGTH);
+}
+
+/**
+ * 서버에서 내 금고를 찾는 이름.
+ *
+ * ⚠ **자격증명이 아니다.** 서버 DB와 로그에 평문으로 존재한다 — 이걸 아는 것만으로
+ *   읽거나 지울 수 있게 만들면 안 된다(인가는 별도).
+ */
+export function deriveVaultId(secret: Uint8Array): Uint8Array {
+  return deriveKey(secret, INFO_VAULT_ID, VAULT_ID_LENGTH);
+}
+
+/** 봉투 헤더에 실리는 키 식별자. 어떤 코드로 잠갔는지 대조하는 용도 */
+export function deriveKid(secret: Uint8Array): Uint8Array {
+  return deriveKey(secret, INFO_KID, KID_LENGTH);
+}
+
+/**
+ * `vault_id`의 **정본 표현은 소문자 hex 32자다.** DB 컬럼·서명 URL 경로·오류 코드가
+ * 전부 이 표현을 쓴다 — 한 곳이라도 다르면 이미 올린 백업을 못 찾고, 되돌리려면
+ * 전 사용자가 다시 올려야 한다.
+ */
+export function toHex(bytes: Uint8Array): string {
+  let out = '';
+  for (const byte of bytes) {
+    out += byte.toString(16).padStart(2, '0');
+  }
+  return out;
+}

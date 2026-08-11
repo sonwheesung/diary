@@ -2,6 +2,11 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    // Node의 타입 스트리핑(`--experimental-strip-types`)이 지울 수 없는 문법을 막는다.
+    // enum·namespace·parameter property가 여기 걸린다 — `features/backup/*`를 Node에서
+    // 그대로 임포트해 KAT를 돌리므로, 하나만 들어와도 검증 스크립트가 통째로 죽는다.
+    // 실제로 겪음(2026-08-11): `constructor(readonly code: string)` 하나로 전체가 멈췄다.
+    "erasableSyntaxOnly": true,
     "paths": {
       "@/*": ["./*"]
     }
