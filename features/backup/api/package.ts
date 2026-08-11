@@ -1,4 +1,4 @@
-import { VERSION_EXPERIMENTAL, VERSION_MIN_RELEASE } from '@/features/backup/envelope';
+import { VERSION_MIN_RELEASE } from '@/features/backup/envelope';
 import type { Manifest } from '@/features/backup/manifest';
 import { countParts, openManifest, sealManifest as sealPure } from '@/features/backup/package';
 import type { OpenedManifest, SealingKeys } from '@/features/backup/package';
@@ -21,11 +21,17 @@ export type { OpenedManifest };
  * ⚠ **`0x00~0x0F`는 실험 구간이라 사용자 빌드에 나가면 안 된다.** 내부 테스트도
  *   사용자 릴리스다 — 테스터는 자기 진짜 일기를 쓴다. 실험 버전으로 백업한 사람의
  *   데이터는 동결 시점에 못 읽는 데이터가 되고, 폰을 잃은 뒤라면 영구 손실이다.
- *   **백업 UI를 사용자에게 여는 릴리스에서 이 값을 `VERSION_MIN_RELEASE`로 바꾼다.**
+ *   **동결 완료(2026-08-11)**: `VERSION_MIN_RELEASE`(0x10). 실험 구간(`VERSION_EXPERIMENTAL`)은
+ *   다음 봉투 형식을 만들 때만 잠시 쓰고, 사용자에게 나가기 전에 다시 올린다.
  */
-export const ENVELOPE_VERSION: number = VERSION_EXPERIMENTAL;
+export const ENVELOPE_VERSION: number = VERSION_MIN_RELEASE;
 
-/** 백업 UI를 노출해도 되는 빌드인가. 릴리스 체크리스트가 이걸 본다 */
+/**
+ * 백업 UI를 노출해도 되는 빌드인가.
+ *
+ * ⚠ 전에는 *"릴리스 체크리스트가 이걸 본다"* 라고만 적혀 있었고 **보는 곳이 없었다.**
+ *   사람이 지키기로 한 규칙은 지켜지지 않는다 — 화면이 직접 본다(`app/backup.tsx`).
+ */
 export function isReleaseEnvelopeVersion(): boolean {
   return ENVELOPE_VERSION >= VERSION_MIN_RELEASE;
 }

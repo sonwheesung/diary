@@ -9,6 +9,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
+import { isReleaseEnvelopeVersion } from '@/features/backup/api/package';
 import { getBackupState, markCodeConfirmed } from '@/features/backup/api/backup-state';
 import type { BackupState } from '@/features/backup/api/backup-state';
 import {
@@ -145,7 +146,15 @@ export default function BackupScreen() {
         </View>
       )}
 
-      {state === null ? (
+      {/*
+        ⚠ **실험 봉투 버전으로는 사용자에게 백업을 열지 않는다.** 그 버전으로 올라간
+          데이터는 동결 시점에 못 읽는 데이터가 되고, 폰을 잃은 뒤라면 영구 손실이다.
+          내부 테스트도 사용자 릴리스다 — 테스터는 자기 진짜 일기를 쓴다.
+          개발 빌드는 통과시킨다(그래야 다음 형식을 만들 수 있다).
+      */}
+      {!__DEV__ && !isReleaseEnvelopeVersion() ? (
+        <Text style={styles.subtle}>{t('backup.experimentalBuild')}</Text>
+      ) : state === null ? (
         <ActivityIndicator color={colors.accentMuted} />
       ) : state.enabled ? (
         <View style={styles.block}>

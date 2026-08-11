@@ -294,6 +294,7 @@
     "confirmCodeWrong": "적어 둔 코드를 다시 확인해 주세요.",
     "doneBody": "{{count}}개 묶음으로 올렸어요.",
     "doneTitle": "백업했어요",
+    "experimentalBuild": "이 빌드에서는 백업을 사용할 수 없어요. 다음 버전에서 열려요.",
     "fail": {
       "not-configured": "백업 서버가 설정되지 않았어요.",
       "offline": "인터넷에 연결되어 있지 않아요.",

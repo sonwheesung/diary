@@ -294,6 +294,7 @@
     "confirmCodeWrong": "That does not match. Please check what you saved.",
     "doneBody": "Uploaded in {{count}} parts.",
     "doneTitle": "Backed up",
+    "experimentalBuild": "Backup is not available in this build. It opens in a later version.",
     "fail": {
       "not-configured": "The backup server is not configured.",
       "offline": "You are not connected to the internet.",
