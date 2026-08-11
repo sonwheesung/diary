@@ -497,10 +497,24 @@ stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까�
 로컬 스택은 같은 머신이라 **호스트·지연·실제 Storage 동작이 다르다.** 실제로 로컬에서만
 `SUPABASE_PUBLIC_URL` 문제가 나왔다 — 서명 URL의 `127.0.0.1`이 에뮬레이터에겐 자기 자신이었다.
 
-- [ ] `npm run e2e`를 **stg URL로** 한 번 통과시킨다(32개)
-- [ ] 실기기에서 `EXPO_PUBLIC_BACKUP_SERVER_URL`을 stg로 두고 기기 점검 18개
-- [ ] 서명 URL PUT이 실제 Storage(로컬 MinIO 아님)에서 5MB를 받는지
-- [ ] 서울 리전 왕복 지연 — introspect가 태평양을 건너지 않는지(`CLAUDE.md` §5 ⚠)
+- [x] `npm run e2e` **32/32** (2026-08-11 · `jogak-stg` 서울)
+- [x] 기기 점검 **15/18** — 남은 3은 dev 빌드의 암호 속도 게이트(릴리스에서 잰다)
+- [x] 서명 URL PUT이 실제 Storage에서 5MB를 받는다 — **0.96초**(개발 머신 기준, 기기 속도 아님)
+- [x] 사진 왕복이 **HTTPS 클라우드 경로**에서 통과 — 백업 전체 9.0초(사진 1장 + 매니페스트)
+- [ ] 서울 리전 왕복 지연 — introspect가 태평양을 건너지 않는지(`CLAUDE.md` §5 ⚠). ⏭ Vercel 배포 후
+
+### 실제로 세운 것 (2026-08-11)
+
+| | |
+|---|---|
+| 프로젝트 | `jogak-stg` · Vivace Staging(Free) · **Seoul `ap-northeast-2`** |
+| 키 | 새 형식 **`sb_secret_…`**. supabase-js Storage에서 그대로 동작한다(레거시 service_role JWT 아님) |
+| **Data API** | **껐다.** 우리는 PostgREST를 쓰지 않는데, 켜두면 drizzle이 만든 테이블(RLS 미적용)이 anon 키로 HTTP에서 읽힌다 — `vault_id`·용량·시각이 그대로 나간다. **끄고도 Storage는 정상**임을 왕복으로 확인했다 |
+| 버킷 | `backups` **비공개** · `npm run setup:storage`가 만든다 |
+| 연결 | Session pooler `:5432`(DDL). ⏭ Vercel에서는 Transaction 풀러 `:6543` + `prepare:false` |
+
+⚠ **`AUTH_STUB=1`은 로컬 전용이다.** 지금 구조는 *로컬 Next → 클라우드 Supabase*라 서버가
+   외부에 열려 있지 않다. Vercel에 올리는 순간 이 값이 있으면 **아무 Bearer나 통과한다.**
 
 ⚠ **운영으로 올릴 때는 "이관"과 "신규 생성" 중 하나다.** 이관이면 stg 데이터가 그대로 운영이 되므로
 **테스터의 시험 데이터가 운영에 남는다** — 신규로 만들고 stg는 버리는 쪽이 깨끗하다.
