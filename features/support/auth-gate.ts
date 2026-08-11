@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { purgeBackup } from '@/features/backup/api/run-backup';
 import { forgetPurchaseIdentity, reattachSubscription } from '@/features/subscription/api/purchases';
+import { DEV_LOGIN_ENABLED, DEV_SUBJECT, devSessionExists, devSignIn, devSignOut } from '@/features/support/dev-auth';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
@@ -74,6 +75,19 @@ export function useSupportAuth(): SupportAuth {
        * 로그아웃되면 안 된다), 세션 폐기는 서버가 401로 명시적으로 거절했을 때만 일어난다.
        * 그래서 오프라인일 때는 "기기에 토큰이 있는지"로 판단한다.
        */
+      /*
+       * 개발용 임의 로그인이 켜져 있으면 그것부터 본다 — 진짜 서버에 물어봐야
+       * `not-configured`로 떨어질 뿐이고, 그 사이 화면이 '로그인 필요'로 깜빡인다.
+       */
+      if (DEV_LOGIN_ENABLED && (await devSessionExists())) {
+        if (!alive) return;
+        setSubject(DEV_SUBJECT);
+        setSignedIn(true);
+        setReady(true);
+        void useEntitlementStore.getState().hydrate();
+        return;
+      }
+
       const result = await commonServer.restoreSession();
       if (!alive) {
         return;
@@ -92,6 +106,21 @@ export function useSupportAuth(): SupportAuth {
   }, []);
 
   const signIn = useCallback(async (): Promise<SignInOutcome> => {
+    /*
+     * ⚠ 구글 창을 띄우기 **전에** 가른다. 개발 빌드에서 구글 로그인을 붙이려면
+     *   SHA-1 등록과 dev build가 필요한데, 화면을 눌러보려는 목적에는 과하다.
+     */
+    if (DEV_LOGIN_ENABLED) {
+      const subject = await devSignIn();
+      if (subject === null) {
+        return 'not-configured';
+      }
+      setSubject(subject);
+      setSignedIn(true);
+      await useEntitlementStore.getState().hydrate();
+      return null;
+    }
+
     if (!WEB_CLIENT_ID) {
       return 'not-configured';
     }
@@ -171,6 +200,7 @@ export function useSupportAuth(): SupportAuth {
       // 구글 쪽을 먼저 끊어도 우리 세션이 남으면 로그인된 것처럼 보인다 — 둘 다 지운다
       await GoogleSignin.signOut().catch(() => {});
       await commonServer.logout();
+      await devSignOut();
       setSubject(null);
       setSignedIn(false);
       // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.

@@ -13,7 +13,7 @@ import { diaryDatesFor } from '@/features/backup/api/manifest-builder';
 import { downloadPhotos } from '@/features/backup/api/photos';
 import { applyRestore, diffAgainstLocal } from '@/features/backup/api/restore';
 import type { RestoreDiff } from '@/features/backup/api/restore';
-import { fetchRestorable } from '@/features/backup/api/run-backup';
+import { fetchRestorable, takeOverWriter } from '@/features/backup/api/run-backup';
 import { decodeRecoveryCode } from '@/features/backup/recovery-code';
 import type { Manifest } from '@/features/backup/manifest';
 import { formatListDate } from '@/lib/format';
@@ -99,6 +99,18 @@ export default function BackupRestoreScreen() {
       );
       return;
     }
+    /*
+     * ⚠ **여기서 라이터를 되찾는다.** 안 하면 `no-grant` 안내가 막다른 길이 된다 —
+     *   화면은 "여기서 복원하면 가져올 수 있어요"라고 말해놓고, 복원해도 다음 백업이
+     *   다시 막힌다(실제로 그 상태였다).
+     *
+     *   **복원 뒤에 부르는 것이 핵심이다.** 먼저 되찾으면 상대 기기의 백업을 멈춰놓고
+     *   이쪽 복원이 실패할 수 있다. 복원이 끝난 기기는 서버 내용과 같으므로 그때가 안전하다.
+     *
+     *   실패해도 복원 실패로 올리지 않는다 — 조각은 이미 들어왔고, 다음 백업이 다시 시도한다.
+     */
+    await takeOverWriter();
+
     /*
      * ⚠ 사진은 **복원이 끝난 뒤** 따로 받는다. 조각 행은 이미 들어왔고 사진은 `'missing'`으로
      *   표시돼 있다 — 여기서 실패하거나 사용자가 나가도 **복원 자체는 성공**이고, 다음에

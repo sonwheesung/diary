@@ -19,7 +19,8 @@
       },
       "env": {
         "EXPO_PUBLIC_SERVER_URL": "https://common-server.vercel.app",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "281316002652-v3959n7417plarerr1i1m7k9h71v5bgb.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "281316002652-v3959n7417plarerr1i1m7k9h71v5bgb.apps.googleusercontent.com",
+        "EXPO_PUBLIC_BACKUP_SERVER_URL": "https://jogak-stg.vercel.app"
       }
     },
     "production": {

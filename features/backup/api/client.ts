@@ -1,3 +1,4 @@
+import { DEV_SESSION_TOKEN } from '@/features/support/dev-auth';
 import { readSessionToken } from '@/lib/common-server/client';
 
 /**
@@ -105,7 +106,7 @@ function mapStatus(status: number): BackupFail {
  *   진짜 사용자의 백업이 스텁 신원으로 올라간다.
  */
 const DEVICE_CHECK_TOKEN =
-  process.env.EXPO_PUBLIC_DEVICE_CHECK === '1' ? 'jogak-device-check' : null;
+  process.env.EXPO_PUBLIC_DEVICE_CHECK === '1' ? DEV_SESSION_TOKEN : null;
 
 async function post<T>(path: string, body: unknown): Promise<BackupResult<T>> {
   if (BACKUP_SERVER_URL.length === 0) {
