@@ -15,6 +15,20 @@ import { reportError } from './observability';
  */
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? 'http://127.0.0.1:54321';
+/**
+ * 앱이 실제로 접속할 주소. 보통은 `SUPABASE_URL`과 같다.
+ *
+ * ⚠ 로컬 개발에서는 **다르다.** 서버는 호스트의 `127.0.0.1`로 Supabase에 닿지만
+ *   에뮬레이터에게 `127.0.0.1`은 **자기 자신**이라 서명 URL이 그대로 나가면
+ *   `Network request failed`가 된다(겪음). 그래서 서명 URL의 출처만 갈아끼운다.
+ */
+const PUBLIC_URL = process.env.SUPABASE_PUBLIC_URL ?? SUPABASE_URL;
+
+/** 서명 URL을 앱이 닿을 수 있는 주소로 바꾼다. 서명은 경로·쿼리에 걸려 있어 호스트를 바꿔도 유효하다 */
+function toPublicUrl(url: string): string {
+  if (PUBLIC_URL === SUPABASE_URL) return url;
+  return url.startsWith(SUPABASE_URL) ? `${PUBLIC_URL}${url.slice(SUPABASE_URL.length)}` : url;
+}
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
 export const BUCKET = 'backups';
 
@@ -39,6 +53,19 @@ export function manifestPath(vaultId: string, seq: number, part: number): string
   assertIndex(seq);
   assertIndex(part);
   return `${vaultId}/manifests/${seq}/${part}`;
+}
+
+/**
+ * 사진 blob의 자리. `blobKey`는 앱이 DEK에서 유도한 hex 64자다.
+ *
+ * ⚠ 여기서도 **서버가 조립한다.** 앱 문자열을 경로에 넣으면 `../`로 남의 금고에 쓸 수 있다.
+ */
+export function blobPath(vaultId: string, blobKey: string): string {
+  assertHex32(vaultId);
+  if (!/^[0-9a-f]{64}$/.test(blobKey)) {
+    throw new Error('blobKey는 소문자 hex 64자여야 한다');
+  }
+  return `${vaultId}/blobs/${blobKey}`;
 }
 
 function assertHex32(vaultId: string): void {
@@ -74,7 +101,7 @@ export async function signUpload(path: string): Promise<SignedUpload | null> {
     reportError(error, 'signUpload');
     return null;
   }
-  return data;
+  return { ...data, signedUrl: toPublicUrl(data.signedUrl) };
 }
 
 /** 다운로드용 서명 URL. 복원이 이걸로 직접 받는다 */
@@ -86,7 +113,7 @@ export async function signDownload(path: string, expiresInSeconds = 3600): Promi
     reportError(error, 'signDownload');
     return null;
   }
-  return data.signedUrl;
+  return toPublicUrl(data.signedUrl);
 }
 
 /**

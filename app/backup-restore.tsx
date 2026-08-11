@@ -10,6 +10,7 @@ import { Screen } from '@/components/Screen';
 import { adoptBackupSecret, loadBackupKeys } from '@/features/backup/api/key-store';
 import type { BackupKeys } from '@/features/backup/api/key-store';
 import { diaryDatesFor } from '@/features/backup/api/manifest-builder';
+import { downloadPhotos } from '@/features/backup/api/photos';
 import { applyRestore, diffAgainstLocal } from '@/features/backup/api/restore';
 import type { RestoreDiff } from '@/features/backup/api/restore';
 import { fetchRestorable } from '@/features/backup/api/run-backup';
@@ -35,7 +36,9 @@ type Step =
   | { kind: 'code' }
   | { kind: 'loading' }
   | { kind: 'confirm'; keys: BackupKeys; manifest: Manifest; seq: number; diff: RestoreDiff; dates: string[] }
-  | { kind: 'applying' };
+  | { kind: 'applying' }
+  /** 조각은 이미 들어왔고 사진만 받는 중. **여기서 실패해도 복원은 성공이다** */
+  | { kind: 'photos' };
 
 export default function BackupRestoreScreen() {
   const { t } = useTranslation();
@@ -96,7 +99,26 @@ export default function BackupRestoreScreen() {
       );
       return;
     }
-    Alert.alert(t('backup.restoreDoneTitle'), t('backup.restoreDoneBody'), [
+    /*
+     * ⚠ 사진은 **복원이 끝난 뒤** 따로 받는다. 조각 행은 이미 들어왔고 사진은 `'missing'`으로
+     *   표시돼 있다 — 여기서 실패하거나 사용자가 나가도 **복원 자체는 성공**이고, 다음에
+     *   다시 시도할 수 있다. 그래서 실패를 복원 실패로 올리지 않는다.
+     */
+    setStep({ kind: 'photos' });
+    setRatio(0);
+    let absent = 0;
+    try {
+      const photos = await downloadPhotos(current.keys, ({ done, total }) =>
+        setRatio(total === 0 ? 1 : done / total),
+      );
+      if (photos.ok) {
+        absent = photos.absent;
+      }
+    } catch {
+      // 사진은 다시 받을 수 있다. 조각을 되찾은 것이 이 화면의 목적이다.
+    }
+
+    Alert.alert(t('backup.restoreDoneTitle'), restoreDoneBody(absent), [
       // ⚠ 홈으로 되돌린다. 잠금은 백업 대상이 아니라 복원 후 꺼져 있고,
       //   화면들은 포커스를 잃은 적이 없어 스스로 다시 읽지 않는다.
       { text: t('common.confirm'), onPress: () => router.replace('/') },
@@ -117,7 +139,15 @@ export default function BackupRestoreScreen() {
     </View>
   );
 
-  if (step.kind === 'loading' || step.kind === 'applying') {
+  /** 사진이 서버에도 없으면 **그 사실을 말한다.** 조용히 넘기면 "복원이 반쯤 됐나"로 읽힌다 */
+  const restoreDoneBody = (absent: number) =>
+    absent > 0
+      ? `${t('backup.restoreDoneBody')}
+
+${t('backup.restorePhotosAbsent', { count: absent })}`
+      : t('backup.restoreDoneBody');
+
+  if (step.kind === 'loading' || step.kind === 'applying' || step.kind === 'photos') {
     return (
       <Screen edges={['top', 'bottom', 'left', 'right']} header={header} scroll={false}>
         <View style={styles.center}>
@@ -125,7 +155,9 @@ export default function BackupRestoreScreen() {
           <Text style={styles.progressText}>
             {step.kind === 'loading'
               ? `${t('backup.restoreDownloading')} ${Math.round(ratio * 100)}%`
-              : t('backup.restoreApplying')}
+              : step.kind === 'photos'
+                ? `${t('backup.restorePhotos')} ${Math.round(ratio * 100)}%`
+                : t('backup.restoreApplying')}
           </Text>
           {/* 복원 중 이탈을 막을 수는 없지만, 나가면 안 된다는 것은 말해준다 */}
           {step.kind === 'applying' && (

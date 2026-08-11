@@ -202,10 +202,16 @@ export function BlockEditor({
           const image = images.get(block.imageId);
           return (
             <View key={`image-${block.imageId}`} style={styles.imageBlock}>
-              {image === undefined ? (
-                // 이미지 메타를 못 찾는 경우(파일 유실·데이터 불일치)에도 본문 전체를 죽이지 않는다.
+              {image === undefined || image.blobState === 'missing' ? (
+                /*
+                 * 이미지 메타를 못 찾거나(파일 유실·데이터 불일치) 복원이 파일을 못 받아온 경우
+                 * 본문 전체를 죽이지 않는다. **둘의 문구는 다르다** — 하나는 일시적일 수 있고
+                 * `'missing'`은 영구다.
+                 */
                 <View style={styles.imageMissing}>
-                  <Text style={styles.imageMissingText}>{t('write.imageLoadFailed')}</Text>
+                  <Text style={styles.imageMissingText}>
+                    {image === undefined ? t('write.imageLoadFailed') : t('backup.photoMissing')}
+                  </Text>
                 </View>
               ) : (
                 <Image

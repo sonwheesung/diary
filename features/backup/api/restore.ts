@@ -1,8 +1,10 @@
+import { File } from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 
 import { getDatabase } from '@/db/client';
 import { LATEST_DB_VERSION, migrate } from '@/db/migrations';
 import { adoptRestoredGeneration } from '@/features/backup/api/backup-state';
+import { resolveImageUri } from '@/features/diary/api/image-store';
 import { localAliveDiaryIds } from '@/features/backup/api/manifest-builder';
 import { clearSentinel, readSentinel, writeSentinel } from '@/features/backup/api/sentinel';
 import { aliveDiaryIds } from '@/features/backup/manifest';
@@ -215,14 +217,21 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
     await db.withTransactionAsync(async () => {
       for (const row of rows) {
         /*
-         * ⚠ `blob_state`를 매니페스트 값이 아니라 **'missing'으로 강제한다.**
-         *   1차는 사진 파일을 가져오지 않으므로, 원본 기기의 'present'를 그대로 쓰면
-         *   "파일이 있다"고 주장하는 행이 생긴다.
+         * ⚠ `blob_state`는 매니페스트 값을 쓰지 않는다 — 그건 **원본 기기의 사정**이다.
+         *   이 기기에 파일이 실제로 있는지로 정한다:
+         *
+         *   - 파일 있음 → `null`  같은 기기에서 복원했거나 사진 백업 이전 세대다.
+         *                        서버에 있는지는 모르므로 다음 백업이 확인해서 올린다.
+         *   - 파일 없음 → `'missing'`  `downloadPhotos()`가 받아올 대상.
+         *
+         *   ⚠ 파일이 있는데도 `'missing'`을 박으면 **네트워크가 없거나 사진 백업 이전
+         *     세대일 때 멀쩡히 있는 사진이 "이 기기에 없어요"로 표시된다.**
          */
+        const present = new File(resolveImageUri(row.file_name)).exists;
         await db.runAsync(
           `INSERT OR REPLACE INTO diary_images
              (id, diary_id, file_name, width, height, created_at, deleted_at, blob_state)
-           VALUES (?, ?, ?, ?, ?, ?, ?, 'missing')`,
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
           row.id,
           row.diary_id,
           row.file_name,
@@ -230,6 +239,7 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
           row.height,
           row.created_at,
           row.deleted_at,
+          present ? null : 'missing',
         );
       }
     });

@@ -1,13 +1,14 @@
 import { and, eq, lt, sql } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { generationParts, generations, vaults } from '@/db/schema';
+import { generationParts, generations, vaultBlobs, vaults } from '@/db/schema';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { removeObjects, storageConfigured } from '@/lib/storage';
 import { purgeVault } from '@/lib/vault';
 import {
   ABANDONED_MS,
+  BLOB_ORPHAN_MS,
   GRACE_MS,
   KEEP_GENERATIONS,
   RESERVED_TTL_MS,
@@ -160,6 +161,31 @@ export async function POST(req: Request) {
       purgedAbandoned += 1;
     }
 
+    // ── 5.5 고아 blob ─────────────────────────────────────────────────────────
+    /*
+     * ⚠ **서버는 매니페스트를 읽을 수 없다**(암호문이다). 그래서 "이 blob이 참조되는가"를
+     *   혼자 판정할 수 없고, 앱이 백업할 때마다 `plan`으로 알려주는 `referencedAt`이
+     *   유일한 근거다.
+     *
+     * ⚠ 그래서 **유예를 넉넉히 둔다.** "현재 매니페스트에 없으면 즉시 삭제"로 만들면,
+     *   백업이 며칠 실패한 사이에 멀쩡한 사진이 지워진다. 7일이면 사람이 알아챌 시간이 된다.
+     */
+    let reapedBlobs = 0;
+    const orphanBlobs = await db
+      .select()
+      .from(vaultBlobs)
+      .where(lt(vaultBlobs.referencedAt, new Date(now - BLOB_ORPHAN_MS)))
+      .limit(500);
+    if (orphanBlobs.length > 0) {
+      await removeObjects(orphanBlobs.map((blob) => blob.objectPath));
+      for (const blob of orphanBlobs) {
+        await db
+          .delete(vaultBlobs)
+          .where(and(eq(vaultBlobs.vaultId, blob.vaultId), eq(vaultBlobs.blobKey, blob.blobKey)));
+      }
+      reapedBlobs = orphanBlobs.length;
+    }
+
     // ── 6. 보관 기간이 지난 툼스톤 ────────────────────────────────────────────
     const expired = await db
       .delete(vaults)
@@ -172,7 +198,7 @@ export async function POST(req: Request) {
       .returning({ id: vaults.id });
     reapedTombstones = expired.length;
 
-    return ok({ reapedParts, reapedGenerations, purgedExpired, purgedAbandoned, reapedTombstones });
+    return ok({ reapedParts, reapedGenerations, reapedBlobs, purgedExpired, purgedAbandoned, reapedTombstones });
   } catch (error) {
     reportError(error, 'cron/reap');
     return fail('error');

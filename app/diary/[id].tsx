@@ -178,6 +178,8 @@ export default function DiaryDetailScreen() {
     .filter((block): block is Extract<typeof block, { type: 'image' }> => block.type === 'image')
     .map((block) => images.get(block.imageId))
     .filter((image): image is DiaryImage => image !== undefined)
+    // 없는 사진은 넘겨보기에서도 뺀다 — 넘기다 빈 화면이 나오면 뷰어가 고장 난 것처럼 보인다.
+    .filter((image) => image.blobState !== 'missing')
     .map((image) => resolveImageUri(image.fileName));
 
   return (
@@ -227,6 +229,19 @@ export default function DiaryDetailScreen() {
           return (
             <View key={`image-${block.imageId}`} style={styles.imageMissing}>
               <Text style={styles.imageMissingText}>{t('detail.imageLoadFailed')}</Text>
+            </View>
+          );
+        }
+        /*
+         * ⚠ **'없다'와 '못 읽었다'를 구분해서 말한다.** 복원은 행을 되살리지만 파일은
+         *   따로 받아오므로, 못 받은 사진은 여기서 영구히 빈 자리다. 같은 문구를 쓰면
+         *   사용자는 기다리면 나올 줄 알고 영영 기다린다.
+         */
+        if (image.blobState === 'missing') {
+          return (
+            <View key={`image-${block.imageId}`} style={styles.imageMissing}>
+              <Text style={styles.imageMissingText}>{t('backup.photoMissing')}</Text>
+              <Text style={styles.imageMissingHint}>{t('backup.photoMissingHint')}</Text>
             </View>
           );
         }
@@ -368,6 +383,15 @@ const createStyles = (colors: Palette) =>
     imageMissingText: {
       ...typography.caption,
       color: colors.textMuted,
+      textAlign: 'center',
+    },
+    imageMissingHint: {
+      ...typography.caption,
+      color: colors.textMuted,
+      textAlign: 'center',
+      marginTop: spacing.xs,
+      // 독일어는 두 배까지 길어진다 — 자르지 않고 줄바꿈으로 받는다(§9.1).
+      paddingHorizontal: spacing.md,
     },
     tagRow: {
       flexDirection: 'row',

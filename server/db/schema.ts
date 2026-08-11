@@ -153,3 +153,40 @@ export const generationParts = pgTable(
     index('idx_parts_reaper').on(table.state, table.reservedAt),
   ],
 );
+
+/**
+ * 사진 blob — 이미지 하나 = 행 하나.
+ *
+ * **세대와 무관하게 산다.** 매니페스트는 세대마다 통째로 다시 올리지만, 사진은 한 번
+ * 올리면 끝이다 — 조각 500개짜리 사용자가 한 줄 고쳤다고 사진 300장을 다시 올릴 수는 없다.
+ *
+ * ⚠ `blobKey`는 `HKDF(DEK, "jogak/blob/v1" ‖ image_id)`다. **콘텐츠 주소가 아니다** —
+ *   `sha256(암호문)`은 nonce가 랜덤이라 성립하지 않고, `sha256(평문)`은 서버가
+ *   "이 사용자가 이 사진을 갖고 있는가"를 확인할 수 있게 만든다.
+ */
+export const vaultBlobs = pgTable(
+  'vault_blobs',
+  {
+    vaultId: text('vault_id').notNull(),
+    /** 소문자 hex 64자 */
+    blobKey: text('blob_key').notNull(),
+    objectPath: text('object_path').notNull(),
+    /** 'reserved' | 'committed' */
+    state: text('state').notNull().default('reserved'),
+    /** commit 때 **서버가 Storage에 물어** 채운다. 앱이 보낸 값을 믿지 않는다 */
+    bytes: bigint('bytes', { mode: 'number' }),
+    reservedAt: timestamp('reserved_at', { withTimezone: true }).notNull().defaultNow(),
+    committedAt: timestamp('committed_at', { withTimezone: true }),
+    /**
+     * 마지막으로 어느 세대가 이걸 참조했는가.
+     *
+     * ⚠ **서버는 매니페스트를 읽을 수 없다**(암호문이다). 그래서 앱이 커밋할 때 참조 목록을
+     *   함께 보내고, 서버는 그 시각을 여기 찍는다. 오래 참조되지 않은 blob이 고아다.
+     */
+    referencedAt: timestamp('referenced_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('uq_blobs').on(table.vaultId, table.blobKey),
+    index('idx_blobs_reaper').on(table.state, table.referencedAt),
+  ],
+);

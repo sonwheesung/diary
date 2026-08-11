@@ -35,6 +35,7 @@ const INFO_DEK = asciiBytes('jogak/dek/v1');
 const INFO_VAULT_ID = asciiBytes('jogak/vault-id/v1');
 const INFO_KID = asciiBytes('jogak/kid/v1');
 const INFO_AUTH = asciiBytes('jogak/auth/v1');
+const INFO_BLOB = asciiBytes('jogak/blob/v1');
 
 /** `TextEncoder`를 쓰지 않는다 — RN과 Node 양쪽에서 임포트 0으로 돌아야 한다 */
 function asciiBytes(text: string): Uint8Array {
@@ -89,6 +90,32 @@ export function deriveKid(secret: Uint8Array): Uint8Array {
  */
 export function deriveAuthKey(secret: Uint8Array): string {
   return toHex(deriveKey(secret, INFO_AUTH, 32));
+}
+
+/**
+ * 사진 blob이 서버에서 놓일 자리.
+ *
+ * ⚠ **콘텐츠 주소가 아니다.** `sha256(암호문)`은 nonce가 랜덤이라 같은 사진도 매번 달라져
+ *   재시도가 중복을 쌓고, `sha256(평문)`은 **서버가 "이 사용자가 이 사진을 갖고 있는가"를
+ *   확인할 수 있게 된다**(알려진 이미지 해시와 대조). 둘 다 안 된다.
+ *
+ * 이미지 하나 = blob 하나이고, **재업로드가 같은 경로를 덮는다**(멱등).
+ * 중복 제거는 하지 않는다 — 축소된 사진이 장당 ~300KB라 그 낭비가 개인정보 위험보다 싸다.
+ */
+export function deriveBlobKey(secret: Uint8Array, imageId: string): string {
+  const id = new Uint8Array(imageId.length);
+  for (let i = 0; i < imageId.length; i += 1) {
+    const code = imageId.charCodeAt(i);
+    // image_id는 UUID(ASCII)다. 아니면 유도가 기기마다 갈릴 수 있으므로 막는다.
+    if (code > 0x7f) {
+      throw new Error('image_id는 ASCII여야 한다');
+    }
+    id[i] = code;
+  }
+  const info = new Uint8Array(INFO_BLOB.length + id.length);
+  info.set(INFO_BLOB, 0);
+  info.set(id, INFO_BLOB.length);
+  return toHex(deriveKey(secret, info, 32));
 }
 
 /**

@@ -1,9 +1,9 @@
 import { createHash } from 'node:crypto';
 
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { generationParts, generations, vaultGrants, vaults } from '@/db/schema';
+import { generationParts, generations, vaultBlobs, vaultGrants, vaults } from '@/db/schema';
 import { removeObjects } from './storage';
 import type { Identity } from './auth';
 
@@ -161,10 +161,21 @@ export async function findVault(vaultId: string): Promise<VaultRow | null> {
  * 코드를 아는 사람이 남의 금고 인가를 갈아치울 수 있다.
  */
 export async function ensureVault(vaultId: string, authKey?: string): Promise<VaultRow> {
-  await db
-    .insert(vaults)
-    .values({ id: vaultId, authHash: authKey === undefined ? null : hashAuthKey(authKey) })
-    .onConflictDoNothing();
+  const authHash = authKey === undefined ? null : hashAuthKey(authKey);
+  await db.insert(vaults).values({ id: vaultId, authHash }).onConflictDoNothing();
+
+  /*
+   * ⚠ **비어 있는 해시는 채운다.** 사진이 매니페스트보다 먼저 올라가므로 금고가
+   *   `authKey` 없이 먼저 생길 수 있고, 그대로 두면 **되찾기·코드로 삭제가 영영 막힌
+   *   금고**가 남는다. 덮어쓰기가 아니라 빈 칸 채우기라 위 규칙과 충돌하지 않는다.
+   */
+  if (authHash !== null) {
+    await db
+      .update(vaults)
+      .set({ authHash })
+      .where(and(eq(vaults.id, vaultId), isNull(vaults.authHash)));
+  }
+
   const row = await findVault(vaultId);
   if (row === null) {
     throw new Error('금고를 만들지 못했다');
@@ -203,6 +214,14 @@ export async function purgeVault(vaultId: string): Promise<void> {
 
   // 객체를 먼저 지운다 — 행을 먼저 지우면 **경로를 잃어 객체가 영원히 남는다.**
   await removeObjects(parts.map((part) => part.objectPath));
+
+  // ⚠ 사진 blob도 함께 지운다. 빠뜨리면 "탈퇴하면 백업도 삭제됩니다"가 거짓이 된다.
+  const blobs = await db
+    .select({ objectPath: vaultBlobs.objectPath })
+    .from(vaultBlobs)
+    .where(eq(vaultBlobs.vaultId, vaultId));
+  await removeObjects(blobs.map((blob) => blob.objectPath));
+  await db.delete(vaultBlobs).where(eq(vaultBlobs.vaultId, vaultId));
 
   await db.delete(generationParts).where(eq(generationParts.vaultId, vaultId));
   await db.delete(generations).where(eq(generations.vaultId, vaultId));

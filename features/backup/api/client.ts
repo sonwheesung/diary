@@ -41,9 +41,47 @@ export type BackupFail =
 /** 성공에 실릴 것이 없으면 `BackupResult<Empty>` */
 export type Empty = Record<never, never>;
 
-export type BackupResult<T> = ({ ok: true } & T) | { ok: false; reason: BackupFail; detail?: unknown };
+export type BackupResult<T> =
+  | ({ ok: true } & T)
+  | {
+      ok: false;
+      reason: BackupFail;
+      detail?: unknown;
+      /**
+       * `seq-conflict`일 때 서버가 알려주는 마지막 세대.
+       *
+       * 앱이 커서를 잃으면(재설치·데이터 삭제) 영원히 1번을 올리려 해서 **백업이 영구히
+       * 막힌다.** 서버가 진실을 알고 있으므로 그 값으로 맞추고 한 번 더 시도한다.
+       */
+      serverSeq?: number;
+    };
 
 const TIMEOUT_MS = 20_000;
+
+/**
+ * 시간 제한이 걸린 `fetch`.
+ *
+ * ⚠ **`AbortSignal.timeout()`을 쓰지 않는다 — Hermes에 없다.**
+ *   *(`TypeError: AbortSignal.timeout is not a function`)*. 이걸로 서버 호출이 **전부**
+ *   즉시 던졌고, `catch`가 그걸 `offline`으로 바꿔서 **네트워크가 멀쩡한데 "오프라인"** 이
+ *   떴다. Node에는 있어서 서버 e2e는 전부 통과했다 — 기기에서만 드러나는 종류다.
+ *
+ * ⚠ 타이머는 `finally`로 반드시 끈다. 안 끄면 20초짜리 타이머가 요청마다 쌓인다.
+ */
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 
 function mapStatus(status: number): BackupFail {
   if (status === 401) return 'unauthorized';
@@ -56,24 +94,44 @@ function mapStatus(status: number): BackupFail {
   return 'error';
 }
 
+/**
+ * 점검용 토큰 — **로컬 스텁 서버(`AUTH_STUB=1`)에서만 의미가 있다.**
+ *
+ * 기기 점검은 구글 로그인 없이 돌아야 한다(에뮬레이터에 로그인 세션이 없다).
+ * 진짜 서버는 이 문자열을 introspect에서 거부하므로 **릴리스에서 권한이 되지 않는다** —
+ * 이 값이 통하는 유일한 서버는 내 컴퓨터의 스텁이다.
+ *
+ * ⚠ 그래도 세션이 있으면 **세션이 이긴다.** 반대로 두면 점검 플래그가 켜진 기기에서
+ *   진짜 사용자의 백업이 스텁 신원으로 올라간다.
+ */
+const DEVICE_CHECK_TOKEN =
+  process.env.EXPO_PUBLIC_DEVICE_CHECK === '1' ? 'jogak-device-check' : null;
+
 async function post<T>(path: string, body: unknown): Promise<BackupResult<T>> {
   if (BACKUP_SERVER_URL.length === 0) {
     return { ok: false, reason: 'not-configured' };
   }
-  const token = await readSessionToken();
+  const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
   if (token === null) {
     return { ok: false, reason: 'unauthorized' };
   }
 
   let res: Response;
   try {
-    res = await fetch(`${BACKUP_SERVER_URL}/api/v1/backup/${path}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(TIMEOUT_MS),
-    });
-  } catch {
+    res = await fetchWithTimeout(
+      `${BACKUP_SERVER_URL}/api/v1/backup/${path}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      },
+      TIMEOUT_MS,
+    );
+  } catch (error) {
+    // 점검 중에만 원인을 남긴다. 평상시엔 화면이 '오프라인'만 알면 된다.
+    if (DEVICE_CHECK_TOKEN !== null) {
+      console.log(`[jogak-check] post ${path} threw: ${String(error)}`);
+    }
     return { ok: false, reason: 'offline' };
   }
 
@@ -87,7 +145,12 @@ async function post<T>(path: string, body: unknown): Promise<BackupResult<T>> {
   if (!res.ok || json.ok !== true) {
     // 서버가 준 사유를 우선한다 — 403이 세 가지(구독·grant·쿼터)라 상태코드만으로는 못 가른다.
     const reason = typeof json.reason === 'string' ? (json.reason as BackupFail) : mapStatus(res.status);
-    return { ok: false, reason, detail: json.detail };
+    return {
+      ok: false,
+      reason,
+      detail: json.detail,
+      serverSeq: typeof json.serverSeq === 'number' ? json.serverSeq : undefined,
+    };
   }
   return json as unknown as BackupResult<T>;
 }
@@ -138,19 +201,28 @@ export async function uploadPart(
   bytes: Uint8Array,
 ): Promise<BackupResult<Empty>> {
   try {
-    const res = await fetch(signedUrl, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/octet-stream' },
-      // ⚠ ArrayBuffer로 넘긴다 — Uint8Array를 그대로 주면 RN이 base64로 바꿔
-      //   1.33배로 부풀고 서버가 받은 바이트가 달라진다.
-      body: bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer,
-      signal: AbortSignal.timeout(TIMEOUT_MS * 3),
-    });
+    const res = await fetchWithTimeout(
+      signedUrl,
+      {
+        method: 'PUT',
+        headers: { 'content-type': 'application/octet-stream' },
+        // ⚠ ArrayBuffer로 넘긴다 — Uint8Array를 그대로 주면 RN이 base64로 바꿔
+        //   1.33배로 부풀고 서버가 받은 바이트가 달라진다.
+        body: bytes.buffer.slice(
+          bytes.byteOffset,
+          bytes.byteOffset + bytes.byteLength,
+        ) as ArrayBuffer,
+      },
+      TIMEOUT_MS * 3,
+    );
     if (!res.ok) {
       return { ok: false, reason: res.status === 413 ? 'too-large' : mapStatus(res.status) };
     }
     return { ok: true };
-  } catch {
+  } catch (error) {
+    if (DEVICE_CHECK_TOKEN !== null) {
+      console.log(`[jogak-check] uploadPart threw: ${String(error)}`);
+    }
     return { ok: false, reason: 'offline' };
   }
 }
@@ -206,10 +278,57 @@ export function deleteVault(
   return post('delete', { vaultId, authKey });
 }
 
+/**
+ * 사진 blob — 이미지 하나 = blob 하나. **세대와 무관하게 산다.**
+ *
+ * `plan`이 증분의 전부다: 서버가 이미 가진 것을 빼고 **없는 것만** 올린다.
+ * 매번 전량을 올리면 사진 300장짜리 사용자는 백업을 한 번도 끝내지 못한다.
+ */
+export const blobs = {
+  /**
+   * 어느 것이 이미 있는가. 참조 시각도 여기서 갱신된다(서버는 매니페스트를 못 읽는다).
+   *
+   * ⚠ 쓰기 갈래는 **`authKey`를 함께 보낸다.** 사진이 매니페스트보다 먼저 가므로
+   *   금고를 여기서 처음 만들 수 있는데, 키 없이 만들면 되찾기·삭제가 막힌 금고가 남는다.
+   */
+  plan(
+    vaultId: string,
+    authKey: string,
+    blobKeys: string[],
+  ): Promise<BackupResult<{ have: string[]; missing: string[] }>> {
+    return post('blobs', { action: 'plan', vaultId, authKey, blobKeys });
+  },
+  reserve(
+    vaultId: string,
+    authKey: string,
+    blobKeys: string[],
+  ): Promise<BackupResult<{ uploads: { blobKey: string; signedUrl: string }[] }>> {
+    return post('blobs', { action: 'reserve', vaultId, authKey, blobKeys });
+  },
+  /** 서버가 실제 크기를 물어 대조하고 쿼터를 센다 */
+  commit(
+    vaultId: string,
+    authKey: string,
+    blobKeys: string[],
+  ): Promise<BackupResult<{ committed: string[]; missing: string[]; usedBytes: number; quota: number }>> {
+    return post('blobs', { action: 'commit', vaultId, authKey, blobKeys });
+  },
+  /**
+   * 복원용. ⚠ **구독을 요구하지 않는다** — 복원 경로이고 읽기는 암호가 지킨다.
+   * `absent`는 서버에도 없는 것 — 앱이 `'missing'`으로 남겨 화면에 밝혀야 한다.
+   */
+  download(
+    vaultId: string,
+    blobKeys: string[],
+  ): Promise<BackupResult<{ downloads: { blobKey: string; url: string }[]; absent: string[] }>> {
+    return post('blobs', { action: 'download', vaultId, blobKeys });
+  },
+};
+
 /** Storage에서 파트를 받는다. 서명 URL이라 인증 헤더가 없다 */
 export async function downloadPart(url: string): Promise<BackupResult<{ bytes: Uint8Array }>> {
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS * 3) });
+    const res = await fetchWithTimeout(url, {}, TIMEOUT_MS * 3);
     if (!res.ok) {
       return { ok: false, reason: mapStatus(res.status) };
     }

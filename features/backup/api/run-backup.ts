@@ -1,5 +1,7 @@
 import { openManifest, sealManifest } from '@/features/backup/api/package';
 import { buildManifest } from '@/features/backup/api/manifest-builder';
+import { uploadPhotos } from '@/features/backup/api/photos';
+import type { PhotoProgress } from '@/features/backup/api/photos';
 import { deleteBackupSecret, loadBackupKeys } from '@/features/backup/api/key-store';
 import type { BackupKeys } from '@/features/backup/api/key-store';
 import {
@@ -32,7 +34,7 @@ export type BackupFailure = BackupFail | 'no-keys';
 export interface BackupProgress {
   /** 0..1. 파트 업로드가 대부분을 차지한다 */
   ratio: number;
-  phase: 'building' | 'sealing' | 'uploading' | 'committing';
+  phase: 'building' | 'photos' | 'sealing' | 'uploading' | 'committing';
 }
 
 export type BackupOutcome =
@@ -47,22 +49,53 @@ export async function runBackup(
     return { ok: false, reason: 'no-keys' };
   }
 
-  onProgress?.({ ratio: 0, phase: 'building' });
+  /*
+   * ⚠ **사진을 매니페스트보다 먼저** 올린다. 반대로 하면 커밋된 세대가 **없는 사진을
+   *   가리킨다** — 복원한 사람은 행은 받았는데 파일이 영원히 안 오고, 화면에서 "손상"과
+   *   구별되지 않는다.
+   */
+  onProgress?.({ ratio: 0, phase: 'photos' });
+  const photos = await uploadPhotos(keys, ({ done, total }: PhotoProgress) =>
+    onProgress?.({ ratio: total === 0 ? 0 : (done / total) * 0.5, phase: 'photos' }),
+  );
+  if (!photos.ok) {
+    return photos;
+  }
+
+  onProgress?.({ ratio: 0.5, phase: 'building' });
   const manifest = await buildManifest();
 
   // 저장된 커서를 읽는다. vault_id가 다르면(= 다른 복구 코드로 갈아탐) 여기서 0으로 리셋된다.
   const state = await getBackupState(keys.vaultId);
-  const seq = state.seq + 1;
 
-  onProgress?.({ ratio: 0.05, phase: 'sealing' });
-  const { genId, envelopes } = await sealManifest(manifest, keys, seq);
+  /*
+   * ⚠ 커서가 서버보다 뒤처져 있으면 **영원히 같은 번호를 올리려 한다.** 재설치하거나
+   *   앱 데이터를 지우면 커서만 사라지고 복구 코드는 남으므로 실제로 일어난다 —
+   *   그때 백업 버튼이 영구히 실패하면 사용자가 할 수 있는 일이 없다.
+   *
+   *   서버가 `serverSeq`로 진실을 알려주므로 **한 번만** 맞춰서 다시 건다.
+   *   `seq`는 봉투의 AAD에 들어가므로 **다시 봉인해야 한다** — 번호만 바꿔 보내면 열리지 않는다.
+   */
+  const sealAt = async (at: number) => {
+    onProgress?.({ ratio: 0.55, phase: 'sealing' });
+    return await sealManifest(manifest, keys, at);
+  };
 
-  const reserved = await reserve(keys.vaultId, seq, genId, envelopes.length, keys.authKey);
+  let seq = state.seq + 1;
+  let sealed = await sealAt(seq);
+  let reserved = await reserve(keys.vaultId, seq, sealed.genId, sealed.envelopes.length, keys.authKey);
+
+  if (!reserved.ok && reserved.reason === 'seq-conflict' && typeof reserved.serverSeq === 'number') {
+    seq = reserved.serverSeq + 1;
+    sealed = await sealAt(seq);
+    reserved = await reserve(keys.vaultId, seq, sealed.genId, sealed.envelopes.length, keys.authKey);
+  }
   if (!reserved.ok) {
     return reserved;
   }
+  const { genId, envelopes } = sealed;
 
-  onProgress?.({ ratio: 0.1, phase: 'uploading' });
+  onProgress?.({ ratio: 0.6, phase: 'uploading' });
   for (const slot of reserved.uploads) {
     const uploaded = await uploadPart(slot.signedUrl, envelopes[slot.part]);
     if (!uploaded.ok) {
@@ -70,7 +103,7 @@ export async function runBackup(
     }
     // 업로드가 전체의 85%를 차지한다고 본다 — 봉인·커밋은 순식간이다.
     onProgress?.({
-      ratio: 0.1 + (0.85 * (slot.part + 1)) / reserved.uploads.length,
+      ratio: 0.6 + (0.35 * (slot.part + 1)) / reserved.uploads.length,
       phase: 'uploading',
     });
   }

@@ -21,7 +21,7 @@ const MAGIC = Uint8Array.of(0x4a, 0x47, 0x4b, 0x42);
 export const NONCE_LENGTH = 24;
 export const TAG_LENGTH = 16;
 export const KID_LENGTH = 4;
-export const BLOB_HASH_LENGTH = 32;
+export const BLOB_KEY_LENGTH = 32;
 /** 세대 식별자 — 같은 seq 안에서 옛 파트와 새 파트가 섞이는 것을 막는다 */
 export const GEN_ID_LENGTH = 8;
 
@@ -62,8 +62,15 @@ export interface ManifestContext {
 
 export interface BlobContext {
   readonly type: typeof ENVELOPE_TYPE.blob;
-  /** `sha256(암호문)`. 콘텐츠 주소이므로 봉인 **후에** 정해진다 — 헤더에는 참조로만 들어간다 */
-  readonly blobHash: Uint8Array;
+  /**
+   * 이 blob이 놓일 자리(`HKDF(DEK, "jogak/blob/v1" ‖ image_id)`), 32바이트.
+   *
+   * ⚠ ~~`sha256(암호문)`~~ 에서 바꿨다(2026-08-11). nonce가 랜덤이라 콘텐츠 주소가
+   *   성립하지 않고, 평문 해시는 서버에 "이 사진을 갖고 있는가"를 알려준다.
+   *
+   * 헤더 전체가 AAD이므로 **봉투가 자기 자리에 묶인다** — 다른 경로에 올려두면 개봉이 실패한다.
+   */
+  readonly blobKey: Uint8Array;
 }
 
 export type EnvelopeContext = ManifestContext | BlobContext;
@@ -94,7 +101,7 @@ const FIXED_PREFIX_LENGTH = 4 + 1 + 1 + 1 + KID_LENGTH + 1 + 1; // magic..ctxLen
 
 function contextLength(type: number): number {
   if (type === ENVELOPE_TYPE.manifest) return MANIFEST_CONTEXT_LENGTH;
-  if (type === ENVELOPE_TYPE.blob) return BLOB_HASH_LENGTH;
+  if (type === ENVELOPE_TYPE.blob) return BLOB_KEY_LENGTH;
   throw new EnvelopeError('JGKB-E01', `알 수 없는 봉투 type ${type}`);
 }
 
@@ -151,9 +158,9 @@ export function encodeHeader(header: EnvelopeHeader): Uint8Array {
     view.setUint16(p, partCount, false);
     p += 2;
   } else {
-    requireLength(header.context.blobHash, BLOB_HASH_LENGTH, 'blobHash');
-    out.set(header.context.blobHash, p);
-    p += BLOB_HASH_LENGTH;
+    requireLength(header.context.blobKey, BLOB_KEY_LENGTH, 'blobKey');
+    out.set(header.context.blobKey, p);
+    p += BLOB_KEY_LENGTH;
   }
 
   out.set(header.nonce, p);
@@ -223,7 +230,7 @@ export function parseEnvelope(bytes: Uint8Array): ParsedEnvelope {
     }
     context = { type: ENVELOPE_TYPE.manifest, seq, genId, part, partCount };
   } else {
-    context = { type: ENVELOPE_TYPE.blob, blobHash: bytes.subarray(p, p + BLOB_HASH_LENGTH) };
+    context = { type: ENVELOPE_TYPE.blob, blobKey: bytes.subarray(p, p + BLOB_KEY_LENGTH) };
   }
   p += ctxLen;
 

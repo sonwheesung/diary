@@ -60,7 +60,7 @@
 | **광고 제거(구독자)** | ✅ | `features/entitlement/store.ts` — 캐시 먼저·서버 나중. 조회 실패에 캐시를 지우지 않는다 |
 | **백업/복원 — 앱 쪽** | ✅ | 암호 계층·매니페스트·클라이언트·화면. [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
 | **백업/복원 — 실기기 검증** | ❌ | RN의 5MB PUT · `backupDatabaseAsync` 동작 · 암호 처리량 |
-| 사진 백업(2차) | ❌ | 1차는 텍스트만. 복원 후 사진 자리는 `blob_state='missing'` |
+| 사진 백업(2차) | ✅ | 이미지 하나 = blob 하나. 증분(`plan`) · 복원 후 못 받은 사진만 `'missing'` |
 | 월 구독(RevenueCat) | ❌ | Phase 9 대기 |
 | 백업/복원(클라이언트 암호화) | ❌ | 조각 서버 대기 |
 | AI 리포트(주간 우선·서버 프록시) | ❌ | 조각 서버 대기 |

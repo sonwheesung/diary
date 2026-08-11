@@ -27,6 +27,16 @@ async function check(name, fn) {
   }
 }
 
+/**
+ * 서명 URL을 **이 호스트에서 닿는 주소**로 되돌린다.
+ *
+ * 서버는 에뮬레이터를 위해 `SUPABASE_PUBLIC_URL=http://10.0.2.2:...`를 쓰는데,
+ * 그 주소는 안드로이드 에뮬레이터 안에서만 호스트를 가리킨다 — Node에서는 닿지 않는다.
+ */
+function reachable(url) {
+  return url.replace('10.0.2.2', '127.0.0.1');
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -76,7 +86,7 @@ await check(`서명 URL PUT — 파트당 ${(PART_BYTES / 1024).toFixed(0)}KB �
     for (let i = 0; i < bytes.length; i += 1) bytes[i] = (i * 31 + upload.part) & 0xff;
     payloads.push(bytes);
 
-    const res = await fetch(upload.signedUrl, {
+    const res = await fetch(reachable(upload.signedUrl), {
       method: 'PUT',
       headers: { 'content-type': 'application/octet-stream' },
       body: bytes,
@@ -99,13 +109,20 @@ await check('commit — 재호출은 성공으로 답한다 (응답 유실 재�
 });
 
 // ── 4. latest + 다운로드 ──────────────────────────────────────────────────────
+await check('reserve — 충돌하면 서버가 serverSeq를 알려준다 (앱이 커서를 맞출 수 있게)', async () => {
+  // 이게 없으면 커서를 잃은 앱(재설치)이 영원히 같은 번호를 올리려 해 백업이 영구히 막힌다.
+  const { status, json } = await api('reserve', { vaultId, seq: 1, genId, partCount: 1 });
+  assert(status === 409, `HTTP ${status}`);
+  assert(typeof json.serverSeq === 'number', JSON.stringify(json));
+});
+
 await check('latest — 완성된 세대의 다운로드 URL을 준다', async () => {
   const { status, json } = await api('latest', { vaultId });
   assert(status === 200, `HTTP ${status} ${JSON.stringify(json)}`);
   assert(json.seq === 1 && json.partCount === 2, `seq=${json.seq} parts=${json.partCount}`);
 
   for (const download of json.downloads) {
-    const res = await fetch(download.url);
+    const res = await fetch(reachable(download.url));
     assert(res.ok, `파트 ${download.part} 다운로드 HTTP ${res.status}`);
     const got = new Uint8Array(await res.arrayBuffer());
     const want = payloads[download.part];
@@ -123,7 +140,7 @@ await check('미완성 세대는 latest가 무시한다', async () => {
   assert(reserved.status === 200, `reserve HTTP ${reserved.status}`);
   // 파트를 하나만 올린다 → 세대 미완성
   const one = reserved.json.uploads[0];
-  const res = await fetch(one.signedUrl, { method: 'PUT', body: new Uint8Array(1024) });
+  const res = await fetch(reachable(one.signedUrl), { method: 'PUT', body: new Uint8Array(1024) });
   assert(res.ok, `PUT HTTP ${res.status}`);
 
   const committed = await api('commit', { vaultId, seq: 2, genId: nextGen });
@@ -152,7 +169,7 @@ await check('큰 파트 — 5MB 서명 URL PUT (Vercel 4.5MB 한도 밖임을 �
   for (let i = 0; i < bytes.length; i += 4096) bytes[i] = i & 0xff;
 
   const started = Date.now();
-  const res = await fetch(reserved.json.uploads[0].signedUrl, {
+  const res = await fetch(reachable(reserved.json.uploads[0].signedUrl), {
     method: 'PUT',
     headers: { 'content-type': 'application/octet-stream' },
     body: bytes,
@@ -251,7 +268,7 @@ await check('되찾기 — 금고 생성 후에는 auth_key를 덮어쓸 수 없
 await check('삭제 — grant가 있으면 지운다', async () => {
   const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
   const r = await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
-  await fetch(r.json.uploads[0].signedUrl, { method: 'PUT', body: new Uint8Array(2048) });
+  await fetch(reachable(r.json.uploads[0].signedUrl), { method: 'PUT', body: new Uint8Array(2048) });
   await api('commit', { vaultId: v, seq: 1, genId });
 
   const del = await api('delete', { vaultId: v });
@@ -296,6 +313,116 @@ await check('삭제 — auth_key만 있어도 지운다 (계정이 바뀐 사람
     body: JSON.stringify({ vaultId: v, authKey: AUTH }),
   });
   assert(res.status === 200, `HTTP ${res.status} ${await res.text()}`);
+});
+
+// ── 9.5 사진 blob ─────────────────────────────────────────────────────────────
+/*
+ * 사진은 세대와 무관하게 산다. 검증의 핵심은 **plan이 증분을 만들어 내는가**다 —
+ * 여기가 깨지면 사진 300장짜리 사용자는 매번 300장을 다시 올리고 백업을 끝내지 못한다.
+ */
+const blobVault = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+const blobKeys = [0, 1, 2].map((i) => String(i).repeat(64).slice(0, 64).replace(/[^0-9a-f]/g, 'a'));
+const PHOTO = new Uint8Array(64 * 1024).fill(0x7f);
+
+async function blobApi(action, body) {
+  return await api('blobs', { action, vaultId: blobVault, authKey: AUTH, ...body });
+}
+
+await check('blobs — 처음에는 전부 missing (올릴 것을 알려준다)', async () => {
+  /*
+   * ⚠ **금고를 미리 만들지 않는다.** 사진은 매니페스트보다 먼저 올라가므로
+   *   blob plan이 금고를 만들 수 있어야 한다 — 여기서 실패하면 첫 백업이 영원히 막힌다.
+   */
+  const { status, json } = await blobApi('plan', { blobKeys });
+  assert(status === 200, `HTTP ${status} ${JSON.stringify(json)}`);
+  assert(json.missing?.length === 3 && json.have?.length === 0, JSON.stringify(json));
+});
+
+let blobUploads = [];
+await check('blobs — reserve가 사진마다 서명 URL을 준다', async () => {
+  const { status, json } = await blobApi('reserve', { blobKeys });
+  assert(status === 200, `HTTP ${status} ${JSON.stringify(json)}`);
+  assert(json.uploads?.length === 3, JSON.stringify(json));
+  blobUploads = json.uploads;
+});
+
+await check('blobs — 서명 URL PUT + commit이 실제 크기를 물어 대조한다', async () => {
+  for (const slot of blobUploads) {
+    const res = await fetch(reachable(slot.signedUrl), {
+      method: 'PUT',
+      headers: { 'content-type': 'application/octet-stream' },
+      body: PHOTO,
+    });
+    assert(res.ok, `PUT ${res.status}`);
+  }
+  const { status, json } = await blobApi('commit', { blobKeys });
+  assert(status === 200, `HTTP ${status} ${JSON.stringify(json)}`);
+  assert(json.committed?.length === 3, JSON.stringify(json));
+  // 앱이 보낸 숫자가 아니라 Storage가 답한 크기여야 한다
+  assert(json.usedBytes === PHOTO.byteLength * 3, `usedBytes=${json.usedBytes}`);
+});
+
+await check('blobs — 올리지 않은 것을 commit하면 missing으로 답한다 (거짓 커밋 차단)', async () => {
+  const ghost = 'b'.repeat(64);
+  const { status, json } = await blobApi('commit', { blobKeys: [ghost] });
+  assert(status === 200 && json.missing?.includes(ghost), JSON.stringify(json));
+});
+
+await check('blobs — 두 번째 plan은 전부 have (증분이 실제로 동작한다)', async () => {
+  const { status, json } = await blobApi('plan', { blobKeys });
+  assert(status === 200, `HTTP ${status}`);
+  assert(json.have?.length === 3 && json.missing?.length === 0, JSON.stringify(json));
+});
+
+await check('blobs — 복원 다운로드는 구독도 grant도 요구하지 않는다', async () => {
+  const res = await fetch(`${BASE}/api/v1/backup/blobs`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer other-account' },
+    body: JSON.stringify({ action: 'download', vaultId: blobVault, blobKeys }),
+  });
+  const json = await res.json();
+  assert(res.status === 200, `HTTP ${res.status} ${JSON.stringify(json)}`);
+  assert(json.downloads?.length === 3, JSON.stringify(json));
+
+  const got = await fetch(reachable(json.downloads[0].url));
+  const bytes = new Uint8Array(await got.arrayBuffer());
+  assert(bytes.byteLength === PHOTO.byteLength, `받은 크기 ${bytes.byteLength}`);
+});
+
+await check('blobs — 서버에 없는 사진은 absent로 밝힌다 ("로딩 중"과 구별되게)', async () => {
+  const ghost = 'c'.repeat(64);
+  const { status, json } = await blobApi('download', { blobKeys: [...blobKeys, ghost] });
+  assert(status === 200, `HTTP ${status}`);
+  assert(json.absent?.length === 1 && json.absent[0] === ghost, JSON.stringify(json));
+});
+
+await check('blobs — 남의 경로를 쓸 수 없다 (blobKey는 hex 64자만)', async () => {
+  const { status } = await blobApi('reserve', { blobKeys: ['../../etc/passwd'] });
+  // 걸러진 뒤 빈 배열이 되므로 200이되 발급이 0이어야 한다
+  const { json } = await blobApi('reserve', { blobKeys: [] });
+  assert(status === 200 && json.uploads?.length === 0, `status=${status}`);
+});
+
+await check('blobs — 사진이 먼저 만든 금고에도 authKey가 박힌다 (되찾기·삭제가 살아 있다)', async () => {
+  // 매니페스트 예약이 한 번도 없었는데 auth_key로 되찾기가 되면, 빈 칸이 채워진 것이다.
+  const res = await fetch(`${BASE}/api/v1/backup/rebind`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer another-account' },
+    body: JSON.stringify({ vaultId: blobVault, authKey: AUTH }),
+  });
+  assert(res.status === 200, `HTTP ${res.status} ${await res.text()}`);
+});
+
+await check('blobs — 금고를 지우면 사진도 함께 지워진다', async () => {
+  const del = await fetch(`${BASE}/api/v1/backup/delete`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${TOKEN}` },
+    body: JSON.stringify({ vaultId: blobVault, authKey: AUTH }),
+  });
+  assert(del.status === 200, `HTTP ${del.status}`);
+  const { json } = await blobApi('download', { blobKeys });
+  // 금고가 사라졌으므로 조회 자체가 막힌다
+  assert(json.ok === false, JSON.stringify(json));
 });
 
 // ── 10. 리퍼 ──────────────────────────────────────────────────────────────────

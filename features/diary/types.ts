@@ -23,6 +23,13 @@ export interface DiaryImage {
   width: number | null;
   height: number | null;
   createdAt: number;
+  /**
+   * 백업 상태. `'missing'`은 **행은 복원됐는데 파일이 이 기기에 없다**는 뜻이다.
+   *
+   * ⚠ 화면이 이 값을 봐야 한다. 안 보면 깨진 URI로 **빈 자리**만 그려져
+   *   "일시적 로드 실패"와 구별되지 않고, 사용자는 기다리면 나올 줄 안다.
+   */
+  blobState: 'backed_up' | 'missing' | null;
 }
 
 /** 조각 하나. */
@@ -91,4 +98,5 @@ export interface DiaryImageRow {
   height: number | null;
   created_at: number;
   deleted_at: number | null;
+  blob_state: string | null;
 }

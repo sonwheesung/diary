@@ -126,6 +126,8 @@ export async function saveImage(params: {
     width: shrunk.width,
     height: shrunk.height,
     createdAt: Date.now(),
+    // 방금 만든 사진은 아직 올라간 적이 없다. 다음 백업이 이 값을 보고 올린다.
+    blobState: null,
   };
 
   const db = await getDatabase();
@@ -151,6 +153,9 @@ function toDiaryImage(row: DiaryImageRow): DiaryImage {
     width: row.width,
     height: row.height,
     createdAt: row.created_at,
+    // 아는 값만 통과시킨다 — 옛 행이나 손상된 값이 화면 분기를 흔들지 않게.
+    blobState:
+      row.blob_state === 'backed_up' || row.blob_state === 'missing' ? row.blob_state : null,
   };
 }
 

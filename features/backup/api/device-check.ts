@@ -247,6 +247,15 @@ async function checkRestoreRoundTrip(): Promise<CheckResult[]> {
       detail: `잃음 ${diff.losing.length} · 들어옴 ${diff.incoming}`,
     });
 
+    /*
+     * ⚠ **커서를 먼저 적어둔다.** `applyRestore`는 마지막에 백업 커서를 복원한 세대로
+     *   갈아끼우는데, 여기서 쓰는 금고 id는 가짜다 — 그대로 두면 **다음 점검(그리고 실제
+     *   백업)이 seq-conflict로 막힌다.** 점검이 서로를 오염시키지 않게 원복한다.
+     */
+    const savedState = await (
+      await import('@/features/backup/api/backup-state')
+    ).getBackupState();
+
     const started = Date.now();
     await applyRestore(manifest, '0'.repeat(32), 1);
     const ms = Date.now() - started;
@@ -300,9 +309,130 @@ async function checkRestoreRoundTrip(): Promise<CheckResult[]> {
     await db.execAsync("DELETE FROM diary_tags WHERE tag_id = 'chk-tag'");
     await db.execAsync("DELETE FROM tags WHERE id = 'chk-tag'");
     await db.execAsync("DELETE FROM diaries WHERE id LIKE 'chk-%'");
+
+    // 커서 원복 — 위 주석 참조. 켜져 있던 금고와 seq를 그대로 돌려놓는다.
+    const state = await import('@/features/backup/api/backup-state');
+    if (savedState.vaultId !== null) {
+      await state.enableBackup(savedState.vaultId);
+      if (savedState.seq > 0) {
+        await state.markBackupCommitted(savedState.seq, savedState.lastBackupAt ?? Date.now());
+      }
+    } else {
+      await state.disableBackup();
+    }
   } catch (error) {
     out.push({
       name: '스크래치 스왑 복원',
+      ok: false,
+      detail: error instanceof Error ? error.message : String(error),
+    });
+  }
+  return out;
+}
+
+
+/**
+ * 5. 사진 왕복 — **봉인 → 서명 URL PUT → 다운로드 → 개봉 → 바이트 비교.**
+ *
+ * ⚠ 서버 e2e는 더미 바이트로 계약만 본다. 여기서만 확인되는 것은
+ *   **실제 파일 I/O와 봉투가 기기에서 맞물리는가**다 — `File.bytes()`가 비동기이고
+ *   `write()`가 동기라 그 짝이 어긋나면 조용히 빈 파일이 올라간다.
+ */
+async function checkPhotoRoundTrip(): Promise<CheckResult[]> {
+  const out: CheckResult[] = [];
+  try {
+    const { File } = await import('expo-file-system');
+    // ⚠ 디렉터리를 직접 조립하지 않는다 — 이름이 어긋나면 파일을 만들어놓고 못 찾는다(겪음).
+    const { resolveImageUri } = await import('@/features/diary/api/image-store');
+    const { loadBackupKeys, createBackupSecret } = await import('@/features/backup/api/key-store');
+    const { downloadPhotos, uploadPhotos } = await import('@/features/backup/api/photos');
+    const { runBackup } = await import('@/features/backup/api/run-backup');
+
+    const keys = (await loadBackupKeys()) ?? (await createBackupSecret());
+
+    // 진짜 파일을 만든다 — 300KB면 1600px로 줄인 사진의 실제 크기대다.
+    const fileName = 'chk-photo.bin';
+    const bytes = new Uint8Array(300 * 1024);
+    for (let i = 0; i < bytes.length; i += 1) bytes[i] = (i * 31) & 0xff;
+    const file = new File(resolveImageUri(fileName));
+    if (file.exists) file.delete();
+    file.create();
+    file.write(bytes);
+
+    const db = await getDatabase();
+    await db.runAsync(
+      `INSERT OR REPLACE INTO diary_images
+         (id, diary_id, file_name, width, height, created_at, deleted_at, blob_state)
+       VALUES ('chk-img', 'chk-ko', ?, 1600, 1200, 1, NULL, NULL)`,
+      fileName,
+    );
+
+    /*
+     * ⚠ `uploadPhotos`를 직접 부르지 않고 **`runBackup()` 전체**를 태운다.
+     *   금고는 매니페스트 예약이 만들고(사진 라우트는 금고를 만들지 않는다),
+     *   무엇보다 **사진이 매니페스트보다 먼저 올라가는 순서**가 여기서만 검증된다.
+     */
+    const started = Date.now();
+    const run = await runBackup();
+    out.push({
+      name: '★ 백업 전체 — 사진 → 매니페스트 순서',
+      ok: run.ok,
+      detail: run.ok
+        ? `seq ${run.seq} · 파트 ${run.partCount} · ${Date.now() - started}ms`
+        : `실패 ${run.reason}`,
+    });
+
+    const uploadedRow = await db.getFirstAsync<{ blob_state: string | null }>(
+      "SELECT blob_state FROM diary_images WHERE id = 'chk-img'",
+    );
+    out.push({
+      name: '★ 사진 업로드 — 커밋 성공 후에만 backed_up이 된다',
+      ok: uploadedRow?.blob_state === 'backed_up',
+      detail: `blob_state=${uploadedRow?.blob_state}`,
+    });
+
+    // 두 번째 호출은 plan이 have로 답해 **아무것도 올리지 않아야** 한다 — 증분의 증거다.
+    const again = await uploadPhotos(keys);
+    out.push({
+      name: '★ 증분 — 두 번째 백업은 사진을 다시 올리지 않는다',
+      ok: again.ok && again.uploaded === 0,
+      detail: again.ok ? `${again.uploaded}장` : `실패 ${again.reason}`,
+    });
+
+    /*
+     * 복원 상황을 만든다: 파일을 지우고 행을 'missing'으로 되돌린다.
+     * 이게 새 폰의 상태다 — 행은 매니페스트로 들어왔고 파일은 없다.
+     */
+    file.delete();
+    await db.runAsync("UPDATE diary_images SET blob_state = 'missing' WHERE id = 'chk-img'");
+
+    const down = await downloadPhotos(keys);
+    const back = new File(resolveImageUri(fileName));
+    let identical = false;
+    if (back.exists) {
+      const got = await back.bytes();
+      identical = got.byteLength === bytes.byteLength && got[0] === bytes[0] && got[12345] === bytes[12345] && got[got.byteLength - 1] === bytes[bytes.length - 1];
+    }
+    out.push({
+      name: '★ 사진 복원 — 받아서 개봉한 바이트가 원본과 같다',
+      ok: down.ok && identical,
+      detail: down.ok ? `${down.restored}장 복원 · 없음 ${down.absent} · 일치 ${identical}` : `실패 ${down.reason}`,
+    });
+
+    const row = await db.getFirstAsync<{ blob_state: string | null }>(
+      "SELECT blob_state FROM diary_images WHERE id = 'chk-img'",
+    );
+    out.push({
+      name: '복원된 사진은 backed_up으로 바뀐다 (다시 안 올린다)',
+      ok: row?.blob_state === 'backed_up',
+      detail: `blob_state=${row?.blob_state}`,
+    });
+
+    if (back.exists) back.delete();
+    await db.execAsync("DELETE FROM diary_images WHERE id = 'chk-img'");
+  } catch (error) {
+    out.push({
+      name: '사진 왕복',
       ok: false,
       detail: error instanceof Error ? error.message : String(error),
     });
@@ -323,6 +453,10 @@ export async function runDeviceChecks(baseUrl: string): Promise<CheckResult[]> {
   }
   results.push(...(await checkDatabaseSwap()));
   results.push(...(await checkRestoreRoundTrip()));
+  // ⚠ 복원 왕복 **뒤에** 둔다 — 'chk-ko' 조각이 있어야 이미지 행의 FK가 선다.
+  if (baseUrl.length > 0) {
+    results.push(...(await checkPhotoRoundTrip()));
+  }
 
   for (const result of results) {
     console.log(line(result));
