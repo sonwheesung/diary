@@ -1,8 +1,7 @@
 // 공통 서버 클라이언트 SDK — 타입.
-// ⚠️ 원본: common_server/client/types.ts 에서 복사 (2026-08-09, auth 추가본).
+// ⚠️ 원본: common_server/client/types.ts 에서 복사 (2026-08-11, 엔타이틀먼트 추가본).
 //    이 파일은 손으로 고치지 말 것 — 서버 계약이 바뀌면 원본을 갱신하고 다시 복사한다.
 //    (앱 4~5개 규모에선 monorepo·npm 패키지 오버헤드가 이득보다 크다는 판단 — common_server 규약)
-//
 //
 // 이 폴더는 각 앱의 `src/services/commonServer/`로 **복사해서** 쓴다(앱 4~5개 규모에선 monorepo·npm 패키지
 // 오버헤드가 이득보다 크다). 복사본에는 어느 버전에서 가져왔는지 주석을 남긴다.
@@ -64,6 +63,16 @@ export interface MyInquiry {
   reply: string | null;
   createdAt: string;
   repliedAt: string | null;
+}
+
+/** 엔타이틀먼트(구독) 상태. 서버가 계산해서 내려준다 — 앱이 만료를 다시 판정하지 않는다. */
+export interface EntitlementView {
+  active: boolean;
+  /** ISO. 오프라인 캐시의 유효기한이다. 유예 중이면 유예 종료 시각이 온다. */
+  expiresAt: string | null;
+  willRenew: boolean;
+  /** 결제 실패 유예 중. 활성이지만 곧 끊길 수 있어 안내를 띄울 수 있다. */
+  inGracePeriod: boolean;
 }
 
 /**

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
-import { AD_UNITS, adsEnabled } from '@/features/ads/api/ads';
+import { AD_UNITS } from '@/features/ads/api/ads';
+import { useEntitlementStore } from '@/features/entitlement/store';
 import type { Palette } from '@/theme/palettes';
 import { useStyles } from '@/theme/use-styles';
 
@@ -17,8 +18,14 @@ import { useStyles } from '@/theme/use-styles';
 export function AdBanner() {
   const styles = useStyles(createStyles);
   const [failed, setFailed] = useState(false);
+  /*
+   * ⚠ `adsEnabled()`를 부르지 않고 스토어를 **구독**한다. 함수 호출은 렌더 시점의 값만
+   *   읽어서, 구독을 막 결제한 사용자의 화면에서 배너가 그대로 남는다 — 돈을 낸 직후가
+   *   광고가 사라지는 걸 가장 확실히 보여줘야 하는 순간이다.
+   */
+  const pro = useEntitlementStore((state) => state.pro);
 
-  if (!adsEnabled() || failed) {
+  if (pro || failed) {
     return null;
   }
 

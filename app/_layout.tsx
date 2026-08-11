@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
+import { useEntitlementStore } from '@/features/entitlement/store';
 import { LockGate } from '@/features/lock/components/LockGate';
 import { useNoticeStore } from '@/features/notice/store';
 import { useLanguageStore } from '@/features/settings/language-store';
@@ -41,6 +42,17 @@ export default function RootLayout() {
   useEffect(() => {
     void initializeAds();
   }, []);
+
+  /*
+   * 구독 권한 — **캐시를 먼저 읽고**(동기에 가깝다) 그 다음 서버를 조회한다.
+   * 순서가 중요하다: 서버를 기다리면 비행기 모드의 구독자에게 광고가 먼저 뜬다.
+   * 조회 실패는 캐시를 건드리지 않으므로 아무 일도 일어나지 않는다.
+   */
+  const hydrateEntitlement = useEntitlementStore((state) => state.hydrate);
+  const refreshEntitlement = useEntitlementStore((state) => state.refresh);
+  useEffect(() => {
+    void hydrateEntitlement().then(() => refreshEntitlement());
+  }, [hydrateEntitlement, refreshEntitlement]);
 
   // 저장된 언어 선택을 읽어 적용한다. 읽기 전에는 기기 언어로 그려진다.
   const loadLanguage = useLanguageStore((state) => state.load);

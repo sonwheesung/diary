@@ -1,5 +1,6 @@
 import mobileAds, { MaxAdContentRating, TestIds } from 'react-native-google-mobile-ads';
 
+import { isPro } from '@/features/entitlement/store';
 import { SETTING_KEYS, getSetting, setSetting } from '@/features/settings/api/settings-store';
 import { today } from '@/lib/date';
 
@@ -83,11 +84,15 @@ export async function initializeAds(): Promise<void> {
 /**
  * 구독자는 광고를 보지 않는다(§7).
  *
- * ⏭ 구독이 붙기 전까지는 항상 true다. 엔타이틀먼트가 생기면 **이 함수만** 바꾸면 되도록
- * 호출부는 전부 여기를 거치게 한다.
+ * 호출부를 전부 여기로 모아둔 덕에 엔타이틀먼트가 생겼을 때 **이 함수만** 바뀌었다
+ * (2026-08-11). 앞으로도 광고 표시 여부를 판단하는 곳은 여기 하나다.
+ *
+ * ⚠ **동기여야 한다** — 렌더 중에 배너를 그릴지 정한다. 그래서 스토어의 현재 값을 읽는다.
+ *   앱 시작 직후 `hydrate()` 전에는 `pro=false`라 구독자에게 배너 자리가 아주 잠깐
+ *   보일 수 있지만, `AdBanner`가 로드 실패 시 자리를 차지하지 않으므로 실제 깜빡임은 없다.
  */
 export function adsEnabled(): boolean {
-  return true;
+  return !isPro();
 }
 
 /** 오늘 이미 띄웠는지. 하루 1회 캡이라 쿨다운은 따로 두지 않는다 */

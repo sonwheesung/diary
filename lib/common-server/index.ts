@@ -1,8 +1,7 @@
 // 공통 서버 클라이언트 SDK.
-// ⚠️ 원본: common_server/client/index.ts 에서 복사 (2026-08-09, auth 추가본).
+// ⚠️ 원본: common_server/client/index.ts 에서 복사 (2026-08-11, 엔타이틀먼트 추가본).
 //    이 파일은 손으로 고치지 말 것 — 서버 계약이 바뀌면 원본을 갱신하고 다시 복사한다.
 //    (앱 4~5개 규모에선 monorepo·npm 패키지 오버헤드가 이득보다 크다는 판단 — common_server 규약)
-//
 //
 // 이 모듈은 **throw 하지 않는다**. 네트워크가 끊겨 있든 서버가 없든 화면은 조용히 안내만 하면 되므로,
 // 실패를 타입으로 돌려준다(호출부에서 try/catch를 강제하지 않는다).
@@ -11,6 +10,7 @@ import type {
   AuthProviderId,
   Bootstrap,
   CommonServerConfig,
+  EntitlementView,
   MyInquiry,
   Result,
   Subject,
@@ -22,7 +22,7 @@ import type {
 export type * from './types';
 
 /** 앱에 복사할 때 이 값을 복사본 주석에 남긴다 — 서버 계약이 바뀌었는지 판단하는 유일한 단서다. */
-export const SDK_VERSION = '2026-08-09';
+export const SDK_VERSION = '2026-08-10';
 
 const DEFAULT_TIMEOUT_MS = 10000;
 /** 서버가 요구하는 문의 최소 길이(라우트의 CONTENT_MIN과 같은 값). */
@@ -247,6 +247,36 @@ export function createCommonServer(cfg: CommonServerConfig) {
         await setSession(null, null);
       }
       return res.ok ? { ok: true } : { ok: false, reason: mapFail(res.status) };
+    },
+
+    /**
+     * 내 엔타이틀먼트(구독). 미구독자도 성공하고 `{}`가 온다 — 서버 오류와 구분되어야 한다.
+     * 그 차이가 **광고를 띄울지 말지**를 가른다.
+     *
+     * ⚠ 오프라인 대비로 앱이 캐시할 때는 `expiresAt`을 함께 저장하고 그때까지만 유효로 볼 것.
+     *   `active`만 캐시하면 만료된 뒤에도 영원히 pro가 된다.
+     *
+     * ⚠ 로그인했는데 active가 false라면 스토어에 구독이 남아 있을 수 있다(탈퇴 후 재가입 등으로
+     *   subject가 바뀐 경우). 그때 `Purchases.restorePurchases()`를 부르면 RC가 소유자를 옮기고
+     *   서버에 TRANSFER 웹훅이 온다. 안 부르면 "돈은 나가는데 pro가 아닌" 상태가 유지된다.
+     */
+    async fetchEntitlements(): Promise<Result<{ entitlements: Record<string, EntitlementView>; checkedAt: string }>> {
+      if (!baseUrl) return { ok: false, reason: 'not-configured' };
+      if (!(await loadToken())) return { ok: false, reason: 'not-signed-in' };
+
+      const res = await req('/api/v1/entitlements', undefined, true);
+      if (!res) return { ok: false, reason: 'offline' };
+      if (res.status === 401) {
+        await setSession(null, null);
+        return { ok: false, reason: 'unauthorized' };
+      }
+      if (!res.ok) return { ok: false, reason: mapFail(res.status) };
+      try {
+        const j = (await res.json()) as { entitlements?: Record<string, EntitlementView>; checkedAt?: string };
+        return { ok: true, entitlements: j.entitlements ?? {}, checkedAt: j.checkedAt ?? new Date().toISOString() };
+      } catch {
+        return { ok: false, reason: 'error' };
+      }
     },
 
     /**

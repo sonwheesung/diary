@@ -6,6 +6,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { useCallback, useEffect, useState } from 'react';
 
+import { useEntitlementStore } from '@/features/entitlement/store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
 import type { FailReason, Subject } from '@/lib/common-server/types';
@@ -129,6 +130,11 @@ export function useSupportAuth(): SupportAuth {
       }
       setSubject(result.subject);
       setSignedIn(true);
+      /*
+       * 로그인 직후 권한을 다시 읽는다. 다른 기기에서 구독한 사람은 이 순간 pro가 되고,
+       * 안 읽으면 다음 앱 실행까지 광고를 계속 본다 — 방금 돈을 낸 사람에게 최악이다.
+       */
+      void useEntitlementStore.getState().refresh();
       return null;
     } catch (error) {
       // 사용자가 뒤로가기로 닫으면 취소 코드가 온다 — 오류가 아니다
@@ -162,6 +168,8 @@ export function useSupportAuth(): SupportAuth {
       await commonServer.logout();
       setSubject(null);
       setSignedIn(false);
+      // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.
+      await useEntitlementStore.getState().clear();
     } finally {
       setBusy(false);
     }
@@ -182,6 +190,8 @@ export function useSupportAuth(): SupportAuth {
       await GoogleSignin.signOut().catch(() => {});
       setSubject(null);
       setSignedIn(false);
+      // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.
+      await useEntitlementStore.getState().clear();
       return null;
     } finally {
       setBusy(false);

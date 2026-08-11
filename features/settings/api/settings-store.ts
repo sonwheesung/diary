@@ -31,6 +31,14 @@ export const SETTING_KEYS = {
    * 알 수 있게 만들면 익명성이 깨진다(NOTICE_SYSTEM). 그래서 기기에만 쌓는다.
    */
   noticeReadIds: 'notice_read_ids',
+  /**
+   * `pro` 엔타이틀먼트가 유효한 시각(ISO). **오프라인 캐시**다.
+   *
+   * 서버가 내려준 `expiresAt`을 그대로 담는다 — 앱이 만료를 다시 판정하지 않는다.
+   * 이게 없으면 비행기 모드로 앱을 연 구독자에게 광고가 뜬다.
+   * `'never'`는 만료 없음(서버가 `expiresAt: null`을 준 경우).
+   */
+  proUntil: 'pro_until',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];
