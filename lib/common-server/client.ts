@@ -71,3 +71,22 @@ export const commonServer = createCommonServer({
   platform: Platform.OS,
   storage: sessionStorage,
 });
+
+/**
+ * 세션 토큰을 꺼낸다 — **조각 서버**에 붙을 때 쓴다.
+ *
+ * 조각 서버는 이 토큰을 common_server에 물어(introspect) 신원을 확인한다. 같은 토큰이
+ * 두 서버에 쓰이는 것이 맞다 — 신원의 단일 진실은 common_server 하나다(CLAUDE.md §5).
+ *
+ * ⚠ SDK가 토큰을 노출하지 않아 **저장 키를 여기서 재구성한다.** SDK는 복사본이라
+ *   손대지 않는 것이 규약이므로, 앱이 소유한 이 파일이 그 결합을 떠안는다.
+ *   SDK를 재복사할 때 `storageKey` 형식(`cs_session_<appCode>`)이 그대로인지 확인할 것 —
+ *   바뀌면 조각 서버 호출이 전부 401이 되고, 원인이 로그인 쪽으로 보인다.
+ */
+export async function readSessionToken(): Promise<string | null> {
+  try {
+    return await SecureStore.getItemAsync(`cs_session_${APP_CODE}`);
+  } catch {
+    return null;
+  }
+}

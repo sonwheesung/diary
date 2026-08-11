@@ -3,6 +3,7 @@ import type { Manifest } from '@/features/backup/manifest';
 import { countParts, openManifest, sealManifest as sealPure } from '@/features/backup/package';
 import type { OpenedManifest, SealingKeys } from '@/features/backup/package';
 import { newGenId, newNonce } from '@/features/backup/api/key-store';
+import { toHex } from '@/features/backup/key-derive';
 
 /**
  * 순수 봉인 계층에 **기기 난수를 붙이는 얇은 층**.
@@ -29,12 +30,23 @@ export function isReleaseEnvelopeVersion(): boolean {
   return ENVELOPE_VERSION >= VERSION_MIN_RELEASE;
 }
 
+export interface SealedGeneration {
+  /**
+   * 이 세대를 묶는 8바이트(hex 16자). **서버에 함께 보내야 한다.**
+   *
+   * ⚠ 봉투 바이트에서 오프셋으로 다시 파싱하지 않는다 — 헤더 레이아웃이 바뀌면
+   *   조용히 엉뚱한 값을 읽고, 그 결과가 "찢어진 세대"라 증상이 한참 뒤에 나온다.
+   */
+  genId: string;
+  envelopes: Uint8Array[];
+}
+
 /** 매니페스트를 봉투 묶음으로. 파트마다 새 nonce를 만든다 */
 export async function sealManifest(
   manifest: Manifest,
   keys: SealingKeys,
   seq: number,
-): Promise<Uint8Array[]> {
+): Promise<SealedGeneration> {
   const genId = await newGenId();
 
   // nonce는 동기로 넘겨야 해서 미리 만든다. 세는 것과 봉인하는 것을 두 번 돌리지 않으려고
@@ -44,7 +56,7 @@ export async function sealManifest(
     nonces.push(await newNonce());
   }
 
-  return sealPure(manifest, keys, {
+  const envelopes = sealPure(manifest, keys, {
     seq,
     genId,
     version: ENVELOPE_VERSION,
@@ -56,4 +68,6 @@ export async function sealManifest(
       return nonce;
     },
   });
+
+  return { genId: toHex(genId), envelopes };
 }
