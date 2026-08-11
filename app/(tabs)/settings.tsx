@@ -1,15 +1,13 @@
 import Constants from 'expo-constants';
 import { router, useFocusEffect } from 'expo-router';
-import {
-  Bell,
-  ChevronRight,
-  Globe,
-  Lock,
-  Megaphone,
-  MessageSquare,
-  Moon,
-  Sun,
-} from 'lucide-react-native';
+import Bell from 'lucide-react-native/icons/bell';
+import ChevronRight from 'lucide-react-native/icons/chevron-right';
+import Globe from 'lucide-react-native/icons/globe';
+import Lock from 'lucide-react-native/icons/lock';
+import Megaphone from 'lucide-react-native/icons/megaphone';
+import MessageSquare from 'lucide-react-native/icons/message-square';
+import Moon from 'lucide-react-native/icons/moon';
+import Sun from 'lucide-react-native/icons/sun';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';

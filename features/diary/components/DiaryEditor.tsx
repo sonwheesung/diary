@@ -1,6 +1,11 @@
 import * as Crypto from 'expo-crypto';
 import * as ImagePicker from 'expo-image-picker';
-import { ChevronDown, ImagePlus, List, Smile, Tag, X } from 'lucide-react-native';
+import ChevronDown from 'lucide-react-native/icons/chevron-down';
+import ImagePlus from 'lucide-react-native/icons/image-plus';
+import List from 'lucide-react-native/icons/list';
+import Smile from 'lucide-react-native/icons/face-slightly-smiling';
+import Tag from 'lucide-react-native/icons/tag';
+import X from 'lucide-react-native/icons/x';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';

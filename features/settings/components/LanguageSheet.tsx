@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react-native';
+import Check from 'lucide-react-native/icons/check';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 

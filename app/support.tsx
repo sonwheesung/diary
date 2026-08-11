@@ -1,12 +1,10 @@
 import { router } from 'expo-router';
-import {
-  Bug,
-  ChevronLeft,
-  HelpCircle,
-  Lightbulb,
-  LogIn,
-  MoreHorizontal,
-} from 'lucide-react-native';
+import Bug from 'lucide-react-native/icons/bug';
+import ChevronLeft from 'lucide-react-native/icons/chevron-left';
+import HelpCircle from 'lucide-react-native/icons/circle-question-mark';
+import Lightbulb from 'lucide-react-native/icons/lightbulb';
+import LogIn from 'lucide-react-native/icons/log-in';
+import MoreHorizontal from 'lucide-react-native/icons/ellipsis';
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
-import { Trash2, X } from 'lucide-react-native';
+import Trash2 from 'lucide-react-native/icons/trash-2';
+import X from 'lucide-react-native/icons/x';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';

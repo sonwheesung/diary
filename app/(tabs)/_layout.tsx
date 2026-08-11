@@ -1,5 +1,9 @@
 import { Tabs } from 'expo-router';
-import { Calendar, House, Plus, Search, Settings } from 'lucide-react-native';
+import Calendar from 'lucide-react-native/icons/calendar';
+import House from 'lucide-react-native/icons/house';
+import Plus from 'lucide-react-native/icons/plus';
+import Search from 'lucide-react-native/icons/search';
+import Settings from 'lucide-react-native/icons/settings';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

@@ -1,4 +1,4 @@
-import { Delete } from 'lucide-react-native';
+import Delete from 'lucide-react-native/icons/delete';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 

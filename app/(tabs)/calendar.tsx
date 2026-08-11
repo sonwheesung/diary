@@ -1,6 +1,8 @@
 import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
-import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react-native';
+import ChevronLeft from 'lucide-react-native/icons/chevron-left';
+import ChevronRight from 'lucide-react-native/icons/chevron-right';
+import Pencil from 'lucide-react-native/icons/pencil';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';

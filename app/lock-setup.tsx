@@ -1,5 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { Grid3x3, KeyRound, X } from 'lucide-react-native';
+import Grid3x3 from 'lucide-react-native/icons/grid-3x3';
+import KeyRound from 'lucide-react-native/icons/key-round';
+import X from 'lucide-react-native/icons/x';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, Pressable, StyleSheet, Text, View } from 'react-native';

@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { X } from 'lucide-react-native';
+import X from 'lucide-react-native/icons/x';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

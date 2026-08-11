@@ -1,4 +1,4 @@
-import { Lock } from 'lucide-react-native';
+import Lock from 'lucide-react-native/icons/lock';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';

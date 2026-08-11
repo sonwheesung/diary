@@ -1,4 +1,5 @@
-import { Plus, X } from 'lucide-react-native';
+import Plus from 'lucide-react-native/icons/plus';
+import X from 'lucide-react-native/icons/x';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';

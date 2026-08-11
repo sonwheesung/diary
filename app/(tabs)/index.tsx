@@ -1,6 +1,8 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { Flame, Pencil, Search } from 'lucide-react-native';
+import Flame from 'lucide-react-native/icons/flame';
+import Pencil from 'lucide-react-native/icons/pencil';
+import Search from 'lucide-react-native/icons/search';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
