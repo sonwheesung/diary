@@ -68,6 +68,41 @@ const MIGRATIONS: readonly string[] = [
     updated_at  INTEGER NOT NULL
   );
   `,
+
+  // v4 — 백업 커서 (BACKUP_SYSTEM)
+  //
+  // ⚠ **이 테이블은 복원의 교체 대상이 아니다.** 복원은 diaries·diary_images·tags·diary_tags를
+  //   통째로 갈아끼우는데, 커서가 그 안에 있으면 두 갈래로 깨진다:
+  //     지워지면  → 앱이 "백업한 적 없음"으로 seq=1을 올려 서버 세대와 충돌한다
+  //     남아 있으면 → 그건 **복원 전 기기의 커서**라 역시 어긋난다
+  //   그래서 별도 테이블로 빼고, 복원의 마지막 단계가 이 값을 복원한 세대로 맞춘다.
+  //
+  // ⚠ app_settings(키-값)를 재사용하지 않는 이유는 두 가지다 — 교체 대상이라는 것이 첫째고,
+  //   값이 전부 TEXT라 seq 비교가 문자열 비교('9' > '10')가 되는 것이 둘째다.
+  `
+  CREATE TABLE IF NOT EXISTS backup_state (
+    id                INTEGER PRIMARY KEY CHECK (id = 1),
+    -- 켜기 전에는 NULL. vault_id 유무로 대신하지 않는다 — "켠 적 없음"과 "껐음"은 다르다
+    backup_enabled    INTEGER NOT NULL DEFAULT 0,
+    -- 소문자 hex 32자. 비밀에서 유도 가능하지만 **캐시**로 둔다.
+    -- 읽을 때마다 deriveVaultId와 대조해 다르면 커서를 초기화한다(다른 코드로 갈아탄 것이다)
+    vault_id          TEXT,
+    -- 서버에 성공적으로 커밋된 **마지막** 세대. 다음 업로드는 seq+1. 미백업은 0
+    seq               INTEGER NOT NULL DEFAULT 0,
+    -- epoch ms. 미백업 상기 주기의 유일한 입력이다
+    last_backup_at    INTEGER,
+    -- 복구 코드를 실제로 보관했는지 되받아 확인한 시각.
+    -- NULL이면 설정에 배지를 띄운다 — 코드를 가진 유일한 순간은 발급 직후뿐이고,
+    -- 그때 확인을 안 받으면 "백업은 도는데 아무도 못 여는" 사용자를 만들어놓고 알지 못한다
+    code_confirmed_at INTEGER
+  );
+  INSERT OR IGNORE INTO backup_state (id) VALUES (1);
+
+  -- 사진 파일의 소재. 1차(텍스트 백업)는 diary_images **행**만 복원하고 파일은 안 가져오므로,
+  -- 복원 직후 '행은 있는데 파일이 없는' 상태가 정상적으로 생긴다. 그걸 1급 상태로 만든다.
+  -- NULL = 이 기기에서 만든 로컬 파일 / 'backed_up' = 서버에 올라감 / 'missing' = 파일 없음
+  ALTER TABLE diary_images ADD COLUMN blob_state TEXT;
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;
