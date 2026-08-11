@@ -471,6 +471,43 @@ blob_key = HKDF-SHA256(DEK, "jogak/blob/v1" ‖ image_id, 32B)  → 소문자 he
 
 ---
 
+## 6.5 배포 환경 — stg 무료 · 운영 Pro
+
+`CLAUDE.md` §5가 정본이다. 여기는 **조각 서버를 올릴 때 실제로 할 일**만 둔다.
+
+```
+개발    로컬 Supabase 스택(도커)        $0     ← 지금
+stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까지
+운영    WheeSungSon(Pro) 조직           +$9.8/월
+```
+
+### 프로젝트를 만들 때 반드시 지킬 것
+
+| | 왜 |
+|---|---|
+| **리전 = 서울 `ap-northeast-2`** | 조직 간 이관은 **리전을 바꾸지 못한다**(공식 문서). stg를 싱가포르에 만들면 운영으로 옮길 때 그대로 싱가포르다 |
+| **버킷 이름 = `backups`** | `server/lib/storage.ts`의 `BUCKET` 상수와 같아야 한다 |
+| **버킷은 deny-all RLS** | 서비스롤이 우회하므로 격리는 `blobPath()`/`manifestPath()`가 하지만, 사고 등급을 한 단계 낮춘다 |
+| `SUPABASE_PUBLIC_URL`은 **비워둔다** | 로컬 에뮬레이터 전용이다. 클라우드에서는 서명 URL 호스트가 그대로 맞다 |
+| ⚠ `AUTH_STUB`을 **넣지 않는다** | 켜두면 아무 Bearer나 통과한다. 로컬 전용이다 |
+| ⚠ `RC_SANDBOX_GRANT` | common_server 쪽 스위치지만 출시 체크리스트에 함께 둔다 |
+
+### stg에서 반드시 확인할 것 (로컬에서 안 드러나는 것)
+
+로컬 스택은 같은 머신이라 **호스트·지연·실제 Storage 동작이 다르다.** 실제로 로컬에서만
+`SUPABASE_PUBLIC_URL` 문제가 나왔다 — 서명 URL의 `127.0.0.1`이 에뮬레이터에겐 자기 자신이었다.
+
+- [ ] `npm run e2e`를 **stg URL로** 한 번 통과시킨다(32개)
+- [ ] 실기기에서 `EXPO_PUBLIC_BACKUP_SERVER_URL`을 stg로 두고 기기 점검 18개
+- [ ] 서명 URL PUT이 실제 Storage(로컬 MinIO 아님)에서 5MB를 받는지
+- [ ] 서울 리전 왕복 지연 — introspect가 태평양을 건너지 않는지(`CLAUDE.md` §5 ⚠)
+
+⚠ **운영으로 올릴 때는 "이관"과 "신규 생성" 중 하나다.** 이관이면 stg 데이터가 그대로 운영이 되므로
+**테스터의 시험 데이터가 운영에 남는다** — 신규로 만들고 stg는 버리는 쪽이 깨끗하다.
+단 그러면 URL·키가 바뀌므로 **앱 빌드도 함께 바뀐다**(`EXPO_PUBLIC_*`는 번들에 인라인된다).
+
+---
+
 ## 7. 검증
 
 | 명령 | 무엇을 |
