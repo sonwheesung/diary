@@ -15,5 +15,8 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  // server/ 는 별도 Next.js 앱이다 — 자기 tsconfig와 자기 `@/` 별칭을 갖는다.
+  // 여기 포함하면 그쪽 `@/db`가 앱 루트로 해석돼 없는 모듈이 된다.
+  // (Metro도 같은 이유로 metro.config.js의 blockList로 막아뒀다.)
+  "exclude": ["node_modules", "**/*.test.ts", "server"]
 }

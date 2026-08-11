@@ -1,0 +1,35 @@
+# Supabase 로컬 스택 (`npx supabase start`). 전부 Docker 컨테이너로 뜬다.
+#
+# ⚠ **왜 Postgres+MinIO가 아니라 이것인가**: 검증에서 가장 불확실하다고 나온 항목이
+#   "RN이 5MB를 서명 URL에 PUT할 수 있는가"였다. MinIO의 S3 presigned URL로 테스트하면
+#   `createSignedUploadUrl`과 API가 달라 **그 답이 거짓 확신이 된다.**
+#   여기서 도는 Storage는 프로덕션과 같은 구현이다.
+project_id = "jogak"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+max_rows = 1000
+
+[db]
+port = 54322
+# ⚠ 프로덕션 Supabase와 major를 맞춘다. 다르면 로컬에서 통과한 DDL이 배포에서 깨질 수 있다.
+major_version = 17
+
+[storage]
+enabled = true
+# 매니페스트 파트 목표 크기가 512KB다. 넉넉히 잡되 무제한으로 두지 않는다 —
+# 상한이 없으면 버그 하나가 디스크를 채운다.
+file_size_limit = "20MiB"
+
+[studio]
+enabled = true
+port = 54323
+
+# 조각 서버는 자체 로그인을 만들지 않는다. 신원의 단일 진실은 common_server다(CLAUDE.md §5).
+[auth]
+enabled = false
+
+[analytics]
+enabled = false

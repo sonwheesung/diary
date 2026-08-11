@@ -1,0 +1,25 @@
+{
+  "name": "jogak-server",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3200",
+    "build": "next build",
+    "start": "next start -p 3200",
+    "typecheck": "tsc --noEmit",
+    "db:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
+    "drizzle-orm": "^0.44.6",
+    "next": "^15.5.4",
+    "postgres": "^3.4.7",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.1.0",
+    "drizzle-kit": "^0.31.5",
+    "typescript": "^5.9.2"
+  }
+}
