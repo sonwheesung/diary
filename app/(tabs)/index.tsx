@@ -10,6 +10,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
+import { GraceBanner } from '@/features/backup/components/GraceBanner';
 import { resolveImageUri } from '@/features/diary/api/image-store';
 import { emotionLabel } from '@/features/diary/emotions';
 import { useHomeData } from '@/features/diary/hooks/use-home-data';
@@ -31,6 +32,13 @@ export default function HomeScreen() {
 
   return (
     <Screen footer={<AdBanner />}>
+      {/*
+        ⚠ 백업이 지워지기까지의 카운트다운. **홈에 세우는 이유**는 백업 화면에 들어가는
+          사람은 이미 아는 사람이기 때문이다 — 우리에겐 푸시가 없어서 앱을 여는 이 순간이
+          유일한 통지 기회다(`docs/BACKUP_SYSTEM.md` §5). 유예가 아니면 아무것도 안 그린다.
+      */}
+      <GraceBanner />
+
       <View style={styles.header}>
         <Text style={styles.date}>{formatFullDate(today())}</Text>
         <Pressable

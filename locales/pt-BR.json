@@ -312,6 +312,7 @@
       "unreadable": "This backup was made by a newer version. Please update the app."
     },
     "failedTitle": "Couldn't back up",
+    "graceAction": "Resubscribe and it stays. Tap to see the date.",
     "graceBody": "It will be removed on {{date}}. Resubscribing before then keeps it.",
     "graceTitle": "Your backup will be deleted in {{days}} days",
     "lastBackup": "Last backup",

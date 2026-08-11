@@ -5,6 +5,8 @@
  * 날짜가 하루만 어긋나도 "언제 결제되는지"를 잘못 고지하는 것이고,
  * 그건 화면을 눈으로 봐서는 알 수 없다.
  */
+import { GRACE_DAYS, GRACE_MS, daysUntil, purgeAtFrom } from '../features/backup/policy.ts';
+import { GRACE_MS as SERVER_GRACE_MS } from '../server/lib/policy.ts';
 import { trialTerms } from '../features/subscription/trial.ts';
 
 let passed = 0;
@@ -71,6 +73,42 @@ check('🔴 모르는 단위는 기간을 지어내지 않는다', () => {
 check('cycles가 0으로 와도 기간이 0이 되지 않는다', () => {
   // 0을 그대로 곱하면 "오늘 결제된다"고 고지하게 된다.
   assert(trialTerms(free('DAY', 7, 0), 'x', NOW)?.days === 7, 'cycles=0');
+});
+
+/*
+ * ── 유예 시계 ────────────────────────────────────────────────────────────────
+ * 구독이 끝난 결과라 여기서 함께 본다. 이 계산이 틀리면 **일기가 예고보다 일찍 지워지거나,
+ * 지워진 뒤에도 "아직 남아 있다"고 말한다.** 서버(`server/lib/policy.ts`)와 같은 값이어야 한다.
+ */
+check('유예는 만료 시각 + 90일', () => {
+  const expired = new Date(NOW).toISOString();
+  const purgeAt = purgeAtFrom(expired);
+  assert(purgeAt === NOW + GRACE_DAYS * DAY, `purgeAt=${purgeAt}`);
+});
+
+check("구독 중('never')이면 유예가 아니다 — 삭제 경고를 띄우지 않는다", () => {
+  assert(purgeAtFrom('never') === null, 'never');
+  assert(purgeAtFrom(null) === null, 'null');
+  assert(purgeAtFrom('') === null, '빈 문자열');
+});
+
+check('🔴 알 수 없는 만료 값에 삭제일을 지어내지 않는다', () => {
+  assert(purgeAtFrom('언젠가') === null, '파싱 실패');
+});
+
+check('🔴 앱과 서버의 유예가 같은 값인가 — 어긋나면 되돌릴 수 없다', () => {
+  // 화면에는 90일이라 적혀 있는데 서버가 60일에 지우면 사과할 방법이 없다.
+  assert(GRACE_MS === SERVER_GRACE_MS, `앱 ${GRACE_MS} ≠ 서버 ${SERVER_GRACE_MS}`);
+  assert(GRACE_DAYS * DAY === GRACE_MS, '일수 표기와 실제 값이 다르다');
+});
+
+check('남은 일수는 올림한다 — 반나절 남았는데 0일이라고 하지 않는다', () => {
+  assert(daysUntil(NOW + DAY / 2, NOW) === 1, '반나절');
+  assert(daysUntil(NOW + 7 * DAY, NOW) === 7, '7일');
+});
+
+check('이미 지났으면 0 — 음수가 화면에 나오지 않는다', () => {
+  assert(daysUntil(NOW - 5 * DAY, NOW) === 0, '지난 뒤');
 });
 
 console.log(
