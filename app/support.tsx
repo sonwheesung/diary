@@ -8,7 +8,7 @@ import MoreHorizontal from 'lucide-react-native/icons/ellipsis';
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
@@ -68,6 +68,9 @@ const FAIL_KEYS: Record<FailReason, string> = {
  * **로그인 필수**다(CLAUDE.md §4) — 답변을 드리려면 누가 보냈는지 알아야 하기 때문이다.
  * 로그인 판정은 `features/support/auth-gate`가 갖는다. 이 화면은 `signedIn`만 보고 갈라진다.
  */
+/** Play 구독 관리. 탈퇴는 구독을 해지하지 않는다 — 해지는 여기서만 된다 */
+const PLAY_SUBSCRIPTIONS = 'https://play.google.com/store/account/subscriptions';
+
 export default function SupportScreen() {
   const { t } = useTranslation();
   const colors = useColors();
@@ -140,6 +143,15 @@ export default function SupportScreen() {
   const confirmDelete = () => {
     Alert.alert(t('support.deleteTitle'), t('support.deleteBody'), [
       { text: t('common.cancel'), style: 'cancel' },
+      /*
+       * ⚠ **탈퇴해도 구글 구독은 계속 청구된다.** 우리가 해지시킬 수 없다 —
+       *   이 버튼이 없으면 "탈퇴했는데 돈이 나간다"는 문의와 환불 요청이 온다.
+       *   `pro`가 false여도 띄운다: 계정을 바꾼 사람은 우리 쪽 권한이 없는데도 청구된다.
+       */
+      {
+        text: t('support.deleteManageSubscription'),
+        onPress: () => void Linking.openURL(PLAY_SUBSCRIPTIONS),
+      },
       {
         text: t('support.deleteConfirm'),
         style: 'destructive',

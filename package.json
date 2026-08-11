@@ -18,7 +18,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "legal:html": "node scripts/make-legal-html.mjs"
+    "legal:html": "node scripts/make-legal-html.mjs",
+    "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.3.0",

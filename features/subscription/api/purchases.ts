@@ -2,6 +2,8 @@ import Purchases, { LOG_LEVEL } from 'react-native-purchases';
 import type { CustomerInfo, PurchasesOffering, PurchasesPackage } from 'react-native-purchases';
 
 import { useEntitlementStore } from '@/features/entitlement/store';
+import { trialTerms } from '@/features/subscription/trial';
+import type { TrialTerms } from '@/features/subscription/trial';
 
 /**
  * RevenueCat 연결 — 결제의 유일한 접점.
@@ -115,6 +117,28 @@ export async function fetchPlans(): Promise<Plans | null> {
   }
 }
 
+/**
+ * 이 상품에 무료 체험이 붙어 있는가. 계산은 순수 계층이 한다(`features/subscription/trial.ts`).
+ *
+ * 여기서는 SDK 모양을 순수 계층의 모양으로 옮기는 일만 한다 —
+ * 그래야 법적 고지의 근거가 되는 계산을 Node에서 검사할 수 있다.
+ */
+export function trialTermsOf(pkg: PurchasesPackage, now: number): TrialTerms | null {
+  const intro = pkg.product.introPrice;
+  return trialTerms(
+    intro === null
+      ? null
+      : {
+          price: intro.price,
+          periodUnit: intro.periodUnit,
+          periodNumberOfUnits: intro.periodNumberOfUnits,
+          cycles: intro.cycles,
+        },
+    pkg.product.priceString,
+    now,
+  );
+}
+
 export type PurchaseOutcome =
   | { kind: 'ok' }
   /** 사용자가 창을 닫았다 — **오류가 아니다.** 문구를 띄우지 않는다 */
@@ -167,6 +191,34 @@ export async function restore(): Promise<PurchaseOutcome> {
   } catch {
     return { kind: 'error' };
   }
+}
+
+/**
+ * 로그인 직후 **구독을 이 계정에 다시 붙인다.**
+ *
+ * ⚠ 탈퇴 후 재가입하면 `subject_id`가 바뀐다(`softDeleteSubject()`가 `provider_id`를
+ *   가명화한다). RC의 새 appUserID에는 아무것도 없어서 **돈은 나가는데 `pro`가 아니다.**
+ *   사용자는 "구매 내역 복원"이라는 버튼이 자기 문제의 답인 줄 모른다 — 그래서 앱이 대신 부른다.
+ *
+ * 순서가 중요하다: **`logIn` → 권한 조회 → 없으면 그때만 `restore`.**
+ * 구독이 없는 대다수에게 스토어 왕복을 한 번 더 시키는 대신, 서버가 이미 `pro`라고
+ * 답하면 아무것도 하지 않는다.
+ *
+ * 조용히 돈다 — 성공해도 알림을 띄우지 않는다. 사용자가 기대한 것은 "로그인"이지
+ * "복원"이 아니고, 잘 되면 그냥 광고가 사라진다.
+ */
+export async function reattachSubscription(subjectId: string): Promise<void> {
+  const store = useEntitlementStore.getState();
+  if (!purchasesConfigured()) {
+    await store.refresh();
+    return;
+  }
+  const identified = await identifyForPurchase(subjectId);
+  await store.refresh();
+  if (!identified.ok || useEntitlementStore.getState().pro) {
+    return;
+  }
+  await restore();
 }
 
 function hasPro(customerInfo: CustomerInfo): boolean {

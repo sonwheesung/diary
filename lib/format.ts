@@ -57,6 +57,16 @@ export function formatListDate(entryDate: string): string {
   return translate(key, parts(entryDate));
 }
 
+/**
+ * 시각(ms)을 **연도까지 넣어** 적는다.
+ *
+ * 법적 고지(결제 전환일 등)에 쓴다 — 목록용 `formatListDate`는 올해면 연도를 빼는데,
+ * "언제 돈이 나가는가"에서 연도를 빼면 안 된다.
+ */
+export function formatTimestampDate(ms: number): string {
+  return translate('date.listWithYear', parts(dayjs(ms).format(DATE_FORMAT)));
+}
+
 /** 캘린더 헤더용 */
 export function formatMonthLabel(entryDate: string): string {
   return translate('date.monthYear', parts(entryDate));

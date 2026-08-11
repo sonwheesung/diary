@@ -7,7 +7,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import { purgeBackup } from '@/features/backup/api/run-backup';
-import { forgetPurchaseIdentity } from '@/features/subscription/api/purchases';
+import { forgetPurchaseIdentity, reattachSubscription } from '@/features/subscription/api/purchases';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
@@ -135,8 +135,11 @@ export function useSupportAuth(): SupportAuth {
       /*
        * 로그인 직후 권한을 다시 읽는다. 다른 기기에서 구독한 사람은 이 순간 pro가 되고,
        * 안 읽으면 다음 앱 실행까지 광고를 계속 본다 — 방금 돈을 낸 사람에게 최악이다.
+       *
+       * ⚠ 서버가 `pro`가 아니라고 답해도 **스토어에는 구독이 있을 수 있다**(계정이 바뀐 경우).
+       *   그때 스토어에 한 번 더 물어보는 것까지가 이 한 줄이다 — 안 하면 돈만 나간다.
        */
-      void useEntitlementStore.getState().refresh();
+      void reattachSubscription(result.subject.id);
       return null;
     } catch (error) {
       // 사용자가 뒤로가기로 닫으면 취소 코드가 온다 — 오류가 아니다

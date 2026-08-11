@@ -23,8 +23,11 @@ import {
   purchase,
   purchasesConfigured,
   restore,
+  trialTermsOf,
 } from '@/features/subscription/api/purchases';
 import type { Plans } from '@/features/subscription/api/purchases';
+import type { TrialTerms } from '@/features/subscription/trial';
+import { formatTimestampDate } from '@/lib/format';
 import { useSupportAuth } from '@/features/support/auth-gate';
 import { OPERATOR } from '@/features/legal/legal-text';
 import type { Palette } from '@/theme/palettes';
@@ -59,6 +62,13 @@ export default function SubscribeScreen() {
   const [working, setWorking] = useState(false);
   /** RC에 신원을 알렸는가. **이게 false면 결제 버튼을 누를 수 없다** */
   const [identified, setIdentified] = useState(false);
+  /**
+   * 전자상거래법 §13⑥ 동의 단계. 무료 체험이 붙은 상품에만 선다.
+   *
+   * ⚠ **고지가 아니라 동의다.** 체크를 켜야 결제가 열리고, 뒤로가기는 동의가 아니다.
+   */
+  const [consent, setConsent] = useState<{ pkg: PurchasesPackage; terms: TrialTerms } | null>(null);
+  const [agreed, setAgreed] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -82,7 +92,22 @@ export default function SubscribeScreen() {
     }
   }, [ready, signedIn, load]);
 
+  /**
+   * 상품을 누르면 여기로 온다. **체험이 붙어 있으면 바로 결제하지 않는다** —
+   * §13⑥이 전환 일시·전후 가격·결제방법에 대한 **별도 동의**를 요구한다.
+   */
+  const choose = (pkg: PurchasesPackage) => {
+    const terms = trialTermsOf(pkg, Date.now());
+    if (terms === null) {
+      void buy(pkg);
+      return;
+    }
+    setAgreed(false);
+    setConsent({ pkg, terms });
+  };
+
   const buy = async (pkg: PurchasesPackage) => {
+    setConsent(null);
     if (!identified) {
       // 여기 오면 안 되지만, 오면 결제를 막는다 — 익명 결제는 되돌릴 수 없다.
       Alert.alert(t('subscribe.notReadyTitle'), t('subscribe.notReadyBody'));
@@ -132,6 +157,72 @@ export default function SubscribeScreen() {
       <Text style={styles.headerTitle}>{t('subscribe.title')}</Text>
     </View>
   );
+
+  /*
+   * ── §13⑥ 전환 동의 ────────────────────────────────────────────────────────
+   * 전용 화면으로 세운다. 아래 작은 글씨로는 "동의를 받았다"가 성립하지 않는다.
+   */
+  if (consent !== null) {
+    return (
+      <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
+        <Text style={styles.consentTitle}>{t('subscribe.consentTitle')}</Text>
+
+        <View style={styles.consentBox}>
+          {/* 전환 일시 — 날짜는 틀을 통째로 번역한다(§9.1) */}
+          <ConsentRow
+            label={t('subscribe.consentWhenLabel')}
+            value={t('subscribe.consentWhen', {
+              days: consent.terms.days,
+              date: formatTimestampDate(consent.terms.chargesAt),
+            })}
+          />
+          {/* 변동 전/후 가격을 **나란히** 적는다 */}
+          <ConsentRow
+            label={t('subscribe.consentPriceLabel')}
+            value={t('subscribe.consentPrice', { after: consent.terms.priceAfter })}
+          />
+          <ConsentRow
+            label={t('subscribe.consentMethodLabel')}
+            value={t('subscribe.consentMethod')}
+          />
+          <ConsentRow
+            label={t('subscribe.consentCancelLabel')}
+            value={t('subscribe.consentCancel')}
+          />
+        </View>
+
+        <Pressable
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: agreed }}
+          onPress={() => setAgreed((value) => !value)}
+          style={styles.agreeRow}
+          hitSlop={8}
+        >
+          <View style={[styles.checkbox, agreed && styles.checkboxOn]}>
+            {agreed && <Check size={16} color={colors.textOnAccent} />}
+          </View>
+          <Text style={styles.agreeText}>{t('subscribe.consentAgree')}</Text>
+        </Pressable>
+
+        <Button
+          label={t('subscribe.consentStart')}
+          onPress={() => void buy(consent.pkg)}
+          // ⚠ 기본값이 꺼짐이고, 켜야 열린다. 미리 켜두면 동의가 아니다.
+          disabled={!agreed || working}
+          loading={working}
+          fullWidth
+        />
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => setConsent(null)}
+          hitSlop={8}
+          style={styles.consentBack}
+        >
+          <Text style={styles.link}>{t('common.cancel')}</Text>
+        </Pressable>
+      </Screen>
+    );
+  }
 
   // ── 로그인 게이트 ──────────────────────────────────────────────────────────
   if (ready && !signedIn) {
@@ -193,7 +284,7 @@ export default function SubscribeScreen() {
               pkg={plans.annual}
               label={t('subscribe.annual')}
               badge={t('subscribe.annualBadge')}
-              onPress={buy}
+              onPress={choose}
               disabled={working}
             />
           )}
@@ -201,7 +292,7 @@ export default function SubscribeScreen() {
             <PlanButton
               pkg={plans.monthly}
               label={t('subscribe.monthly')}
-              onPress={buy}
+              onPress={choose}
               disabled={working}
             />
           )}
@@ -227,6 +318,16 @@ export default function SubscribeScreen() {
         <Text style={styles.link}>{t('subscribe.restore')}</Text>
       </Pressable>
     </Screen>
+  );
+}
+
+function ConsentRow({ label, value }: { label: string; value: string }) {
+  const styles = useStyles(createStyles);
+  return (
+    <View style={styles.consentRow}>
+      <Text style={styles.consentLabel}>{label}</Text>
+      <Text style={styles.consentValue}>{value}</Text>
+    </View>
   );
 }
 
@@ -319,6 +420,39 @@ const createStyles = (colors: Palette) =>
       backgroundColor: colors.accentSoft,
     },
     activeTitle: { ...typography.label, color: colors.accent },
+    consentTitle: { ...typography.title, color: colors.text, marginBottom: spacing.lg },
+    consentBox: {
+      backgroundColor: colors.surface,
+      borderRadius: radius.md,
+      padding: spacing.md,
+      gap: spacing.md,
+    },
+    consentRow: { gap: 2 },
+    consentLabel: { ...typography.caption, color: colors.textMuted },
+    consentValue: { ...typography.body, color: colors.text },
+    agreeRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      marginVertical: spacing.lg,
+    },
+    checkbox: {
+      width: 24,
+      height: 24,
+      borderRadius: radius.sm,
+      borderWidth: 1.5,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    // ⚠ 배경만 바꿀 때 반지름을 다시 적는다 — 안드로이드에서 네모로 그려지는 경우를 겪었다(§10)
+    checkboxOn: {
+      backgroundColor: colors.accent,
+      borderColor: colors.accent,
+      borderRadius: radius.sm,
+    },
+    agreeText: { ...typography.body, color: colors.text, flex: 1 },
+    consentBack: { alignSelf: 'center', marginTop: spacing.lg },
     legal: { gap: spacing.xs, marginTop: spacing.md },
     fine: { ...typography.caption, color: colors.textMuted, lineHeight: 18 },
     subtle: { ...typography.caption, color: colors.textMuted, lineHeight: 19 },
