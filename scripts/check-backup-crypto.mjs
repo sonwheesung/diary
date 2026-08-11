@@ -44,6 +44,7 @@ import {
   encodeUtf8,
   decodeUtf8,
 } from '../features/backup/manifest.ts';
+import { sealManifest, openManifest, countParts } from '../features/backup/package.ts';
 
 const hex = (s) => Uint8Array.from(s.replace(/\s/g, '').match(/../g).map((b) => parseInt(b, 16)));
 const ascii = (s) => Uint8Array.from([...s].map((c) => c.charCodeAt(0)));
@@ -408,6 +409,69 @@ check('매니페스트 · 깨진 JSON은 파싱 실패로 거부', () => {
   throws(() => joinManifest([encodeUtf8('{ 이건 JSON이')]), '깨진 파트');
 });
 
+// ── 전체 경로 (매니페스트 → 봉인 → 개봉 → 매니페스트) ─────────────────────────
+
+const KEYS = { dek: hex('808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f'), kid: KID };
+// 결정적 nonce — **테스트 전용**이다. 제품은 매번 CSPRNG로 만든다
+const nonceFor = (part) => { const n = new Uint8Array(24); n[23] = part + 1; return n; };
+const sealOpts = (over = {}) => ({
+  seq: 41, genId: GEN, version: VERSION_EXPERIMENTAL, nonceFor, ...over,
+});
+
+check('전체 경로 · 단일 파트 왕복', () => {
+  const original = fullManifest();
+  const envelopes = sealManifest(original, KEYS, sealOpts());
+  eq(envelopes.length, 1, '파트 수');
+  const opened = openManifest(envelopes, KEYS);
+  eq(opened.seq, 41, 'seq');
+  eq(JSON.stringify(opened.manifest), JSON.stringify(original), '매니페스트 불일치');
+});
+
+check('전체 경로 · 여러 파트 왕복', () => {
+  const original = { ...fullManifest(), diaries: Array.from({ length: 40 }, (_, i) => diary(`d${i}`)) };
+  const envelopes = sealManifest(original, KEYS, sealOpts({ targetPartBytes: 400 }));
+  if (envelopes.length < 3) throw new Error(`나뉘지 않았다 (${envelopes.length}파트)`);
+  eq(JSON.stringify(openManifest(envelopes, KEYS).manifest), JSON.stringify(original), '불일치');
+});
+
+check('전체 경로 · 파트 순서가 섞여 있어도 복원된다', () => {
+  const original = { ...fullManifest(), diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)) };
+  const envelopes = sealManifest(original, KEYS, sealOpts({ targetPartBytes: 400 }));
+  const shuffled = [...envelopes].reverse();
+  eq(JSON.stringify(openManifest(shuffled, KEYS).manifest), JSON.stringify(original), '불일치');
+});
+
+check('전체 경로 · 파트 하나가 빠지면 전체 거부', () => {
+  const original = { ...fullManifest(), diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)) };
+  const envelopes = sealManifest(original, KEYS, sealOpts({ targetPartBytes: 400 }));
+  throws(() => openManifest(envelopes.slice(1), KEYS), '파트 누락');
+});
+
+check('전체 경로 · 다른 세대의 파트가 섞이면 거부 (찢어진 세대)', () => {
+  const m = { ...fullManifest(), diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)) };
+  const a = sealManifest(m, KEYS, sealOpts({ targetPartBytes: 400 }));
+  // 같은 seq·같은 partCount인데 genId만 다른 재시도 — AAD·태그는 전부 통과한다
+  const b = sealManifest(m, KEYS, sealOpts({ targetPartBytes: 400, genId: hex('ffffffffffffffff') }));
+  throws(() => openManifest([a[0], ...b.slice(1)], KEYS), 'genId 혼입');
+});
+
+check('전체 경로 · 다른 복구 코드로는 못 연다', () => {
+  const envelopes = sealManifest(fullManifest(), KEYS, sealOpts());
+  const other = { dek: hex('00'.repeat(32)), kid: KID };
+  throws(() => openManifest(envelopes, other), '다른 DEK');
+});
+
+check('전체 경로 · countParts가 실제 파트 수와 일치한다', () => {
+  const m = { ...fullManifest(), diaries: Array.from({ length: 37 }, (_, i) => diary(`d${i}`)) };
+  for (const target of [200, 400, 1000, 100_000]) {
+    eq(
+      countParts(m, target),
+      sealManifest(m, KEYS, sealOpts({ targetPartBytes: target })).length,
+      `목표 ${target}B — 어긋나면 nonce가 모자라 봉인이 죽는다`,
+    );
+  }
+});
+
 // ── 결과 ──────────────────────────────────────────────────────────────────────
 
 if (failures.length > 0) {
@@ -415,4 +479,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.error(`  ✗ ${failure}\n`);
   process.exit(1);
 }
-console.log(`백업 암호 ok — ${passed}개 검사 통과 (KAT 3 + 봉투 8 + 세대 4 + 복구 코드 9 + 매니페스트 9)`);
+console.log(`백업 암호 ok — ${passed}개 검사 통과 (KAT 3 + 봉투 8 + 세대 4 + 복구 코드 9 + 매니페스트 9 + 전체 경로 7)`);
