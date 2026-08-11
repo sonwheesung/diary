@@ -7,7 +7,7 @@ import {
   markBackupCommitted,
 } from '@/features/backup/api/backup-state';
 import type { BackupFail } from '@/features/backup/api/client';
-import { commit, downloadPart, latest, reserve, uploadPart } from '@/features/backup/api/client';
+import { commit, downloadPart, latest, rebind, reserve, uploadPart } from '@/features/backup/api/client';
 import { assertReadable } from '@/features/backup/manifest';
 import type { Manifest } from '@/features/backup/manifest';
 import { LATEST_DB_VERSION } from '@/db/migrations';
@@ -49,7 +49,7 @@ export async function runBackup(
   onProgress?.({ ratio: 0.05, phase: 'sealing' });
   const { genId, envelopes } = await sealManifest(manifest, keys, seq);
 
-  const reserved = await reserve(keys.vaultId, seq, genId, envelopes.length);
+  const reserved = await reserve(keys.vaultId, seq, genId, envelopes.length, keys.authKey);
   if (!reserved.ok) {
     return reserved;
   }
@@ -83,6 +83,21 @@ export async function runBackup(
     totalBytes: committed.totalBytes,
     partCount: envelopes.length,
   };
+}
+
+/**
+ * 다른 기기가 라이터일 때 이 기기로 가져온다.
+ *
+ * ⚠ **덮어쓰기 버튼은 만들지 않는다.** 순진한 덮어쓰기가 상대 기기의 조각을 지운다.
+ *   가져온 뒤에는 **복원해서 서버 내용에 맞춘 다음** 이어 쓰는 것이 정해진 순서다.
+ */
+export async function takeOverWriter(): Promise<{ ok: true } | { ok: false; reason: BackupFailure }> {
+  const keys = await loadBackupKeys();
+  if (keys === null) {
+    return { ok: false, reason: 'no-keys' };
+  }
+  const result = await rebind(keys.vaultId, keys.authKey);
+  return result.ok ? { ok: true } : { ok: false, reason: result.reason };
 }
 
 export type RestoreOutcome =

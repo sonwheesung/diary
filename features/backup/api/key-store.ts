@@ -1,7 +1,7 @@
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 
-import { deriveDek, deriveKid, deriveVaultId, toHex } from '@/features/backup/key-derive';
+import { deriveAuthKey, deriveDek, deriveKid, deriveVaultId, toHex } from '@/features/backup/key-derive';
 import { SECRET_LENGTH, encodeRecoveryCode } from '@/features/backup/recovery-code';
 
 /**
@@ -41,6 +41,11 @@ export interface BackupKeys {
   readonly vaultId: string;
   /** 봉투 헤더에 실리는 키 식별자 */
   readonly kid: Uint8Array;
+  /**
+   * 되찾기·삭제 인가값. hex 64자.
+   * ⚠ 서버는 `sha256`으로만 저장한다 — 절대 로그에 남기지 않는다.
+   */
+  readonly authKey: string;
 }
 
 function keysFrom(secret: Uint8Array): BackupKeys {
@@ -49,6 +54,7 @@ function keysFrom(secret: Uint8Array): BackupKeys {
     dek: deriveDek(secret),
     vaultId: toHex(deriveVaultId(secret)),
     kid: deriveKid(secret),
+    authKey: deriveAuthKey(secret),
   };
 }
 

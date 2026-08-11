@@ -34,6 +34,7 @@ export const KID_LENGTH = 4;
 const INFO_DEK = asciiBytes('jogak/dek/v1');
 const INFO_VAULT_ID = asciiBytes('jogak/vault-id/v1');
 const INFO_KID = asciiBytes('jogak/kid/v1');
+const INFO_AUTH = asciiBytes('jogak/auth/v1');
 
 /** `TextEncoder`를 쓰지 않는다 — RN과 Node 양쪽에서 임포트 0으로 돌아야 한다 */
 function asciiBytes(text: string): Uint8Array {
@@ -75,6 +76,19 @@ export function deriveVaultId(secret: Uint8Array): Uint8Array {
 /** 봉투 헤더에 실리는 키 식별자. 어떤 코드로 잠갔는지 대조하는 용도 */
 export function deriveKid(secret: Uint8Array): Uint8Array {
   return deriveKey(secret, INFO_KID, KID_LENGTH);
+}
+
+/**
+ * 되찾기·삭제를 인가하는 값.
+ *
+ * ⚠ **서버는 이걸 `sha256`으로만 저장한다.** 그래서 서버 DB가 통째로 새도 되찾기 권한은
+ *   안 샌다. 대칭 비밀이라 요청 중에는 평문으로 전송되지만 **절대 로그에 남기지 않는다.**
+ *
+ * ⚠ `vault_id`와 **다른 값이어야 한다.** vault_id는 서버 DB·로그에 평문으로 있으므로,
+ *   같은 값을 인가에 쓰면 "이름을 아는 사람이 곧 주인"이 된다.
+ */
+export function deriveAuthKey(secret: Uint8Array): string {
+  return toHex(deriveKey(secret, INFO_AUTH, 32));
 }
 
 /**

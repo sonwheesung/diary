@@ -10,6 +10,7 @@
  * ⚠ common_server 없이 돌리려면 `AUTH_STUB=1`로 서버를 띄운다.
  */
 const BASE = process.env.SERVER_URL ?? 'http://127.0.0.1:3200';
+// ⚠ 토큰은 **ASCII만** — HTTP 헤더는 ByteString이라 한글을 넣으면 fetch가 던진다.
 const TOKEN = process.env.TEST_TOKEN ?? 'stub-token';
 
 let passed = 0;
@@ -163,6 +164,107 @@ await check('큰 파트 — 5MB 서명 URL PUT (Vercel 4.5MB 한도 밖임을 �
   assert(committed.status === 200, `commit HTTP ${committed.status} ${JSON.stringify(committed.json)}`);
   assert(committed.json.totalBytes === big, `totalBytes=${committed.json.totalBytes}`);
   console.log(`       5MB 업로드 ${seconds.toFixed(2)}초 (로컬 루프백 — 실망 속도가 아니다)`);
+});
+
+// ── 7. 읽기는 grant를 요구하지 않는다 (순환 제거 확인) ────────────────────────
+await check('다른 계정도 읽을 수 있다 — 읽기는 암호가 지킨다', async () => {
+  const res = await fetch(`${BASE}/api/v1/backup/latest`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer other-account' },
+    body: JSON.stringify({ vaultId }),
+  });
+  const json = await res.json();
+  assert(res.status === 200, `HTTP ${res.status} ${JSON.stringify(json)}`);
+  /*
+   * 이게 안전한 이유: 받아가는 건 **못 여는 암호문**이다. 열려면 복구 코드가 필요하고,
+   * 코드가 있으면 어차피 오프라인에서 열 수 있다. grant는 단일 라이터용이지 열람 차단용이 아니다.
+   */
+});
+
+// ── 8. 되찾기 — auth_key가 없으면 못 뺏는다 ───────────────────────────────────
+const AUTH = 'a'.repeat(64);
+await check('되찾기 — auth_key 없이는 거부', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  const r = await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  assert(r.status === 200, `reserve HTTP ${r.status}`);
+
+  const res = await fetch(`${BASE}/api/v1/backup/rebind`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer intruder' },
+    body: JSON.stringify({ vaultId: v }), // authKey 없음
+  });
+  assert(res.status === 403, `HTTP ${res.status}`);
+});
+
+await check('되찾기 — 틀린 auth_key도 거부', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  const res = await fetch(`${BASE}/api/v1/backup/rebind`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer intruder' },
+    body: JSON.stringify({ vaultId: v, authKey: 'b'.repeat(64) }),
+  });
+  assert(res.status === 403, `HTTP ${res.status}`);
+});
+
+await check('되찾기 — 맞는 auth_key면 라이터가 바뀐다', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+
+  // 다른 계정은 아직 쓸 수 없다
+  const before = await fetch(`${BASE}/api/v1/backup/reserve`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer new-phone' },
+    body: JSON.stringify({ vaultId: v, seq: 1, genId, partCount: 1 }),
+  });
+  assert(before.status === 403, `되찾기 전 HTTP ${before.status}`);
+
+  const rebound = await fetch(`${BASE}/api/v1/backup/rebind`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer new-phone' },
+    body: JSON.stringify({ vaultId: v, authKey: AUTH }),
+  });
+  assert(rebound.status === 200, `rebind HTTP ${rebound.status} ${await rebound.text()}`);
+
+  const after = await fetch(`${BASE}/api/v1/backup/reserve`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer new-phone' },
+    body: JSON.stringify({ vaultId: v, seq: 1, genId, partCount: 1 }),
+  });
+  assert(after.status === 200, `되찾기 후 HTTP ${after.status}`);
+});
+
+await check('되찾기 — 금고 생성 후에는 auth_key를 덮어쓸 수 없다', async () => {
+  const v = Array.from({ length: 32 }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: AUTH });
+  // 침입자가 자기 키로 덮어쓰려 시도
+  await api('reserve', { vaultId: v, seq: 1, genId, partCount: 1, authKey: 'c'.repeat(64) });
+  const res = await fetch(`${BASE}/api/v1/backup/rebind`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer intruder' },
+    body: JSON.stringify({ vaultId: v, authKey: 'c'.repeat(64) }),
+  });
+  assert(res.status === 403, `덮어쓰기가 통했다 (HTTP ${res.status})`);
+});
+
+// ── 9. 리퍼 ───────────────────────────────────────────────────────────────────
+await check('리퍼 — CRON_SECRET 없이는 거부', async () => {
+  const res = await fetch(`${BASE}/api/cron/reap`, { method: 'POST' });
+  assert(res.status === 401, `HTTP ${res.status}`);
+});
+
+await check('리퍼 — 시크릿이 맞으면 돌고 건수를 돌려준다', async () => {
+  const secret = process.env.CRON_SECRET ?? 'dev-cron-secret';
+  const res = await fetch(`${BASE}/api/cron/reap`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${secret}` },
+  });
+  const json = await res.json();
+  assert(res.status === 200, `HTTP ${res.status} ${JSON.stringify(json)}`);
+  assert(typeof json.reapedParts === 'number', '건수가 없다 — 조용히 죽으면 아무도 모른다');
+  console.log(
+    `       파트 ${json.reapedParts} · 세대 ${json.reapedGenerations} · 툼스톤 ${json.reapedTombstones}`,
+  );
 });
 
 // ── 결과 ──────────────────────────────────────────────────────────────────────

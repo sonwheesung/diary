@@ -34,6 +34,14 @@ export const vaults = pgTable(
     id: text('id').primaryKey(),
     /** 서버에 커밋된 마지막 세대. 다음 업로드는 seq+1만 받는다 */
     seq: integer('seq').notNull().default(0),
+    /**
+     * `sha256(auth_key)`. `auth_key`는 복구 코드에서 유도된다(HKDF).
+     *
+     * ⚠ **원본을 저장하지 않는다.** 그래서 이 DB가 통째로 새도 되찾기·삭제 권한은 안 샌다.
+     * ⚠ `vault_id`와 **다른 값이어야** 한다 — vault_id는 여기 평문으로 있고 로그에도 남는다.
+     *   같은 값을 인가에 쓰면 "이름을 아는 사람이 곧 주인"이 된다.
+     */
+    authHash: text('auth_hash'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     /**

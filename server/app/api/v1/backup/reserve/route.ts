@@ -31,6 +31,8 @@ interface Body {
   seq?: unknown;
   genId?: unknown;
   partCount?: unknown;
+  /** 금고를 **처음 만들 때만** 쓰인다. 이후 요청의 값은 무시된다 */
+  authKey?: unknown;
 }
 
 export async function POST(req: Request) {
@@ -60,6 +62,7 @@ export async function POST(req: Request) {
 
   const vaultId = typeof body.vaultId === 'string' ? body.vaultId : '';
   const genId = typeof body.genId === 'string' ? body.genId : '';
+  const authKey = typeof body.authKey === 'string' ? body.authKey : undefined;
   const seq = typeof body.seq === 'number' ? body.seq : NaN;
   const partCount = typeof body.partCount === 'number' ? body.partCount : NaN;
 
@@ -74,7 +77,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const vault = await ensureVault(vaultId);
+    const vault = await ensureVault(vaultId, authKey);
     if (vault.purgedAt !== null) {
       return fail('vault-purged', { purgedAt: vault.purgedAt.toISOString() });
     }

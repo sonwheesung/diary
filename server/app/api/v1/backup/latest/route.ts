@@ -6,7 +6,7 @@ import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { signDownload, storageConfigured } from '@/lib/storage';
-import { ensureGrant, findVault } from '@/lib/vault';
+import { findVault } from '@/lib/vault';
 
 export const dynamic = 'force-dynamic';
 
@@ -59,14 +59,14 @@ export async function POST(req: Request) {
     }
 
     /*
-     * 읽기도 grant를 확인한다 — 다만 **비어 있으면 잡는다.**
-     * 새 폰이 복구 코드로 처음 붙는 경로가 이것이다(최초 grant = 선착순, lib/vault.ts).
-     * 남이 잡고 있으면 되찾기를 안내한다.
+     * ⚠ **grant를 요구하지 않는다.** 읽기는 **암호가 이미 지킨다** —
+     *   `vault_id`를 아는 사람이 얻는 것은 못 여는 암호문이고, 열려면 복구 코드가 필요하며,
+     *   코드가 있으면 어차피 오프라인에서 열 수 있다.
+     *   grant의 존재 이유는 **단일 라이터**를 강제하는 것이지 열람을 막는 것이 아니다.
+     *
+     *   요구하면 순환이 생긴다: 읽기에 grant가 필요한데 grant를 옮기는 되찾기는
+     *   복원 뒤에 오고, 복원이 곧 읽기다.
      */
-    const grant = await ensureGrant(vaultId, identity);
-    if (grant.kind === 'taken') {
-      return fail('no-grant', { reboundAt: grant.reboundAt?.toISOString() ?? null });
-    }
 
     const [generation] = await db
       .select()

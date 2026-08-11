@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/db';
@@ -97,21 +99,48 @@ export interface VaultRow {
   id: string;
   seq: number;
   purgedAt: Date | null;
+  authHash: string | null;
+}
+
+/** `auth_key`(hex 64자)의 저장 형태 */
+export function hashAuthKey(authKey: string): string {
+  return createHash('sha256').update(authKey, 'utf8').digest('hex');
+}
+
+/**
+ * 제시한 `auth_key`가 이 금고의 것인가.
+ *
+ * ⚠ 해시가 **없는** 금고(auth_key가 붙기 전에 만들어진 것)는 통과시키지 않는다 —
+ *   "해시가 없으면 아무나 통과"는 인가를 통째로 무력화한다.
+ */
+export function authKeyMatches(vault: VaultRow, authKey: string | null): boolean {
+  if (vault.authHash === null || authKey === null || authKey.length === 0) {
+    return false;
+  }
+  return vault.authHash === hashAuthKey(authKey);
 }
 
 /** 금고를 읽는다. 없으면 `null`, 파기됐으면 행은 있고 `purgedAt`이 찍혀 있다 */
 export async function findVault(vaultId: string): Promise<VaultRow | null> {
   const [row] = await db
-    .select({ id: vaults.id, seq: vaults.seq, purgedAt: vaults.purgedAt })
+    .select({ id: vaults.id, seq: vaults.seq, purgedAt: vaults.purgedAt, authHash: vaults.authHash })
     .from(vaults)
     .where(eq(vaults.id, vaultId))
     .limit(1);
   return row ?? null;
 }
 
-/** 없으면 만든다. 첫 백업이 곧 금고 생성이다 */
-export async function ensureVault(vaultId: string): Promise<VaultRow> {
-  await db.insert(vaults).values({ id: vaultId }).onConflictDoNothing();
+/**
+ * 없으면 만든다. 첫 백업이 곧 금고 생성이다.
+ *
+ * `authKey`는 **금고를 처음 만들 때만** 해시로 박힌다. 이미 있는 금고의 해시를 덮어쓰면
+ * 코드를 아는 사람이 남의 금고 인가를 갈아치울 수 있다.
+ */
+export async function ensureVault(vaultId: string, authKey?: string): Promise<VaultRow> {
+  await db
+    .insert(vaults)
+    .values({ id: vaultId, authHash: authKey === undefined ? null : hashAuthKey(authKey) })
+    .onConflictDoNothing();
   const row = await findVault(vaultId);
   if (row === null) {
     throw new Error('금고를 만들지 못했다');

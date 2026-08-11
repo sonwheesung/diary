@@ -99,14 +99,30 @@ export interface ReserveSlot {
   token: string;
 }
 
-/** 1단 — 자리 예약. 멱등하므로 재시도해도 된다(URL이 재발급된다) */
+/**
+ * 1단 — 자리 예약. 멱등하므로 재시도해도 된다(URL이 재발급된다).
+ *
+ * `authKey`는 **금고를 처음 만들 때만** 쓰인다. 서버는 `sha256`으로만 저장하고,
+ * 이미 있는 금고의 값은 무시한다 — 안 그러면 코드를 아는 사람이 인가를 갈아치울 수 있다.
+ */
 export function reserve(
   vaultId: string,
   seq: number,
   genId: string,
   partCount: number,
+  authKey: string,
 ): Promise<BackupResult<{ seq: number; genId: string; uploads: ReserveSlot[] }>> {
-  return post('reserve', { vaultId, seq, genId, partCount });
+  return post('reserve', { vaultId, seq, genId, partCount, authKey });
+}
+
+/**
+ * 되찾기 — 이 계정을 라이터로 만든다. `no-grant`를 받은 뒤에 부른다.
+ *
+ * ⚠ 구독을 요구하지 않는다(읽기 등급). 쓰기로 분류하면 구독이 끊긴 분실자가
+ *   되찾기부터 막혀서 "복원은 구독과 무관하다"가 한 층 아래에서 무효가 된다.
+ */
+export function rebind(vaultId: string, authKey: string): Promise<BackupResult<Empty>> {
+  return post('rebind', { vaultId, authKey });
 }
 
 /**
