@@ -66,7 +66,13 @@ export function UnlockView({ method, onUnlocked, onWiped }: UnlockViewProps) {
       checkingRef.current = true;
       try {
         if (await verifySecret(secret)) {
-          await resetFailures();
+          /*
+           * ⚠ 실패 횟수 초기화가 실패해도 **문은 열어준다.** 비밀은 이미 맞았다.
+           * 여기서 던지면 올바른 PIN을 넣고도 앱이 안 열리고, 사용자에게 남는 유일한
+           * 출구가 초기화(전부 삭제)다 — 부기 하나 때문에 일기를 잃게 할 수는 없다.
+           * 못 지운 실패 횟수는 다음 성공에서 지워지고, 최악이라도 backoff가 한 번 더 걸릴 뿐이다.
+           */
+          await resetFailures().catch(() => undefined);
           onUnlocked();
           return;
         }
