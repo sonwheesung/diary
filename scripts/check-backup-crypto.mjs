@@ -36,6 +36,14 @@ import {
   SECRET_LENGTH,
   TOTAL_SYMBOLS,
 } from '../features/backup/recovery-code.ts';
+import {
+  splitManifest,
+  joinManifest,
+  assertReadable,
+  aliveDiaryIds,
+  encodeUtf8,
+  decodeUtf8,
+} from '../features/backup/manifest.ts';
 
 const hex = (s) => Uint8Array.from(s.replace(/\s/g, '').match(/../g).map((b) => parseInt(b, 16)));
 const ascii = (s) => Uint8Array.from([...s].map((c) => c.charCodeAt(0)));
@@ -326,6 +334,80 @@ check('복구 코드 · 무작위 2000개 왕복', () => {
   }
 });
 
+// ── 매니페스트 ────────────────────────────────────────────────────────────────
+
+const diary = (id, over = {}) => ({
+  id, entry_date: '2026-08-11', title: null, content: `본문 ${id}`,
+  content_blocks: JSON.stringify([{ type: 'text', value: `본문 ${id}` }]),
+  emotion: 'joy', created_at: 1, updated_at: 2, deleted_at: null, ...over,
+});
+
+const fullManifest = () => ({
+  dbVersion: 4,
+  diaries: [diary('a'), diary('b'), diary('c', { deleted_at: 99, content: '' })],
+  images: [{ id: 'i1', diary_id: 'a', file_name: 'x.jpg', width: 800, height: 600, created_at: 1, deleted_at: null }],
+  tags: [{ id: 't1', name: '여행', created_at: 10 }, { id: 't2', name: '일상', created_at: 20 }],
+  diaryTags: [{ diary_id: 'a', tag_id: 't1' }],
+});
+
+check('매니페스트 · UTF-8 왕복 (한글·이모지·서러게이트 쌍)', () => {
+  for (const text of ['조각', '오늘은 🌤️ 맑음', 'a', '𝔘𝔫𝔦𝔠𝔬𝔡𝔢', '']) {
+    eq(decodeUtf8(encodeUtf8(text)), text, `"${text}"`);
+  }
+});
+
+check('매니페스트 · 단일 파트 왕복', () => {
+  const original = fullManifest();
+  const joined = joinManifest(splitManifest(original, 1_000_000));
+  eq(JSON.stringify(joined), JSON.stringify(original), '왕복 불일치');
+});
+
+check('매니페스트 · 여러 파트로 나뉘어도 왕복 (각 파트가 독립 파싱된다)', () => {
+  const original = fullManifest();
+  const parts = splitManifest(original, 200); // 조각 하나가 겨우 들어갈 크기
+  if (parts.length < 2) throw new Error(`나뉘지 않았다 (${parts.length}파트)`);
+  for (const bytes of parts) {
+    JSON.parse(decodeUtf8(bytes)); // 이어붙이지 않고 **혼자** 파싱돼야 한다
+  }
+  eq(JSON.stringify(joinManifest(parts)), JSON.stringify(original), '왕복 불일치');
+});
+
+check('매니페스트 · 파트가 비어 있어도 무한 루프에 빠지지 않는다', () => {
+  const empty = { dbVersion: 4, diaries: [], images: [], tags: [], diaryTags: [] };
+  eq(splitManifest(empty, 10).length, 1, '빈 매니페스트는 파트 1개');
+});
+
+check('매니페스트 · content_blocks를 파싱하지 않고 문자열 그대로 나른다', () => {
+  const unknown = JSON.stringify([{ type: 'table', rows: [[1, 2]] }]); // 이 앱이 모르는 타입
+  const m = { ...fullManifest(), diaries: [diary('a', { content_blocks: unknown })] };
+  eq(joinManifest(splitManifest(m, 1_000_000)).diaries[0].content_blocks, unknown, '블록이 변형됐다');
+});
+
+check('매니페스트 · 더 새 스키마는 거부한다', () => {
+  throws(() => assertReadable({ ...fullManifest(), dbVersion: 9 }, 4), 'dbVersion 9 > 4');
+  assertReadable({ ...fullManifest(), dbVersion: 3 }, 4); // 옛 백업은 읽는다
+});
+
+check('매니페스트 · 형식 버전이 다른 파트가 섞이면 거부', () => {
+  const [good] = splitManifest(fullManifest(), 1_000_000);
+  const bad = encodeUtf8(JSON.stringify({ v: 1, dbVersion: 99, diaries: [], images: [], tags: [], diaryTags: [] }));
+  throws(() => joinManifest([good, bad]), 'dbVersion 불일치');
+});
+
+check('매니페스트 · aliveDiaryIds가 묘비를 뺀다 (차집합이 뚫리는 경로)', () => {
+  const ids = aliveDiaryIds(fullManifest());
+  eq([...ids].sort().join(','), 'a,b', '묘비 c가 섞였다');
+  /*
+   * 이게 왜 회귀인가: 확인 화면은 "로컬 alive ∖ 매니페스트" 차집합을 보여준다.
+   * 묘비 id가 매니페스트 쪽 집합에 들어가면, A 기기에서 지운 조각이 B 기기에서
+   * "백업에 있음"으로 판정돼 **경고 없이 사라진다.**
+   */
+});
+
+check('매니페스트 · 깨진 JSON은 파싱 실패로 거부', () => {
+  throws(() => joinManifest([encodeUtf8('{ 이건 JSON이')]), '깨진 파트');
+});
+
 // ── 결과 ──────────────────────────────────────────────────────────────────────
 
 if (failures.length > 0) {
@@ -333,4 +415,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.error(`  ✗ ${failure}\n`);
   process.exit(1);
 }
-console.log(`백업 암호 ok — ${passed}개 검사 통과 (KAT 3 + 봉투 8 + 세대 4 + 복구 코드 9)`);
+console.log(`백업 암호 ok — ${passed}개 검사 통과 (KAT 3 + 봉투 8 + 세대 4 + 복구 코드 9 + 매니페스트 9)`);

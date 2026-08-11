@@ -8,6 +8,10 @@ import type { SQLiteDatabase } from 'expo-sqlite';
  *    잘못됐으면 새 버전을 추가해서 고친다.
  * 2. Expand-only — 컬럼을 지우거나 이름을 바꾸지 않는다. 추가만 한다.
  * 3. 모든 DDL은 멱등하게(IF NOT EXISTS) — 중간에 실패한 기기가 재시도해도 깨지지 않게.
+ *
+ * ⚠ **컬럼을 추가하면 `features/backup/api/manifest-builder.ts`도 같이 고친다.**
+ *    백업은 저장소 계층을 거치지 않고 원본 행을 직접 읽으므로, 거기 컬럼을 안 더하면
+ *    그 값이 백업에서 조용히 빠진다 — 타입이 잡아주지 않는 유실이다.
  */
 const MIGRATIONS: readonly string[] = [
   // v1 — diaries 테이블 + 조회 경로 3종 인덱스
