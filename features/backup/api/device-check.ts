@@ -178,6 +178,138 @@ async function checkDatabaseSwap(): Promise<CheckResult[]> {
   return out;
 }
 
+/**
+ * 4. 복원 전 경로 — 매니페스트를 만들어 **스크래치 스왑으로 실제 복원**한다.
+ *
+ * ⚠ 자기 데이터를 자기 데이터로 덮는 것이라 **내용은 그대로여야 한다.**
+ *   달라지면 보존 복사(3단계)나 스왑에 문제가 있는 것이다.
+ */
+async function checkRestoreRoundTrip(): Promise<CheckResult[]> {
+  const out: CheckResult[] = [];
+  try {
+    const { buildManifest } = await import('@/features/backup/api/manifest-builder');
+    const { applyRestore, diffAgainstLocal } = await import('@/features/backup/api/restore');
+    const { SETTING_KEYS, getSetting, setSetting } = await import(
+      '@/features/settings/api/settings-store'
+    );
+
+    // 보존이 실제로 되는지 보려면 표식이 필요하다.
+    const MARK = `check-${Date.now()}`;
+    await setSetting(SETTING_KEYS.themeMode, MARK);
+
+    /*
+     * ⚠ **빈 DB로 왕복하면 아무것도 증명하지 못한다**("조각 0/0"). 실제 데이터를 심는다.
+     *   다국어·묘비·태그·이미지 행까지 넣어야 복원이 정말 온전한지 알 수 있다.
+     */
+    const db0 = await getDatabase();
+    const SEED = [
+      { id: 'chk-ko', text: '오늘은 비가 왔다. 우산을 안 가져왔지만 기분은 좋았어.' },
+      { id: 'chk-ja', text: '今日は雨が降った。傘を持ってこなかった。' },
+      { id: 'chk-zh', text: '今天下雨了。没带伞，淋得浑身湿透。' },
+      { id: 'chk-th', text: 'วันนี้ฝนตก ฉันไม่ได้เอาร่มมา' },
+      { id: 'chk-emoji', text: '가족 👨‍👩‍👧‍👦 그리고 🇰🇷 오늘 ✅' },
+    ];
+    await db0.withTransactionAsync(async () => {
+      for (let i = 0; i < SEED.length; i += 1) {
+        const row = SEED[i];
+        await db0.runAsync(
+          `INSERT OR REPLACE INTO diaries
+             (id, entry_date, title, content, content_blocks, emotion, created_at, updated_at, deleted_at)
+           VALUES (?, ?, ?, ?, ?, 'joy', ?, ?, NULL)`,
+          row.id,
+          `2026-08-${String(i + 1).padStart(2, '0')}`,
+          `점검 ${row.id}`,
+          row.text,
+          JSON.stringify([{ type: 'text', value: row.text }]),
+          1000 + i,
+          2000 + i,
+        );
+      }
+      // 묘비도 하나 — 매니페스트에 실리되 차집합에는 안 잡혀야 한다
+      await db0.runAsync(
+        `INSERT OR REPLACE INTO diaries
+           (id, entry_date, title, content, content_blocks, emotion, created_at, updated_at, deleted_at)
+         VALUES ('chk-dead', '2026-07-01', NULL, '', NULL, NULL, 1, 2, 999)`,
+      );
+      await db0.runAsync(
+        "INSERT OR REPLACE INTO tags (id, name, created_at) VALUES ('chk-tag', '점검태그', 5)",
+      );
+      await db0.runAsync(
+        "INSERT OR REPLACE INTO diary_tags (diary_id, tag_id) VALUES ('chk-ko', 'chk-tag')",
+      );
+    });
+
+    const manifest = await buildManifest();
+    const diff = await diffAgainstLocal(manifest);
+    out.push({
+      name: '차집합 — 자기 백업으로 복원하면 잃는 것이 없다',
+      ok: diff.losing.length === 0,
+      detail: `잃음 ${diff.losing.length} · 들어옴 ${diff.incoming}`,
+    });
+
+    const started = Date.now();
+    await applyRestore(manifest, '0'.repeat(32), 1);
+    const ms = Date.now() - started;
+
+    const db = await getDatabase();
+    const after = await db.getFirstAsync<{ n: number }>('SELECT count(*) as n FROM diaries');
+    out.push({
+      name: '★ 스크래치 스왑 복원',
+      ok: (after?.n ?? -1) === manifest.diaries.length && manifest.diaries.length > 0,
+      detail: `${ms}ms · 조각 ${after?.n ?? -1}/${manifest.diaries.length}`,
+    });
+
+    // 다국어 본문이 **바이트 그대로** 살아남았는가 — 여기가 깨지면 조용한 손실이다
+    let intact = 0;
+    for (const row of SEED) {
+      const got = await db.getFirstAsync<{ content: string }>(
+        'SELECT content FROM diaries WHERE id = ?',
+        row.id,
+      );
+      if (got?.content === row.text) intact += 1;
+    }
+    out.push({
+      name: '★ 복원 후 다국어 본문 일치',
+      ok: intact === SEED.length,
+      detail: `${intact}/${SEED.length} (한국어·日本語·中文·ไทย·이모지)`,
+    });
+
+    // 태그 연결과 묘비도 살아남아야 한다
+    const tagLink = await db.getFirstAsync<{ n: number }>(
+      "SELECT count(*) as n FROM diary_tags WHERE diary_id = 'chk-ko'",
+    );
+    const dead = await db.getFirstAsync<{ n: number }>(
+      "SELECT count(*) as n FROM diaries WHERE id = 'chk-dead' AND deleted_at IS NOT NULL",
+    );
+    out.push({
+      name: '복원 후 태그 연결·묘비',
+      ok: (tagLink?.n ?? 0) === 1 && (dead?.n ?? 0) === 1,
+      detail: `태그연결 ${tagLink?.n ?? 0} · 묘비 ${dead?.n ?? 0}`,
+    });
+
+    // ⚠ 이게 실패하면 테마·언어가 날아간다는 뜻이다.
+    const preserved = await getSetting(SETTING_KEYS.themeMode);
+    out.push({
+      name: '★ 보존 복사 — app_settings가 살아남는가',
+      ok: preserved === MARK,
+      detail: preserved === MARK ? '표식 유지됨' : `표식이 사라졌다 (${preserved ?? '없음'})`,
+    });
+
+    await setSetting(SETTING_KEYS.themeMode, 'system');
+    // 점검이 심은 것은 점검이 치운다 — 개발 DB에 쓰레기를 남기지 않는다.
+    await db.execAsync("DELETE FROM diary_tags WHERE tag_id = 'chk-tag'");
+    await db.execAsync("DELETE FROM tags WHERE id = 'chk-tag'");
+    await db.execAsync("DELETE FROM diaries WHERE id LIKE 'chk-%'");
+  } catch (error) {
+    out.push({
+      name: '스크래치 스왑 복원',
+      ok: false,
+      detail: error instanceof Error ? error.message : String(error),
+    });
+  }
+  return out;
+}
+
 /** 전부 돌리고 콘솔에 찍는다. `adb logcat -s ReactNativeJS | grep jogak-check` */
 export async function runDeviceChecks(baseUrl: string): Promise<CheckResult[]> {
   const results: CheckResult[] = [];
@@ -190,6 +322,7 @@ export async function runDeviceChecks(baseUrl: string): Promise<CheckResult[]> {
     results.push({ name: 'RN PUT', ok: false, detail: 'EXPO_PUBLIC_BACKUP_SERVER_URL 없음 — 건너뜀' });
   }
   results.push(...(await checkDatabaseSwap()));
+  results.push(...(await checkRestoreRoundTrip()));
 
   for (const result of results) {
     console.log(line(result));

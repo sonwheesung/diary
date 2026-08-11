@@ -24,6 +24,25 @@ async function open(): Promise<SQLite.SQLiteDatabase> {
   await db.execAsync('PRAGMA busy_timeout = 5000');
 
   await migrate(db);
+
+  /*
+   * ⚠ **중단된 복원을 여기서 마무리한다.** 복원은 스크래치 DB에 만들고 한 번에 스왑하는데,
+   *   그 사이에 앱이 죽으면 마커(`restore-pending.json`)가 남는다.
+   *
+   * ⚠ **`app/_layout.tsx`에 두면 늦다.** `ThemeProvider`가 `LockGate` 바깥에서
+   *   `getSetting`으로 DB를 열고, 언어·공지·광고가 `void`로 게이트를 앞지른다.
+   *   `getDatabase()`가 **모든 DB 접근이 반드시 지나는 유일한 지점**이라 여기가 맞다.
+   *
+   * ⚠ 실패해도 앱은 열려야 한다 — 스왑이 원자적이라 라이브는 무손상이거나 완전히
+   *   교체된 상태 둘 중 하나이고, 반쪽은 원리적으로 없다.
+   */
+  try {
+    const { recoverInterruptedRestore } = await import('@/features/backup/api/restore');
+    await recoverInterruptedRestore(db);
+  } catch {
+    // 복구 모듈을 못 불러와도 DB는 쓸 수 있어야 한다.
+  }
+
   return db;
 }
 
