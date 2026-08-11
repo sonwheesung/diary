@@ -30,12 +30,35 @@ const json = execFileSync(
 );
 const { privacy, deleteAccount, operator } = JSON.parse(json);
 
+/** 템플릿 리터럴 안에서 개행을 넣으려면 상수로 빼는 편이 읽기 쉽다 */
+const NL = String.fromCharCode(10);
+
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** 본문 줄 안의 URL을 링크로. 처리방침에 Google 정책 링크가 들어간다 */
 const linkify = (s) => esc(s).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" rel="noopener">$1</a>');
 
 const render = (doc) => {
+/*
+ * ⚠ **개정 예고는 반드시 함께 게시한다.** 이게 빠지면 30일 사전 고지가 실제로는
+ *   일어난 적이 없게 되고(정본 파일에만 적혀 있다), 릴리스 직전에 30일이 통째로
+ *   크리티컬 패스가 된다 — 예고본을 만든 이유 전체가 무효가 된다. 실제로 빠져 있었다.
+ */
+const pending =
+  doc.pending === undefined
+    ? ''
+    : `    <section class="pending">
+      <h2>개정 예고</h2>
+      <p class="pending-when">적용 시점: ${esc(doc.pending.appliesFrom)}</p>
+      <p>${linkify(doc.pending.summary)}</p>
+${doc.pending.sections
+  .map(
+    (s) => `      <h3>${esc(s.h)}</h3>
+${s.body.map((line) => `      <p>${linkify(line)}</p>`).join(NL)}`,
+  )
+  .join(NL)}
+    </section>`;
+
 const sections = doc.sections
   .map(
     (s) => `    <section>
@@ -79,6 +102,12 @@ return `<!doctype html>
     p { color: #AEB8C9; }
     a { color: #8AB0E8; }
   }
+  /* 예고는 아직 시행되지 않은 내용이다 — 본문과 눈으로 구분돼야 오해가 없다 */
+  .pending {
+    margin-top: 48px; padding: 20px; border: 1px solid #C0564B; border-radius: 12px;
+  }
+  .pending h2 { color: #C0564B; margin-top: 0; }
+  .pending-when { font-weight: 600; }
 </style>
 </head>
 <body>
@@ -86,6 +115,7 @@ return `<!doctype html>
   <p class="meta">시행일 ${esc(doc.effective)} · 최종 수정일 ${esc(doc.updated)}</p>
   <p class="intro">${esc(doc.intro)}</p>
 ${sections}
+${pending}
   <footer>
     ${esc(operator.name)} (${esc(operator.brand)}) · 대표 ${esc(operator.representative)}<br>
     문의 <a href="mailto:${esc(operator.contactEmail)}">${esc(operator.contactEmail)}</a>
@@ -109,7 +139,10 @@ for (const [file, doc] of [
 ]) {
   const out = render(doc);
   writeFileSync(`docs/${file}`, out, 'utf8');
-  console.log(`docs/${file} 생성 — ${doc.sections.length}개 섹션, ${(out.length / 1024).toFixed(1)}KB`);
+  const extra = doc.pending === undefined ? '' : ` + 개정 예고 ${doc.pending.sections.length}개`;
+  console.log(
+    `docs/${file} 생성 — ${doc.sections.length}개 섹션${extra}, ${(out.length / 1024).toFixed(1)}KB`,
+  );
 }
 console.log('게시: https://sonwheesung.github.io/diary/privacy.html');
 console.log('      https://sonwheesung.github.io/diary/delete-account.html  (push하면 반영)');

@@ -58,6 +58,33 @@ export default function PrivacyScreen() {
           ))}
         </View>
       ))}
+
+      {/*
+        ⚠ **개정 예고.** §13이 "불리한 변경은 30일 전 고지"를 스스로 걸어놨는데,
+          예고를 어디에도 띄우지 않으면 그 30일은 시작된 적이 없다 — 정본 파일에만
+          적혀 있는 것은 고지가 아니다. 웹 페이지(`npm run legal:html`)와 이 화면 둘 다
+          보여줘야 앱만 쓰는 사람에게도 닿는다.
+
+          본문과 **눈으로 구분되어야** 한다. 아직 시행되지 않은 내용이 본문처럼 보이면
+          "이미 서버에 백업이 올라가고 있다"는 오해를 만든다.
+      */}
+      {PRIVACY.pending !== undefined && (
+        <View style={styles.pending}>
+          <Text style={styles.pendingTitle}>개정 예고</Text>
+          <Text style={styles.pendingWhen}>적용 시점: {PRIVACY.pending.appliesFrom}</Text>
+          <Text style={styles.line}>{PRIVACY.pending.summary}</Text>
+          {PRIVACY.pending.sections.map((section) => (
+            <View key={section.h} style={styles.section}>
+              <Text style={styles.sectionTitle}>{section.h}</Text>
+              {section.body.map((line, index) => (
+                <Text key={index} style={styles.line}>
+                  {line}
+                </Text>
+              ))}
+            </View>
+          ))}
+        </View>
+      )}
     </Screen>
   );
 }
@@ -100,5 +127,22 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
       lineHeight: 21,
+    },
+    pending: {
+      gap: spacing.md,
+      marginTop: spacing.lg,
+      padding: spacing.md,
+      borderWidth: 1,
+      borderColor: colors.danger,
+      borderRadius: 12,
+    },
+    pendingTitle: {
+      ...typography.label,
+      color: colors.danger,
+    },
+    pendingWhen: {
+      ...typography.caption,
+      color: colors.text,
+      marginTop: -spacing.sm,
     },
   });
