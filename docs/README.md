@@ -59,7 +59,7 @@
 | 광고(AdMob) | ✅ | 전면=저장 완료 후 하루 1회 · 배너=탭 화면 상시. 개발은 테스트 단위(`EXPO_PUBLIC_ADS_REAL=1`일 때만 실제 단위) |
 | **광고 제거(구독자)** | ✅ | `features/entitlement/store.ts` — 캐시 먼저·서버 나중. 조회 실패에 캐시를 지우지 않는다 |
 | **백업/복원 — 앱 쪽** | ✅ | 암호 계층·매니페스트·클라이언트·화면. [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
-| **백업/복원 — 실기기 검증** | ❌ | RN의 5MB PUT · `backupDatabaseAsync` 동작 · 암호 처리량 |
+| **백업/복원 — 기기 검증** | ✅ | 2026-08-11 에뮬레이터 15/18. 5MB PUT 바이트 일치 · `backupDatabaseAsync` 9ms. ⏭ 남은 3은 **암호 처리량**이고 "순수 JS 유지"로 결론냈다 — 실기기(ARM) 재측정만 남음([`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §8) |
 | 사진 백업(2차) | ✅ | 이미지 하나 = blob 하나. 증분(`plan`) · 복원 후 못 받은 사진만 `'missing'` |
 | 월 구독(RevenueCat) | ⏸ | ~~Phase 9 대기~~ → 앱·RC·**Play 상품 등록까지 완료**(2026-08-12). 남은 것은 RC 상품 import·attach와 결제 프로필. [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) |
 | 백업/복원 — 서버 | ✅ | ~~조각 서버 대기~~ → `jogak-stg`(서울) + Vercel(`icn1`) 배포. 위 두 줄과 합쳐 읽는다 |

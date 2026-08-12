@@ -939,7 +939,8 @@ MVP를 이 범위로 내려면 **common_server 쪽 작업이 먼저** 끝나야 
   ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §11–§12)
 - ❌ 사진 백업(2차) · 되찾기/리퍼/파기 라우트
 - ❌ **RevenueCat 상품 import·attach** — 구독 배선의 마지막 한 칸
-- ❌ **백업 실기기 검증** — RN의 5MB PUT · `backupDatabaseAsync` 동작 · 암호 처리량
+- ✅ **백업 기기 검증**(2026-08-11 에뮬레이터 15/18) — 5MB PUT 바이트 일치 · `backupDatabaseAsync` 9ms.
+  ⏭ 암호 처리량만 실기기(ARM) 재측정이 남았다. 순수 JS 유지로 이미 결론냈다
 - ❌ **AI 서버** — `POST /api/v1/ai/report` · 캡 상수 · `ai_usage`. P1 원가 실측이 선행
 
 ⚠ **미출시다.** 남은 것은 대체로 외부 대기다.
