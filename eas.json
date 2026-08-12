@@ -39,6 +39,13 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {},
+    "internal": {
+      "android": {
+        "track": "internal",
+        "serviceAccountKeyPath": "../secrets/play-service-account.json",
+        "releaseStatus": "completed"
+      }
+    }
   }
 }
