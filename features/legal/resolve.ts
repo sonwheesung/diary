@@ -1,6 +1,7 @@
 import { PRIVACY } from '@/features/legal/legal-text';
 import type { LegalDoc } from '@/features/legal/legal-text';
 import { PRIVACY_EN } from '@/features/legal/translations/en';
+import { PRIVACY_JA } from '@/features/legal/translations/ja';
 import { i18next } from '@/lib/i18n';
 
 /**
@@ -28,6 +29,7 @@ import { i18next } from '@/lib/i18n';
 /** 번역이 있는 언어. 없으면 한국어 원문을 보여준다 */
 const TRANSLATIONS: Record<string, LegalDoc> = {
   en: PRIVACY_EN,
+  ja: PRIVACY_JA,
 };
 
 export interface ResolvedLegal {

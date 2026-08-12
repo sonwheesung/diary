@@ -18,8 +18,9 @@
  */
 import { PRIVACY } from '../features/legal/legal-text.ts';
 import { PRIVACY_EN } from '../features/legal/translations/en.ts';
+import { PRIVACY_JA } from '../features/legal/translations/ja.ts';
 
-const TRANSLATIONS = { en: PRIVACY_EN };
+const TRANSLATIONS = { en: PRIVACY_EN, ja: PRIVACY_JA };
 
 let passed = 0;
 const failures = [];
