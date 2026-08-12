@@ -27,6 +27,10 @@ import { PRIVACY_FR } from '../features/legal/translations/fr.ts';
 import { PRIVACY_DE } from '../features/legal/translations/de.ts';
 import { PRIVACY_IT } from '../features/legal/translations/it.ts';
 import { PRIVACY_RU } from '../features/legal/translations/ru.ts';
+import { PRIVACY_ID } from '../features/legal/translations/id.ts';
+import { PRIVACY_VI } from '../features/legal/translations/vi.ts';
+import { PRIVACY_TH } from '../features/legal/translations/th.ts';
+import { PRIVACY_TR } from '../features/legal/translations/tr.ts';
 
 const TRANSLATIONS = {
   en: PRIVACY_EN,
@@ -39,6 +43,10 @@ const TRANSLATIONS = {
   de: PRIVACY_DE,
   it: PRIVACY_IT,
   ru: PRIVACY_RU,
+  id: PRIVACY_ID,
+  vi: PRIVACY_VI,
+  th: PRIVACY_TH,
+  tr: PRIVACY_TR,
 };
 
 let passed = 0;
@@ -148,9 +156,17 @@ for (const [lang, doc] of Object.entries(TRANSLATIONS)) {
 }
 
 console.log('');
-const missing = 15 - 1 - Object.keys(TRANSLATIONS).length;
-if (missing > 0) {
-  console.log(`  ⏭ 아직 한국어 원문을 보여주는 언어가 ${missing}개 남았다 (번역이 없으면 원문이다)`);
+/*
+ * ⚠ **15개 언어가 전부 채워졌다**(2026-08-12). 이 검사가 앞으로 지켜야 할 것은
+ *   "빠진 언어가 없는가"이지 "몇 개 남았는가"가 아니다 — 언어를 추가하면 여기도 늘린다.
+ */
+const KO = 1;
+const expected = 15 - KO;
+if (Object.keys(TRANSLATIONS).length !== expected) {
+  console.error(`
+번역된 언어가 ${Object.keys(TRANSLATIONS).length}개다 — ${expected}개여야 한다.`);
+  console.error('번역이 없는 언어는 한국어 원문을 보여주므로 화면은 깨지지 않지만, 그 언어 사용자는 못 읽는다.');
+  process.exit(1);
 }
 
 if (failures.length > 0) {

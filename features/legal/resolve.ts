@@ -10,6 +10,10 @@ import { PRIVACY_FR } from '@/features/legal/translations/fr';
 import { PRIVACY_DE } from '@/features/legal/translations/de';
 import { PRIVACY_IT } from '@/features/legal/translations/it';
 import { PRIVACY_RU } from '@/features/legal/translations/ru';
+import { PRIVACY_ID } from '@/features/legal/translations/id';
+import { PRIVACY_VI } from '@/features/legal/translations/vi';
+import { PRIVACY_TH } from '@/features/legal/translations/th';
+import { PRIVACY_TR } from '@/features/legal/translations/tr';
 import { i18next } from '@/lib/i18n';
 
 /**
@@ -46,6 +50,10 @@ const TRANSLATIONS: Record<string, LegalDoc> = {
   de: PRIVACY_DE,
   it: PRIVACY_IT,
   ru: PRIVACY_RU,
+  id: PRIVACY_ID,
+  vi: PRIVACY_VI,
+  th: PRIVACY_TH,
+  tr: PRIVACY_TR,
 };
 
 export interface ResolvedLegal {
