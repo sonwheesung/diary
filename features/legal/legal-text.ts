@@ -56,6 +56,15 @@ export interface PendingAmendment {
 
 export interface LegalDoc {
   title: string;
+  /**
+   * 이 번역이 보고 만들어진 **한국어 정본의 지문**. 번역본만 갖는다(정본은 비운다).
+   *
+   * 🔴 구조 검사(절 수·줄 수)는 **문구만 바뀐 경우를 못 잡는다.** 실제로 시험했다 —
+   *   보유기간을 `3년 → 5년`으로 고쳤더니 98개 검사가 전부 통과했고, 번역 14개는
+   *   여전히 "3년"이라고 말하고 있었다. 그게 2026-08-09에 "번역하지 않는다"를 정하게
+   *   만들었던 바로 그 드리프트다(`fingerprint.ts`).
+   */
+  sourceFingerprint?: string;
   effective: string;
   updated: string;
   intro: string;

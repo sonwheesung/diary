@@ -8,6 +8,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ZH_HANT: LegalDoc = {
   title: 'Jogak 隱私權政策',
+  sourceFingerprint: 'e1010878',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:

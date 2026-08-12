@@ -17,37 +17,9 @@
  *   그래도 유지한다 — 그 불편이 조항 누락을 잡아주는 유일한 신호다.
  */
 import { PRIVACY } from '../features/legal/legal-text.ts';
-import { PRIVACY_EN } from '../features/legal/translations/en.ts';
-import { PRIVACY_JA } from '../features/legal/translations/ja.ts';
-import { PRIVACY_ZH_HANS } from '../features/legal/translations/zh-Hans.ts';
-import { PRIVACY_ZH_HANT } from '../features/legal/translations/zh-Hant.ts';
-import { PRIVACY_ES } from '../features/legal/translations/es.ts';
-import { PRIVACY_PT_BR } from '../features/legal/translations/pt-BR.ts';
-import { PRIVACY_FR } from '../features/legal/translations/fr.ts';
-import { PRIVACY_DE } from '../features/legal/translations/de.ts';
-import { PRIVACY_IT } from '../features/legal/translations/it.ts';
-import { PRIVACY_RU } from '../features/legal/translations/ru.ts';
-import { PRIVACY_ID } from '../features/legal/translations/id.ts';
-import { PRIVACY_VI } from '../features/legal/translations/vi.ts';
-import { PRIVACY_TH } from '../features/legal/translations/th.ts';
-import { PRIVACY_TR } from '../features/legal/translations/tr.ts';
+import { fingerprint } from '../features/legal/fingerprint.ts';
+import { EXPECTED_TRANSLATIONS, TRANSLATIONS } from '../features/legal/registry.ts';
 
-const TRANSLATIONS = {
-  en: PRIVACY_EN,
-  ja: PRIVACY_JA,
-  'zh-Hans': PRIVACY_ZH_HANS,
-  'zh-Hant': PRIVACY_ZH_HANT,
-  es: PRIVACY_ES,
-  'pt-BR': PRIVACY_PT_BR,
-  fr: PRIVACY_FR,
-  de: PRIVACY_DE,
-  it: PRIVACY_IT,
-  ru: PRIVACY_RU,
-  id: PRIVACY_ID,
-  vi: PRIVACY_VI,
-  th: PRIVACY_TH,
-  tr: PRIVACY_TR,
-};
 
 let passed = 0;
 const failures = [];
@@ -75,6 +47,7 @@ function shape(doc) {
 }
 
 const base = shape(PRIVACY);
+const currentFingerprint = fingerprint(PRIVACY);
 
 console.log('\n처리방침 번역 구조');
 
@@ -139,6 +112,20 @@ for (const [lang, doc] of Object.entries(TRANSLATIONS)) {
     assert(empty.length === 0, `빈 값 ${empty.length}개`);
   });
 
+  /*
+   * 🔴 **구조가 같아도 문구가 낡을 수 있다.** 절 수·줄 수만 보면 한국어의 단어만 바꾼 변경을
+   *   못 잡는다 — 실제로 시험했다(보유기간 3년 → 5년, 98개 전부 통과). 그게 드리프트다.
+   *   그래서 번역본이 **자기가 보고 번역한 한국어의 지문**을 들고 있고, 여기서 대조한다.
+   */
+  check(`🔴 ${lang} — 현재 정본을 보고 만든 번역인가 (지문 대조)`, () => {
+    assert(
+      doc.sourceFingerprint === currentFingerprint,
+      `한국어가 바뀌었는데 ${lang}이 따라오지 않았다: ${doc.sourceFingerprint} ≠ ${currentFingerprint}
+` +
+        `       → 한국어를 다시 읽고 ${lang}을 고친 뒤  node scripts/legal-stamp.mjs ${lang}`,
+    );
+  });
+
   check(`🔴 ${lang} — 한글이 남아 있지 않다`, () => {
     const all = [
       doc.title,
@@ -160,11 +147,9 @@ console.log('');
  * ⚠ **15개 언어가 전부 채워졌다**(2026-08-12). 이 검사가 앞으로 지켜야 할 것은
  *   "빠진 언어가 없는가"이지 "몇 개 남았는가"가 아니다 — 언어를 추가하면 여기도 늘린다.
  */
-const KO = 1;
-const expected = 15 - KO;
-if (Object.keys(TRANSLATIONS).length !== expected) {
+if (Object.keys(TRANSLATIONS).length !== EXPECTED_TRANSLATIONS) {
   console.error(`
-번역된 언어가 ${Object.keys(TRANSLATIONS).length}개다 — ${expected}개여야 한다.`);
+번역된 언어가 ${Object.keys(TRANSLATIONS).length}개다 — ${EXPECTED_TRANSLATIONS}개여야 한다.`);
   console.error('번역이 없는 언어는 한국어 원문을 보여주므로 화면은 깨지지 않지만, 그 언어 사용자는 못 읽는다.');
   process.exit(1);
 }

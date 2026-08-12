@@ -1,19 +1,6 @@
 import { PRIVACY } from '@/features/legal/legal-text';
 import type { LegalDoc } from '@/features/legal/legal-text';
-import { PRIVACY_EN } from '@/features/legal/translations/en';
-import { PRIVACY_JA } from '@/features/legal/translations/ja';
-import { PRIVACY_ZH_HANS } from '@/features/legal/translations/zh-Hans';
-import { PRIVACY_ZH_HANT } from '@/features/legal/translations/zh-Hant';
-import { PRIVACY_ES } from '@/features/legal/translations/es';
-import { PRIVACY_PT_BR } from '@/features/legal/translations/pt-BR';
-import { PRIVACY_FR } from '@/features/legal/translations/fr';
-import { PRIVACY_DE } from '@/features/legal/translations/de';
-import { PRIVACY_IT } from '@/features/legal/translations/it';
-import { PRIVACY_RU } from '@/features/legal/translations/ru';
-import { PRIVACY_ID } from '@/features/legal/translations/id';
-import { PRIVACY_VI } from '@/features/legal/translations/vi';
-import { PRIVACY_TH } from '@/features/legal/translations/th';
-import { PRIVACY_TR } from '@/features/legal/translations/tr';
+import { TRANSLATIONS } from '@/features/legal/registry';
 import { i18next } from '@/lib/i18n';
 
 /**
@@ -38,23 +25,6 @@ import { i18next } from '@/lib/i18n';
  *   국외 이용자에게는 "이 사업자는 한국법을 따른다"는 사실 자체가 정보다.
  */
 
-/** 번역이 있는 언어. 없으면 한국어 원문을 보여준다 */
-const TRANSLATIONS: Record<string, LegalDoc> = {
-  en: PRIVACY_EN,
-  ja: PRIVACY_JA,
-  'zh-Hans': PRIVACY_ZH_HANS,
-  'zh-Hant': PRIVACY_ZH_HANT,
-  es: PRIVACY_ES,
-  'pt-BR': PRIVACY_PT_BR,
-  fr: PRIVACY_FR,
-  de: PRIVACY_DE,
-  it: PRIVACY_IT,
-  ru: PRIVACY_RU,
-  id: PRIVACY_ID,
-  vi: PRIVACY_VI,
-  th: PRIVACY_TH,
-  tr: PRIVACY_TR,
-};
 
 export interface ResolvedLegal {
   doc: LegalDoc;

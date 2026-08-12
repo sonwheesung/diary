@@ -10,6 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
+  sourceFingerprint: 'e1010878',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:

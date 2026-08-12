@@ -104,7 +104,8 @@ npm install                    # 의존성
 npm run typecheck              # tsc --noEmit
 npm run lint                   # eslint
 npm run check:i18n             # 키 누락·언어 간 불일치 + **다른 언어에 한글이 남았는가**
-npm run check:legal            # 처리방침 번역의 절·줄 수가 한국어와 같은가 (조항 누락 방어)
+npm run check:legal            # 112개 — 절·줄 수 + **정본 지문**(문구만 바뀐 드리프트 방어)
+npm run legal:stamp --check    # 지금 어긋난 언어만 본다. <lang>을 주면 다시 읽은 뒤 도장을 찍는다
 
 # 백업을 건드렸으면
 npm run check:backup-crypto    # 46개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
