@@ -105,6 +105,13 @@ npm run check:i18n             # 키 누락·언어 간 불일치
 npm run check:backup-crypto    # 43개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
 npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니페스트 왕복
 
+# 구독·AI를 건드렸으면
+npm run check:subscription     # 14개 — 체험 기간 계산(전자상거래법 §13⑥ 고지의 근거)
+npm run check:ai               # 31개 — ISO 주차·프롬프트·인젝션 방어·구조화 출력 스키마
+
+# API 키가 있을 때만 (실제 과금이 발생한다)
+cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effort 스윕·refusal
+
 # 새 런타임 의존성이 들어가는 커밋 / AAB 굽기 직전에만 (콜드 수 분)
 npm run check:bundle           # 번들 상한. 기준선 3.67MB
 

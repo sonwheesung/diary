@@ -391,7 +391,9 @@ no longer than necessary to service the specific request in real-time* 을 요�
 | `LegalDoc.pending` 배열 구조 변경 | ✅ 백업 예고와 따로 흐른다 |
 | 벤더 데이터 정책 실측 (§9.2) | ✅ 학습 미사용 기본값 · 보관 7일 · ZDR은 Enterprise 전용 |
 | Play 데이터 보안 판정 (§9.3) | ✅ **Collected · Optional. Shared 아님** |
-| P1 측정 (토큰·모델 3종·effort·응답시간·refusal) | ❌ |
+| 순수 계층 — `features/ai/{types,prompt,period}.ts` | ✅ `npm run check:ai` **31개 통과** |
+| P1 측정 **스크립트** | ✅ `cd server && npm run measure:ai` |
+| P1 측정 **실행** | ❌ **API 키 대기.** `@anthropic-ai/sdk` 설치 + `ANTHROPIC_API_KEY` |
 | `server/lib/ai.ts` (벤더 경계) | ❌ |
 | `server/lib/ai-policy.ts` (캡 상수) | ❌ |
 | `POST /api/v1/ai/report` | ❌ |

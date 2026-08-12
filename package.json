@@ -19,7 +19,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "legal:html": "node scripts/make-legal-html.mjs",
-    "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs"
+    "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs",
+    "check:ai": "node scripts/check-ai.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.3.0",
