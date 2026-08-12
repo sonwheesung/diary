@@ -14,9 +14,26 @@ function weekdayLabel(target: dayjs.Dayjs): string {
   return names[target.day()] ?? '';
 }
 
+/**
+ * 달 이름 — **로케일 파일이 갖는다**(`date.months`). `date.weekdays`와 같은 방식이다.
+ *
+ * 🔴 예전에는 `target.locale('en').format('MMMM')`이었다. 즉 **10개 언어가 전부 영어 달 이름을
+ *   보고 있었다** — 독일어에서 `27. July`(→ `27. Juli`)가 뜨는 것을 화면으로 보고 잡았다.
+ *   dayjs 로케일 15개를 번들에 넣는 대신 이미 있는 규약(`weekdays` 배열)을 따른다.
+ *
+ * ⚠ **두 벌인 이유는 러시아어다.** 날짜와 붙으면 속격(`27 июля`), 홀로 서면 주격(`Июль 2026`)이라
+ *   한 벌로는 둘 중 하나가 반드시 틀린다. 나머지 언어는 두 배열이 같다.
+ */
+function monthNames(key: 'date.months' | 'date.monthsStandalone'): string[] {
+  return translate(key) as unknown as string[];
+}
+
 function monthName(target: dayjs.Dayjs): string {
-  // 영어처럼 달 이름을 쓰는 언어를 위해. 숫자만 쓰는 언어는 틀에서 {{month}}를 쓰면 된다.
-  return target.locale('en').format('MMMM');
+  return monthNames('date.months')[target.month()] ?? '';
+}
+
+function monthNameStandalone(target: dayjs.Dayjs): string {
+  return monthNames('date.monthsStandalone')[target.month()] ?? '';
 }
 
 function parts(entryDate: string) {
@@ -25,6 +42,7 @@ function parts(entryDate: string) {
     year: target.year(),
     month: target.month() + 1,
     monthName: monthName(target),
+    monthNameStandalone: monthNameStandalone(target),
     day: target.date(),
     weekday: weekdayLabel(target),
   };
@@ -84,6 +102,7 @@ export function formatDateTime(epochMs: number): string {
     year: target.year(),
     month: target.month() + 1,
     monthName: monthName(target),
+    monthNameStandalone: monthNameStandalone(target),
     day: target.date(),
     hour: String(target.hour()).padStart(2, '0'),
     minute: String(target.minute()).padStart(2, '0'),
@@ -146,6 +165,8 @@ export function formatPeriodMonth(periodKey: string): string {
     year: target.year(),
     month: target.month() + 1,
     monthName: monthName(target),
+    // ⚠ 러시아어 `monthYear`가 이 조각을 쓴다. 빠뜨리면 `{{monthNameStandalone}} 2026`이 그대로 뜬다
+    monthNameStandalone: monthNameStandalone(target),
   });
 }
 

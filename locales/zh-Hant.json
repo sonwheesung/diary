@@ -44,7 +44,35 @@
     "range": "{{fromMonth}}月{{fromDay}}日 – {{toDay}}日",
     "rangeCrossMonth": "{{fromMonth}}月{{fromDay}}日 – {{toMonth}}月{{toDay}}日",
     "weekNumber": "{{year}}年 第{{week}}週",
-    "yearOnly": "{{year}}年"
+    "yearOnly": "{{year}}年",
+    "months": [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ],
+    "monthsStandalone": [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ]
   },
   "emotion": {
     "joy": "開心",
@@ -174,7 +202,7 @@
     "support": "聯絡我們",
     "privacy": "隱私政策",
     "aiReport": "AI 報告",
-    "reportLanguage": "報告語言",
+    "reportLanguage": "AI 報告語言",
     "reportLanguageSameAsApp": "與應用程式語言相同"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} 則碎片",
     "subReportCount": "{{count}} 份報告",
     "empty": "還沒有報告",
-    "emptyBody": "一週過去後，我們會把這一週的碎片彙成一段回顧。",
     "create": "產生報告",
     "creating": "正在產生報告",
     "onceAWeek": "報告每週可以產生一次",
-    "needWeekly": "請先產生本月的每週報告",
-    "needMonthly": "請先產生今年的每月報告",
+    "needWeekly": "需要先有 {{period}} 的每週報告",
+    "needMonthly": "需要先有 {{period}} 的每月報告",
     "noEntries": "這段期間沒有碎片",
     "disclaimer": "由 AI 撰寫的摘要。內容可能有誤，也不構成診斷或建議。",
     "reportIssue": "檢舉",
@@ -452,6 +479,12 @@
       "rate-limited": "請稍後再試。",
       "upstream": "伺服器發生問題，請稍後再試。",
       "error": "發生了問題。"
-    }
+    },
+    "emptyWeekly": "一週過去後，我們會把這一週的碎片彙成一段回顧。",
+    "emptyMonthly": "我們會把這個月的每週報告彙成一次月度回顧。",
+    "emptyYearly": "我們會把這一年的每月報告彙成一次年度回顧。",
+    "willCreate": "可以產生 {{period}} 的報告了",
+    "alreadyExists": "{{period}} 的報告已經有了",
+    "detailTitle": "報告"
   }
 }

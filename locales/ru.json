@@ -38,13 +38,41 @@
     "dateTime": "{{day}}.{{month}}.{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
-    "monthYear": "{{monthName}} {{year}}",
+    "monthYear": "{{monthNameStandalone}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
     "short": "{{day}}.{{month}}",
     "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
     "weekNumber": "{{week}}-я неделя {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "января",
+      "февраля",
+      "марта",
+      "апреля",
+      "мая",
+      "июня",
+      "июля",
+      "августа",
+      "сентября",
+      "октября",
+      "ноября",
+      "декабря"
+    ],
+    "monthsStandalone": [
+      "Январь",
+      "Февраль",
+      "Март",
+      "Апрель",
+      "Май",
+      "Июнь",
+      "Июль",
+      "Август",
+      "Сентябрь",
+      "Октябрь",
+      "Ноябрь",
+      "Декабрь"
+    ]
   },
   "emotion": {
     "joy": "Радость",
@@ -174,7 +202,7 @@
     "support": "Обратная связь",
     "privacy": "Политика конфиденциальности",
     "aiReport": "Отчёты ИИ",
-    "reportLanguage": "Язык отчёта",
+    "reportLanguage": "Язык отчётов ИИ",
     "reportLanguageSameAsApp": "Как язык приложения"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "Записей: {{count}}",
     "subReportCount": "Отчётов: {{count}}",
     "empty": "Отчётов пока нет",
-    "emptyBody": "Когда неделя закончится, мы соберём её записи в короткий обзор.",
     "create": "Создать отчёт",
     "creating": "Готовим отчёт",
     "onceAWeek": "Отчёт можно создавать раз в неделю",
-    "needWeekly": "Сначала создайте недельные отчёты этого месяца",
-    "needMonthly": "Сначала создайте месячные отчёты этого года",
+    "needWeekly": "Сначала нужны недельные отчёты за {{period}}",
+    "needMonthly": "Сначала нужны месячные отчёты за {{period}}",
     "noEntries": "За этот период записей нет",
     "disclaimer": "Текст написан ИИ. Он может быть неточным и не является диагнозом или советом.",
     "reportIssue": "Пожаловаться",
@@ -452,6 +479,12 @@
       "rate-limited": "Повторите попытку чуть позже.",
       "upstream": "На сервере проблема. Повторите попытку позже.",
       "error": "Что-то пошло не так."
-    }
+    },
+    "emptyWeekly": "Когда неделя закончится, мы соберём её записи в короткий обзор.",
+    "emptyMonthly": "Мы соберём недельные отчёты этого месяца в обзор месяца.",
+    "emptyYearly": "Мы соберём месячные отчёты этого года в обзор года.",
+    "willCreate": "Можно составить отчёт за {{period}}",
+    "alreadyExists": "Отчёт за {{period}} уже есть",
+    "detailTitle": "Отчёт"
   }
 }

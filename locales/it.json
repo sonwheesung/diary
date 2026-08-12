@@ -44,7 +44,35 @@
     "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
     "weekNumber": "Settimana {{week}} del {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "gennaio",
+      "febbraio",
+      "marzo",
+      "aprile",
+      "maggio",
+      "giugno",
+      "luglio",
+      "agosto",
+      "settembre",
+      "ottobre",
+      "novembre",
+      "dicembre"
+    ],
+    "monthsStandalone": [
+      "Gennaio",
+      "Febbraio",
+      "Marzo",
+      "Aprile",
+      "Maggio",
+      "Giugno",
+      "Luglio",
+      "Agosto",
+      "Settembre",
+      "Ottobre",
+      "Novembre",
+      "Dicembre"
+    ]
   },
   "emotion": {
     "joy": "Felice",
@@ -174,7 +202,7 @@
     "support": "Contattaci",
     "privacy": "Informativa sulla privacy",
     "aiReport": "Resoconti IA",
-    "reportLanguage": "Lingua del resoconto",
+    "reportLanguage": "Lingua dei resoconti IA",
     "reportLanguageSameAsApp": "Come la lingua dell'app"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} voci",
     "subReportCount": "{{count}} resoconti",
     "empty": "Ancora nessun resoconto",
-    "emptyBody": "Passata una settimana, raccoglieremo le sue voci in una breve riflessione.",
     "create": "Crea resoconto",
     "creating": "Stiamo scrivendo il resoconto",
     "onceAWeek": "Puoi creare un resoconto a settimana",
-    "needWeekly": "Crea prima i resoconti settimanali di questo mese",
-    "needMonthly": "Crea prima i resoconti mensili di quest'anno",
+    "needWeekly": "Servono prima i resoconti settimanali di {{period}}",
+    "needMonthly": "Servono prima i resoconti mensili di {{period}}",
     "noEntries": "Nessuna voce in questo periodo",
     "disclaimer": "Scritto da un'IA. Può contenere errori e non è una diagnosi né un consiglio.",
     "reportIssue": "Segnala",
@@ -452,6 +479,12 @@
       "rate-limited": "Riprova tra poco.",
       "upstream": "Il server ha un problema. Riprova a breve.",
       "error": "Qualcosa è andato storto."
-    }
+    },
+    "emptyWeekly": "Passata una settimana, raccoglieremo le sue voci in una breve riflessione.",
+    "emptyMonthly": "Raccoglieremo i resoconti settimanali del mese in uno sguardo sul mese.",
+    "emptyYearly": "Raccoglieremo i resoconti mensili dell'anno in uno sguardo sull'anno.",
+    "willCreate": "Puoi creare il resoconto di {{period}}",
+    "alreadyExists": "Hai già un resoconto di {{period}}",
+    "detailTitle": "Resoconto"
   }
 }

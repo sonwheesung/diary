@@ -44,7 +44,35 @@
     "range": "{{fromDay}}. – {{toDay}}. {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}}. {{fromMonthName}} – {{toDay}}. {{toMonthName}}",
     "weekNumber": "KW {{week}}, {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "Januar",
+      "Februar",
+      "März",
+      "April",
+      "Mai",
+      "Juni",
+      "Juli",
+      "August",
+      "September",
+      "Oktober",
+      "November",
+      "Dezember"
+    ],
+    "monthsStandalone": [
+      "Januar",
+      "Februar",
+      "März",
+      "April",
+      "Mai",
+      "Juni",
+      "Juli",
+      "August",
+      "September",
+      "Oktober",
+      "November",
+      "Dezember"
+    ]
   },
   "emotion": {
     "joy": "Freude",
@@ -174,7 +202,7 @@
     "support": "Kontakt",
     "privacy": "Datenschutzerklärung",
     "aiReport": "KI-Berichte",
-    "reportLanguage": "Sprache des Berichts",
+    "reportLanguage": "Sprache der KI-Berichte",
     "reportLanguageSameAsApp": "Wie die App-Sprache"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} Einträge",
     "subReportCount": "{{count}} Berichte",
     "empty": "Noch keine Berichte",
-    "emptyBody": "Ist eine Woche vorbei, fassen wir ihre Einträge zu einem kurzen Rückblick zusammen.",
     "create": "Bericht erstellen",
     "creating": "Bericht wird geschrieben",
     "onceAWeek": "Du kannst einen Bericht pro Woche erstellen",
-    "needWeekly": "Erstelle zuerst die Wochenberichte dieses Monats",
-    "needMonthly": "Erstelle zuerst die Monatsberichte dieses Jahres",
+    "needWeekly": "Dafür braucht es zuerst die Wochenberichte von {{period}}",
+    "needMonthly": "Dafür braucht es zuerst die Monatsberichte von {{period}}",
     "noEntries": "In diesem Zeitraum gibt es keine Einträge",
     "disclaimer": "Von einer KI verfasst. Der Text kann falsch sein und ist weder Diagnose noch Ratschlag.",
     "reportIssue": "Melden",
@@ -452,6 +479,12 @@
       "rate-limited": "Bitte versuche es gleich noch einmal.",
       "upstream": "Der Server hat Probleme. Bitte versuche es später noch einmal.",
       "error": "Etwas ist schiefgelaufen."
-    }
+    },
+    "emptyWeekly": "Ist eine Woche vorbei, fassen wir ihre Einträge zu einem kurzen Rückblick zusammen.",
+    "emptyMonthly": "Wir fassen die Wochenberichte des Monats zu einem Blick auf den Monat zusammen.",
+    "emptyYearly": "Wir fassen die Monatsberichte des Jahres zu einem Blick auf das Jahr zusammen.",
+    "willCreate": "Der Bericht für {{period}} kann erstellt werden",
+    "alreadyExists": "Für {{period}} gibt es schon einen Bericht",
+    "detailTitle": "Bericht"
   }
 }

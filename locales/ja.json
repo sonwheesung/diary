@@ -44,7 +44,35 @@
     "range": "{{fromMonth}}月{{fromDay}}日 – {{toDay}}日",
     "rangeCrossMonth": "{{fromMonth}}月{{fromDay}}日 – {{toMonth}}月{{toDay}}日",
     "weekNumber": "{{year}}年 第{{week}}週",
-    "yearOnly": "{{year}}年"
+    "yearOnly": "{{year}}年",
+    "months": [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ],
+    "monthsStandalone": [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ]
   },
   "emotion": {
     "joy": "うれしい",
@@ -174,7 +202,7 @@
     "support": "お問い合わせ",
     "privacy": "プライバシーポリシー",
     "aiReport": "AIレポート",
-    "reportLanguage": "レポートの言語",
+    "reportLanguage": "AIレポートの言語",
     "reportLanguageSameAsApp": "アプリの言語と同じ"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "かけら {{count}}件",
     "subReportCount": "レポート {{count}}件",
     "empty": "まだレポートがありません",
-    "emptyBody": "1週間が過ぎると、その週のかけらをまとめて振り返りをお作りします。",
     "create": "レポートを作る",
     "creating": "レポートを作成しています",
     "onceAWeek": "レポートは週に1回作成できます",
-    "needWeekly": "先にこの月の週間レポートを作成してください",
-    "needMonthly": "先にこの年の月間レポートを作成してください",
+    "needWeekly": "先に{{period}}の週間レポートが必要です",
+    "needMonthly": "先に{{period}}の月間レポートが必要です",
     "noEntries": "この期間のかけらがありません",
     "disclaimer": "AIが書いた要約です。事実と異なる場合があり、診断や助言ではありません。",
     "reportIssue": "報告",
@@ -452,6 +479,12 @@
       "rate-limited": "しばらくしてからもう一度お試しください。",
       "upstream": "サーバーに問題があります。しばらくしてからお試しください。",
       "error": "問題が発生しました。"
-    }
+    },
+    "emptyWeekly": "1週間が過ぎると、その週のかけらをまとめて振り返りをお作りします。",
+    "emptyMonthly": "その月の週間レポートをまとめて、1か月を振り返ります。",
+    "emptyYearly": "その年の月間レポートをまとめて、1年を振り返ります。",
+    "willCreate": "{{period}}のレポートを作成できます",
+    "alreadyExists": "{{period}}のレポートはすでにあります",
+    "detailTitle": "レポート"
   }
 }

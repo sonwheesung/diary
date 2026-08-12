@@ -44,7 +44,35 @@
     "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
     "weekNumber": "{{year}} {{week}}. hafta",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "Ocak",
+      "Şubat",
+      "Mart",
+      "Nisan",
+      "Mayıs",
+      "Haziran",
+      "Temmuz",
+      "Ağustos",
+      "Eylül",
+      "Ekim",
+      "Kasım",
+      "Aralık"
+    ],
+    "monthsStandalone": [
+      "Ocak",
+      "Şubat",
+      "Mart",
+      "Nisan",
+      "Mayıs",
+      "Haziran",
+      "Temmuz",
+      "Ağustos",
+      "Eylül",
+      "Ekim",
+      "Kasım",
+      "Aralık"
+    ]
   },
   "emotion": {
     "joy": "Mutlu",
@@ -174,7 +202,7 @@
     "support": "Bize ulaşın",
     "privacy": "Gizlilik politikası",
     "aiReport": "Yapay zekâ raporları",
-    "reportLanguage": "Rapor dili",
+    "reportLanguage": "Yapay zekâ raporu dili",
     "reportLanguageSameAsApp": "Uygulama diliyle aynı"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} kayıt",
     "subReportCount": "{{count}} rapor",
     "empty": "Henüz rapor yok",
-    "emptyBody": "Bir hafta tamamlandığında o haftanın kayıtlarını kısa bir geri bakışta toplarız.",
     "create": "Rapor oluştur",
     "creating": "Raporun yazılıyor",
     "onceAWeek": "Haftada bir rapor oluşturabilirsin",
-    "needWeekly": "Önce bu ayın haftalık raporlarını oluştur",
-    "needMonthly": "Önce bu yılın aylık raporlarını oluştur",
+    "needWeekly": "Önce {{period}} haftalık raporları gerekiyor",
+    "needMonthly": "Önce {{period}} aylık raporları gerekiyor",
     "noEntries": "Bu dönemde kayıt yok",
     "disclaimer": "Bir yapay zekâ tarafından yazıldı. Yanlış olabilir; teşhis ya da tavsiye değildir.",
     "reportIssue": "Bildir",
@@ -452,6 +479,12 @@
       "rate-limited": "Birazdan tekrar dene.",
       "upstream": "Sunucuda bir sorun var. Kısa süre sonra tekrar dene.",
       "error": "Bir şeyler ters gitti."
-    }
+    },
+    "emptyWeekly": "Bir hafta tamamlandığında o haftanın kayıtlarını kısa bir geri bakışta toplarız.",
+    "emptyMonthly": "O ayın haftalık raporlarını bir aylık geri bakışta toplarız.",
+    "emptyYearly": "O yılın aylık raporlarını bir yıllık geri bakışta toplarız.",
+    "willCreate": "{{period}} raporu oluşturulabilir",
+    "alreadyExists": "{{period}} için zaten bir rapor var",
+    "detailTitle": "Rapor"
   }
 }

@@ -44,7 +44,35 @@
     "range": "{{fromMonth}}月{{fromDay}}日 – {{toDay}}日",
     "rangeCrossMonth": "{{fromMonth}}月{{fromDay}}日 – {{toMonth}}月{{toDay}}日",
     "weekNumber": "{{year}}年 第{{week}}周",
-    "yearOnly": "{{year}}年"
+    "yearOnly": "{{year}}年",
+    "months": [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ],
+    "monthsStandalone": [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ]
   },
   "emotion": {
     "joy": "开心",
@@ -174,7 +202,7 @@
     "support": "联系我们",
     "privacy": "隐私政策",
     "aiReport": "AI 报告",
-    "reportLanguage": "报告语言",
+    "reportLanguage": "AI 报告语言",
     "reportLanguageSameAsApp": "与应用语言相同"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} 篇碎片",
     "subReportCount": "{{count}} 份报告",
     "empty": "还没有报告",
-    "emptyBody": "一周过去后，我们会把这一周的碎片汇成一段回顾。",
     "create": "生成报告",
     "creating": "正在生成报告",
     "onceAWeek": "报告每周可以生成一次",
-    "needWeekly": "请先生成本月的每周报告",
-    "needMonthly": "请先生成本年的每月报告",
+    "needWeekly": "需要先有 {{period}} 的每周报告",
+    "needMonthly": "需要先有 {{period}} 的每月报告",
     "noEntries": "这段时间没有碎片",
     "disclaimer": "由 AI 撰写的摘要。内容可能有误，也不构成诊断或建议。",
     "reportIssue": "举报",
@@ -452,6 +479,12 @@
       "rate-limited": "请稍后再试。",
       "upstream": "服务器出现问题，请稍后再试。",
       "error": "出了点问题。"
-    }
+    },
+    "emptyWeekly": "一周过去后，我们会把这一周的碎片汇成一段回顾。",
+    "emptyMonthly": "我们会把这个月的每周报告汇成一次月度回顾。",
+    "emptyYearly": "我们会把这一年的每月报告汇成一次年度回顾。",
+    "willCreate": "可以生成 {{period}} 的报告了",
+    "alreadyExists": "{{period}} 的报告已经有了",
+    "detailTitle": "报告"
   }
 }

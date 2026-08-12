@@ -44,7 +44,35 @@
     "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
     "weekNumber": "Minggu ke-{{week}} {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember"
+    ],
+    "monthsStandalone": [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember"
+    ]
   },
   "emotion": {
     "joy": "Senang",
@@ -174,7 +202,7 @@
     "support": "Hubungi kami",
     "privacy": "Kebijakan privasi",
     "aiReport": "Laporan AI",
-    "reportLanguage": "Bahasa laporan",
+    "reportLanguage": "Bahasa laporan AI",
     "reportLanguageSameAsApp": "Sama dengan bahasa aplikasi"
   },
   "lock": {
@@ -421,15 +449,14 @@
     "sourceCount": "{{count}} catatan",
     "subReportCount": "{{count}} laporan",
     "empty": "Belum ada laporan",
-    "emptyBody": "Setelah satu minggu berlalu, kami akan merangkum catatannya menjadi renungan singkat.",
     "create": "Buat laporan",
     "creating": "Sedang menulis laporan",
     "onceAWeek": "Laporan dapat dibuat sekali seminggu",
-    "needWeekly": "Buat dulu laporan mingguan bulan ini",
-    "needMonthly": "Buat dulu laporan bulanan tahun ini",
+    "needWeekly": "Perlu laporan mingguan {{period}} terlebih dahulu",
+    "needMonthly": "Perlu laporan bulanan {{period}} terlebih dahulu",
     "noEntries": "Tidak ada catatan pada periode ini",
     "disclaimer": "Ditulis oleh AI. Bisa saja keliru, dan ini bukan diagnosis atau saran.",
-    "reportIssue": "Laporkan",
+    "reportIssue": "Laporkan masalah",
     "reported": "Terima kasih sudah memberi tahu. Kami akan memeriksanya.",
     "delete": "Hapus laporan",
     "deleteConfirm": "Hapus laporan ini? Tindakan ini tidak bisa dibatalkan.",
@@ -452,6 +479,12 @@
       "rate-limited": "Coba lagi sebentar lagi.",
       "upstream": "Server sedang bermasalah. Coba lagi nanti.",
       "error": "Terjadi kesalahan."
-    }
+    },
+    "emptyWeekly": "Setelah satu minggu berlalu, kami akan merangkum catatannya menjadi renungan singkat.",
+    "emptyMonthly": "Kami akan merangkum laporan mingguan bulan itu menjadi tinjauan sebulan.",
+    "emptyYearly": "Kami akan merangkum laporan bulanan tahun itu menjadi tinjauan setahun.",
+    "willCreate": "Laporan {{period}} siap dibuat",
+    "alreadyExists": "Laporan {{period}} sudah ada",
+    "detailTitle": "Laporan"
   }
 }

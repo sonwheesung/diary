@@ -44,7 +44,35 @@
     "range": "{{fromMonthName}} {{fromDay}} – {{toDay}}",
     "rangeCrossMonth": "{{fromMonthName}} {{fromDay}} – {{toMonthName}} {{toDay}}",
     "weekNumber": "Week {{week}}, {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "monthsStandalone": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
   },
   "emotion": {
     "joy": "Joyful",
@@ -174,7 +202,7 @@
     "support": "Contact us",
     "privacy": "Privacy policy",
     "aiReport": "AI reports",
-    "reportLanguage": "Report language",
+    "reportLanguage": "AI report language",
     "reportLanguageSameAsApp": "Same as app language"
   },
   "lock": {
@@ -421,15 +449,14 @@
     "sourceCount": "{{count}} entries",
     "subReportCount": "{{count}} reports",
     "empty": "No reports yet",
-    "emptyBody": "Once a week has passed, we'll gather its entries into a short reflection.",
     "create": "Create report",
     "creating": "Writing your report",
     "onceAWeek": "You can create one report per week",
-    "needWeekly": "Create this month's weekly reports first",
-    "needMonthly": "Create this year's monthly reports first",
+    "needWeekly": "Weekly reports for {{period}} are needed first",
+    "needMonthly": "Monthly reports for {{period}} are needed first",
     "noEntries": "No entries in this period",
     "disclaimer": "Written by AI. It may be inaccurate, and it is not a diagnosis or advice.",
-    "reportIssue": "Report",
+    "reportIssue": "Report an issue",
     "reported": "Thanks for letting us know. We'll look into it.",
     "delete": "Delete report",
     "deleteConfirm": "Delete this report? This can't be undone.",
@@ -452,6 +479,12 @@
       "rate-limited": "Please try again in a moment.",
       "upstream": "The server is having trouble. Please try again shortly.",
       "error": "Something went wrong."
-    }
+    },
+    "emptyWeekly": "Once a week has passed, we'll gather its entries into a short reflection.",
+    "emptyMonthly": "We'll gather that month's weekly reports into a look back at the month.",
+    "emptyYearly": "We'll gather that year's monthly reports into a look back at the year.",
+    "willCreate": "Ready to write your {{period}} report",
+    "alreadyExists": "You already have a report for {{period}}",
+    "detailTitle": "Report"
   }
 }

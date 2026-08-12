@@ -324,15 +324,20 @@ export default function SettingsScreen() {
           <View style={styles.rowIcon}>
             <Sparkles size={18} color={colors.accent} />
           </View>
+          {/*
+            ⚠ **고른 값을 오른쪽이 아니라 아래(note)에 둔다.** 위 언어 행처럼 오른쪽에 놓았더니
+              "Same as app language"가 길어 제목이 `Report` / `language` 두 줄로 쪼개졌다 —
+              §9.1 규칙 5(문자열 길이를 전제한 레이아웃 금지)에 실제로 걸린 자리다.
+              값이 언어 이름이라 길이를 예측할 수 없으므로 폭을 나눠 갖게 두지 않는다.
+          */}
           <View style={styles.rowBody}>
             <Text style={styles.rowTitle}>{t('settings.reportLanguage')}</Text>
-            <Text style={styles.rowNote}>{t('settings.aiReport')}</Text>
+            <Text style={styles.rowNote}>
+              {reportLanguage === 'system'
+                ? t('settings.reportLanguageSameAsApp')
+                : LANGUAGE_LABELS[reportLanguage]}
+            </Text>
           </View>
-          <Text style={styles.rowValue}>
-            {reportLanguage === 'system'
-              ? t('settings.reportLanguageSameAsApp')
-              : LANGUAGE_LABELS[reportLanguage]}
-          </Text>
           <ChevronRight size={18} color={colors.textMuted} />
         </Pressable>
       </View>

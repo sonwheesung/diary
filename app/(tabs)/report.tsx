@@ -12,13 +12,13 @@ import { listReports, type Report } from '@/features/ai/api/report-repository';
 import {
   canCreate,
   createReport,
-  periodRange,
   targetPeriodKey,
   type CreateFail,
 } from '@/features/ai/api/report-service';
+import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
 import { useEntitlementStore } from '@/features/entitlement/store';
-import { formatDateRange, formatWeekNumber } from '@/lib/format';
+import { formatWeekNumber } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -79,7 +79,7 @@ export default function ReportScreen() {
         router.push(`/report/${result.reportId}`);
         return;
       }
-      Alert.alert(t('report.title'), failMessage(result.reason, t));
+      Alert.alert(t('report.title'), failMessage(result.reason, kind, t));
       // 실패 사유가 바뀌었을 수 있다(누가 다른 기기에서 만들었다든지) — 다시 판정한다
       await load(kind);
     } finally {
@@ -124,7 +124,11 @@ export default function ReportScreen() {
           {reports.length === 0 ? (
             <Card>
               <Text style={styles.emptyTitle}>{t('report.empty')}</Text>
-              <Text style={styles.emptyBody}>{t('report.emptyBody')}</Text>
+              {/*
+                ⚠ 빈 화면 설명이 **종류마다 다르다.** 월간 탭에서 "한 주가 지나면…"을 보여주면
+                  무엇을 기다려야 하는지 틀리게 알려주는 것이다 — 월간은 주간 리포트를 기다린다.
+              */}
+              <Text style={styles.emptyBody}>{t(`report.empty${capitalize(kind)}`)}</Text>
             </Card>
           ) : (
             reports.map((report) => <ReportRow key={report.id} report={report} />)
@@ -132,11 +136,18 @@ export default function ReportScreen() {
 
           <View style={styles.createBox}>
             {/*
-              캡을 **누르기 전에** 적는다(§6.3). 재생성 버튼은 없다 — 주 1회 캡과 정면으로 충돌한다.
+              **무엇이 만들어지는지를 먼저 적는다.** 캡만 적으면 "몇 월 리포트가 나오는 건데?"에
+              답하지 못한다. 재생성 버튼은 없다 — 주 1회 캡과 정면으로 충돌한다(§6.3).
             */}
             <Text style={styles.createNote}>
-              {blocked === null ? t('report.onceAWeek') : failMessage(blocked, t)}
+              {blocked === null
+                ? t('report.willCreate', { period: periodLabel(kind, targetPeriodKey(kind)) })
+                : failMessage(blocked, kind, t)}
             </Text>
+            {/* 주 1회 캡은 **주간에만** 해당한다. 월간·연간에 붙이면 거짓말이다 */}
+            {blocked === null && kind === 'weekly' && (
+              <Text style={styles.createNote}>{t('report.onceAWeek')}</Text>
+            )}
             <Button
               label={creating ? t('report.creating') : t('report.create')}
               fullWidth
@@ -156,30 +167,23 @@ export default function ReportScreen() {
   );
 }
 
-/** 기간 표기 — **날짜 범위가 주인공이고 주차는 부제다**(2026-08-12 사용자 결정) */
-function periodLabel(report: Report): { primary: string; secondary: string | null } {
-  const range = periodRange(report.kind, report.periodKey);
-  if (range === null) {
-    // 키가 깨졌으면 키를 그대로 보여준다. 조용히 빈칸을 두면 고장 난 줄 모른다
-    return { primary: report.periodKey, secondary: null };
-  }
-  return {
-    primary: formatDateRange(range.from, range.to),
-    // 주차는 사람이 회상하는 단위가 아니지만 **문의가 왔을 때의 식별자**다(§11.2)
-    secondary: report.kind === 'weekly' ? formatWeekNumber(report.periodKey) : null,
-  };
+/** `weekly` → `Weekly` — i18n 키(`report.emptyWeekly`)를 종류에서 만든다 */
+function capitalize(kind: ReportKind): string {
+  return kind.charAt(0).toUpperCase() + kind.slice(1);
 }
 
 function ReportRow({ report }: { report: Report }) {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
-  const { primary, secondary } = periodLabel(report);
 
   return (
     <Card onPress={() => router.push(`/report/${report.id}`)}>
       <View style={styles.rowMeta}>
-        <Text style={styles.rowPeriod}>{primary}</Text>
-        {secondary !== null && <Text style={styles.rowWeek}>{secondary}</Text>}
+        <Text style={styles.rowPeriod}>{periodLabel(report.kind, report.periodKey)}</Text>
+        {/* 주차는 사람이 회상하는 단위가 아니지만 **문의가 왔을 때의 식별자**다(§11.2) */}
+        {report.kind === 'weekly' && (
+          <Text style={styles.rowWeek}>{formatWeekNumber(report.periodKey)}</Text>
+        )}
       </View>
       <Text style={styles.rowSummary} numberOfLines={3}>
         {report.summary}
@@ -203,7 +207,7 @@ function LockedPreview() {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
   // 예시에도 실제 형식의 날짜를 쓴다 — 언어마다 다른 표기를 여기서 한 번 보여주는 값도 있다
-  const range = periodRange('weekly', targetPeriodKey('weekly'));
+  const label = periodLabel('weekly', targetPeriodKey('weekly'));
 
   return (
     <>
@@ -215,9 +219,7 @@ function LockedPreview() {
           <View style={styles.sampleBadge}>
             <Text style={styles.sampleBadgeText}>{t('report.sampleBadge')}</Text>
           </View>
-          {range !== null && (
-            <Text style={styles.rowPeriod}>{formatDateRange(range.from, range.to)}</Text>
-          )}
+          <Text style={styles.rowPeriod}>{label}</Text>
         </View>
         <Text style={styles.rowSummary}>{t('report.sampleBody')}</Text>
       </Card>
@@ -235,18 +237,29 @@ function LockedPreview() {
  * `report.fail.*`에 코드 그대로 들어 있고(백업의 `backup.fail.*`과 같은 규약),
  * 앱에서만 나는 네 가지는 이미 화면에 쓰는 안내 문구를 재사용한다.
  */
-function failMessage(reason: CreateFail, t: (key: string) => string): string {
+function failMessage(
+  reason: CreateFail,
+  kind: ReportKind,
+  t: (key: string, opts?: Record<string, string>) => string,
+): string {
+  const period = periodLabel(kind, targetPeriodKey(kind));
   switch (reason) {
-    // 이미 있다 = 이번 기간 몫을 썼다. 캡 안내와 같은 말이 정확하다
+    // ⚠ "주에 한 번"으로 뭉치지 않는다 — 월간 탭에서 그 문장은 거짓이다.
+    //   무엇이 이미 있는지를 기간으로 말해야 다음에 할 일이 분명해진다
     case 'exists':
     case 'cap-exceeded':
-      return t('report.onceAWeek');
+      return t('report.alreadyExists', { period });
     case 'empty':
       return t('report.noEntries');
+    /*
+     * ⚠ **기간을 반드시 넣는다.** 처음엔 "이 달의 주간 리포트를 먼저"라고 썼는데,
+     *   월간이 겨냥하는 것은 **지난달**이라 그 문장이 틀렸다. 연간은 작년이라 더 틀렸다.
+     *   화면에서 눈으로 보고 잡았다 — 코드만 봐서는 맞는 것처럼 읽힌다.
+     */
     case 'need-weekly':
-      return t('report.needWeekly');
+      return t('report.needWeekly', { period });
     case 'need-monthly':
-      return t('report.needMonthly');
+      return t('report.needMonthly', { period });
     default:
       return t(`report.fail.${reason}`);
   }
@@ -325,7 +338,6 @@ const createStyles = (colors: Palette) =>
     },
     createBox: {
       gap: spacing.sm,
-      marginTop: spacing.md,
     },
     createNote: {
       ...typography.caption,

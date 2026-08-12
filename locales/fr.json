@@ -44,7 +44,35 @@
     "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
     "weekNumber": "Semaine {{week}} de {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ],
+    "monthsStandalone": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ]
   },
   "emotion": {
     "joy": "Joie",
@@ -174,7 +202,7 @@
     "support": "Nous contacter",
     "privacy": "Politique de confidentialité",
     "aiReport": "Bilans IA",
-    "reportLanguage": "Langue du bilan",
+    "reportLanguage": "Langue des bilans IA",
     "reportLanguageSameAsApp": "Comme la langue de l'app"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} entrées",
     "subReportCount": "{{count}} bilans",
     "empty": "Pas encore de bilan",
-    "emptyBody": "Une fois la semaine écoulée, nous rassemblerons ses entrées en un court retour.",
     "create": "Créer un bilan",
     "creating": "Rédaction de votre bilan",
     "onceAWeek": "Vous pouvez créer un bilan par semaine",
-    "needWeekly": "Créez d'abord les bilans hebdomadaires de ce mois",
-    "needMonthly": "Créez d'abord les bilans mensuels de cette année",
+    "needWeekly": "Les bilans hebdomadaires de {{period}} sont nécessaires d'abord",
+    "needMonthly": "Les bilans mensuels de {{period}} sont nécessaires d'abord",
     "noEntries": "Aucune entrée sur cette période",
     "disclaimer": "Rédigé par une IA. Le texte peut être inexact et ne constitue ni un diagnostic ni un conseil.",
     "reportIssue": "Signaler",
@@ -452,6 +479,12 @@
       "rate-limited": "Réessayez dans un instant.",
       "upstream": "Le serveur rencontre un problème. Réessayez bientôt.",
       "error": "Un problème est survenu."
-    }
+    },
+    "emptyWeekly": "Une fois la semaine écoulée, nous rassemblerons ses entrées en un court retour.",
+    "emptyMonthly": "Nous rassemblerons les bilans hebdomadaires du mois en un regard sur le mois.",
+    "emptyYearly": "Nous rassemblerons les bilans mensuels de l'année en un regard sur l'année.",
+    "willCreate": "Le bilan de {{period}} peut être créé",
+    "alreadyExists": "Vous avez déjà un bilan pour {{period}}",
+    "detailTitle": "Bilan"
   }
 }

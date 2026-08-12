@@ -13,8 +13,8 @@ import {
   getReport,
   type Report,
 } from '@/features/ai/api/report-repository';
-import { periodRange } from '@/features/ai/api/report-service';
-import { formatDateRange, formatDateTime, formatWeekNumber } from '@/lib/format';
+import { periodLabel } from '@/features/ai/labels';
+import { formatDateTime, formatWeekNumber } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -87,7 +87,11 @@ export default function ReportDetailScreen() {
       >
         <ChevronLeft size={26} color={colors.text} />
       </Pressable>
-      <Text style={styles.headerTitle}>{t('report.title')}</Text>
+      {/*
+        ⚠ 목록 제목(`report.title`)을 재사용하지 않는다 — 영어에서 `Reports`가 되어
+          **한 건짜리 화면에 복수형**이 뜬다. 한국어는 구분이 없어 눈에 안 띄는 종류의 오류다.
+      */}
+      <Text style={styles.headerTitle}>{t('report.detailTitle')}</Text>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('report.delete')}
@@ -119,7 +123,14 @@ export default function ReportDetailScreen() {
     );
   }
 
-  const range = periodRange(report.kind, report.periodKey);
+  /*
+   * ⚠ 주간은 조각을, 월간·연간은 **하위 리포트**를 센다. 한 문구로 뭉치면 연간 리포트가
+   *   "조각 12개"로 뜨는데 그건 12개 조각을 읽었다는 뜻이 되어 사실과 다르다.
+   */
+  const countLabel =
+    report.kind === 'weekly'
+      ? t('report.sourceCount', { count: report.sourceCount })
+      : t('report.subReportCount', { count: report.sourceCount });
 
   return (
     <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
@@ -144,9 +155,7 @@ export default function ReportDetailScreen() {
       )}
 
       <View style={styles.meta}>
-        <Text style={styles.period}>
-          {range === null ? report.periodKey : formatDateRange(range.from, range.to)}
-        </Text>
+        <Text style={styles.period}>{periodLabel(report.kind, report.periodKey)}</Text>
         {report.kind === 'weekly' && (
           <Text style={styles.week}>{formatWeekNumber(report.periodKey)}</Text>
         )}
@@ -157,7 +166,7 @@ export default function ReportDetailScreen() {
       <View style={styles.footer}>
         <Text style={styles.disclaimer}>{t('report.disclaimer')}</Text>
         <Text style={styles.stamp}>
-          {t('report.sourceCount', { count: report.sourceCount })} · {formatDateTime(report.createdAt)}
+          {countLabel} · {formatDateTime(report.createdAt)}
         </Text>
         <Pressable
           accessibilityRole="button"
@@ -213,7 +222,12 @@ const createStyles = (colors: Palette) =>
     },
     concernText: {
       ...typography.caption,
-      color: colors.textMuted,
+      /*
+       * ⚠ `textMuted`가 아니라 `text`다. 배너 배경이 `accentSoft`(옅은 파랑)라 회색 글씨의
+       *   대비가 눈에 띄게 떨어진다 — 흰 바탕을 전제한 색이기 때문이다.
+       *   **이 배너는 가장 힘든 순간에 읽는 문장이라 흐리면 안 된다.**
+       */
+      color: colors.text,
     },
     concernChannel: {
       ...typography.caption,

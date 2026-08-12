@@ -44,7 +44,35 @@
     "range": "{{fromDay}} – {{toDay}} de {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} de {{fromMonthName}} – {{toDay}} de {{toMonthName}}",
     "weekNumber": "Semana {{week}} de {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "janeiro",
+      "fevereiro",
+      "março",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro"
+    ],
+    "monthsStandalone": [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+    ]
   },
   "emotion": {
     "joy": "Feliz",
@@ -174,7 +202,7 @@
     "support": "Fale conosco",
     "privacy": "Política de privacidade",
     "aiReport": "Relatórios de IA",
-    "reportLanguage": "Idioma do relatório",
+    "reportLanguage": "Idioma dos relatórios de IA",
     "reportLanguageSameAsApp": "Igual ao idioma do app"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} registros",
     "subReportCount": "{{count}} relatórios",
     "empty": "Ainda não há relatórios",
-    "emptyBody": "Quando uma semana terminar, reuniremos seus registros em uma breve reflexão.",
     "create": "Criar relatório",
     "creating": "Escrevendo seu relatório",
     "onceAWeek": "Você pode criar um relatório por semana",
-    "needWeekly": "Crie antes os relatórios semanais deste mês",
-    "needMonthly": "Crie antes os relatórios mensais deste ano",
+    "needWeekly": "Primeiro são necessários os relatórios semanais de {{period}}",
+    "needMonthly": "Primeiro são necessários os relatórios mensais de {{period}}",
     "noEntries": "Nenhum registro neste período",
     "disclaimer": "Escrito por IA. Pode conter erros e não é um diagnóstico nem um conselho.",
     "reportIssue": "Denunciar",
@@ -452,6 +479,12 @@
       "rate-limited": "Tente novamente em instantes.",
       "upstream": "O servidor está com problemas. Tente novamente em breve.",
       "error": "Algo deu errado."
-    }
+    },
+    "emptyWeekly": "Quando uma semana terminar, reuniremos seus registros em uma breve reflexão.",
+    "emptyMonthly": "Reuniremos os relatórios semanais daquele mês em um olhar sobre o mês.",
+    "emptyYearly": "Reuniremos os relatórios mensais daquele ano em um olhar sobre o ano.",
+    "willCreate": "Já dá para criar o relatório de {{period}}",
+    "alreadyExists": "Você já tem um relatório de {{period}}",
+    "detailTitle": "Relatório"
   }
 }

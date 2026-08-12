@@ -44,7 +44,35 @@
     "range": "{{fromDay}} – {{toDay}} de {{fromMonthName}}",
     "rangeCrossMonth": "{{fromDay}} de {{fromMonthName}} – {{toDay}} de {{toMonthName}}",
     "weekNumber": "Semana {{week}} de {{year}}",
-    "yearOnly": "{{year}}"
+    "yearOnly": "{{year}}",
+    "months": [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre"
+    ],
+    "monthsStandalone": [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ]
   },
   "emotion": {
     "joy": "Feliz",
@@ -174,7 +202,7 @@
     "support": "Contacto",
     "privacy": "Política de privacidad",
     "aiReport": "Informes de IA",
-    "reportLanguage": "Idioma del informe",
+    "reportLanguage": "Idioma de los informes de IA",
     "reportLanguageSameAsApp": "Igual que el idioma de la app"
   },
   "lock": {
@@ -421,12 +449,11 @@
     "sourceCount": "{{count}} entradas",
     "subReportCount": "{{count}} informes",
     "empty": "Aún no hay informes",
-    "emptyBody": "Cuando pase una semana, reuniremos sus entradas en una breve reflexión.",
     "create": "Crear informe",
     "creating": "Escribiendo tu informe",
     "onceAWeek": "Puedes crear un informe por semana",
-    "needWeekly": "Crea antes los informes semanales de este mes",
-    "needMonthly": "Crea antes los informes mensuales de este año",
+    "needWeekly": "Primero hacen falta los informes semanales de {{period}}",
+    "needMonthly": "Primero hacen falta los informes mensuales de {{period}}",
     "noEntries": "No hay entradas en este periodo",
     "disclaimer": "Escrito por IA. Puede contener errores y no es un diagnóstico ni un consejo.",
     "reportIssue": "Denunciar",
@@ -452,6 +479,12 @@
       "rate-limited": "Inténtalo de nuevo en un momento.",
       "upstream": "El servidor tiene problemas. Inténtalo de nuevo en breve.",
       "error": "Algo salió mal."
-    }
+    },
+    "emptyWeekly": "Cuando pase una semana, reuniremos sus entradas en una breve reflexión.",
+    "emptyMonthly": "Reuniremos los informes semanales de ese mes en una mirada al mes entero.",
+    "emptyYearly": "Reuniremos los informes mensuales de ese año en una mirada al año entero.",
+    "willCreate": "Ya puedes crear el informe de {{period}}",
+    "alreadyExists": "Ya tienes un informe de {{period}}",
+    "detailTitle": "Informe"
   }
 }
