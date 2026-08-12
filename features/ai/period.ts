@@ -80,3 +80,72 @@ export function lastWeekKey(now: Date): string {
 export function lastWeekRange(now: Date): { from: string; to: string } {
   return weekRange(new Date(now.getTime() - 7 * DAY_MS));
 }
+
+/**
+ * 저장된 키(`2026-W33`)를 **다시 날짜 범위로** 편다.
+ *
+ * 화면이 주차가 아니라 `8월 10일 – 16일`을 보여주기로 했으므로(2026-08-12 사용자 결정)
+ * 목록을 그릴 때마다 필요하다. `weekKey()`의 역함수이고, `check-ai.mjs`가 왕복을 검사한다.
+ *
+ * ⚠ 잘못된 키에는 **빈 범위 대신 null**을 준다. 빈 문자열을 주면 화면이 `– `만 그리는데,
+ *   그건 고장 났다는 것보다 나쁘다(고장 난 줄 모른다).
+ */
+export function weekKeyRange(periodKey: string): { from: string; to: string } | null {
+  const match = /^(\d{4})-W(\d{2})$/.exec(periodKey);
+  if (match === null) return null;
+  const isoYear = Number(match[1]);
+  const week = Number(match[2]);
+  if (week < 1 || week > 53) return null;
+
+  // ISO 1주차는 1월 4일이 든 주다 — 정의상 항상 참이라 여기서 출발한다
+  const jan4 = new Date(Date.UTC(isoYear, 0, 4));
+  const jan4Day = jan4.getUTCDay() || 7;
+  const week1Monday = new Date(jan4.getTime() - (jan4Day - 1) * DAY_MS);
+  const monday = new Date(week1Monday.getTime() + (week - 1) * 7 * DAY_MS);
+  // 53주가 없는 해에 53을 물으면 다음 해로 넘어간다 — 그건 그 키가 존재하지 않는다는 뜻이다
+  if (weekKey(monday) !== periodKey) return null;
+  return { from: ymd(monday), to: ymd(new Date(monday.getTime() + 6 * DAY_MS)) };
+}
+
+/**
+ * "지난달"의 키. 월간 리포트가 겨냥하는 기간이다.
+ *
+ * ⚠ 주간과 같은 이유로 **이번 달이 아니다.** 그리고 `setMonth(-1)`류로 하루를 빼지 않는다 —
+ *   31일에 부르면 2월이 3월로 튄다. 그 달 1일을 잡고 하루 전으로 간다.
+ */
+export function lastMonthKey(now: Date): string {
+  const firstOfThisMonth = new Date(Date.UTC(now.getFullYear(), now.getMonth(), 1));
+  return monthKey(new Date(firstOfThisMonth.getTime() - DAY_MS));
+}
+
+/** `2026-08` → 그 달의 1일과 말일 */
+export function monthKeyRange(periodKey: string): { from: string; to: string } | null {
+  const match = /^(\d{4})-(\d{2})$/.exec(periodKey);
+  if (match === null) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  if (month < 1 || month > 12) return null;
+  const first = new Date(Date.UTC(year, month - 1, 1));
+  // 다음 달 1일에서 하루 전 = 말일. 윤년·30/31일을 직접 세지 않는다
+  const last = new Date(Date.UTC(year, month, 1) - DAY_MS);
+  return { from: ymd(first), to: ymd(last) };
+}
+
+/** "작년"의 키 */
+export function lastYearKey(now: Date): string {
+  return String(now.getFullYear() - 1);
+}
+
+/** `2026` → 1월 1일과 12월 31일 */
+export function yearKeyRange(periodKey: string): { from: string; to: string } | null {
+  if (!/^\d{4}$/.test(periodKey)) return null;
+  const year = Number(periodKey);
+  return { from: `${year}-01-01`, to: `${year}-12-31` };
+}
+
+/** 종류를 묻지 않고 키에서 범위를 편다 — 목록이 세 종류를 한 함수로 그린다 */
+export function keyRange(periodKey: string): { from: string; to: string } | null {
+  if (periodKey.includes('-W')) return weekKeyRange(periodKey);
+  if (periodKey.includes('-')) return monthKeyRange(periodKey);
+  return yearKeyRange(periodKey);
+}

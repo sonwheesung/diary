@@ -21,7 +21,8 @@
     "calendar": "Calendario",
     "search": "Buscar",
     "settings": "Ajustes",
-    "write": "Nueva entrada"
+    "write": "Nueva entrada",
+    "report": "Informes"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} de {{monthName}} de {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} de {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}/{{month}}"
+    "short": "{{day}}/{{month}}",
+    "range": "{{fromDay}} – {{toDay}} de {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}} de {{fromMonthName}} – {{toDay}} de {{toMonthName}}",
+    "weekNumber": "Semana {{week}} de {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Feliz",
@@ -167,7 +172,10 @@
     "sectionSupport": "Ayuda",
     "notice": "Avisos",
     "support": "Contacto",
-    "privacy": "Política de privacidad"
+    "privacy": "Política de privacidad",
+    "aiReport": "Informes de IA",
+    "reportLanguage": "Idioma del informe",
+    "reportLanguageSameAsApp": "Igual que el idioma de la app"
   },
   "lock": {
     "lockedTitle": "Tus piezas están bloqueadas",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Tras la prueba gratuita de 7 días se cobra automáticamente. Si cancelas durante la prueba, no se te cobra.",
     "unavailable": "Las suscripciones no están disponibles ahora mismo. Vuelve a comprobarlo en un momento."
+  },
+  "report": {
+    "title": "Informes",
+    "weekly": "Semanal",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "sourceCount": "{{count}} entradas",
+    "subReportCount": "{{count}} informes",
+    "empty": "Aún no hay informes",
+    "emptyBody": "Cuando pase una semana, reuniremos sus entradas en una breve reflexión.",
+    "create": "Crear informe",
+    "creating": "Escribiendo tu informe",
+    "onceAWeek": "Puedes crear un informe por semana",
+    "needWeekly": "Crea antes los informes semanales de este mes",
+    "needMonthly": "Crea antes los informes mensuales de este año",
+    "noEntries": "No hay entradas en este periodo",
+    "disclaimer": "Escrito por IA. Puede contener errores y no es un diagnóstico ni un consejo.",
+    "reportIssue": "Denunciar",
+    "reported": "Gracias por avisarnos. Lo revisaremos.",
+    "delete": "Eliminar informe",
+    "deleteConfirm": "¿Eliminar este informe? No se puede deshacer.",
+    "concernTitle": "Parece que estás pasando por una época difícil.",
+    "concernBody": "No tienes que llevarlo sola o solo.",
+    "concernChannel": "Considera hablar con alguien cercano o con un profesional de salud mental.",
+    "lockedTitle": "Un momento para mirar atrás, cada semana",
+    "lockedBody": "Reunimos las entradas de la semana pasada en una reflexión como esta.",
+    "sampleBadge": "Ejemplo",
+    "sampleBody": "Los lunes se leían cansados, pero después de la presentación del jueves las frases se volvieron más cortas y ligeras. Lo que más repetiste esta semana fue «estoy bien».",
+    "seeSubscription": "Conocer 조각 Pro",
+    "homeCardTitle": "El informe de la semana pasada está listo",
+    "fail": {
+      "not-configured": "El servidor de informes no está configurado.",
+      "offline": "No tienes conexión a internet.",
+      "unauthorized": "Necesitas iniciar sesión.",
+      "not-subscribed": "Disponible con una suscripción.",
+      "refused": "Esta vez no pudimos escribir el informe. Este intento no cuenta para tu límite.",
+      "in-progress": "Ya se está escribiendo. Espera un momento.",
+      "rate-limited": "Inténtalo de nuevo en un momento.",
+      "upstream": "El servidor tiene problemas. Inténtalo de nuevo en breve.",
+      "error": "Algo salió mal."
+    }
   }
 }

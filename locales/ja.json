@@ -21,7 +21,8 @@
     "calendar": "カレンダー",
     "search": "検索",
     "settings": "設定",
-    "write": "かけらを書く"
+    "write": "かけらを書く",
+    "report": "レポート"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{year}}年{{month}}月{{day}}日（{{weekday}}）",
     "monthYear": "{{year}}年{{month}}月",
     "monthYearWeekday": "{{month}}月 {{year}}（{{weekday}}）",
-    "short": "{{month}}/{{day}}"
+    "short": "{{month}}/{{day}}",
+    "range": "{{fromMonth}}月{{fromDay}}日 – {{toDay}}日",
+    "rangeCrossMonth": "{{fromMonth}}月{{fromDay}}日 – {{toMonth}}月{{toDay}}日",
+    "weekNumber": "{{year}}年 第{{week}}週",
+    "yearOnly": "{{year}}年"
   },
   "emotion": {
     "joy": "うれしい",
@@ -167,7 +172,10 @@
     "sectionSupport": "サポート",
     "notice": "お知らせ",
     "support": "お問い合わせ",
-    "privacy": "プライバシーポリシー"
+    "privacy": "プライバシーポリシー",
+    "aiReport": "AIレポート",
+    "reportLanguage": "レポートの言語",
+    "reportLanguageSameAsApp": "アプリの言語と同じ"
   },
   "lock": {
     "lockedTitle": "かけらはロックされています",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• 7日間の無料体験の後、自動的に課金されます。体験期間中に解約すれば請求されません。",
     "unavailable": "現在、定期購入はご利用いただけません。しばらくしてからもう一度ご確認ください。"
+  },
+  "report": {
+    "title": "レポート",
+    "weekly": "週間",
+    "monthly": "月間",
+    "yearly": "年間",
+    "sourceCount": "かけら {{count}}件",
+    "subReportCount": "レポート {{count}}件",
+    "empty": "まだレポートがありません",
+    "emptyBody": "1週間が過ぎると、その週のかけらをまとめて振り返りをお作りします。",
+    "create": "レポートを作る",
+    "creating": "レポートを作成しています",
+    "onceAWeek": "レポートは週に1回作成できます",
+    "needWeekly": "先にこの月の週間レポートを作成してください",
+    "needMonthly": "先にこの年の月間レポートを作成してください",
+    "noEntries": "この期間のかけらがありません",
+    "disclaimer": "AIが書いた要約です。事実と異なる場合があり、診断や助言ではありません。",
+    "reportIssue": "報告",
+    "reported": "お知らせいただきありがとうございます。確認いたします。",
+    "delete": "レポートを削除",
+    "deleteConfirm": "このレポートを削除しますか？元に戻せません。",
+    "concernTitle": "つらい時期を過ごされているようですね。",
+    "concernBody": "ひとりで抱え込まなくて大丈夫です。",
+    "concernChannel": "身近な人や専門家に相談することを考えてみてください。",
+    "lockedTitle": "毎週、振り返る時間",
+    "lockedBody": "先週のかけらをまとめて、こんな振り返りをお作りします。",
+    "sampleBadge": "例",
+    "sampleBody": "月曜日には疲れた様子がよく見えましたが、木曜日の発表が終わってから文章が短く軽くなりました。今週いちばん多く使われた言葉は「大丈夫」でした。",
+    "seeSubscription": "조각 Pro について",
+    "homeCardTitle": "先週のレポートができました",
+    "fail": {
+      "not-configured": "レポートサーバーが設定されていません。",
+      "offline": "インターネットに接続されていません。",
+      "unauthorized": "ログインが必要です。",
+      "not-subscribed": "定期購入するとご利用いただけます。",
+      "refused": "今回はレポートを作成できませんでした。この試行は回数に含まれません。",
+      "in-progress": "すでに作成中です。少しお待ちください。",
+      "rate-limited": "しばらくしてからもう一度お試しください。",
+      "upstream": "サーバーに問題があります。しばらくしてからお試しください。",
+      "error": "問題が発生しました。"
+    }
   }
 }

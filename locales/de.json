@@ -21,7 +21,8 @@
     "calendar": "Kalender",
     "search": "Suche",
     "settings": "Einstellungen",
-    "write": "Neuer Eintrag"
+    "write": "Neuer Eintrag",
+    "report": "Berichte"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}}. {{monthName}} {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}.{{month}}."
+    "short": "{{day}}.{{month}}.",
+    "range": "{{fromDay}}. – {{toDay}}. {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}}. {{fromMonthName}} – {{toDay}}. {{toMonthName}}",
+    "weekNumber": "KW {{week}}, {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Freude",
@@ -167,7 +172,10 @@
     "sectionSupport": "Hilfe",
     "notice": "Mitteilungen",
     "support": "Kontakt",
-    "privacy": "Datenschutzerklärung"
+    "privacy": "Datenschutzerklärung",
+    "aiReport": "KI-Berichte",
+    "reportLanguage": "Sprache des Berichts",
+    "reportLanguageSameAsApp": "Wie die App-Sprache"
   },
   "lock": {
     "lockedTitle": "Deine Stücke sind gesperrt",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Nach der 7-tägigen Testphase wird automatisch abgebucht. Wenn du während der Testphase kündigst, wird nichts berechnet.",
     "unavailable": "Abos sind gerade nicht verfügbar. Bitte schau gleich noch einmal vorbei."
+  },
+  "report": {
+    "title": "Berichte",
+    "weekly": "Wöchentlich",
+    "monthly": "Monatlich",
+    "yearly": "Jährlich",
+    "sourceCount": "{{count}} Einträge",
+    "subReportCount": "{{count}} Berichte",
+    "empty": "Noch keine Berichte",
+    "emptyBody": "Ist eine Woche vorbei, fassen wir ihre Einträge zu einem kurzen Rückblick zusammen.",
+    "create": "Bericht erstellen",
+    "creating": "Bericht wird geschrieben",
+    "onceAWeek": "Du kannst einen Bericht pro Woche erstellen",
+    "needWeekly": "Erstelle zuerst die Wochenberichte dieses Monats",
+    "needMonthly": "Erstelle zuerst die Monatsberichte dieses Jahres",
+    "noEntries": "In diesem Zeitraum gibt es keine Einträge",
+    "disclaimer": "Von einer KI verfasst. Der Text kann falsch sein und ist weder Diagnose noch Ratschlag.",
+    "reportIssue": "Melden",
+    "reported": "Danke für den Hinweis. Wir sehen uns das an.",
+    "delete": "Bericht löschen",
+    "deleteConfirm": "Diesen Bericht löschen? Das lässt sich nicht rückgängig machen.",
+    "concernTitle": "Es klingt, als wäre das eine schwere Zeit für dich.",
+    "concernBody": "Du musst das nicht allein tragen.",
+    "concernChannel": "Sprich vielleicht mit jemandem, der dir nahesteht, oder mit einer Fachperson.",
+    "lockedTitle": "Jede Woche ein Moment zum Zurückblicken",
+    "lockedBody": "Wir fassen die Einträge der letzten Woche zu einem Rückblick wie diesem zusammen.",
+    "sampleBadge": "Beispiel",
+    "sampleBody": "Montags klang es oft müde, doch nach der Präsentation am Donnerstag wurden die Sätze kürzer und leichter. Das Wort dieser Woche war „passt schon“.",
+    "seeSubscription": "조각 Pro ansehen",
+    "homeCardTitle": "Der Bericht der letzten Woche ist fertig",
+    "fail": {
+      "not-configured": "Der Berichtsserver ist nicht eingerichtet.",
+      "offline": "Du bist nicht mit dem Internet verbunden.",
+      "unauthorized": "Du musst dich anmelden.",
+      "not-subscribed": "Mit einem Abo verfügbar.",
+      "refused": "Diesmal konnten wir keinen Bericht schreiben. Dieser Versuch zählt nicht auf dein Limit.",
+      "in-progress": "Wird bereits geschrieben. Einen Moment bitte.",
+      "rate-limited": "Bitte versuche es gleich noch einmal.",
+      "upstream": "Der Server hat Probleme. Bitte versuche es später noch einmal.",
+      "error": "Etwas ist schiefgelaufen."
+    }
   }
 }

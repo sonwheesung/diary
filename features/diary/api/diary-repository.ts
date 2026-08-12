@@ -220,6 +220,26 @@ export async function listRecentDiaries(limit = 20, offset = 0): Promise<Diary[]
   return toDiaries(rows);
 }
 
+/**
+ * 기간 안의 조각들. **AI 주간 리포트의 입력**이다(`docs/AI_REPORT_SYSTEM.md` §7).
+ *
+ * 오래된 것부터 준다 — 요약이 한 주의 흐름("월요일엔 …, 목요일 뒤로는 …")을 말하려면
+ * 모델이 시간 순서로 읽어야 한다. 최신순으로 넣으면 흐름이 거꾸로 서술된다.
+ *
+ * ⚠ 경계는 **양끝 포함**이다. `weekRange()`가 월요일·일요일을 그대로 주므로
+ *   여기서 하루를 빼거나 더하면 어떤 조각이 두 리포트에 들어가거나 어디에도 안 들어간다.
+ */
+export async function listDiariesBetween(fromDate: string, toDate: string): Promise<Diary[]> {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<DiaryRow>(
+    `SELECT * FROM diaries WHERE entry_date >= ? AND entry_date <= ? AND ${ALIVE}
+     ORDER BY entry_date ASC, created_at ASC`,
+    fromDate,
+    toDate,
+  );
+  return toDiaries(rows);
+}
+
 /** 특정 날짜의 조각들. 하루 여러 개가 가능하다(DIARY_SYSTEM §2). */
 export async function listDiariesByDate(entryDate: string): Promise<Diary[]> {
   const db = await getDatabase();

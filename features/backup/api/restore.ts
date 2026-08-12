@@ -27,8 +27,16 @@ import type { Manifest } from '@/features/backup/manifest';
  * 창이 30초에서 8ms로 줄어든다.
  */
 
-/** 교체되는 테이블 */
-const REPLACED = ['diary_tags', 'diary_images', 'tags', 'diaries'] as const;
+/**
+ * 교체되는 테이블.
+ *
+ * ⚠ `ai_reports`가 여기 있는 이유: 리포트는 **사용자의 기록**이지 기기의 사정이 아니다.
+ *   `backup_state`(커서)처럼 보존하면 복원한 세대와 어긋난 리포트가 남는다.
+ *
+ * 🔴 구독 만료는 이 목록과 무관하다 — 만료가 리포트를 지우는 경로는 어디에도 없다
+ *   (`docs/AI_REPORT_SYSTEM.md` §11.3).
+ */
+const REPLACED = ['diary_tags', 'diary_images', 'tags', 'diaries', 'ai_reports'] as const;
 
 /**
  * 복원이 **건드리지 않는** 테이블.
@@ -240,6 +248,34 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
           row.created_at,
           row.deleted_at,
           present ? null : 'missing',
+        );
+      }
+    });
+  });
+
+  /*
+   * AI 리포트. **교체 대상**이다 — 조각과 같이 사용자의 기록이므로 복원한 세대의 것으로 바뀐다.
+   *
+   * ⚠ v1 매니페스트에는 `reports`가 없다. `joinManifest`가 빈 배열로 채워주므로
+   *   여기서 따로 분기하지 않는다 — 없으면 아무것도 안 넣는다.
+   */
+  await chunked(manifest.reports, async (rows) => {
+    await db.withTransactionAsync(async () => {
+      for (const row of rows) {
+        await db.runAsync(
+          `INSERT OR REPLACE INTO ai_reports
+             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          row.id,
+          row.kind,
+          row.period_key,
+          row.lang,
+          row.summary,
+          row.concern,
+          row.source_count,
+          row.model,
+          row.prompt_ver,
+          row.created_at,
         );
       }
     });

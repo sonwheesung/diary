@@ -99,6 +99,61 @@ export function formatShortDate(entryDate: string): string {
   });
 }
 
+/**
+ * 리포트 기간 표기 — `8월 10일 – 16일` · `7월 27일 – 8월 2일`.
+ *
+ * ⚠ **달을 넘는 주가 실제로 있다.** 같은 달이면 뒤쪽 달 이름을 빼고, 넘으면 둘 다 쓴다 —
+ *   두 경우의 문장 틀이 언어마다 다르므로 키를 나눈다(§9.1 규칙 3).
+ *
+ * ~~"8월 둘째 주"~~ → **날짜 범위**(2026-08-12 결정). 서수는 세는 규칙이 언어마다 다르고
+ * 달 경계에서 어색해진다(`8월 31일`부터인 주가 "8월 다섯째 주"가 된다).
+ */
+export function formatDateRange(from: string, to: string): string {
+  const a = dayjs(from);
+  const b = dayjs(to);
+  const same = a.month() === b.month() && a.year() === b.year();
+  return translate(same ? 'date.range' : 'date.rangeCrossMonth', {
+    fromMonth: a.month() + 1,
+    fromMonthName: monthName(a),
+    fromDay: a.date(),
+    toMonth: b.month() + 1,
+    toMonthName: monthName(b),
+    toDay: b.date(),
+  });
+}
+
+/**
+ * `2026년 33주` — 목록의 부제.
+ *
+ * ⏭ 사람이 주차로 회상하지는 않지만 **진단용 식별자**다. 조각은 원격 관측이 0이라
+ *   화면에 식별자를 띄우는 규약이 이미 있다(백업 오류 코드). 저장값 `2026-W33`과 1:1이라
+ *   문의가 오면 "몇 주차인가요"로 바로 특정된다.
+ */
+export function formatWeekNumber(periodKey: string): string {
+  const [year, week] = periodKey.split('-W');
+  return translate('date.weekNumber', { year, week: Number(week) });
+}
+
+/**
+ * `2026년 8월` / `August 2026` — periodKey(`2026-08`)에서.
+ *
+ * ⚠ `monthName`을 빈 문자열로 넘기면 안 된다 — en·de의 틀이 `{{monthName}} {{year}}`라
+ *   " 2026"이 된다. 숫자만 쓰는 언어와 이름을 쓰는 언어가 섞여 있으므로 **둘 다 넘긴다.**
+ */
+export function formatPeriodMonth(periodKey: string): string {
+  const target = dayjs(`${periodKey}-01`);
+  return translate('date.monthYear', {
+    year: target.year(),
+    month: target.month() + 1,
+    monthName: monthName(target),
+  });
+}
+
+/** `2026년` */
+export function formatPeriodYear(periodKey: string): string {
+  return translate('date.yearOnly', { year: periodKey });
+}
+
 /** 오늘·어제만 말로 알려준다. 그 이전은 날짜만으로 충분하다 */
 export function relativeDayLabel(entryDate: string): string | null {
   if (entryDate === dayjs().format(DATE_FORMAT)) {

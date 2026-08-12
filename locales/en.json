@@ -21,7 +21,8 @@
     "calendar": "Calendar",
     "search": "Search",
     "settings": "Settings",
-    "write": "New entry"
+    "write": "New entry",
+    "report": "Reports"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{monthName}} {{day}}, {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{month}}/{{day}}"
+    "short": "{{month}}/{{day}}",
+    "range": "{{fromMonthName}} {{fromDay}} – {{toDay}}",
+    "rangeCrossMonth": "{{fromMonthName}} {{fromDay}} – {{toMonthName}} {{toDay}}",
+    "weekNumber": "Week {{week}}, {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Joyful",
@@ -167,7 +172,10 @@
     "sectionSupport": "Support",
     "notice": "Notices",
     "support": "Contact us",
-    "privacy": "Privacy policy"
+    "privacy": "Privacy policy",
+    "aiReport": "AI reports",
+    "reportLanguage": "Report language",
+    "reportLanguageSameAsApp": "Same as app language"
   },
   "lock": {
     "lockedTitle": "Your pieces are locked",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• After the 7-day free trial you are charged automatically. Cancel during the trial and you are not billed.",
     "unavailable": "Subscriptions are unavailable right now. Please check back shortly."
+  },
+  "report": {
+    "title": "Reports",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "sourceCount": "{{count}} entries",
+    "subReportCount": "{{count}} reports",
+    "empty": "No reports yet",
+    "emptyBody": "Once a week has passed, we'll gather its entries into a short reflection.",
+    "create": "Create report",
+    "creating": "Writing your report",
+    "onceAWeek": "You can create one report per week",
+    "needWeekly": "Create this month's weekly reports first",
+    "needMonthly": "Create this year's monthly reports first",
+    "noEntries": "No entries in this period",
+    "disclaimer": "Written by AI. It may be inaccurate, and it is not a diagnosis or advice.",
+    "reportIssue": "Report",
+    "reported": "Thanks for letting us know. We'll look into it.",
+    "delete": "Delete report",
+    "deleteConfirm": "Delete this report? This can't be undone.",
+    "concernTitle": "It sounds like you're going through a hard stretch.",
+    "concernBody": "You don't have to carry it alone.",
+    "concernChannel": "Consider reaching out to someone close to you, or a mental health professional.",
+    "lockedTitle": "A moment to look back, every week",
+    "lockedBody": "We gather last week's entries into a reflection like this one.",
+    "sampleBadge": "Example",
+    "sampleBody": "Mondays often read tired, but after Thursday's presentation the sentences got shorter and lighter. The words you reached for most this week were \"it's fine.\"",
+    "seeSubscription": "Learn about Jogak Pro",
+    "homeCardTitle": "Last week's report is ready",
+    "fail": {
+      "not-configured": "The report server isn't configured.",
+      "offline": "You're not connected to the internet.",
+      "unauthorized": "You need to sign in.",
+      "not-subscribed": "This is available with a subscription.",
+      "refused": "We couldn't write a report this time. This attempt doesn't count toward your limit.",
+      "in-progress": "It's already being written. Please wait a moment.",
+      "rate-limited": "Please try again in a moment.",
+      "upstream": "The server is having trouble. Please try again shortly.",
+      "error": "Something went wrong."
+    }
   }
 }

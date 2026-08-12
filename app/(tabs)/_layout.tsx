@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
 import Calendar from 'lucide-react-native/icons/calendar';
+import FileText from 'lucide-react-native/icons/file-text';
 import House from 'lucide-react-native/icons/house';
 import Plus from 'lucide-react-native/icons/plus';
-import Search from 'lucide-react-native/icons/search';
 import Settings from 'lucide-react-native/icons/settings';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
@@ -98,12 +98,18 @@ export default function TabsLayout() {
           tabBarAccessibilityLabel: t('tabs.write'),
         }}
       />
+      {/*
+        ⚠ 이 자리는 **검색이었다**(2026-08-12 교체). 검색은 조각을 찾을 때만 여는 화면이라
+          홈·모든 조각의 돋보기로 충분한데, 리포트는 **여기 없으면 존재를 모른다** —
+          설정 안에 넣으면 구독의 세 기둥 중 하나가 안 보이는 상품이 된다
+          (`docs/AI_REPORT_SYSTEM.md` §11.1).
+      */}
       <Tabs.Screen
-        name="search"
+        name="report"
         options={{
-          title: t('tabs.search'),
-          tabBarLabel: ({ color }) => <TabLabel label={t('tabs.search')} color={color} />,
-          tabBarIcon: ({ color }) => <Search size={ICON_SIZE} color={color} />,
+          title: t('tabs.report'),
+          tabBarLabel: ({ color }) => <TabLabel label={t('tabs.report')} color={color} />,
+          tabBarIcon: ({ color }) => <FileText size={ICON_SIZE} color={color} />,
         }}
       />
       <Tabs.Screen

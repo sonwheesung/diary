@@ -16,6 +16,16 @@ interface LanguageSheetProps {
   value: LanguageMode;
   onSelect: (next: LanguageMode) => void;
   onClose: () => void;
+  /**
+   * `'system'` 항목의 라벨을 갈아끼운다.
+   *
+   * ⚠ 같은 시트를 앱 언어와 **리포트 언어** 둘 다에 쓴다. 앱 언어에서 `system`은
+   *   *"기기 설정을 따름"* 이지만 리포트 언어에서는 *"앱 언어와 같음"* 이다 —
+   *   같은 값이 두 화면에서 다른 것을 가리키므로 라벨을 밖에서 준다
+   *   (`docs/AI_REPORT_SYSTEM.md` §6.2).
+   */
+  systemLabel?: string;
+  title?: string;
 }
 
 /**
@@ -27,7 +37,14 @@ interface LanguageSheetProps {
  * 언어 이름은 **그 언어로** 적혀 있다(`LANGUAGE_LABELS`) — 그래서 이 목록만은
  * 현재 앱 언어와 무관하게 읽힌다. 영어를 못 읽는 사람도 자기 언어를 찾을 수 있어야 한다.
  */
-export function LanguageSheet({ visible, value, onSelect, onClose }: LanguageSheetProps) {
+export function LanguageSheet({
+  visible,
+  value,
+  onSelect,
+  onClose,
+  systemLabel,
+  title,
+}: LanguageSheetProps) {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
@@ -35,13 +52,15 @@ export function LanguageSheet({ visible, value, onSelect, onClose }: LanguageShe
   const options: LanguageMode[] = ['system', ...LANGUAGE_ORDER];
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} title={t('settings.languageSheet')}>
+    <BottomSheet visible={visible} onClose={onClose} title={title ?? t('settings.languageSheet')}>
       {/* 목록이 길어 시트 높이 상한을 넘는다 — 안에서 스크롤한다 */}
       <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
         {options.map((option) => {
           const selected = option === value;
           const label =
-            option === 'system' ? t('settings.languageOptionSystem') : LANGUAGE_LABELS[option];
+            option === 'system'
+              ? (systemLabel ?? t('settings.languageOptionSystem'))
+              : LANGUAGE_LABELS[option];
           return (
             <Pressable
               key={option}

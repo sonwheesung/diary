@@ -21,7 +21,8 @@
     "calendar": "日历",
     "search": "搜索",
     "settings": "设置",
-    "write": "写一片"
+    "write": "写一片",
+    "report": "报告"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "monthYear": "{{year}}年{{month}}月",
     "monthYearWeekday": "{{month}}月 {{year}} 星期{{weekday}}",
-    "short": "{{month}}/{{day}}"
+    "short": "{{month}}/{{day}}",
+    "range": "{{fromMonth}}月{{fromDay}}日 – {{toDay}}日",
+    "rangeCrossMonth": "{{fromMonth}}月{{fromDay}}日 – {{toMonth}}月{{toDay}}日",
+    "weekNumber": "{{year}}年 第{{week}}周",
+    "yearOnly": "{{year}}年"
   },
   "emotion": {
     "joy": "开心",
@@ -167,7 +172,10 @@
     "sectionSupport": "支持",
     "notice": "公告",
     "support": "联系我们",
-    "privacy": "隐私政策"
+    "privacy": "隐私政策",
+    "aiReport": "AI 报告",
+    "reportLanguage": "报告语言",
+    "reportLanguageSameAsApp": "与应用语言相同"
   },
   "lock": {
     "lockedTitle": "你的碎片已锁定",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• 7 天免费试用后将自动扣款。在试用期内取消则不会产生费用。",
     "unavailable": "目前无法订阅，请稍后再查看。"
+  },
+  "report": {
+    "title": "报告",
+    "weekly": "每周",
+    "monthly": "每月",
+    "yearly": "每年",
+    "sourceCount": "{{count}} 篇碎片",
+    "subReportCount": "{{count}} 份报告",
+    "empty": "还没有报告",
+    "emptyBody": "一周过去后，我们会把这一周的碎片汇成一段回顾。",
+    "create": "生成报告",
+    "creating": "正在生成报告",
+    "onceAWeek": "报告每周可以生成一次",
+    "needWeekly": "请先生成本月的每周报告",
+    "needMonthly": "请先生成本年的每月报告",
+    "noEntries": "这段时间没有碎片",
+    "disclaimer": "由 AI 撰写的摘要。内容可能有误，也不构成诊断或建议。",
+    "reportIssue": "举报",
+    "reported": "感谢告知，我们会查看。",
+    "delete": "删除报告",
+    "deleteConfirm": "要删除这份报告吗？此操作无法撤销。",
+    "concernTitle": "你似乎正在经历一段艰难的日子。",
+    "concernBody": "你不必独自承受。",
+    "concernChannel": "可以试着和身边的人或专业人士聊一聊。",
+    "lockedTitle": "每周留一点回望的时间",
+    "lockedBody": "我们会把上周的碎片汇成这样一段回顾。",
+    "sampleBadge": "示例",
+    "sampleBody": "周一常常透着疲惫，但周四的汇报结束后，句子变短也变轻了。这一周你说得最多的是「没关系」。",
+    "seeSubscription": "了解 조각 Pro",
+    "homeCardTitle": "上周的报告已经好了",
+    "fail": {
+      "not-configured": "尚未配置报告服务器。",
+      "offline": "当前没有连接到网络。",
+      "unauthorized": "需要先登录。",
+      "not-subscribed": "订阅后即可使用。",
+      "refused": "这次没能生成报告。本次尝试不计入次数。",
+      "in-progress": "已经在生成中，请稍候。",
+      "rate-limited": "请稍后再试。",
+      "upstream": "服务器出现问题，请稍后再试。",
+      "error": "出了点问题。"
+    }
   }
 }

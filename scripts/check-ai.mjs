@@ -15,6 +15,12 @@ import {
   weekRange,
   lastWeekKey,
   lastWeekRange,
+  weekKeyRange,
+  monthKeyRange,
+  yearKeyRange,
+  lastMonthKey,
+  lastYearKey,
+  keyRange,
 } from '../features/ai/period.ts';
 import { buildSystem, buildUser, isEmpty } from '../features/ai/prompt.ts';
 import { REPORT_SCHEMA, PROMPT_VERSION } from '../features/ai/types.ts';
@@ -234,6 +240,81 @@ check('🔴 weekly에 조각이 있어도 monthly는 비어 있다고 본다', (
     isEmpty({ kind: 'monthly', lang: 'ko', periodKey: 'x', entries: [entry('2026-08-10', 'a')] }),
     'monthly가 entries를 보고 있다',
   );
+});
+
+console.log('\n기간 키 → 날짜 범위 (화면 표기의 근거)');
+
+check('🔴 weekKey ↔ weekKeyRange 왕복 — 5년치 전부', () => {
+  // 화면이 주차 대신 날짜 범위를 보여주기로 했으므로 역함수가 틀리면 **틀린 날짜가 뜬다**.
+  // 눈으로는 안 보인다 — 8월 10일이든 17일이든 그럴듯해 보인다.
+  for (let t = Date.UTC(2023, 0, 1); t <= Date.UTC(2027, 11, 31); t += 86_400_000) {
+    const day = new Date(t);
+    const local = d(
+      `${day.getUTCFullYear()}-${String(day.getUTCMonth() + 1).padStart(2, '0')}-${String(
+        day.getUTCDate(),
+      ).padStart(2, '0')}`,
+    );
+    const key = weekKey(local);
+    const range = weekKeyRange(key);
+    assert(range !== null, `${key}의 범위가 null이다`);
+    eq(weekRange(local).from, range.from, `${key} 시작`);
+    eq(weekRange(local).to, range.to, `${key} 끝`);
+  }
+});
+
+check('2026-W33 → 8월 10일 ~ 16일', () => {
+  eq(weekKeyRange('2026-W33').from, '2026-08-10', 'from');
+  eq(weekKeyRange('2026-W33').to, '2026-08-16', 'to');
+});
+
+check('🔴 없는 주차(2026-W53)는 null — 조용히 다음 해를 보여주면 안 된다', () => {
+  // 2026년은 52주까지다. 없는 키에 그럴듯한 범위를 주면 화면이 거짓말을 한다
+  eq(weekKey(d('2026-12-31')), '2026-W53', '2026은 53주가 있다');
+  eq(weekKeyRange('2025-W53'), null, '2025는 52주까지');
+});
+
+check('깨진 키는 null', () => {
+  eq(weekKeyRange(''), null, '빈 문자열');
+  eq(weekKeyRange('2026-W00'), null, '0주');
+  eq(weekKeyRange('2026-W99'), null, '99주');
+  eq(monthKeyRange('2026-13'), null, '13월');
+  eq(yearKeyRange('26'), null, '두 자리 연도');
+});
+
+check('monthKeyRange는 말일을 직접 세지 않는다 — 윤년 2월', () => {
+  eq(monthKeyRange('2024-02').to, '2024-02-29', '윤년');
+  eq(monthKeyRange('2026-02').to, '2026-02-28', '평년');
+  eq(monthKeyRange('2026-04').to, '2026-04-30', '30일 달');
+  eq(monthKeyRange('2026-12').to, '2026-12-31', '12월 — 연도가 넘어간다');
+});
+
+check('yearKeyRange', () => {
+  eq(yearKeyRange('2026').from, '2026-01-01', 'from');
+  eq(yearKeyRange('2026').to, '2026-12-31', 'to');
+});
+
+check('keyRange가 세 종류를 형태로 가른다', () => {
+  eq(keyRange('2026-W33').from, '2026-08-10', '주간');
+  eq(keyRange('2026-08').from, '2026-08-01', '월간');
+  eq(keyRange('2026').from, '2026-01-01', '연간');
+});
+
+console.log('\n겨냥하는 기간 — 항상 닫힌 기간');
+
+check('🔴 lastMonthKey가 31일에 한 달을 건너뛰지 않는다', () => {
+  // `setMonth(-1)`류로 짜면 3월 31일에 부를 때 2월이 없어 3월로 튄다. 실제로 흔한 버그다
+  eq(lastMonthKey(d('2026-03-31')), '2026-02', '3월 31일');
+  eq(lastMonthKey(d('2026-03-01')), '2026-02', '3월 1일');
+  eq(lastMonthKey(d('2026-05-31')), '2026-04', '5월 31일');
+});
+
+check('lastMonthKey가 연초에 작년 12월을 준다', () => {
+  eq(lastMonthKey(d('2026-01-15')), '2025-12', '1월');
+});
+
+check('lastYearKey', () => {
+  eq(lastYearKey(d('2026-01-01')), '2025', '연초');
+  eq(lastYearKey(d('2026-12-31')), '2025', '연말');
 });
 
 console.log('\n구조화 출력 스키마');

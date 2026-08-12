@@ -107,6 +107,41 @@ const MIGRATIONS: readonly string[] = [
   -- NULL = 이 기기에서 만든 로컬 파일 / 'backed_up' = 서버에 올라감 / 'missing' = 파일 없음
   ALTER TABLE diary_images ADD COLUMN blob_state TEXT;
   `,
+
+  // v5 — AI 리포트 (AI_REPORT_SYSTEM)
+  //
+  // ⚠ **본문을 완성된 문자열로 저장한다.** §9.1 규칙 2(코드/id만 저장)의 예외다 —
+  //   이건 코드가 아니라 생성된 콘텐츠이고, 같은 입력으로도 다시 만들 수 없다.
+  //   그래서 리포트를 만든 시점의 언어로 영원히 남는다. 그게 정확하다.
+  //
+  // ⚠ **복원의 교체 대상이다**(diaries·tags와 같이). backup_state와 달리 기기에 매인 값이
+  //   아니라 사용자의 기록이므로, 복원하면 그 세대의 리포트로 통째로 바뀌는 것이 맞다.
+  //
+  // 🔴 **구독이 끝나도 지우지 않는다.** 만료가 기록을 뺏는 일은 없다 — 화면도 목록을 막지
+  //   않고 [만들기]만 막는다(AI_REPORT_SYSTEM §11.3). 삭제는 사용자만 한다.
+  `
+  CREATE TABLE IF NOT EXISTS ai_reports (
+    id           TEXT    PRIMARY KEY NOT NULL,
+    -- 'weekly' | 'monthly' | 'yearly'
+    kind         TEXT    NOT NULL,
+    -- '2026-W33' | '2026-08' | '2026'. 표기는 날짜 범위로 하되 저장은 ISO 키다
+    period_key   TEXT    NOT NULL,
+    -- 생성 당시의 출력 언어. 나중에 앱 언어를 바꿔도 이 값은 안 바뀐다
+    lang         TEXT    NOT NULL,
+    summary      TEXT    NOT NULL,
+    -- 위기 신호. 1이면 상세 상단에 상담 채널 배너를 얹는다
+    concern      INTEGER NOT NULL DEFAULT 0,
+    -- 요약에 들어간 조각(또는 하위 리포트) 수. 목록의 '조각 7개'
+    source_count INTEGER NOT NULL DEFAULT 0,
+    -- 재현성. 모델과 프롬프트가 둘 다 움직이면 "왜 그때는 달랐지"에 답할 수 없다
+    model        TEXT,
+    prompt_ver   INTEGER,
+    created_at   INTEGER NOT NULL
+  );
+  -- 같은 기간의 리포트는 하나. 중복 생성의 1차 방어(서버 멱등 키가 2차)
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_ai_reports_period ON ai_reports (kind, period_key);
+  CREATE INDEX IF NOT EXISTS idx_ai_reports_kind_created ON ai_reports (kind, created_at DESC);
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

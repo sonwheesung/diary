@@ -25,9 +25,12 @@ import { useLanguageStore } from '@/features/settings/language-store';
 import {
   SETTING_KEYS,
   getBoolSetting,
+  getSetting,
   setBoolSetting,
+  setSetting,
 } from '@/features/settings/api/settings-store';
-import { LANGUAGE_LABELS } from '@/lib/i18n';
+import { LANGUAGE_LABELS, isLanguageMode } from '@/lib/i18n';
+import type { LanguageMode } from '@/lib/i18n';
 import type { Palette, ThemeMode } from '@/theme/palettes';
 import { useColors, useTheme } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -55,6 +58,12 @@ export default function SettingsScreen() {
   const languageMode = useLanguageStore((state) => state.mode);
   const setLanguageMode = useLanguageStore((state) => state.setMode);
   const [languageSheetOpen, setLanguageSheetOpen] = useState(false);
+  /*
+   * 리포트 언어. `'system'`은 여기서 **"앱 언어와 같음"** 을 뜻한다 —
+   * 저장은 빈 문자열이고, 그래서 앱 언어를 바꾸면 리포트 언어도 따라간다(§6.2).
+   */
+  const [reportLanguage, setReportLanguage] = useState<LanguageMode>('system');
+  const [reportLanguageSheetOpen, setReportLanguageSheetOpen] = useState(false);
   const unreadNotices = useNoticeStore((state) => state.unreadCount);
   const [notifications, setNotifications] = useState(false);
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
@@ -106,6 +115,29 @@ export default function SettingsScreen() {
       alive = false;
     };
   }, []);
+
+  useEffect(() => {
+    let alive = true;
+    void getSetting(SETTING_KEYS.aiReportLanguage)
+      .then((value) => {
+        // 빈 문자열도 "안 고름"이다 — 이 저장소의 삭제 관용구가 빈 문자열이다
+        if (alive && value !== null && value.length > 0 && isLanguageMode(value)) {
+          setReportLanguage(value);
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const chooseReportLanguage = (next: LanguageMode) => {
+    setReportLanguage(next);
+    setReportLanguageSheetOpen(false);
+    void setSetting(SETTING_KEYS.aiReportLanguage, next === 'system' ? '' : next).catch(() =>
+      setReportLanguage(reportLanguage),
+    );
+  };
 
   const toggleNotifications = (next: boolean) => {
     // 먼저 화면을 바꾸고 저장한다 — 스위치가 손가락을 따라오지 않으면 고장 난 것처럼 느껴진다.
@@ -276,6 +308,33 @@ export default function SettingsScreen() {
           </Text>
           <ChevronRight size={18} color={colors.textMuted} />
         </Pressable>
+
+        {/*
+          리포트 언어는 **앱 언어와 따로** 고를 수 있다(§6.2). 한국어로 쓰면서 영어 리포트를
+          받고 싶은 사람이 있고, 무엇보다 리포트는 **저장된 뒤에는 다시 번역되지 않는다** —
+          완성된 문장이 그대로 남으므로 만들기 전에 정해야 한다.
+
+          ⚠ 생성 화면에서 매번 묻지 않고 여기 한 곳에 둔다. 만드는 동작은 1탭이어야 한다(기둥 1).
+        */}
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => setReportLanguageSheetOpen(true)}
+          style={styles.row}
+        >
+          <View style={styles.rowIcon}>
+            <Sparkles size={18} color={colors.accent} />
+          </View>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.reportLanguage')}</Text>
+            <Text style={styles.rowNote}>{t('settings.aiReport')}</Text>
+          </View>
+          <Text style={styles.rowValue}>
+            {reportLanguage === 'system'
+              ? t('settings.reportLanguageSameAsApp')
+              : LANGUAGE_LABELS[reportLanguage]}
+          </Text>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
       </View>
 
       <View style={styles.section}>
@@ -344,6 +403,16 @@ export default function SettingsScreen() {
           setLanguageSheetOpen(false);
         }}
         onClose={() => setLanguageSheetOpen(false)}
+      />
+
+      <LanguageSheet
+        visible={reportLanguageSheetOpen}
+        value={reportLanguage}
+        onSelect={chooseReportLanguage}
+        onClose={() => setReportLanguageSheetOpen(false)}
+        // 같은 시트지만 `system`이 가리키는 것이 다르다 — 라벨을 갈아끼운다
+        systemLabel={t('settings.reportLanguageSameAsApp')}
+        title={t('settings.reportLanguage')}
       />
 
       {/*

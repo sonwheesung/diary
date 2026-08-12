@@ -21,7 +21,8 @@
     "calendar": "Kalender",
     "search": "Cari",
     "settings": "Pengaturan",
-    "write": "Tulis baru"
+    "write": "Tulis baru",
+    "report": "Laporan"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}/{{month}}"
+    "short": "{{day}}/{{month}}",
+    "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
+    "weekNumber": "Minggu ke-{{week}} {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Senang",
@@ -167,7 +172,10 @@
     "sectionSupport": "Bantuan",
     "notice": "Pengumuman",
     "support": "Hubungi kami",
-    "privacy": "Kebijakan privasi"
+    "privacy": "Kebijakan privasi",
+    "aiReport": "Laporan AI",
+    "reportLanguage": "Bahasa laporan",
+    "reportLanguageSameAsApp": "Sama dengan bahasa aplikasi"
   },
   "lock": {
     "lockedTitle": "Kepinganmu terkunci",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Setelah uji coba gratis 7 hari, penagihan berjalan otomatis. Kalau dibatalkan selama uji coba, kamu tidak ditagih.",
     "unavailable": "Langganan sedang tidak tersedia. Coba cek lagi sebentar lagi."
+  },
+  "report": {
+    "title": "Laporan",
+    "weekly": "Mingguan",
+    "monthly": "Bulanan",
+    "yearly": "Tahunan",
+    "sourceCount": "{{count}} catatan",
+    "subReportCount": "{{count}} laporan",
+    "empty": "Belum ada laporan",
+    "emptyBody": "Setelah satu minggu berlalu, kami akan merangkum catatannya menjadi renungan singkat.",
+    "create": "Buat laporan",
+    "creating": "Sedang menulis laporan",
+    "onceAWeek": "Laporan dapat dibuat sekali seminggu",
+    "needWeekly": "Buat dulu laporan mingguan bulan ini",
+    "needMonthly": "Buat dulu laporan bulanan tahun ini",
+    "noEntries": "Tidak ada catatan pada periode ini",
+    "disclaimer": "Ditulis oleh AI. Bisa saja keliru, dan ini bukan diagnosis atau saran.",
+    "reportIssue": "Laporkan",
+    "reported": "Terima kasih sudah memberi tahu. Kami akan memeriksanya.",
+    "delete": "Hapus laporan",
+    "deleteConfirm": "Hapus laporan ini? Tindakan ini tidak bisa dibatalkan.",
+    "concernTitle": "Sepertinya kamu sedang melewati masa yang berat.",
+    "concernBody": "Kamu tidak harus menanggungnya sendirian.",
+    "concernChannel": "Pertimbangkan untuk berbicara dengan orang terdekat atau tenaga profesional.",
+    "lockedTitle": "Waktu untuk menengok ke belakang, setiap minggu",
+    "lockedBody": "Kami merangkum catatan minggu lalu menjadi renungan seperti ini.",
+    "sampleBadge": "Contoh",
+    "sampleBody": "Hari Senin terasa lelah, tetapi setelah presentasi hari Kamis kalimatmu jadi lebih pendek dan ringan. Kata yang paling sering muncul minggu ini adalah \"tidak apa-apa\".",
+    "seeSubscription": "Pelajari 조각 Pro",
+    "homeCardTitle": "Laporan minggu lalu sudah siap",
+    "fail": {
+      "not-configured": "Server laporan belum dikonfigurasi.",
+      "offline": "Kamu sedang tidak terhubung ke internet.",
+      "unauthorized": "Kamu perlu masuk terlebih dahulu.",
+      "not-subscribed": "Tersedia dengan langganan.",
+      "refused": "Kali ini kami belum bisa menulis laporan. Percobaan ini tidak dihitung dalam batasmu.",
+      "in-progress": "Sedang ditulis. Mohon tunggu sebentar.",
+      "rate-limited": "Coba lagi sebentar lagi.",
+      "upstream": "Server sedang bermasalah. Coba lagi nanti.",
+      "error": "Terjadi kesalahan."
+    }
   }
 }

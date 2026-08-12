@@ -10,6 +10,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
+import { ReportReadyCard } from '@/features/ai/components/ReportReadyCard';
 import { GraceBanner } from '@/features/backup/components/GraceBanner';
 import { resolveImageUri } from '@/features/diary/api/image-store';
 import { emotionLabel } from '@/features/diary/emotions';
@@ -55,6 +56,11 @@ export default function HomeScreen() {
         {wroteToday ? t('home.greetingWritten') : t('home.greetingEmpty')}
       </Text>
 
+      {/*
+        조각 쓰기 **위**가 아니라 아래에 둔다. 홈의 첫 동선은 언제나 쓰러 가는 길이고(기둥 1),
+        리포트는 지난주를 돌아보는 일이라 급하지 않다. 대신 최근 목록보다는 위에 둔다 —
+        스크롤해야 보이면 알린 것이 아니다.
+      */}
       {streak > 0 && (
         <View style={styles.streak}>
           <Flame size={16} color={colors.accent} />
@@ -72,6 +78,8 @@ export default function HomeScreen() {
         icon={<Pencil size={18} color={colors.textOnAccent} />}
         onPress={() => router.push('/write')}
       />
+
+      <ReportReadyCard />
 
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>{t('home.recent')}</Text>

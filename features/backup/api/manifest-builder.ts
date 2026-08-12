@@ -5,6 +5,7 @@ import type {
   DiaryTagRow,
   ImageRow,
   Manifest,
+  ReportRow,
   TagRow,
 } from '@/features/backup/manifest';
 
@@ -55,12 +56,25 @@ export async function buildManifest(): Promise<Manifest> {
     `SELECT diary_id, tag_id FROM diary_tags`,
   );
 
+  /*
+   * AI 리포트도 싣는다. 본문이 로컬에만 있어서 기기를 잃으면 그대로 사라지고,
+   * 같은 일기로 다시 만들어도 결과가 달라 복구가 아니다.
+   *
+   * ⚠ 요약에는 일기 내용이 녹아 있으므로 당연히 암호화되어 나간다. 서버는 못 읽는다.
+   */
+  const reports = await db.getAllAsync<ReportRow>(
+    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at
+       FROM ai_reports
+      ORDER BY created_at ASC`,
+  );
+
   return {
     dbVersion: LATEST_DB_VERSION,
     diaries: diaries.map(emptyBodyIfDeleted),
     images,
     tags,
     diaryTags,
+    reports,
   };
 }
 

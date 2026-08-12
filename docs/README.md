@@ -41,7 +41,7 @@
 | Pretendard 폰트 | ✅ | 정적 OTF 3종. 로드 완료까지 스플래시 유지, 실패해도 앱은 진행 |
 | expo-sqlite 스키마·마이그레이션 | ✅ | `db/` — user_version 기반. 실기기 스모크 테스트 통과 |
 | 일기 CRUD·검색·streak·캘린더 집계 | ✅ | `features/diary/api/` |
-| 하단 탭 네비게이션(홈·캘린더·⊕·검색·설정) | ✅ | ⊕는 탭이 아니라 작성 화면을 띄우는 동작 |
+| 하단 탭 네비게이션(홈·캘린더·⊕·**리포트**·설정) | ✅ | ⊕는 탭이 아니라 작성 화면을 띄우는 동작. **검색은 2026-08-12에 탭에서 강등**(AI_REPORT_SYSTEM §11.1) |
 | 화면 틀 `components/Screen` | ✅ | 세이프에어리어·키보드 여백 단일 처리. CLAUDE.md §10 |
 | 공통 컴포넌트 Button · Card · TextField · MonthGrid · DatePickerSheet | ✅ | Modal · Header · BottomSheet · Avatar · Loading 미착수 |
 | Splash · 아이콘 | ✅ | `scripts/make-assets.py`로 코드 생성. 라이트/다크 스플래시 분리. 적응형 아이콘 안전영역 확인 |
@@ -49,7 +49,7 @@
 | Write / Edit | ✅ | 한 화면이 둘을 겸한다(`/write?id=`). 커서 위치 사진 삽입·태그·감정·날짜 변경. 저장 후 광고는 AdMob 대기 |
 | Detail | ✅ | `app/diary/[id].tsx` — 조회·수정·삭제. 돌아올 때마다 다시 읽는다 |
 | Calendar | ✅ | 월 격자(쓴 날 점 표시)·날짜 선택·그날 조각 카드·빈 날엔 그 날짜로 쓰기 |
-| Search | ✅ | 제목·본문·태그 부분 문자열. 250ms 디바운스. 빈 검색어면 자주 쓴 태그를 보여준다 |
+| Search | ✅ | `app/search.tsx` — **탭이 아니다.** 홈·모든 조각의 돋보기가 입구. 250ms 디바운스, 빈 검색어면 자주 쓴 태그 |
 | 모든 조각 목록(홈의 더보기) | ✅ | `app/diaries.tsx` — 달 머리글 + 20개씩 '더 보기' |
 | Settings(다크모드·잠금·언어·알림 UI) | ✅ | 2026-08-11 정정 — ❌로 남아 있었다 |
 | 앱 잠금(PIN·패턴 3×3·생체) | ✅ | `features/lock/` · 힌트 되찾기 · 실패 backoff · 복귀 지연 · 앱 스위처 가림(Android). iOS 가림만 남음 |
@@ -63,7 +63,9 @@
 | 사진 백업(2차) | ✅ | 이미지 하나 = blob 하나. 증분(`plan`) · 복원 후 못 받은 사진만 `'missing'` |
 | 월 구독(RevenueCat) | ⏸ | ~~Phase 9 대기~~ → 앱·RC·**Play 상품 등록까지 완료**(2026-08-12). 남은 것은 RC 상품 import·attach와 결제 프로필. [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) |
 | 백업/복원 — 서버 | ✅ | ~~조각 서버 대기~~ → `jogak-stg`(서울) + Vercel(`icn1`) 배포. 위 두 줄과 합쳐 읽는다 |
-| **AI 리포트** | ⏸ | 설계 문서 ✅ [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) · 코드 ❌. **처리방침 AI 예고(30일)가 선행** |
+| **AI 리포트 — 앱 쪽** | ✅ | 리포트 탭·상세·홈 카드·설정(리포트 언어)·DB v5·백업 포함. [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11 |
+| **AI 리포트 — 서버** | ❌ | `POST /api/v1/ai/report` 미구현. **앱이 이미 이 라우트를 부른다** — 없으면 [만들기]가 실패 문구로 떨어진다 |
+| AI 리포트 — 처리방침 예고 | ✅ | 2026-08-12 게시. 30일 시계는 **2026-09-11** 만료 |
 | 공통 컴포넌트 8종 | ❌ | |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ❌ | |
@@ -102,12 +104,12 @@ npm run lint                   # eslint
 npm run check:i18n             # 키 누락·언어 간 불일치
 
 # 백업을 건드렸으면
-npm run check:backup-crypto    # 43개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
+npm run check:backup-crypto    # 46개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
 npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니페스트 왕복
 
 # 구독·AI를 건드렸으면
 npm run check:subscription     # 14개 — 체험 기간 계산(전자상거래법 §13⑥ 고지의 근거)
-npm run check:ai               # 31개 — ISO 주차·프롬프트·인젝션 방어·구조화 출력 스키마
+npm run check:ai               # 41개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마
 
 # API 키가 있을 때만 (실제 과금이 발생한다)
 cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effort 스윕·refusal

@@ -21,7 +21,8 @@
     "calendar": "Calendário",
     "search": "Buscar",
     "settings": "Ajustes",
-    "write": "Novo registro"
+    "write": "Novo registro",
+    "report": "Relatórios"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} de {{monthName}} de {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} de {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}/{{month}}"
+    "short": "{{day}}/{{month}}",
+    "range": "{{fromDay}} – {{toDay}} de {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}} de {{fromMonthName}} – {{toDay}} de {{toMonthName}}",
+    "weekNumber": "Semana {{week}} de {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Feliz",
@@ -167,7 +172,10 @@
     "sectionSupport": "Suporte",
     "notice": "Avisos",
     "support": "Fale conosco",
-    "privacy": "Política de privacidade"
+    "privacy": "Política de privacidade",
+    "aiReport": "Relatórios de IA",
+    "reportLanguage": "Idioma do relatório",
+    "reportLanguageSameAsApp": "Igual ao idioma do app"
   },
   "lock": {
     "lockedTitle": "Seus pedaços estão bloqueados",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Depois do teste grátis de 7 dias, a cobrança é automática. Se cancelar durante o teste, não há cobrança.",
     "unavailable": "As assinaturas não estão disponíveis agora. Verifique de novo daqui a pouco."
+  },
+  "report": {
+    "title": "Relatórios",
+    "weekly": "Semanal",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "sourceCount": "{{count}} registros",
+    "subReportCount": "{{count}} relatórios",
+    "empty": "Ainda não há relatórios",
+    "emptyBody": "Quando uma semana terminar, reuniremos seus registros em uma breve reflexão.",
+    "create": "Criar relatório",
+    "creating": "Escrevendo seu relatório",
+    "onceAWeek": "Você pode criar um relatório por semana",
+    "needWeekly": "Crie antes os relatórios semanais deste mês",
+    "needMonthly": "Crie antes os relatórios mensais deste ano",
+    "noEntries": "Nenhum registro neste período",
+    "disclaimer": "Escrito por IA. Pode conter erros e não é um diagnóstico nem um conselho.",
+    "reportIssue": "Denunciar",
+    "reported": "Obrigado por avisar. Vamos analisar.",
+    "delete": "Excluir relatório",
+    "deleteConfirm": "Excluir este relatório? Não é possível desfazer.",
+    "concernTitle": "Parece que você está passando por um período difícil.",
+    "concernBody": "Você não precisa carregar isso sozinha ou sozinho.",
+    "concernChannel": "Considere conversar com alguém próximo ou com um profissional de saúde mental.",
+    "lockedTitle": "Um momento para olhar para trás, toda semana",
+    "lockedBody": "Reunimos os registros da semana passada em uma reflexão como esta.",
+    "sampleBadge": "Exemplo",
+    "sampleBody": "As segundas soavam cansadas, mas depois da apresentação de quinta as frases ficaram mais curtas e leves. O que você mais repetiu nesta semana foi «está tudo bem».",
+    "seeSubscription": "Conhecer o 조각 Pro",
+    "homeCardTitle": "O relatório da semana passada está pronto",
+    "fail": {
+      "not-configured": "O servidor de relatórios não está configurado.",
+      "offline": "Você não está conectado à internet.",
+      "unauthorized": "É preciso entrar na conta.",
+      "not-subscribed": "Disponível com uma assinatura.",
+      "refused": "Desta vez não conseguimos escrever o relatório. Esta tentativa não conta no seu limite.",
+      "in-progress": "Já está sendo escrito. Aguarde um instante.",
+      "rate-limited": "Tente novamente em instantes.",
+      "upstream": "O servidor está com problemas. Tente novamente em breve.",
+      "error": "Algo deu errado."
+    }
   }
 }

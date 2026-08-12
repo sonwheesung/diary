@@ -21,7 +21,8 @@
     "calendar": "Calendario",
     "search": "Cerca",
     "settings": "Impostazioni",
-    "write": "Nuova voce"
+    "write": "Nuova voce",
+    "report": "Resoconti"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}/{{month}}"
+    "short": "{{day}}/{{month}}",
+    "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
+    "weekNumber": "Settimana {{week}} del {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Felice",
@@ -167,7 +172,10 @@
     "sectionSupport": "Assistenza",
     "notice": "Avvisi",
     "support": "Contattaci",
-    "privacy": "Informativa sulla privacy"
+    "privacy": "Informativa sulla privacy",
+    "aiReport": "Resoconti IA",
+    "reportLanguage": "Lingua del resoconto",
+    "reportLanguageSameAsApp": "Come la lingua dell'app"
   },
   "lock": {
     "lockedTitle": "I tuoi pezzi sono bloccati",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Dopo la prova gratuita di 7 giorni l'addebito è automatico. Se disdici durante la prova, non ti viene addebitato nulla.",
     "unavailable": "Gli abbonamenti non sono disponibili al momento. Ricontrolla tra poco."
+  },
+  "report": {
+    "title": "Resoconti",
+    "weekly": "Settimanale",
+    "monthly": "Mensile",
+    "yearly": "Annuale",
+    "sourceCount": "{{count}} voci",
+    "subReportCount": "{{count}} resoconti",
+    "empty": "Ancora nessun resoconto",
+    "emptyBody": "Passata una settimana, raccoglieremo le sue voci in una breve riflessione.",
+    "create": "Crea resoconto",
+    "creating": "Stiamo scrivendo il resoconto",
+    "onceAWeek": "Puoi creare un resoconto a settimana",
+    "needWeekly": "Crea prima i resoconti settimanali di questo mese",
+    "needMonthly": "Crea prima i resoconti mensili di quest'anno",
+    "noEntries": "Nessuna voce in questo periodo",
+    "disclaimer": "Scritto da un'IA. Può contenere errori e non è una diagnosi né un consiglio.",
+    "reportIssue": "Segnala",
+    "reported": "Grazie per la segnalazione. Daremo un'occhiata.",
+    "delete": "Elimina resoconto",
+    "deleteConfirm": "Eliminare questo resoconto? Non si può annullare.",
+    "concernTitle": "Sembra che tu stia attraversando un periodo difficile.",
+    "concernBody": "Non devi portarlo da sola o da solo.",
+    "concernChannel": "Valuta di parlarne con una persona vicina o con un professionista della salute mentale.",
+    "lockedTitle": "Ogni settimana, un momento per guardare indietro",
+    "lockedBody": "Raccogliamo le voci della settimana scorsa in una riflessione come questa.",
+    "sampleBadge": "Esempio",
+    "sampleBody": "I lunedì suonavano stanchi, ma dopo la presentazione di giovedì le frasi si sono fatte più brevi e leggere. La parola più ripetuta questa settimana è stata «tutto ok».",
+    "seeSubscription": "Scopri 조각 Pro",
+    "homeCardTitle": "Il resoconto della scorsa settimana è pronto",
+    "fail": {
+      "not-configured": "Il server dei resoconti non è configurato.",
+      "offline": "Non sei connessa o connesso a internet.",
+      "unauthorized": "Devi accedere.",
+      "not-subscribed": "Disponibile con un abbonamento.",
+      "refused": "Questa volta non siamo riusciti a scrivere il resoconto. Questo tentativo non conta nel tuo limite.",
+      "in-progress": "È già in scrittura. Attendi un momento.",
+      "rate-limited": "Riprova tra poco.",
+      "upstream": "Il server ha un problema. Riprova a breve.",
+      "error": "Qualcosa è andato storto."
+    }
   }
 }

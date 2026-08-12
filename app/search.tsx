@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
+import ChevronLeft from 'lucide-react-native/icons/chevron-left';
 import Search from 'lucide-react-native/icons/search';
 import X from 'lucide-react-native/icons/x';
 import { useCallback, useEffect, useState } from 'react';
@@ -8,7 +9,6 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
-import { AdBanner } from '@/features/ads/components/AdBanner';
 import { TextField } from '@/components/TextField';
 import { searchDiaries } from '@/features/diary/api/diary-repository';
 import { getImagesForDiaries, resolveImageUri } from '@/features/diary/api/image-store';
@@ -30,6 +30,10 @@ const DEBOUNCE_MS = 250;
  *
  * 검색어를 지우면 결과 대신 **자주 쓴 태그**를 보여준다. 빈 화면을 두느니
  * 눌러서 바로 찾을 수 있는 단서를 주는 편이 낫다.
+ *
+ * ⚠ **탭이 아니다**(2026-08-12 결정). 다섯 칸 중 하나를 AI 리포트에 내주고
+ *   검색은 조각을 찾으러 갈 때만 열리는 화면이 됐다 — 홈·모든 조각의 돋보기가 입구다.
+ *   그래서 배너를 두지 않는다(§7 "탭 화면만")고, `edges`에 아래를 넣는다(탭바가 없다).
  */
 export default function SearchScreen() {
   const { t } = useTranslation();
@@ -98,6 +102,14 @@ export default function SearchScreen() {
 
   const header = (
     <View style={styles.header}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('common.back')}
+        onPress={() => router.back()}
+        hitSlop={12}
+      >
+        <ChevronLeft size={26} color={colors.text} />
+      </Pressable>
       <View style={styles.field}>
         <Search size={18} color={colors.textMuted} />
         <TextField
@@ -123,7 +135,7 @@ export default function SearchScreen() {
   );
 
   return (
-    <Screen header={header} footer={<AdBanner />}>
+    <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
       {trimmed.length === 0 ? (
         <>
           <Text style={styles.sectionTitle}>{t('search.frequentTags')}</Text>
@@ -205,11 +217,16 @@ function ResultRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage |
 const createStyles = (colors: Palette) =>
   StyleSheet.create({
     header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.md,
       paddingBottom: spacing.sm,
     },
     field: {
+      // 뒤로가기 옆에서 남는 폭을 전부 먹는다 — 고정 폭이면 언어마다 어긋난다
+      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm,

@@ -79,6 +79,9 @@ SQLite의 `PRAGMA user_version`을 버전 카운터로 쓴다. 마이그레이�
 |---|---|
 | 1 | `diaries` 테이블 + 인덱스 3종 (초기) |
 | 2 | 본문 블록 · 이미지 · 태그 — `diaries.content_blocks` 추가, `diary_images`·`tags`·`diary_tags` 신설 |
+| 3 | `app_settings` 키-값 |
+| 4 | `backup_state`(커서) + `diary_images.blob_state` — [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
+| 5 | `ai_reports` — [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) |
 
 ### v2 (2026-08-07) — 본문 블록 · 이미지 · 태그
 
@@ -141,21 +144,64 @@ CREATE TABLE IF NOT EXISTS app_settings (
 | 값은 **문자열 하나로** | 불리언·숫자·enum을 한 컬럼에 담는다. 타입은 읽는 쪽이 안다(`getBoolSetting` 등) |
 | 소프트 삭제 없음 | 설정은 기기에 종속이고 되살릴 이유가 없다 |
 
+### v4 — 백업 커서 (2026-08-11)
+
+`backup_state`(단일 행) + `diary_images.blob_state`. DDL과 근거 주석은 `db/migrations.ts`가
+정본이고, 설계는 [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md)에 있다. 여기서는 **한 가지만** 기억한다:
+
+🔴 **`backup_state`는 복원의 교체 대상이 아니다.** 지워지면 앱이 `seq=1`부터 다시 올려 서버
+세대와 충돌하고, 남아 있으면 그건 *복원 전 기기의* 커서라 역시 어긋난다. 그래서 별도 테이블로
+빼고 복원의 마지막 단계가 복원한 세대로 맞춘다.
+
+### v5 — AI 리포트 (2026-08-12)
+
+```sql
+CREATE TABLE IF NOT EXISTS ai_reports (
+  id           TEXT    PRIMARY KEY NOT NULL,
+  kind         TEXT    NOT NULL,   -- 'weekly' | 'monthly' | 'yearly'
+  period_key   TEXT    NOT NULL,   -- '2026-W33' | '2026-08' | '2026'
+  lang         TEXT    NOT NULL,   -- 생성 당시의 출력 언어
+  summary      TEXT    NOT NULL,
+  concern      INTEGER NOT NULL DEFAULT 0,
+  source_count INTEGER NOT NULL DEFAULT 0,
+  model        TEXT,
+  prompt_ver   INTEGER,
+  created_at   INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_ai_reports_period ON ai_reports (kind, period_key);
+CREATE INDEX IF NOT EXISTS idx_ai_reports_kind_created ON ai_reports (kind, created_at DESC);
+```
+
+| 결정 | 이유 |
+|---|---|
+| **본문을 완성된 문자열로 저장** | §9.1 규칙 2(코드/id만 저장)의 **예외**다. 이건 코드가 아니라 생성된 콘텐츠고 같은 입력으로도 다시 못 만든다. 앱 언어를 바꿔도 옛 리포트는 옛 언어로 남는다 — 그게 정확하다 |
+| `lang`을 함께 저장 | 위와 짝이다. 무슨 언어로 쓰인 글인지 알아야 나중에 화면이 판단할 수 있다 |
+| `(kind, period_key)` UNIQUE | 중복 생성의 **1차 방어**(서버 멱등 키가 2차). 캡보다 먼저 걸린다 |
+| `concern`을 **컬럼**으로 | 본문에 섞으면 배너 판정이 문자열 매칭이 되고, 조용히 안 뜨는 날이 온다 |
+| `model` · `prompt_ver` | 재현성. 둘 다 움직이면 *"왜 그때는 달랐지"* 에 답할 수 없다 |
+| 소프트 삭제 없음 | 리포트는 기기 간 병합 대상이 아니다. 복원은 **통째 교체**라 묘비가 필요 없다 |
+| 🔴 **구독 상태를 담지 않는다** | 만료가 기록을 뺏는 경로를 스키마 차원에서 만들지 않는다. 삭제는 사용자만 한다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11.3) |
+
+**복원의 교체 대상이다** — `backup_state`와 반대다. 기기에 매인 값이 아니라 사용자의 기록이므로
+복원하면 그 세대의 리포트로 통째로 바뀌는 것이 맞다.
+
 ---
 
-## 5. 백업 대비 (아직 구현 안 함)
+## 5. 백업 대비 — ✅ 붙었다 (2026-08-11 · 2026-08-12)
 
-지금 스키마로 나중에 백업을 붙일 때 필요한 것과 이미 준비된 것.
+~~"아직 구현 안 함"~~. 아래 항목은 전부 v4·v5에서 해소됐다.
 
 | 필요한 것 | 상태 |
 |---|---|
 | 기기 간 충돌 없는 id | ✅ UUID |
 | 최신본 판단 기준 | ✅ `updated_at` |
 | 삭제 전파(묘비) | ✅ `deleted_at` |
-| 마지막 백업 시각 | ❌ 백업 착수 시 추가(별도 메타 테이블) |
-| 암호화 메타(알고리즘·버전) | ❌ 백업 착수 시 추가 |
+| 마지막 백업 시각 | ✅ v4 `backup_state.last_backup_at` |
+| 암호화 메타(알고리즘·버전) | ✅ 봉투 헤더가 갖는다(`features/backup/envelope.ts`) — DB가 아니다 |
+| AI 리포트도 백업에 포함 | ✅ v5 + `MANIFEST_FORMAT = 2`의 `reports` |
 
-> 백업 단위(전체 스냅샷 vs 증분)와 복원 충돌 규칙은 미결정 — [`ARCHITECTURE.md`](./ARCHITECTURE.md) §8.
+> 백업 단위는 **전체 스냅샷 + 차집합 경고**로 정해졌다(2026-08-11) —
+> [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md)가 정본이다.
 
 ---
 
@@ -165,5 +211,6 @@ CREATE TABLE IF NOT EXISTS app_settings (
 |---|---|
 | 스키마 v1 결정 | ✅ 2026-08-07 |
 | `db/` 구현(연결·마이그레이션) | ✅ `db/client.ts`(단일 커넥션·WAL) · `db/migrations.ts`(user_version) |
-| 쿼리 계층 | ✅ `features/diary/api/diary-repository.ts` |
-| 조각 서버 DB | ❌ — 월 결제 착수 시(§1) |
+| **현재 user_version** | ✅ **5** (v4 백업 커서 · v5 AI 리포트) |
+| 쿼리 계층 | ✅ `features/diary/api/diary-repository.ts` · `features/ai/api/report-repository.ts` |
+| 조각 서버 DB | ✅ ~~월 결제 착수 시~~ → `jogak-stg`(서울) 생성·배포됨. ⚠ 운영 프로젝트는 아직 없다 |

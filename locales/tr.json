@@ -21,7 +21,8 @@
     "calendar": "Takvim",
     "search": "Arama",
     "settings": "Ayarlar",
-    "write": "Yeni parça"
+    "write": "Yeni parça",
+    "report": "Raporlar"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}.{{month}}"
+    "short": "{{day}}.{{month}}",
+    "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
+    "weekNumber": "{{year}} {{week}}. hafta",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Mutlu",
@@ -167,7 +172,10 @@
     "sectionSupport": "Destek",
     "notice": "Duyurular",
     "support": "Bize ulaşın",
-    "privacy": "Gizlilik politikası"
+    "privacy": "Gizlilik politikası",
+    "aiReport": "Yapay zekâ raporları",
+    "reportLanguage": "Rapor dili",
+    "reportLanguageSameAsApp": "Uygulama diliyle aynı"
   },
   "lock": {
     "lockedTitle": "Parçaların kilitli",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• 7 günlük ücretsiz denemenin ardından otomatik olarak ücretlendirilirsin. Deneme sırasında iptal edersen ücret alınmaz.",
     "unavailable": "Abonelikler şu anda kullanılamıyor. Lütfen birazdan tekrar bak."
+  },
+  "report": {
+    "title": "Raporlar",
+    "weekly": "Haftalık",
+    "monthly": "Aylık",
+    "yearly": "Yıllık",
+    "sourceCount": "{{count}} kayıt",
+    "subReportCount": "{{count}} rapor",
+    "empty": "Henüz rapor yok",
+    "emptyBody": "Bir hafta tamamlandığında o haftanın kayıtlarını kısa bir geri bakışta toplarız.",
+    "create": "Rapor oluştur",
+    "creating": "Raporun yazılıyor",
+    "onceAWeek": "Haftada bir rapor oluşturabilirsin",
+    "needWeekly": "Önce bu ayın haftalık raporlarını oluştur",
+    "needMonthly": "Önce bu yılın aylık raporlarını oluştur",
+    "noEntries": "Bu dönemde kayıt yok",
+    "disclaimer": "Bir yapay zekâ tarafından yazıldı. Yanlış olabilir; teşhis ya da tavsiye değildir.",
+    "reportIssue": "Bildir",
+    "reported": "Bildirdiğin için teşekkürler. İnceleyeceğiz.",
+    "delete": "Raporu sil",
+    "deleteConfirm": "Bu rapor silinsin mi? Bu işlem geri alınamaz.",
+    "concernTitle": "Zor bir dönemden geçiyor gibisin.",
+    "concernBody": "Bunu tek başına taşımak zorunda değilsin.",
+    "concernChannel": "Yakınındaki birine ya da bir ruh sağlığı uzmanına açılmayı düşünebilirsin.",
+    "lockedTitle": "Her hafta geriye bakmak için bir an",
+    "lockedBody": "Geçen haftanın kayıtlarını böyle bir geri bakışta topluyoruz.",
+    "sampleBadge": "Örnek",
+    "sampleBody": "Pazartesileri yorgun okunuyordu, ama perşembe günkü sunumdan sonra cümleler kısaldı ve hafifledi. Bu hafta en çok yazdığın söz \"iyiyim\" oldu.",
+    "seeSubscription": "조각 Pro'yu keşfet",
+    "homeCardTitle": "Geçen haftanın raporu hazır",
+    "fail": {
+      "not-configured": "Rapor sunucusu yapılandırılmamış.",
+      "offline": "İnternete bağlı değilsin.",
+      "unauthorized": "Giriş yapman gerekiyor.",
+      "not-subscribed": "Abonelikle kullanılabilir.",
+      "refused": "Bu sefer rapor yazamadık. Bu deneme hakkından düşmez.",
+      "in-progress": "Zaten yazılıyor. Biraz bekle.",
+      "rate-limited": "Birazdan tekrar dene.",
+      "upstream": "Sunucuda bir sorun var. Kısa süre sonra tekrar dene.",
+      "error": "Bir şeyler ters gitti."
+    }
   }
 }

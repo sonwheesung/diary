@@ -21,7 +21,8 @@
     "calendar": "Lịch",
     "search": "Tìm kiếm",
     "settings": "Cài đặt",
-    "write": "Viết mảnh mới"
+    "write": "Viết mảnh mới",
+    "report": "Báo cáo"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} tháng {{month}} năm {{year}} ({{weekday}})",
     "monthYear": "Tháng {{month}} năm {{year}}",
     "monthYearWeekday": "Tháng {{month}} {{year}} ({{weekday}})",
-    "short": "{{day}}/{{month}}"
+    "short": "{{day}}/{{month}}",
+    "range": "{{fromDay}} – {{toDay}} tháng {{fromMonth}}",
+    "rangeCrossMonth": "{{fromDay}} tháng {{fromMonth}} – {{toDay}} tháng {{toMonth}}",
+    "weekNumber": "Tuần {{week}} năm {{year}}",
+    "yearOnly": "Năm {{year}}"
   },
   "emotion": {
     "joy": "Vui",
@@ -167,7 +172,10 @@
     "sectionSupport": "Hỗ trợ",
     "notice": "Thông báo",
     "support": "Liên hệ",
-    "privacy": "Chính sách bảo mật"
+    "privacy": "Chính sách bảo mật",
+    "aiReport": "Báo cáo AI",
+    "reportLanguage": "Ngôn ngữ báo cáo",
+    "reportLanguageSameAsApp": "Giống ngôn ngữ ứng dụng"
   },
   "lock": {
     "lockedTitle": "Các mảnh của bạn đang bị khóa",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Sau 7 ngày dùng thử miễn phí, phí sẽ được tính tự động. Hủy trong thời gian dùng thử thì bạn không bị tính phí.",
     "unavailable": "Hiện chưa đăng ký được. Vui lòng kiểm tra lại sau giây lát."
+  },
+  "report": {
+    "title": "Báo cáo",
+    "weekly": "Hằng tuần",
+    "monthly": "Hằng tháng",
+    "yearly": "Hằng năm",
+    "sourceCount": "{{count}} mảnh ghi",
+    "subReportCount": "{{count}} báo cáo",
+    "empty": "Chưa có báo cáo nào",
+    "emptyBody": "Khi một tuần trôi qua, chúng tôi sẽ gộp các mảnh của tuần đó thành một bản nhìn lại ngắn.",
+    "create": "Tạo báo cáo",
+    "creating": "Đang viết báo cáo",
+    "onceAWeek": "Mỗi tuần bạn có thể tạo một báo cáo",
+    "needWeekly": "Hãy tạo báo cáo tuần của tháng này trước",
+    "needMonthly": "Hãy tạo báo cáo tháng của năm nay trước",
+    "noEntries": "Không có mảnh nào trong khoảng thời gian này",
+    "disclaimer": "Do AI viết. Nội dung có thể không chính xác và không phải là chẩn đoán hay lời khuyên.",
+    "reportIssue": "Báo cáo vi phạm",
+    "reported": "Cảm ơn bạn đã cho chúng tôi biết. Chúng tôi sẽ xem xét.",
+    "delete": "Xoá báo cáo",
+    "deleteConfirm": "Xoá báo cáo này? Không thể hoàn tác.",
+    "concernTitle": "Có vẻ bạn đang trải qua một quãng thời gian khó khăn.",
+    "concernBody": "Bạn không cần phải gánh điều đó một mình.",
+    "concernChannel": "Hãy thử chia sẻ với người thân hoặc một chuyên gia sức khoẻ tinh thần.",
+    "lockedTitle": "Mỗi tuần, một khoảnh khắc nhìn lại",
+    "lockedBody": "Chúng tôi gộp các mảnh của tuần trước thành một bản nhìn lại như thế này.",
+    "sampleBadge": "Ví dụ",
+    "sampleBody": "Thứ Hai thường đọc lên thấy mệt, nhưng sau buổi thuyết trình hôm thứ Năm thì câu chữ ngắn lại và nhẹ hơn. Câu bạn nói nhiều nhất tuần này là \"không sao đâu\".",
+    "seeSubscription": "Tìm hiểu 조각 Pro",
+    "homeCardTitle": "Báo cáo tuần trước đã sẵn sàng",
+    "fail": {
+      "not-configured": "Máy chủ báo cáo chưa được cấu hình.",
+      "offline": "Bạn chưa kết nối internet.",
+      "unauthorized": "Bạn cần đăng nhập.",
+      "not-subscribed": "Có sẵn khi bạn đăng ký gói.",
+      "refused": "Lần này chúng tôi chưa viết được báo cáo. Lần thử này không tính vào giới hạn của bạn.",
+      "in-progress": "Báo cáo đang được viết. Vui lòng đợi một lát.",
+      "rate-limited": "Vui lòng thử lại sau giây lát.",
+      "upstream": "Máy chủ đang gặp sự cố. Vui lòng thử lại sau.",
+      "error": "Đã xảy ra lỗi."
+    }
   }
 }

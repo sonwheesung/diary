@@ -21,7 +21,8 @@
     "calendar": "行事曆",
     "search": "搜尋",
     "settings": "設定",
-    "write": "寫一片"
+    "write": "寫一片",
+    "report": "報告"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "monthYear": "{{year}}年{{month}}月",
     "monthYearWeekday": "{{month}}月 {{year}} 星期{{weekday}}",
-    "short": "{{month}}/{{day}}"
+    "short": "{{month}}/{{day}}",
+    "range": "{{fromMonth}}月{{fromDay}}日 – {{toDay}}日",
+    "rangeCrossMonth": "{{fromMonth}}月{{fromDay}}日 – {{toMonth}}月{{toDay}}日",
+    "weekNumber": "{{year}}年 第{{week}}週",
+    "yearOnly": "{{year}}年"
   },
   "emotion": {
     "joy": "開心",
@@ -167,7 +172,10 @@
     "sectionSupport": "支援",
     "notice": "公告",
     "support": "聯絡我們",
-    "privacy": "隱私政策"
+    "privacy": "隱私政策",
+    "aiReport": "AI 報告",
+    "reportLanguage": "報告語言",
+    "reportLanguageSameAsApp": "與應用程式語言相同"
   },
   "lock": {
     "lockedTitle": "你的碎片已鎖定",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• 7 天免費試用後將自動扣款。在試用期內取消則不會產生費用。",
     "unavailable": "目前無法訂閱，請稍後再查看。"
+  },
+  "report": {
+    "title": "報告",
+    "weekly": "每週",
+    "monthly": "每月",
+    "yearly": "每年",
+    "sourceCount": "{{count}} 則碎片",
+    "subReportCount": "{{count}} 份報告",
+    "empty": "還沒有報告",
+    "emptyBody": "一週過去後，我們會把這一週的碎片彙成一段回顧。",
+    "create": "產生報告",
+    "creating": "正在產生報告",
+    "onceAWeek": "報告每週可以產生一次",
+    "needWeekly": "請先產生本月的每週報告",
+    "needMonthly": "請先產生今年的每月報告",
+    "noEntries": "這段期間沒有碎片",
+    "disclaimer": "由 AI 撰寫的摘要。內容可能有誤，也不構成診斷或建議。",
+    "reportIssue": "檢舉",
+    "reported": "謝謝告知，我們會查看。",
+    "delete": "刪除報告",
+    "deleteConfirm": "要刪除這份報告嗎？此動作無法復原。",
+    "concernTitle": "你似乎正在經歷一段艱難的日子。",
+    "concernBody": "你不必獨自承受。",
+    "concernChannel": "可以試著和身邊的人或專業人士聊一聊。",
+    "lockedTitle": "每週留一點回望的時間",
+    "lockedBody": "我們會把上週的碎片彙成這樣一段回顧。",
+    "sampleBadge": "範例",
+    "sampleBody": "週一常常透著疲憊，但週四的簡報結束後，句子變短也變輕了。這一週你說得最多的是「沒關係」。",
+    "seeSubscription": "了解 조각 Pro",
+    "homeCardTitle": "上週的報告已經好了",
+    "fail": {
+      "not-configured": "尚未設定報告伺服器。",
+      "offline": "目前沒有連線到網路。",
+      "unauthorized": "需要先登入。",
+      "not-subscribed": "訂閱後即可使用。",
+      "refused": "這次沒能產生報告。本次嘗試不計入次數。",
+      "in-progress": "已經在產生中，請稍候。",
+      "rate-limited": "請稍後再試。",
+      "upstream": "伺服器發生問題，請稍後再試。",
+      "error": "發生了問題。"
+    }
   }
 }

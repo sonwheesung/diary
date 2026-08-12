@@ -80,6 +80,19 @@ throw new Error(translate('errors.alreadyWritten'));
 
 숫자만 쓰는 언어는 `{{month}}`를, 달 이름을 쓰는 언어는 `{{monthName}}`를 쓰면 된다.
 
+🔴 **그래서 `date.*`만은 자리표시자가 언어마다 달라도 된다.** `apply-translations.mjs`는
+원문과 자리표시자가 다르면 거부하는데(§번역 현황), 그 규칙이 옳은 이유는 일반 문구에서
+`{{count}}`가 빠지면 숫자가 사라지기 때문이다. 날짜 틀은 반대로 **다른 것이 정답**이다 —
+`date.*`는 적용기를 태우지 말고 직접 넣는다.
+
+⚠ **`monthName`을 빈 문자열로 넘기지 않는다.** en·de의 틀이 `{{monthName}} {{year}}`라
+`" 2026"`이 된다. 숫자를 쓰는 언어와 이름을 쓰는 언어가 섞여 있으므로 **항상 둘 다 넘긴다**
+(2026-08-12에 `formatPeriodMonth`에서 실제로 겪음).
+
+**주 범위(`date.range`)는 달 경계에서 틀이 갈린다.** `8월 10일 – 16일`과
+`7월 27일 – 8월 2일`은 문장 구조가 달라서 `date.rangeCrossMonth`로 키를 나눴다 —
+한 키에 조건을 넣으면 언어마다 그 조건이 다르다.
+
 ### 4.3 언어 이름은 **그 언어로** 적는다
 
 `LANGUAGE_LABELS`의 `한국어`·`English`는 번역하지 않는다. 영어 화면에서 'Korean'으로 보이면
@@ -147,6 +160,20 @@ npm run check:i18n
 
 ---
 
+## 번역 현황 — `report.*` · `date.*` 추가 (2026-08-12)
+
+AI 리포트 화면의 **32키 + `report.fail.*` 9키 + `date.*` 4키**를 15개 언어에 넣었다.
+
+| | |
+|---|---|
+| `report.fail.*` | **코드를 그대로 키로 쓴다** — `backup.fail.*`과 같은 규약. 사유마다 다음에 할 일이 달라서 뭉뚱그린 "오류가 발생했습니다"를 쓰지 않는다 |
+| 재사용 금지 | 🔴 `backup.notice.*`와 **절대 섞지 않는다.** 고지가 정반대다(백업 = 저장하되 못 읽음 / AI = 읽되 저장 안 함, `CLAUDE.md` §5.1) |
+| `date.*` 4키 | `range` · `rangeCrossMonth` · `weekNumber` · `yearOnly`. 위 §4.2대로 **자리표시자가 언어마다 다르다** |
+
+⚠ 여기도 원어민 검수 전이다. 위험 목록에 세 줄이 늘었다(아래).
+
+---
+
 ## 번역 현황 — `backup.*` · `subscribe.*` (2026-08-11)
 
 15개 언어 **전부 번역됐다**(각 120키). 전에는 ko·en만 실제 번역이고 13개 언어가
@@ -171,6 +198,9 @@ npm run check:i18n
 | `backup.restoreLosing*` · `restoreConfirmBody` | **"지워진다"가 "저장된다"로 읽히면 일기가 사라진다** |
 | `backup.graceTitle` · `graceBody` | 삭제 예정일 안내. 오독하면 백업을 잃는다 |
 | `subscribe.consent*` | 전자상거래법 §13⑥ 동의 문구 — **법적 효력이 걸린다** |
+| `report.concernTitle` · `concernBody` · `concernChannel` | **위기 배너**. 가장 힘든 순간에 읽는 문장이고, 어색하거나 훈계조로 번역되면 안 하느니만 못하다 |
+| `report.disclaimer` | *"AI가 썼고 진단이 아니다"* — **Play 생성형 AI 정책 필수 고지**다 |
+| `report.sampleBadge` | **"예시"**. 약하게 번역되면 무료 사용자가 남의 문장을 자기 일기의 요약으로 읽는다 |
 
 ⏭ 우선순위는 **한국어 다음으로 사용자가 많을 언어**(en → ja → zh)부터다.
    독일어·이탈리아어는 EEA 배포 제외로 당장 사용처가 없다(§배포 지역 제약).

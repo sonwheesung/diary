@@ -1,6 +1,7 @@
 import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
 import ChevronLeft from 'lucide-react-native/icons/chevron-left';
+import Search from 'lucide-react-native/icons/search';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -84,8 +85,18 @@ export default function DiariesScreen() {
         <ChevronLeft size={26} color={colors.text} />
       </Pressable>
       <Text style={styles.headerTitle}>{t('diaries.title')}</Text>
-      {/* 좌우 균형을 맞추는 빈 자리 — 제목이 가운데 오게 한다 */}
-      <View style={styles.headerSpacer} />
+      {/*
+        검색이 탭에서 빠졌으므로(2026-08-12) **조각이 모여 있는 자리마다 돋보기를 둔다.**
+        홈에만 두면 목록을 훑다가 못 찾았을 때 돌아 나가야 한다 — 찾고 싶어지는 자리가 여기다.
+      */}
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('common.search')}
+        onPress={() => router.push('/search')}
+        hitSlop={12}
+      >
+        <Search size={22} color={colors.textMuted} />
+      </Pressable>
     </View>
   );
 
@@ -186,9 +197,6 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
-    },
-    headerSpacer: {
-      width: 26,
     },
     center: {
       flex: 1,

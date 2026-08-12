@@ -21,7 +21,8 @@
     "calendar": "캘린더",
     "search": "검색",
     "settings": "설정",
-    "write": "조각 쓰기"
+    "write": "조각 쓰기",
+    "report": "리포트"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{year}}년 {{month}}월 {{day}}일 ({{weekday}})",
     "monthYear": "{{year}}년 {{month}}월",
     "monthYearWeekday": "{{month}}월 {{year}} ({{weekday}})",
-    "short": "{{month}}.{{day}}"
+    "short": "{{month}}.{{day}}",
+    "range": "{{fromMonth}}월 {{fromDay}}일 – {{toDay}}일",
+    "rangeCrossMonth": "{{fromMonth}}월 {{fromDay}}일 – {{toMonth}}월 {{toDay}}일",
+    "weekNumber": "{{year}}년 {{week}}주",
+    "yearOnly": "{{year}}년"
   },
   "emotion": {
     "joy": "기쁨",
@@ -167,7 +172,10 @@
     "sectionSupport": "지원",
     "notice": "공지사항",
     "support": "문의하기",
-    "privacy": "개인정보처리방침"
+    "privacy": "개인정보처리방침",
+    "aiReport": "AI 리포트",
+    "reportLanguage": "리포트 언어",
+    "reportLanguageSameAsApp": "앱 언어와 같음"
   },
   "lock": {
     "lockedTitle": "조각이 잠겨 있어요",
@@ -404,5 +412,46 @@
     "title": "조각 Pro",
     "trialNotice": "• 7일 무료 체험 후 자동으로 결제돼요. 체험 기간에 해지하시면 청구되지 않아요.",
     "unavailable": "지금은 구독할 수 없어요. 잠시 뒤 다시 확인해 주세요."
+  },
+  "report": {
+    "title": "리포트",
+    "weekly": "주간",
+    "monthly": "월간",
+    "yearly": "연간",
+    "sourceCount": "조각 {{count}}개",
+    "subReportCount": "리포트 {{count}}개",
+    "empty": "아직 리포트가 없어요",
+    "emptyBody": "한 주가 지나면 그 주의 조각을 모아 회고를 만들어 드려요.",
+    "create": "리포트 만들기",
+    "creating": "리포트를 만들고 있어요",
+    "onceAWeek": "리포트는 주에 한 번 만들 수 있어요",
+    "needWeekly": "이 달의 주간 리포트를 먼저 만들어 주세요",
+    "needMonthly": "이 해의 월간 리포트를 먼저 만들어 주세요",
+    "noEntries": "이 기간에 남긴 조각이 없어요",
+    "disclaimer": "AI가 쓴 요약이에요. 사실과 다를 수 있고, 진단이나 조언이 아닙니다.",
+    "reportIssue": "신고",
+    "reported": "알려주셔서 고마워요. 살펴보겠습니다.",
+    "delete": "리포트 삭제",
+    "deleteConfirm": "이 리포트를 삭제할까요? 되돌릴 수 없어요.",
+    "concernTitle": "힘든 시간을 지나고 계신 것 같아요.",
+    "concernBody": "혼자 감당하지 않으셔도 돼요.",
+    "concernChannel": "자살예방 상담전화 109 · 24시간",
+    "lockedTitle": "매주 돌아보는 시간",
+    "lockedBody": "지난주 조각을 모아 이런 회고를 만들어 드려요.",
+    "sampleBadge": "예시",
+    "sampleBody": "월요일에는 지친 기색이 자주 보였는데, 목요일 발표가 끝난 뒤로 문장이 짧아지고 가벼워졌어요. 이번 주에 가장 자주 쓰신 말은 '괜찮다'였어요.",
+    "seeSubscription": "조각 Pro 알아보기",
+    "homeCardTitle": "지난주 리포트가 준비됐어요",
+    "fail": {
+      "not-configured": "리포트 서버가 설정되지 않았어요.",
+      "offline": "인터넷에 연결되어 있지 않아요.",
+      "unauthorized": "로그인이 필요해요.",
+      "not-subscribed": "구독하면 이용할 수 있어요.",
+      "refused": "이번에는 리포트를 만들지 못했어요. 이 시도는 횟수에 포함되지 않아요.",
+      "in-progress": "이미 만들고 있어요. 잠시만 기다려 주세요.",
+      "rate-limited": "잠시 뒤 다시 시도해 주세요.",
+      "upstream": "서버에 문제가 있어요. 잠시 뒤 다시 시도해 주세요.",
+      "error": "문제가 생겼어요."
+    }
   }
 }

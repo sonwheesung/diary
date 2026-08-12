@@ -343,12 +343,19 @@ const diary = (id, over = {}) => ({
   emotion: 'joy', created_at: 1, updated_at: 2, deleted_at: null, ...over,
 });
 
+const report = (id, over = {}) => ({
+  id, kind: 'weekly', period_key: '2026-W33', lang: 'ko',
+  summary: `요약 ${id}`, concern: 0, source_count: 7,
+  model: 'gpt-5.6-luna', prompt_ver: 1, created_at: 100, ...over,
+});
+
 const fullManifest = () => ({
-  dbVersion: 4,
+  dbVersion: 5,
   diaries: [diary('a'), diary('b'), diary('c', { deleted_at: 99, content: '' })],
   images: [{ id: 'i1', diary_id: 'a', file_name: 'x.jpg', width: 800, height: 600, created_at: 1, deleted_at: null }],
   tags: [{ id: 't1', name: '여행', created_at: 10 }, { id: 't2', name: '일상', created_at: 20 }],
   diaryTags: [{ diary_id: 'a', tag_id: 't1' }],
+  reports: [report('r1'), report('r2', { kind: 'monthly', period_key: '2026-08', concern: 1 })],
 });
 
 check('매니페스트 · UTF-8 왕복 (한글·이모지·서러게이트 쌍)', () => {
@@ -374,8 +381,38 @@ check('매니페스트 · 여러 파트로 나뉘어도 왕복 (각 파트가 �
 });
 
 check('매니페스트 · 파트가 비어 있어도 무한 루프에 빠지지 않는다', () => {
-  const empty = { dbVersion: 4, diaries: [], images: [], tags: [], diaryTags: [] };
+  const empty = { dbVersion: 5, diaries: [], images: [], tags: [], diaryTags: [], reports: [] };
   eq(splitManifest(empty, 10).length, 1, '빈 매니페스트는 파트 1개');
+});
+
+check('🔴 매니페스트 · 리포트가 여러 파트로 나뉘어도 딱 한 번만 실린다', () => {
+  // 리포트는 첫 파트에만 넣는다. 파트마다 넣으면 복원 시 중복되고,
+  // 안 넣으면 통째로 사라진다 — 둘 다 조용하다
+  const original = fullManifest();
+  const parts = splitManifest(original, 200);
+  if (parts.length < 2) throw new Error(`나뉘지 않았다 (${parts.length}파트)`);
+  const joined = joinManifest(parts);
+  eq(joined.reports.length, 2, '리포트 수');
+  eq(JSON.stringify(joined.reports), JSON.stringify(original.reports), '리포트 왕복 불일치');
+});
+
+check('🔴 매니페스트 · v1 백업(reports 없음)도 복원된다 — 형식 상승이 옛 백업을 막지 않는다', () => {
+  // 엄격 일치로 두면 형식을 올리는 순간 이미 만들어진 백업이 전부 복원 불가가 된다
+  const v1 = encodeUtf8(JSON.stringify({
+    v: 1, dbVersion: 4,
+    diaries: [diary('a')], images: [], tags: [], diaryTags: [],
+    // reports 없음 — v1에는 이 필드 자체가 없었다
+  }));
+  const joined = joinManifest([v1]);
+  eq(joined.reports.length, 0, 'reports가 빈 배열이어야 한다');
+  eq(joined.diaries.length, 1, '조각은 살아 있어야 한다');
+});
+
+check('매니페스트 · 더 새 형식은 여전히 거부한다', () => {
+  const future = encodeUtf8(JSON.stringify({
+    v: 99, dbVersion: 4, diaries: [], images: [], tags: [], diaryTags: [], reports: [],
+  }));
+  throws(() => joinManifest([future]), '형식 v99');
 });
 
 check('매니페스트 · content_blocks를 파싱하지 않고 문자열 그대로 나른다', () => {
@@ -479,4 +516,8 @@ if (failures.length > 0) {
   for (const failure of failures) console.error(`  ✗ ${failure}\n`);
   process.exit(1);
 }
-console.log(`백업 암호 ok — ${passed}개 검사 통과 (KAT 3 + 봉투 8 + 세대 4 + 복구 코드 9 + 매니페스트 9 + 전체 경로 7)`);
+// ⚠ 이 내역은 손으로 유지한다 — 검사를 더하면 여기도 고친다.
+//   2026-08-12에 합계와 3개 어긋나 있는 것을 발견하고 다시 셌다.
+console.log(
+  `백업 암호 ok — ${passed}개 검사 통과 (KAT 4 + 유도값 1 + 봉투 8 + 세대 4 + 복구 코드 10 + 매니페스트 12 + 전체 경로 7)`,
+);

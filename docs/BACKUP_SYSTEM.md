@@ -129,6 +129,22 @@ magic "JGKB" 4 | version 1 | suite 1 | flags 1 | kid 4 | type 1 | ctxLen 1 | con
 | `dbVersion` | 봉투의 `version`은 **암호 형식**이라 스키마를 말해주지 않는다. 없으면 새 앱이 만든 백업을 옛 앱이 복원할 때 컬럼을 조용히 버리거나 raw SQL 오류로 죽는다 — 그것도 전부 받아 복호화한 뒤에. **더 새 스키마는 거부한다** |
 | 묘비 | 본문은 비우되 행은 싣는다. ⚠ `content`·`created_at`·`updated_at`이 **NOT NULL**이라 "id·날짜·`deleted_at`만"으로 만들면 복원 INSERT가 통째로 실패한다 |
 | `tags.created_at` | 태그 표시 순서의 유일한 출처 |
+| **`reports`** (2026-08-12) | AI 리포트는 **다시 만들 수 없다** — 캡이 주 1회이고, 원본 조각이 그대로여도 같은 문장이 나오지 않는다. 조각만 복원하면 폰을 바꾼 사람이 1년치 회고를 잃는다 |
+
+### 매니페스트 형식 버전 — `MANIFEST_FORMAT` (2026-08-12: 1 → 2)
+
+`reports`가 추가되면서 형식을 올렸다. `dbVersion`(스키마)과 **다른 축**이다 —
+매니페스트 자체의 모양이 바뀌었는지를 말한다.
+
+🔴 **판정을 하마터면 틀릴 뻔했다.** 검증이 `format !== MANIFEST_FORMAT`이면 거부하는 모양이었고,
+그대로 2로 올렸으면 **기존 v1 백업이 전부 복원 불가**가 됐다. 지금은 `format > MANIFEST_FORMAT` —
+*더 새 것만* 거부한다. 옛 형식은 언제까지나 읽는다(Expand-only와 같은 규율).
+
+`check-backup-crypto.mjs`에 두 검사를 박아뒀다: **v1 매니페스트가 복원되는가**,
+**v99가 거부되는가**. 이건 눈으로 보이지 않는 종류라 검사가 아니면 다음에 또 틀린다.
+
+⚠ 옛 앱이 v2 매니페스트를 복원하면 `reports`를 모르고 버린다. `dbVersion`이 그걸 먼저
+거부하므로 조용한 손실은 아니다.
 
 ### 파트마다 완결된 JSON
 
@@ -457,7 +473,7 @@ blob_key = HKDF-SHA256(DEK, "jogak/blob/v1" ‖ image_id, 32B)  → 소문자 he
 
 | 분류 | 대상 |
 |---|---|
-| **교체** | `diaries` · `diary_images` · `tags` · `diary_tags` |
+| **교체** | `diaries` · `diary_images` · `tags` · `diary_tags` · **`ai_reports`**(2026-08-12) |
 | **보존** | `app_settings` 전체 + `backup_state` |
 | **병합** | **없음** |
 | **외부(건드리지 않음)** | `Paths.document/diary-images/` 파일 트리 |
@@ -467,6 +483,10 @@ blob_key = HKDF-SHA256(DEK, "jogak/blob/v1" ‖ image_id, 32B)  → 소문자 he
   남으면 **복원 전 기기의 커서**라 역시 어긋난다. 그래서 별도 테이블이다.
 - ⚠ `blob_state`를 매니페스트 값이 아니라 **`'missing'`으로 강제**한다. 1차는 사진 파일을
   안 가져오므로 원본의 `'present'`를 쓰면 "파일이 있다"고 주장하는 행이 생긴다.
+- ⚠ `ai_reports`가 **교체**인 이유: `backup_state`와 달리 기기에 매인 값이 아니라 사용자의
+  기록이다. 병합하면 같은 `(kind, period_key)`가 둘 생겨 UNIQUE가 터진다 —
+  전체 교체가 곧 정답이고, 차집합 경고는 조각 기준이므로 리포트에는 따로 세지 않는다.
+  ⏭ 리포트만 남기고 조각을 되돌리는 사람은 없다고 본다. 나오면 그때 다시 본다.
 - 복원의 **마지막 단계**가 커서를 복원한 세대로 맞춘다. 빠뜨리면 직후 첫 백업이 409를 받는다.
 
 ---
@@ -577,7 +597,7 @@ stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까�
 
 | 명령 | 무엇을 |
 |---|---|
-| `npm run check:backup-crypto` | **43개** — KAT 3 · 봉투 8 · 세대 4 · 복구 코드 9 · 매니페스트 9 · 전체 경로 7 |
+| `npm run check:backup-crypto` | **46개** — KAT 4 · 유도값 1 · 봉투 8 · 세대 4 · 복구 코드 10 · 매니페스트 **12** · 전체 경로 7 |
 | `npm run check:i18n-roundtrip` | **54개** — 25개 스크립트의 UTF-8·매니페스트 왕복 |
 | `npm run check:bundle` | 번들 상한 (기준선 3.67MB) |
 | `cd server && npm run e2e` | **21개** — reserve→PUT→commit→latest→다운로드 · 되찾기 인가 4종 · **삭제 5종** · 리퍼 2종 |

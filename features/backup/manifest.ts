@@ -18,8 +18,16 @@
  * 행을 나눠 담은 **독립 문서**로 만든다. 읽는 쪽은 배열을 이어붙이기만 하면 된다.
  */
 
-/** 매니페스트 페이로드 형식 버전. 봉투의 `version`(암호 형식)과 **다른 축**이다 */
-export const MANIFEST_FORMAT = 1;
+/**
+ * 매니페스트 페이로드 형식 버전. 봉투의 `version`(암호 형식)과 **다른 축**이다.
+ *
+ * ~~1~~ → **2**(2026-08-12): `reports`를 추가했다.
+ *
+ * ⚠ 옛 앱이 v2 매니페스트를 복원하면 `reports`를 모르고 버린다. 그건 `dbVersion`이
+ *   알려주므로 **조용한 손실이 아니다** — 매니페스트 규약이 그렇게 설계돼 있다.
+ *   반대로 새 앱이 v1을 복원하면 `reports`가 없을 뿐이고, 그때는 빈 배열로 읽는다.
+ */
+export const MANIFEST_FORMAT = 2;
 
 /** `diaries` 원본 행. 컬럼 이름을 그대로 쓴다 — 매핑 층을 하나 없앤다 */
 export interface DiaryRow {
@@ -69,6 +77,30 @@ export interface DiaryTagRow {
   tag_id: string;
 }
 
+/**
+ * `ai_reports` 원본 행.
+ *
+ * 🔴 **리포트를 백업에 싣는 이유**: 본문이 로컬에만 있어서, 기기를 잃으면 그대로 사라진다.
+ *   조각과 똑같이 사용자의 기록이고 다시 만들 수 없다 — 같은 입력으로도 생성 결과가 다르다.
+ *
+ * ⚠ 요약에는 일기 내용이 녹아 있으므로 **당연히 암호화되어 나간다.** 서버는 못 읽는다.
+ *   그래서 매니페스트에 함께 싣는 것으로 충분하고, `ENVELOPE_TYPE.aiReport = 2`는
+ *   예약으로 남겨둔다(별도 객체로 뺄 이유가 없다).
+ */
+export interface ReportRow {
+  id: string;
+  kind: string;
+  period_key: string;
+  lang: string;
+  summary: string;
+  /** SQLite에는 boolean이 없다. 0 | 1 */
+  concern: number;
+  source_count: number;
+  model: string | null;
+  prompt_ver: number | null;
+  created_at: number;
+}
+
 /** 파트 하나 = 완결된 JSON 문서 */
 export interface ManifestPart {
   /** 페이로드 형식 */
@@ -85,6 +117,8 @@ export interface ManifestPart {
   images: ImageRow[];
   tags: TagRow[];
   diaryTags: DiaryTagRow[];
+  /** ⚠ v1 매니페스트에는 없다. 읽을 때 `?? []`로 받는다 */
+  reports: ReportRow[];
 }
 
 /** 여러 파트를 합친 결과 */
@@ -94,6 +128,8 @@ export interface Manifest {
   images: ImageRow[];
   tags: TagRow[];
   diaryTags: DiaryTagRow[];
+  /** ⚠ v1 매니페스트에는 없다. 읽을 때 `?? []`로 받는다 */
+  reports: ReportRow[];
 }
 
 export class ManifestError extends Error {
@@ -192,6 +228,8 @@ export function splitManifest(manifest: Manifest, maxBytes: number): Uint8Array[
       images: first ? manifest.images : [],
       tags: first ? manifest.tags : [],
       diaryTags: first ? manifest.diaryTags : [],
+      // 리포트도 첫 파트에 싣는다 — 주당 하나라 1년 써야 52개다. 페이징할 크기가 아니다
+      reports: first ? manifest.reports : [],
     };
     let bytes = encodeUtf8(JSON.stringify(part)).length;
 
@@ -222,7 +260,14 @@ export function joinManifest(parts: readonly Uint8Array[]): Manifest {
     throw new ManifestError('JGKB-M01', '매니페스트 파트가 없다');
   }
 
-  const merged: Manifest = { dbVersion: 0, diaries: [], images: [], tags: [], diaryTags: [] };
+  const merged: Manifest = {
+    dbVersion: 0,
+    diaries: [],
+    images: [],
+    tags: [],
+    diaryTags: [],
+    reports: [],
+  };
   let formatSeen: number | null = null;
 
   for (const bytes of parts) {
@@ -242,9 +287,23 @@ export function joinManifest(parts: readonly Uint8Array[]): Manifest {
     merged.images.push(...(part.images ?? []));
     merged.tags.push(...(part.tags ?? []));
     merged.diaryTags.push(...(part.diaryTags ?? []));
+    // ⚠ v1에는 없는 필드다. `?? []`가 그 호환을 담당한다
+    merged.reports.push(...(part.reports ?? []));
   }
 
-  if (formatSeen !== MANIFEST_FORMAT) {
+  /*
+   * ⚠ **옛 형식은 받고, 새 형식만 거부한다.**
+   *
+   * ~~`formatSeen !== MANIFEST_FORMAT`~~ → `formatSeen > MANIFEST_FORMAT` (2026-08-12 정정).
+   *
+   * 🔴 엄격 일치로 두면 형식을 올리는 순간 **이미 만들어진 백업이 전부 복원 불가**가 된다.
+   *   v1 → v2는 `reports`를 더한 것뿐이라 옛 백업을 읽는 데 아무 문제가 없다 — 없는 필드는
+   *   위에서 빈 배열로 받는다. 형식 상승은 앞으로도 이렇게 **덧붙이기만** 한다.
+   *
+   * 반대로 **더 새 형식은 여전히 거부한다.** 조용히 모르는 필드를 버리면 사용자는 복원이
+   * 성공했다고 믿고, 그 상태로 다음 백업을 눌러 잘린 데이터를 새 정본으로 만든다.
+   */
+  if (formatSeen === null || formatSeen > MANIFEST_FORMAT) {
     throw new ManifestError('JGKB-M04', `모르는 매니페스트 형식 v${formatSeen}`);
   }
   return merged;

@@ -21,7 +21,8 @@
     "calendar": "Calendrier",
     "search": "Recherche",
     "settings": "Réglages",
-    "write": "Nouvelle entrée"
+    "write": "Nouvelle entrée",
+    "report": "Bilans"
   },
   "date": {
     "weekdays": [
@@ -39,7 +40,11 @@
     "listWithYear": "{{day}} {{monthName}} {{year}} ({{weekday}})",
     "monthYear": "{{monthName}} {{year}}",
     "monthYearWeekday": "{{monthName}} {{year}} ({{weekday}})",
-    "short": "{{day}}/{{month}}"
+    "short": "{{day}}/{{month}}",
+    "range": "{{fromDay}} – {{toDay}} {{fromMonthName}}",
+    "rangeCrossMonth": "{{fromDay}} {{fromMonthName}} – {{toDay}} {{toMonthName}}",
+    "weekNumber": "Semaine {{week}} de {{year}}",
+    "yearOnly": "{{year}}"
   },
   "emotion": {
     "joy": "Joie",
@@ -167,7 +172,10 @@
     "sectionSupport": "Aide",
     "notice": "Annonces",
     "support": "Nous contacter",
-    "privacy": "Politique de confidentialité"
+    "privacy": "Politique de confidentialité",
+    "aiReport": "Bilans IA",
+    "reportLanguage": "Langue du bilan",
+    "reportLanguageSameAsApp": "Comme la langue de l'app"
   },
   "lock": {
     "lockedTitle": "Tes fragments sont verrouillés",
@@ -404,5 +412,46 @@
     "title": "Jogak Pro",
     "trialNotice": "• Après l'essai gratuit de 7 jours, le débit est automatique. Si vous résiliez pendant l'essai, rien ne vous est facturé.",
     "unavailable": "Les abonnements ne sont pas disponibles pour le moment. Revenez dans un instant."
+  },
+  "report": {
+    "title": "Bilans",
+    "weekly": "Hebdo",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "sourceCount": "{{count}} entrées",
+    "subReportCount": "{{count}} bilans",
+    "empty": "Pas encore de bilan",
+    "emptyBody": "Une fois la semaine écoulée, nous rassemblerons ses entrées en un court retour.",
+    "create": "Créer un bilan",
+    "creating": "Rédaction de votre bilan",
+    "onceAWeek": "Vous pouvez créer un bilan par semaine",
+    "needWeekly": "Créez d'abord les bilans hebdomadaires de ce mois",
+    "needMonthly": "Créez d'abord les bilans mensuels de cette année",
+    "noEntries": "Aucune entrée sur cette période",
+    "disclaimer": "Rédigé par une IA. Le texte peut être inexact et ne constitue ni un diagnostic ni un conseil.",
+    "reportIssue": "Signaler",
+    "reported": "Merci de nous l'avoir signalé. Nous allons vérifier.",
+    "delete": "Supprimer le bilan",
+    "deleteConfirm": "Supprimer ce bilan ? Cette action est irréversible.",
+    "concernTitle": "Vous semblez traverser une période difficile.",
+    "concernBody": "Vous n'avez pas à porter cela seul·e.",
+    "concernChannel": "Envisagez d'en parler à un proche ou à un professionnel de santé mentale.",
+    "lockedTitle": "Un temps pour revenir en arrière, chaque semaine",
+    "lockedBody": "Nous rassemblons les entrées de la semaine passée en un retour comme celui-ci.",
+    "sampleBadge": "Exemple",
+    "sampleBody": "Les lundis semblaient fatigués, mais après la présentation de jeudi, les phrases sont devenues plus courtes et plus légères. Le mot le plus répété cette semaine était « ça va ».",
+    "seeSubscription": "Découvrir 조각 Pro",
+    "homeCardTitle": "Le bilan de la semaine dernière est prêt",
+    "fail": {
+      "not-configured": "Le serveur de bilans n'est pas configuré.",
+      "offline": "Vous n'êtes pas connecté·e à internet.",
+      "unauthorized": "Vous devez vous connecter.",
+      "not-subscribed": "Disponible avec un abonnement.",
+      "refused": "Nous n'avons pas pu rédiger le bilan cette fois. Cette tentative ne compte pas dans votre limite.",
+      "in-progress": "La rédaction est déjà en cours. Patientez un instant.",
+      "rate-limited": "Réessayez dans un instant.",
+      "upstream": "Le serveur rencontre un problème. Réessayez bientôt.",
+      "error": "Un problème est survenu."
+    }
   }
 }
