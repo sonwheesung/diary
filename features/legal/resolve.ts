@@ -2,6 +2,10 @@ import { PRIVACY } from '@/features/legal/legal-text';
 import type { LegalDoc } from '@/features/legal/legal-text';
 import { PRIVACY_EN } from '@/features/legal/translations/en';
 import { PRIVACY_JA } from '@/features/legal/translations/ja';
+import { PRIVACY_ZH_HANS } from '@/features/legal/translations/zh-Hans';
+import { PRIVACY_ZH_HANT } from '@/features/legal/translations/zh-Hant';
+import { PRIVACY_ES } from '@/features/legal/translations/es';
+import { PRIVACY_PT_BR } from '@/features/legal/translations/pt-BR';
 import { i18next } from '@/lib/i18n';
 
 /**
@@ -30,6 +34,10 @@ import { i18next } from '@/lib/i18n';
 const TRANSLATIONS: Record<string, LegalDoc> = {
   en: PRIVACY_EN,
   ja: PRIVACY_JA,
+  'zh-Hans': PRIVACY_ZH_HANS,
+  'zh-Hant': PRIVACY_ZH_HANT,
+  es: PRIVACY_ES,
+  'pt-BR': PRIVACY_PT_BR,
 };
 
 export interface ResolvedLegal {

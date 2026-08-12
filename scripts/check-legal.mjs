@@ -19,8 +19,19 @@
 import { PRIVACY } from '../features/legal/legal-text.ts';
 import { PRIVACY_EN } from '../features/legal/translations/en.ts';
 import { PRIVACY_JA } from '../features/legal/translations/ja.ts';
+import { PRIVACY_ZH_HANS } from '../features/legal/translations/zh-Hans.ts';
+import { PRIVACY_ZH_HANT } from '../features/legal/translations/zh-Hant.ts';
+import { PRIVACY_ES } from '../features/legal/translations/es.ts';
+import { PRIVACY_PT_BR } from '../features/legal/translations/pt-BR.ts';
 
-const TRANSLATIONS = { en: PRIVACY_EN, ja: PRIVACY_JA };
+const TRANSLATIONS = {
+  en: PRIVACY_EN,
+  ja: PRIVACY_JA,
+  'zh-Hans': PRIVACY_ZH_HANS,
+  'zh-Hant': PRIVACY_ZH_HANT,
+  es: PRIVACY_ES,
+  'pt-BR': PRIVACY_PT_BR,
+};
 
 let passed = 0;
 const failures = [];
