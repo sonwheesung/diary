@@ -6,6 +6,10 @@ import { PRIVACY_ZH_HANS } from '@/features/legal/translations/zh-Hans';
 import { PRIVACY_ZH_HANT } from '@/features/legal/translations/zh-Hant';
 import { PRIVACY_ES } from '@/features/legal/translations/es';
 import { PRIVACY_PT_BR } from '@/features/legal/translations/pt-BR';
+import { PRIVACY_FR } from '@/features/legal/translations/fr';
+import { PRIVACY_DE } from '@/features/legal/translations/de';
+import { PRIVACY_IT } from '@/features/legal/translations/it';
+import { PRIVACY_RU } from '@/features/legal/translations/ru';
 import { i18next } from '@/lib/i18n';
 
 /**
@@ -38,6 +42,10 @@ const TRANSLATIONS: Record<string, LegalDoc> = {
   'zh-Hant': PRIVACY_ZH_HANT,
   es: PRIVACY_ES,
   'pt-BR': PRIVACY_PT_BR,
+  fr: PRIVACY_FR,
+  de: PRIVACY_DE,
+  it: PRIVACY_IT,
+  ru: PRIVACY_RU,
 };
 
 export interface ResolvedLegal {

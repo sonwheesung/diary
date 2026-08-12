@@ -23,6 +23,10 @@ import { PRIVACY_ZH_HANS } from '../features/legal/translations/zh-Hans.ts';
 import { PRIVACY_ZH_HANT } from '../features/legal/translations/zh-Hant.ts';
 import { PRIVACY_ES } from '../features/legal/translations/es.ts';
 import { PRIVACY_PT_BR } from '../features/legal/translations/pt-BR.ts';
+import { PRIVACY_FR } from '../features/legal/translations/fr.ts';
+import { PRIVACY_DE } from '../features/legal/translations/de.ts';
+import { PRIVACY_IT } from '../features/legal/translations/it.ts';
+import { PRIVACY_RU } from '../features/legal/translations/ru.ts';
 
 const TRANSLATIONS = {
   en: PRIVACY_EN,
@@ -31,6 +35,10 @@ const TRANSLATIONS = {
   'zh-Hant': PRIVACY_ZH_HANT,
   es: PRIVACY_ES,
   'pt-BR': PRIVACY_PT_BR,
+  fr: PRIVACY_FR,
+  de: PRIVACY_DE,
+  it: PRIVACY_IT,
+  ru: PRIVACY_RU,
 };
 
 let passed = 0;
