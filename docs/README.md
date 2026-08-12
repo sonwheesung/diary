@@ -43,7 +43,7 @@
 | 일기 CRUD·검색·streak·캘린더 집계 | ✅ | `features/diary/api/` |
 | 하단 탭 네비게이션(홈·캘린더·⊕·**리포트**·설정) | ✅ | ⊕는 탭이 아니라 작성 화면을 띄우는 동작. **검색은 2026-08-12에 탭에서 강등**(AI_REPORT_SYSTEM §11.1) |
 | 화면 틀 `components/Screen` | ✅ | 세이프에어리어·키보드 여백 단일 처리. CLAUDE.md §10 |
-| 공통 컴포넌트 Button · Card · TextField · MonthGrid · DatePickerSheet | ✅ | Modal · Header · BottomSheet · Avatar · Loading 미착수 |
+| 공통 컴포넌트 Button · Card · TextField · MonthGrid · DatePickerSheet · **BottomSheet · ImageViewer** | ✅ | 2026-08-13 정정 — BottomSheet는 있다(언어·리포트 언어 시트가 쓴다). Modal · Header · Avatar · Loading은 **필요한 적이 없어 안 만들었다** — 미착수가 아니라 불필요 |
 | Splash · 아이콘 | ✅ | `scripts/make-assets.py`로 코드 생성. 라이트/다크 스플래시 분리. 적응형 아이콘 안전영역 확인 |
 | Home | ✅ | 오늘 날짜·인사·연속 기록·조각 쓰기·최근 조각(썸네일) |
 | Write / Edit | ✅ | 한 화면이 둘을 겸한다(`/write?id=`). 커서 위치 사진 삽입·태그·감정·날짜 변경. 저장 후 광고는 AdMob 대기 |
@@ -68,9 +68,8 @@
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
 | 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
 | AI 리포트 — 처리방침 예고 | ✅ | 2026-08-12 게시. 30일 시계는 **2026-09-11** 만료 |
-| 공통 컴포넌트 8종 | ❌ | |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
-| EAS 빌드 설정 | ❌ | |
+| EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
 ### ⚠ 출시 전에 반드시 처리할 것
 
@@ -84,12 +83,13 @@
 | 영역 | 상태 | 비고 |
 |---|---|---|
 | Metro `server/` blockList | ✅ | 선반영 완료 |
-| common_server `apps`에 `jogak` 등록 | ❌ | `node tools/seed.ts jogak "조각"` |
-| common_server SDK 복사 | ❌ | `client/` → `lib/common-server/` |
-| **common_server Phase 7**(subjects·토큰) | ❌ | 로그인·문의·구독·백업 전부 여기 막힘 |
-| **common_server Phase 9**(RevenueCat) | ❌ | 구독·광고제거 |
-| 조각 서버(Next.js) 생성 | ❌ | **월 결제 착수 시** — 그전엔 만들지 않는다 |
-| 조각 Supabase 프로젝트 | ❌ | **월 결제 착수 시**(2026-08-07 결정). Pro 조직 추가 시 $10/월 |
+| common_server `apps`에 `jogak` 등록 | ✅ | 2026-08-13 정정 — `bootstrap?app=jogak`이 **200**이다(2026-08-11 실측) |
+| common_server SDK 복사 | ✅ | 2026-08-13 정정 — `lib/common-server/{client,index,types}.ts` |
+| **common_server Phase 7**(subjects·토큰) | ✅ | 2026-08-13 정정 — 로그인·문의·탈퇴가 실제로 돈다 |
+| **common_server Phase 9**(RevenueCat) | ✅ | 2026-08-13 정정 — 2026-08-10 완료(결제 가드 37/37). ⏭ 남은 것은 RC 대시보드 상품 import·attach |
+| 조각 서버(Next.js) 생성 | ✅ | 2026-08-13 정정 — 배포됨. 백업 6 라우트 + `cron/reap` + `ai/report` |
+| 조각 Supabase 프로젝트 | ✅ | 2026-08-13 정정 — `jogak-stg`(서울). ⏭ **운영 프로젝트는 미생성**(Pro 조직 추가 시 +$9.8/월) |
+| 백업 라우트 — 되찾기(`rebind`)·파기(`delete`)·리퍼(`cron/reap`) | ✅ | 2026-08-13 정정 — 셋 다 구현돼 있다. ⏭ 리퍼의 Vercel Cron 스케줄 등록만 확인 필요 |
 
 🚫 = 안 하기로 결정 / ⏸ = 보류 / ❌ = 미착수 / ✅ = 완료
 
