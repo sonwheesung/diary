@@ -486,5 +486,22 @@
     "willCreate": "Der Bericht für {{period}} kann erstellt werden",
     "alreadyExists": "Für {{period}} gibt es schon einen Bericht",
     "detailTitle": "Bericht"
+  },
+  "aiConsent": {
+    "title": "Einwilligung für KI-Berichte",
+    "lead": "Für einen Bericht braucht es zwei getrennte Einwilligungen. Du kannst jede einzeln wählen.",
+    "whatSent": "• Was gesendet wird: Titel, Text, Gefühl und Datum der Einträge aus diesem Zeitraum",
+    "whenSent": "• Wann: nur wenn du auf [Bericht erstellen] tippst. Nichts entsteht automatisch",
+    "notStored": "• Wir speichern das nicht. Aber während der Bericht geschrieben wird, läuft der Text durch unseren Server — wir können nicht behaupten, ihn nicht sehen zu können",
+    "vendorRetention": "• Der KI-Anbieter bewahrt ihn bis zu 30 Tage zur Missbrauchskontrolle auf und löscht ihn dann; für Modelltraining wird er nie verwendet",
+    "sensitiveTitle": "(Erforderlich) Verarbeitung sensibler Daten",
+    "sensitiveBody": "Tagebücher können Angaben zu Gesundheit und seelischem Zustand enthalten. Berichte verarbeiten diesen Text unverschlüsselt.",
+    "transferTitle": "(Erforderlich) Übermittlung ins Ausland",
+    "transferBody": "Der KI-Anbieter {{vendor}} sitzt in {{country}}. Der Text wird nur zur Erstellung der Zusammenfassung gesendet.",
+    "vendorContact": "Kontakt: {{contact}}",
+    "optional": "Wenn du ablehnst, fehlen nur die KI-Berichte — alles andere funktioniert weiter.",
+    "agree": "Zustimmen und fortfahren",
+    "readPolicy": "Datenschutzerklärung lesen",
+    "vendorCountry": "den USA"
   }
 }

@@ -486,5 +486,22 @@
     "willCreate": "Có thể tạo báo cáo {{period}}",
     "alreadyExists": "Đã có báo cáo {{period}}",
     "detailTitle": "Báo cáo"
+  },
+  "aiConsent": {
+    "title": "Đồng ý cho báo cáo AI",
+    "lead": "Tạo báo cáo cần hai sự đồng ý riêng biệt. Bạn có thể chọn từng mục.",
+    "whatSent": "• Nội dung được gửi: tiêu đề, nội dung, cảm xúc và ngày của các mảnh trong kỳ đó",
+    "whenSent": "• Khi nào: chỉ khi bạn nhấn [Tạo báo cáo]. Không có gì được tạo tự động",
+    "notStored": "• Chúng tôi không lưu nội dung đó. Nhưng trong lúc viết bản tóm tắt, nội dung có đi qua máy chủ của chúng tôi — chúng tôi không thể nói là mình không thể xem",
+    "vendorRetention": "• Nhà cung cấp AI giữ tối đa 30 ngày để giám sát lạm dụng rồi xoá, và không dùng để huấn luyện mô hình",
+    "sensitiveTitle": "(Bắt buộc) Đồng ý xử lý thông tin nhạy cảm",
+    "sensitiveBody": "Nhật ký có thể chứa thông tin sức khoẻ và trạng thái tinh thần. Báo cáo xử lý nội dung đó ở dạng không mã hoá.",
+    "transferTitle": "(Bắt buộc) Đồng ý chuyển ra nước ngoài",
+    "transferBody": "Nhà cung cấp AI {{vendor}} đặt tại {{country}}. Nội dung chỉ được gửi để tạo bản tóm tắt.",
+    "vendorContact": "Liên hệ: {{contact}}",
+    "optional": "Nếu bạn không đồng ý, chỉ báo cáo AI là không dùng được; các tính năng khác vẫn bình thường.",
+    "agree": "Đồng ý và tiếp tục",
+    "readPolicy": "Xem chính sách quyền riêng tư",
+    "vendorCountry": "Hoa Kỳ"
   }
 }

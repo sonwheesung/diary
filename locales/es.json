@@ -486,5 +486,22 @@
     "willCreate": "Ya puedes crear el informe de {{period}}",
     "alreadyExists": "Ya tienes un informe de {{period}}",
     "detailTitle": "Informe"
+  },
+  "aiConsent": {
+    "title": "Consentimiento para informes de IA",
+    "lead": "Crear un informe requiere dos consentimientos separados. Puedes elegir cada uno por separado.",
+    "whatSent": "• Qué se envía: el título, el texto, la emoción y la fecha de las entradas de ese periodo",
+    "whenSent": "• Cuándo: solo cuando pulsas [Crear informe]. Nada se genera automáticamente",
+    "notStored": "• No lo almacenamos. Pero mientras se escribe el resumen, el texto sí pasa por nuestro servidor: no podemos afirmar que no podamos verlo",
+    "vendorRetention": "• El proveedor de IA lo conserva hasta 30 días para vigilar abusos y luego lo borra; nunca lo usa para entrenar modelos",
+    "sensitiveTitle": "(Obligatorio) Tratamiento de información sensible",
+    "sensitiveBody": "Los diarios pueden contener información de salud y estado anímico. Los informes tratan ese texto sin cifrar.",
+    "transferTitle": "(Obligatorio) Transferencia fuera del país",
+    "transferBody": "El proveedor de IA {{vendor}} está en {{country}}. El texto se envía solo para generar el resumen.",
+    "vendorContact": "Contacto: {{contact}}",
+    "optional": "Si no aceptas, solo dejarás de tener informes de IA; el resto sigue funcionando igual.",
+    "agree": "Aceptar y continuar",
+    "readPolicy": "Ver la política de privacidad",
+    "vendorCountry": "Estados Unidos"
   }
 }

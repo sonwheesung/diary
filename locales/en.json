@@ -486,5 +486,22 @@
     "willCreate": "Ready to write your {{period}} report",
     "alreadyExists": "You already have a report for {{period}}",
     "detailTitle": "Report"
+  },
+  "aiConsent": {
+    "title": "AI report consent",
+    "lead": "Creating a report needs two separate consents. You can choose each one on its own.",
+    "whatSent": "• What's sent: the title, text, emotion and date of the entries in that period",
+    "whenSent": "• When: only when you tap [Create report]. Nothing is generated automatically",
+    "notStored": "• We don't store it. But while the summary is being written, the text does pass through our server — we can't claim we're unable to see it",
+    "vendorRetention": "• The AI provider keeps it up to 30 days for abuse monitoring, then deletes it, and never uses it for model training",
+    "sensitiveTitle": "(Required) Processing of sensitive information",
+    "sensitiveBody": "Diaries can contain health and mental-state information. Reports process that text without encryption.",
+    "transferTitle": "(Required) Transfer outside the country",
+    "transferBody": "The AI provider {{vendor}} is located in {{country}}. The text is sent only to produce the summary.",
+    "vendorContact": "Contact: {{contact}}",
+    "optional": "If you decline, only AI reports are unavailable — everything else keeps working.",
+    "agree": "Agree and continue",
+    "readPolicy": "Read the privacy policy",
+    "vendorCountry": "the United States"
   }
 }

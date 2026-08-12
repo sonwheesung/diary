@@ -486,5 +486,22 @@
     "willCreate": "Já dá para criar o relatório de {{period}}",
     "alreadyExists": "Você já tem um relatório de {{period}}",
     "detailTitle": "Relatório"
+  },
+  "aiConsent": {
+    "title": "Consentimento para relatórios de IA",
+    "lead": "Criar um relatório exige dois consentimentos separados. Você pode escolher cada um deles.",
+    "whatSent": "• O que é enviado: título, texto, emoção e data dos registros daquele período",
+    "whenSent": "• Quando: apenas ao tocar em [Criar relatório]. Nada é gerado automaticamente",
+    "notStored": "• Não armazenamos esse conteúdo. Mas, enquanto o resumo é escrito, o texto passa pelo nosso servidor — não podemos dizer que não conseguimos vê-lo",
+    "vendorRetention": "• O provedor de IA guarda por até 30 dias para monitorar abusos e depois exclui; nunca usa para treinar modelos",
+    "sensitiveTitle": "(Obrigatório) Tratamento de informações sensíveis",
+    "sensitiveBody": "Diários podem conter informações de saúde e estado emocional. Os relatórios tratam esse texto sem criptografia.",
+    "transferTitle": "(Obrigatório) Transferência para fora do país",
+    "transferBody": "O provedor de IA {{vendor}} fica em {{country}}. O texto é enviado apenas para gerar o resumo.",
+    "vendorContact": "Contato: {{contact}}",
+    "optional": "Se você não concordar, apenas os relatórios de IA ficam indisponíveis; o resto continua funcionando.",
+    "agree": "Concordar e continuar",
+    "readPolicy": "Ver a política de privacidade",
+    "vendorCountry": "Estados Unidos"
   }
 }

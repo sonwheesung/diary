@@ -486,5 +486,22 @@
     "willCreate": "Le bilan de {{period}} peut être créé",
     "alreadyExists": "Vous avez déjà un bilan pour {{period}}",
     "detailTitle": "Bilan"
+  },
+  "aiConsent": {
+    "title": "Consentement aux bilans IA",
+    "lead": "Créer un bilan demande deux consentements distincts. Vous pouvez choisir chacun séparément.",
+    "whatSent": "• Ce qui est envoyé : le titre, le texte, l'émotion et la date des entrées de cette période",
+    "whenSent": "• Quand : uniquement lorsque vous appuyez sur [Créer un bilan]. Rien n'est généré automatiquement",
+    "notStored": "• Nous ne le conservons pas. Mais pendant la rédaction du résumé, le texte passe bien par notre serveur — nous ne pouvons pas prétendre ne pas pouvoir le voir",
+    "vendorRetention": "• Le prestataire IA le conserve jusqu'à 30 jours pour surveiller les abus, puis le supprime ; il ne l'utilise jamais pour entraîner ses modèles",
+    "sensitiveTitle": "(Obligatoire) Traitement d'informations sensibles",
+    "sensitiveBody": "Un journal peut contenir des informations de santé et d'état psychique. Les bilans traitent ce texte sans chiffrement.",
+    "transferTitle": "(Obligatoire) Transfert hors du pays",
+    "transferBody": "Le prestataire IA {{vendor}} se trouve aux {{country}}. Le texte n'est envoyé que pour produire le résumé.",
+    "vendorContact": "Contact : {{contact}}",
+    "optional": "Si vous refusez, seuls les bilans IA sont indisponibles ; tout le reste continue de fonctionner.",
+    "agree": "Accepter et continuer",
+    "readPolicy": "Lire la politique de confidentialité",
+    "vendorCountry": "les États-Unis"
   }
 }

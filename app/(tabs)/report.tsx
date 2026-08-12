@@ -15,6 +15,7 @@ import {
   targetPeriodKey,
   type CreateFail,
 } from '@/features/ai/api/report-service';
+import { hasAiConsent } from '@/features/ai/consent';
 import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
 import { useEntitlementStore } from '@/features/entitlement/store';
@@ -71,6 +72,19 @@ export default function ReportScreen() {
   );
 
   const onCreate = async () => {
+    /*
+     * 🔴 **동의를 서버가 아니라 여기서 막는다.** 서버가 막으려면 동의 사실을 서버가
+     *   알아야 하고, 그러면 "누가 언제 무엇에 동의했는지"가 서버에 하나 더 쌓인다.
+     *   동의는 기기에서 받고 기기에서 기록한다 — 전송을 시작하는 주체가 앱이기 때문이다.
+     *
+     * ⚠ 동의가 없으면 **아무것도 보내지 않고** 동의 화면으로 보낸다. 돌아오면 다시 누른다 —
+     *   자동으로 이어서 만들지 않는다. 동의 직후의 자동 실행은 "동의를 눌렀더니 뭔가
+     *   일어났다"가 되어, 무엇에 동의했는지 확인할 틈을 없앤다.
+     */
+    if (!(await hasAiConsent())) {
+      router.push('/ai-consent');
+      return;
+    }
     setCreating(true);
     try {
       const result = await createReport(kind);

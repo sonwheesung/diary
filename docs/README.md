@@ -64,7 +64,9 @@
 | 월 구독(RevenueCat) | ⏸ | ~~Phase 9 대기~~ → 앱·RC·**Play 상품 등록까지 완료**(2026-08-12). 남은 것은 RC 상품 import·attach와 결제 프로필. [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) |
 | 백업/복원 — 서버 | ✅ | ~~조각 서버 대기~~ → `jogak-stg`(서울) + Vercel(`icn1`) 배포. 위 두 줄과 합쳐 읽는다 |
 | **AI 리포트 — 앱 쪽** | ✅ | 리포트 탭·상세·홈 카드·설정(리포트 언어)·DB v5·백업 포함. [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11 |
-| **AI 리포트 — 서버** | ❌ | `POST /api/v1/ai/report` 미구현. **앱이 이미 이 라우트를 부른다** — 없으면 [만들기]가 실패 문구로 떨어진다 |
+| **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` **구현 완료**(`npm run e2e:ai` 7개). 🔴 **실호출은 한 번도 안 해봤다** — `OPENAI_API_KEY` 대기 |
+| AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
+| 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
 | AI 리포트 — 처리방침 예고 | ✅ | 2026-08-12 게시. 30일 시계는 **2026-09-11** 만료 |
 | 공통 컴포넌트 8종 | ❌ | |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
@@ -109,7 +111,7 @@ npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니�
 
 # 구독·AI를 건드렸으면
 npm run check:subscription     # 14개 — 체험 기간 계산(전자상거래법 §13⑥ 고지의 근거)
-npm run check:ai               # 41개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마
+npm run check:ai               # 47개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마·동의
 
 # API 키가 있을 때만 (실제 과금이 발생한다)
 cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effort 스윕·refusal
@@ -128,6 +130,8 @@ npx supabase start   # Postgres :54422 · Storage :54421 · Studio :54423 (전�
 npm run db:push
 npm run dev          # :3200
 npm run e2e          # 9개 — reserve→서명 URL PUT→commit→latest→다운로드
+npm run e2e:ai       # 7개 — AI 게이트(인가·구독·빈입력·과대입력·캡). **모델을 부르지 않는다**
+npm run measure:ai   # ⚠ 실제 과금. OPENAI_API_KEY 필요
 ```
 
 ⚠ 기본 포트(5432x)를 다른 프로젝트의 Supabase 스택이 쓰고 있어 **544xx로 옮겼다.**

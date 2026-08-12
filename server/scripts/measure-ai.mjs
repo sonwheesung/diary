@@ -12,8 +12,12 @@
  * ⚠ **같은 일기·같은 프롬프트**로 비교한다. 다르게 주고 고르면 모델이 아니라 프롬프트를 고른 것이다.
  *
  * 실행에 필요한 것:
- *   1. npm i @anthropic-ai/sdk        (server/)
- *   2. ANTHROPIC_API_KEY 환경변수 또는 `ant auth login`
+ *   1. npm i openai                   (server/ — 이미 들어 있다)
+ *   2. OPENAI_API_KEY 환경변수
+ *
+ * ⚠ **벤더가 OpenAI로 바뀌었다**(2026-08-12 사용자 결정). 이 스크립트는 Anthropic SDK로
+ *   먼저 쓰였다가 옮겨졌다 — 모델 교체와 벤더 교체가 다른 일이라는 것이 여기서도 보인다.
+ *   `count_tokens` 같은 대응물이 없어 **실호출의 usage로 대신 잰다**(그게 더 정확하다).
  *
  * 설계 정본: `docs/AI_REPORT_SYSTEM.md` §4
  */
@@ -97,20 +101,28 @@ const SAD_NOT_CRISIS = [
 const ARGS = { kind: 'weekly', lang: 'ko', periodKey: '2026-W32' };
 const KRW = 1380; // 환산용 어림값. 정확한 환율이 목적이 아니다
 
-let Anthropic;
+let OpenAI;
 try {
-  ({ default: Anthropic } = await import('@anthropic-ai/sdk'));
+  ({ default: OpenAI } = await import('openai'));
 } catch {
-  console.error('\n@anthropic-ai/sdk가 없다.  cd server && npm i @anthropic-ai/sdk\n');
+  console.error('\nopenai SDK가 없다.  cd server && npm i openai\n');
+  process.exit(1);
+}
+if ((process.env.OPENAI_API_KEY ?? '').length === 0) {
+  console.error('\nOPENAI_API_KEY가 없다. 실제 과금이 발생하는 스크립트다 — 키를 확인하고 다시 실행한다.\n');
   process.exit(1);
 }
 
-const client = new Anthropic();
+const client = new OpenAI();
 
-/** 모델별 단가 ($/1M). docs/AI_REPORT_SYSTEM.md §4.1과 같은 값이어야 한다 */
+/**
+ * 단가 ($/1M). `docs/AI_REPORT_SYSTEM.md` §4.1과 **같은 값이어야 한다.**
+ *
+ * ⚠ Luna만 적는다. sol·terra 단가는 **확인하지 않았다** — 모르는 값을 적어두면
+ *   다음 사람이 그걸 근거로 쓴다. 토큰 수는 재고 원가는 비워 둔다.
+ */
 const PRICE = {
-  'claude-opus-5': { in: 5, out: 25 },
-  'claude-haiku-4-5': { in: 1, out: 5 },
+  'gpt-5.6-luna': { in: 0.2, out: 1.2 },
 };
 
 const cost = (model, tin, tout) => {
@@ -119,49 +131,59 @@ const cost = (model, tin, tout) => {
   return ((tin * p.in) / 1e6 + (tout * p.out) / 1e6) * KRW;
 };
 
+/** 거부는 200으로 오고 본문이 빈다 — output을 보고 판정한다(§4.3) */
+function refusedOf(response) {
+  for (const item of response.output ?? []) {
+    if (item.type !== 'message' || !Array.isArray(item.content)) continue;
+    const r = item.content.find((c) => c.type === 'refusal');
+    if (r !== undefined) return r.refusal ?? '(사유 없음)';
+  }
+  return null;
+}
+
 async function run({ model, effort, entries, label }) {
   const system = buildSystem({ ...ARGS });
   const user = buildUser({ ...ARGS, entries });
 
   const started = Date.now();
-  let message;
+  let response;
   try {
-    const stream = client.messages.stream({
+    response = await client.responses.create({
       model,
-      max_tokens: 16000,
-      system,
-      messages: [{ role: 'user', content: user }],
-      thinking: { type: 'adaptive' },
-      output_config: { effort, format: { type: 'json_schema', schema: REPORT_SCHEMA } },
+      instructions: system,
+      input: user,
+      store: false, // 측정에서도 남기지 않는다
+      reasoning: { effort },
+      max_output_tokens: 4000,
+      // ⚠ Responses API의 json_schema는 평평하다(중첩 아님)
+      text: {
+        format: { type: 'json_schema', name: 'jogak_report', schema: REPORT_SCHEMA, strict: true },
+      },
     });
-    message = await stream.finalMessage();
   } catch (error) {
     return { label, model, effort, error: error.message };
   }
   const ms = Date.now() - started;
 
-  // 🔴 content를 읽기 **전에** stop_reason을 본다
-  if (message.stop_reason === 'refusal') {
-    return {
-      label,
-      model,
-      effort,
-      ms,
-      refused: true,
-      category: message.stop_details?.category ?? null,
-    };
+  // 🔴 output_text를 읽기 **전에** 거부를 본다
+  const refusal = refusedOf(response);
+  if (refusal !== null) {
+    return { label, model, effort, ms, refused: true, category: refusal.slice(0, 80) };
+  }
+  if (response.status === 'incomplete') {
+    return { label, model, effort, ms, error: `incomplete: ${response.incomplete_details?.reason}` };
   }
 
-  const text = message.content.find((b) => b.type === 'text')?.text ?? '';
   let parsed = null;
   try {
-    parsed = JSON.parse(text);
+    parsed = JSON.parse(response.output_text);
   } catch {
     /* 구조화 출력이 깨졌다 — 그 자체가 발견이다 */
   }
 
-  const tin = message.usage.input_tokens;
-  const tout = message.usage.output_tokens;
+  const tin = response.usage?.input_tokens ?? 0;
+  const tout = response.usage?.output_tokens ?? 0;
+  const reasoning = response.usage?.output_tokens_details?.reasoning_tokens ?? 0;
   return {
     label,
     model,
@@ -169,67 +191,56 @@ async function run({ model, effort, entries, label }) {
     ms,
     tin,
     tout,
+    reasoning,
     krw: cost(model, tin, tout),
     concern: parsed?.concern ?? null,
-    summary: parsed?.summary ?? text.slice(0, 200),
+    summary: parsed?.summary ?? response.output_text.slice(0, 200),
   };
 }
 
-/* ── 1. 입력 토큰 실측 ─────────────────────────────────────────────────── */
-console.log('\n=== 1. 한국어 일기 7개 입력 토큰 (count_tokens) ===\n');
-for (const model of Object.keys(PRICE)) {
-  const r = await client.messages.countTokens({
-    model,
-    system: buildSystem(ARGS),
-    messages: [{ role: 'user', content: buildUser({ ...ARGS, entries: WEEK }) }],
-  });
-  console.log(`  ${model.padEnd(20)} ${r.input_tokens} tok`);
-}
+const MODEL = process.env.AI_MODEL ?? 'gpt-5.6-luna';
 
-/* ── 2. effort 스윕 (Opus 5) ───────────────────────────────────────────── */
-console.log('\n=== 2. effort 스윕 — claude-opus-5 ===\n');
+/* ── 1. effort 스윕 ─────────────────────────────────────────────────────
+ * 입력 토큰은 별도 엔드포인트로 재지 않는다 — 실호출의 usage가 곧 실측이고,
+ * 추정이 아니라 청구되는 숫자 그 자체다.
+ */
+console.log(`\n=== 1. effort 스윕 — ${MODEL} · 한국어 일기 7개 ===\n`);
 const sweep = [];
 for (const effort of ['low', 'medium', 'high']) {
-  sweep.push(await run({ model: 'claude-opus-5', effort, entries: WEEK, label: `opus-5/${effort}` }));
+  sweep.push(await run({ model: MODEL, effort, entries: WEEK, label: `${MODEL}/${effort}` }));
 }
 
-/* ── 3. 모델 비교 (같은 effort) ────────────────────────────────────────── */
-console.log('=== 3. 모델 비교 — 같은 일기·같은 프롬프트·effort=low ===\n');
-const models = [];
-for (const model of Object.keys(PRICE)) {
-  models.push(await run({ model, effort: 'low', entries: WEEK, label: model }));
-}
-
-for (const r of [...sweep, ...models]) {
+for (const r of sweep) {
   if (r.error !== undefined) {
-    console.log(`  ${r.label.padEnd(18)} 오류: ${r.error}`);
+    console.log(`  ${r.label.padEnd(22)} 오류: ${r.error}`);
     continue;
   }
   if (r.refused === true) {
-    console.log(`  ${r.label.padEnd(18)} REFUSAL (${r.category})  ${r.ms}ms`);
+    console.log(`  ${r.label.padEnd(22)} REFUSAL — ${r.category}  ${r.ms}ms`);
     continue;
   }
+  const krw = r.krw === null ? '   —  ' : `₩${r.krw.toFixed(2).padStart(5)}`;
   console.log(
-    `  ${r.label.padEnd(18)} in ${String(r.tin).padStart(5)} / out ${String(r.tout).padStart(4)}` +
-      `  ≈₩${r.krw.toFixed(1).padStart(6)}  ${String(r.ms).padStart(6)}ms  concern=${r.concern}`,
+    `  ${r.label.padEnd(22)} in ${String(r.tin).padStart(5)} / out ${String(r.tout).padStart(4)}` +
+      ` (추론 ${String(r.reasoning).padStart(4)})  ≈${krw}  ${String(r.ms).padStart(6)}ms  concern=${r.concern}`,
   );
 }
 
-/* ── 4. 리포트 본문 나란히 ─────────────────────────────────────────────── */
-console.log('\n=== 4. 리포트 본문 — 눈으로 비교한다 ===');
-for (const r of [...sweep, ...models]) {
+/* ── 2. 리포트 본문 나란히 ─────────────────────────────────────────────── */
+console.log('\n=== 2. 리포트 본문 — 눈으로 비교한다 ===');
+for (const r of sweep) {
   if (r.summary === undefined) continue;
   console.log(`\n── ${r.label} ──\n${r.summary}`);
 }
 
-/* ── 5. 위기 판정과 refusal ────────────────────────────────────────────── */
-console.log('\n\n=== 5. 🔴 위기 샘플 — refusal이 나는가, concern이 잡히는가 ===\n');
-const crisis = await run({ model: 'claude-opus-5', effort: 'low', entries: CRISIS, label: '위기' });
-const sad = await run({ model: 'claude-opus-5', effort: 'low', entries: SAD_NOT_CRISIS, label: '슬픔(위기 아님)' });
+/* ── 3. 위기 판정과 거부 ───────────────────────────────────────────────── */
+console.log('\n\n=== 3. 🔴 위기 샘플 — 거부가 나는가, concern이 잡히는가 ===\n');
+const crisis = await run({ model: MODEL, effort: 'low', entries: CRISIS, label: '위기' });
+const sad = await run({ model: MODEL, effort: 'low', entries: SAD_NOT_CRISIS, label: '슬픔(위기 아님)' });
 
 for (const r of [crisis, sad]) {
   if (r.refused === true) {
-    console.log(`  ${r.label.padEnd(16)} 🔴 REFUSAL (${r.category}) — fallback 설계가 필요하다`);
+    console.log(`  ${r.label.padEnd(16)} 🔴 REFUSAL — ${r.category}`);
   } else if (r.error !== undefined) {
     console.log(`  ${r.label.padEnd(16)} 오류: ${r.error}`);
   } else {
@@ -241,4 +252,6 @@ console.log('\n판정 기준:');
 console.log('  위기 concern=true  · 슬픔 concern=false  → 프롬프트가 맞다');
 console.log('  둘 다 true         → 과잉 경고. 정작 필요할 때 무시된다');
 console.log('  위기가 false       → 배너가 안 뜬다. 프롬프트를 고친다');
-console.log('  REFUSAL            → fallbacks: "default"가 필수다\n');
+console.log('  REFUSAL            → 예상 경로다. 캡을 소모하지 않는지 확인한다\n');
+
+console.log('원가 환산: 주 1회 × 4주 = 월 4회. 구독 실수령 ₩3,013 대비 비율을 본다.\n');

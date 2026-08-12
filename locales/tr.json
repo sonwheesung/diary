@@ -486,5 +486,22 @@
     "willCreate": "{{period}} raporu oluşturulabilir",
     "alreadyExists": "{{period}} için zaten bir rapor var",
     "detailTitle": "Rapor"
+  },
+  "aiConsent": {
+    "title": "Yapay zekâ raporu onayı",
+    "lead": "Rapor oluşturmak için iki ayrı onay gerekiyor. Her birini ayrı ayrı seçebilirsin.",
+    "whatSent": "• Gönderilenler: o dönemdeki kayıtların başlığı, metni, duygusu ve tarihi",
+    "whenSent": "• Ne zaman: yalnızca [Rapor oluştur]'a dokunduğunda. Hiçbir şey kendiliğinden üretilmez",
+    "notStored": "• Bunu saklamıyoruz. Ama özet yazılırken metin sunucumuzdan geçiyor — göremediğimizi söyleyemeyiz",
+    "vendorRetention": "• Yapay zekâ sağlayıcısı kötüye kullanımı izlemek için en fazla 30 gün saklar, sonra siler; model eğitiminde asla kullanmaz",
+    "sensitiveTitle": "(Zorunlu) Hassas bilgilerin işlenmesi onayı",
+    "sensitiveBody": "Günlükler sağlık ve ruh durumu bilgisi içerebilir. Raporlar bu metni şifrelenmemiş hâlde işler.",
+    "transferTitle": "(Zorunlu) Yurt dışına aktarım onayı",
+    "transferBody": "Yapay zekâ sağlayıcısı {{vendor}}, {{country}} ülkesinde. Metin yalnızca özeti üretmek için gönderilir.",
+    "vendorContact": "İletişim: {{contact}}",
+    "optional": "Onaylamazsan yalnızca yapay zekâ raporları kullanılamaz; kalan her şey çalışmaya devam eder.",
+    "agree": "Onayla ve devam et",
+    "readPolicy": "Gizlilik politikasını oku",
+    "vendorCountry": "ABD"
   }
 }

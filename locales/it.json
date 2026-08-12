@@ -486,5 +486,22 @@
     "willCreate": "Puoi creare il resoconto di {{period}}",
     "alreadyExists": "Hai già un resoconto di {{period}}",
     "detailTitle": "Resoconto"
+  },
+  "aiConsent": {
+    "title": "Consenso ai resoconti IA",
+    "lead": "Creare un resoconto richiede due consensi distinti. Puoi scegliere ciascuno separatamente.",
+    "whatSent": "• Cosa viene inviato: titolo, testo, emozione e data delle voci di quel periodo",
+    "whenSent": "• Quando: solo quando tocchi [Crea resoconto]. Nulla viene generato automaticamente",
+    "notStored": "• Non lo conserviamo. Ma mentre il riassunto viene scritto il testo passa dal nostro server — non possiamo dire di non poterlo vedere",
+    "vendorRetention": "• Il fornitore IA lo conserva fino a 30 giorni per monitorare gli abusi e poi lo elimina; non lo usa mai per addestrare modelli",
+    "sensitiveTitle": "(Obbligatorio) Trattamento di dati sensibili",
+    "sensitiveBody": "I diari possono contenere informazioni su salute e stato psicologico. I resoconti trattano quel testo senza cifratura.",
+    "transferTitle": "(Obbligatorio) Trasferimento all'estero",
+    "transferBody": "Il fornitore IA {{vendor}} si trova negli {{country}}. Il testo viene inviato solo per generare il riassunto.",
+    "vendorContact": "Contatto: {{contact}}",
+    "optional": "Se non acconsenti, mancheranno solo i resoconti IA; tutto il resto continua a funzionare.",
+    "agree": "Accetta e continua",
+    "readPolicy": "Leggi l'informativa sulla privacy",
+    "vendorCountry": "Stati Uniti"
   }
 }

@@ -24,6 +24,13 @@ import {
 } from '../features/ai/period.ts';
 import { buildSystem, buildUser, isEmpty } from '../features/ai/prompt.ts';
 import { REPORT_SCHEMA, PROMPT_VERSION } from '../features/ai/types.ts';
+import { AI_VENDOR, vendorContactReady } from '../features/ai/vendor.ts';
+import {
+  AI_CONSENT_VERSION,
+  bothGiven,
+  parseConsent,
+  serializeConsent,
+} from '../features/ai/consent-rules.ts';
 
 let passed = 0;
 const failures = [];
@@ -335,6 +342,55 @@ check('concern은 boolean — 문자열이면 파싱이 다시 문자열 매칭�
 check('PROMPT_VERSION이 정수', () => {
   assert(Number.isInteger(PROMPT_VERSION), `정수가 아니다: ${PROMPT_VERSION}`);
 });
+
+console.log('\n동의와 고지');
+
+check('동의는 둘 다 있어야 통과 — 하나만으로는 안 된다', () => {
+  assert(!bothGiven({ sensitiveAt: null, transferAt: null }), '둘 다 없음');
+  assert(!bothGiven({ sensitiveAt: 1, transferAt: null }), '민감정보만');
+  assert(!bothGiven({ sensitiveAt: null, transferAt: 1 }), '국외이전만');
+  assert(bothGiven({ sensitiveAt: 1, transferAt: 1 }), '둘 다');
+});
+
+check('AI_CONSENT_VERSION이 정수', () => {
+  assert(Number.isInteger(AI_CONSENT_VERSION), `정수가 아니다: ${AI_CONSENT_VERSION}`);
+});
+
+check('동의 왕복 — 저장한 시각이 그대로 읽힌다', () => {
+  eq(parseConsent(serializeConsent(1754870000000)), 1754870000000, '왕복');
+});
+
+check('🔴 옛 버전 동의는 무효 — 옛 문안에 대한 동의로 새 처리를 할 수 없다', () => {
+  eq(parseConsent(`${AI_CONSENT_VERSION + 1}|1754870000000`), null, '더 새 버전');
+  eq(parseConsent('0|1754870000000'), null, '옛 버전');
+});
+
+check('깨진 동의값은 미동의로 읽는다 — 안전한 쪽으로 틀린다', () => {
+  eq(parseConsent(null), null, 'null');
+  eq(parseConsent(''), null, '빈 문자열');
+  eq(parseConsent('1'), null, '구분자 없음');
+  eq(parseConsent(`${AI_CONSENT_VERSION}|0`), null, '0');
+  eq(parseConsent(`${AI_CONSENT_VERSION}|어제`), null, '숫자 아님');
+});
+
+check('사업자명·국가코드가 비어 있지 않다 (§28-8② 1·2호)', () => {
+  assert(AI_VENDOR.name.length > 0, '사업자명이 비었다');
+  // ⚠ 코드다. 표기 문구가 아니다 — 상수에 '미국'을 넣었다가 영어 화면에 한글이 떴다
+  assert(/^[A-Z]{2}$/.test(AI_VENDOR.countryCode), `ISO 국가코드가 아니다: ${AI_VENDOR.countryCode}`);
+});
+
+/*
+ * 🔴 **출시 게이트.** §28-8② 3호는 연락처까지 요구한다.
+ *   ⚠ 실패로 만들지 않는 이유: 지금 비어 있는 것은 알고 있는 상태이고, 여기서 실패시키면
+ *     이 스크립트가 다른 회귀를 잡는 도구로 못 쓰인다. 대신 **매 실행마다 크게 남긴다** —
+ *     조용히 넘어가는 것과 눈에 띄게 남기는 것의 차이가 출시 때 갈린다.
+ */
+if (!vendorContactReady()) {
+  console.log('');
+  console.log('  🔴 출시 차단: AI 사업자 **연락처**가 비어 있다 (features/ai/vendor.ts)');
+  console.log('     「개인정보 보호법」 §28-8② 3호가 국외 이전 동의 전에 연락처 고지를 요구한다.');
+  console.log('     채우면 동의 화면과 처리방침에 자동 반영된다.');
+}
 
 console.log('');
 if (failures.length > 0) {

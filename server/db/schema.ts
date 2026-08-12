@@ -190,3 +190,44 @@ export const vaultBlobs = pgTable(
     index('idx_blobs_reaper').on(table.state, table.referencedAt),
   ],
 );
+
+/**
+ * AI 리포트 사용량 — **캡의 근거이자 원가 관측의 유일한 창구다.**
+ *
+ * 🔴 **본문은 없다.** 여기 있는 것은 "누가 언제 몇 번 불렀고 토큰이 얼마였나"뿐이다.
+ *   일기도, 프롬프트도, 생성된 리포트도 저장하지 않는다 — 그게 §5.1의 무저장 약속이고,
+ *   이 테이블의 컬럼 목록이 그 약속의 증거다. **여기에 텍스트 컬럼을 더하지 않는다.**
+ *
+ * ⚠ 이건 메타데이터라 **저장한다고 고지한다.** "아무것도 저장하지 않는다"고 쓰면 거짓말이다.
+ *
+ * ⚠ 기간 캡(`periodKey`)과 일일 폭주 방어(`day`)는 **다른 문제**라 한 행에 둘 다 있다:
+ *   전자는 "같은 주를 두 번 만들지 마라", 후자는 "버그로 하루에 수백 번 부르지 마라".
+ */
+export const aiUsage = pgTable(
+  'ai_usage',
+  {
+    id: text('id').primaryKey(),
+    /** common_server의 subject. **FK 없다** — 다른 DB다 */
+    subjectId: text('subject_id').notNull(),
+    /** 'weekly' | 'monthly' | 'yearly' */
+    kind: text('kind').notNull(),
+    /** `2026-W33` · `2026-08` · `2026`. 기간 캡의 기준 */
+    periodKey: text('period_key').notNull(),
+    /** `YYYY-MM-DD`(UTC). 일일 폭주 방어의 기준 */
+    day: text('day').notNull(),
+    inputTokens: integer('input_tokens').notNull().default(0),
+    outputTokens: integer('output_tokens').notNull().default(0),
+    /** 원가를 나중에 되짚으려면 어떤 모델이었는지가 필요하다 */
+    model: text('model'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    /*
+     * 🔴 **성공만 기록된다.** 거부·타임아웃은 행을 만들지 않는다 —
+     *   우리 잘못으로 그 주 리포트를 영영 잃게 두지 않기 위해서다(`ai-policy.ts`).
+     *   그래서 이 UNIQUE가 곧 "이 기간은 이미 만들었다"의 진실이다.
+     */
+    uniqueIndex('uq_ai_usage_period').on(table.subjectId, table.kind, table.periodKey),
+    index('idx_ai_usage_day').on(table.subjectId, table.day),
+  ],
+);

@@ -486,5 +486,22 @@
     "willCreate": "Laporan {{period}} siap dibuat",
     "alreadyExists": "Laporan {{period}} sudah ada",
     "detailTitle": "Laporan"
+  },
+  "aiConsent": {
+    "title": "Persetujuan laporan AI",
+    "lead": "Membuat laporan memerlukan dua persetujuan terpisah. Kamu bisa memilih masing-masing.",
+    "whatSent": "• Yang dikirim: judul, isi, emosi, dan tanggal catatan pada periode itu",
+    "whenSent": "• Kapan: hanya saat kamu menekan [Buat laporan]. Tidak ada yang dibuat otomatis",
+    "notStored": "• Kami tidak menyimpannya. Namun saat ringkasan ditulis, teksnya memang melewati server kami — kami tidak bisa mengklaim tidak dapat melihatnya",
+    "vendorRetention": "• Penyedia AI menyimpannya maksimal 30 hari untuk pemantauan penyalahgunaan lalu menghapusnya, dan tidak pernah memakainya untuk melatih model",
+    "sensitiveTitle": "(Wajib) Pemrosesan informasi sensitif",
+    "sensitiveBody": "Catatan harian bisa memuat kondisi kesehatan dan psikologis. Laporan memproses teks itu tanpa enkripsi.",
+    "transferTitle": "(Wajib) Transfer ke luar negeri",
+    "transferBody": "Penyedia AI {{vendor}} berada di {{country}}. Teks dikirim hanya untuk membuat ringkasan.",
+    "vendorContact": "Kontak: {{contact}}",
+    "optional": "Jika tidak setuju, hanya laporan AI yang tidak tersedia; fitur lain tetap bisa dipakai.",
+    "agree": "Setuju dan lanjutkan",
+    "readPolicy": "Lihat kebijakan privasi",
+    "vendorCountry": "Amerika Serikat"
   }
 }

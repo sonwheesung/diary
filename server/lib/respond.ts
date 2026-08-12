@@ -17,7 +17,13 @@ export type FailCode =
   | 'too-large'         // 413
   | 'rate-limited'      // 429
   | 'upstream'          // 503 — common_server가 죽었다. 401이 아니다
-  | 'error';            // 500
+  | 'error'             // 500
+  /* ── AI 리포트 (docs/AI_REPORT_SYSTEM.md §7) ───────────────────────────── */
+  | 'cap-exceeded'      // 429 — 이 기간 몫을 이미 썼다. rate-limited와 뜻이 다르다
+  | 'refused'           // 422 — 모델이 거부했다. **캡을 소모하지 않았다**
+  | 'empty'             // 422 — 요약할 내용이 없다
+  | 'in-progress'       // 409 — 같은 멱등 키가 처리 중이다
+  | 'not-configured';   // 503 — API 키가 없다. 배포 문제이지 사용자 문제가 아니다
 
 const STATUS: Record<FailCode, number> = {
   unauthorized: 401,
@@ -31,6 +37,17 @@ const STATUS: Record<FailCode, number> = {
   'rate-limited': 429,
   upstream: 503,
   error: 500,
+  /*
+   * ⚠ `refused`·`empty`가 4xx인 이유: 서버는 정상 동작했고 요청이 처리될 수 없었을 뿐이다.
+   *   500으로 주면 앱이 재시도하는데, 재시도해도 결과가 같다.
+   * ⚠ `cap-exceeded`는 429지만 `rate-limited`와 **뜻이 다르다** — 전자는 이번 기간 몫을
+   *   다 쓴 것이라 기다려도 안 열리고, 후자는 잠시 뒤 열린다. 앱이 다른 문구를 띄운다.
+   */
+  'cap-exceeded': 429,
+  refused: 422,
+  empty: 422,
+  'in-progress': 409,
+  'not-configured': 503,
 };
 
 export function ok<T extends object>(body: T): NextResponse {

@@ -486,5 +486,22 @@
     "willCreate": "可以生成 {{period}} 的报告了",
     "alreadyExists": "{{period}} 的报告已经有了",
     "detailTitle": "报告"
+  },
+  "aiConsent": {
+    "title": "AI 报告同意",
+    "lead": "生成报告需要两项同意，可以分别选择。",
+    "whatSent": "• 会发送：该时间段内碎片的标题、正文、情绪和日期",
+    "whenSent": "• 何时：仅在你点击[生成报告]时。不会自动生成",
+    "notStored": "• 我们不会保存这些内容。但在生成摘要的那一刻，内容确实会经过我们的服务器——我们不能说自己「看不到」",
+    "vendorRetention": "• AI 服务商为防止滥用最多保留 30 天后删除，且不会用于模型训练",
+    "sensitiveTitle": "（必需）敏感信息处理同意",
+    "sensitiveBody": "日记中可能包含健康与心理状态。报告会在未加密的状态下处理这些内容。",
+    "transferTitle": "（必需）跨境传输同意",
+    "transferBody": "AI 服务商 {{vendor}} 位于{{country}}。内容仅为生成摘要而发送。",
+    "vendorContact": "联系方式：{{contact}}",
+    "optional": "即使不同意，也只是无法使用 AI 报告，其他功能照常使用。",
+    "agree": "同意并继续",
+    "readPolicy": "查看隐私政策",
+    "vendorCountry": "美国"
   }
 }

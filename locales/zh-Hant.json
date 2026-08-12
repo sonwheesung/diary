@@ -486,5 +486,22 @@
     "willCreate": "可以產生 {{period}} 的報告了",
     "alreadyExists": "{{period}} 的報告已經有了",
     "detailTitle": "報告"
+  },
+  "aiConsent": {
+    "title": "AI 報告同意",
+    "lead": "產生報告需要兩項同意，可以分別選擇。",
+    "whatSent": "• 會傳送：該期間碎片的標題、內文、情緒與日期",
+    "whenSent": "• 何時：僅在你點擊[產生報告]時。不會自動產生",
+    "notStored": "• 我們不會保存這些內容。但在產生摘要的那一刻，內容確實會經過我們的伺服器——我們不能說自己「看不到」",
+    "vendorRetention": "• AI 服務商為防止濫用最多保留 30 天後刪除，且不會用於模型訓練",
+    "sensitiveTitle": "（必要）敏感資訊處理同意",
+    "sensitiveBody": "日記中可能包含健康與心理狀態。報告會在未加密的狀態下處理這些內容。",
+    "transferTitle": "（必要）跨境傳輸同意",
+    "transferBody": "AI 服務商 {{vendor}} 位於{{country}}。內容僅為產生摘要而傳送。",
+    "vendorContact": "聯絡方式：{{contact}}",
+    "optional": "即使不同意，也只是無法使用 AI 報告，其他功能照常使用。",
+    "agree": "同意並繼續",
+    "readPolicy": "查看隱私權政策",
+    "vendorCountry": "美國"
   }
 }

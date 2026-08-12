@@ -34,6 +34,17 @@ export const SETTING_KEYS = {
    */
   aiReportLanguage: 'ai_report_language',
   /**
+   * AI 리포트 동의 — **두 키다. 합치지 않는다.**
+   *
+   * 🔴 근거 법조문이 다르다(§23 민감정보 / §28-8 국외이전). 한 키에 담으면 "둘 다 동의"
+   *   외의 상태를 표현할 수 없고, 하나만 철회하는 것도 불가능해진다
+   *   (`features/ai/consent.ts`).
+   *
+   * 값은 `"<동의버전>|<epoch ms>"` — **언제 어느 문안에 동의했는지** 증명할 수 있어야 한다.
+   */
+  aiConsentSensitive: 'ai_consent_sensitive',
+  aiConsentTransfer: 'ai_consent_transfer',
+  /**
    * 읽은 공지 id 목록(JSON 배열).
    *
    * **서버에 읽음을 보내지 않는다** — 익명 접수라 서버가 "누가 읽었는지"를 알 방법이 없고,
