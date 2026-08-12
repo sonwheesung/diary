@@ -35,8 +35,19 @@ const NL = String.fromCharCode(10);
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-/** 본문 줄 안의 URL을 링크로. 처리방침에 Google 정책 링크가 들어간다 */
-const linkify = (s) => esc(s).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" rel="noopener">$1</a>');
+/**
+ * 본문 줄을 HTML로. URL은 링크로, `**강조**`는 굵게.
+ *
+ * ⚠ 정본(`legal-text.ts`)은 마크다운 강조를 쓰는데 생성기가 그걸 그대로 흘려보내고 있었다 —
+ *   게시된 법적 문서에 `**`가 26개 노출돼 있었다(2026-08-12 발견). 앱 화면은 Text라
+ *   어차피 평문이지만, HTML은 렌더할 수 있으니 렌더한다.
+ *
+ * 순서: esc → 강조 → 링크. `*`는 esc 대상이 아니고 URL에 `**`가 들어갈 일이 없어 서로 간섭하지 않는다.
+ */
+const linkify = (s) =>
+  esc(s)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" rel="noopener">$1</a>');
 
 const render = (doc) => {
 /*
