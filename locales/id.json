@@ -397,7 +397,8 @@
     "restoreWithCode": "Pulihkan dengan kode pemulihan",
     "title": "Pencadangan",
     "turnOn": "Aktifkan pencadangan",
-    "viewCode": "Lihat kode pemulihan"
+    "viewCode": "Lihat kode pemulihan",
+    "noticeIncludes": "Catatan (judul, isi, foto), tag, dan laporan AI diunggah bersama."
   },
   "subscribe": {
     "alreadyActive": "Kamu punya Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "Setuju dan lanjutkan",
     "readPolicy": "Lihat kebijakan privasi",
     "vendorCountry": "Amerika Serikat"
+  },
+  "legal": {
+    "effectiveUpdated": "Berlaku {{effective}} · Terakhir diperbarui {{updated}}",
+    "koreanGoverns": "Ini adalah terjemahan untuk memudahkan pembacaan. Jika berbeda dengan naskah asli bahasa Korea, versi Korea yang berlaku.",
+    "pendingTitle": "Perubahan mendatang",
+    "appliesFrom": "Berlaku sejak: {{when}}"
   }
 }

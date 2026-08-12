@@ -20,7 +20,8 @@
     "format:check": "prettier --check .",
     "legal:html": "node scripts/make-legal-html.mjs",
     "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs",
-    "check:ai": "node scripts/check-ai.mjs"
+    "check:ai": "node scripts/check-ai.mjs",
+    "check:legal": "node --experimental-strip-types --no-warnings scripts/check-legal.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.3.0",

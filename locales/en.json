@@ -397,7 +397,8 @@
     "restoreWithCode": "Restore with a recovery code",
     "title": "Backup",
     "turnOn": "Turn on backup",
-    "viewCode": "View recovery code"
+    "viewCode": "View recovery code",
+    "noticeIncludes": "Entries (title, text, photos), tags and AI reports all go up together."
   },
   "subscribe": {
     "alreadyActive": "You have Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "Agree and continue",
     "readPolicy": "Read the privacy policy",
     "vendorCountry": "the United States"
+  },
+  "legal": {
+    "effectiveUpdated": "Effective {{effective}} · Last updated {{updated}}",
+    "koreanGoverns": "This is a translation for readability. Where it differs from the Korean original, the Korean version governs.",
+    "pendingTitle": "Upcoming amendment",
+    "appliesFrom": "Applies from: {{when}}"
   }
 }

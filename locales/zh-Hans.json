@@ -397,7 +397,8 @@
     "restoreWithCode": "用恢复码恢复",
     "title": "备份",
     "turnOn": "开启备份",
-    "viewCode": "查看恢复码"
+    "viewCode": "查看恢复码",
+    "noticeIncludes": "碎片（标题、正文、照片）、标签和 AI 报告会一起上传。"
   },
   "subscribe": {
     "alreadyActive": "你正在使用 Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "同意并继续",
     "readPolicy": "查看隐私政策",
     "vendorCountry": "美国"
+  },
+  "legal": {
+    "effectiveUpdated": "生效日 {{effective}} · 最后更新 {{updated}}",
+    "koreanGoverns": "本文为便于阅读的译文。如与韩文原文有出入，以韩文版为准。",
+    "pendingTitle": "修订预告",
+    "appliesFrom": "适用时间：{{when}}"
   }
 }

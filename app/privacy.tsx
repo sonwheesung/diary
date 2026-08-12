@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
-import { PRIVACY } from '@/features/legal/legal-text';
+import { resolvePrivacy } from '@/features/legal/resolve';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -17,12 +17,19 @@ import { typography } from '@/theme/typography';
  * 원문을 앱에 **정적으로** 담는다. 법적 고지는 오프라인에서도 열려야 하고,
  * 조각은 서버 없이 완전히 동작하는 앱이라 더욱 그렇다(웹 링크로만 두면 비행기에서 못 본다).
  *
- * ⚠ 번역하지 않는다. 법적 문서라 번역본이 원문과 어긋나면 어느 쪽이 효력인지 다툼이 생긴다.
- * 15개 언어 중 어떤 언어로 앱을 쓰든 이 화면은 한국어 원문을 보여준다 —
- * 국문 사업자가 국내법(PIPA)에 따라 작성한 문서이기 때문이다.
+ * ~~번역하지 않는다~~ → **번역한다**(2026-08-12 사용자 결정).
+ *
+ * 옛 근거는 *"번역본이 원문과 어긋나면 어느 쪽이 효력인지 다툼이 생긴다"* 였다. 걱정은 옳지만
+ * 답이 틀렸다 — 다툼은 **"한국어본이 우선한다"** 한 줄로 막히고, 그 줄을 안 쓴 대가는
+ * **자기 정보가 어떻게 처리되는지 못 읽는 사용자**다. 읽을 수 없는 고지는 고지가 아니다.
+ *
+ * 어긋남은 문구가 아니라 **구조**로 막는다 — `npm run check:legal`이 절 수와 줄 수를
+ * 한국어와 대조한다. 번역이 없는 언어는 한국어 원문을 그대로 보여준다(반쪽 번역을 만들지 않는다).
  */
 export default function PrivacyScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // 언어를 바꾸면 다시 고른다 — 화면이 열린 채 언어가 바뀌는 경로가 있다
+  const { doc: PRIVACY, translated } = resolvePrivacy(i18n.language);
   const colors = useColors();
   const styles = useStyles(createStyles);
 
@@ -44,8 +51,15 @@ export default function PrivacyScreen() {
     <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
       <Text style={styles.docTitle}>{PRIVACY.title}</Text>
       <Text style={styles.meta}>
-        시행일 {PRIVACY.effective} · 최종 수정일 {PRIVACY.updated}
+        {t('legal.effectiveUpdated', { effective: PRIVACY.effective, updated: PRIVACY.updated })}
       </Text>
+
+      {/*
+        🔴 **번역본에는 우선순위를 반드시 띄운다.** 이 한 줄이 "어느 쪽이 효력인가"를
+          정리하고, 그래서 번역을 안 하던 이유가 사라진다. 안 띄우면 번역본이
+          독립된 약속처럼 읽힌다.
+      */}
+      {translated && <Text style={styles.precedence}>{t('legal.koreanGoverns')}</Text>}
       <Text style={styles.intro}>{PRIVACY.intro}</Text>
 
       {PRIVACY.sections.map((section) => (
@@ -75,8 +89,8 @@ export default function PrivacyScreen() {
       */}
       {(PRIVACY.pending ?? []).map((amendment) => (
         <View key={amendment.appliesFrom} style={styles.pending}>
-          <Text style={styles.pendingTitle}>개정 예고</Text>
-          <Text style={styles.pendingWhen}>적용 시점: {amendment.appliesFrom}</Text>
+          <Text style={styles.pendingTitle}>{t('legal.pendingTitle')}</Text>
+          <Text style={styles.pendingWhen}>{t('legal.appliesFrom', { when: amendment.appliesFrom })}</Text>
           <Text style={styles.line}>{amendment.summary}</Text>
           {amendment.sections.map((section) => (
             <View key={section.h} style={styles.section}>
@@ -115,6 +129,11 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
       marginTop: -spacing.sm,
+    },
+    precedence: {
+      ...typography.caption,
+      color: colors.textMuted,
+      fontStyle: 'italic',
     },
     intro: {
       ...typography.caption,

@@ -397,7 +397,8 @@
     "restoreWithCode": "Mit einem Wiederherstellungscode wiederherstellen",
     "title": "Sicherung",
     "turnOn": "Sicherung einschalten",
-    "viewCode": "Wiederherstellungscode ansehen"
+    "viewCode": "Wiederherstellungscode ansehen",
+    "noticeIncludes": "Einträge (Titel, Text, Fotos), Tags und KI-Berichte werden zusammen gesichert."
   },
   "subscribe": {
     "alreadyActive": "Du hast Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "Zustimmen und fortfahren",
     "readPolicy": "Datenschutzerklärung lesen",
     "vendorCountry": "den USA"
+  },
+  "legal": {
+    "effectiveUpdated": "Gültig ab {{effective}} · Zuletzt geändert {{updated}}",
+    "koreanGoverns": "Dies ist eine Übersetzung zur besseren Lesbarkeit. Bei Abweichungen vom koreanischen Original gilt die koreanische Fassung.",
+    "pendingTitle": "Angekündigte Änderung",
+    "appliesFrom": "Gilt ab: {{when}}"
   }
 }

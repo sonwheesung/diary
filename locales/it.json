@@ -397,7 +397,8 @@
     "restoreWithCode": "Ripristina con un codice di recupero",
     "title": "Backup",
     "turnOn": "Attiva il backup",
-    "viewCode": "Vedi il codice di recupero"
+    "viewCode": "Vedi il codice di recupero",
+    "noticeIncludes": "Vengono caricate insieme le voci (titolo, testo, foto), i tag e i resoconti IA."
   },
   "subscribe": {
     "alreadyActive": "Hai Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "Accetta e continua",
     "readPolicy": "Leggi l'informativa sulla privacy",
     "vendorCountry": "Stati Uniti"
+  },
+  "legal": {
+    "effectiveUpdated": "In vigore dal {{effective}} · Ultimo aggiornamento {{updated}}",
+    "koreanGoverns": "Questa è una traduzione di cortesia. In caso di difformità con l’originale coreano, prevale la versione coreana.",
+    "pendingTitle": "Modifica in arrivo",
+    "appliesFrom": "Si applica dal: {{when}}"
   }
 }

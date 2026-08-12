@@ -397,7 +397,8 @@
     "restoreWithCode": "Kurtarma koduyla geri yükle",
     "title": "Yedekleme",
     "turnOn": "Yedeklemeyi aç",
-    "viewCode": "Kurtarma kodunu gör"
+    "viewCode": "Kurtarma kodunu gör",
+    "noticeIncludes": "Kayıtlar (başlık, metin, fotoğraflar), etiketler ve yapay zekâ raporları birlikte yüklenir."
   },
   "subscribe": {
     "alreadyActive": "Jogak Pro'ya sahipsin",
@@ -503,5 +504,11 @@
     "agree": "Onayla ve devam et",
     "readPolicy": "Gizlilik politikasını oku",
     "vendorCountry": "ABD"
+  },
+  "legal": {
+    "effectiveUpdated": "Yürürlük {{effective}} · Son güncelleme {{updated}}",
+    "koreanGoverns": "Bu, okuma kolaylığı için hazırlanmış bir çeviridir. Korece aslıyla çelişmesi hâlinde Korece sürüm geçerlidir.",
+    "pendingTitle": "Yaklaşan değişiklik",
+    "appliesFrom": "Şu tarihten itibaren geçerli: {{when}}"
   }
 }

@@ -397,7 +397,8 @@
     "restoreWithCode": "복구 코드로 되돌리기",
     "title": "백업",
     "turnOn": "백업 켜기",
-    "viewCode": "복구 코드 보기"
+    "viewCode": "복구 코드 보기",
+    "noticeIncludes": "조각(제목·본문·사진)·태그·AI 리포트가 함께 올라가요."
   },
   "subscribe": {
     "alreadyActive": "조각 Pro를 이용 중이에요",
@@ -503,5 +504,11 @@
     "agree": "동의하고 계속",
     "readPolicy": "개인정보 처리방침 보기",
     "vendorCountry": "미국"
+  },
+  "legal": {
+    "effectiveUpdated": "시행일 {{effective}} · 최종 수정일 {{updated}}",
+    "koreanGoverns": "이 문서가 정본입니다. 다른 언어로 보이는 내용은 읽기 편하시라고 옮긴 것이며, 다를 경우 이 한국어본이 우선합니다.",
+    "pendingTitle": "개정 예고",
+    "appliesFrom": "적용 시점: {{when}}"
   }
 }

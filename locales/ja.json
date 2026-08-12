@@ -397,7 +397,8 @@
     "restoreWithCode": "復旧コードで復元する",
     "title": "バックアップ",
     "turnOn": "バックアップをオンにする",
-    "viewCode": "復旧コードを見る"
+    "viewCode": "復旧コードを見る",
+    "noticeIncludes": "かけら（タイトル・本文・写真）・タグ・AIレポートが一緒に保存されます。"
   },
   "subscribe": {
     "alreadyActive": "Jogak Proをご利用中です",
@@ -503,5 +504,11 @@
     "agree": "同意して続ける",
     "readPolicy": "プライバシーポリシーを見る",
     "vendorCountry": "アメリカ合衆国"
+  },
+  "legal": {
+    "effectiveUpdated": "施行日 {{effective}} · 最終更新日 {{updated}}",
+    "koreanGoverns": "読みやすさのための翻訳です。韓国語の原文と異なる場合は、韓国語版が優先します。",
+    "pendingTitle": "改定予告",
+    "appliesFrom": "適用時期: {{when}}"
   }
 }

@@ -397,7 +397,8 @@
     "restoreWithCode": "Restaurar com um código de recuperação",
     "title": "Backup",
     "turnOn": "Ativar o backup",
-    "viewCode": "Ver o código de recuperação"
+    "viewCode": "Ver o código de recuperação",
+    "noticeIncludes": "Sobem juntos os registros (título, texto, fotos), as tags e os relatórios de IA."
   },
   "subscribe": {
     "alreadyActive": "Você tem o Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "Concordar e continuar",
     "readPolicy": "Ver a política de privacidade",
     "vendorCountry": "Estados Unidos"
+  },
+  "legal": {
+    "effectiveUpdated": "Em vigor desde {{effective}} · Última atualização {{updated}}",
+    "koreanGoverns": "Esta é uma tradução para facilitar a leitura. Em caso de divergência com o original em coreano, prevalece a versão coreana.",
+    "pendingTitle": "Alteração prevista",
+    "appliesFrom": "Aplica-se a partir de: {{when}}"
   }
 }

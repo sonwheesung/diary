@@ -397,7 +397,8 @@
     "restoreWithCode": "Khôi phục bằng mã khôi phục",
     "title": "Sao lưu",
     "turnOn": "Bật sao lưu",
-    "viewCode": "Xem mã khôi phục"
+    "viewCode": "Xem mã khôi phục",
+    "noticeIncludes": "Các mảnh (tiêu đề, nội dung, ảnh), thẻ và báo cáo AI được sao lưu cùng nhau."
   },
   "subscribe": {
     "alreadyActive": "Bạn đang dùng Jogak Pro",
@@ -503,5 +504,11 @@
     "agree": "Đồng ý và tiếp tục",
     "readPolicy": "Xem chính sách quyền riêng tư",
     "vendorCountry": "Hoa Kỳ"
+  },
+  "legal": {
+    "effectiveUpdated": "Hiệu lực {{effective}} · Cập nhật {{updated}}",
+    "koreanGoverns": "Đây là bản dịch để dễ đọc. Nếu có khác biệt với bản gốc tiếng Hàn, bản tiếng Hàn được ưu tiên áp dụng.",
+    "pendingTitle": "Sửa đổi sắp áp dụng",
+    "appliesFrom": "Áp dụng từ: {{when}}"
   }
 }

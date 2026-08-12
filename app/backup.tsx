@@ -126,6 +126,13 @@ export default function BackupScreen() {
           암호문과 메타데이터(백업 시각·용량)는 서버에 남는다.
       */}
       <View style={styles.noticeBox}>
+        {/*
+          🔴 **무엇이 올라가는지 먼저 적는다.** 여기 없으면 사용자는 "일기만"으로 읽는다 —
+            리포트는 캡이 주 1회라 **다시 만들 수 없고**, 백업에 든다는 사실을 모른 채
+            폰을 바꾸면 잃었다고 생각한다. 반대로 "리포트도 올라간다"는 것은
+            AI 고지(무엇이 서버로 가는가)와도 이어지므로 밝히는 쪽이 맞다.
+        */}
+        <Text style={styles.notice}>{t('backup.noticeIncludes')}</Text>
         <Text style={styles.notice}>{t('backup.noticeUnreadable')}</Text>
         <Text style={styles.notice}>{t('backup.noticeMetadata')}</Text>
       </View>

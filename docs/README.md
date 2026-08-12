@@ -103,7 +103,8 @@ npm install                    # 의존성
 # 커밋 전 필수 (CLAUDE.md §11 ④)
 npm run typecheck              # tsc --noEmit
 npm run lint                   # eslint
-npm run check:i18n             # 키 누락·언어 간 불일치
+npm run check:i18n             # 키 누락·언어 간 불일치 + **다른 언어에 한글이 남았는가**
+npm run check:legal            # 처리방침 번역의 절·줄 수가 한국어와 같은가 (조항 누락 방어)
 
 # 백업을 건드렸으면
 npm run check:backup-crypto    # 46개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
