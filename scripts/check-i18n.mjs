@@ -98,6 +98,42 @@ for (const code of codes) {
   }
 }
 
+/*
+ * ③ 🔴 다른 언어에 한글이 남아 있는가.
+ *
+ * **키가 다 있어도 값이 한국어면 검사는 통과하던 자리다.** 2026-08-12에 실제로 잡혔다 —
+ * `report.seeSubscription`이 14개 언어에서 `조각 Pro`였고, 독일어 사용자에게 한글이 떴다.
+ * 다른 언어에서 상품명은 `Jogak Pro`가 규약이다(`subscribe.title`이 그렇게 되어 있다).
+ *
+ * ⚠ 반대 방향(영어가 남아 있는가)은 검사하지 않는다 — `Backup`·`Update`처럼 그 언어에서
+ *   그대로 쓰는 외래어가 많아 오탐이 너무 잦다. 한글은 그런 경우가 없다.
+ */
+const HANGUL = /[가-힣]/;
+function collectValues(value, prefix = '', out = []) {
+  for (const [key, child] of Object.entries(value)) {
+    const path = prefix === '' ? key : `${prefix}.${key}`;
+    if (child !== null && typeof child === 'object' && !Array.isArray(child)) {
+      collectValues(child, path, out);
+    } else if (typeof child === 'string') {
+      out.push([path, child]);
+    } else if (Array.isArray(child)) {
+      child.forEach((v, i) => typeof v === 'string' && out.push([`${path}[${i}]`, v]));
+    }
+  }
+  return out;
+}
+for (const file of readdirSync(LOCALE_DIR)) {
+  if (extname(file) !== '.json' || file === 'ko.json') continue;
+  const code = file.replace('.json', '');
+  const raw = JSON.parse(readFileSync(join(LOCALE_DIR, file), 'utf8'));
+  for (const [path, text] of collectValues(raw)) {
+    if (HANGUL.test(text)) {
+      console.error(`한글이 남아 있다:  ${code}  ${path}  =  ${text}`);
+      failed = true;
+    }
+  }
+}
+
 if (failed) {
   process.exit(1);
 }
