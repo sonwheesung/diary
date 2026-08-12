@@ -21,7 +21,7 @@
 | `LOCK_SYSTEM.md` | 앱 잠금 — PIN·패턴(3×3)·생체·자동잠금·실패 처리 (정책은 CLAUDE.md §7.1) | ❌ 미작성 |
 | [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) | 구독 — 단일 상품·로그인 게이트·RevenueCat 연결·전자상거래법 (정책은 CLAUDE.md §7.2) | ✅ |
 | [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) | 백업/복원 — 키 유도·봉투·매니페스트·서버 계약·전체 교체 (정책은 CLAUDE.md §5.1) | ✅ |
-| `AI_REPORT_SYSTEM.md` | 주간/월간/연간 리포트 생성·비용·계층 요약 (정책은 ARCHITECTURE §6) | ❌ 미작성 |
+| [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) | AI 리포트 — 처리 경로·위기 정책·모델/원가·캡·기간/언어·서버 계약 (정책은 CLAUDE.md §5.1) | ✅ |
 | `UI_GUIDE.md` | 컬러·타이포·여백·공통 컴포넌트 사용법 | ❌ 미작성 |
 | `CHANGELOG.md` | 릴리스 변경 이력 | ❌ 미작성(첫 빌드 시점부터) |
 | `PROJECT_STRUCTURE.md` | 폴더 구조 상세 | ⏸ 보류 — 현재는 CLAUDE.md §8이 정본 |
@@ -61,9 +61,9 @@
 | **백업/복원 — 앱 쪽** | ✅ | 암호 계층·매니페스트·클라이언트·화면. [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
 | **백업/복원 — 실기기 검증** | ❌ | RN의 5MB PUT · `backupDatabaseAsync` 동작 · 암호 처리량 |
 | 사진 백업(2차) | ✅ | 이미지 하나 = blob 하나. 증분(`plan`) · 복원 후 못 받은 사진만 `'missing'` |
-| 월 구독(RevenueCat) | ❌ | Phase 9 대기 |
-| 백업/복원(클라이언트 암호화) | ❌ | 조각 서버 대기 |
-| AI 리포트(주간 우선·서버 프록시) | ❌ | 조각 서버 대기 |
+| 월 구독(RevenueCat) | ⏸ | ~~Phase 9 대기~~ → 앱·RC·**Play 상품 등록까지 완료**(2026-08-12). 남은 것은 RC 상품 import·attach와 결제 프로필. [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) |
+| 백업/복원 — 서버 | ✅ | ~~조각 서버 대기~~ → `jogak-stg`(서울) + Vercel(`icn1`) 배포. 위 두 줄과 합쳐 읽는다 |
+| **AI 리포트** | ⏸ | 설계 문서 ✅ [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) · 코드 ❌. **처리방침 AI 예고(30일)가 선행** |
 | 공통 컴포넌트 8종 | ❌ | |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ❌ | |

@@ -44,20 +44,27 @@ const render = (doc) => {
  *   일어난 적이 없게 되고(정본 파일에만 적혀 있다), 릴리스 직전에 30일이 통째로
  *   크리티컬 패스가 된다 — 예고본을 만든 이유 전체가 무효가 된다. 실제로 빠져 있었다.
  */
-const pending =
-  doc.pending === undefined
-    ? ''
-    : `    <section class="pending">
+/*
+ * ⚠ `pending`은 **배열**이다(2026-08-12 정정). 시행일이 다른 예고를 각각 담는다 —
+ *   합치면 예고를 수정한 것이 되어 30일이 다시 흐르고 앞선 릴리스가 밀린다.
+ *   단수 시절 코드가 `doc.pending.sections`를 직접 읽었으므로, 여기를 안 고치면
+ *   `undefined.map`으로 **생성이 통째로 죽는다.**
+ */
+const pending = (doc.pending ?? [])
+  .map(
+    (p) => `    <section class="pending">
       <h2>개정 예고</h2>
-      <p class="pending-when">적용 시점: ${esc(doc.pending.appliesFrom)}</p>
-      <p>${linkify(doc.pending.summary)}</p>
-${doc.pending.sections
+      <p class="pending-when">적용 시점: ${esc(p.appliesFrom)}</p>
+      <p>${linkify(p.summary)}</p>
+${p.sections
   .map(
     (s) => `      <h3>${esc(s.h)}</h3>
 ${s.body.map((line) => `      <p>${linkify(line)}</p>`).join(NL)}`,
   )
   .join(NL)}
-    </section>`;
+    </section>`,
+  )
+  .join(NL);
 
 const sections = doc.sections
   .map(
@@ -139,7 +146,12 @@ for (const [file, doc] of [
 ]) {
   const out = render(doc);
   writeFileSync(`docs/${file}`, out, 'utf8');
-  const extra = doc.pending === undefined ? '' : ` + 개정 예고 ${doc.pending.sections.length}개`;
+  // 예고가 몇 개이고 각각 몇 절인지 눈으로 확인한다 — 조용히 0개가 되는 것이 이 파일의 사고 유형이다
+  const pendings = doc.pending ?? [];
+  const extra =
+    pendings.length === 0
+      ? ''
+      : ` + 개정 예고 ${pendings.length}건(${pendings.map((p) => `${p.sections.length}절`).join(' · ')})`;
   console.log(
     `docs/${file} 생성 — ${doc.sections.length}개 섹션${extra}, ${(out.length / 1024).toFixed(1)}KB`,
   );

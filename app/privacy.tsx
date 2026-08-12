@@ -68,12 +68,17 @@ export default function PrivacyScreen() {
           본문과 **눈으로 구분되어야** 한다. 아직 시행되지 않은 내용이 본문처럼 보이면
           "이미 서버에 백업이 올라가고 있다"는 오해를 만든다.
       */}
-      {PRIVACY.pending !== undefined && (
-        <View style={styles.pending}>
+      {/*
+          ⚠ `pending`은 **배열**이다(2026-08-12 정정). 시행일이 다른 예고를 각각 그린다 —
+            백업 예고와 AI 예고는 30일 시계가 따로 흐르므로 한 덩어리로 합칠 수 없다.
+            각 예고를 별도 박스로 그려야 "어느 것이 언제부터인지"가 읽힌다.
+      */}
+      {(PRIVACY.pending ?? []).map((amendment) => (
+        <View key={amendment.appliesFrom} style={styles.pending}>
           <Text style={styles.pendingTitle}>개정 예고</Text>
-          <Text style={styles.pendingWhen}>적용 시점: {PRIVACY.pending.appliesFrom}</Text>
-          <Text style={styles.line}>{PRIVACY.pending.summary}</Text>
-          {PRIVACY.pending.sections.map((section) => (
+          <Text style={styles.pendingWhen}>적용 시점: {amendment.appliesFrom}</Text>
+          <Text style={styles.line}>{amendment.summary}</Text>
+          {amendment.sections.map((section) => (
             <View key={section.h} style={styles.section}>
               <Text style={styles.sectionTitle}>{section.h}</Text>
               {section.body.map((line, index) => (
@@ -84,7 +89,7 @@ export default function PrivacyScreen() {
             </View>
           ))}
         </View>
-      )}
+      ))}
     </Screen>
   );
 }
