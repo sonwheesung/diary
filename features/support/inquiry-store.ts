@@ -121,10 +121,17 @@ export const useInquiryStore = create<InquiryState>((set, get) => ({
     set({ loading: true });
     try {
       /*
-       * 로그인 여부를 여기서 따로 묻지 않는다 — SDK가 토큰이 없으면 `not-signed-in`을
-       * **네트워크 없이** 돌려준다. 로그인 안 한 사람에게 왕복이 생기지 않는다.
+       * 🔴 **토큰 유무를 먼저 반영한다**(2026-08-13 기기에서 발견).
+       *
+       * 조회 성공에서만 `signedIn`을 켜면, 로그인한 사람이 **오프라인일 때 영영 안 켜진다** —
+       * 초기값이 false이고 `offline`은 값을 안 바꾸므로 true에 도달할 길이 없다.
+       * 그러면 비행기 모드로 앱을 연 사람에게 설정의 '내 문의' 행이 아예 사라진다.
+       *
+       * `isSignedIn()`은 **로컬 토큰 읽기**라 왕복이 없다 — 설정 탭에 왕복을 더하지 않는다는
+       * 원래 이유(`docs/SUPPORT_SYSTEM.md` §5.5)와 어긋나지 않는다.
        */
-      const [result, readKeys] = await Promise.all([
+      const [hasToken, result, readKeys] = await Promise.all([
+        commonServer.isSignedIn(),
         commonServer.fetchMyInquiries(),
         loadReadKeys(),
       ]);
@@ -137,6 +144,17 @@ export const useInquiryStore = create<InquiryState>((set, get) => ({
          */
         const noSession = result.reason === 'not-signed-in' || result.reason === 'unauthorized';
         /*
+         * 🔴 **`not-signed-in`과 `unauthorized`를 오류 표시에서 갈라야 한다**(2026-08-13 기기에서 발견).
+         *
+         * 둘 다 "세션 없음"이지만 사용자가 처한 상황이 정반대다:
+         *   · `not-signed-in` — 토큰이 애초에 없다. 그 사람은 **이 화면에 오지도 못한다**(입구가 안 보인다).
+         *     오류로 세우면 로그인 안 한 사람에게 "불러오지 못했어요"가 뜬다.
+         *   · `unauthorized` — 토큰이 있었는데 서버가 거절했고 **SDK가 방금 세션을 버렸다.**
+         *     그 사람은 지금 이 화면을 보고 있다. 여기서 조용히 빈 목록을 그리면
+         *     **"문의가 없어요"가 거짓말이 된다** — 있는지 없는지 우리도 모른다.
+         */
+        const neverSignedIn = result.reason === 'not-signed-in';
+        /*
          * ⚠ **실패에 목록을 비우지 않는다.** 엔타이틀먼트 캐시와 같은 규율이다 —
          *   잠깐 끊긴 것 때문에 이미 받아둔 답변이 화면에서 사라지면 고장으로 보인다.
          *   단 세션이 없어진 것이라면 남의 답변이 남으면 안 되므로 비운다.
@@ -145,12 +163,12 @@ export const useInquiryStore = create<InquiryState>((set, get) => ({
         set({
           loaded: true,
           loading: false,
-          signedIn: noSession ? false : get().signedIn,
           /*
-           * 로그인을 안 한 것은 오류가 아니다 — 그 사람에게는 화면 자체가 안 보인다.
-           * 오류로 세우면 "불러오지 못했어요"가 로그인 안 한 사람에게 뜬다.
+           * 세션이 확실히 없으면 false. 그 밖(오프라인·서버 오류)은 **토큰 유무**로 판정한다 —
+           * 못 물어본 것을 "로그인 안 함"으로 읽으면 행이 사라진다.
            */
-          lastError: noSession ? null : result.reason,
+          signedIn: noSession ? false : hasToken,
+          lastError: neverSignedIn ? null : result.reason,
           inquiries,
           readKeys,
           unreadCount: countUnread(inquiries, readKeys),

@@ -67,6 +67,12 @@ export default function InquiriesScreen() {
   const markAllRead = useInquiryStore((state) => state.markAllRead);
 
   const loadFailed = lastError !== null;
+  /*
+   * 세션이 죽은 것과 못 불러온 것은 **할 수 있는 일이 다르다.**
+   * 다시 시도해봐야 또 401이라 재시도 버튼을 주지 않는다 — 다시 로그인해야 한다.
+   * 문구는 문의 화면이 이미 쓰는 `support.failSignInAgain`을 재사용한다(새 키를 15개 언어에 더하지 않는다).
+   */
+  const sessionExpired = lastError === 'unauthorized';
 
   /*
    * 입장 시점의 안읽음을 **스냅샷으로 뜬다**(공지 화면과 같은 이유).
@@ -150,10 +156,14 @@ export default function InquiriesScreen() {
                "보낸 문의가 없어요"가 뜨면 방금 보낸 문의가 사라진 것처럼 보인다.
           */}
           <Text style={styles.emptyTitle}>
-            {loadFailed ? t('inquiries.loadFailed') : t('inquiries.empty')}
+            {sessionExpired
+              ? t('support.failSignInAgain')
+              : loadFailed
+                ? t('inquiries.loadFailed')
+                : t('inquiries.empty')}
           </Text>
           {!loadFailed && <Text style={styles.emptyBody}>{t('inquiries.emptyBody')}</Text>}
-          {loadFailed && (
+          {loadFailed && !sessionExpired && (
             <View style={styles.emptyAction}>
               <Button
                 label={t('common.retry')}
