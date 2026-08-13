@@ -251,9 +251,7 @@ export default function LockSetupScreen() {
         </Pressable>
 
         {/* 과장하지 않는다 — 잠금은 UI 게이트이지 암호화가 아니다(CLAUDE.md §7.1) */}
-        <Text style={styles.disclaimer}>
-          {t('lock.setup.disclaimer')}
-        </Text>
+        <Text style={styles.disclaimer}>{t('lock.setup.disclaimer')}</Text>
       </Screen>
     );
   }
@@ -302,9 +300,7 @@ export default function LockSetupScreen() {
           이 문은 답의 강도만큼만 강하다. 과장하지 말고 그대로 알려준다 — 사용자가
           '생일'처럼 남이 아는 답을 넣으면 잠금이 그만큼 약해진다.
         */}
-        <Text style={styles.disclaimer}>
-          {t('lock.setup.hintDisclaimer')}
-        </Text>
+        <Text style={styles.disclaimer}>{t('lock.setup.hintDisclaimer')}</Text>
 
         {error !== null && <Text style={styles.errorText}>{error}</Text>}
 
@@ -332,8 +328,8 @@ export default function LockSetupScreen() {
         <Text style={styles.subtitle}>
           {error ??
             (method === 'pin'
-            ? t('lock.setup.pinNote', { digits: PIN_LENGTH })
-            : t('lock.setup.patternNote', { dots: PATTERN_MIN_POINTS }))}
+              ? t('lock.setup.pinNote', { digits: PIN_LENGTH })
+              : t('lock.setup.patternNote', { dots: PATTERN_MIN_POINTS }))}
         </Text>
 
         <View style={styles.input}>

@@ -25,15 +25,7 @@
     "report": "レポート"
   },
   "date": {
-    "weekdays": [
-      "日",
-      "月",
-      "火",
-      "水",
-      "木",
-      "金",
-      "土"
-    ],
+    "weekdays": ["日", "月", "火", "水", "木", "金", "土"],
     "full": "{{year}}年{{month}}月{{day}}日（{{weekday}}）",
     "dateTime": "{{year}}年{{month}}月{{day}}日 {{hour}}:{{minute}}",
     "list": "{{month}}月{{day}}日（{{weekday}}）",
@@ -312,6 +304,17 @@
     "submit": "送信",
     "title": "お問い合わせ",
     "tooShort": "{{min}}文字以上入力してください。"
+  },
+  "inquiries": {
+    "title": "お問い合わせ履歴",
+    "empty": "お問い合わせはまだありません",
+    "loadFailed": "お問い合わせ履歴を読み込めませんでした",
+    "emptyBody": "ご不明な点や不具合があればお知らせください。",
+    "statusOpen": "受付済み",
+    "statusReplied": "回答済み",
+    "statusResolved": "対応完了",
+    "replyLabel": "回答",
+    "awaitingReply": "回答を準備しています。"
   },
   "backup": {
     "backupNow": "今すぐバックアップ",

@@ -1,7 +1,13 @@
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 
-import { deriveAuthKey, deriveDek, deriveKid, deriveVaultId, toHex } from '@/features/backup/key-derive';
+import {
+  deriveAuthKey,
+  deriveDek,
+  deriveKid,
+  deriveVaultId,
+  toHex,
+} from '@/features/backup/key-derive';
 import { SECRET_LENGTH, encodeRecoveryCode } from '@/features/backup/recovery-code';
 
 /**

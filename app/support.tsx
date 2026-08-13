@@ -15,6 +15,7 @@ import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
 import { useSupportAuth } from '@/features/support/auth-gate';
 import type { SignInOutcome } from '@/features/support/auth-gate';
+import { useInquiryStore } from '@/features/support/inquiry-store';
 import { CONTENT_MAX, CONTENT_MIN } from '@/lib/common-server';
 import { commonServer } from '@/lib/common-server/client';
 import type { FailReason, SupportCategory } from '@/lib/common-server/types';
@@ -77,6 +78,9 @@ export default function SupportScreen() {
   const styles = useStyles(createStyles);
   const { signedIn, ready, busy, subject, signIn, signOut, deleteAccount } = useSupportAuth();
 
+  const unreadReplies = useInquiryStore((state) => state.unreadCount);
+  const refreshInquiries = useInquiryStore((state) => state.refresh);
+
   const [category, setCategory] = useState<SupportCategory>('bug');
   const [content, setContent] = useState('');
   const [sending, setSending] = useState(false);
@@ -94,7 +98,10 @@ export default function SupportScreen() {
       const result = await commonServer.sendInquiry(category, content);
       if (result.ok) {
         setContent('');
+        // 방금 보낸 것이 내역에 없으면 안 간 것처럼 보인다. 기다리지 않고 갱신만 걸어둔다.
+        void refreshInquiries();
         Alert.alert(t('support.sentTitle'), t('support.sentBody'), [
+          { text: t('inquiries.title'), onPress: () => router.replace('/inquiries') },
           { text: t('common.confirm'), onPress: () => router.back() },
         ]);
         return;
@@ -180,6 +187,22 @@ export default function SupportScreen() {
         <ChevronLeft size={26} color={colors.text} />
       </Pressable>
       <Text style={styles.headerTitle}>{t('support.title')}</Text>
+      {/*
+        내 문의 입구. **로그인했을 때만** 보인다 — 로그인 전에는 볼 내역이 없고,
+        누르면 빈 화면이 나오는 링크는 고장으로 읽힌다.
+        답변이 왔는데 안 읽은 게 있으면 점을 찍는다(설정 행과 같은 규약).
+      */}
+      {signedIn && (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/inquiries')}
+          hitSlop={8}
+          style={styles.headerLinkWrap}
+        >
+          <Text style={styles.headerLink}>{t('inquiries.title')}</Text>
+          {unreadReplies > 0 && <View style={styles.headerDot} />}
+        </Pressable>
+      )}
     </View>
   );
 
@@ -220,11 +243,7 @@ export default function SupportScreen() {
             무엇을 받는지·왜 받는지·언제 지우는지를 **누르기 전에** 여기서 밝힌다.
           */}
           <Text style={styles.gateNote}>{t('support.loginPrivacyNote')}</Text>
-          <Pressable
-            accessibilityRole="link"
-            onPress={() => router.push('/privacy')}
-            hitSlop={8}
-          >
+          <Pressable accessibilityRole="link" onPress={() => router.push('/privacy')} hitSlop={8}>
             <Text style={styles.gateLink}>{t('settings.privacy')}</Text>
           </Pressable>
           <View style={styles.gateAction}>
@@ -303,7 +322,12 @@ export default function SupportScreen() {
           {subject?.email ?? t('support.signedIn')}
         </Text>
         <View style={styles.accountActions}>
-          <Pressable accessibilityRole="button" onPress={confirmSignOut} disabled={busy} hitSlop={8}>
+          <Pressable
+            accessibilityRole="button"
+            onPress={confirmSignOut}
+            disabled={busy}
+            hitSlop={8}
+          >
             <Text style={styles.accountAction}>{t('support.signOut')}</Text>
           </Pressable>
           <Pressable accessibilityRole="button" onPress={confirmDelete} disabled={busy} hitSlop={8}>
@@ -330,6 +354,22 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+    },
+    headerLinkWrap: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      marginLeft: 'auto',
+    },
+    headerLink: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    headerDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: colors.danger,
     },
     sectionTitle: {
       ...typography.label,

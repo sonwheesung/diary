@@ -25,15 +25,7 @@
     "report": "Báo cáo"
   },
   "date": {
-    "weekdays": [
-      "CN",
-      "T2",
-      "T3",
-      "T4",
-      "T5",
-      "T6",
-      "T7"
-    ],
+    "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
     "full": "{{weekday}}, {{day}} tháng {{month}} năm {{year}}",
     "dateTime": "{{day}}/{{month}}/{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} tháng {{month}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Gửi",
     "title": "Liên hệ",
     "tooShort": "Hãy viết ít nhất {{min}} ký tự."
+  },
+  "inquiries": {
+    "title": "Yêu cầu của tôi",
+    "empty": "Chưa có yêu cầu nào",
+    "loadFailed": "Không tải được yêu cầu của bạn",
+    "emptyBody": "Hãy cho chúng tôi biết nếu có điều gì chưa rõ hoặc không hoạt động.",
+    "statusOpen": "Đã tiếp nhận",
+    "statusReplied": "Đã trả lời",
+    "statusResolved": "Đã xử lý",
+    "replyLabel": "Trả lời",
+    "awaitingReply": "Chúng tôi đang chuẩn bị câu trả lời."
   },
   "backup": {
     "backupNow": "Sao lưu ngay",

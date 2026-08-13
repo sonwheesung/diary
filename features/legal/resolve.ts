@@ -25,7 +25,6 @@ import { i18next } from '@/lib/i18n';
  *   국외 이용자에게는 "이 사업자는 한국법을 따른다"는 사실 자체가 정보다.
  */
 
-
 export interface ResolvedLegal {
   doc: LegalDoc;
   /** 번역본인가. `true`면 화면이 "한국어본이 우선" 문구를 띄운다 */

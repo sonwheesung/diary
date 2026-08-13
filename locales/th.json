@@ -25,15 +25,7 @@
     "report": "รายงาน"
   },
   "date": {
-    "weekdays": [
-      "อา",
-      "จ",
-      "อ",
-      "พ",
-      "พฤ",
-      "ศ",
-      "ส"
-    ],
+    "weekdays": ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}}/{{month}}/{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "ส่ง",
     "title": "ติดต่อเรา",
     "tooShort": "โปรดเขียนอย่างน้อย {{min}} ตัวอักษร"
+  },
+  "inquiries": {
+    "title": "คำถามของฉัน",
+    "empty": "ยังไม่มีคำถาม",
+    "loadFailed": "ไม่สามารถโหลดคำถามของคุณได้",
+    "emptyBody": "บอกเราได้เลยหากมีสิ่งใดไม่ชัดเจนหรือใช้งานไม่ได้",
+    "statusOpen": "รับเรื่องแล้ว",
+    "statusReplied": "ตอบแล้ว",
+    "statusResolved": "ดำเนินการเสร็จสิ้น",
+    "replyLabel": "คำตอบ",
+    "awaitingReply": "เรากำลังเตรียมคำตอบ"
   },
   "backup": {
     "backupNow": "สำรองข้อมูลตอนนี้",

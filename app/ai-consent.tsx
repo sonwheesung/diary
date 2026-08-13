@@ -114,7 +114,11 @@ export default function AiConsentScreen() {
           country: t('aiConsent.vendorCountry'),
         })}
         // ⚠ 연락처는 채워졌을 때만 그린다. 빈 문자열을 그리면 "연락처: " 만 남는다
-        extra={AI_VENDOR.contact.length > 0 ? t('aiConsent.vendorContact', { contact: AI_VENDOR.contact }) : null}
+        extra={
+          AI_VENDOR.contact.length > 0
+            ? t('aiConsent.vendorContact', { contact: AI_VENDOR.contact })
+            : null
+        }
       />
 
       {/* 거부해도 나머지 기능은 그대로다 — 그게 성립해야 동의가 자유로운 것이 된다 */}

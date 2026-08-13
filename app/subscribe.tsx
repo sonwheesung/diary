@@ -3,15 +3,7 @@ import ChevronLeft from 'lucide-react-native/icons/chevron-left';
 import Check from 'lucide-react-native/icons/check';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ActivityIndicator,
-  Alert,
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { PurchasesPackage } from 'react-native-purchases';
 
 import { Button } from '@/components/Button';
@@ -256,7 +248,8 @@ export default function SubscribeScreen() {
     );
   }
 
-  const unavailable = !purchasesConfigured() || plans === null || (plans.monthly === null && plans.annual === null);
+  const unavailable =
+    !purchasesConfigured() || plans === null || (plans.monthly === null && plans.annual === null);
 
   return (
     <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>

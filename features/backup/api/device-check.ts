@@ -189,9 +189,8 @@ async function checkRestoreRoundTrip(): Promise<CheckResult[]> {
   try {
     const { buildManifest } = await import('@/features/backup/api/manifest-builder');
     const { applyRestore, diffAgainstLocal } = await import('@/features/backup/api/restore');
-    const { SETTING_KEYS, getSetting, setSetting } = await import(
-      '@/features/settings/api/settings-store'
-    );
+    const { SETTING_KEYS, getSetting, setSetting } =
+      await import('@/features/settings/api/settings-store');
 
     // 보존이 실제로 되는지 보려면 표식이 필요하다.
     const MARK = `check-${Date.now()}`;
@@ -252,9 +251,7 @@ async function checkRestoreRoundTrip(): Promise<CheckResult[]> {
      *   갈아끼우는데, 여기서 쓰는 금고 id는 가짜다 — 그대로 두면 **다음 점검(그리고 실제
      *   백업)이 seq-conflict로 막힌다.** 점검이 서로를 오염시키지 않게 원복한다.
      */
-    const savedState = await (
-      await import('@/features/backup/api/backup-state')
-    ).getBackupState();
+    const savedState = await (await import('@/features/backup/api/backup-state')).getBackupState();
 
     const started = Date.now();
     await applyRestore(manifest, '0'.repeat(32), 1);
@@ -329,7 +326,6 @@ async function checkRestoreRoundTrip(): Promise<CheckResult[]> {
   }
   return out;
 }
-
 
 /**
  * 5. 사진 왕복 — **봉인 → 서명 URL PUT → 다운로드 → 개봉 → 바이트 비교.**
@@ -411,12 +407,18 @@ async function checkPhotoRoundTrip(): Promise<CheckResult[]> {
     let identical = false;
     if (back.exists) {
       const got = await back.bytes();
-      identical = got.byteLength === bytes.byteLength && got[0] === bytes[0] && got[12345] === bytes[12345] && got[got.byteLength - 1] === bytes[bytes.length - 1];
+      identical =
+        got.byteLength === bytes.byteLength &&
+        got[0] === bytes[0] &&
+        got[12345] === bytes[12345] &&
+        got[got.byteLength - 1] === bytes[bytes.length - 1];
     }
     out.push({
       name: '★ 사진 복원 — 받아서 개봉한 바이트가 원본과 같다',
       ok: down.ok && identical,
-      detail: down.ok ? `${down.restored}장 복원 · 없음 ${down.absent} · 일치 ${identical}` : `실패 ${down.reason}`,
+      detail: down.ok
+        ? `${down.restored}장 복원 · 없음 ${down.absent} · 일치 ${identical}`
+        : `실패 ${down.reason}`,
     });
 
     const row = await db.getFirstAsync<{ blob_state: string | null }>(
@@ -449,7 +451,11 @@ export async function runDeviceChecks(baseUrl: string): Promise<CheckResult[]> {
   if (baseUrl.length > 0) {
     results.push(...(await checkLargePut(baseUrl)));
   } else {
-    results.push({ name: 'RN PUT', ok: false, detail: 'EXPO_PUBLIC_BACKUP_SERVER_URL 없음 — 건너뜀' });
+    results.push({
+      name: 'RN PUT',
+      ok: false,
+      detail: 'EXPO_PUBLIC_BACKUP_SERVER_URL 없음 — 건너뜀',
+    });
   }
   results.push(...(await checkDatabaseSwap()));
   results.push(...(await checkRestoreRoundTrip()));

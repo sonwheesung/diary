@@ -19,7 +19,11 @@ const tables = JSON.parse(readFileSync(tablePath, 'utf8'));
 const en = JSON.parse(readFileSync('locales/en.json', 'utf8'));
 
 const PLACEHOLDER = /\{\{\s*([a-zA-Z]+)\s*\}\}/g;
-const placeholders = (s) => [...s.matchAll(PLACEHOLDER)].map((m) => m[1]).sort().join(',');
+const placeholders = (s) =>
+  [...s.matchAll(PLACEHOLDER)]
+    .map((m) => m[1])
+    .sort()
+    .join(',');
 
 const get = (obj, key) => key.split('.').reduce((o, k) => (o === undefined ? o : o[k]), obj);
 
@@ -37,7 +41,9 @@ for (const [lang, table] of Object.entries(tables)) {
       continue;
     }
     if (placeholders(source) !== placeholders(value)) {
-      console.error(`  ✗ ${lang} ${key} — 자리표시자 불일치 (원문 ${placeholders(source) || '없음'})`);
+      console.error(
+        `  ✗ ${lang} ${key} — 자리표시자 불일치 (원문 ${placeholders(source) || '없음'})`,
+      );
       failures += 1;
       continue;
     }
@@ -51,7 +57,9 @@ for (const [lang, table] of Object.entries(tables)) {
   // 키 순서를 알파벳으로 유지 — diff가 읽히게
   for (const section of ['backup', 'subscribe']) {
     if (doc[section] === undefined) continue;
-    doc[section] = Object.fromEntries(Object.entries(doc[section]).sort(([a], [b]) => a.localeCompare(b)));
+    doc[section] = Object.fromEntries(
+      Object.entries(doc[section]).sort(([a], [b]) => a.localeCompare(b)),
+    );
   }
   writeFileSync(path, `${JSON.stringify(doc, null, 2)}\n`, 'utf8');
   console.log(`  ${lang}: ${applied}개 적용`);

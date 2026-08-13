@@ -25,15 +25,7 @@
     "report": "Reports"
   },
   "date": {
-    "weekdays": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
-    ],
+    "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     "full": "{{weekday}}, {{monthName}} {{day}}, {{year}}",
     "dateTime": "{{monthName}} {{day}}, {{year}} {{hour}}:{{minute}}",
     "list": "{{monthName}} {{day}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Send",
     "title": "Contact us",
     "tooShort": "Please write at least {{min}} characters."
+  },
+  "inquiries": {
+    "title": "My inquiries",
+    "empty": "No inquiries yet",
+    "loadFailed": "Couldn't load your inquiries",
+    "emptyBody": "Let us know if anything is unclear or isn't working.",
+    "statusOpen": "Received",
+    "statusReplied": "Answered",
+    "statusResolved": "Closed",
+    "replyLabel": "Reply",
+    "awaitingReply": "We're working on a reply."
   },
   "backup": {
     "backupNow": "Back up now",

@@ -83,7 +83,6 @@ async function fetchWithTimeout(
   }
 }
 
-
 function mapStatus(status: number): BackupFail {
   if (status === 401) return 'unauthorized';
   if (status === 404) return 'no-vault';
@@ -105,8 +104,7 @@ function mapStatus(status: number): BackupFail {
  * ⚠ 그래도 세션이 있으면 **세션이 이긴다.** 반대로 두면 점검 플래그가 켜진 기기에서
  *   진짜 사용자의 백업이 스텁 신원으로 올라간다.
  */
-const DEVICE_CHECK_TOKEN =
-  process.env.EXPO_PUBLIC_DEVICE_CHECK === '1' ? DEV_SESSION_TOKEN : null;
+const DEVICE_CHECK_TOKEN = process.env.EXPO_PUBLIC_DEVICE_CHECK === '1' ? DEV_SESSION_TOKEN : null;
 
 async function post<T>(path: string, body: unknown): Promise<BackupResult<T>> {
   if (BACKUP_SERVER_URL.length === 0) {
@@ -145,7 +143,8 @@ async function post<T>(path: string, body: unknown): Promise<BackupResult<T>> {
 
   if (!res.ok || json.ok !== true) {
     // 서버가 준 사유를 우선한다 — 403이 세 가지(구독·grant·쿼터)라 상태코드만으로는 못 가른다.
-    const reason = typeof json.reason === 'string' ? (json.reason as BackupFail) : mapStatus(res.status);
+    const reason =
+      typeof json.reason === 'string' ? (json.reason as BackupFail) : mapStatus(res.status);
     return {
       ok: false,
       reason,
@@ -311,7 +310,9 @@ export const blobs = {
     vaultId: string,
     authKey: string,
     blobKeys: string[],
-  ): Promise<BackupResult<{ committed: string[]; missing: string[]; usedBytes: number; quota: number }>> {
+  ): Promise<
+    BackupResult<{ committed: string[]; missing: string[]; usedBytes: number; quota: number }>
+  > {
     return post('blobs', { action: 'commit', vaultId, authKey, blobKeys });
   },
   /**

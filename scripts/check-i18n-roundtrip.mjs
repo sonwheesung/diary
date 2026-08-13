@@ -10,31 +10,34 @@ import { decodeUtf8, encodeUtf8 } from '../features/backup/manifest.ts';
 import { openManifest, sealManifest } from '../features/backup/package.ts';
 
 const SAMPLES = {
-  '한국어': '오늘은 비가 왔다. 우산을 안 가져와서 흠뻑 젖었지만, 이상하게 기분은 좋았어.',
+  한국어: '오늘은 비가 왔다. 우산을 안 가져와서 흠뻑 젖었지만, 이상하게 기분은 좋았어.',
   '한국어(옛한글)': 'ᄒᆞᄂᆞᆯ 아래 첫 걸음, ᄡᅳ고 ᄉᆡᆼ각ᄒᆞ다',
   '한국어(자모분리)': '각난', // 조합형 각난
-  '日本語': '今日は雨が降った。傘を持ってこなかったので、びしょ濡れになった。でも不思議と気分は良かった。',
+  日本語:
+    '今日は雨が降った。傘を持ってこなかったので、びしょ濡れになった。でも不思議と気分は良かった。',
   '日本語(かな)': 'ひらがな・カタカナ・半角ｶﾀｶﾅ、そして絵文字😊',
-  '简体中文': '今天下雨了。没带伞，淋得浑身湿透，但心情却出奇地好。',
-  '繁體中文': '今天下雨了。沒帶傘，淋得渾身濕透，但心情卻出奇地好。',
+  简体中文: '今天下雨了。没带伞，淋得浑身湿透，但心情却出奇地好。',
+  繁體中文: '今天下雨了。沒帶傘，淋得渾身濕透，但心情卻出奇地好。',
   '中文(生僻字)': '龘䶵𠮷𡃁 — 확장 한자면(U+20000 이상)',
-  'ไทย': 'วันนี้ฝนตก ฉันไม่ได้เอาร่มมา เปียกไปทั้งตัว แต่กลับรู้สึกดีอย่างประหลาด',
+  ไทย: 'วันนี้ฝนตก ฉันไม่ได้เอาร่มมา เปียกไปทั้งตัว แต่กลับรู้สึกดีอย่างประหลาด',
   'ไทย(결합)': 'เ ก ษ ต ร ์ ที่ ำ ํ ๊ ๋ ็',
-  'Русский': 'Сегодня шёл дождь. Я не взял зонт и промок насквозь, но настроение было странно хорошим.',
-  'Tiếng Việt': 'Hôm nay trời mưa. Tôi không mang ô nên ướt sũng, nhưng lại thấy vui một cách kỳ lạ.',
+  Русский:
+    'Сегодня шёл дождь. Я не взял зонт и промок насквозь, но настроение было странно хорошим.',
+  'Tiếng Việt':
+    'Hôm nay trời mưa. Tôi không mang ô nên ướt sũng, nhưng lại thấy vui một cách kỳ lạ.',
   'العربية(RTL)': 'اليوم أمطرت السماء. لم أحضر مظلة فابتللت تمامًا.',
   'עברית(RTL)': 'היום ירד גשם. לא הבאתי מטרייה ונרטבתי לגמרי.',
-  'Deutsch': 'Heute hat es geregnet. Straßenbahnhaltestelle, Fußgängerübergang, Grüße!',
-  'Français': 'Il a plu aujourd’hui. J’étais trempé — mais bizarrement heureux. Œuf, cœur, naïve.',
+  Deutsch: 'Heute hat es geregnet. Straßenbahnhaltestelle, Fußgängerübergang, Grüße!',
+  Français: 'Il a plu aujourd’hui. J’étais trempé — mais bizarrement heureux. Œuf, cœur, naïve.',
   'emoji-ZWJ': '가족 👨‍👩‍👧‍👦 그리고 👩🏽‍💻 오늘',
   'emoji-국기': '🇰🇷 🇯🇵 🇨🇳 🇺🇸 🇹🇭 🇻🇳',
   'emoji-피부톤': '👍🏻👍🏼👍🏽👍🏾👍🏿',
   '결합문자(NFD)': 'égalé — 조합된 e+´ (NFC의 é와 다른 바이트다)',
   '결합문자(NFC)': 'égalé — 완성형 é',
-  '이형자선택자': '󠄀葛󠄀 · ⌚︎ · ✔️',
-  '수학기호': '𝔘𝔫𝔦𝔠𝔬𝔡𝔢 ∑∫√∞ ℝℕℤ',
-  '제어문자': '줄바꿈\n탭\t그리고 널 아닌 것들',
-  '혼합': '오늘 会議 で meeting 했다 🇰🇷 — mixed script 混在 ผสม',
+  이형자선택자: '󠄀葛󠄀 · ⌚︎ · ✔️',
+  수학기호: '𝔘𝔫𝔦𝔠𝔬𝔡𝔢 ∑∫√∞ ℝℕℤ',
+  제어문자: '줄바꿈\n탭\t그리고 널 아닌 것들',
+  혼합: '오늘 会議 で meeting 했다 🇰🇷 — mixed script 混在 ผสม',
 };
 
 let passed = 0;
@@ -68,7 +71,9 @@ for (const [label, text] of Object.entries(SAMPLES)) {
   check(`디코딩 ${label}`, () => {
     const back = decodeUtf8(new Uint8Array(Buffer.from(text, 'utf8')));
     if (back !== text) {
-      throw new Error(`문자열 불일치\n       기대 ${codepoints(text).slice(0, 120)}\n       실제 ${codepoints(back).slice(0, 120)}`);
+      throw new Error(
+        `문자열 불일치\n       기대 ${codepoints(text).slice(0, 120)}\n       실제 ${codepoints(back).slice(0, 120)}`,
+      );
     }
   });
 }
@@ -80,7 +85,11 @@ const KEYS = {
   dek: new Uint8Array(32).fill(7),
   kid: Uint8Array.of(1, 2, 3, 4),
 };
-const nonceFor = (part) => { const n = new Uint8Array(24); n[23] = part + 1; return n; };
+const nonceFor = (part) => {
+  const n = new Uint8Array(24);
+  n[23] = part + 1;
+  return n;
+};
 
 const diaries = Object.entries(SAMPLES).map(([label, text], i) => ({
   id: `d${i}`,
@@ -103,14 +112,23 @@ const manifest = {
 };
 
 check('전체 경로 — 단일 파트', () => {
-  const sealed = sealManifest(manifest, KEYS, { seq: 1, genId: new Uint8Array(8), version: 1, nonceFor });
+  const sealed = sealManifest(manifest, KEYS, {
+    seq: 1,
+    genId: new Uint8Array(8),
+    version: 1,
+    nonceFor,
+  });
   const opened = openManifest(sealed, KEYS);
   compare(manifest, opened.manifest);
 });
 
 check('전체 경로 — 여러 파트로 쪼개도 (파트 경계가 문자를 자르지 않는가)', () => {
   const sealed = sealManifest(manifest, KEYS, {
-    seq: 2, genId: new Uint8Array(8), version: 1, nonceFor, targetPartBytes: 300,
+    seq: 2,
+    genId: new Uint8Array(8),
+    version: 1,
+    nonceFor,
+    targetPartBytes: 300,
   });
   if (sealed.length < 5) throw new Error(`나뉘지 않았다 (${sealed.length}파트)`);
   const opened = openManifest(sealed, KEYS);
@@ -144,7 +162,8 @@ check('NFD를 NFC로 바꾸지 않는다', () => {
   const nfc = 'é';
   if (nfd.normalize('NFC') !== nfc) throw new Error('테스트 전제가 틀렸다');
   const back = decodeUtf8(encodeUtf8(nfd));
-  if (back !== nfd) throw new Error(`NFD가 ${codepoints(back)}로 바뀌었다 — 조각이 다른 글자가 된다`);
+  if (back !== nfd)
+    throw new Error(`NFD가 ${codepoints(back)}로 바뀌었다 — 조각이 다른 글자가 된다`);
   if (back === nfc) throw new Error('NFC로 정규화됐다');
 });
 

@@ -238,7 +238,11 @@ function LockedPreview() {
         <Text style={styles.rowSummary}>{t('report.sampleBody')}</Text>
       </Card>
 
-      <Button label={t('report.seeSubscription')} fullWidth onPress={() => router.push('/subscribe')} />
+      <Button
+        label={t('report.seeSubscription')}
+        fullWidth
+        onPress={() => router.push('/subscribe')}
+      />
       <Text style={styles.disclaimer}>{t('report.disclaimer')}</Text>
     </>
   );

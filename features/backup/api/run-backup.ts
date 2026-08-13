@@ -4,10 +4,7 @@ import { uploadPhotos } from '@/features/backup/api/photos';
 import type { PhotoProgress } from '@/features/backup/api/photos';
 import { deleteBackupSecret, loadBackupKeys } from '@/features/backup/api/key-store';
 import type { BackupKeys } from '@/features/backup/api/key-store';
-import {
-  getBackupState,
-  markBackupCommitted,
-} from '@/features/backup/api/backup-state';
+import { getBackupState, markBackupCommitted } from '@/features/backup/api/backup-state';
 import type { BackupFail } from '@/features/backup/api/client';
 import {
   commit,
@@ -83,12 +80,28 @@ export async function runBackup(
 
   let seq = state.seq + 1;
   let sealed = await sealAt(seq);
-  let reserved = await reserve(keys.vaultId, seq, sealed.genId, sealed.envelopes.length, keys.authKey);
+  let reserved = await reserve(
+    keys.vaultId,
+    seq,
+    sealed.genId,
+    sealed.envelopes.length,
+    keys.authKey,
+  );
 
-  if (!reserved.ok && reserved.reason === 'seq-conflict' && typeof reserved.serverSeq === 'number') {
+  if (
+    !reserved.ok &&
+    reserved.reason === 'seq-conflict' &&
+    typeof reserved.serverSeq === 'number'
+  ) {
     seq = reserved.serverSeq + 1;
     sealed = await sealAt(seq);
-    reserved = await reserve(keys.vaultId, seq, sealed.genId, sealed.envelopes.length, keys.authKey);
+    reserved = await reserve(
+      keys.vaultId,
+      seq,
+      sealed.genId,
+      sealed.envelopes.length,
+      keys.authKey,
+    );
   }
   if (!reserved.ok) {
     return reserved;
@@ -132,7 +145,9 @@ export async function runBackup(
  * ⚠ **덮어쓰기 버튼은 만들지 않는다.** 순진한 덮어쓰기가 상대 기기의 조각을 지운다.
  *   가져온 뒤에는 **복원해서 서버 내용에 맞춘 다음** 이어 쓰는 것이 정해진 순서다.
  */
-export async function takeOverWriter(): Promise<{ ok: true } | { ok: false; reason: BackupFailure }> {
+export async function takeOverWriter(): Promise<
+  { ok: true } | { ok: false; reason: BackupFailure }
+> {
   const keys = await loadBackupKeys();
   if (keys === null) {
     return { ok: false, reason: 'no-keys' };

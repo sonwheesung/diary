@@ -5,6 +5,7 @@ import ChevronRight from 'lucide-react-native/icons/chevron-right';
 import CloudUpload from 'lucide-react-native/icons/cloud-upload';
 import Sparkles from 'lucide-react-native/icons/sparkles';
 import Globe from 'lucide-react-native/icons/globe';
+import Inbox from 'lucide-react-native/icons/inbox';
 import Lock from 'lucide-react-native/icons/lock';
 import Megaphone from 'lucide-react-native/icons/megaphone';
 import MessageSquare from 'lucide-react-native/icons/message-square';
@@ -20,6 +21,7 @@ import { useLockStore } from '@/features/lock/store';
 import { getBackupState } from '@/features/backup/api/backup-state';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { useNoticeStore } from '@/features/notice/store';
+import { useInquiryStore } from '@/features/support/inquiry-store';
 import { LanguageSheet } from '@/features/settings/components/LanguageSheet';
 import { useLanguageStore } from '@/features/settings/language-store';
 import {
@@ -65,6 +67,17 @@ export default function SettingsScreen() {
   const [reportLanguage, setReportLanguage] = useState<LanguageMode>('system');
   const [reportLanguageSheetOpen, setReportLanguageSheetOpen] = useState(false);
   const unreadNotices = useNoticeStore((state) => state.unreadCount);
+  /*
+   * 문의 내역 행과 답변 배지.
+   *
+   * ⚠ `useSupportAuth()`를 부르지 않는다. 그 훅은 마운트마다 `restoreSession()`으로
+   *   **서버를 한 번 왕복**하는데, 설정 탭은 앱을 켤 때마다 지나는 자리다. 문의 화면이
+   *   이미 그 판정을 하므로 여기서는 스토어가 조회하며 알게 된 값을 그대로 쓴다 —
+   *   토큰 유무는 로컬 읽기라 왕복이 없다(`docs/SUPPORT_SYSTEM.md` §5.5).
+   */
+  const signedIn = useInquiryStore((state) => state.signedIn);
+  const unreadReplies = useInquiryStore((state) => state.unreadCount);
+  const refreshInquiries = useInquiryStore((state) => state.refresh);
   const [notifications, setNotifications] = useState(false);
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
   const lock = useLockStore((state) => state.config);
@@ -86,7 +99,13 @@ export default function SettingsScreen() {
       void getBackupState().then((state) =>
         setBackupNeedsAttention(state.enabled && state.codeConfirmedAt === null),
       );
-    }, [refreshLock]),
+      /*
+       * 답변 배지. `bootstrap`에 실을 수 없어서(인증 필요) 여기서 잰다 —
+       * 설정 탭이 문의로 가는 유일한 길이라 이 지점이면 충분하다.
+       * 로그인 안 한 사람에게는 SDK가 네트워크 없이 돌아 나온다.
+       */
+      void refreshInquiries();
+    }, [refreshLock, refreshInquiries]),
   );
 
   /*
@@ -374,6 +393,31 @@ export default function SettingsScreen() {
           </View>
           <ChevronRight size={18} color={colors.textMuted} />
         </Pressable>
+
+        {/*
+          내 문의 — **로그인했을 때만** 보인다. 로그인 전에는 볼 내역이 자체가 없고,
+          여기서 로그인을 권하면 문의 화면과 게이트가 두 곳이 된다.
+
+          🔴 이 줄의 점이 답변 통지의 **전부**다. 푸시가 없어서, 여기 안 찍으면
+             화면이 있어도 아무도 열지 않는다(`docs/SUPPORT_SYSTEM.md` §5.5).
+        */}
+        {signedIn && (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/inquiries')}
+            style={styles.row}
+          >
+            <View style={styles.rowIcon}>
+              <Inbox size={18} color={colors.accent} />
+            </View>
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitle}>{t('inquiries.title')}</Text>
+            </View>
+            {/* 숫자를 쓰지 않는다 — 몇 개인지보다 '새 게 있다'가 필요한 정보다 */}
+            {unreadReplies > 0 && <View style={styles.badge} />}
+            <ChevronRight size={18} color={colors.textMuted} />
+          </Pressable>
+        )}
       </View>
 
       <View style={styles.section}>

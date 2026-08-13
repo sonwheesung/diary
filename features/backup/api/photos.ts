@@ -114,9 +114,7 @@ export async function uploadPhotos(
          * ⚠ **커밋 성공 후에야** 표시한다. 앞에 두면 커밋이 실패했을 때 다음 백업이
          *   그 사진들을 "이미 올렸다"고 건너뛴다 — 서버엔 없는데 앱은 있다고 믿는다.
          */
-        await markBackedUp(
-          committed.committed.map((key) => keyOf.get(key)?.id).filter(isString),
-        );
+        await markBackedUp(committed.committed.map((key) => keyOf.get(key)?.id).filter(isString));
       }
     }
   }

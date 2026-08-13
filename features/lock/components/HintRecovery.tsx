@@ -84,31 +84,27 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
 
   // 되돌릴 수 없는 동작이라 **두 번** 묻는다. 한 번은 실수로 누를 수 있다.
   const confirmWipe = () => {
-    Alert.alert(
-      t('lock.hint.wipeTitle'),
-      t('lock.hint.wipeBody'),
-      [
-        { text: t('lock.hint.wipeNo'), style: 'cancel' },
-        {
-          text: t('lock.hint.wipeContinue'),
-          style: 'destructive',
-          onPress: () => {
-            Alert.alert(t('lock.hint.wipeFinalTitle'), t('lock.hint.wipeFinalBody'), [
-              { text: t('lock.hint.wipeNo'), style: 'cancel' },
-              {
-                text: t('lock.hint.wipeFinalConfirm'),
-                style: 'destructive',
-                onPress: () => {
-                  void wipeAllData()
-                    .then(onWiped)
-                    .catch(() => setError(t('lock.hint.wipeFailed')));
-                },
+    Alert.alert(t('lock.hint.wipeTitle'), t('lock.hint.wipeBody'), [
+      { text: t('lock.hint.wipeNo'), style: 'cancel' },
+      {
+        text: t('lock.hint.wipeContinue'),
+        style: 'destructive',
+        onPress: () => {
+          Alert.alert(t('lock.hint.wipeFinalTitle'), t('lock.hint.wipeFinalBody'), [
+            { text: t('lock.hint.wipeNo'), style: 'cancel' },
+            {
+              text: t('lock.hint.wipeFinalConfirm'),
+              style: 'destructive',
+              onPress: () => {
+                void wipeAllData()
+                  .then(onWiped)
+                  .catch(() => setError(t('lock.hint.wipeFailed')));
               },
-            ]);
-          },
+            },
+          ]);
         },
-      ],
-    );
+      },
+    ]);
   };
 
   if (revealed !== null) {
@@ -151,9 +147,7 @@ export function HintRecovery({ method, onClose, onWiped }: HintRecoveryProps) {
             style={styles.input}
           />
           {error !== null && <Text style={styles.error}>{error}</Text>}
-          {blocked && (
-            <Text style={styles.error}>{t('lock.blockedMessage')}</Text>
-          )}
+          {blocked && <Text style={styles.error}>{t('lock.blockedMessage')}</Text>}
           <Pressable
             accessibilityRole="button"
             onPress={() => void submit()}

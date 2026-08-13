@@ -55,6 +55,7 @@
 | 앱 잠금(PIN·패턴 3×3·생체) | ✅ | `features/lock/` · 힌트 되찾기 · 실패 backoff · 복귀 지연 · 앱 스위처 가림(Android). iOS 가림만 남음 |
 | 공지사항 | ✅ | `app/notice.tsx` — bootstrap 1회 조회. **서버에 `jogak` 등록 대기** |
 | 문의하기 | ✅ | 화면·서버 전송·로그인·탈퇴까지. 로그인 게이트 화면에 처리방침 고지 추가(2026-08-11) |
+| **문의 내역·답변** | ✅ | 2026-08-13 — `app/inquiries.tsx`. 서버·SDK는 있었는데 **앱이 부르지 않아** 답변을 볼 길이 없었다. 답변 배지는 설정 행에 점 하나(푸시가 없어 이게 통지의 전부다). [`SUPPORT_SYSTEM.md`](./SUPPORT_SYSTEM.md) §5.5 |
 | 구글 로그인(선택적) | ✅ | 2026-08-11 정정 — Phase 7이 끝났고 `bootstrap?app=jogak`도 200이다 |
 | 광고(AdMob) | ✅ | 전면=저장 완료 후 하루 1회 · 배너=탭 화면 상시. 개발은 테스트 단위(`EXPO_PUBLIC_ADS_REAL=1`일 때만 실제 단위) |
 | **광고 제거(구독자)** | ✅ | `features/entitlement/store.ts` — 캐시 먼저·서버 나중. 조회 실패에 캐시를 지우지 않는다 |

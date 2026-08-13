@@ -150,7 +150,8 @@ export const PRIVACY_ID: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'Sejak hari versi yang memuat langganan bulanan dan pencadangan/pemulihan dirilis',
+      appliesFrom:
+        'Sejak hari versi yang memuat langganan bulanan dan pencadangan/pemulihan dirilis',
       summary:
         'Langganan bulanan dan pencadangan/pemulihan ditambahkan. Jika kamu berlangganan, status langganan dan pengenal transaksi akan diproses; dan hanya jika kamu mengaktifkan pencadangan, salinan catatanmu yang dienkripsi di perangkatmu akan disimpan di server operator. Operator tidak dapat mendekripsi salinan itu.',
       sections: [

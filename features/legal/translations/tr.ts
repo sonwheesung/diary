@@ -150,7 +150,8 @@ export const PRIVACY_TR: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'Aylık abonelik ile yedekleme/geri yüklemeyi içeren sürümün yayımlandığı günden itibaren',
+      appliesFrom:
+        'Aylık abonelik ile yedekleme/geri yüklemeyi içeren sürümün yayımlandığı günden itibaren',
       summary:
         'Aylık abonelik ile yedekleme/geri yükleme ekleniyor. Abone olursan abonelik durumu ve işlem kimliği işlenir; ve yalnızca yedeklemeyi açarsan, kayıtlarının cihazında şifrelenmiş bir kopyası işletmecinin sunucusunda saklanır. İşletmeci bu kopyanın şifresini çözemez.',
       sections: [

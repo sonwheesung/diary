@@ -156,7 +156,8 @@ export const PRIVACY_EN: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'From the day the version containing monthly subscription and backup/restore is released',
+      appliesFrom:
+        'From the day the version containing monthly subscription and backup/restore is released',
       summary:
         'Monthly subscription and backup/restore are being added. If you subscribe, your subscription status and transaction identifier are processed; and only if you turn backup on, a copy of your entries encrypted on your device is stored on the operator’s server. The operator cannot decrypt that copy.',
       sections: [

@@ -41,7 +41,9 @@ try {
   });
 
   const jsDir = join(outDir, '_expo', 'static', 'js', 'android');
-  const bundles = readdirSync(jsDir).filter((name) => name.endsWith('.hbc') || name.endsWith('.js'));
+  const bundles = readdirSync(jsDir).filter(
+    (name) => name.endsWith('.hbc') || name.endsWith('.js'),
+  );
   if (bundles.length === 0) {
     throw new Error(`번들을 못 찾았다: ${jsDir}`);
   }

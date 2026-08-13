@@ -44,7 +44,9 @@ export function createCommonServer(cfg: CommonServerConfig) {
   async function req(path: string, init?: RequestInit, withAuth = false): Promise<Response | null> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
-    const headers: Record<string, string> = { ...((init?.headers as Record<string, string>) ?? {}) };
+    const headers: Record<string, string> = {
+      ...((init?.headers as Record<string, string>) ?? {}),
+    };
     // 토큰이 없으면 헤더를 붙이지 않는다. 서버는 **헤더가 있는데 무효면 401**이고 익명으로 강등하지 않는다
     // (강등하면 로그인 사용자의 문의가 귀속 없이 저장돼 답변을 영영 못 받는다).
     if (withAuth && token) headers.authorization = `Bearer ${token}`;
@@ -109,7 +111,10 @@ export function createCommonServer(cfg: CommonServerConfig) {
       if (!res.ok) return { ok: false, reason: mapFail(res.status) };
       try {
         const j = (await res.json()) as Bootstrap & { ok: boolean };
-        return { ok: true, data: { maintenance: j.maintenance, version: j.version, announcements: j.announcements } };
+        return {
+          ok: true,
+          data: { maintenance: j.maintenance, version: j.version, announcements: j.announcements },
+        };
       } catch {
         return { ok: false, reason: 'error' };
       }
@@ -260,7 +265,9 @@ export function createCommonServer(cfg: CommonServerConfig) {
      *   subject가 바뀐 경우). 그때 `Purchases.restorePurchases()`를 부르면 RC가 소유자를 옮기고
      *   서버에 TRANSFER 웹훅이 온다. 안 부르면 "돈은 나가는데 pro가 아닌" 상태가 유지된다.
      */
-    async fetchEntitlements(): Promise<Result<{ entitlements: Record<string, EntitlementView>; checkedAt: string }>> {
+    async fetchEntitlements(): Promise<
+      Result<{ entitlements: Record<string, EntitlementView>; checkedAt: string }>
+    > {
       if (!baseUrl) return { ok: false, reason: 'not-configured' };
       if (!(await loadToken())) return { ok: false, reason: 'not-signed-in' };
 
@@ -272,8 +279,15 @@ export function createCommonServer(cfg: CommonServerConfig) {
       }
       if (!res.ok) return { ok: false, reason: mapFail(res.status) };
       try {
-        const j = (await res.json()) as { entitlements?: Record<string, EntitlementView>; checkedAt?: string };
-        return { ok: true, entitlements: j.entitlements ?? {}, checkedAt: j.checkedAt ?? new Date().toISOString() };
+        const j = (await res.json()) as {
+          entitlements?: Record<string, EntitlementView>;
+          checkedAt?: string;
+        };
+        return {
+          ok: true,
+          entitlements: j.entitlements ?? {},
+          checkedAt: j.checkedAt ?? new Date().toISOString(),
+        };
       } catch {
         return { ok: false, reason: 'error' };
       }

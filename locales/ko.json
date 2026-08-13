@@ -25,15 +25,7 @@
     "report": "리포트"
   },
   "date": {
-    "weekdays": [
-      "일",
-      "월",
-      "화",
-      "수",
-      "목",
-      "금",
-      "토"
-    ],
+    "weekdays": ["일", "월", "화", "수", "목", "금", "토"],
     "full": "{{year}}년 {{month}}월 {{day}}일 ({{weekday}})",
     "dateTime": "{{year}}년 {{month}}월 {{day}}일 {{hour}}:{{minute}}",
     "list": "{{month}}월 {{day}}일 ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "보내기",
     "title": "문의하기",
     "tooShort": "{{min}}자 이상 입력해 주세요."
+  },
+  "inquiries": {
+    "title": "내 문의",
+    "empty": "보낸 문의가 없어요",
+    "loadFailed": "문의 내역을 불러오지 못했어요",
+    "emptyBody": "궁금한 점이나 불편한 점을 알려주세요.",
+    "statusOpen": "접수됨",
+    "statusReplied": "답변 완료",
+    "statusResolved": "처리 완료",
+    "replyLabel": "답변",
+    "awaitingReply": "답변을 준비하고 있어요."
   },
   "backup": {
     "backupNow": "지금 백업하기",

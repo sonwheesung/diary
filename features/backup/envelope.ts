@@ -116,7 +116,10 @@ function viewOf(bytes: Uint8Array): DataView {
 
 function requireLength(bytes: Uint8Array, expected: number, what: string): void {
   if (bytes.length !== expected) {
-    throw new EnvelopeError('JGKB-E02', `${what}는 ${expected}바이트여야 한다 (받은 값 ${bytes.length})`);
+    throw new EnvelopeError(
+      'JGKB-E02',
+      `${what}는 ${expected}바이트여야 한다 (받은 값 ${bytes.length})`,
+    );
   }
 }
 
@@ -208,7 +211,10 @@ export function parseEnvelope(bytes: Uint8Array): ParsedEnvelope {
   // type 검사가 곧 ctxLen 검사다 — 선언값과 다르면 만든 쪽과 읽는 쪽의 규약이 어긋난 것이다.
   const ctxLen = contextLength(type);
   if (declaredCtxLen !== ctxLen) {
-    throw new EnvelopeError('JGKB-E08', `type ${type}의 context 길이가 ${declaredCtxLen}로 선언됐다 (기대 ${ctxLen})`);
+    throw new EnvelopeError(
+      'JGKB-E08',
+      `type ${type}의 context 길이가 ${declaredCtxLen}로 선언됐다 (기대 ${ctxLen})`,
+    );
   }
 
   const headerLength = FIXED_PREFIX_LENGTH + ctxLen + NONCE_LENGTH;

@@ -25,15 +25,7 @@
     "report": "報告"
   },
   "date": {
-    "weekdays": [
-      "日",
-      "一",
-      "二",
-      "三",
-      "四",
-      "五",
-      "六"
-    ],
+    "weekdays": ["日", "一", "二", "三", "四", "五", "六"],
     "full": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "dateTime": "{{year}}年{{month}}月{{day}}日 {{hour}}:{{minute}}",
     "list": "{{month}}月{{day}}日 星期{{weekday}}",
@@ -312,6 +304,17 @@
     "submit": "傳送",
     "title": "聯絡我們",
     "tooShort": "請至少輸入 {{min}} 個字。"
+  },
+  "inquiries": {
+    "title": "我的意見回饋",
+    "empty": "尚無意見回饋紀錄",
+    "loadFailed": "無法載入意見回饋紀錄",
+    "emptyBody": "有疑問或遇到問題時請告訴我們。",
+    "statusOpen": "已受理",
+    "statusReplied": "已回覆",
+    "statusResolved": "已處理",
+    "replyLabel": "回覆",
+    "awaitingReply": "我們正在準備回覆。"
   },
   "backup": {
     "backupNow": "立即備份",

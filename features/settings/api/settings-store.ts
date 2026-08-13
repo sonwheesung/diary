@@ -52,6 +52,15 @@ export const SETTING_KEYS = {
    */
   noticeReadIds: 'notice_read_ids',
   /**
+   * 읽은 **답변** 키 목록(JSON 배열). 공지와 같은 규약 — 서버에 읽음을 보내지 않는다.
+   *
+   * ⚠ 키가 문의 id가 아니라 **`<id>:<repliedAt>`** 이다. 답변은 고쳐 쓸 수 있어서
+   *   id만 기억하면 운영자가 정정한 답변이 **영영 안 보인다**(`docs/SUPPORT_SYSTEM.md` §5.5).
+   *
+   * ⚠ 로그아웃·탈퇴 때 **반드시 비운다.** 안 비우면 다음 사람에게 앞사람의 배지가 남는다.
+   */
+  inquiryReadKeys: 'inquiry_read_keys',
+  /**
    * `pro` 엔타이틀먼트가 유효한 시각(ISO). **오프라인 캐시**다.
    *
    * 서버가 내려준 `expiresAt`을 그대로 담는다 — 앱이 만료를 다시 판정하지 않는다.

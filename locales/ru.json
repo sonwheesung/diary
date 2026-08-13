@@ -25,15 +25,7 @@
     "report": "Отчёты"
   },
   "date": {
-    "weekdays": [
-      "вс",
-      "пн",
-      "вт",
-      "ср",
-      "чт",
-      "пт",
-      "сб"
-    ],
+    "weekdays": ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
     "full": "{{day}} {{monthName}} {{year}}, {{weekday}}",
     "dateTime": "{{day}}.{{month}}.{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Отправить",
     "title": "Обратная связь",
     "tooShort": "Напишите хотя бы {{min}} символов."
+  },
+  "inquiries": {
+    "title": "Мои обращения",
+    "empty": "Обращений пока нет",
+    "loadFailed": "Не удалось загрузить обращения",
+    "emptyBody": "Расскажите, если что-то непонятно или не работает.",
+    "statusOpen": "Принято",
+    "statusReplied": "Отвечено",
+    "statusResolved": "Закрыто",
+    "replyLabel": "Ответ",
+    "awaitingReply": "Мы готовим ответ."
   },
   "backup": {
     "backupNow": "Создать резервную копию",

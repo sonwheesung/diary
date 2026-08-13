@@ -25,15 +25,7 @@
     "report": "Raporlar"
   },
   "date": {
-    "weekdays": [
-      "Paz",
-      "Pzt",
-      "Sal",
-      "Çar",
-      "Per",
-      "Cum",
-      "Cmt"
-    ],
+    "weekdays": ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
     "full": "{{day}} {{monthName}} {{year}} {{weekday}}",
     "dateTime": "{{day}}.{{month}}.{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Gönder",
     "title": "Bize ulaşın",
     "tooShort": "Lütfen en az {{min}} karakter yaz."
+  },
+  "inquiries": {
+    "title": "Taleplerim",
+    "empty": "Henüz talep yok",
+    "loadFailed": "Talepleriniz yüklenemedi",
+    "emptyBody": "Anlaşılmayan veya çalışmayan bir şey varsa bize bildir.",
+    "statusOpen": "Alındı",
+    "statusReplied": "Yanıtlandı",
+    "statusResolved": "Kapatıldı",
+    "replyLabel": "Yanıt",
+    "awaitingReply": "Bir yanıt hazırlıyoruz."
   },
   "backup": {
     "backupNow": "Şimdi yedekle",

@@ -64,11 +64,7 @@ async function read(): Promise<BackupState> {
  */
 export async function getBackupState(currentVaultId?: string): Promise<BackupState> {
   const state = await read();
-  if (
-    currentVaultId === undefined ||
-    state.vaultId === null ||
-    state.vaultId === currentVaultId
-  ) {
+  if (currentVaultId === undefined || state.vaultId === null || state.vaultId === currentVaultId) {
     return state;
   }
   const db = await getDatabase();
@@ -104,11 +100,7 @@ export async function disableBackup(): Promise<void> {
  */
 export async function markBackupCommitted(seq: number, at: number): Promise<void> {
   const db = await getDatabase();
-  await db.runAsync(
-    'UPDATE backup_state SET seq = ?, last_backup_at = ? WHERE id = 1',
-    seq,
-    at,
-  );
+  await db.runAsync('UPDATE backup_state SET seq = ?, last_backup_at = ? WHERE id = 1', seq, at);
 }
 
 /**

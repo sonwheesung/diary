@@ -80,11 +80,7 @@ export function UnlockView({ method, onUnlocked, onWiped }: UnlockViewProps) {
         setBlockedUntil(state.blockedUntil);
         setNow(Date.now());
         setPin('');
-        setError(
-          state.blockedUntil > Date.now()
-            ? t('lock.blockedMessage')
-            : t('lock.wrong'),
-        );
+        setError(state.blockedUntil > Date.now() ? t('lock.blockedMessage') : t('lock.wrong'));
       } finally {
         checkingRef.current = false;
       }
@@ -151,7 +147,9 @@ export function UnlockView({ method, onUnlocked, onWiped }: UnlockViewProps) {
 
       <View style={[styles.foot, { paddingBottom: insets.bottom + spacing.xl }]}>
         {blocked ? (
-          <Text style={styles.blocked}>{t('lock.blockedCountdown', { seconds: remainSeconds })}</Text>
+          <Text style={styles.blocked}>
+            {t('lock.blockedCountdown', { seconds: remainSeconds })}
+          </Text>
         ) : (
           error !== null && <Text style={styles.error}>{error}</Text>
         )}

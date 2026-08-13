@@ -150,7 +150,8 @@ export const PRIVACY_ES: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'Desde el día en que se publique la versión que incluye la suscripción mensual y la copia de seguridad/restauración',
+      appliesFrom:
+        'Desde el día en que se publique la versión que incluye la suscripción mensual y la copia de seguridad/restauración',
       summary:
         'Se añaden la suscripción mensual y la copia de seguridad/restauración. Si te suscribes, se tratarán el estado de la suscripción y el identificador de la transacción; y solo si activas la copia de seguridad, se guardará en el servidor del operador una copia de tus entradas cifrada en tu dispositivo. El operador no puede descifrar esa copia.',
       sections: [
@@ -220,7 +221,8 @@ export const PRIVACY_ES: LegalDoc = {
       ],
     },
     {
-      appliesFrom: 'Desde el día en que se publique la versión que incluye los informes de resumen con IA',
+      appliesFrom:
+        'Desde el día en que se publique la versión que incluye los informes de resumen con IA',
       summary:
         'Se añaden los informes de resumen con IA. Solo cuando creas un informe tú mismo, el contenido de tus entradas de ese periodo pasa sin cifrar por el servidor del operador y se envía al proveedor de IA. El operador no almacena ese contenido; el proveedor de IA lo conserva hasta 30 días para vigilar abusos, después lo borra, y no lo usa para entrenar modelos.',
       sections: [

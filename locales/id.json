@@ -25,15 +25,7 @@
     "report": "Laporan"
   },
   "date": {
-    "weekdays": [
-      "Min",
-      "Sen",
-      "Sel",
-      "Rab",
-      "Kam",
-      "Jum",
-      "Sab"
-    ],
+    "weekdays": ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
     "full": "{{weekday}}, {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Kirim",
     "title": "Hubungi kami",
     "tooShort": "Tulis minimal {{min}} karakter."
+  },
+  "inquiries": {
+    "title": "Pertanyaan saya",
+    "empty": "Belum ada pertanyaan",
+    "loadFailed": "Tidak dapat memuat pertanyaan Anda",
+    "emptyBody": "Beri tahu kami jika ada yang tidak jelas atau tidak berfungsi.",
+    "statusOpen": "Diterima",
+    "statusReplied": "Dijawab",
+    "statusResolved": "Selesai",
+    "replyLabel": "Jawaban",
+    "awaitingReply": "Kami sedang menyiapkan jawaban."
   },
   "backup": {
     "backupNow": "Cadangkan sekarang",

@@ -55,7 +55,10 @@ function checkValue(secret: Uint8Array): number {
  */
 export function encodeRecoveryCode(secret: Uint8Array): string {
   if (secret.length !== SECRET_LENGTH) {
-    throw new RecoveryCodeError('JGKB-C01', `비밀은 ${SECRET_LENGTH}바이트여야 한다 (받은 값 ${secret.length})`);
+    throw new RecoveryCodeError(
+      'JGKB-C01',
+      `비밀은 ${SECRET_LENGTH}바이트여야 한다 (받은 값 ${secret.length})`,
+    );
   }
 
   // MSB-first 비트스트림. 마지막 심볼의 남는 하위 2비트는 0으로 채운다.

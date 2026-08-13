@@ -25,15 +25,7 @@
     "report": "Bilans"
   },
   "date": {
-    "weekdays": [
-      "dim",
-      "lun",
-      "mar",
-      "mer",
-      "jeu",
-      "ven",
-      "sam"
-    ],
+    "weekdays": ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Envoyer",
     "title": "Nous contacter",
     "tooShort": "Écris au moins {{min}} caractères."
+  },
+  "inquiries": {
+    "title": "Mes demandes",
+    "empty": "Aucune demande pour le moment",
+    "loadFailed": "Impossible de charger vos demandes",
+    "emptyBody": "Dites-nous si quelque chose n'est pas clair ou ne fonctionne pas.",
+    "statusOpen": "Reçue",
+    "statusReplied": "Répondue",
+    "statusResolved": "Clôturée",
+    "replyLabel": "Réponse",
+    "awaitingReply": "Nous préparons une réponse."
   },
   "backup": {
     "backupNow": "Sauvegarder maintenant",

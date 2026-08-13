@@ -90,7 +90,9 @@ export default function PrivacyScreen() {
       {(PRIVACY.pending ?? []).map((amendment) => (
         <View key={amendment.appliesFrom} style={styles.pending}>
           <Text style={styles.pendingTitle}>{t('legal.pendingTitle')}</Text>
-          <Text style={styles.pendingWhen}>{t('legal.appliesFrom', { when: amendment.appliesFrom })}</Text>
+          <Text style={styles.pendingWhen}>
+            {t('legal.appliesFrom', { when: amendment.appliesFrom })}
+          </Text>
           <Text style={styles.line}>{amendment.summary}</Text>
           {amendment.sections.map((section) => (
             <View key={section.h} style={styles.section}>

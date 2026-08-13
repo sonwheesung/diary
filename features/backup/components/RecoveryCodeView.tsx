@@ -59,9 +59,7 @@ export function RecoveryCodeView({ code, onConfirmed, onSkip }: Props) {
     return (
       <View style={styles.root}>
         <Text style={styles.title}>{t('backup.confirmCodeTitle')}</Text>
-        <Text style={styles.body}>
-          {t('backup.confirmCodeBody', { index: askIndex + 1 })}
-        </Text>
+        <Text style={styles.body}>{t('backup.confirmCodeBody', { index: askIndex + 1 })}</Text>
 
         <TextInput
           value={answer}

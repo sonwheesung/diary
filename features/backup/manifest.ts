@@ -177,7 +177,7 @@ export function encodeUtf8(text: string): Uint8Array {
 /** UTF-8 디코딩 */
 export function decodeUtf8(bytes: Uint8Array): string {
   let out = '';
-  for (let i = 0; i < bytes.length; ) {
+  for (let i = 0; i < bytes.length;) {
     const b = bytes[i];
     let code: number;
     if (b < 0x80) {

@@ -106,8 +106,8 @@ export function DatePickerSheet({
         style={[styles.todayButton, todayTaken && styles.todayButtonDisabled]}
       >
         <Text style={[styles.todayLabel, todayTaken && styles.todayLabelDisabled]}>
-            {t('calendar.goToday')}
-          </Text>
+          {t('calendar.goToday')}
+        </Text>
       </Pressable>
     </BottomSheet>
   );

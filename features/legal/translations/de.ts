@@ -150,7 +150,8 @@ export const PRIVACY_DE: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'Ab dem Tag, an dem die Version mit Monatsabo und Backup/Wiederherstellung veröffentlicht wird',
+      appliesFrom:
+        'Ab dem Tag, an dem die Version mit Monatsabo und Backup/Wiederherstellung veröffentlicht wird',
       summary:
         'Monatsabo sowie Backup/Wiederherstellung kommen hinzu. Bei einem Abo werden Abostatus und Transaktionskennung verarbeitet; und nur wenn du das Backup einschaltest, wird eine auf deinem Gerät verschlüsselte Kopie deiner Einträge auf dem Server des Betreibers gespeichert. Der Betreiber kann diese Kopie nicht entschlüsseln.',
       sections: [
@@ -220,7 +221,8 @@ export const PRIVACY_DE: LegalDoc = {
       ],
     },
     {
-      appliesFrom: 'Ab dem Tag, an dem die Version mit KI-Zusammenfassungsberichten veröffentlicht wird',
+      appliesFrom:
+        'Ab dem Tag, an dem die Version mit KI-Zusammenfassungsberichten veröffentlicht wird',
       summary:
         'KI-Zusammenfassungsberichte kommen hinzu. Nur wenn du selbst einen Bericht erstellst, läuft der Inhalt deiner Einträge aus diesem Zeitraum unverschlüsselt über den Server des Betreibers und wird an den KI-Anbieter übermittelt. Der Betreiber speichert diesen Inhalt nicht; der KI-Anbieter bewahrt ihn bis zu 30 Tage zur Missbrauchskontrolle auf, löscht ihn dann und nutzt ihn nicht für das Modelltraining.',
       sections: [

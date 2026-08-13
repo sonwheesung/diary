@@ -25,15 +25,7 @@
     "report": "Informes"
   },
   "date": {
-    "weekdays": [
-      "dom",
-      "lun",
-      "mar",
-      "mié",
-      "jue",
-      "vie",
-      "sáb"
-    ],
+    "weekdays": ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Enviar",
     "title": "Contacto",
     "tooShort": "Escribe al menos {{min}} caracteres."
+  },
+  "inquiries": {
+    "title": "Mis consultas",
+    "empty": "Aún no hay consultas",
+    "loadFailed": "No se pudieron cargar tus consultas",
+    "emptyBody": "Cuéntanos si algo no está claro o no funciona.",
+    "statusOpen": "Recibida",
+    "statusReplied": "Respondida",
+    "statusResolved": "Cerrada",
+    "replyLabel": "Respuesta",
+    "awaitingReply": "Estamos preparando una respuesta."
   },
   "backup": {
     "backupNow": "Hacer copia ahora",

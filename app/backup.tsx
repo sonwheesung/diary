@@ -168,9 +168,7 @@ export default function BackupScreen() {
           <View style={styles.statusRow}>
             <Text style={styles.statusLabel}>{t('backup.lastBackup')}</Text>
             <Text style={styles.statusValue}>
-              {state.lastBackupAt === null
-                ? t('backup.never')
-                : formatDateTime(state.lastBackupAt)}
+              {state.lastBackupAt === null ? t('backup.never') : formatDateTime(state.lastBackupAt)}
             </Text>
           </View>
 
@@ -203,7 +201,11 @@ export default function BackupScreen() {
           )}
 
           {!pro && (
-            <Pressable accessibilityRole="button" onPress={() => router.push('/subscribe')} hitSlop={8}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push('/subscribe')}
+              hitSlop={8}
+            >
               <Text style={styles.linkCenter}>{t('backup.needsSubscription')}</Text>
             </Pressable>
           )}
@@ -244,7 +246,11 @@ export default function BackupScreen() {
             fullWidth
           />
           {!pro && (
-            <Pressable accessibilityRole="button" onPress={() => router.push('/subscribe')} hitSlop={8}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push('/subscribe')}
+              hitSlop={8}
+            >
               <Text style={styles.linkCenter}>{t('backup.needsSubscription')}</Text>
             </Pressable>
           )}

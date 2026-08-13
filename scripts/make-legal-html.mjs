@@ -50,20 +50,20 @@ const linkify = (s) =>
     .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" rel="noopener">$1</a>');
 
 const render = (doc) => {
-/*
- * ⚠ **개정 예고는 반드시 함께 게시한다.** 이게 빠지면 30일 사전 고지가 실제로는
- *   일어난 적이 없게 되고(정본 파일에만 적혀 있다), 릴리스 직전에 30일이 통째로
- *   크리티컬 패스가 된다 — 예고본을 만든 이유 전체가 무효가 된다. 실제로 빠져 있었다.
- */
-/*
- * ⚠ `pending`은 **배열**이다(2026-08-12 정정). 시행일이 다른 예고를 각각 담는다 —
- *   합치면 예고를 수정한 것이 되어 30일이 다시 흐르고 앞선 릴리스가 밀린다.
- *   단수 시절 코드가 `doc.pending.sections`를 직접 읽었으므로, 여기를 안 고치면
- *   `undefined.map`으로 **생성이 통째로 죽는다.**
- */
-const pending = (doc.pending ?? [])
-  .map(
-    (p) => `    <section class="pending">
+  /*
+   * ⚠ **개정 예고는 반드시 함께 게시한다.** 이게 빠지면 30일 사전 고지가 실제로는
+   *   일어난 적이 없게 되고(정본 파일에만 적혀 있다), 릴리스 직전에 30일이 통째로
+   *   크리티컬 패스가 된다 — 예고본을 만든 이유 전체가 무효가 된다. 실제로 빠져 있었다.
+   */
+  /*
+   * ⚠ `pending`은 **배열**이다(2026-08-12 정정). 시행일이 다른 예고를 각각 담는다 —
+   *   합치면 예고를 수정한 것이 되어 30일이 다시 흐르고 앞선 릴리스가 밀린다.
+   *   단수 시절 코드가 `doc.pending.sections`를 직접 읽었으므로, 여기를 안 고치면
+   *   `undefined.map`으로 **생성이 통째로 죽는다.**
+   */
+  const pending = (doc.pending ?? [])
+    .map(
+      (p) => `    <section class="pending">
       <h2>개정 예고</h2>
       <p class="pending-when">적용 시점: ${esc(p.appliesFrom)}</p>
       <p>${linkify(p.summary)}</p>
@@ -74,19 +74,19 @@ ${s.body.map((line) => `      <p>${linkify(line)}</p>`).join(NL)}`,
   )
   .join(NL)}
     </section>`,
-  )
-  .join(NL);
+    )
+    .join(NL);
 
-const sections = doc.sections
-  .map(
-    (s) => `    <section>
+  const sections = doc.sections
+    .map(
+      (s) => `    <section>
       <h2>${esc(s.h)}</h2>
 ${s.body.map((line) => `      <p>${linkify(line)}</p>`).join('\n')}
     </section>`,
-  )
-  .join('\n');
+    )
+    .join('\n');
 
-return `<!doctype html>
+  return `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">

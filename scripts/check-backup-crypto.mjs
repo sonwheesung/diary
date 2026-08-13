@@ -18,7 +18,13 @@ import { randomBytes } from 'node:crypto';
 import { hkdf } from '@noble/hashes/hkdf.js';
 import { sha256 } from '@noble/hashes/sha2.js';
 
-import { deriveKey, deriveDek, deriveVaultId, deriveKid, toHex } from '../features/backup/key-derive.ts';
+import {
+  deriveKey,
+  deriveDek,
+  deriveVaultId,
+  deriveKid,
+  toHex,
+} from '../features/backup/key-derive.ts';
 import { seal, open } from '../features/backup/seal.ts';
 import {
   encodeHeader,
@@ -46,7 +52,13 @@ import {
 } from '../features/backup/manifest.ts';
 import { sealManifest, openManifest, countParts } from '../features/backup/package.ts';
 
-const hex = (s) => Uint8Array.from(s.replace(/\s/g, '').match(/../g).map((b) => parseInt(b, 16)));
+const hex = (s) =>
+  Uint8Array.from(
+    s
+      .replace(/\s/g, '')
+      .match(/../g)
+      .map((b) => parseInt(b, 16)),
+  );
 const ascii = (s) => Uint8Array.from([...s].map((c) => c.charCodeAt(0)));
 
 let passed = 0;
@@ -238,7 +250,11 @@ check('봉투 · magic이 다르면 거부', () => {
 // ── 세대 완결성 ───────────────────────────────────────────────────────────────
 
 const part = (index, count, genId = GEN, seq = 41) => ({
-  type: ENVELOPE_TYPE.manifest, seq, genId, part: index, partCount: count,
+  type: ENVELOPE_TYPE.manifest,
+  seq,
+  genId,
+  part: index,
+  partCount: count,
 });
 
 check('세대 · 파트가 전부 모이면 통과', () => {
@@ -270,7 +286,14 @@ check('복구 코드 · 왕복', () => {
 check('복구 코드 · 길이와 그룹 모양 (4자 6그룹 + 3자)', () => {
   const code = encodeRecoveryCode(hex('000102030405060708090a0b0c0d0e0f'));
   eq(normalizeRecoveryCode(code).length, TOTAL_SYMBOLS, `정규형 길이(${TOTAL_SYMBOLS}자)`);
-  eq(code.split('-').map((g) => g.length).join(','), '4,4,4,4,4,4,3', '그룹 분할');
+  eq(
+    code
+      .split('-')
+      .map((g) => g.length)
+      .join(','),
+    '4,4,4,4,4,4,3',
+    '그룹 분할',
+  );
 });
 
 check('복구 코드 · 혼동 문자 흡수 (O→0, I·L→1)', () => {
@@ -338,22 +361,50 @@ check('복구 코드 · 무작위 2000개 왕복', () => {
 // ── 매니페스트 ────────────────────────────────────────────────────────────────
 
 const diary = (id, over = {}) => ({
-  id, entry_date: '2026-08-11', title: null, content: `본문 ${id}`,
+  id,
+  entry_date: '2026-08-11',
+  title: null,
+  content: `본문 ${id}`,
   content_blocks: JSON.stringify([{ type: 'text', value: `본문 ${id}` }]),
-  emotion: 'joy', created_at: 1, updated_at: 2, deleted_at: null, ...over,
+  emotion: 'joy',
+  created_at: 1,
+  updated_at: 2,
+  deleted_at: null,
+  ...over,
 });
 
 const report = (id, over = {}) => ({
-  id, kind: 'weekly', period_key: '2026-W33', lang: 'ko',
-  summary: `요약 ${id}`, concern: 0, source_count: 7,
-  model: 'gpt-5.6-luna', prompt_ver: 1, created_at: 100, ...over,
+  id,
+  kind: 'weekly',
+  period_key: '2026-W33',
+  lang: 'ko',
+  summary: `요약 ${id}`,
+  concern: 0,
+  source_count: 7,
+  model: 'gpt-5.6-luna',
+  prompt_ver: 1,
+  created_at: 100,
+  ...over,
 });
 
 const fullManifest = () => ({
   dbVersion: 5,
   diaries: [diary('a'), diary('b'), diary('c', { deleted_at: 99, content: '' })],
-  images: [{ id: 'i1', diary_id: 'a', file_name: 'x.jpg', width: 800, height: 600, created_at: 1, deleted_at: null }],
-  tags: [{ id: 't1', name: '여행', created_at: 10 }, { id: 't2', name: '일상', created_at: 20 }],
+  images: [
+    {
+      id: 'i1',
+      diary_id: 'a',
+      file_name: 'x.jpg',
+      width: 800,
+      height: 600,
+      created_at: 1,
+      deleted_at: null,
+    },
+  ],
+  tags: [
+    { id: 't1', name: '여행', created_at: 10 },
+    { id: 't2', name: '일상', created_at: 20 },
+  ],
   diaryTags: [{ diary_id: 'a', tag_id: 't1' }],
   reports: [report('r1'), report('r2', { kind: 'monthly', period_key: '2026-08', concern: 1 })],
 });
@@ -396,29 +447,50 @@ check('🔴 매니페스트 · 리포트가 여러 파트로 나뉘어도 딱 �
   eq(JSON.stringify(joined.reports), JSON.stringify(original.reports), '리포트 왕복 불일치');
 });
 
-check('🔴 매니페스트 · v1 백업(reports 없음)도 복원된다 — 형식 상승이 옛 백업을 막지 않는다', () => {
-  // 엄격 일치로 두면 형식을 올리는 순간 이미 만들어진 백업이 전부 복원 불가가 된다
-  const v1 = encodeUtf8(JSON.stringify({
-    v: 1, dbVersion: 4,
-    diaries: [diary('a')], images: [], tags: [], diaryTags: [],
-    // reports 없음 — v1에는 이 필드 자체가 없었다
-  }));
-  const joined = joinManifest([v1]);
-  eq(joined.reports.length, 0, 'reports가 빈 배열이어야 한다');
-  eq(joined.diaries.length, 1, '조각은 살아 있어야 한다');
-});
+check(
+  '🔴 매니페스트 · v1 백업(reports 없음)도 복원된다 — 형식 상승이 옛 백업을 막지 않는다',
+  () => {
+    // 엄격 일치로 두면 형식을 올리는 순간 이미 만들어진 백업이 전부 복원 불가가 된다
+    const v1 = encodeUtf8(
+      JSON.stringify({
+        v: 1,
+        dbVersion: 4,
+        diaries: [diary('a')],
+        images: [],
+        tags: [],
+        diaryTags: [],
+        // reports 없음 — v1에는 이 필드 자체가 없었다
+      }),
+    );
+    const joined = joinManifest([v1]);
+    eq(joined.reports.length, 0, 'reports가 빈 배열이어야 한다');
+    eq(joined.diaries.length, 1, '조각은 살아 있어야 한다');
+  },
+);
 
 check('매니페스트 · 더 새 형식은 여전히 거부한다', () => {
-  const future = encodeUtf8(JSON.stringify({
-    v: 99, dbVersion: 4, diaries: [], images: [], tags: [], diaryTags: [], reports: [],
-  }));
+  const future = encodeUtf8(
+    JSON.stringify({
+      v: 99,
+      dbVersion: 4,
+      diaries: [],
+      images: [],
+      tags: [],
+      diaryTags: [],
+      reports: [],
+    }),
+  );
   throws(() => joinManifest([future]), '형식 v99');
 });
 
 check('매니페스트 · content_blocks를 파싱하지 않고 문자열 그대로 나른다', () => {
   const unknown = JSON.stringify([{ type: 'table', rows: [[1, 2]] }]); // 이 앱이 모르는 타입
   const m = { ...fullManifest(), diaries: [diary('a', { content_blocks: unknown })] };
-  eq(joinManifest(splitManifest(m, 1_000_000)).diaries[0].content_blocks, unknown, '블록이 변형됐다');
+  eq(
+    joinManifest(splitManifest(m, 1_000_000)).diaries[0].content_blocks,
+    unknown,
+    '블록이 변형됐다',
+  );
 });
 
 check('매니페스트 · 더 새 스키마는 거부한다', () => {
@@ -428,7 +500,9 @@ check('매니페스트 · 더 새 스키마는 거부한다', () => {
 
 check('매니페스트 · 형식 버전이 다른 파트가 섞이면 거부', () => {
   const [good] = splitManifest(fullManifest(), 1_000_000);
-  const bad = encodeUtf8(JSON.stringify({ v: 1, dbVersion: 99, diaries: [], images: [], tags: [], diaryTags: [] }));
+  const bad = encodeUtf8(
+    JSON.stringify({ v: 1, dbVersion: 99, diaries: [], images: [], tags: [], diaryTags: [] }),
+  );
   throws(() => joinManifest([good, bad]), 'dbVersion 불일치');
 });
 
@@ -448,11 +522,22 @@ check('매니페스트 · 깨진 JSON은 파싱 실패로 거부', () => {
 
 // ── 전체 경로 (매니페스트 → 봉인 → 개봉 → 매니페스트) ─────────────────────────
 
-const KEYS = { dek: hex('808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f'), kid: KID };
+const KEYS = {
+  dek: hex('808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f'),
+  kid: KID,
+};
 // 결정적 nonce — **테스트 전용**이다. 제품은 매번 CSPRNG로 만든다
-const nonceFor = (part) => { const n = new Uint8Array(24); n[23] = part + 1; return n; };
+const nonceFor = (part) => {
+  const n = new Uint8Array(24);
+  n[23] = part + 1;
+  return n;
+};
 const sealOpts = (over = {}) => ({
-  seq: 41, genId: GEN, version: VERSION_EXPERIMENTAL, nonceFor, ...over,
+  seq: 41,
+  genId: GEN,
+  version: VERSION_EXPERIMENTAL,
+  nonceFor,
+  ...over,
 });
 
 check('전체 경로 · 단일 파트 왕복', () => {
@@ -465,21 +550,30 @@ check('전체 경로 · 단일 파트 왕복', () => {
 });
 
 check('전체 경로 · 여러 파트 왕복', () => {
-  const original = { ...fullManifest(), diaries: Array.from({ length: 40 }, (_, i) => diary(`d${i}`)) };
+  const original = {
+    ...fullManifest(),
+    diaries: Array.from({ length: 40 }, (_, i) => diary(`d${i}`)),
+  };
   const envelopes = sealManifest(original, KEYS, sealOpts({ targetPartBytes: 400 }));
   if (envelopes.length < 3) throw new Error(`나뉘지 않았다 (${envelopes.length}파트)`);
   eq(JSON.stringify(openManifest(envelopes, KEYS).manifest), JSON.stringify(original), '불일치');
 });
 
 check('전체 경로 · 파트 순서가 섞여 있어도 복원된다', () => {
-  const original = { ...fullManifest(), diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)) };
+  const original = {
+    ...fullManifest(),
+    diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)),
+  };
   const envelopes = sealManifest(original, KEYS, sealOpts({ targetPartBytes: 400 }));
   const shuffled = [...envelopes].reverse();
   eq(JSON.stringify(openManifest(shuffled, KEYS).manifest), JSON.stringify(original), '불일치');
 });
 
 check('전체 경로 · 파트 하나가 빠지면 전체 거부', () => {
-  const original = { ...fullManifest(), diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)) };
+  const original = {
+    ...fullManifest(),
+    diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)),
+  };
   const envelopes = sealManifest(original, KEYS, sealOpts({ targetPartBytes: 400 }));
   throws(() => openManifest(envelopes.slice(1), KEYS), '파트 누락');
 });
@@ -488,7 +582,11 @@ check('전체 경로 · 다른 세대의 파트가 섞이면 거부 (찢어진 �
   const m = { ...fullManifest(), diaries: Array.from({ length: 20 }, (_, i) => diary(`d${i}`)) };
   const a = sealManifest(m, KEYS, sealOpts({ targetPartBytes: 400 }));
   // 같은 seq·같은 partCount인데 genId만 다른 재시도 — AAD·태그는 전부 통과한다
-  const b = sealManifest(m, KEYS, sealOpts({ targetPartBytes: 400, genId: hex('ffffffffffffffff') }));
+  const b = sealManifest(
+    m,
+    KEYS,
+    sealOpts({ targetPartBytes: 400, genId: hex('ffffffffffffffff') }),
+  );
   throws(() => openManifest([a[0], ...b.slice(1)], KEYS), 'genId 혼입');
 });
 

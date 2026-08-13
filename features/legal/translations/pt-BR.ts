@@ -150,7 +150,8 @@ export const PRIVACY_PT_BR: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'A partir do dia em que for publicada a versão que inclui a assinatura mensal e o backup/restauração',
+      appliesFrom:
+        'A partir do dia em que for publicada a versão que inclui a assinatura mensal e o backup/restauração',
       summary:
         'Serão adicionados a assinatura mensal e o backup/restauração. Se você assinar, serão tratados o status da assinatura e o identificador da transação; e somente se você ativar o backup, uma cópia dos seus registros criptografada no seu dispositivo será guardada no servidor da operadora. A operadora não consegue descriptografar essa cópia.',
       sections: [
@@ -220,7 +221,8 @@ export const PRIVACY_PT_BR: LegalDoc = {
       ],
     },
     {
-      appliesFrom: 'A partir do dia em que for publicada a versão que inclui os relatórios de resumo com IA',
+      appliesFrom:
+        'A partir do dia em que for publicada a versão que inclui os relatórios de resumo com IA',
       summary:
         'Serão adicionados os relatórios de resumo com IA. Somente quando você mesmo cria um relatório, o conteúdo dos registros daquele período passa sem criptografia pelo servidor da operadora e é enviado ao provedor de IA. A operadora não armazena esse conteúdo; o provedor de IA o mantém por até 30 dias para monitorar abusos, depois o exclui, e não o usa para treinar modelos.',
       sections: [

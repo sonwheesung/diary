@@ -52,9 +52,7 @@ export async function buildManifest(): Promise<Manifest> {
     `SELECT id, name, created_at FROM tags ORDER BY created_at ASC`,
   );
 
-  const diaryTags = await db.getAllAsync<DiaryTagRow>(
-    `SELECT diary_id, tag_id FROM diary_tags`,
-  );
+  const diaryTags = await db.getAllAsync<DiaryTagRow>(`SELECT diary_id, tag_id FROM diary_tags`);
 
   /*
    * AI 리포트도 싣는다. 본문이 로컬에만 있어서 기기를 잃으면 그대로 사라지고,

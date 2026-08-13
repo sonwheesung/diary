@@ -7,8 +7,18 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import { purgeBackup } from '@/features/backup/api/run-backup';
-import { forgetPurchaseIdentity, reattachSubscription } from '@/features/subscription/api/purchases';
-import { DEV_LOGIN_ENABLED, DEV_SUBJECT, devSessionExists, devSignIn, devSignOut } from '@/features/support/dev-auth';
+import {
+  forgetPurchaseIdentity,
+  reattachSubscription,
+} from '@/features/subscription/api/purchases';
+import {
+  DEV_LOGIN_ENABLED,
+  DEV_SUBJECT,
+  devSessionExists,
+  devSignIn,
+  devSignOut,
+} from '@/features/support/dev-auth';
+import { useInquiryStore } from '@/features/support/inquiry-store';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
@@ -206,6 +216,12 @@ export function useSupportAuth(): SupportAuth {
       // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.
       await useEntitlementStore.getState().clear();
       /*
+       * ⚠ 문의 내역과 **읽음 기록**도 함께 버린다. 안 버리면 다음 사람이 로그인했을 때
+       *   앞사람의 답변 배지가 남는다 — 내용이 새지는 않지만(서버가 subject로 거른다)
+       *   있지도 않은 답변을 알리는 것은 고장이다(`docs/SUPPORT_SYSTEM.md` §5.5).
+       */
+      await useInquiryStore.getState().clear();
+      /*
        * ⚠ RC 신원도 끊는다. 안 끊으면 **다음 사람이 남의 구독을 물려받는다** —
        *   같은 기기에서 다른 계정으로 로그인했을 때 RC는 여전히 앞 사람의 appUserID다.
        */
@@ -249,6 +265,11 @@ export function useSupportAuth(): SupportAuth {
       setSignedIn(false);
       // 권한은 계정에 붙어 있다 — 계정을 끊었는데 pro가 남으면 광고가 안 뜬다.
       await useEntitlementStore.getState().clear();
+      /*
+       * 탈퇴는 로그아웃보다 분명하다 — 서버에서 문의 자체가 사라지는데
+       * 로컬에 읽음 기록만 남을 이유가 없다.
+       */
+      await useInquiryStore.getState().clear();
       await forgetPurchaseIdentity();
       return null;
     } finally {

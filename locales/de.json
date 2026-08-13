@@ -25,15 +25,7 @@
     "report": "Berichte"
   },
   "date": {
-    "weekdays": [
-      "So",
-      "Mo",
-      "Di",
-      "Mi",
-      "Do",
-      "Fr",
-      "Sa"
-    ],
+    "weekdays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
     "full": "{{weekday}}, {{day}}. {{monthName}} {{year}}",
     "dateTime": "{{day}}. {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}}. {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Senden",
     "title": "Kontakt",
     "tooShort": "Bitte schreib mindestens {{min}} Zeichen."
+  },
+  "inquiries": {
+    "title": "Meine Anfragen",
+    "empty": "Noch keine Anfragen",
+    "loadFailed": "Deine Anfragen konnten nicht geladen werden",
+    "emptyBody": "Sag uns Bescheid, wenn etwas unklar ist oder nicht funktioniert.",
+    "statusOpen": "Eingegangen",
+    "statusReplied": "Beantwortet",
+    "statusResolved": "Abgeschlossen",
+    "replyLabel": "Antwort",
+    "awaitingReply": "Wir bereiten eine Antwort vor."
   },
   "backup": {
     "backupNow": "Jetzt sichern",

@@ -102,10 +102,7 @@ export interface OpenedManifest {
  * 중복이거나 다른 세대의 것이 섞이면 **전체를 거부한다.** 반쪽 매니페스트로 복원하면
  * 그만큼이 조용히 사라지고, 스크래치 DB 구조라 중단 비용은 0이다.
  */
-export function openManifest(
-  envelopes: readonly Uint8Array[],
-  keys: SealingKeys,
-): OpenedManifest {
+export function openManifest(envelopes: readonly Uint8Array[], keys: SealingKeys): OpenedManifest {
   const parsed = envelopes.map((bytes) => parseEnvelope(bytes));
 
   const contexts: ManifestContext[] = [];

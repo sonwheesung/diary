@@ -20,7 +20,6 @@ import { PRIVACY } from '../features/legal/legal-text.ts';
 import { fingerprint } from '../features/legal/fingerprint.ts';
 import { EXPECTED_TRANSLATIONS, TRANSLATIONS } from '../features/legal/registry.ts';
 
-
 let passed = 0;
 const failures = [];
 
@@ -93,7 +92,10 @@ for (const [lang, doc] of Object.entries(TRANSLATIONS)) {
   });
 
   check(`${lang} — 시행일·수정일이 한국어와 같다`, () => {
-    assert(doc.effective === PRIVACY.effective, `시행일: ko=${PRIVACY.effective} ${lang}=${doc.effective}`);
+    assert(
+      doc.effective === PRIVACY.effective,
+      `시행일: ko=${PRIVACY.effective} ${lang}=${doc.effective}`,
+    );
     assert(doc.updated === PRIVACY.updated, `수정일: ko=${PRIVACY.updated} ${lang}=${doc.updated}`);
   });
 
@@ -121,8 +123,7 @@ for (const [lang, doc] of Object.entries(TRANSLATIONS)) {
     assert(
       doc.sourceFingerprint === currentFingerprint,
       `한국어가 바뀌었는데 ${lang}이 따라오지 않았다: ${doc.sourceFingerprint} ≠ ${currentFingerprint}
-` +
-        `       → 한국어를 다시 읽고 ${lang}을 고친 뒤  node scripts/legal-stamp.mjs ${lang}`,
+` + `       → 한국어를 다시 읽고 ${lang}을 고친 뒤  node scripts/legal-stamp.mjs ${lang}`,
     );
   });
 
@@ -150,7 +151,9 @@ console.log('');
 if (Object.keys(TRANSLATIONS).length !== EXPECTED_TRANSLATIONS) {
   console.error(`
 번역된 언어가 ${Object.keys(TRANSLATIONS).length}개다 — ${EXPECTED_TRANSLATIONS}개여야 한다.`);
-  console.error('번역이 없는 언어는 한국어 원문을 보여주므로 화면은 깨지지 않지만, 그 언어 사용자는 못 읽는다.');
+  console.error(
+    '번역이 없는 언어는 한국어 원문을 보여주므로 화면은 깨지지 않지만, 그 언어 사용자는 못 읽는다.',
+  );
   process.exit(1);
 }
 

@@ -150,7 +150,8 @@ export const PRIVACY_IT: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'Dal giorno in cui viene pubblicata la versione che include l’abbonamento mensile e il backup/ripristino',
+      appliesFrom:
+        'Dal giorno in cui viene pubblicata la versione che include l’abbonamento mensile e il backup/ripristino',
       summary:
         'Vengono aggiunti l’abbonamento mensile e il backup/ripristino. Se ti abboni, saranno trattati lo stato dell’abbonamento e l’identificatore della transazione; e soltanto se attivi il backup, una copia delle tue voci cifrata sul tuo dispositivo sarà conservata sul server del gestore. Il gestore non può decifrare tale copia.',
       sections: [
@@ -220,7 +221,8 @@ export const PRIVACY_IT: LegalDoc = {
       ],
     },
     {
-      appliesFrom: 'Dal giorno in cui viene pubblicata la versione che include i resoconti di sintesi con IA',
+      appliesFrom:
+        'Dal giorno in cui viene pubblicata la versione che include i resoconti di sintesi con IA',
       summary:
         'Vengono aggiunti i resoconti di sintesi con IA. Soltanto quando crei tu un resoconto, il contenuto delle tue voci di quel periodo passa non cifrato dal server del gestore e viene inviato al fornitore di IA. Il gestore non conserva quel contenuto; il fornitore di IA lo mantiene fino a 30 giorni per il monitoraggio degli abusi, poi lo elimina, e non lo usa per addestrare modelli.',
       sections: [

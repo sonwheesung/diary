@@ -3,7 +3,15 @@ import AlertTriangle from 'lucide-react-native/icons/triangle-alert';
 import ChevronLeft from 'lucide-react-native/icons/chevron-left';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
@@ -35,7 +43,14 @@ import { useStyles } from '@/theme/use-styles';
 type Step =
   | { kind: 'code' }
   | { kind: 'loading' }
-  | { kind: 'confirm'; keys: BackupKeys; manifest: Manifest; seq: number; diff: RestoreDiff; dates: string[] }
+  | {
+      kind: 'confirm';
+      keys: BackupKeys;
+      manifest: Manifest;
+      seq: number;
+      diff: RestoreDiff;
+      dates: string[];
+    }
   | { kind: 'applying' }
   /** 조각은 이미 들어왔고 사진만 받는 중. **여기서 실패해도 복원은 성공이다** */
   | { kind: 'photos' };
@@ -184,9 +199,7 @@ ${t('backup.restorePhotosAbsent', { count: absent })}`
     const losing = step.diff.losing.length;
     return (
       <Screen edges={['top', 'bottom', 'left', 'right']} header={header}>
-        <Text style={styles.lead}>
-          {t('backup.restoreFound', { count: step.diff.incoming })}
-        </Text>
+        <Text style={styles.lead}>{t('backup.restoreFound', { count: step.diff.incoming })}</Text>
 
         {losing > 0 ? (
           <View style={styles.dangerBox}>
@@ -270,7 +283,11 @@ ${t('backup.restorePhotosAbsent', { count: absent })}`
 
       <Button label={t('backup.restoreLoad')} onPress={() => void submitCode()} fullWidth />
 
-      <Pressable accessibilityRole="button" onPress={() => void restoreFromThisDevice()} hitSlop={8}>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => void restoreFromThisDevice()}
+        hitSlop={8}
+      >
         <Text style={styles.link}>{t('backup.restoreUseThisDevice')}</Text>
       </Pressable>
     </Screen>

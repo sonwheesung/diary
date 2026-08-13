@@ -8,11 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
-import {
-  deleteReport,
-  getReport,
-  type Report,
-} from '@/features/ai/api/report-repository';
+import { deleteReport, getReport, type Report } from '@/features/ai/api/report-repository';
 import { periodLabel } from '@/features/ai/labels';
 import { formatDateTime, formatWeekNumber } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';

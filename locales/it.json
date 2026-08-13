@@ -25,15 +25,7 @@
     "report": "Resoconti"
   },
   "date": {
-    "weekdays": [
-      "dom",
-      "lun",
-      "mar",
-      "mer",
-      "gio",
-      "ven",
-      "sab"
-    ],
+    "weekdays": ["dom", "lun", "mar", "mer", "gio", "ven", "sab"],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -312,6 +304,17 @@
     "submit": "Invia",
     "title": "Contattaci",
     "tooShort": "Scrivi almeno {{min}} caratteri."
+  },
+  "inquiries": {
+    "title": "Le mie richieste",
+    "empty": "Ancora nessuna richiesta",
+    "loadFailed": "Impossibile caricare le tue richieste",
+    "emptyBody": "Facci sapere se qualcosa non è chiaro o non funziona.",
+    "statusOpen": "Ricevuta",
+    "statusReplied": "Risposta inviata",
+    "statusResolved": "Chiusa",
+    "replyLabel": "Risposta",
+    "awaitingReply": "Stiamo preparando una risposta."
   },
   "backup": {
     "backupNow": "Fai il backup ora",

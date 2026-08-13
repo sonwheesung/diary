@@ -165,7 +165,9 @@ export default function SearchScreen() {
         </Card>
       ) : (
         <>
-          <Text style={styles.sectionTitle}>{t('search.resultCount', { total: results.length })}</Text>
+          <Text style={styles.sectionTitle}>
+            {t('search.resultCount', { total: results.length })}
+          </Text>
           {results.map((diary) => (
             <ResultRow key={diary.id} diary={diary} thumbnail={thumbnails.get(diary.id)} />
           ))}

@@ -150,7 +150,8 @@ export const PRIVACY_FR: LegalDoc = {
   ],
   pending: [
     {
-      appliesFrom: 'À compter du jour de publication de la version incluant l’abonnement mensuel et la sauvegarde/restauration',
+      appliesFrom:
+        'À compter du jour de publication de la version incluant l’abonnement mensuel et la sauvegarde/restauration',
       summary:
         'L’abonnement mensuel et la sauvegarde/restauration sont ajoutés. Si vous vous abonnez, l’état de l’abonnement et l’identifiant de transaction sont traités ; et uniquement si vous activez la sauvegarde, une copie de vos entrées chiffrée sur votre appareil est conservée sur le serveur de l’exploitant. L’exploitant ne peut pas déchiffrer cette copie.',
       sections: [
@@ -220,7 +221,8 @@ export const PRIVACY_FR: LegalDoc = {
       ],
     },
     {
-      appliesFrom: 'À compter du jour de publication de la version incluant les bilans de synthèse par IA',
+      appliesFrom:
+        'À compter du jour de publication de la version incluant les bilans de synthèse par IA',
       summary:
         'Les bilans de synthèse par IA sont ajoutés. Uniquement lorsque vous créez vous-même un bilan, le contenu de vos entrées de la période concernée transite en clair par le serveur de l’exploitant et est envoyé au prestataire d’IA. L’exploitant ne conserve pas ce contenu ; le prestataire d’IA le garde jusqu’à 30 jours à des fins de surveillance des abus, puis le supprime, et ne l’utilise pas pour entraîner ses modèles.',
       sections: [
