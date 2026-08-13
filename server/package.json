@@ -9,7 +9,7 @@
     "db:push": "drizzle-kit push",
     "e2e": "node scripts/e2e.mjs",
     "setup:storage": "node --env-file=.env.local scripts/setup-storage.mjs",
-    "measure:ai": "node scripts/measure-ai.mjs",
+    "measure:ai": "node --env-file=.env.local scripts/measure-ai.mjs",
     "e2e:ai": "node scripts/e2e-ai.mjs"
   },
   "dependencies": {

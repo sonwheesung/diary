@@ -28,12 +28,16 @@ import { reportError } from './observability';
 const DEFAULT_MODEL = 'gpt-5.6-luna';
 
 /**
- * 추론 강도.
+ * 추론 강도 — **P1 실측으로 `medium` 확정**(2026-08-13, `docs/AI_REPORT_SYSTEM.md` §4).
  *
- * ⏭ **P1 실측 전까지 `low`다.** 리포트는 긴 추론이 필요한 과제가 아니고(읽고 요약한다),
- *   원가는 추론 토큰에서 가장 크게 벌어진다. 실측 후 확정한다(§4).
+ * ~~실측 전까지 `low`~~ → 원가를 **4배 높게 추정**하고 있었기 때문에 내린 잠정값이었다.
+ * 실측하니 리포트 1건이 ₩3.3이 아니라 **₩0.9**였고, low↔medium 차이는 **₩0.16**이다.
+ *
+ * 품질은 눈에 띄게 갈렸다. medium부터 *"한 달에 몇 번씩 있다고 적었다"* 처럼
+ * **여러 날에 걸친 패턴**을 잡아낸다 — 그게 "내 일기를 읽었구나"를 만드는 종류의 관찰이고
+ * low는 놓쳤다. high는 medium 대비 나아진 것이 없이 토큰만 더 썼다.
  */
-const DEFAULT_EFFORT = 'low';
+const DEFAULT_EFFORT = 'medium';
 
 export interface GenerateArgs {
   system: string;

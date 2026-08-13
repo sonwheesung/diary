@@ -66,7 +66,7 @@
 | 월 구독(RevenueCat) | ⏸ | ~~Phase 9 대기~~ → 앱·RC·**Play 상품 등록까지 완료**(2026-08-12). 남은 것은 RC 상품 import·attach와 결제 프로필. [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) |
 | 백업/복원 — 서버 | ✅ | ~~조각 서버 대기~~ → `jogak-stg`(서울) + Vercel(`icn1`) 배포. 위 두 줄과 합쳐 읽는다 |
 | **AI 리포트 — 앱 쪽** | ✅ | 리포트 탭·상세·홈 카드·설정(리포트 언어)·DB v5·백업 포함. [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11 |
-| **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` **구현 완료**(`npm run e2e:ai` 7개). 🔴 **실호출은 한 번도 안 해봤다** — `OPENAI_API_KEY` 대기 |
+| **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
 | 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
 | AI 리포트 — 처리방침 예고 | ✅ | 2026-08-12 게시. 30일 시계는 **2026-09-11** 만료 |
