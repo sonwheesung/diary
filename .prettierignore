@@ -8,3 +8,8 @@ package-lock.json
 
 # 문서는 손으로 쓴 표·정렬을 유지한다 — Prettier가 재배치하면 diff만 커지고 읽기 나빠진다
 *.md
+
+# 생성물이다 — `npm run legal:html`이 만든다. Prettier가 손대면 다음 생성 때
+# 원래 모양으로 돌아가 **없는 변경이 계속 잡힌다**(2026-08-13에 실제로 겪음).
+# 게시되는 법적 문서라 형식 diff로 내용 diff를 가리는 것도 위험하다.
+docs/*.html
