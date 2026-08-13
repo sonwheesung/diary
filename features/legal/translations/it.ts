@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_IT: LegalDoc = {
   title: 'Informativa sulla privacy di Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -221,54 +221,55 @@ export const PRIVACY_IT: LegalDoc = {
       ],
     },
     {
-      appliesFrom:
-        'Dal giorno in cui viene pubblicata la versione che include i resoconti di sintesi con IA',
+      appliesFrom: 'Dal giorno in cui viene pubblicata la versione contenente i report di sintesi con IA',
       summary:
-        'Vengono aggiunti i resoconti di sintesi con IA. Soltanto quando crei tu un resoconto, il contenuto delle tue voci di quel periodo passa non cifrato dal server del gestore e viene inviato al fornitore di IA. Il gestore non conserva quel contenuto; il fornitore di IA lo mantiene fino a 30 giorni per il monitoraggio degli abusi, poi lo elimina, e non lo usa per addestrare modelli.',
+        'Vengono aggiunti i report di sintesi con IA. Solo quando crei tu stesso un report, il contenuto del diario di quel periodo transita non cifrato attraverso il server dell’operatore e viene inviato al fornitore di IA. L’operatore non conserva il contenuto del diario, ma conserva la sintesi generata per 90 giorni al fine di migliorare la qualità dei report. Il fornitore di IA la conserva per un massimo di 30 giorni per il monitoraggio degli abusi, poi la elimina, e non la utilizza per addestrare i modelli.',
       sections: [
         {
           h: 'a. Che cosa cambia (prima → dopo)',
           body: [
-            'Prima: titoli e testo delle voci non vengono trasmessi fuori dal tuo dispositivo. Anche con il backup attivo, vengono trasmessi solo come testo cifrato che il gestore non può leggere.',
-            'Dopo: **soltanto quando tocchi tu “Crea resoconto”**, il contenuto delle voci di quel periodo viene inviato **non cifrato** attraverso il server del gestore al fornitore di IA e viene generata una sintesi.',
-            '⚠ Per essere precisi: il gestore **non conserva** quel contenuto. Ma nel momento in cui la sintesi viene scritta, il contenuto passa dal server del gestore — quindi non possiamo dirti che “il gestore non può vederlo”. Lo diciamo chiaramente invece di sfumarlo.',
-            'Se non crei resoconti, questa trasmissione non avviene affatto, e tutte le altre funzioni, compresa la scrittura delle voci, restano disponibili.',
+            'Prima: i titoli e i testi del diario non vengono trasmessi fuori dal tuo dispositivo. Anche con il backup attivo, vengono trasmessi solo come testo cifrato che l’operatore non può leggere.',
+            'Dopo: **solo quando premi tu stesso Crea report**, il contenuto del diario di quel periodo viene inviato **non cifrato** tramite il server dell’operatore al fornitore di IA e viene generata una sintesi.',
+            '⚠ Per essere precisi: l’operatore **non conserva il contenuto del diario in sé**. Tuttavia ① nel momento in cui la sintesi viene prodotta il contenuto transita nel server dell’operatore, quindi non possiamo dirti che «l’operatore non può vederlo», e ② **la sintesi generata viene conservata per 90 giorni** (vedi lettera d). Lo diciamo chiaramente, senza attenuarlo.',
+            'Se non crei un report, questa trasmissione non avviene affatto e tutte le altre funzioni, compresa la scrittura, restano pienamente disponibili.',
           ],
         },
         {
-          h: 'b. Consenso specifico per i dati sensibili',
+          h: 'b. Consenso separato per le informazioni sensibili',
           body: [
-            'I diari possono contenere dati sensibili ai sensi dell’art. 23 della Legge sulla protezione delle informazioni personali, come lo stato di salute o lo stato psicologico.',
-            'Poiché i resoconti di sintesi con IA trattano quel contenuto non cifrato, raccogliamo un **consenso specifico al trattamento dei dati sensibili** la prima volta che usi la funzione. Tale consenso è **indipendente** da quello per il trasferimento all’estero di cui alla lettera (c), e ciascuno può essere scelto separatamente.',
-            'Se non lo presti, puoi comunque usare tutte le funzioni tranne i resoconti con IA.',
+            'Un diario può contenere informazioni sensibili, come lo stato di salute o psicologico, ai sensi dell’articolo 23 della legge sulla protezione delle informazioni personali.',
+            'Poiché i report di sintesi con IA trattano tale contenuto non cifrato, raccogliamo un **consenso separato al trattamento di informazioni sensibili** al primo utilizzo della funzione. Questo consenso è **distinto** dal consenso al trasferimento all’estero di cui alla lettera (c), e puoi scegliere separatamente.',
+            'Anche senza il consenso, tutte le funzioni diverse dai report con IA restano pienamente disponibili.',
           ],
         },
         {
-          h: 'c. Consenso specifico per il trasferimento all’estero',
+          h: 'c. Consenso separato per il trasferimento all’estero',
           body: [
-            'Il fornitore di IA si trova fuori dalla Corea. Nome del fornitore, Paese destinatario e recapiti sono indicati in questa lettera al momento del rilascio della funzione e sono mostrati anche nell’app prima della raccolta del consenso.',
-            '• Dati trasferiti: titolo, testo, emozione e data delle voci del periodo per cui hai chiesto il resoconto',
-            '• Finalità: generare il resoconto di sintesi',
-            '• Quando e come: trasmessi in rete quando tocchi “Crea resoconto”',
-            '• Conservazione: il server del gestore **non conserva nulla** — mantiene il contenuto in memoria solo mentre la sintesi viene scritta e poi lo scarta. Il fornitore di IA lo mantiene **fino a 30 giorni** per il monitoraggio degli abusi e poi lo elimina, e anche in quel periodo **non lo usa per addestrare modelli.**',
-            'Puoi opporti al trasferimento all’estero; in tal caso saranno indisponibili solo i resoconti con IA e tutte le altre funzioni continueranno a funzionare.',
+            'Il fornitore di IA ha sede fuori dalla Corea. Il nome del fornitore, il Paese destinatario e i relativi contatti saranno indicati in questa lettera al momento del rilascio della funzione e saranno mostrati anche nell’app prima della raccolta del consenso.',
+            '• Elementi trasferiti: titolo, testo, emozione e data delle voci del periodo per cui hai richiesto un report',
+            '• Finalità: generare un report di sintesi',
+            '• Quando e come: trasmessi in rete quando premi Crea report',
+            '• Conservazione: il server dell’operatore **non conserva gli elementi trasferiti (il contenuto del diario)** — restano in memoria solo mentre la sintesi viene prodotta e poi vengono eliminati. La conservazione della sintesi generata è indicata separatamente alla lettera (d). Il fornitore di IA li conserva per **un massimo di 30 giorni** per il monitoraggio degli abusi e poi li elimina, e anche in tale periodo **non li utilizza per addestrare i modelli.**',
+            'Puoi rifiutare il trasferimento all’estero; in tal caso solo i report con IA non saranno disponibili e tutte le altre funzioni resteranno pienamente utilizzabili.',
           ],
         },
         {
-          h: 'd. Che cosa conserva il gestore (e che non è il contenuto delle voci)',
+          h: 'd. Che cosa conserva l’operatore',
           body: [
-            'Non conserviamo il contenuto delle voci, ma conserviamo quanto segue.',
-            '• L’identificatore dell’account che ha creato il resoconto, il periodo, il numero di volte e il numero di token usati — servono per la fatturazione e la prevenzione degli abusi.',
-            '• Conservazione: fino al raggiungimento della finalità o fino all’eliminazione del tuo account',
-            'Il testo del resoconto finito è conservato **solo sul tuo dispositivo** e, se hai il backup attivo, vi è incluso in forma cifrata.',
+            'Non conserviamo il contenuto del diario (titoli e testi). Conserviamo quanto segue.',
+            '• **La sintesi generata dall’IA** — conservata per verificare e migliorare la qualità dei report. Conservazione: **90 giorni dal giorno della creazione**, dopo i quali viene eliminata automaticamente.',
+            '• L’identificativo dell’account che ha creato il report, il periodo, il numero di volte e il numero di token utilizzati — usati per la fatturazione e la prevenzione degli abusi. Conservazione: fino al raggiungimento della finalità o fino all’eliminazione del tuo account',
+            '⚠ La sintesi è scritta a partire dal tuo diario, quindi può contenerne il contenuto. Lo diciamo chiaramente, senza attenuarlo.',
+            'Il report completato viene salvato **anche sul tuo dispositivo** e, se hai attivato il backup, vi è incluso in forma cifrata.',
           ],
         },
         {
           h: 'e. I tuoi diritti',
           body: [
-            '• I resoconti sono generati solo quando li crei tu; non vengono mai generati automaticamente.',
-            '• Puoi eliminare in qualsiasi momento, dall’app, un resoconto che hai creato.',
-            '• Le sintesi generate dall’IA possono discostarsi dai fatti e non costituiscono una diagnosi né un consiglio medico o psicologico. L’app offre un modo per segnalare una sintesi.',
+            '• I report vengono generati solo quando li crei tu; non vengono mai generati automaticamente.',
+            '• Puoi eliminare in qualsiasi momento dall’app un report che hai creato.',
+            '• Eliminandolo nell’app sparisce dal tuo dispositivo; la sintesi conservata sul server dell’operatore viene eliminata automaticamente dopo 90 giorni. Se desideri una cancellazione anticipata, puoi richiederla tramite Contattaci.',
+            '• Le sintesi generate dall’IA possono discostarsi dai fatti e non costituiscono una diagnosi o un consiglio medico o psicologico. L’app offre un modo per segnalare una sintesi.',
           ],
         },
       ],

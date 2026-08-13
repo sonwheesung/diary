@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -220,53 +220,55 @@ export const PRIVACY_VI: LegalDoc = {
       ],
     },
     {
-      appliesFrom: 'Kể từ ngày phát hành phiên bản có báo cáo tóm tắt bằng AI',
+      appliesFrom: 'Kể từ ngày phát hành phiên bản có tính năng báo cáo tóm tắt bằng AI',
       summary:
-        'Báo cáo tóm tắt bằng AI được bổ sung. Chỉ khi chính bạn tạo báo cáo, nội dung nhật ký của giai đoạn đó mới đi qua máy chủ của nhà vận hành ở dạng không mã hoá và được gửi tới nhà cung cấp AI. Nhà vận hành không lưu nội dung đó; nhà cung cấp AI giữ tối đa 30 ngày để giám sát lạm dụng rồi xoá, và không dùng để huấn luyện mô hình.',
+        'Tính năng báo cáo tóm tắt bằng AI được bổ sung. Chỉ khi bạn tự tạo báo cáo, nội dung nhật ký của kỳ đó mới đi qua máy chủ của nhà vận hành ở dạng không mã hóa và được gửi tới nhà cung cấp AI. Nhà vận hành không lưu nội dung nhật ký, nhưng lưu bản tóm tắt được tạo ra trong 90 ngày để cải thiện chất lượng báo cáo. Nhà cung cấp AI lưu tối đa 30 ngày nhằm giám sát lạm dụng rồi xóa, và không dùng để huấn luyện mô hình.',
       sections: [
         {
           h: 'a. Điều gì thay đổi (trước → sau)',
           body: [
-            'Trước: tiêu đề và nội dung các mảnh không được truyền ra khỏi thiết bị của bạn. Ngay cả khi bật sao lưu, chúng chỉ được truyền dưới dạng bản mã hoá mà nhà vận hành không đọc được.',
-            'Sau: **chỉ khi chính bạn nhấn “Tạo báo cáo”**, nội dung các mảnh của giai đoạn đó được gửi **ở dạng không mã hoá** qua máy chủ của nhà vận hành tới nhà cung cấp AI, và một bản tóm tắt được tạo ra.',
-            '⚠ Nói cho chính xác: nhà vận hành **không lưu** nội dung đó. Nhưng vào đúng lúc bản tóm tắt được viết, nội dung có đi qua máy chủ của nhà vận hành — nên chúng tôi không thể nói rằng “nhà vận hành không thể nhìn thấy”. Chúng tôi nói rõ điều này thay vì làm mờ đi.',
-            'Nếu bạn không tạo báo cáo, việc truyền này hoàn toàn không xảy ra, và mọi tính năng khác, kể cả viết mảnh, vẫn dùng được bình thường.',
+            'Trước: tiêu đề và nội dung nhật ký không được truyền ra khỏi thiết bị của bạn. Ngay cả khi bạn bật sao lưu, chúng chỉ được truyền dưới dạng bản mã mà nhà vận hành không thể đọc.',
+            'Sau: **chỉ khi bạn tự nhấn Tạo báo cáo**, nội dung nhật ký của kỳ đó được gửi **ở dạng không mã hóa** qua máy chủ của nhà vận hành tới nhà cung cấp AI và bản tóm tắt được tạo ra.',
+            '⚠ Nói chính xác: nhà vận hành **không lưu bản thân nội dung nhật ký.** Tuy nhiên ① tại thời điểm tạo bản tóm tắt, nội dung đi qua máy chủ của nhà vận hành nên chúng tôi không thể nói rằng "nhà vận hành không thể xem", và ② **bản tóm tắt được tạo ra sẽ được lưu 90 ngày** (xem mục d). Chúng tôi nói rõ điều này chứ không làm mờ đi.',
+            'Nếu bạn không tạo báo cáo, việc truyền này hoàn toàn không xảy ra, và mọi tính năng khác kể cả viết nhật ký vẫn dùng được đầy đủ.',
           ],
         },
         {
-          h: 'b. Sự đồng ý riêng đối với thông tin nhạy cảm',
+          h: 'b. Đồng ý riêng đối với thông tin nhạy cảm',
           body: [
-            'Nhật ký có thể chứa thông tin nhạy cảm theo Điều 23 Luật Bảo vệ thông tin cá nhân, chẳng hạn tình trạng sức khoẻ hay trạng thái tâm lý.',
-            'Vì báo cáo tóm tắt bằng AI xử lý nội dung đó ở dạng không mã hoá, chúng tôi lấy **sự đồng ý riêng cho việc xử lý thông tin nhạy cảm** khi bạn dùng tính năng này lần đầu. Sự đồng ý này **độc lập** với sự đồng ý chuyển ra nước ngoài ở điểm (c), và mỗi mục có thể được chọn riêng.',
-            'Nếu bạn không đồng ý, bạn vẫn dùng được mọi tính năng trừ báo cáo AI.',
+            'Nhật ký có thể chứa thông tin nhạy cảm như tình trạng sức khỏe hoặc tâm lý theo Điều 23 Luật Bảo vệ Thông tin Cá nhân.',
+            'Vì báo cáo tóm tắt bằng AI xử lý nội dung đó ở dạng không mã hóa, chúng tôi lấy **sự đồng ý riêng cho việc xử lý thông tin nhạy cảm** khi bạn dùng tính năng lần đầu. Sự đồng ý này **tách biệt** với đồng ý chuyển ra nước ngoài ở mục (c), và bạn có thể chọn riêng từng mục.',
+            'Dù không đồng ý, mọi tính năng ngoài báo cáo AI vẫn dùng được đầy đủ.',
           ],
         },
         {
-          h: 'c. Sự đồng ý riêng đối với việc chuyển ra nước ngoài',
+          h: 'c. Đồng ý riêng đối với việc chuyển ra nước ngoài',
           body: [
-            'Nhà cung cấp AI đặt ngoài Hàn Quốc. Tên nhà cung cấp, quốc gia nhận và thông tin liên hệ sẽ được ghi cụ thể ở điểm này khi tính năng ra mắt, và cũng được hiển thị trong ứng dụng trước khi lấy sự đồng ý.',
-            '• Dữ liệu được chuyển: tiêu đề, nội dung, cảm xúc và ngày viết của các mảnh trong giai đoạn bạn yêu cầu báo cáo',
+            'Nhà cung cấp AI đặt ở ngoài Hàn Quốc. Tên nhà cung cấp, quốc gia tiếp nhận và thông tin liên hệ sẽ được ghi cụ thể tại mục này khi tính năng ra mắt, và cũng được hiển thị trong ứng dụng trước khi lấy sự đồng ý.',
+            '• Hạng mục chuyển: tiêu đề, nội dung, cảm xúc và ngày viết của các mục trong kỳ bạn yêu cầu báo cáo',
             '• Mục đích: tạo báo cáo tóm tắt',
-            '• Khi nào và bằng cách nào: truyền qua mạng khi bạn nhấn “Tạo báo cáo”',
-            '• Lưu giữ: máy chủ của nhà vận hành **không lưu** — chỉ xử lý trong bộ nhớ khi đang tạo bản tóm tắt rồi bỏ đi ngay. Nhà cung cấp AI giữ **tối đa 30 ngày** để giám sát lạm dụng rồi xoá, và ngay trong thời gian đó cũng **không dùng để huấn luyện mô hình.**',
-            'Bạn có thể từ chối việc chuyển ra nước ngoài; nếu từ chối, chỉ báo cáo AI là không dùng được, mọi tính năng khác vẫn hoạt động.',
+            '• Thời điểm và cách thức: truyền qua mạng khi bạn nhấn Tạo báo cáo',
+            '• Thời gian lưu giữ: máy chủ của nhà vận hành **không lưu các hạng mục được chuyển (nội dung nhật ký)** — chúng chỉ nằm trong bộ nhớ khi bản tóm tắt đang được tạo rồi bị hủy. Việc lưu bản tóm tắt được tạo ra ghi riêng ở mục (d). Nhà cung cấp AI lưu **tối đa 30 ngày** để giám sát lạm dụng rồi xóa, và ngay cả trong thời gian đó **cũng không dùng để huấn luyện mô hình.**',
+            'Bạn có thể từ chối việc chuyển ra nước ngoài; khi đó chỉ báo cáo AI không dùng được, mọi tính năng khác vẫn dùng được đầy đủ.',
           ],
         },
         {
-          h: 'd. Những gì nhà vận hành có lưu (không phải nội dung nhật ký)',
+          h: 'd. Nhà vận hành lưu những gì',
           body: [
-            'Chúng tôi không lưu nội dung nhật ký, nhưng có lưu những mục sau.',
-            '• Mã định danh tài khoản đã tạo báo cáo, giai đoạn, số lần và số token đã dùng — dùng cho việc tính phí và ngăn lạm dụng.',
-            '• Lưu giữ: cho đến khi đạt được mục đích hoặc cho đến khi bạn xoá tài khoản',
-            'Nội dung báo cáo đã hoàn thành chỉ được lưu **trên thiết bị của bạn**, và nếu bạn đã bật sao lưu thì nó được đưa vào bản sao lưu ở dạng mã hoá.',
+            'Chúng tôi không lưu nội dung nhật ký (tiêu đề và nội dung). Chúng tôi lưu những mục sau.',
+            '• **Bản tóm tắt do AI tạo ra** — được lưu để kiểm tra và cải thiện chất lượng báo cáo. Thời gian lưu giữ: **90 ngày kể từ ngày tạo**, sau đó tự động xóa.',
+            '• Định danh tài khoản đã tạo báo cáo, kỳ, số lần và số token đã dùng — dùng cho việc thanh toán và ngăn chặn lạm dụng. Thời gian lưu giữ: đến khi đạt mục đích hoặc đến khi bạn xóa tài khoản',
+            '⚠ Bản tóm tắt được viết dựa trên nhật ký của bạn nên có thể chứa nội dung nhật ký. Chúng tôi nói rõ điều này chứ không làm mờ đi.',
+            'Báo cáo hoàn thành cũng được lưu **trên thiết bị của bạn**, và nếu bạn đã bật sao lưu thì được đưa vào bản sao lưu ở dạng mã hóa.',
           ],
         },
         {
           h: 'e. Quyền của bạn',
           body: [
-            '• Báo cáo chỉ được tạo khi chính bạn tạo; báo cáo không bao giờ được tạo tự động.',
-            '• Báo cáo đã tạo có thể được bạn xoá bất cứ lúc nào trong ứng dụng.',
-            '• Bản tóm tắt do AI tạo có thể khác với sự thật và không phải là chẩn đoán hay lời khuyên y tế, tâm lý. Ứng dụng có cung cấp cách để báo cáo một bản tóm tắt.',
+            '• Báo cáo chỉ được tạo khi bạn tự tạo; không bao giờ được tạo tự động.',
+            '• Bạn có thể xóa báo cáo đã tạo bất cứ lúc nào trong ứng dụng.',
+            '• Khi xóa trong ứng dụng, báo cáo biến mất khỏi thiết bị; bản tóm tắt lưu trên máy chủ của nhà vận hành sẽ tự động xóa sau 90 ngày. Nếu muốn xóa sớm hơn, bạn có thể yêu cầu qua mục Liên hệ.',
+            '• Bản tóm tắt do AI tạo ra có thể khác với sự thật và không phải là chẩn đoán hay lời khuyên y tế, tâm lý. Ứng dụng cung cấp cách báo cáo một bản tóm tắt.',
           ],
         },
       ],

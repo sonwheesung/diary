@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_DE: LegalDoc = {
   title: 'Datenschutzerklärung für Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -221,54 +221,55 @@ export const PRIVACY_DE: LegalDoc = {
       ],
     },
     {
-      appliesFrom:
-        'Ab dem Tag, an dem die Version mit KI-Zusammenfassungsberichten veröffentlicht wird',
+      appliesFrom: 'Ab dem Tag, an dem die Version mit den KI-Zusammenfassungsberichten veröffentlicht wird',
       summary:
-        'KI-Zusammenfassungsberichte kommen hinzu. Nur wenn du selbst einen Bericht erstellst, läuft der Inhalt deiner Einträge aus diesem Zeitraum unverschlüsselt über den Server des Betreibers und wird an den KI-Anbieter übermittelt. Der Betreiber speichert diesen Inhalt nicht; der KI-Anbieter bewahrt ihn bis zu 30 Tage zur Missbrauchskontrolle auf, löscht ihn dann und nutzt ihn nicht für das Modelltraining.',
+        'KI-Zusammenfassungsberichte kommen hinzu. Nur wenn du selbst einen Bericht erstellst, gelangt der Tagebuchinhalt dieses Zeitraums unverschlüsselt über den Server des Betreibers zum KI-Anbieter. Der Betreiber speichert den Tagebuchinhalt nicht, bewahrt die erzeugte Zusammenfassung jedoch 90 Tage lang auf, um die Qualität der Berichte zu verbessern. Der KI-Anbieter bewahrt sie zur Missbrauchsüberwachung höchstens 30 Tage auf, löscht sie danach und verwendet sie nicht für das Modelltraining.',
       sections: [
         {
           h: 'a. Was sich ändert (vorher → nachher)',
           body: [
-            'Vorher: Titel und Text der Einträge werden nicht von deinem Gerät fort übermittelt. Auch bei eingeschaltetem Backup werden sie nur als Chiffretext übermittelt, den der Betreiber nicht lesen kann.',
-            'Nachher: **nur wenn du selbst auf „Bericht erstellen“ tippst**, wird der Inhalt der Einträge dieses Zeitraums **unverschlüsselt** über den Server des Betreibers an den KI-Anbieter übermittelt, und eine Zusammenfassung wird erzeugt.',
-            '⚠ Genau gesagt: Der Betreiber **speichert** diesen Inhalt **nicht.** Doch in dem Moment, in dem die Zusammenfassung entsteht, läuft der Inhalt über den Server des Betreibers — wir können dir daher nicht sagen, „der Betreiber kann ihn nicht sehen“. Wir sagen das klar, statt es zu verwischen.',
-            'Erstellst du keinen Bericht, findet diese Übermittlung überhaupt nicht statt, und alle übrigen Funktionen, auch das Schreiben von Einträgen, bleiben vollständig nutzbar.',
+            'Vorher: Titel und Text deiner Einträge werden nicht von deinem Gerät übertragen. Auch wenn du die Sicherung aktiviert hast, werden sie nur als Geheimtext übertragen, den der Betreiber nicht lesen kann.',
+            'Nachher: **Nur wenn du selbst auf Bericht erstellen tippst**, wird der Tagebuchinhalt dieses Zeitraums **unverschlüsselt** über den Server des Betreibers an den KI-Anbieter gesendet und eine Zusammenfassung erzeugt.',
+            '⚠ Genau gesagt: Der Betreiber **speichert den Tagebuchinhalt selbst nicht.** Allerdings ① durchläuft der Inhalt in dem Moment, in dem die Zusammenfassung entsteht, den Server des Betreibers, weshalb wir dir nicht sagen können, dass „der Betreiber ihn nicht sehen kann“, und ② **wird die erzeugte Zusammenfassung 90 Tage lang aufbewahrt** (siehe Buchstabe d). Wir sagen das klar und verschleiern es nicht.',
+            'Wenn du keinen Bericht erstellst, findet diese Übertragung überhaupt nicht statt, und alle anderen Funktionen einschließlich des Schreibens bleiben vollständig nutzbar.',
           ],
         },
         {
           h: 'b. Gesonderte Einwilligung für sensible Daten',
           body: [
-            'Tagebücher können sensible Daten im Sinne von Art. 23 des Gesetzes zum Schutz personenbezogener Daten enthalten, etwa zu Gesundheit oder seelischem Zustand.',
-            'Da KI-Zusammenfassungsberichte diesen Inhalt unverschlüsselt verarbeiten, holen wir bei der ersten Nutzung der Funktion eine **gesonderte Einwilligung für die Verarbeitung sensibler Daten** ein. Diese Einwilligung ist von der Einwilligung zur Übermittlung ins Ausland unter (c) **unabhängig**; beide können einzeln gewählt werden.',
-            'Willigst du nicht ein, kannst du weiterhin alle Funktionen außer den KI-Berichten nutzen.',
+            'Ein Tagebuch kann sensible Daten wie Gesundheits- oder psychische Zustände im Sinne von Artikel 23 des Gesetzes zum Schutz personenbezogener Daten enthalten.',
+            'Da KI-Zusammenfassungsberichte diesen Inhalt unverschlüsselt verarbeiten, holen wir bei der ersten Nutzung der Funktion eine **gesonderte Einwilligung zur Verarbeitung sensibler Daten** ein. Diese Einwilligung ist **getrennt** von der Einwilligung zur Übermittlung ins Ausland unter Buchstabe (c); du kannst beide unabhängig voneinander wählen.',
+            'Auch ohne Einwilligung bleiben alle Funktionen außer den KI-Berichten vollständig nutzbar.',
           ],
         },
         {
-          h: 'c. Gesonderte Einwilligung für die Übermittlung ins Ausland',
+          h: 'c. Gesonderte Einwilligung zur Übermittlung ins Ausland',
           body: [
-            'Der KI-Anbieter sitzt außerhalb Koreas. Name des Anbieters, Empfängerland und Kontaktdaten werden zum Zeitpunkt der Freigabe der Funktion in diesem Punkt angegeben und vor der Einholung der Einwilligung auch in der App gezeigt.',
+            'Der KI-Anbieter hat seinen Sitz außerhalb Koreas. Name des Anbieters, Empfängerland und Kontaktdaten werden zum Zeitpunkt der Veröffentlichung der Funktion in diesem Abschnitt konkret angegeben und außerdem in der App vor Einholung der Einwilligung angezeigt.',
             '• Übermittelte Daten: Titel, Text, Gefühl und Datum der Einträge des Zeitraums, für den du einen Bericht angefordert hast',
-            '• Zweck: Erstellung des Zusammenfassungsberichts',
-            '• Wann und wie: Übermittlung über das Netz, wenn du auf „Bericht erstellen“ tippst',
-            '• Speicherdauer: Der Server des Betreibers **speichert nichts** — er hält den Inhalt nur im Arbeitsspeicher, solange die Zusammenfassung entsteht, und verwirft ihn danach. Der KI-Anbieter bewahrt ihn **bis zu 30 Tage** zur Missbrauchskontrolle auf und löscht ihn dann; auch in dieser Zeit **nutzt er ihn nicht für das Modelltraining.**',
-            'Du kannst der Übermittlung ins Ausland widersprechen; dann sind nur die KI-Berichte nicht verfügbar, alle übrigen Funktionen laufen weiter.',
+            '• Zweck: Erstellung eines Zusammenfassungsberichts',
+            '• Zeitpunkt und Art: Übertragung über das Netzwerk, wenn du auf Bericht erstellen tippst',
+            '• Aufbewahrung: Der Server des Betreibers **speichert die übermittelten Daten (den Tagebuchinhalt) nicht** — sie werden nur während der Erstellung der Zusammenfassung im Arbeitsspeicher gehalten und danach verworfen. Die Aufbewahrung der erzeugten Zusammenfassung ist gesondert unter Buchstabe (d) angegeben. Der KI-Anbieter bewahrt sie zur Missbrauchsüberwachung **höchstens 30 Tage** auf und löscht sie danach und **verwendet sie auch in diesem Zeitraum nicht für das Modelltraining.**',
+            'Du kannst die Übermittlung ins Ausland ablehnen; dann sind nur die KI-Berichte nicht verfügbar, alle anderen Funktionen bleiben vollständig nutzbar.',
           ],
         },
         {
-          h: 'd. Was der Betreiber speichert (und was nicht der Inhalt der Einträge ist)',
+          h: 'd. Was der Betreiber speichert',
           body: [
-            'Den Inhalt der Einträge speichern wir nicht, wohl aber Folgendes.',
-            '• Die Kennung des Kontos, das den Bericht erstellt hat, den Zeitraum, die Anzahl der Male und die Zahl der verbrauchten Token — für Abrechnung und Missbrauchsprävention.',
-            '• Speicherdauer: bis der Zweck erreicht ist oder bis du dein Konto löschst',
-            'Der Text des fertigen Berichts wird **nur auf deinem Gerät** gespeichert und ist bei eingeschaltetem Backup verschlüsselt darin enthalten.',
+            'Wir speichern keine Tagebuchinhalte (Titel und Text). Folgendes speichern wir.',
+            '• **Die von der KI erzeugte Zusammenfassung** — aufbewahrt, um die Qualität der Berichte zu prüfen und zu verbessern. Aufbewahrung: **90 Tage ab dem Tag der Erstellung**, danach wird sie automatisch gelöscht.',
+            '• Kennung des Kontos, das den Bericht erstellt hat, Zeitraum, Anzahl der Male und Anzahl der verwendeten Token — verwendet für die Abrechnung und die Missbrauchsprävention. Aufbewahrung: bis der Zweck erfüllt ist oder bis du dein Konto löschst',
+            '⚠ Die Zusammenfassung wird auf Grundlage deines Tagebuchs verfasst und kann daher Tagebuchinhalte enthalten. Wir sagen das klar und verschleiern es nicht.',
+            'Der fertige Bericht wird **auch auf deinem Gerät** gespeichert und ist, wenn du die Sicherung aktiviert hast, verschlüsselt darin enthalten.',
           ],
         },
         {
           h: 'e. Deine Rechte',
           body: [
-            '• Berichte entstehen nur, wenn du sie selbst erstellst; automatisch werden sie nie erzeugt.',
+            '• Berichte werden nur erzeugt, wenn du sie selbst erstellst; sie entstehen nie automatisch.',
             '• Einen erstellten Bericht kannst du jederzeit in der App löschen.',
-            '• Von KI erzeugte Zusammenfassungen können von den Tatsachen abweichen und sind weder eine medizinische oder psychologische Diagnose noch eine Beratung. Die App bietet eine Möglichkeit, eine Zusammenfassung zu melden.',
+            '• Beim Löschen in der App verschwindet er von deinem Gerät; die auf dem Server des Betreibers aufbewahrte Zusammenfassung wird nach 90 Tagen automatisch gelöscht. Wenn du eine frühere Löschung wünschst, kannst du sie über Kontakt anfordern.',
+            '• Von der KI erzeugte Zusammenfassungen können von den Tatsachen abweichen und sind keine medizinische oder psychologische Diagnose oder Beratung. Die App bietet eine Möglichkeit, eine Zusammenfassung zu melden.',
           ],
         },
       ],

@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_PT_BR: LegalDoc = {
   title: 'Política de Privacidade do Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -221,54 +221,55 @@ export const PRIVACY_PT_BR: LegalDoc = {
       ],
     },
     {
-      appliesFrom:
-        'A partir do dia em que for publicada a versão que inclui os relatórios de resumo com IA',
+      appliesFrom: 'A partir do dia em que a versão com os relatórios de resumo por IA for publicada',
       summary:
-        'Serão adicionados os relatórios de resumo com IA. Somente quando você mesmo cria um relatório, o conteúdo dos registros daquele período passa sem criptografia pelo servidor da operadora e é enviado ao provedor de IA. A operadora não armazena esse conteúdo; o provedor de IA o mantém por até 30 dias para monitorar abusos, depois o exclui, e não o usa para treinar modelos.',
+        'Os relatórios de resumo por IA estão sendo adicionados. Somente quando você cria um relatório, o conteúdo do diário daquele período passa sem criptografia pelo servidor do operador e é enviado ao provedor de IA. O operador não armazena o conteúdo do diário, mas mantém o resumo gerado por 90 dias para melhorar a qualidade dos relatórios. O provedor de IA o mantém por até 30 dias para monitoramento de abuso, depois o exclui, e não o usa para treinar modelos.',
       sections: [
         {
           h: 'a. O que muda (antes → depois)',
           body: [
-            'Antes: títulos e texto dos registros não são transmitidos para fora do seu dispositivo. Mesmo com o backup ativado, são transmitidos apenas como texto criptografado que a operadora não consegue ler.',
-            'Depois: **somente quando você mesmo toca em “Criar relatório”**, o conteúdo dos registros daquele período é enviado **sem criptografia** pelo servidor da operadora ao provedor de IA, e um resumo é gerado.',
-            '⚠ Para ser preciso: a operadora **não armazena** esse conteúdo. Mas, no momento em que o resumo é escrito, o conteúdo passa pelo servidor da operadora — então não podemos dizer que “a operadora não consegue ver”. Deixamos isso claro em vez de suavizar.',
-            'Se você não criar relatórios, essa transmissão não ocorre de forma alguma, e todas as demais funções, inclusive escrever registros, continuam disponíveis.',
+            'Antes: os títulos e textos do diário não são transmitidos para fora do seu dispositivo. Mesmo com o backup ativado, eles são transmitidos apenas como texto cifrado que o operador não consegue ler.',
+            'Depois: **somente quando você toca em Criar relatório**, o conteúdo do diário daquele período é enviado **sem criptografia** pelo servidor do operador ao provedor de IA, e um resumo é gerado.',
+            '⚠ Para ser preciso: o operador **não armazena o conteúdo do diário em si**. No entanto, ① no momento em que o resumo é feito o conteúdo passa pelo servidor do operador, então não podemos dizer que "o operador não consegue ver", e ② **o resumo gerado é mantido por 90 dias** (veja o item d). Informamos isso de forma clara, sem suavizar.',
+            'Se você não criar um relatório, essa transmissão não ocorre, e todos os outros recursos, inclusive escrever entradas, continuam totalmente disponíveis.',
           ],
         },
         {
-          h: 'b. Consentimento específico para informações sensíveis',
+          h: 'b. Consentimento separado para informações sensíveis',
           body: [
-            'Os registros podem conter informações sensíveis nos termos do art. 23 da Lei de Proteção de Informações Pessoais, como estado de saúde ou estado emocional.',
-            'Como os relatórios de resumo com IA tratam esse conteúdo sem criptografia, obtemos um **consentimento específico para o tratamento de informações sensíveis** na primeira vez que você usa a função. Esse consentimento é **independente** do consentimento para transferência internacional do item (c), e cada um pode ser escolhido separadamente.',
-            'Se você não consentir, ainda poderá usar todas as funções, exceto os relatórios com IA.',
+            'Um diário pode conter informações sensíveis, como estado de saúde ou psicológico, conforme o artigo 23 da Lei de Proteção de Informações Pessoais.',
+            'Como os relatórios de resumo por IA processam esse conteúdo sem criptografia, coletamos um **consentimento separado para o tratamento de informações sensíveis** na primeira vez que você usa o recurso. Esse consentimento é **separado** do consentimento de transferência ao exterior no item (c), e você pode escolher cada um de forma independente.',
+            'Se você não consentir, todos os recursos além dos relatórios por IA continuam totalmente disponíveis.',
           ],
         },
         {
-          h: 'c. Consentimento específico para transferência internacional',
+          h: 'c. Consentimento separado para transferência ao exterior',
           body: [
-            'O provedor de IA fica fora da Coreia. O nome do provedor, o país de destino e seus contatos são indicados neste item no momento do lançamento da função e também são mostrados no app antes de o consentimento ser obtido.',
-            '• Dados transferidos: o título, o texto, a emoção e a data dos registros do período para o qual você pediu o relatório',
-            '• Finalidade: gerar o relatório de resumo',
-            '• Quando e como: transmitidos pela rede quando você toca em “Criar relatório”',
-            '• Retenção: o servidor da operadora **não armazena** — mantém em memória apenas enquanto o resumo é escrito e depois descarta. O provedor de IA mantém por **até 30 dias** para monitorar abusos e depois exclui, e mesmo nesse período **não usa para treinar modelos.**',
-            'Você pode recusar a transferência internacional; se recusar, apenas os relatórios com IA ficam indisponíveis e todas as demais funções continuam funcionando.',
+            'O provedor de IA está localizado fora da Coreia. O nome do provedor, o país receptor e seus dados de contato serão informados neste item quando o recurso for lançado, e também serão exibidos no aplicativo antes da coleta do consentimento.',
+            '• Itens transferidos: o título, o texto, a emoção e a data das entradas do período para o qual você solicitou um relatório',
+            '• Finalidade: gerar um relatório de resumo',
+            '• Quando e como: transmitidos pela rede quando você toca em Criar relatório',
+            '• Retenção: o servidor do operador **não armazena os itens transferidos (o conteúdo do diário)** — eles ficam em memória apenas enquanto o resumo é feito e depois são descartados. A retenção do resumo gerado é informada separadamente no item (d). O provedor de IA os mantém por **até 30 dias** para monitoramento de abuso e depois os exclui, e mesmo nesse período **não os usa para treinar modelos.**',
+            'Você pode recusar a transferência ao exterior; se recusar, apenas os relatórios por IA ficam indisponíveis e todos os outros recursos continuam totalmente disponíveis.',
           ],
         },
         {
-          h: 'd. O que a operadora armazena (que não é o conteúdo dos registros)',
+          h: 'd. O que o operador armazena',
           body: [
-            'Não armazenamos o conteúdo dos registros, mas armazenamos o seguinte.',
-            '• O identificador da conta que criou o relatório, o período, a quantidade de vezes e o número de tokens usados — usados para faturamento e prevenção de abusos.',
-            '• Retenção: até a finalidade ser cumprida ou até você excluir sua conta',
-            'O texto do relatório pronto é guardado **somente no seu dispositivo** e, se você tiver o backup ativado, é incluído nele de forma criptografada.',
+            'Não armazenamos o conteúdo do diário (títulos e textos). Armazenamos o seguinte.',
+            '• **O resumo gerado pela IA** — mantido para verificar e melhorar a qualidade dos relatórios. Retenção: **90 dias a partir do dia em que foi criado**, após os quais é excluído automaticamente.',
+            '• O identificador da conta que criou o relatório, o período, o número de vezes e a quantidade de tokens usados — utilizados para faturamento e prevenção de abuso. Retenção: até que a finalidade seja cumprida ou até você excluir sua conta',
+            '⚠ O resumo é escrito com base no seu diário, portanto pode conter conteúdo do diário. Informamos isso de forma clara, sem suavizar.',
+            'O relatório finalizado é armazenado **também no seu dispositivo** e é incluído criptografado no backup, caso você o tenha ativado.',
           ],
         },
         {
           h: 'e. Seus direitos',
           body: [
-            '• Os relatórios são gerados somente quando você mesmo os cria; nunca são gerados automaticamente.',
-            '• Você pode excluir a qualquer momento, no app, um relatório que tenha criado.',
-            '• Resumos gerados por IA podem divergir dos fatos e não constituem diagnóstico nem aconselhamento médico ou psicológico. O app oferece uma forma de denunciar um resumo.',
+            '• Os relatórios são gerados somente quando você os cria; nunca são gerados automaticamente.',
+            '• Você pode excluir a qualquer momento no aplicativo um relatório que tenha criado.',
+            '• Ao excluí-lo no aplicativo, ele some do seu dispositivo; o resumo mantido no servidor do operador é excluído automaticamente após 90 dias. Se quiser que seja excluído antes, pode solicitar pelo Fale conosco.',
+            '• Resumos gerados por IA podem divergir dos fatos e não constituem diagnóstico ou orientação médica ou psicológica. O aplicativo oferece uma forma de denunciar um resumo.',
           ],
         },
       ],

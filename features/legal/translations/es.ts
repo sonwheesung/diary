@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ES: LegalDoc = {
   title: 'Política de privacidad de Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -221,54 +221,55 @@ export const PRIVACY_ES: LegalDoc = {
       ],
     },
     {
-      appliesFrom:
-        'Desde el día en que se publique la versión que incluye los informes de resumen con IA',
+      appliesFrom: 'Desde el día en que se publique la versión que incluye los informes de resumen con IA',
       summary:
-        'Se añaden los informes de resumen con IA. Solo cuando creas un informe tú mismo, el contenido de tus entradas de ese periodo pasa sin cifrar por el servidor del operador y se envía al proveedor de IA. El operador no almacena ese contenido; el proveedor de IA lo conserva hasta 30 días para vigilar abusos, después lo borra, y no lo usa para entrenar modelos.',
+        'Se añaden los informes de resumen con IA. Solo cuando creas un informe por ti mismo, el contenido del diario de ese periodo pasa sin cifrar por el servidor del operador y se envía al proveedor de IA. El operador no almacena el contenido del diario, pero conserva el resumen generado durante 90 días para mejorar la calidad de los informes. El proveedor de IA lo conserva un máximo de 30 días para vigilar el uso indebido, después lo elimina y no lo usa para entrenar modelos.',
       sections: [
         {
           h: 'a. Qué cambia (antes → después)',
           body: [
-            'Antes: los títulos y el texto de las entradas no se transmiten fuera de tu dispositivo. Incluso con la copia de seguridad activada, se transmiten solo como texto cifrado que el operador no puede leer.',
-            'Después: **solo cuando pulsas tú «Crear informe»**, el contenido de las entradas de ese periodo se envía **sin cifrar** a través del servidor del operador al proveedor de IA, y se genera un resumen.',
-            '⚠ Con precisión: el operador **no almacena** ese contenido. Pero en el momento en que se elabora el resumen, el contenido pasa por el servidor del operador, así que no podemos decirte que «el operador no puede verlo». Lo indicamos con claridad en lugar de difuminarlo.',
-            'Si no creas informes, esta transmisión no se produce en absoluto, y todas las demás funciones, incluida la escritura de entradas, siguen disponibles.',
+            'Antes: los títulos y textos del diario no se transmiten fuera de tu dispositivo. Aunque hayas activado la copia de seguridad, solo se transmiten como texto cifrado que el operador no puede leer.',
+            'Después: **solo cuando pulsas Crear informe**, el contenido del diario de ese periodo se envía **sin cifrar** a través del servidor del operador al proveedor de IA y se genera un resumen.',
+            '⚠ Con precisión: el operador **no almacena el contenido del diario en sí**. No obstante, ① en el momento en que se elabora el resumen el contenido pasa por el servidor del operador, por lo que no podemos decirte que "el operador no puede verlo", y ② **el resumen generado se conserva 90 días** (véase el apartado d). Lo indicamos con claridad y sin difuminarlo.',
+            'Si no creas un informe, esta transmisión no se produce en absoluto, y el resto de funciones, incluida la escritura de entradas, siguen plenamente disponibles.',
           ],
         },
         {
-          h: 'b. Consentimiento específico para información sensible',
+          h: 'b. Consentimiento separado para información sensible',
           body: [
-            'Las entradas pueden contener información sensible en el sentido del art. 23 de la Ley de Protección de Información Personal, como el estado de salud o el estado anímico.',
-            'Dado que los informes de resumen con IA tratan ese contenido sin cifrar, recabamos un **consentimiento específico para el tratamiento de información sensible** la primera vez que usas la función. Este consentimiento es **independiente** del consentimiento para la transferencia internacional del apartado (c), y cada uno puede elegirse por separado.',
-            'Si no lo otorgas, puedes seguir usando todas las funciones salvo los informes con IA.',
+            'Un diario puede contener información sensible, como el estado de salud o psicológico, según el artículo 23 de la Ley de Protección de Información Personal.',
+            'Dado que los informes de resumen con IA procesan ese contenido sin cifrar, recabamos un **consentimiento separado para el tratamiento de información sensible** la primera vez que usas la función. Este consentimiento es **independiente** del consentimiento de transferencia al extranjero del apartado (c), y puedes elegir cada uno por separado.',
+            'Si no lo otorgas, todas las funciones distintas de los informes con IA siguen plenamente disponibles.',
           ],
         },
         {
-          h: 'c. Consentimiento específico para la transferencia internacional',
+          h: 'c. Consentimiento separado para la transferencia al extranjero',
           body: [
-            'El proveedor de IA está fuera de Corea. Su nombre, el país receptor y sus datos de contacto se indican en este apartado en el momento de publicar la función, y también se muestran en la aplicación antes de recabar el consentimiento.',
-            '• Datos transferidos: el título, el texto, la emoción y la fecha de las entradas del periodo para el que has pedido el informe',
-            '• Finalidad: generar el informe de resumen',
-            '• Cuándo y cómo: se transmiten por la red cuando pulsas «Crear informe»',
-            '• Conservación: el servidor del operador **no lo almacena**; solo lo mantiene en memoria mientras se elabora el resumen y después lo descarta. El proveedor de IA lo conserva **hasta 30 días** para vigilar abusos y después lo borra, y ni siquiera durante ese periodo **lo usa para entrenar modelos.**',
-            'Puedes oponerte a la transferencia internacional; si lo haces, solo dejarán de estar disponibles los informes con IA y todas las demás funciones seguirán funcionando.',
+            'El proveedor de IA está ubicado fuera de Corea. El nombre del proveedor, el país receptor y sus datos de contacto se indicarán en este apartado cuando se publique la función, y también se mostrarán en la aplicación antes de recabar el consentimiento.',
+            '• Elementos transferidos: el título, el texto, la emoción y la fecha de las entradas del periodo para el que solicitaste un informe',
+            '• Finalidad: generar un informe de resumen',
+            '• Cuándo y cómo: se transmiten por la red cuando pulsas Crear informe',
+            '• Conservación: el servidor del operador **no almacena los elementos transferidos (el contenido del diario)**: solo se mantienen en memoria mientras se elabora el resumen y después se descartan. La conservación del resumen generado se indica por separado en el apartado (d). El proveedor de IA los conserva **un máximo de 30 días** para vigilar el uso indebido y después los elimina, y ni siquiera durante ese periodo **los usa para entrenar modelos.**',
+            'Puedes rechazar la transferencia al extranjero; si lo haces, solo dejarán de estar disponibles los informes con IA y el resto de funciones seguirán plenamente disponibles.',
           ],
         },
         {
-          h: 'd. Lo que sí almacena el operador (que no es el contenido de tus entradas)',
+          h: 'd. Qué almacena el operador',
           body: [
-            'No almacenamos el contenido de las entradas, pero sí lo siguiente.',
-            '• El identificador de la cuenta que creó el informe, el periodo, el número de veces y el número de tokens utilizados: se usan para la facturación y para prevenir abusos.',
-            '• Conservación: hasta que se cumpla la finalidad o hasta que elimines tu cuenta',
-            'El texto del informe terminado se guarda **únicamente en tu dispositivo** y, si tienes activada la copia de seguridad, se incluye en ella de forma cifrada.',
+            'No almacenamos el contenido del diario (títulos y textos). Sí almacenamos lo siguiente.',
+            '• **El resumen generado por la IA**: se conserva para comprobar y mejorar la calidad de los informes. Conservación: **90 días desde el día en que se creó**, tras los cuales se elimina automáticamente.',
+            '• El identificador de la cuenta que creó el informe, el periodo, el número de veces y el número de tokens utilizados: se usan para la facturación y la prevención del uso indebido. Conservación: hasta que se cumpla la finalidad o hasta que elimines tu cuenta',
+            '⚠ El resumen se redacta a partir de tu diario, por lo que puede contener contenido del diario. Lo indicamos con claridad y sin difuminarlo.',
+            'El informe terminado se guarda **también en tu dispositivo** y se incluye cifrado en la copia de seguridad si la has activado.',
           ],
         },
         {
           h: 'e. Tus derechos',
           body: [
-            '• Los informes se generan únicamente cuando los creas tú; nunca se generan automáticamente.',
-            '• Puedes eliminar en cualquier momento, desde la aplicación, un informe que hayas creado.',
-            '• Los resúmenes generados por IA pueden no ajustarse a la realidad y no constituyen un diagnóstico ni un consejo médico o psicológico. La aplicación ofrece una forma de denunciar un resumen.',
+            '• Los informes se generan solo cuando los creas tú; nunca se generan automáticamente.',
+            '• Puedes eliminar en cualquier momento desde la aplicación un informe que hayas creado.',
+            '• Al eliminarlo en la aplicación desaparece de tu dispositivo; el resumen conservado en el servidor del operador se elimina automáticamente pasados 90 días. Si deseas que se elimine antes, puedes solicitarlo mediante Contacto.',
+            '• Los resúmenes generados por IA pueden no coincidir con los hechos y no constituyen un diagnóstico ni un consejo médico o psicológico. La aplicación ofrece una forma de denunciar un resumen.',
           ],
         },
       ],

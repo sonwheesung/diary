@@ -16,7 +16,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_EN: LegalDoc = {
   title: 'Jogak Privacy Policy',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -229,23 +229,23 @@ export const PRIVACY_EN: LegalDoc = {
     {
       appliesFrom: 'From the day the version containing AI summary reports is released',
       summary:
-        'AI summary reports are being added. Only when you create a report yourself, the diary content for that period passes through the operator’s server unencrypted and is sent to the AI provider. The operator does not store that content; the AI provider keeps it for up to 30 days for abuse monitoring, then deletes it, and does not use it for model training.',
+        'AI summary reports are being added. Only when you create a report yourself, the diary content for that period passes through the operator’s server unencrypted and is sent to the AI provider. The operator does not store the diary content, but keeps the generated summary for 90 days in order to improve report quality. The AI provider keeps it for up to 30 days for abuse monitoring, then deletes it, and does not use it for model training.',
       sections: [
         {
           h: 'a. What changes (before → after)',
           body: [
             'Before: diary titles and text are not transmitted off your device. Even if you turned backup on, they are transmitted only as ciphertext the operator cannot read.',
             'After: **only when you press Create report yourself**, the diary content for that period is sent **unencrypted** through the operator’s server to the AI provider, and a summary is generated.',
-            '⚠ To be precise: the operator **does not store** that content. But at the moment the summary is being made, the content passes through the operator’s server — so we cannot tell you that "the operator cannot see it". We state this plainly rather than blur it.',
+            '⚠ To be precise: the operator **does not store the diary content itself**. However, ① at the moment the summary is being made the content passes through the operator’s server, so we cannot tell you that "the operator cannot see it", and ② **the generated summary is kept for 90 days** (see d below). We state this plainly rather than blur it.',
             'If you do not create a report, this transmission does not occur at all, and all other features including writing entries remain fully available.',
           ],
         },
         {
           h: 'b. Separate consent for sensitive information',
           body: [
-            'Diaries may contain sensitive information under art. 23 of the Personal Information Protection Act, such as health or mental state.',
-            'Because AI summary reports process that content unencrypted, we take **separate consent for the processing of sensitive information** when you first use the feature. This consent is **separate** from the consent to transfer abroad in (c) below, and each can be chosen on its own.',
-            'If you do not consent, you can still use every feature except AI reports.',
+            'A diary may contain sensitive information such as health or psychological state, as defined in article 23 of the Personal Information Protection Act.',
+            'Because AI summary reports process that content unencrypted, we take **separate consent for the processing of sensitive information** the first time you use the feature. This consent is **separate** from the consent to transfer abroad in (c) below, and you may choose each independently.',
+            'If you do not consent, every feature other than AI reports remains fully available.',
           ],
         },
         {
@@ -255,17 +255,18 @@ export const PRIVACY_EN: LegalDoc = {
             '• Items transferred: the title, text, emotion and date of the entries in the period you requested a report for',
             '• Purpose: generating a summary report',
             '• When and how: transmitted over the network when you press Create report',
-            '• Retention: the operator’s server **does not store it** — it is held in memory only while the summary is being made and then discarded. The AI provider keeps it for **up to 30 days** for abuse monitoring and then deletes it, and even during that period **does not use it for model training.**',
+            '• Retention: the operator’s server **does not store the transferred items (diary content)** — they are held in memory only while the summary is being made and then discarded. Retention of the generated summary is stated separately in (d) below. The AI provider keeps them for **up to 30 days** for abuse monitoring and then deletes them, and even during that period **does not use them for model training.**',
             'You may refuse the transfer abroad; if you do, only AI reports become unavailable and all other features remain fully available.',
           ],
         },
         {
-          h: 'd. What the operator does store (things that are not diary content)',
+          h: 'd. What the operator does store',
           body: [
-            'We do not store diary content, but we do store the following.',
-            '• The identifier of the account that created the report, the period, the number of times, and the number of tokens used — used for billing and abuse prevention.',
-            '• Retention: until the purpose is achieved or until you delete your account',
-            'The finished report text is stored **only on your device**, and is included in your backup in encrypted form if you have turned backup on.',
+            'We do not store diary content (titles and text). We do store the following.',
+            '• **The summary generated by AI** — kept in order to check and improve report quality. Retention: **90 days from the day it was created**, after which it is deleted automatically.',
+            '• The identifier of the account that created the report, the period, the number of times, and the number of tokens used — used for billing and abuse prevention. Retention: until the purpose is achieved or until you delete your account',
+            '⚠ A summary is written on the basis of your diary, so diary content may appear within it. We state this plainly rather than blur it.',
+            'The finished report is stored **on your device as well**, and is included in your backup in encrypted form if you have turned backup on.',
           ],
         },
         {
@@ -273,6 +274,7 @@ export const PRIVACY_EN: LegalDoc = {
           body: [
             '• Reports are generated only when you create them yourself; they are never generated automatically.',
             '• You can delete a report you have created at any time in the app.',
+            '• Deleting it in the app removes it from your device; the summary kept on the operator’s server is deleted automatically after 90 days. If you want it deleted sooner, you can ask through Contact us.',
             '• Summaries generated by AI may differ from fact and are not a medical or psychological diagnosis or advice. The app provides a way to report a summary.',
           ],
         },

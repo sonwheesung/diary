@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -223,51 +223,53 @@ export const PRIVACY_ID: LegalDoc = {
     {
       appliesFrom: 'Sejak hari versi yang memuat laporan ringkasan AI dirilis',
       summary:
-        'Laporan ringkasan AI ditambahkan. Hanya ketika kamu sendiri membuat laporan, isi catatanmu pada periode itu melewati server operator tanpa enkripsi dan dikirim ke penyedia AI. Operator tidak menyimpan isi tersebut; penyedia AI menyimpannya maksimal 30 hari untuk pemantauan penyalahgunaan lalu menghapusnya, dan tidak menggunakannya untuk melatih model.',
+        'Laporan ringkasan AI ditambahkan. Hanya ketika Anda sendiri membuat laporan, isi diari untuk periode tersebut melewati server operator tanpa enkripsi dan dikirim ke penyedia AI. Operator tidak menyimpan isi diari, tetapi menyimpan ringkasan yang dihasilkan selama 90 hari untuk meningkatkan kualitas laporan. Penyedia AI menyimpannya paling lama 30 hari untuk pemantauan penyalahgunaan, lalu menghapusnya, dan tidak menggunakannya untuk melatih model.',
       sections: [
         {
           h: 'a. Apa yang berubah (sebelum → sesudah)',
           body: [
-            'Sebelum: judul dan isi catatan tidak dikirim keluar dari perangkatmu. Bahkan dengan pencadangan aktif, keduanya dikirim hanya sebagai teks terenkripsi yang tidak dapat dibaca operator.',
-            'Sesudah: **hanya ketika kamu sendiri menekan “Buat laporan”**, isi catatan pada periode itu dikirim **tanpa enkripsi** melalui server operator ke penyedia AI, lalu ringkasan dibuat.',
-            '⚠ Ketepatannya: operator **tidak menyimpan** isi tersebut. Namun pada saat ringkasan dibuat, isinya memang melewati server operator — jadi kami tidak dapat mengatakan bahwa “operator tidak dapat melihatnya”. Kami menyampaikannya apa adanya, tanpa mengaburkan.',
-            'Jika kamu tidak membuat laporan, pengiriman ini sama sekali tidak terjadi, dan semua fitur lain termasuk menulis catatan tetap dapat digunakan.',
+            'Sebelum: judul dan isi diari tidak dikirim keluar dari perangkat Anda. Meskipun Anda mengaktifkan pencadangan, keduanya hanya dikirim sebagai teks terenkripsi yang tidak dapat dibaca operator.',
+            'Sesudah: **hanya ketika Anda sendiri menekan Buat laporan**, isi diari untuk periode tersebut dikirim **tanpa enkripsi** melalui server operator ke penyedia AI, lalu ringkasan dibuat.',
+            '⚠ Secara tepat: operator **tidak menyimpan isi diari itu sendiri.** Namun ① pada saat ringkasan dibuat, isinya melewati server operator, sehingga kami tidak dapat mengatakan bahwa "operator tidak dapat melihatnya", dan ② **ringkasan yang dihasilkan disimpan selama 90 hari** (lihat huruf d). Kami menyampaikannya apa adanya tanpa mengaburkannya.',
+            'Jika Anda tidak membuat laporan, pengiriman ini sama sekali tidak terjadi, dan semua fitur lain termasuk menulis diari tetap dapat digunakan sepenuhnya.',
           ],
         },
         {
           h: 'b. Persetujuan terpisah untuk informasi sensitif',
           body: [
-            'Catatan harian dapat memuat informasi sensitif menurut Pasal 23 Undang-Undang Perlindungan Informasi Pribadi, seperti kondisi kesehatan atau kondisi kejiwaan.',
-            'Karena laporan ringkasan AI memproses isi tersebut tanpa enkripsi, kami mengambil **persetujuan terpisah untuk pemrosesan informasi sensitif** saat kamu pertama kali menggunakan fitur ini. Persetujuan ini **terpisah** dari persetujuan transfer ke luar negeri pada huruf (c), dan masing-masing dapat dipilih sendiri.',
-            'Jika kamu tidak menyetujuinya, kamu tetap dapat menggunakan semua fitur kecuali laporan AI.',
+            'Diari dapat memuat informasi sensitif seperti kondisi kesehatan atau psikologis sebagaimana dimaksud Pasal 23 Undang-Undang Perlindungan Informasi Pribadi.',
+            'Karena laporan ringkasan AI memproses isi tersebut tanpa enkripsi, kami meminta **persetujuan terpisah untuk pemrosesan informasi sensitif** saat Anda pertama kali menggunakan fitur ini. Persetujuan ini **terpisah** dari persetujuan transfer ke luar negeri pada huruf (c), dan Anda dapat memilih masing-masing secara terpisah.',
+            'Meski tidak menyetujui, semua fitur selain laporan AI tetap dapat digunakan sepenuhnya.',
           ],
         },
         {
           h: 'c. Persetujuan terpisah untuk transfer ke luar negeri',
           body: [
-            'Penyedia AI berada di luar Korea. Nama penyedia, negara penerima, dan kontaknya dicantumkan pada huruf ini saat fitur dirilis, dan juga ditampilkan di aplikasi sebelum persetujuan diambil.',
-            '• Data yang ditransfer: judul, isi, emosi, dan tanggal catatan pada periode yang kamu minta laporannya',
+            'Penyedia AI berlokasi di luar Korea. Nama penyedia, negara penerima, dan kontaknya akan dicantumkan secara spesifik pada huruf ini saat fitur dirilis, dan juga ditampilkan di aplikasi sebelum persetujuan diambil.',
+            '• Item yang ditransfer: judul, isi, emosi, dan tanggal entri pada periode yang Anda mintakan laporannya',
             '• Tujuan: membuat laporan ringkasan',
-            '• Kapan dan bagaimana: dikirim melalui jaringan saat kamu menekan “Buat laporan”',
-            '• Penyimpanan: server operator **tidak menyimpannya** — hanya diproses di memori selama ringkasan dibuat lalu langsung dibuang. Penyedia AI menyimpannya **maksimal 30 hari** untuk pemantauan penyalahgunaan lalu menghapusnya, dan selama periode itu pun **tidak menggunakannya untuk melatih model.**',
-            'Kamu dapat menolak transfer ke luar negeri; jika menolak, hanya laporan AI yang tidak tersedia, sedangkan fitur lain tetap berjalan.',
+            '• Waktu dan cara: dikirim melalui jaringan saat Anda menekan Buat laporan',
+            '• Masa penyimpanan: server operator **tidak menyimpan item yang ditransfer (isi diari)** — hanya ditahan di memori selama ringkasan dibuat lalu dibuang. Penyimpanan ringkasan yang dihasilkan dicantumkan terpisah pada huruf (d). Penyedia AI menyimpannya **paling lama 30 hari** untuk pemantauan penyalahgunaan lalu menghapusnya, dan bahkan selama periode itu **tidak menggunakannya untuk melatih model.**',
+            'Anda dapat menolak transfer ke luar negeri; jika menolak, hanya laporan AI yang tidak tersedia dan semua fitur lain tetap dapat digunakan sepenuhnya.',
           ],
         },
         {
-          h: 'd. Yang disimpan operator (yang bukan isi catatan)',
+          h: 'd. Apa yang disimpan operator',
           body: [
-            'Kami tidak menyimpan isi catatan, tetapi kami menyimpan hal berikut.',
-            '• Pengenal akun yang membuat laporan, periode, jumlah kali, dan jumlah token yang dipakai — digunakan untuk penagihan dan pencegahan penyalahgunaan.',
-            '• Penyimpanan: sampai tujuannya tercapai atau sampai kamu menghapus akun',
-            'Teks laporan yang sudah jadi disimpan **hanya di perangkatmu**, dan bila pencadangan aktif, ikut tersimpan dalam cadangan dalam bentuk terenkripsi.',
+            'Kami tidak menyimpan isi diari (judul dan teks). Kami menyimpan hal berikut.',
+            '• **Ringkasan yang dihasilkan AI** — disimpan untuk memeriksa dan meningkatkan kualitas laporan. Masa penyimpanan: **90 hari sejak hari dibuat**, setelah itu dihapus otomatis.',
+            '• Pengenal akun yang membuat laporan, periode, jumlah kali, dan jumlah token yang digunakan — dipakai untuk penagihan dan pencegahan penyalahgunaan. Masa penyimpanan: sampai tujuan tercapai atau sampai Anda menghapus akun',
+            '⚠ Ringkasan ditulis berdasarkan diari Anda, sehingga isi diari dapat termuat di dalamnya. Kami menyampaikannya apa adanya tanpa mengaburkannya.',
+            'Laporan yang selesai juga disimpan **di perangkat Anda**, dan jika pencadangan aktif, disertakan dalam cadangan dalam bentuk terenkripsi.',
           ],
         },
         {
-          h: 'e. Hak kamu',
+          h: 'e. Hak Anda',
           body: [
-            '• Laporan hanya dibuat ketika kamu sendiri membuatnya; laporan tidak pernah dibuat otomatis.',
-            '• Laporan yang sudah dibuat dapat kamu hapus kapan saja di aplikasi.',
-            '• Ringkasan yang dibuat AI dapat berbeda dari kenyataan dan bukan merupakan diagnosis atau saran medis maupun psikologis. Aplikasi menyediakan cara untuk melaporkan sebuah ringkasan.',
+            '• Laporan hanya dibuat ketika Anda sendiri membuatnya; tidak pernah dibuat otomatis.',
+            '• Anda dapat menghapus laporan yang telah Anda buat kapan saja di aplikasi.',
+            '• Menghapusnya di aplikasi akan menghilangkannya dari perangkat Anda; ringkasan yang disimpan di server operator dihapus otomatis setelah 90 hari. Jika ingin dihapus lebih cepat, Anda dapat memintanya melalui Hubungi kami.',
+            '• Ringkasan yang dihasilkan AI dapat berbeda dari fakta dan bukan merupakan diagnosis atau saran medis maupun psikologis. Aplikasi menyediakan cara untuk melaporkan sebuah ringkasan.',
           ],
         },
       ],

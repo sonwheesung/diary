@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_FR: LegalDoc = {
   title: 'Politique de confidentialité de Jogak',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -221,54 +221,55 @@ export const PRIVACY_FR: LegalDoc = {
       ],
     },
     {
-      appliesFrom:
-        'À compter du jour de publication de la version incluant les bilans de synthèse par IA',
+      appliesFrom: 'À compter du jour de publication de la version contenant les rapports de synthèse par IA',
       summary:
-        'Les bilans de synthèse par IA sont ajoutés. Uniquement lorsque vous créez vous-même un bilan, le contenu de vos entrées de la période concernée transite en clair par le serveur de l’exploitant et est envoyé au prestataire d’IA. L’exploitant ne conserve pas ce contenu ; le prestataire d’IA le garde jusqu’à 30 jours à des fins de surveillance des abus, puis le supprime, et ne l’utilise pas pour entraîner ses modèles.',
+        'Les rapports de synthèse par IA sont ajoutés. Uniquement lorsque vous créez vous-même un rapport, le contenu du journal de cette période transite non chiffré par le serveur de l’exploitant et est envoyé au fournisseur d’IA. L’exploitant ne conserve pas le contenu du journal, mais conserve la synthèse générée pendant 90 jours afin d’améliorer la qualité des rapports. Le fournisseur d’IA la conserve au maximum 30 jours à des fins de surveillance des abus, puis la supprime, et ne l’utilise pas pour entraîner ses modèles.',
       sections: [
         {
           h: 'a. Ce qui change (avant → après)',
           body: [
-            'Avant : les titres et le texte de vos entrées ne sont pas transmis hors de votre appareil. Même avec la sauvegarde activée, ils ne sont transmis que sous forme de texte chiffré que l’exploitant ne peut pas lire.',
-            'Après : **uniquement lorsque vous appuyez vous-même sur « Créer un bilan »**, le contenu des entrées de cette période est envoyé **en clair** via le serveur de l’exploitant au prestataire d’IA, et un résumé est généré.',
-            '⚠ Pour être précis : l’exploitant **ne conserve pas** ce contenu. Mais au moment où le résumé est rédigé, le contenu transite bien par le serveur de l’exploitant — nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir ». Nous le disons clairement plutôt que de l’estomper.',
-            'Si vous ne créez pas de bilan, cette transmission n’a pas lieu du tout, et toutes les autres fonctions, dont l’écriture d’entrées, restent disponibles.',
+            'Avant : les titres et textes du journal ne sont pas transmis hors de votre appareil. Même si vous avez activé la sauvegarde, ils ne sont transmis que sous forme chiffrée, illisible par l’exploitant.',
+            'Après : **uniquement lorsque vous appuyez vous-même sur Créer un rapport**, le contenu du journal de cette période est envoyé **non chiffré** via le serveur de l’exploitant au fournisseur d’IA, et une synthèse est générée.',
+            '⚠ Pour être précis : l’exploitant **ne conserve pas le contenu du journal lui-même**. Toutefois, ① au moment où la synthèse est produite, le contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② **la synthèse générée est conservée 90 jours** (voir le point d). Nous l’indiquons clairement, sans l’atténuer.',
+            'Si vous ne créez pas de rapport, cette transmission n’a pas lieu du tout, et toutes les autres fonctionnalités, y compris la rédaction d’entrées, restent pleinement disponibles.',
           ],
         },
         {
           h: 'b. Consentement distinct pour les informations sensibles',
           body: [
-            'Les journaux peuvent contenir des informations sensibles au sens de l’art. 23 de la loi sur la protection des informations personnelles, telles que l’état de santé ou l’état psychique.',
-            'Comme les bilans de synthèse par IA traitent ce contenu en clair, nous recueillons un **consentement distinct au traitement des informations sensibles** lors de votre première utilisation de la fonction. Ce consentement est **indépendant** de celui relatif au transfert hors du pays au point (c), et chacun peut être choisi séparément.',
-            'Si vous ne le donnez pas, vous pouvez continuer à utiliser toutes les fonctions à l’exception des bilans par IA.',
+            'Un journal peut contenir des informations sensibles, telles que l’état de santé ou psychologique, au sens de l’article 23 de la loi sur la protection des informations personnelles.',
+            'Les rapports de synthèse par IA traitant ce contenu non chiffré, nous recueillons un **consentement distinct au traitement des informations sensibles** lors de votre première utilisation de la fonctionnalité. Ce consentement est **distinct** du consentement au transfert à l’étranger du point (c), et vous pouvez choisir chacun séparément.',
+            'Si vous ne le donnez pas, toutes les fonctionnalités autres que les rapports par IA restent pleinement disponibles.',
           ],
         },
         {
-          h: 'c. Consentement distinct pour le transfert hors du pays',
+          h: 'c. Consentement distinct pour le transfert à l’étranger',
           body: [
-            'Le prestataire d’IA est situé hors de Corée. Son nom, le pays destinataire et ses coordonnées sont indiqués dans ce point au moment de la mise en service de la fonction, et sont également affichés dans l’application avant le recueil du consentement.',
-            '• Données transférées : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un bilan',
-            '• Finalité : générer le bilan de synthèse',
-            '• Quand et comment : transmises par le réseau lorsque vous appuyez sur « Créer un bilan »',
-            '• Conservation : le serveur de l’exploitant **ne le conserve pas** — il ne le garde en mémoire que le temps de rédiger le résumé, puis le supprime. Le prestataire d’IA le conserve **jusqu’à 30 jours** à des fins de surveillance des abus puis le supprime, et même durant cette période **ne l’utilise pas pour entraîner ses modèles.**',
-            'Vous pouvez refuser le transfert hors du pays ; dans ce cas, seuls les bilans par IA deviennent indisponibles et toutes les autres fonctions continuent de fonctionner.',
+            'Le fournisseur d’IA est situé hors de Corée. Le nom du fournisseur, le pays destinataire et ses coordonnées seront précisés dans ce point au moment de la publication de la fonctionnalité, et seront également affichés dans l’application avant le recueil du consentement.',
+            '• Éléments transférés : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport',
+            '• Finalité : générer un rapport de synthèse',
+            '• Quand et comment : transmis par le réseau lorsque vous appuyez sur Créer un rapport',
+            '• Conservation : le serveur de l’exploitant **ne conserve pas les éléments transférés (le contenu du journal)** — ils ne sont gardés en mémoire que le temps de produire la synthèse, puis supprimés. La conservation de la synthèse générée est indiquée séparément au point (d). Le fournisseur d’IA les conserve **au maximum 30 jours** à des fins de surveillance des abus puis les supprime, et même pendant cette période **ne les utilise pas pour entraîner ses modèles.**',
+            'Vous pouvez refuser le transfert à l’étranger ; dans ce cas, seuls les rapports par IA deviennent indisponibles et toutes les autres fonctionnalités restent pleinement disponibles.',
           ],
         },
         {
-          h: 'd. Ce que l’exploitant conserve (et qui n’est pas le contenu de vos entrées)',
+          h: 'd. Ce que l’exploitant conserve',
           body: [
-            'Nous ne conservons pas le contenu des entrées, mais nous conservons ce qui suit.',
-            '• L’identifiant du compte ayant créé le bilan, la période, le nombre de fois et le nombre de jetons utilisés — pour la facturation et la prévention des abus.',
-            '• Conservation : jusqu’à la réalisation de la finalité ou jusqu’à la suppression de votre compte',
-            'Le texte du bilan terminé est conservé **uniquement sur votre appareil** et, si la sauvegarde est activée, il y est inclus sous forme chiffrée.',
+            'Nous ne conservons pas le contenu du journal (titres et textes). Nous conservons ce qui suit.',
+            '• **La synthèse générée par l’IA** — conservée afin de vérifier et d’améliorer la qualité des rapports. Conservation : **90 jours à compter du jour de sa création**, après quoi elle est supprimée automatiquement.',
+            '• L’identifiant du compte ayant créé le rapport, la période, le nombre de fois et le nombre de jetons utilisés — utilisés pour la facturation et la prévention des abus. Conservation : jusqu’à la réalisation de la finalité ou jusqu’à la suppression de votre compte',
+            '⚠ La synthèse est rédigée à partir de votre journal ; elle peut donc en contenir le contenu. Nous l’indiquons clairement, sans l’atténuer.',
+            'Le rapport terminé est également enregistré **sur votre appareil** et, si vous avez activé la sauvegarde, il y est inclus sous forme chiffrée.',
           ],
         },
         {
           h: 'e. Vos droits',
           body: [
-            '• Les bilans ne sont générés que lorsque vous les créez vous-même ; ils ne le sont jamais automatiquement.',
-            '• Vous pouvez supprimer à tout moment, dans l’application, un bilan que vous avez créé.',
-            '• Les résumés générés par IA peuvent s’écarter des faits et ne constituent ni un diagnostic ni un conseil médical ou psychologique. L’application propose un moyen de signaler un résumé.',
+            '• Les rapports ne sont générés que lorsque vous les créez vous-même ; ils ne sont jamais générés automatiquement.',
+            '• Vous pouvez supprimer à tout moment dans l’application un rapport que vous avez créé.',
+            '• La suppression dans l’application l’efface de votre appareil ; la synthèse conservée sur le serveur de l’exploitant est supprimée automatiquement au bout de 90 jours. Si vous souhaitez une suppression plus rapide, vous pouvez en faire la demande via Nous contacter.',
+            '• Les synthèses générées par IA peuvent différer des faits et ne constituent ni un diagnostic ni un conseil médical ou psychologique. L’application propose un moyen de signaler une synthèse.',
           ],
         },
       ],

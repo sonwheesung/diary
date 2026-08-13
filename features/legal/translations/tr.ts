@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: 'e1010878',
+  sourceFingerprint: '0a627bd3',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -223,51 +223,53 @@ export const PRIVACY_TR: LegalDoc = {
     {
       appliesFrom: 'Yapay zekâ özet raporlarını içeren sürümün yayımlandığı günden itibaren',
       summary:
-        'Yapay zekâ özet raporları ekleniyor. Yalnızca raporu kendin oluşturduğunda, o döneme ait günlük içeriğin şifrelenmemiş hâlde işletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına iletilir. İşletmeci bu içeriği saklamaz; yapay zekâ sağlayıcısı kötüye kullanımı izlemek için en fazla 30 gün saklar, sonra siler ve model eğitiminde kullanmaz.',
+        'Yapay zekâ özet raporları ekleniyor. Yalnızca raporu kendin oluşturduğunda, o döneme ait günlük içeriği şifrelenmemiş hâlde işletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına gönderilir. İşletmeci günlük içeriğini saklamaz, ancak rapor kalitesini iyileştirmek için oluşturulan özeti 90 gün saklar. Yapay zekâ sağlayıcısı kötüye kullanım denetimi için en fazla 30 gün saklar, sonra siler ve model eğitiminde kullanmaz.',
       sections: [
         {
           h: 'a. Ne değişiyor (öncesi → sonrası)',
           body: [
-            'Öncesi: kayıtların başlıkları ve metni cihazının dışına aktarılmaz. Yedeklemeyi açmış olsan bile, yalnızca işletmecinin okuyamadığı şifreli metin olarak aktarılır.',
-            'Sonrası: **yalnızca “Rapor oluştur”a kendin dokunduğunda**, o döneme ait günlük içeriği **şifrelenmemiş** hâlde işletmecinin sunucusu üzerinden yapay zekâ sağlayıcısına gönderilir ve bir özet üretilir.',
-            '⚠ Tam olarak: işletmeci bu içeriği **saklamaz.** Ancak özet yazılırken içerik işletmecinin sunucusundan geçer — bu yüzden “işletmeci göremez” diyemeyiz. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.',
-            'Rapor oluşturmazsan bu aktarım hiç gerçekleşmez; kayıt yazma dâhil diğer tüm özellikler aynen kullanılabilir.',
+            'Öncesi: günlüklerin başlığı ve metni cihazının dışına aktarılmaz. Yedeklemeyi açmış olsan bile yalnızca işletmecinin okuyamayacağı şifreli metin olarak aktarılır.',
+            'Sonrası: **yalnızca Rapor oluştur’a kendin bastığında**, o döneme ait günlük içeriği **şifrelenmemiş hâlde** işletmecinin sunucusu üzerinden yapay zekâ sağlayıcısına gönderilir ve bir özet oluşturulur.',
+            '⚠ Tam olarak: işletmeci **günlük içeriğinin kendisini saklamaz.** Ancak ① özet oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana "işletmeci göremez" diyemeyiz ve ② **oluşturulan özet 90 gün saklanır** (aşağıdaki d bendine bakınız). Bunu bulanıklaştırmadan açıkça belirtiyoruz.',
+            'Rapor oluşturmazsan bu aktarım hiç gerçekleşmez ve günlük yazma dâhil diğer tüm özellikler eksiksiz kullanılabilir.',
           ],
         },
         {
-          h: 'b. Hassas bilgiler için ayrı onay',
+          h: 'b. Hassas bilgiler için ayrı rıza',
           body: [
-            'Günlükler, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruh hâli gibi hassas bilgiler içerebilir.',
-            'Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında **hassas bilgilerin işlenmesine ilişkin ayrı bir onay** alırız. Bu onay, aşağıdaki (c) bendindeki yurt dışına aktarım onayından **bağımsızdır** ve her biri ayrı ayrı seçilebilir.',
-            'Onay vermesen de yapay zekâ raporları dışındaki tüm özellikleri kullanmaya devam edebilirsin.',
+            'Bir günlük, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruhsal durum gibi hassas bilgiler içerebilir.',
+            'Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında **hassas bilgilerin işlenmesine ilişkin ayrı bir rıza** alırız. Bu rıza, (c) bendindeki yurt dışına aktarım rızasından **ayrıdır** ve her birini ayrı ayrı seçebilirsin.',
+            'Rıza vermesen de yapay zekâ raporları dışındaki tüm özellikler eksiksiz kullanılabilir.',
           ],
         },
         {
-          h: 'c. Yurt dışına aktarım için ayrı onay',
+          h: 'c. Yurt dışına aktarım için ayrı rıza',
           body: [
-            'Yapay zekâ sağlayıcısı Kore dışında bulunur. Sağlayıcının adı, alıcı ülke ve iletişim bilgileri, özellik yayımlandığında bu bentte somut olarak belirtilir ve onay alınmadan önce uygulama içinde de gösterilir.',
+            'Yapay zekâ sağlayıcısı Kore dışında bulunmaktadır. Sağlayıcının adı, alıcı ülke ve iletişim bilgileri özellik yayımlandığında bu bentte somut olarak belirtilecek ve rıza alınmadan önce uygulama içinde de gösterilecektir.',
             '• Aktarılan veriler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi',
-            '• Amaç: özet raporun oluşturulması',
-            '• Ne zaman ve nasıl: “Rapor oluştur”a dokunduğunda ağ üzerinden iletilir',
-            '• Saklama: işletmecinin sunucusu **saklamaz** — özet yazılırken yalnızca bellekte tutar ve hemen ardından atar. Yapay zekâ sağlayıcısı kötüye kullanımı izlemek için **en fazla 30 gün** saklar ve sonra siler; bu süre içinde de **model eğitiminde kullanmaz.**',
-            'Yurt dışına aktarımı reddedebilirsin; reddedersen yalnızca yapay zekâ raporları kullanılamaz, diğer tüm özellikler çalışmaya devam eder.',
+            '• Amaç: özet raporu oluşturmak',
+            '• Zaman ve yöntem: Rapor oluştur’a bastığında ağ üzerinden aktarılır',
+            '• Saklama süresi: işletmecinin sunucusu **aktarılan verileri (günlük içeriğini) saklamaz** — yalnızca özet oluşturulurken bellekte tutulur ve ardından atılır. Oluşturulan özetin saklanması (d) bendinde ayrıca belirtilmiştir. Yapay zekâ sağlayıcısı bunları kötüye kullanım denetimi için **en fazla 30 gün** saklar ve sonra siler; bu süre boyunca da **model eğitiminde kullanmaz.**',
+            'Yurt dışına aktarımı reddedebilirsin; reddedersen yalnızca yapay zekâ raporları kullanılamaz, diğer tüm özellikler eksiksiz kullanılabilir.',
           ],
         },
         {
-          h: 'd. İşletmecinin sakladıkları (günlük içeriği olmayanlar)',
+          h: 'd. İşletmecinin sakladıkları',
           body: [
-            'Günlük içeriğini saklamayız, ancak aşağıdakileri saklarız.',
-            '• Raporu oluşturan hesabın kimliği, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı — ücretlendirme ve kötüye kullanımın önlenmesi için kullanılır.',
-            '• Saklama: amaç gerçekleşene kadar veya hesabını silene kadar',
-            'Tamamlanmış raporun metni **yalnızca cihazında** saklanır ve yedeklemeyi açtıysan şifreli olarak yedeğe dâhil edilir.',
+            'Günlük içeriğini (başlık ve metin) saklamayız. Aşağıdakileri saklarız.',
+            '• **Yapay zekânın oluşturduğu özet** — rapor kalitesini kontrol etmek ve iyileştirmek için saklanır. Saklama süresi: **oluşturulduğu günden itibaren 90 gün**, ardından otomatik olarak silinir.',
+            '• Raporu oluşturan hesabın tanımlayıcısı, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı — ücretlendirme ve kötüye kullanımın önlenmesi için kullanılır. Saklama süresi: amaç gerçekleşene kadar ya da hesabını silene kadar',
+            '⚠ Özet, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir. Bunu bulanıklaştırmadan açıkça belirtiyoruz.',
+            'Tamamlanan rapor **cihazında da** saklanır ve yedeklemeyi açtıysan şifrelenmiş olarak yedeğe dâhil edilir.',
           ],
         },
         {
           h: 'e. Haklarınız',
           body: [
-            '• Raporlar yalnızca sen oluşturduğunda üretilir; hiçbir zaman kendiliğinden oluşturulmaz.',
+            '• Raporlar yalnızca sen oluşturduğunda üretilir; asla otomatik olarak oluşturulmaz.',
             '• Oluşturduğun bir raporu uygulamada istediğin zaman silebilirsin.',
-            '• Yapay zekânın ürettiği özetler gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis veya tavsiye değildir. Uygulama, bir özeti bildirmen için bir yol sunar.',
+            '• Uygulamada sildiğinde cihazından kaybolur; işletmecinin sunucusunda saklanan özet 90 gün sonra otomatik olarak silinir. Daha erken silinmesini istersen Bize ulaşın üzerinden talep edebilirsin.',
+            '• Yapay zekânın oluşturduğu özetler gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis veya tavsiye değildir. Uygulama, bir özeti bildirmen için bir yol sunar.',
           ],
         },
       ],
