@@ -1,5 +1,5 @@
 'use client';
-// 조각 운영 콘솔 (docs/ADMIN_SYSTEM.md) — 로그인 게이트 + 4탭(대시보드·AI·금고·정리).
+// 조각 운영 콘솔 (docs/ADMIN_SYSTEM.md) — 로그인 게이트 + 5탭(대시보드·AI·리포트 품질·금고·정리).
 // URL이 /admin이 아닌 건 추측 차단용이고, **실제 보안은 ADMIN_TOKEN**(isAdmin fail-closed).
 // 배구명가 /ops-9f3a2c 구조를 승계한다. 외부 스크립트·스타일 0 — 인라인 <style> 하나뿐(XSS 표면 최소).
 //
@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type Json = Record<string, unknown>;
-type Tab = 'overview' | 'ai' | 'vaults' | 'reap';
+type Tab = 'overview' | 'ai' | 'reports' | 'vaults' | 'reap';
 type Granularity = 'week' | 'month' | 'year';
 
 /**
@@ -122,6 +122,9 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-
 .oc-table tr:last-child td{border-bottom:none;}
 .oc-table td.n,.oc-table th.n{text-align:right;font-variant-numeric:tabular-nums;}
 .oc-empty{color:var(--mut);font-size:13px;padding:22px 0;text-align:center;}
+.oc-tag{display:inline-block;font-size:11.5px;font-weight:800;border-radius:999px;padding:2px 9px;background:var(--bd2);color:var(--mut);}
+.oc-tag.dg{background:rgba(255,107,90,.16);color:var(--dg);}
+.oc-tag.wn{background:rgba(242,169,59,.16);color:var(--wn);}
 .oc-note{color:var(--mut);font-size:12.5px;line-height:1.7;background:var(--card2);border:1px solid var(--bd2);border-radius:10px;padding:12px 14px;margin-top:14px;}
 .oc-seg{display:inline-flex;gap:6px;}
 .oc-bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin-top:10px;}
@@ -141,12 +144,14 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-
 const NAV: { id: Tab; ic: string; label: string }[] = [
   { id: 'overview', ic: '📊', label: '대시보드' },
   { id: 'ai', ic: '✨', label: 'AI 사용량' },
+  { id: 'reports', ic: '📝', label: '리포트 품질' },
   { id: 'vaults', ic: '🔐', label: '백업 금고' },
   { id: 'reap', ic: '🧹', label: '정리' },
 ];
 const TITLES: Record<Tab, string> = {
   overview: '대시보드',
   ai: 'AI 사용량 · 추정 원가',
+  reports: '리포트 품질',
   vaults: '백업 금고',
   reap: '정리 (리퍼 백로그)',
 };
@@ -258,24 +263,30 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
   const [granularity, setGranularity] = useState<Granularity>('month');
   const [overview, setOverview] = useState<Json | null>(null);
   const [ai, setAi] = useState<Json | null>(null);
+  const [reports, setReports] = useState<Json | null>(null);
+  const [reportFilter, setReportFilter] = useState<'all' | 'flagged' | 'concern'>('all');
   const [vaults, setVaults] = useState<Json | null>(null);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(true);
 
   const load = useCallback(async () => {
     setBusy(true);
-    const [o, a, v] = await Promise.all([
+    const query =
+      reportFilter === 'all' ? '' : reportFilter === 'flagged' ? '?flagged=1' : '?concern=1';
+    const [o, a, r, v] = await Promise.all([
       apiCall('/api/admin/overview', token),
       apiCall(`/api/admin/ai?window=${granularity}`, token),
+      apiCall(`/api/admin/reports${query}`, token),
       apiCall('/api/admin/vaults', token),
     ]);
-    const failed = [o, a, v].find((r) => !r.body.ok);
+    const failed = [o, a, r, v].find((x) => !x.body.ok);
     setErr(failed === undefined ? '' : errMsg(failed));
     setOverview(o.body.ok ? o.body : null);
     setAi(a.body.ok ? a.body : null);
+    setReports(r.body.ok ? r.body : null);
     setVaults(v.body.ok ? v.body : null);
     setBusy(false);
-  }, [token, granularity]);
+  }, [token, granularity, reportFilter]);
 
   // granularity가 바뀌면 다시 부른다. 최초 1회도 여기서 걸린다.
   const first = useRef(true);
@@ -334,6 +345,9 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
             {tab === 'overview' && <OverviewTab overview={overview} vaults={vaults} />}
             {tab === 'ai' && (
               <AiTab data={ai} granularity={granularity} onGranularity={setGranularity} />
+            )}
+            {tab === 'reports' && (
+              <ReportsTab data={reports} filter={reportFilter} onFilter={setReportFilter} />
             )}
             {tab === 'vaults' && <VaultsTab data={vaults} />}
             {tab === 'reap' && <ReapTab data={vaults} />}
@@ -567,6 +581,86 @@ function AiTab({
         🔴 <strong>원가는 추정치다.</strong> 캐시·배치 할인과 단가 개정이 반영되지 않고, 실패한
         호출은 애초에 기록되지 않는다(성공만 기록한다). 벤더 대시보드가 정본이고 이 숫자는 추세를
         보는 용도다.
+      </div>
+    </>
+  );
+}
+
+/**
+ * 리포트 품질 — **프롬프트를 고칠 근거를 보는 자리**(`docs/AI_REPORT_SYSTEM.md` §5.2).
+ *
+ * 🔴 여기에 `subject_id`를 그리는 코드를 추가하지 않는다 — 라우트가 아예 안 내려준다.
+ *   요약문은 품질을 보려고 읽는 것이지 누가 썼는지 알려고 읽는 것이 아니다.
+ */
+function ReportsTab({
+  data,
+  filter,
+  onFilter,
+}: {
+  data: Json | null;
+  filter: 'all' | 'flagged' | 'concern';
+  onFilter: (f: 'all' | 'flagged' | 'concern') => void;
+}) {
+  if (data === null) {
+    return <div className="oc-empty">불러오지 못했습니다.</div>;
+  }
+  const rows = (data.reports as Json[] | undefined) ?? [];
+  const counts = (data.counts as Json | undefined) ?? {};
+  const filters: { id: 'all' | 'flagged' | 'concern'; label: string }[] = [
+    { id: 'all', label: `전체 ${fmt(counts.total)}` },
+    { id: 'flagged', label: `신고됨 ${fmt(counts.flagged)}` },
+    { id: 'concern', label: `위기 ${fmt(counts.concern)}` },
+  ];
+
+  return (
+    <>
+      <div className="oc-top" style={{ marginBottom: 14 }}>
+        <div className="oc-seg">
+          {filters.map((f) => (
+            <button
+              key={f.id}
+              className={`oc-btn sm ${filter === f.id ? 'on' : 'ghost'}`}
+              onClick={() => onFilter(f.id)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        <div className="oc-crumb">
+          최근 {fmt(data.limit)}건 · {fmt(data.retentionDays)}일 보관
+        </div>
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="oc-empty">아직 리포트가 없습니다.</div>
+      ) : (
+        rows.map((r) => (
+          <div className="oc-card" key={String(r.id)}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 10, flexWrap: 'wrap' }}>
+              {r.flagged === true ? <span className="oc-tag dg">신고됨</span> : null}
+              {r.concern === true ? <span className="oc-tag wn">위기</span> : null}
+              <span className="oc-tag">{String(r.kind)}</span>
+              <span className="oc-tag">{String(r.periodKey)}</span>
+              <span className="oc-tag">{String(r.lang)}</span>
+              <span className="oc-crumb" style={{ marginLeft: 'auto' }}>
+                {String(r.model ?? '—')} · p{fmt(r.promptVer)} · 조각 {fmt(r.sourceCount)}개 ·{' '}
+                {String(r.createdAt ?? '').slice(0, 10)}
+              </span>
+            </div>
+            {/* 요약문은 줄바꿈이 의미를 갖는다 — 문단이 무너지면 품질 판단이 안 된다 */}
+            <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.75, margin: 0, fontSize: 13.5 }}>
+              {String(r.summary)}
+            </p>
+          </div>
+        ))
+      )}
+
+      <div className="oc-note">
+        🔴 이 화면에는 <strong>누가 썼는지가 없다.</strong> 요약문은 품질을 보려고 읽는 것이지 누가
+        썼는지 알려고 읽는 것이 아니다 — <code>subject_id</code>는 라우트가 아예 내려주지 않는다.
+        <br />
+        ⚠ 요약문은 이용자의 일기를 바탕으로 만들어진 글이다. <strong>{fmt(data.retentionDays)}일</strong>{' '}
+        뒤 리퍼가 지우며, 그 기간은 처리방침에 적혀 있다.
       </div>
     </>
   );

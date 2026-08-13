@@ -69,7 +69,7 @@
 | **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
 | 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
-| AI 리포트 — 처리방침 예고 | ✅ | 2026-08-12 게시. 30일 시계는 **2026-09-11** 만료 |
+| AI 리포트 — 처리방침 | ✅ | 2026-08-13 — 리포트 90일 저장을 반영해 **15개 언어 재작성**(`check:legal` 112개). ⚠ 30일 시계는 **애초에 해당 없었다**(공개 사용자 0명, CLAUDE.md §12) |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
@@ -92,7 +92,7 @@
 | 조각 서버(Next.js) 생성 | ✅ | 2026-08-13 정정 — 배포됨. 백업 6 라우트 + `cron/reap` + `ai/report` |
 | 조각 Supabase 프로젝트 | ✅ | 2026-08-13 정정 — `jogak-stg`(서울). ⏭ **운영 프로젝트는 미생성**(Pro 조직 추가 시 +$9.8/월) |
 | 백업 라우트 — 되찾기(`rebind`)·파기(`delete`)·리퍼(`cron/reap`) | ✅ | 2026-08-13 정정 — 셋 다 구현돼 있다. 크론은 `vercel.json`에 등록돼 있다(`0 18 * * *`) |
-| **운영 콘솔** `/ops-7c1d94` | ✅ | 2026-08-13 — 대시보드·AI 사용량·백업 금고·정리 4탭. **읽기 전용 · 개인 비특정**. `npm run check:admin` 23개. [`ADMIN_SYSTEM.md`](./ADMIN_SYSTEM.md) |
+| **운영 콘솔** `/ops-7c1d94` | ✅ | 2026-08-13 — 대시보드·AI 사용량·**리포트 품질**·백업 금고·정리 5탭. **읽기 전용 · 개인 비특정**. `npm run check:admin` 23개. [`ADMIN_SYSTEM.md`](./ADMIN_SYSTEM.md) |
 | ⚠ `ai_usage` 테이블 | ✅ | 2026-08-13 — **stg DB에 없었다**(`db:push` 누락). 콘솔을 붙이다 발견했고 push했다 — 그전까지 AI 라우트는 성공 경로에서 500이었을 것이다 |
 
 🚫 = 안 하기로 결정 / ⏸ = 보류 / ❌ = 미착수 / ✅ = 완료
