@@ -25,7 +25,15 @@
     "report": "Báo cáo"
   },
   "date": {
-    "weekdays": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+    "weekdays": [
+      "CN",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ],
     "full": "{{weekday}}, {{day}} tháng {{month}} năm {{year}}",
     "dateTime": "{{day}}/{{month}}/{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} tháng {{month}} ({{weekday}})",
@@ -480,6 +488,7 @@
       "not-subscribed": "Có sẵn khi bạn đăng ký gói.",
       "refused": "Lần này chúng tôi chưa viết được báo cáo. Lần thử này không tính vào giới hạn của bạn.",
       "in-progress": "Báo cáo đang được viết. Vui lòng đợi một lát.",
+      "cooling-down": "Đã xảy ra sự cố từ phía chúng tôi. Bạn có thể thử lại sau một giờ.",
       "rate-limited": "Vui lòng thử lại sau giây lát.",
       "upstream": "Máy chủ đang gặp sự cố. Vui lòng thử lại sau.",
       "error": "Đã xảy ra lỗi."

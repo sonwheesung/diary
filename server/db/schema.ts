@@ -1,5 +1,6 @@
 import {
   bigint,
+  boolean,
   index,
   integer,
   pgTable,
@@ -229,5 +230,69 @@ export const aiUsage = pgTable(
      */
     uniqueIndex('uq_ai_usage_period').on(table.subjectId, table.kind, table.periodKey),
     index('idx_ai_usage_day').on(table.subjectId, table.day),
+  ],
+);
+
+/**
+ * AI 실패 잠금 — **크레딧 방어** (`docs/AI_REPORT_SYSTEM.md` §5.1).
+ *
+ * 🔴 **`ai_usage`에 섞지 않는다.** 그쪽은 *"이 기간을 만들었다"* 의 진실이고 캡 계산의
+ *   근거다. 실패를 같은 테이블에 넣으면 `count(*)`가 캡을 잘못 세고,
+ *   `uq_ai_usage_period` UNIQUE도 의미를 잃는다.
+ *
+ * 🔴 **본문은 없다.** 실패 코드와 시각뿐이다 — `ai_usage`와 같은 규율이다.
+ *
+ * subject당 한 행이고 실패할 때마다 덮어쓴다. 이력이 필요하면 Discord 알림이 갖는다.
+ */
+export const aiCooldowns = pgTable('ai_cooldowns', {
+  /** common_server의 subject. **FK 없다** — 다른 DB다 */
+  subjectId: text('subject_id').primaryKey(),
+  /** 이 시각까지 막는다 */
+  until: timestamp('until', { withTimezone: true }).notNull(),
+  /** 왜 잠갔나 — `refused` · `upstream` 등. 진단용이고 본문이 아니다 */
+  reason: text('reason').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * 생성된 리포트 본문 — **운영자 품질 피드백용** (2026-08-13 사용자 결정).
+ *
+ * 🔴 **§5.1의 "저장하지 않습니다"를 뒤집는 결정이다.** 처리방침 문구를 함께 고친다.
+ *   이 테이블이 생긴 이유는 하나다: **리포트가 좋은지 나쁜지 볼 방법이 없으면
+ *   프롬프트를 고칠 근거가 없다.** 원격 관측이 0인 앱이라 사용자 문의 외에는 신호가 없었다.
+ *
+ * ⚠ **일기 원문은 저장하지 않는다.** 여기 남는 것은 **모델이 쓴 요약문**이다 —
+ *   입력(일기)은 여전히 지나가기만 한다. 그 구분이 처리방침 문안의 핵심이다.
+ *
+ * ⚠ **보관 90일.** 무기한은 처리방침에 쓸 수 없다. 리퍼가 지운다.
+ */
+export const aiReports = pgTable(
+  'ai_reports',
+  {
+    /** 앱이 만든 UUID. 멱등 키와 같은 값이다 */
+    id: text('id').primaryKey(),
+    /** common_server의 subject. **FK 없다** — 다른 DB다 */
+    subjectId: text('subject_id').notNull(),
+    kind: text('kind').notNull(),
+    periodKey: text('period_key').notNull(),
+    /** 어떤 언어로 썼나 */
+    lang: text('lang').notNull(),
+    /** 🔴 모델이 쓴 요약문. **일기 원문이 아니다** */
+    summary: text('summary').notNull(),
+    concern: boolean('concern').notNull().default(false),
+    /** 몇 개를 보고 썼나. 품질 판단의 맥락이 된다 */
+    sourceCount: integer('source_count').notNull().default(0),
+    model: text('model'),
+    /** 어느 프롬프트 판이었나 — 프롬프트를 고친 뒤 품질이 나아졌는지 가르려면 필요하다 */
+    promptVer: integer('prompt_ver'),
+    /** 사용자가 [신고]를 눌렀나 — 우선해서 볼 것을 고르는 기준 */
+    flagged: boolean('flagged').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    /** 리퍼가 90일 지난 것을 지운다 */
+    index('idx_ai_reports_created').on(table.createdAt),
+    /** 신고된 것부터 본다 */
+    index('idx_ai_reports_flagged').on(table.flagged, table.createdAt),
   ],
 );

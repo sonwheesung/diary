@@ -25,7 +25,15 @@
     "report": "Relatórios"
   },
   "date": {
-    "weekdays": ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"],
+    "weekdays": [
+      "dom",
+      "seg",
+      "ter",
+      "qua",
+      "qui",
+      "sex",
+      "sáb"
+    ],
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
@@ -480,6 +488,7 @@
       "not-subscribed": "Disponível com uma assinatura.",
       "refused": "Desta vez não conseguimos escrever o relatório. Esta tentativa não conta no seu limite.",
       "in-progress": "Já está sendo escrito. Aguarde um instante.",
+      "cooling-down": "Algo deu errado do nosso lado. Você pode tentar de novo em uma hora.",
       "rate-limited": "Tente novamente em instantes.",
       "upstream": "O servidor está com problemas. Tente novamente em breve.",
       "error": "Algo deu errado."

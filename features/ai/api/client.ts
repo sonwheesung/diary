@@ -34,6 +34,13 @@ export type AiFail =
   | 'refused' // 모델이 거부했다. 캡은 그대로다
   | 'empty' // 요약할 내용이 없다
   | 'in-progress' // 같은 reportId가 이미 처리 중이다(멱등 키)
+  /**
+   * 직전 호출이 모델을 부르고 실패해 **1시간 잠겼다**(`docs/AI_REPORT_SYSTEM.md` §5.1).
+   *
+   * ⚠ `rate-limited`·`cap-exceeded`와 다르다 — 이건 **우리 쪽 실패** 때문이고
+   *   사용자 잘못이 아니다. 문구도 그렇게 쓴다. 기간 캡은 그대로라 한 시간 뒤 만들 수 있다.
+   */
+  | 'cooling-down'
   | 'rate-limited'
   | 'upstream'
   | 'error';

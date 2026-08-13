@@ -25,7 +25,15 @@
     "report": "報告"
   },
   "date": {
-    "weekdays": ["日", "一", "二", "三", "四", "五", "六"],
+    "weekdays": [
+      "日",
+      "一",
+      "二",
+      "三",
+      "四",
+      "五",
+      "六"
+    ],
     "full": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "dateTime": "{{year}}年{{month}}月{{day}}日 {{hour}}:{{minute}}",
     "list": "{{month}}月{{day}}日 星期{{weekday}}",
@@ -480,6 +488,7 @@
       "not-subscribed": "訂閱後即可使用。",
       "refused": "這次沒能產生報告。本次嘗試不計入次數。",
       "in-progress": "已經在產生中，請稍候。",
+      "cooling-down": "我們這邊出了問題，未能產生報告。一小時後可以再試。",
       "rate-limited": "請稍後再試。",
       "upstream": "伺服器發生問題，請稍後再試。",
       "error": "發生了問題。"

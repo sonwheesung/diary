@@ -25,7 +25,15 @@
     "report": "Informes"
   },
   "date": {
-    "weekdays": ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+    "weekdays": [
+      "dom",
+      "lun",
+      "mar",
+      "mié",
+      "jue",
+      "vie",
+      "sáb"
+    ],
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
@@ -480,6 +488,7 @@
       "not-subscribed": "Disponible con una suscripción.",
       "refused": "Esta vez no pudimos escribir el informe. Este intento no cuenta para tu límite.",
       "in-progress": "Ya se está escribiendo. Espera un momento.",
+      "cooling-down": "Algo falló por nuestra parte. Puedes volver a intentarlo en una hora.",
       "rate-limited": "Inténtalo de nuevo en un momento.",
       "upstream": "El servidor tiene problemas. Inténtalo de nuevo en breve.",
       "error": "Algo salió mal."

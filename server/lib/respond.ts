@@ -23,6 +23,7 @@ export type FailCode =
   | 'refused'           // 422 — 모델이 거부했다. **캡을 소모하지 않았다**
   | 'empty'             // 422 — 요약할 내용이 없다
   | 'in-progress'       // 409 — 같은 멱등 키가 처리 중이다
+  | 'cooling-down'      // 429 — 직전 호출이 모델을 부르고 실패했다. 1시간 뒤 다시(§5.1)
   | 'not-configured';   // 503 — API 키가 없다. 배포 문제이지 사용자 문제가 아니다
 
 const STATUS: Record<FailCode, number> = {
@@ -47,6 +48,12 @@ const STATUS: Record<FailCode, number> = {
   refused: 422,
   empty: 422,
   'in-progress': 409,
+  /*
+   * ⚠ `rate-limited`·`cap-exceeded`와 같은 429지만 셋 다 뜻이 다르다:
+   *   rate-limited  잠시 뒤 열린다        cap-exceeded  이번 기간 몫을 다 썼다(안 열린다)
+   *   cooling-down  **한 시간 뒤 열린다** — 우리 쪽 실패 때문이라 사용자 잘못이 아니다
+   */
+  'cooling-down': 429,
   'not-configured': 503,
 };
 

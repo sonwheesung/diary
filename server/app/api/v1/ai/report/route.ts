@@ -12,10 +12,11 @@ import { buildSystem, buildUser, isEmpty } from '@shared/ai/prompt';
 import { PROMPT_VERSION, REPORT_SCHEMA } from '@shared/ai/types';
 import type { BuildPromptArgs, ReportKind } from '@shared/ai/types';
 import { db } from '@/db';
-import { aiUsage } from '@/db/schema';
+import { aiCooldowns, aiReports, aiUsage } from '@/db/schema';
 import { generateReport } from '@/lib/ai';
 import {
   DAILY_CALL_CAP,
+  FAILURE_COOLDOWN_MS,
   IN_FLIGHT_TTL_MS,
   MAX_INPUT_CHARS,
   MONTHLY_PER_MONTH,
@@ -23,8 +24,20 @@ import {
   YEARLY_PER_YEAR,
 } from '@/lib/ai-policy';
 import { identify } from '@/lib/auth';
+import { notifyAiFailure } from '@/lib/notify';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
+import { createHash } from 'node:crypto';
+
+/**
+ * subject 식별자의 해시 앞 8자.
+ *
+ * ⚠ 알림·진단에 **원본을 쓰지 않는다**(`ADMIN_SYSTEM` §3). 앞자리만으로
+ *   *"같은 사람이 반복 실패하는가"* 는 알 수 있고 신원은 만들 수 없다.
+ */
+function subjectRef(subjectId: string): string {
+  return createHash('sha256').update(subjectId).digest('hex').slice(0, 8);
+}
 
 /**
  * `POST /api/v1/ai/report` — AI 요약 리포트 프록시.
@@ -170,6 +183,29 @@ export async function POST(req: Request): Promise<Response> {
   if (periodUsed >= PERIOD_CAP[kind]) return fail('cap-exceeded');
   if (dayUsed >= DAILY_CALL_CAP) return fail('rate-limited');
 
+  /*
+   * 🔴 **실패 잠금** (§5.1). 위의 일일 캡은 `ai_usage` 행을 세는데 그 행은 **성공에만** 쓰인다 —
+   *   즉 실패는 일일 캡에 안 잡혀 **실패하는 루프가 무제한이었다.** 비싼 쪽이 실패인데도.
+   *
+   * ⚠ 캡이 아니다. 한 시간 뒤 같은 기간을 그대로 다시 만들 수 있다.
+   */
+  try {
+    const [cooldown] = await db
+      .select({ until: aiCooldowns.until })
+      .from(aiCooldowns)
+      .where(eq(aiCooldowns.subjectId, id.subjectId));
+    if (cooldown !== undefined && cooldown.until.getTime() > Date.now()) {
+      return fail('cooling-down', { retryAt: cooldown.until.toISOString() });
+    }
+  } catch (error) {
+    /*
+     * ⚠ 잠금을 못 읽었다고 요청을 막지 않는다. 이건 크레딧 방어이지 보안 게이트가 아니고,
+     *   위에 일일 캡과 기간 캡이 이미 있다. 여기서 fail-closed로 가면 DB가 잠깐 흔들릴 때
+     *   멀쩡한 사용자가 리포트를 못 만든다.
+     */
+    reportError(error, 'ai.cooldown-read');
+  }
+
   // 멱등 키. 앱이 응답을 놓치고 재시도해도 두 번 부르지 않는다
   if (!claim(reportId)) return fail('in-progress');
 
@@ -180,7 +216,38 @@ export async function POST(req: Request): Promise<Response> {
       /*
        * 🔴 **실패는 캡을 소모하지 않는다.** `ai_usage`에 행을 쓰지 않고 나간다 —
        *   거부·타임아웃은 우리 사정이고, 그것 때문에 그 주 리포트를 영영 잃으면 안 된다(§5).
+       *
+       * 🔴 대신 **1시간 잠근다**(§5.1) — 모델이 실제로 돌고 실패한 것은 토큰이 이미 청구됐다.
+       *   `not-configured`만 예외다: 아예 부르지 않았으므로 돈이 안 나갔고,
+       *   그건 사용자 잘못이 아니라 **배포 사고**라 잠그면 애먼 사람을 막는다.
        */
+      const calledModel = result.reason !== 'not-configured';
+      if (calledModel) {
+        try {
+          const until = new Date(Date.now() + FAILURE_COOLDOWN_MS);
+          await db
+            .insert(aiCooldowns)
+            .values({ subjectId: id.subjectId, until, reason: result.reason })
+            .onConflictDoUpdate({
+              target: aiCooldowns.subjectId,
+              set: { until, reason: result.reason },
+            });
+        } catch (error) {
+          reportError(error, 'ai.cooldown-write');
+        }
+      }
+      /*
+       * 실패는 대체로 우리 잘못이다(키 만료·벤더 장애·프롬프트 문제). 앱은 원격 관측이 0이라
+       * 이게 없으면 **사용자가 문의를 보내야** 안다. fire-and-forget — await하지 않는다.
+       */
+      notifyAiFailure({
+        reason: result.reason,
+        kind,
+        periodKey,
+        subjectRef: subjectRef(id.subjectId),
+        cooled: calledModel,
+      });
+
       if (result.reason === 'not-configured') return fail('not-configured');
       if (result.reason === 'refused' || result.reason === 'malformed') return fail('refused');
       if (result.reason === 'truncated') return fail('error');
@@ -206,6 +273,32 @@ export async function POST(req: Request): Promise<Response> {
       });
     } catch (error) {
       reportError(error, 'ai.usage-write');
+    }
+
+    /*
+     * 🔴 **리포트 본문을 저장한다** (2026-08-13 사용자 결정, §5.2).
+     *
+     * ⚠ 저장하는 것은 **모델이 쓴 요약문**이지 일기 원문이 아니다. 입력은 여전히
+     *   지나가기만 한다 — 그 구분이 처리방침 문안의 핵심이다.
+     *
+     * ⚠ 실패해도 **리포트는 돌려준다.** 우리 품질 관측을 위해 저장하는 것이지
+     *   사용자가 결과를 받는 조건이 아니다. `ai_usage` 쓰기와 같은 규율.
+     */
+    try {
+      await db.insert(aiReports).values({
+        id: reportId,
+        subjectId: id.subjectId,
+        kind,
+        periodKey,
+        lang,
+        summary: result.summary,
+        concern: result.concern,
+        sourceCount: (args.entries?.length ?? 0) + (args.subReports?.length ?? 0),
+        model: result.model,
+        promptVer: PROMPT_VERSION,
+      });
+    } catch (error) {
+      reportError(error, 'ai.report-write');
     }
 
     return ok({

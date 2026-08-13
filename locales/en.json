@@ -25,7 +25,15 @@
     "report": "Reports"
   },
   "date": {
-    "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "weekdays": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
     "full": "{{weekday}}, {{monthName}} {{day}}, {{year}}",
     "dateTime": "{{monthName}} {{day}}, {{year}} {{hour}}:{{minute}}",
     "list": "{{monthName}} {{day}} ({{weekday}})",
@@ -480,6 +488,7 @@
       "not-subscribed": "This is available with a subscription.",
       "refused": "We couldn't write a report this time. This attempt doesn't count toward your limit.",
       "in-progress": "It's already being written. Please wait a moment.",
+      "cooling-down": "Something went wrong on our side. You can try again in an hour.",
       "rate-limited": "Please try again in a moment.",
       "upstream": "The server is having trouble. Please try again shortly.",
       "error": "Something went wrong."

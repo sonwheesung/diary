@@ -1,7 +1,8 @@
 import { and, eq, lt, sql } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { generationParts, generations, vaultBlobs, vaults } from '@/db/schema';
+import { aiCooldowns, aiReports, generationParts, generations, vaultBlobs, vaults } from '@/db/schema';
+import { COOLDOWN_TTL_MS, REPORT_RETENTION_MS } from '@/lib/ai-policy';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { removeObjects, storageConfigured } from '@/lib/storage';
@@ -198,7 +199,42 @@ export async function POST(req: Request) {
       .returning({ id: vaults.id });
     reapedTombstones = expired.length;
 
-    return ok({ reapedParts, reapedGenerations, reapedBlobs, purgedExpired, purgedAbandoned, reapedTombstones });
+    /*
+     * ── 7. AI ────────────────────────────────────────────────────────────────
+     * 🔴 **처리방침에 "90일 뒤 파기"를 적었으면 실제로 지워야 한다**(§5.2).
+     *   적어두고 안 지우면 그 진술이 거짓이 되고, 그건 §5.1을 뒤집으며 이미 한 번 겪은 종류다.
+     *
+     * ⚠ 백업 정리가 실패해도 이건 돌아야 하고 반대도 마찬가지다 — 서로의 사정이 다르다.
+     *   그래서 각각 try로 감싼다(위 단계들과 달리 여기서 던지면 전부 잃는다).
+     */
+    let reapedReports = 0;
+    let reapedCooldowns = 0;
+    try {
+      const oldReports = await db
+        .delete(aiReports)
+        .where(lt(aiReports.createdAt, new Date(now - REPORT_RETENTION_MS)))
+        .returning({ id: aiReports.id });
+      reapedReports = oldReports.length;
+
+      const oldCooldowns = await db
+        .delete(aiCooldowns)
+        .where(lt(aiCooldowns.until, new Date(now - COOLDOWN_TTL_MS)))
+        .returning({ subjectId: aiCooldowns.subjectId });
+      reapedCooldowns = oldCooldowns.length;
+    } catch (error) {
+      reportError(error, 'cron/reap.ai');
+    }
+
+    return ok({
+      reapedParts,
+      reapedGenerations,
+      reapedBlobs,
+      purgedExpired,
+      purgedAbandoned,
+      reapedTombstones,
+      reapedReports,
+      reapedCooldowns,
+    });
   } catch (error) {
     reportError(error, 'cron/reap');
     return fail('error');

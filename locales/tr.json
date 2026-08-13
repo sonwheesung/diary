@@ -25,7 +25,15 @@
     "report": "Raporlar"
   },
   "date": {
-    "weekdays": ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+    "weekdays": [
+      "Paz",
+      "Pzt",
+      "Sal",
+      "Çar",
+      "Per",
+      "Cum",
+      "Cmt"
+    ],
     "full": "{{day}} {{monthName}} {{year}} {{weekday}}",
     "dateTime": "{{day}}.{{month}}.{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -480,6 +488,7 @@
       "not-subscribed": "Abonelikle kullanılabilir.",
       "refused": "Bu sefer rapor yazamadık. Bu deneme hakkından düşmez.",
       "in-progress": "Zaten yazılıyor. Biraz bekle.",
+      "cooling-down": "Bizim tarafımızda bir sorun oldu. Bir saat sonra tekrar deneyebilirsin.",
       "rate-limited": "Birazdan tekrar dene.",
       "upstream": "Sunucuda bir sorun var. Kısa süre sonra tekrar dene.",
       "error": "Bir şeyler ters gitti."

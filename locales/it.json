@@ -25,7 +25,15 @@
     "report": "Resoconti"
   },
   "date": {
-    "weekdays": ["dom", "lun", "mar", "mer", "gio", "ven", "sab"],
+    "weekdays": [
+      "dom",
+      "lun",
+      "mar",
+      "mer",
+      "gio",
+      "ven",
+      "sab"
+    ],
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -480,6 +488,7 @@
       "not-subscribed": "Disponibile con un abbonamento.",
       "refused": "Questa volta non siamo riusciti a scrivere il resoconto. Questo tentativo non conta nel tuo limite.",
       "in-progress": "È già in scrittura. Attendi un momento.",
+      "cooling-down": "Qualcosa non ha funzionato dalla nostra parte. Puoi riprovare tra un’ora.",
       "rate-limited": "Riprova tra poco.",
       "upstream": "Il server ha un problema. Riprova a breve.",
       "error": "Qualcosa è andato storto."
