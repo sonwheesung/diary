@@ -22,6 +22,7 @@
 | [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) | 구독 — 단일 상품·로그인 게이트·RevenueCat 연결·전자상거래법 (정책은 CLAUDE.md §7.2) | ✅ |
 | [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) | 백업/복원 — 키 유도·봉투·매니페스트·서버 계약·전체 교체 (정책은 CLAUDE.md §5.1) | ✅ |
 | [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) | AI 리포트 — 처리 경로·위기 정책·모델/원가·캡·기간/언어·서버 계약 (정책은 CLAUDE.md §5.1) | ✅ |
+| [`ADMIN_SYSTEM.md`](./ADMIN_SYSTEM.md) | 운영 콘솔 — 배구 승계 범위·인가(fail-closed)·**개인 비특정 규칙**·읽기 전용 | ✅ |
 | `UI_GUIDE.md` | 컬러·타이포·여백·공통 컴포넌트 사용법 | ❌ 미작성 |
 | `CHANGELOG.md` | 릴리스 변경 이력 | ❌ 미작성(첫 빌드 시점부터) |
 | `PROJECT_STRUCTURE.md` | 폴더 구조 상세 | ⏸ 보류 — 현재는 CLAUDE.md §8이 정본 |
@@ -90,7 +91,9 @@
 | **common_server Phase 9**(RevenueCat) | ✅ | 2026-08-13 정정 — 2026-08-10 완료(결제 가드 37/37). ⏭ 남은 것은 RC 대시보드 상품 import·attach |
 | 조각 서버(Next.js) 생성 | ✅ | 2026-08-13 정정 — 배포됨. 백업 6 라우트 + `cron/reap` + `ai/report` |
 | 조각 Supabase 프로젝트 | ✅ | 2026-08-13 정정 — `jogak-stg`(서울). ⏭ **운영 프로젝트는 미생성**(Pro 조직 추가 시 +$9.8/월) |
-| 백업 라우트 — 되찾기(`rebind`)·파기(`delete`)·리퍼(`cron/reap`) | ✅ | 2026-08-13 정정 — 셋 다 구현돼 있다. ⏭ 리퍼의 Vercel Cron 스케줄 등록만 확인 필요 |
+| 백업 라우트 — 되찾기(`rebind`)·파기(`delete`)·리퍼(`cron/reap`) | ✅ | 2026-08-13 정정 — 셋 다 구현돼 있다. 크론은 `vercel.json`에 등록돼 있다(`0 18 * * *`) |
+| **운영 콘솔** `/ops-7c1d94` | ✅ | 2026-08-13 — 대시보드·AI 사용량·백업 금고·정리 4탭. **읽기 전용 · 개인 비특정**. `npm run check:admin` 23개. [`ADMIN_SYSTEM.md`](./ADMIN_SYSTEM.md) |
+| ⚠ `ai_usage` 테이블 | ✅ | 2026-08-13 — **stg DB에 없었다**(`db:push` 누락). 콘솔을 붙이다 발견했고 push했다 — 그전까지 AI 라우트는 성공 경로에서 500이었을 것이다 |
 
 🚫 = 안 하기로 결정 / ⏸ = 보류 / ❌ = 미착수 / ✅ = 완료
 
@@ -115,6 +118,9 @@ npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니�
 # 구독·AI를 건드렸으면
 npm run check:subscription     # 14개 — 체험 기간 계산(전자상거래법 §13⑥ 고지의 근거)
 npm run check:ai               # 47개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마·동의
+
+# 운영 콘솔을 건드렸으면
+npm run check:admin            # 23개 — **fail-closed** · 헤더 판정 · KST 집계 창 · 원가 추정
 
 # API 키가 있을 때만 (실제 과금이 발생한다)
 cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effort 스윕·refusal
