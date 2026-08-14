@@ -13,7 +13,7 @@
  * 앱 안의 탈퇴만으로는 부족하다 — 앱을 이미 지운 사람이 요청할 길이 있어야 한다.
  * 사업자 정보가 두 문서에서 어긋나지 않도록 **같은 정본에서 함께** 뽑는다.
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 // TS 파일을 그대로 읽을 수 없으므로 tsx 없이 정규식으로 뽑지 않고, esbuild 없이
@@ -24,11 +24,47 @@ const json = execFileSync(
     '--experimental-strip-types',
     '--no-warnings',
     '-e',
-    "import('./features/legal/legal-text.ts').then(m => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, operator: m.OPERATOR })))",
+    "Promise.all([import('./features/legal/legal-text.ts'), import('./features/legal/registry.ts')]).then(([m, r]) => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, operator: m.OPERATOR, translations: r.TRANSLATIONS })))",
   ],
   { encoding: 'utf8', cwd: process.cwd() },
 );
-const { privacy, deleteAccount, operator } = JSON.parse(json);
+const { privacy, deleteAccount, operator, translations } = JSON.parse(json);
+
+/**
+ * 🔴 **게시본도 다국어여야 한다** (2026-08-14).
+ *
+ * 번역 15개는 **앱 안에서만** 보이고, GitHub Pages로 게시된 URL은 `<html lang="ko">`
+ * 한국어뿐이었다. 그런데 그 URL이 바로 **Play 심사자와 국외 이용자가 클릭하는 주소**다 —
+ * 읽을 수 없는 고지는 고지가 아니라는 `resolve.ts`의 근거가 여기서 무너져 있었다.
+ *
+ * ⚠ **파일을 언어별로 쪼개지 않는다.** Play 데이터 보안 선언에 등록된 URL이 바뀌면
+ *   선언을 다시 제출해야 한다. 한 파일 안에 모든 언어를 넣고 전환기를 단다 — 주소는 그대로다.
+ */
+const UI = Object.fromEntries(
+  ['ko', ...Object.keys(translations)].map((lang) => [
+    lang,
+    JSON.parse(readFileSync(`locales/${lang}.json`, 'utf8')).legal,
+  ]),
+);
+
+/** 언어 이름은 **그 언어로** 적는다(`I18N_SYSTEM` §4.3) — 'Korean'이면 자기 언어를 못 찾는다 */
+const LABELS = {
+  ko: '한국어',
+  en: 'English',
+  ja: '日本語',
+  'zh-Hans': '简体中文',
+  'zh-Hant': '繁體中文',
+  es: 'Español',
+  'pt-BR': 'Português (Brasil)',
+  fr: 'Français',
+  de: 'Deutsch',
+  it: 'Italiano',
+  ru: 'Русский',
+  id: 'Bahasa Indonesia',
+  vi: 'Tiếng Việt',
+  th: 'ไทย',
+  tr: 'Türkçe',
+};
 
 /** 템플릿 리터럴 안에서 개행을 넣으려면 상수로 빼는 편이 읽기 쉽다 */
 const NL = String.fromCharCode(10);
@@ -49,50 +85,83 @@ const linkify = (s) =>
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" rel="noopener">$1</a>');
 
-const render = (doc) => {
+/** `{{key}}` 자리를 채운다 — 로케일 문구가 i18next 형식이라 그대로 쓴다 */
+const fill = (tpl, vars) =>
+  String(tpl).replace(/\{\{(\w+)\}\}/g, (_, k) => (k in vars ? String(vars[k]) : `{{${k}}}`));
+
+const renderBody = (doc, lang) => {
+  const ui = UI[lang] ?? UI.ko;
   /*
    * ⚠ **개정 예고는 반드시 함께 게시한다.** 이게 빠지면 30일 사전 고지가 실제로는
-   *   일어난 적이 없게 되고(정본 파일에만 적혀 있다), 릴리스 직전에 30일이 통째로
-   *   크리티컬 패스가 된다 — 예고본을 만든 이유 전체가 무효가 된다. 실제로 빠져 있었다.
-   */
-  /*
-   * ⚠ `pending`은 **배열**이다(2026-08-12 정정). 시행일이 다른 예고를 각각 담는다 —
-   *   합치면 예고를 수정한 것이 되어 30일이 다시 흐르고 앞선 릴리스가 밀린다.
-   *   단수 시절 코드가 `doc.pending.sections`를 직접 읽었으므로, 여기를 안 고치면
-   *   `undefined.map`으로 **생성이 통째로 죽는다.**
+   *   일어난 적이 없게 된다(정본 파일에만 적혀 있다). 실제로 빠져 있었다.
+   * ⚠ `pending`은 **배열**이다 — 시행일이 다른 예고를 각각 담는다.
    */
   const pending = (doc.pending ?? [])
     .map(
-      (p) => `    <section class="pending">
-      <h2>개정 예고</h2>
-      <p class="pending-when">적용 시점: ${esc(p.appliesFrom)}</p>
-      <p>${linkify(p.summary)}</p>
+      (p) => `      <section class="pending">
+        <h2>${esc(ui.pendingTitle)}</h2>
+        <p class="pending-when">${esc(fill(ui.appliesFrom, { when: p.appliesFrom }))}</p>
+        <p>${linkify(p.summary)}</p>
 ${p.sections
   .map(
-    (s) => `      <h3>${esc(s.h)}</h3>
-${s.body.map((line) => `      <p>${linkify(line)}</p>`).join(NL)}`,
+    (s) => `        <h3>${esc(s.h)}</h3>
+${s.body.map((line) => `        <p>${linkify(line)}</p>`).join(NL)}`,
   )
   .join(NL)}
-    </section>`,
+      </section>`,
     )
     .join(NL);
 
   const sections = doc.sections
     .map(
-      (s) => `    <section>
-      <h2>${esc(s.h)}</h2>
-${s.body.map((line) => `      <p>${linkify(line)}</p>`).join('\n')}
-    </section>`,
+      (s) => `      <section>
+        <h2>${esc(s.h)}</h2>
+${s.body.map((line) => `        <p>${linkify(line)}</p>`).join(NL)}
+      </section>`,
     )
-    .join('\n');
+    .join(NL);
+
+  /* 🔴 번역본에는 **한국어본이 우선한다**를 반드시 띄운다(`resolve.ts` 규약 1) */
+  const governs =
+    lang === 'ko' ? '' : `      <p class="governs">${esc(ui.koreanGoverns)}</p>${NL}`;
+
+  return `    <article class="doc" data-lang="${lang}" lang="${lang}"${lang === 'ko' ? '' : ' hidden'}>
+      <h1>${esc(doc.title)}</h1>
+      <p class="meta">${esc(fill(ui.effectiveUpdated, { effective: doc.effective, updated: doc.updated }))}</p>
+${governs}      <p class="intro">${esc(doc.intro)}</p>
+${sections}
+${pending}
+    </article>`;
+};
+
+/**
+ * 문서 하나를 **모든 언어가 든 한 파일**로 만든다.
+ *
+ * ⚠ 스위처는 순수 HTML+JS다. 외부 의존성이 0이어야 어디에 올려도 그대로 뜨고,
+ *   법적 고지가 CDN 장애로 안 보이는 일이 없다.
+ * ⚠ 기본은 **한국어**(정본)다. JS가 죽어도 한국어는 보인다 — `hidden`이 나머지에만 붙는다.
+ */
+const render = (docs) => {
+  const langs = Object.keys(docs);
+  const nav =
+    langs.length < 2
+      ? ''
+      : `  <nav class="langs" aria-label="Language">
+${langs
+  .map(
+    (l) =>
+      `    <button type="button" data-go="${l}" lang="${l}"${l === 'ko' ? ' aria-current="true"' : ''}>${esc(LABELS[l] ?? l)}</button>`,
+  )
+  .join(NL)}
+  </nav>`;
 
   return `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(doc.title)}</title>
-<meta name="description" content="조각 개인정보처리방침 — 수집 항목·목적·보유기간·위탁·국외이전·파기·안전성 조치·이용자 권리">
+<title>${esc(docs.ko.title)}</title>
+<meta name="description" content="${esc(docs.ko.intro).slice(0, 150)}">
 <style>
   :root { color-scheme: light dark; }
   body {
@@ -126,18 +195,70 @@ ${s.body.map((line) => `      <p>${linkify(line)}</p>`).join('\n')}
   }
   .pending h2 { color: #C0564B; margin-top: 0; }
   .pending-when { font-weight: 600; }
+  /* 언어 전환기 — 자기 언어를 찾는 사람이 스크롤하지 않아도 되게 맨 위에 둔다 */
+  .langs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 24px; }
+  .langs button {
+    font: inherit; font-size: 13px; padding: 5px 11px; cursor: pointer;
+    color: #48566E; background: #FFFFFF;
+    border: 1px solid #E3E9F2; border-radius: 999px;
+  }
+  .langs button[aria-current] { color: #FFFFFF; background: #2C4A7C; border-color: #2C4A7C; }
+  /* 🔴 번역본이라는 사실과 정본이 무엇인지를 본문보다 먼저 알린다 */
+  .governs {
+    margin: 0 0 20px; padding: 10px 14px; font-size: 13px;
+    color: #7A6A2C; background: #FDF7E3; border: 1px solid #E8DCA8; border-radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .langs button { color: #AEB8C9; background: #1A2030; border-color: #2A3244; }
+    .langs button[aria-current] { color: #12161F; background: #8AB0E8; border-color: #8AB0E8; }
+    .governs { color: #E0CE8E; background: #241F10; border-color: #4A3F1C; }
+  }
 </style>
 </head>
 <body>
-  <h1>${esc(doc.title)}</h1>
-  <p class="meta">시행일 ${esc(doc.effective)} · 최종 수정일 ${esc(doc.updated)}</p>
-  <p class="intro">${esc(doc.intro)}</p>
-${sections}
-${pending}
+${nav}
+${langs.map((l) => renderBody(docs[l], l)).join(NL)}
   <footer>
-    ${esc(operator.name)} (${esc(operator.brand)}) · 대표 ${esc(operator.representative)}<br>
-    문의 <a href="mailto:${esc(operator.contactEmail)}">${esc(operator.contactEmail)}</a>
+    ${esc(operator.name)} (${esc(operator.brand)}) · ${esc(operator.representative)}<br>
+    <a href="mailto:${esc(operator.contactEmail)}">${esc(operator.contactEmail)}</a>
   </footer>
+<script>
+(function () {
+  var docs = [].slice.call(document.querySelectorAll('.doc'));
+  var btns = [].slice.call(document.querySelectorAll('[data-go]'));
+  function show(lang) {
+    /*
+     * 🔴 **먼저 있는지 보고, 있을 때만 바꾼다.** 반대로 하면(다 숨긴 뒤 확인)
+     *   지원하지 않는 언어에서 전부 숨겨진 채 false가 나와 **페이지가 백지가 된다** —
+     *   폴백이 가장 필요한 사용자가 정확히 그 경우다.
+     */
+    var found = false;
+    docs.forEach(function (d) {
+      if (d.getAttribute('data-lang') === lang) found = true;
+    });
+    if (!found) return false;
+    docs.forEach(function (d) {
+      d.hidden = d.getAttribute('data-lang') !== lang;
+    });
+    document.documentElement.lang = lang;
+    btns.forEach(function (b) {
+      if (b.getAttribute('data-go') === lang) b.setAttribute('aria-current', 'true');
+      else b.removeAttribute('aria-current');
+    });
+    return true;
+  }
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-go');
+      show(l);
+      try { history.replaceState(null, '', '#' + l); } catch (e) {}
+    });
+  });
+  /* 우선순위: URL 해시 → 브라우저 언어 → 한국어(정본). 지역 꼬리표는 잘라서 한 번 더 본다 */
+  var want = (location.hash || '').replace('#', '') || navigator.language || '';
+  if (!show(want)) show(want.split('-')[0]);
+})();
+</script>
 </body>
 </html>
 `;
@@ -151,11 +272,17 @@ ${pending}
  * 그 순간 게시본이 정본에서 드리프트한다 — 배구명가에서 정확히 그렇게 법정 필수 항목이 누락됐다.
  */
 mkdirSync('docs', { recursive: true });
-for (const [file, doc] of [
-  ['privacy.html', privacy],
-  ['delete-account.html', deleteAccount],
+for (const [file, byLang] of [
+  /*
+   * ⚠ 처리방침은 번역 14개가 **이미 있다** — 앱에서만 쓰이던 것을 게시본에도 흘려보낸다.
+   * ⏭ 계정 삭제 안내는 아직 한국어뿐이라 언어가 하나다. 번역이 생기면 여기에 얹으면 되고,
+   *    그때 스위처가 저절로 나타난다(`render`가 언어 수로 판단한다).
+   */
+  ['privacy.html', { ko: privacy, ...translations }],
+  ['delete-account.html', { ko: deleteAccount }],
 ]) {
-  const out = render(doc);
+  const doc = byLang.ko;
+  const out = render(byLang);
   writeFileSync(`docs/${file}`, out, 'utf8');
   // 예고가 몇 개이고 각각 몇 절인지 눈으로 확인한다 — 조용히 0개가 되는 것이 이 파일의 사고 유형이다
   const pendings = doc.pending ?? [];
