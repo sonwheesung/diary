@@ -949,14 +949,17 @@ MVP를 이 범위로 내려면 **common_server 쪽 작업이 먼저** 끝나야 
 - ❌ **RevenueCat 상품 import·attach** — 구독 배선의 마지막 한 칸
 - ✅ **백업 기기 검증**(2026-08-11 에뮬레이터 15/18) — 5MB PUT 바이트 일치 · `backupDatabaseAsync` 9ms.
   ⏭ 암호 처리량만 실기기(ARM) 재측정이 남았다. 순수 JS 유지로 이미 결론냈다
-- ⏸ **AI 서버** — 라우트·벤더 경계(OpenAI)·캡·`ai_usage` **구현 완료**, 게이트 7개 통과.
-  🔴 **실호출은 한 번도 안 해봤다** — `OPENAI_API_KEY` 하나가 남았고, 그 뒤 프롬프트를
-  몇 번 고칠 것이 거의 확실하다(P1)
+- ✅ **AI 서버** — 라우트·벤더 경계(OpenAI)·캡·잠금·`ai_usage`·`ai_reports`. 게이트 9개 통과
 - 🔴 **AI 사업자 연락처 미기재** — 출시 차단(§28-8② 3호). `features/ai/vendor.ts`
 - ✅ **AI 실호출 확인**(2026-08-13) — `gpt-5.6-luna` · `AI_EFFORT=medium` 확정.
   **원가가 계획의 1/4**(리포트 1건 ₩0.9, 매출 대비 0.15%)이고 위기 판정도 정확했다
-  ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §4.2.1).
-  🔴 단 **우리 라우트를 통한 성공 경로는 여전히 0회** — 측정은 OpenAI를 직접 불렀다
+  ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §4.2.1)
+- ✅ **라우트 전 구간 성공**(2026-08-14) — `POST /api/v1/ai/report`가 게이트·캡·잠금·멱등을
+  지나 OpenAI를 부르고 `ai_usage`·`ai_reports`까지 썼다. ⚠ **의도한 실행이 아니었다** —
+  `e2e:ai`의 한 검사가 *"키가 없다"* 를 전제하고 있어 매 실행마다 실호출을 내고 있었고,
+  200을 받고 실패하며 드러났다. 같은 커밋에서 **키가 있어도 모델을 안 부르도록** 고쳤다
+  ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §12).
+  🟡 남은 것은 **앱에서 [만들기]** — 요청 조립·응답 파싱·로컬 저장·상세 렌더는 0회
 
 ⚠ **미출시다.** 남은 것은 대체로 외부 대기다.
 

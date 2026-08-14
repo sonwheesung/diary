@@ -476,7 +476,7 @@
     "onceAWeek": "Mỗi tuần bạn có thể tạo một báo cáo",
     "needWeekly": "Cần có báo cáo tuần của {{period}} trước",
     "needMonthly": "Cần có báo cáo tháng của {{period}} trước",
-    "noEntries": "Không có mảnh nào trong khoảng thời gian này",
+    "noEntries": "Không có mảnh nào có nội dung trong khoảng thời gian này",
     "gapConfirm": "Không có mảnh nào: {{days}}. Vẫn tạo báo cáo chứ?",
     "disclaimer": "Do AI viết. Nội dung có thể không chính xác và không phải là chẩn đoán hay lời khuyên.",
     "reportIssue": "Báo cáo vi phạm",

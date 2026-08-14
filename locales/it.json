@@ -476,7 +476,7 @@
     "onceAWeek": "Puoi creare un resoconto a settimana",
     "needWeekly": "Servono prima i resoconti settimanali di {{period}}",
     "needMonthly": "Servono prima i resoconti mensili di {{period}}",
-    "noEntries": "Nessuna voce in questo periodo",
+    "noEntries": "Nessuna voce con testo in questo periodo",
     "gapConfirm": "Nessuna voce: {{days}}. Creare comunque il resoconto?",
     "disclaimer": "Scritto da un'IA. Può contenere errori e non è una diagnosi né un consiglio.",
     "reportIssue": "Segnala",

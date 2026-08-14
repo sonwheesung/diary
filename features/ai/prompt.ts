@@ -76,6 +76,29 @@ export function buildSystem(args: BuildPromptArgs): string {
   ].join('\n');
 }
 
+/**
+ * 🔴 **본문이 있는가.** 없으면 그 조각은 **안 쓴 것으로 친다**(§10.2).
+ *
+ * 조각은 *제목 + 본문*이고, 사진만 있어도 저장이 된다(`features/diary/blocks.ts`의
+ * `hasContent` — DIARY_SYSTEM §1의 의도다). 그래서 본문이 0자인 조각이 실재한다.
+ *
+ * ⚠ 제목은 세지 않는다. 한두 단어라 회고의 재료가 못 되고, *"피곤"·"휴가"·"비"* 세 단어로
+ *   한 주를 요약하게 하면 모델이 **없는 일을 지어낸다**.
+ */
+export function hasBody(text: string): boolean {
+  return text.trim().length > 0;
+}
+
+/**
+ * 본문이 있는 조각만 남긴다 — **판정이 사는 유일한 곳이다.**
+ *
+ * 🔴 `isEmpty`와 `buildUser`가 **둘 다** 이걸 거친다. 그래서 빈 본문은 프롬프트에 도달할
+ *   수 없다 — 규율이 아니라 구조로 막는다. 앱의 개수 세기도 이 함수를 쓴다(§10.2).
+ */
+export function withBody(entries: EntryInput[] | undefined): EntryInput[] {
+  return (entries ?? []).filter((entry) => hasBody(entry.text));
+}
+
 function renderEntry(e: EntryInput): string {
   const head = [e.date, e.emotion, e.title].filter((v) => v !== null && v !== '').join(' · ');
   return `[${head}]\n${neutralize(e.text)}`;
@@ -94,7 +117,7 @@ function renderSub(r: SubReportInput): string {
 export function buildUser(args: BuildPromptArgs): string {
   const body =
     args.kind === 'weekly'
-      ? (args.entries ?? []).map(renderEntry).join('\n\n')
+      ? withBody(args.entries).map(renderEntry).join('\n\n')
       : (args.subReports ?? []).map(renderSub).join('\n\n');
 
   const what =
@@ -105,9 +128,14 @@ export function buildUser(args: BuildPromptArgs): string {
   return [`기간: ${args.periodKey}`, what, '', OPEN, body, CLOSE].join('\n');
 }
 
-/** 입력이 비어 있는가. 화면이 생성 버튼을 막는 근거이자 서버의 2차 방어 */
+/**
+ * 입력이 비어 있는가. 화면이 생성 버튼을 막는 근거이자 서버의 2차 방어.
+ *
+ * ⚠ **개수가 아니라 본문을 본다**(§10.2). 길이만 보던 시절, 사진만 올린 주가 이 게이트를
+ *   통과해 빈 자료로 모델까지 갔다 — 돈이 나가고 실패하면 1시간 잠금까지 걸렸다.
+ */
 export function isEmpty(args: BuildPromptArgs): boolean {
   return args.kind === 'weekly'
-    ? (args.entries ?? []).length === 0
+    ? withBody(args.entries).length === 0
     : (args.subReports ?? []).length === 0;
 }

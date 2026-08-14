@@ -476,7 +476,7 @@
     "onceAWeek": "Laporan dapat dibuat sekali seminggu",
     "needWeekly": "Perlu laporan mingguan {{period}} terlebih dahulu",
     "needMonthly": "Perlu laporan bulanan {{period}} terlebih dahulu",
-    "noEntries": "Tidak ada catatan pada periode ini",
+    "noEntries": "Tidak ada catatan berisi teks pada periode ini",
     "gapConfirm": "Tidak ada catatan: {{days}}. Tetap buat laporan?",
     "disclaimer": "Ditulis oleh AI. Bisa saja keliru, dan ini bukan diagnosis atau saran.",
     "reportIssue": "Laporkan masalah",

@@ -476,7 +476,7 @@
     "onceAWeek": "報告每週可以產生一次",
     "needWeekly": "需要先有 {{period}} 的每週報告",
     "needMonthly": "需要先有 {{period}} 的每月報告",
-    "noEntries": "這段期間沒有碎片",
+    "noEntries": "這段期間沒有寫下內容的碎片",
     "gapConfirm": "{{days}}沒有碎片。仍要產生報告嗎？",
     "disclaimer": "由 AI 撰寫的摘要。內容可能有誤，也不構成診斷或建議。",
     "reportIssue": "檢舉",

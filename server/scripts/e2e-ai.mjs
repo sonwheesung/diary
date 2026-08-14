@@ -5,11 +5,16 @@
  *   그건 `measure:ai`가 할 일이다. 여기서 보는 것은 **모델을 부르기 전에 끝나는 판정들**이다:
  *   인가 · 구독 게이트 · 입력 검증 · 캡 · 멱등. 이것들이 실제 사고가 나는 자리다.
  *
- * ⚠ 그래서 `OPENAI_API_KEY` 없이 돌아간다. 오히려 **키가 없는 편이 낫다** —
- *   게이트를 통과해버린 요청이 실수로 과금되는 일이 없다.
+ * 🔴 **어떤 검사도 모델을 부르지 않는다 — 키가 있어도.** 예전에는 *"키가 없으니 실호출은
+ *   구조상 불가능하다"* 에 기대고 있었는데, 키가 생긴 순간 그 전제가 무너져 검사 하나가
+ *   **매 실행마다 돈을 썼다**(2026-08-14 발견). 전제가 아니라 **입력으로** 보장한다:
+ *   정상 입력이 필요한 캡·잠금 검사는 DB에 행을 심어 게이트에서 끝나게 만든다.
  *
- * 준비: `AUTH_STUB=1 npm run dev` (common_server 없이)
+ * 준비: `AUTH_STUB=1 npm run dev` (common_server 없이). `DATABASE_URL`이 필요하다 —
+ *       npm 스크립트가 `--env-file=.env.local`로 넘긴다.
  */
+import postgres from 'postgres';
+
 const BASE = process.env.SERVER_URL ?? 'http://127.0.0.1:3200';
 const TOKEN = process.env.TEST_TOKEN ?? 'stub-token';
 
@@ -102,36 +107,85 @@ await check('🔴 과대 입력은 too-large — 상한 없이 프록시하면 �
   eq(r.json.reason, 'too-large', 'reason');
 });
 
-console.log('\n캡을 못 읽거나 키가 없을 때 — **모델을 부르지 않는다**');
-
-await check('🔴 여기서 200이 나오면 안 된다 — 캡 없이 모델을 부른 것이다', async () => {
+await check('🔴 본문이 빈 조각만 보내면 empty — 사진만·제목만 있는 주(§10.2)', async () => {
   const r = await ai({
-    reportId: `f-${Date.now()}`,
+    reportId: 'g',
     kind: 'weekly',
     periodKey: fresh(),
     lang: 'ko',
-    entries: [entry('오늘은 평범한 하루였다. 별일 없이 지나갔다.')],
+    entries: [
+      { date: '2026-08-05', emotion: null, title: null, text: '' }, // 사진만
+      { date: '2026-08-06', emotion: null, title: '피곤', text: '' }, // 제목만
+    ],
+  });
+  eq(r.status, 422, 'status');
+  eq(r.json.reason, 'empty', 'reason');
+});
+
+/*
+ * ── 캡과 잠금 ────────────────────────────────────────────────────────────────
+ *
+ * 🔴 여기서부터는 **입력이 정상이다.** 예전에는 정상 입력을 한 번 보내고
+ *   *"어떤 사유로든 실패해야 한다"* 로 확인했는데, 그건 `OPENAI_API_KEY`가 없다는
+ *   전제 위에 서 있었다. 키가 생긴 뒤로 그 검사는 **매 실행마다 실호출을 냈다**
+ *   (2026-08-14에 200을 받고 발견했다 — 검사가 통과하지 않고 실패해서 드러났다).
+ *
+ * 그래서 게이트를 **DB에 행을 심어서** 확인한다. 모델을 부르기 전에 끝나므로 공짜다.
+ */
+const SUBJECT = `stub:${TOKEN}`; // server/lib/auth.ts의 AUTH_STUB 분기와 같은 규칙
+const sql = postgres(process.env.DATABASE_URL);
+const seeded = { usage: [], cooldown: false };
+
+try {
+  console.log('\n캡과 잠금 — 모델을 부르기 전에 끝난다');
+
+  await check('🔴 기간 몫을 다 썼으면 cap-exceeded — 모델을 부르지 않는다', async () => {
+    const periodKey = fresh();
+    const id = `seed-cap-${periodKey}`;
+    await sql`
+      insert into ai_usage (id, subject_id, kind, period_key, day, input_tokens, output_tokens, model)
+      values (${id}, ${SUBJECT}, 'weekly', ${periodKey}, '1970-01-01', 0, 0, 'seed')`;
+    seeded.usage.push(id);
+
+    const r = await ai({
+      reportId: `cap-${periodKey}`,
+      kind: 'weekly',
+      periodKey,
+      lang: 'ko',
+      entries: [entry('오늘은 평범한 하루였다. 별일 없이 지나갔다.')],
+    });
+    eq(r.status, 429, 'status');
+    eq(r.json.reason, 'cap-exceeded', 'reason');
   });
 
+  await check('🔴 실패 잠금 중이면 cooling-down — 다른 기간이어도 막힌다', async () => {
+    const until = new Date(Date.now() + 60 * 60 * 1000);
+    await sql`
+      insert into ai_cooldowns (subject_id, until, reason) values (${SUBJECT}, ${until}, 'seed')
+      on conflict (subject_id) do update set until = ${until}, reason = 'seed'`;
+    seeded.cooldown = true;
+
+    // ⚠ 캡이 비어 있는 **새 기간**을 쓴다 — 안 그러면 cap-exceeded와 구별되지 않는다
+    const r = await ai({
+      reportId: `cool-${Date.now()}`,
+      kind: 'weekly',
+      periodKey: fresh(),
+      lang: 'ko',
+      entries: [entry('오늘은 평범한 하루였다. 별일 없이 지나갔다.')],
+    });
+    eq(r.status, 429, 'status');
+    eq(r.json.reason, 'cooling-down', 'reason');
+    assert(typeof r.json.retryAt === 'string', 'retryAt이 없다 — 앱이 언제 열리는지 못 알린다');
+  });
+} finally {
   /*
-   * 이 검사의 핵심은 **어떤 사유든 실패해야 한다**는 것이다. 여기까지 왔다는 것은
-   * 입력이 정상이라는 뜻이고, 그러면 남은 관문은 캡(DB)과 키뿐이다:
-   *   · DB가 죽었다      → error(500).  🔴 **닫히는 쪽으로 실패한다** — 캡을 모르면 안 부른다
-   *   · 키가 없다        → not-configured(503)
-   *   · 캡을 다 썼다     → cap-exceeded(429)
-   * 200이면 셋 다 아닌데 통과한 것이고, 그건 실호출이 일어났다는 뜻이다.
+   * ⚠ **반드시 치운다.** 잠금 행을 남기면 그 뒤 한 시간 동안 개발 중 생성이 전부 막히고,
+   *   원인을 찾는 데 그 한 시간이 다 간다.
    */
-  assert(
-    r.status !== 200,
-    `200이 돌아왔다 — 게이트를 통과해 실제로 모델을 불렀다. 과금이 발생했을 수 있다`,
-  );
-  const expected = ['error', 'not-configured', 'cap-exceeded'];
-  assert(
-    expected.includes(r.json.reason),
-    `예상 밖 사유: ${r.status} ${r.json.reason}`,
-  );
-  console.log(`       (사유: ${r.status} ${r.json.reason})`);
-});
+  if (seeded.cooldown) await sql`delete from ai_cooldowns where subject_id = ${SUBJECT}`;
+  if (seeded.usage.length > 0) await sql`delete from ai_usage where id in ${sql(seeded.usage)}`;
+  await sql.end();
+}
 
 console.log('');
 if (failures.length > 0) {
@@ -140,4 +194,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 console.log(`AI 라우트 ok — ${passed}개 검사 통과`);
-console.log('⚠ 정상 생성·캡 소진·거부 경로는 실호출이 필요하다 — `npm run measure:ai`에서 본다\n');
+console.log('⚠ 정상 생성과 거부(refusal)만 실호출이 필요하다 — `npm run measure:ai`에서 본다\n');

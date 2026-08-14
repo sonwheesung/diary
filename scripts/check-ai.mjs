@@ -24,7 +24,7 @@ import {
   eachDay,
   missingDays,
 } from '../features/ai/period.ts';
-import { buildSystem, buildUser, isEmpty } from '../features/ai/prompt.ts';
+import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
 import { REPORT_SCHEMA, PROMPT_VERSION } from '../features/ai/types.ts';
 import { AI_VENDOR, vendorContactReady } from '../features/ai/vendor.ts';
 import {
@@ -272,6 +272,66 @@ check('weekly는 조각을, monthly는 하위 리포트를 담는다', () => {
   });
   assert(m.includes('조용한 한 주'), '하위 리포트가 없다');
   assert(!m.includes('오늘은 비'), '월간에 원본이 섞여 들어갔다');
+});
+
+console.log('\n본문 없는 조각 (AI_REPORT_SYSTEM §10.2)');
+
+/** 사진만 올린 조각 — 저장은 되지만 본문이 0자다 */
+const photoOnly = { date: '2026-08-05', emotion: null, title: null, text: '' };
+/** 제목만 쓴 조각 — 제목은 세지 않는다 */
+const titleOnly = { date: '2026-08-06', emotion: null, title: '피곤', text: '' };
+
+check('hasBody — 공백뿐인 본문은 본문이 아니다', () => {
+  assert(hasBody('오늘은 비'), '본문을 못 알아봤다');
+  assert(!hasBody(''), '빈 문자열이 통과했다');
+  assert(!hasBody('   \n\t  '), '공백뿐인 본문이 통과했다');
+});
+
+check('🔴 사진만 있는 조각은 isEmpty가 잡는다 — 길이만 보던 시절의 구멍', () => {
+  const args = { kind: 'weekly', lang: 'ko', periodKey: '2026-W32', entries: [photoOnly] };
+  assert(isEmpty(args), '빈 본문이 게이트를 통과했다 — 모델까지 가서 돈이 나간다');
+});
+
+check('🔴 제목만 있는 조각도 안 쓴 것으로 친다', () => {
+  const args = { kind: 'weekly', lang: 'ko', periodKey: '2026-W32', entries: [titleOnly] };
+  assert(isEmpty(args), '제목이 본문으로 세어졌다');
+});
+
+check('🔴 전부 본문이 없으면 만들 수 없다 — 섞여 있어도', () => {
+  const args = {
+    kind: 'weekly',
+    lang: 'ko',
+    periodKey: '2026-W32',
+    entries: [photoOnly, titleOnly],
+  };
+  assert(isEmpty(args), '빈 조각 여러 개가 통과했다');
+});
+
+check('본문이 하나라도 있으면 만든다', () => {
+  const args = {
+    kind: 'weekly',
+    lang: 'ko',
+    periodKey: '2026-W32',
+    entries: [photoOnly, entry('2026-08-07', '오랜만에 걸었다'), titleOnly],
+  };
+  assert(!isEmpty(args), '멀쩡한 조각이 막혔다');
+  eq(withBody(args.entries).length, 1, '거른 개수');
+});
+
+check('🔴 빈 본문은 프롬프트에 도달할 수 없다 — 규율이 아니라 구조', () => {
+  const user = buildUser({
+    kind: 'weekly',
+    lang: 'ko',
+    periodKey: '2026-W32',
+    entries: [photoOnly, entry('2026-08-07', '오랜만에 걸었다'), titleOnly],
+  });
+  assert(user.includes('오랜만에 걸었다'), '멀쩡한 조각이 빠졌다');
+  assert(!user.includes('2026-08-05'), '사진만 있는 날의 헤더가 남았다');
+  assert(!user.includes('피곤'), '제목만 있는 조각의 제목이 남았다');
+});
+
+check('withBody는 undefined에도 안전하다 — 서버가 body에서 받는 값이다', () => {
+  eq(withBody(undefined).length, 0, '개수');
 });
 
 console.log('\n프롬프트 인젝션');

@@ -476,7 +476,7 @@
     "onceAWeek": "Vous pouvez créer un bilan par semaine",
     "needWeekly": "Les bilans hebdomadaires de {{period}} sont nécessaires d'abord",
     "needMonthly": "Les bilans mensuels de {{period}} sont nécessaires d'abord",
-    "noEntries": "Aucune entrée sur cette période",
+    "noEntries": "Aucune entrée avec du texte sur cette période",
     "gapConfirm": "Aucune entrée : {{days}}. Créer quand même le bilan ?",
     "disclaimer": "Rédigé par une IA. Le texte peut être inexact et ne constitue ni un diagnostic ni un conseil.",
     "reportIssue": "Signaler",

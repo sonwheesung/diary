@@ -12,6 +12,7 @@ import {
   monthKeyRange,
   yearKeyRange,
 } from '@/features/ai/period';
+import { hasBody } from '@/features/ai/prompt';
 import type { ReportKind } from '@/features/ai/types';
 import { SETTING_KEYS, getSetting } from '@/features/settings/api/settings-store';
 import { i18next } from '@/lib/i18n';
@@ -80,13 +81,21 @@ export async function createReport(
     const range = keyRange(periodKey);
     if (range === null) return { ok: false, reason: 'error' };
     const diaries = await listDiariesBetween(range.from, range.to);
-    entries = diaries.map((diary) => ({
-      date: diary.entryDate,
-      emotion: diary.emotion,
-      title: diary.title,
-      // 블록 JSON이 아니라 파생 평문을 보낸다 — JSON을 보내면 구조 문자열이 요약에 섞인다
-      text: diary.plainText,
-    }));
+    /*
+     * 🔴 **본문이 없는 조각은 아예 보내지 않는다**(§10.2). 사진만·제목만 있는 조각은
+     *   프롬프트에 날짜 헤더만 남겨 모델이 없는 일을 지어내게 만든다.
+     *   `withBody`가 서버에서도 같은 필터를 걸지만, 여기서 거르면 **평문이 애초에
+     *   기기를 안 떠난다** — 나갈 이유가 없는 것은 안 내보낸다(CLAUDE.md §5.1-3).
+     */
+    entries = diaries
+      .filter((diary) => hasBody(diary.plainText))
+      .map((diary) => ({
+        date: diary.entryDate,
+        emotion: diary.emotion,
+        title: diary.title,
+        // 블록 JSON이 아니라 파생 평문을 보낸다 — JSON을 보내면 구조 문자열이 요약에 섞인다
+        text: diary.plainText,
+      }));
     if (entries.length === 0) return { ok: false, reason: 'empty' };
   } else if (kind === 'monthly') {
     const weekly = await listReports('weekly');
@@ -151,7 +160,10 @@ export async function canCreate(
     const range = keyRange(periodKey);
     if (range === null) return { ok: false, reason: 'error' };
     const diaries = await listDiariesBetween(range.from, range.to);
-    return diaries.length === 0 ? { ok: false, reason: 'empty' } : { ok: true };
+    // ⚠ 개수가 아니라 본문을 센다 — `createReport`와 같은 규칙이어야 버튼과 결과가 안 어긋난다
+    return diaries.some((diary) => hasBody(diary.plainText))
+      ? { ok: true }
+      : { ok: false, reason: 'empty' };
   }
   if (kind === 'monthly') {
     const weekly = await listReports('weekly');
@@ -181,9 +193,10 @@ export async function weeklyGaps(now: Date = new Date()): Promise<string[]> {
   const range = keyRange(targetPeriodKey('weekly', now));
   if (range === null) return [];
   const diaries = await listDiariesBetween(range.from, range.to);
+  // ⚠ **본문이 있는 날만 "쓴 날"이다**(§10.2). 사진만·제목만 있는 날은 빠진 날에 들어간다
   return missingDays(
     range,
-    diaries.map((diary) => diary.entryDate),
+    diaries.filter((diary) => hasBody(diary.plainText)).map((diary) => diary.entryDate),
   );
 }
 

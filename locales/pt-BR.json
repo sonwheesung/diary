@@ -476,7 +476,7 @@
     "onceAWeek": "Você pode criar um relatório por semana",
     "needWeekly": "Primeiro são necessários os relatórios semanais de {{period}}",
     "needMonthly": "Primeiro são necessários os relatórios mensais de {{period}}",
-    "noEntries": "Nenhum registro neste período",
+    "noEntries": "Nenhum registro com texto neste período",
     "gapConfirm": "Sem registros: {{days}}. Criar o relatório mesmo assim?",
     "disclaimer": "Escrito por IA. Pode conter erros e não é um diagnóstico nem um conselho.",
     "reportIssue": "Denunciar",

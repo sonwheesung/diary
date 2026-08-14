@@ -476,7 +476,7 @@
     "onceAWeek": "レポートは週に1回作成できます",
     "needWeekly": "先に{{period}}の週間レポートが必要です",
     "needMonthly": "先に{{period}}の月間レポートが必要です",
-    "noEntries": "この期間のかけらがありません",
+    "noEntries": "この期間に本文のあるかけらがありません",
     "gapConfirm": "{{days}}のかけらがありません。それでもレポートを作りますか？",
     "disclaimer": "AIが書いた要約です。事実と異なる場合があり、診断や助言ではありません。",
     "reportIssue": "報告",

@@ -8,7 +8,7 @@ import { and, eq, sql } from 'drizzle-orm';
  * ⚠ 이게 가능한 이유는 `features/ai/{prompt,types}.ts`가 **순수 계층**(내부 임포트 0)이기
  *   때문이다. RN·Expo 것을 하나라도 들이면 이 임포트가 깨진다 — 그 규약을 지킨다.
  */
-import { buildSystem, buildUser, isEmpty } from '@shared/ai/prompt';
+import { buildSystem, buildUser, isEmpty, withBody } from '@shared/ai/prompt';
 import { PROMPT_VERSION, REPORT_SCHEMA } from '@shared/ai/types';
 import type { BuildPromptArgs, ReportKind } from '@shared/ai/types';
 import { db } from '@/db';
@@ -293,7 +293,11 @@ export async function POST(req: Request): Promise<Response> {
         lang,
         summary: result.summary,
         concern: result.concern,
-        sourceCount: (args.entries?.length ?? 0) + (args.subReports?.length ?? 0),
+        /*
+         * ⚠ **모델이 실제로 읽은 수**다(§10.2). 배열 길이를 그대로 쓰면 본문이 빈 조각까지
+         *   세어, 콘솔의 품질 탭에서 *"조각 7개짜리인데 왜 이렇게 짧지"* 를 오독하게 된다.
+         */
+        sourceCount: withBody(args.entries).length + (args.subReports?.length ?? 0),
         model: result.model,
         promptVer: PROMPT_VERSION,
       });

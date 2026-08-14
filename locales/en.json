@@ -476,7 +476,7 @@
     "onceAWeek": "You can create one report per week",
     "needWeekly": "Weekly reports for {{period}} are needed first",
     "needMonthly": "Monthly reports for {{period}} are needed first",
-    "noEntries": "No entries in this period",
+    "noEntries": "No written entries in this period",
     "gapConfirm": "No entries on {{days}}. Create the report anyway?",
     "disclaimer": "Written by AI. It may be inaccurate, and it is not a diagnosis or advice.",
     "reportIssue": "Report an issue",
