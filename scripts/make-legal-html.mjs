@@ -24,11 +24,11 @@ const json = execFileSync(
     '--experimental-strip-types',
     '--no-warnings',
     '-e',
-    "Promise.all([import('./features/legal/legal-text.ts'), import('./features/legal/registry.ts')]).then(([m, r]) => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, operator: m.OPERATOR, translations: r.TRANSLATIONS })))",
+    "Promise.all([import('./features/legal/legal-text.ts'), import('./features/legal/registry.ts')]).then(([m, r]) => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, operator: m.OPERATOR, translations: r.TRANSLATIONS, deleteTranslations: r.DELETE_ACCOUNT_TRANSLATIONS })))",
   ],
   { encoding: 'utf8', cwd: process.cwd() },
 );
-const { privacy, deleteAccount, operator, translations } = JSON.parse(json);
+const { privacy, deleteAccount, operator, translations, deleteTranslations } = JSON.parse(json);
 
 /**
  * 🔴 **게시본도 다국어여야 한다** (2026-08-14).
@@ -275,11 +275,12 @@ mkdirSync('docs', { recursive: true });
 for (const [file, byLang] of [
   /*
    * ⚠ 처리방침은 번역 14개가 **이미 있다** — 앱에서만 쓰이던 것을 게시본에도 흘려보낸다.
-   * ⏭ 계정 삭제 안내는 아직 한국어뿐이라 언어가 하나다. 번역이 생기면 여기에 얹으면 되고,
-   *    그때 스위처가 저절로 나타난다(`render`가 언어 수로 판단한다).
+   * ⏭ 계정 삭제 안내는 **영어부터** 넣었다(2026-08-14). Play 심사자가 여는 URL이라
+   *    영어 하나만 있어도 심사는 지난다. 나머지 13개는 이어서 채운다 —
+   *    `render`가 언어 수로 판단하므로 넣기만 하면 스위처가 저절로 늘어난다.
    */
   ['privacy.html', { ko: privacy, ...translations }],
-  ['delete-account.html', { ko: deleteAccount }],
+  ['delete-account.html', { ko: deleteAccount, ...deleteTranslations }],
 ]) {
   const doc = byLang.ko;
   const out = render(byLang);

@@ -1,6 +1,6 @@
 import type { LegalDoc } from './legal-text.ts';
 import { PRIVACY_DE } from './translations/de.ts';
-import { PRIVACY_EN } from './translations/en.ts';
+import { DELETE_ACCOUNT_EN, PRIVACY_EN } from './translations/en.ts';
 import { PRIVACY_ES } from './translations/es.ts';
 import { PRIVACY_FR } from './translations/fr.ts';
 import { PRIVACY_ID } from './translations/id.ts';
@@ -45,3 +45,17 @@ export const TRANSLATIONS: Record<string, LegalDoc> = {
 
 /** 한국어를 뺀 지원 언어 수. 하나라도 비면 그 언어 사용자는 처리방침을 못 읽는다 */
 export const EXPECTED_TRANSLATIONS = 14;
+
+/**
+ * 계정 삭제 안내의 번역본.
+ *
+ * ⚠ **처리방침과 따로 센다.** 두 문서는 번역 진행 속도가 다르고, 하나의 목록으로 묶으면
+ *   "처리방침은 있는데 삭제 안내는 없는 언어"를 표현할 수 없다 — 그 상태로 검사를 돌리면
+ *   있지도 않은 번역을 찾다가 실패하거나, 반대로 빠진 것을 못 잡는다.
+ *
+ * 🔴 이 문서의 URL은 **Play 데이터 보안 선언에 등록된 주소**다. Play 심사자가 여는 곳이라
+ *   한국어만 있으면 심사에서 막힐 수 있다 — 그래서 영어가 첫 번역이다.
+ */
+export const DELETE_ACCOUNT_TRANSLATIONS: Record<string, LegalDoc> = {
+  en: DELETE_ACCOUNT_EN,
+};

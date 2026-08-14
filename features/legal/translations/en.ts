@@ -282,3 +282,122 @@ export const PRIVACY_EN: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Account deletion guide — English.
+ *
+ * 🔴 **The Korean text is authoritative** (`legal-text.ts`). Same rule as the privacy policy.
+ *
+ * ⚠ This document has a public URL of its own because Play's Data safety form requires a
+ *   **web** deletion route: someone who already uninstalled the app still needs a way to ask.
+ *   That URL is what Play reviewers open, which is why it cannot stay Korean-only.
+ *
+ * ⚠ Structure must match the Korean exactly — 5 sections (6/4/4/3/3 lines) plus two
+ *   upcoming amendments. `npm run check:legal` enforces it.
+ */
+export const DELETE_ACCOUNT_EN: LegalDoc = {
+  title: 'Jogak — How to delete your account',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'This page explains how to delete your Jogak account and the data associated with it. You can also ask by email if you have already uninstalled the app or cannot sign in.',
+  sections: [
+    {
+      h: '1. Deleting it yourself in the app',
+      body: [
+        'Follow these steps in the Jogak app and it takes effect immediately.',
+        '① Open the app → [Settings] tab at the bottom',
+        '② Choose [Contact us]',
+        '③ If you are not signed in, sign in with your Google account',
+        '④ Choose [Delete account] at the very bottom of the screen and confirm',
+        'Deleting your account cannot be undone.',
+      ],
+    },
+    {
+      h: '2. Asking by email (if you uninstalled the app or cannot sign in)',
+      body: [
+        'Send the following to support@vivace-games.com.',
+        '• Subject: Jogak account deletion request',
+        '• Body: the email address of the Google account you used to sign in to Jogak',
+        'The address you write from must match the one you signed up with, so that we can confirm it is you. We will act on it and reply within 7 business days.',
+      ],
+    },
+    {
+      h: '3. Data that is deleted',
+      body: [
+        'When you delete your account, the following is destroyed immediately or put beyond re-identification.',
+        '• Your social account identifier (Google "sub")',
+        '• Your email address',
+        '• The link between your enquiries and your account',
+      ],
+    },
+    {
+      h: '4. Data that is kept, and for how long',
+      body: [
+        'The following is kept as required by law, and even during that period it remains only in a form that cannot be traced back to its author (pseudonymised).',
+        '• Enquiry contents: 3 years (Act on Consumer Protection in Electronic Commerce — records of consumer complaints and dispute handling)',
+        'Once the retention period ends we destroy it without delay.',
+      ],
+    },
+    {
+      h: '5. What is not deleted — the diary on your device',
+      body: [
+        'Your Jogak entries (titles, text, photos, tags and emotions) are stored only inside your own device and are not transmitted to the operator’s servers.',
+        'So deleting your account leaves the entries on your device untouched. To erase those as well, uninstall the app or use the reset option in the app’s [Settings].',
+        'Conversely, if you uninstall the app the entries on your device cannot be recovered.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'From the day a version including the monthly subscription and backup/restore features is released',
+      summary:
+        'If you turned backup on, deleting your account also deletes the encrypted backup held on the server. Subscription transaction records are kept as required by law, pseudonymised.',
+      sections: [
+        {
+          h: 'a. Data that is additionally deleted',
+          body: [
+            '• The encrypted copy of your diary held on the server — deleted together with your account. We do not wait out the 90-day grace period.',
+            '• The backup identifier and backup records (time, size, generation number)',
+            '⚠ This cannot be undone. Even if you still hold your recovery code, you will not be able to restore.',
+            '⚠ The entries on your device remain untouched. Only the server-side copy is deleted.',
+          ],
+        },
+        {
+          h: 'b. Data that is additionally kept, and for how long',
+          body: [
+            '• Subscription transaction records (transaction identifier, product, subscription period, history of payment state changes): 5 years (Act on Consumer Protection in Electronic Commerce, art. 6)',
+            '• A record that a backup was destroyed (backup identifier and time of destruction): 1 year — so that you can find out "why restore no longer works". Your account identifier is not kept alongside it.',
+            'Even during those periods, these records remain only in a form that cannot be traced back to their author.',
+          ],
+        },
+        {
+          h: 'c. You must cancel the subscription separately',
+          body: [
+            'Deleting your account does not cancel your Google Play subscription. If you do not cancel it, you will keep being charged.',
+            'To cancel: Google Play Store app > profile > Payments and subscriptions > Subscriptions (https://play.google.com/store/account/subscriptions)',
+            'Refunds of amounts already charged follow Google Play’s refund policy and the operator’s refund policy. Ask us using the contact address below.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'From the day a version including the AI summary report feature is released',
+      summary:
+        'AI report text is stored on your device. On the server, report summaries are kept for up to 90 days for quality review, and are deleted together with your usage records when you delete your account.',
+      sections: [
+        {
+          h: 'a. What gets deleted for AI reports',
+          body: [
+            '• The usage records kept on the server (account identifier, period, count, token counts) — deleted together with your account.',
+            '• The report summaries held on the server (up to 90 days) — deleted together with your account. The diary text itself is never stored, so there is nothing to delete.',
+            '⚠ Report text is also stored on your device, so it stays there after you delete your account. To erase it, delete the reports in the app or uninstall the app.',
+            '• If you turned backup on, reports are included in the backup in encrypted form and are deleted when the backup is deleted.',
+          ],
+        },
+      ],
+    },
+  ],
+};
