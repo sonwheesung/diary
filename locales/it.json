@@ -34,6 +34,16 @@
       "ven",
       "sab"
     ],
+    "weekdaysLong": [
+      "domenica",
+      "lunedì",
+      "martedì",
+      "mercoledì",
+      "giovedì",
+      "venerdì",
+      "sabato"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Servono prima i resoconti settimanali di {{period}}",
     "needMonthly": "Servono prima i resoconti mensili di {{period}}",
     "noEntries": "Nessuna voce in questo periodo",
+    "gapConfirm": "Nessuna voce: {{days}}. Creare comunque il resoconto?",
     "disclaimer": "Scritto da un'IA. Può contenere errori e non è una diagnosi né un consiglio.",
     "reportIssue": "Segnala",
     "reported": "Grazie per la segnalazione. Daremo un'occhiata.",

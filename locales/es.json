@@ -34,6 +34,16 @@
       "vie",
       "sáb"
     ],
+    "weekdaysLong": [
+      "domingo",
+      "lunes",
+      "martes",
+      "miércoles",
+      "jueves",
+      "viernes",
+      "sábado"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Primero hacen falta los informes semanales de {{period}}",
     "needMonthly": "Primero hacen falta los informes mensuales de {{period}}",
     "noEntries": "No hay entradas en este periodo",
+    "gapConfirm": "Sin entradas: {{days}}. ¿Crear el informe de todos modos?",
     "disclaimer": "Escrito por IA. Puede contener errores y no es un diagnóstico ni un consejo.",
     "reportIssue": "Denunciar",
     "reported": "Gracias por avisarnos. Lo revisaremos.",

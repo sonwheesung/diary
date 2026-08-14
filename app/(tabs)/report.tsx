@@ -13,13 +13,14 @@ import {
   canCreate,
   createReport,
   targetPeriodKey,
+  weeklyGaps,
   type CreateFail,
 } from '@/features/ai/api/report-service';
 import { hasAiConsent } from '@/features/ai/consent';
 import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
 import { useEntitlementStore } from '@/features/entitlement/store';
-import { formatWeekNumber } from '@/lib/format';
+import { formatWeekNumber, formatWeekdayList } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -84,6 +85,20 @@ export default function ReportScreen() {
     if (!(await hasAiConsent())) {
       router.push('/ai-consent');
       return;
+    }
+    /*
+     * 🔴 **빠진 날이 있으면 한 번 묻는다**(§10.1). 주 1회 캡이고 재생성 버튼이 없어서,
+     *   조각 1개짜리 주를 모르고 만들면 **그 주를 통째로 잃는다** — 나중에 캘린더에서
+     *   과거 날짜를 채워도 리포트는 1개만 본 채로 굳는다.
+     *
+     * ⚠ 막지 않고 묻기만 한다. 6일을 비운 주도 그 사람의 한 주다.
+     * ⚠ 주간에만. 월간·연간은 하위 리포트가 입력이라 "빠진 날"이 없다.
+     */
+    if (kind === 'weekly') {
+      const gaps = await weeklyGaps().catch(() => [] as string[]);
+      if (gaps.length > 0 && !(await confirmGaps(gaps, t))) {
+        return;
+      }
     }
     setCreating(true);
     try {
@@ -179,6 +194,30 @@ export default function ReportScreen() {
       )}
     </Screen>
   );
+}
+
+/**
+ * *"이 날들엔 조각이 없어요. 그래도 만들까요?"* — 누른 사람이 답할 때까지 기다린다.
+ *
+ * ⚠ `Alert`는 콜백이라 Promise로 감싼다. `onDismiss`(안드로이드 바깥 탭·뒤로가기)도
+ *   반드시 받는다 — 안 받으면 대화상자를 흘려보낸 사람에게서 `onCreate`가 영영 안 끝나고
+ *   버튼이 죽은 채로 남는다.
+ *
+ * ⚠ 확인 버튼은 `report.create`("리포트 만들기")를 쓴다. *"확인"* 으로는
+ *   무엇에 동의하는지가 안 보인다.
+ */
+function confirmGaps(gaps: string[], t: (key: string, opts?: Record<string, string>) => string) {
+  return new Promise<boolean>((resolve) => {
+    Alert.alert(
+      t('report.title'),
+      t('report.gapConfirm', { days: formatWeekdayList(gaps) }),
+      [
+        { text: t('common.cancel'), style: 'cancel', onPress: () => resolve(false) },
+        { text: t('report.create'), onPress: () => resolve(true) },
+      ],
+      { cancelable: true, onDismiss: () => resolve(false) },
+    );
+  });
 }
 
 /** `weekly` → `Weekly` — i18n 키(`report.emptyWeekly`)를 종류에서 만든다 */

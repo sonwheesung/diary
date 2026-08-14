@@ -34,6 +34,16 @@
       "金",
       "土"
     ],
+    "weekdaysLong": [
+      "日曜日",
+      "月曜日",
+      "火曜日",
+      "水曜日",
+      "木曜日",
+      "金曜日",
+      "土曜日"
+    ],
+    "listSeparator": "、",
     "full": "{{year}}年{{month}}月{{day}}日（{{weekday}}）",
     "dateTime": "{{year}}年{{month}}月{{day}}日 {{hour}}:{{minute}}",
     "list": "{{month}}月{{day}}日（{{weekday}}）",
@@ -467,6 +477,7 @@
     "needWeekly": "先に{{period}}の週間レポートが必要です",
     "needMonthly": "先に{{period}}の月間レポートが必要です",
     "noEntries": "この期間のかけらがありません",
+    "gapConfirm": "{{days}}のかけらがありません。それでもレポートを作りますか？",
     "disclaimer": "AIが書いた要約です。事実と異なる場合があり、診断や助言ではありません。",
     "reportIssue": "報告",
     "reported": "お知らせいただきありがとうございます。確認いたします。",

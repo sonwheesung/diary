@@ -34,6 +34,16 @@
       "T6",
       "T7"
     ],
+    "weekdaysLong": [
+      "Chủ Nhật",
+      "Thứ Hai",
+      "Thứ Ba",
+      "Thứ Tư",
+      "Thứ Năm",
+      "Thứ Sáu",
+      "Thứ Bảy"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}}, {{day}} tháng {{month}} năm {{year}}",
     "dateTime": "{{day}}/{{month}}/{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} tháng {{month}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Cần có báo cáo tuần của {{period}} trước",
     "needMonthly": "Cần có báo cáo tháng của {{period}} trước",
     "noEntries": "Không có mảnh nào trong khoảng thời gian này",
+    "gapConfirm": "Không có mảnh nào: {{days}}. Vẫn tạo báo cáo chứ?",
     "disclaimer": "Do AI viết. Nội dung có thể không chính xác và không phải là chẩn đoán hay lời khuyên.",
     "reportIssue": "Báo cáo vi phạm",
     "reported": "Cảm ơn bạn đã cho chúng tôi biết. Chúng tôi sẽ xem xét.",

@@ -34,6 +34,16 @@
       "Cum",
       "Cmt"
     ],
+    "weekdaysLong": [
+      "Pazar",
+      "Pazartesi",
+      "Salı",
+      "Çarşamba",
+      "Perşembe",
+      "Cuma",
+      "Cumartesi"
+    ],
+    "listSeparator": ", ",
     "full": "{{day}} {{monthName}} {{year}} {{weekday}}",
     "dateTime": "{{day}}.{{month}}.{{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Önce {{period}} haftalık raporları gerekiyor",
     "needMonthly": "Önce {{period}} aylık raporları gerekiyor",
     "noEntries": "Bu dönemde kayıt yok",
+    "gapConfirm": "Kayıt yok: {{days}}. Rapor yine de oluşturulsun mu?",
     "disclaimer": "Bir yapay zekâ tarafından yazıldı. Yanlış olabilir; teşhis ya da tavsiye değildir.",
     "reportIssue": "Bildir",
     "reported": "Bildirdiğin için teşekkürler. İnceleyeceğiz.",

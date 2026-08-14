@@ -34,6 +34,16 @@
       "五",
       "六"
     ],
+    "weekdaysLong": [
+      "星期日",
+      "星期一",
+      "星期二",
+      "星期三",
+      "星期四",
+      "星期五",
+      "星期六"
+    ],
+    "listSeparator": "、",
     "full": "{{year}}年{{month}}月{{day}}日 星期{{weekday}}",
     "dateTime": "{{year}}年{{month}}月{{day}}日 {{hour}}:{{minute}}",
     "list": "{{month}}月{{day}}日 星期{{weekday}}",
@@ -467,6 +477,7 @@
     "needWeekly": "需要先有 {{period}} 的每周报告",
     "needMonthly": "需要先有 {{period}} 的每月报告",
     "noEntries": "这段时间没有碎片",
+    "gapConfirm": "{{days}}没有碎片。仍要生成报告吗？",
     "disclaimer": "由 AI 撰写的摘要。内容可能有误，也不构成诊断或建议。",
     "reportIssue": "举报",
     "reported": "感谢告知，我们会查看。",

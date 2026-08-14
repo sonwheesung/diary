@@ -8,6 +8,7 @@ import {
   lastMonthKey,
   lastWeekKey,
   lastYearKey,
+  missingDays,
   monthKeyRange,
   yearKeyRange,
 } from '@/features/ai/period';
@@ -162,6 +163,28 @@ export async function canCreate(
   return monthly.some((r) => r.periodKey.startsWith(`${periodKey}-`))
     ? { ok: true }
     : { ok: false, reason: 'need-monthly' };
+}
+
+/**
+ * 지난주에서 **조각이 없는 날들** (`YYYY-MM-DD`, 월→일 순).
+ *
+ * 주간은 주 1회 캡이고 재생성이 없다(§5). 그래서 *"1개뿐인 줄 모르고 눌렀다"* 가 그 주를
+ * 통째로 잃는 것이 된다 — 만들기 전에 이 목록을 보여주고 한 번 묻는다(§10.1).
+ *
+ * ⚠ **주간에만 쓴다.** 월간·연간은 하위 리포트를 입력으로 받으므로 "빠진 날"이라는 개념이
+ *   없고, 빠진 입력은 `need-weekly`·`need-monthly`가 이미 막는다.
+ *
+ * ⚠ 빈 배열은 두 가지 뜻이다 — 7일 다 썼거나, 키가 깨졌거나. 후자는 `canCreate`가
+ *   `error`로 이미 막으므로 여기서는 "묻지 않는다"로 수렴해도 안전하다.
+ */
+export async function weeklyGaps(now: Date = new Date()): Promise<string[]> {
+  const range = keyRange(targetPeriodKey('weekly', now));
+  if (range === null) return [];
+  const diaries = await listDiariesBetween(range.from, range.to);
+  return missingDays(
+    range,
+    diaries.map((diary) => diary.entryDate),
+  );
 }
 
 /** 기간 키를 화면이 쓸 범위로. 세 종류를 한 곳에서 편다 */

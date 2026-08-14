@@ -34,6 +34,16 @@
       "금",
       "토"
     ],
+    "weekdaysLong": [
+      "일요일",
+      "월요일",
+      "화요일",
+      "수요일",
+      "목요일",
+      "금요일",
+      "토요일"
+    ],
+    "listSeparator": ", ",
     "full": "{{year}}년 {{month}}월 {{day}}일 ({{weekday}})",
     "dateTime": "{{year}}년 {{month}}월 {{day}}일 {{hour}}:{{minute}}",
     "list": "{{month}}월 {{day}}일 ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "{{period}}의 주간 리포트가 먼저 필요해요",
     "needMonthly": "{{period}}의 월간 리포트가 먼저 필요해요",
     "noEntries": "이 기간에 남긴 조각이 없어요",
+    "gapConfirm": "{{days}}에 남긴 조각이 없어요. 그래도 리포트를 만들까요?",
     "disclaimer": "AI가 쓴 요약이에요. 사실과 다를 수 있고, 진단이나 조언이 아닙니다.",
     "reportIssue": "신고",
     "reported": "알려주셔서 고마워요. 살펴보겠습니다.",

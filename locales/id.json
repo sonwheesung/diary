@@ -34,6 +34,16 @@
       "Jum",
       "Sab"
     ],
+    "weekdaysLong": [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}}, {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Perlu laporan mingguan {{period}} terlebih dahulu",
     "needMonthly": "Perlu laporan bulanan {{period}} terlebih dahulu",
     "noEntries": "Tidak ada catatan pada periode ini",
+    "gapConfirm": "Tidak ada catatan: {{days}}. Tetap buat laporan?",
     "disclaimer": "Ditulis oleh AI. Bisa saja keliru, dan ini bukan diagnosis atau saran.",
     "reportIssue": "Laporkan masalah",
     "reported": "Terima kasih sudah memberi tahu. Kami akan memeriksanya.",

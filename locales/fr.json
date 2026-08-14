@@ -34,6 +34,16 @@
       "ven",
       "sam"
     ],
+    "weekdaysLong": [
+      "dimanche",
+      "lundi",
+      "mardi",
+      "mercredi",
+      "jeudi",
+      "vendredi",
+      "samedi"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}} {{day}} {{monthName}} {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} {{monthName}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Les bilans hebdomadaires de {{period}} sont nécessaires d'abord",
     "needMonthly": "Les bilans mensuels de {{period}} sont nécessaires d'abord",
     "noEntries": "Aucune entrée sur cette période",
+    "gapConfirm": "Aucune entrée : {{days}}. Créer quand même le bilan ?",
     "disclaimer": "Rédigé par une IA. Le texte peut être inexact et ne constitue ni un diagnostic ni un conseil.",
     "reportIssue": "Signaler",
     "reported": "Merci de nous l'avoir signalé. Nous allons vérifier.",

@@ -34,6 +34,16 @@
       "sex",
       "sáb"
     ],
+    "weekdaysLong": [
+      "domingo",
+      "segunda-feira",
+      "terça-feira",
+      "quarta-feira",
+      "quinta-feira",
+      "sexta-feira",
+      "sábado"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}}, {{day}} de {{monthName}} de {{year}}",
     "dateTime": "{{day}} {{monthName}} {{year}} {{hour}}:{{minute}}",
     "list": "{{day}} de {{monthName}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Primeiro são necessários os relatórios semanais de {{period}}",
     "needMonthly": "Primeiro são necessários os relatórios mensais de {{period}}",
     "noEntries": "Nenhum registro neste período",
+    "gapConfirm": "Sem registros: {{days}}. Criar o relatório mesmo assim?",
     "disclaimer": "Escrito por IA. Pode conter erros e não é um diagnóstico nem um conselho.",
     "reportIssue": "Denunciar",
     "reported": "Obrigado por avisar. Vamos analisar.",

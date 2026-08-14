@@ -34,6 +34,16 @@
       "Fri",
       "Sat"
     ],
+    "weekdaysLong": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "listSeparator": ", ",
     "full": "{{weekday}}, {{monthName}} {{day}}, {{year}}",
     "dateTime": "{{monthName}} {{day}}, {{year}} {{hour}}:{{minute}}",
     "list": "{{monthName}} {{day}} ({{weekday}})",
@@ -467,6 +477,7 @@
     "needWeekly": "Weekly reports for {{period}} are needed first",
     "needMonthly": "Monthly reports for {{period}} are needed first",
     "noEntries": "No entries in this period",
+    "gapConfirm": "No entries on {{days}}. Create the report anyway?",
     "disclaimer": "Written by AI. It may be inaccurate, and it is not a diagnosis or advice.",
     "reportIssue": "Report an issue",
     "reported": "Thanks for letting us know. We'll look into it.",

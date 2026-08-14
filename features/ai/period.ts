@@ -108,6 +108,33 @@ export function weekKeyRange(periodKey: string): { from: string; to: string } | 
 }
 
 /**
+ * 범위 안의 날짜를 하루씩 편다 (`YYYY-MM-DD`, 오름차순).
+ *
+ * ⚠ 날짜 문자열을 더하지 않고 **UTC 밀리초로 걷는다.** 월말·윤년을 직접 세면 반드시 틀린다.
+ */
+export function eachDay(range: { from: string; to: string }): string[] {
+  const start = Date.parse(`${range.from}T00:00:00Z`);
+  const end = Date.parse(`${range.to}T00:00:00Z`);
+  if (Number.isNaN(start) || Number.isNaN(end) || end < start) return [];
+  const days: string[] = [];
+  for (let t = start; t <= end; t += DAY_MS) {
+    days.push(ymd(new Date(t)));
+  }
+  return days;
+}
+
+/**
+ * 범위 안에서 **조각이 없는 날들** — 만들기 전 확인에 쓴다(`docs/AI_REPORT_SYSTEM.md` §10.1).
+ *
+ * ⚠ `present`에 범위 밖 날짜가 섞여 있어도 무시된다. 호출부가 이미 범위로 질의하지만
+ *   이 함수 혼자로도 옳아야 한다 — 순수 계층의 값어치가 거기에 있다.
+ */
+export function missingDays(range: { from: string; to: string }, present: string[]): string[] {
+  const have = new Set(present);
+  return eachDay(range).filter((day) => !have.has(day));
+}
+
+/**
  * "지난달"의 키. 월간 리포트가 겨냥하는 기간이다.
  *
  * ⚠ 주간과 같은 이유로 **이번 달이 아니다.** 그리고 `setMonth(-1)`류로 하루를 빼지 않는다 —

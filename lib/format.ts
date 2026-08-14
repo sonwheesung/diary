@@ -142,6 +142,25 @@ export function formatDateRange(from: string, to: string): string {
 }
 
 /**
+ * 날짜 목록을 그 언어의 **긴 요일 이름**으로 잇는다 — `월요일, 화요일, 수요일`.
+ *
+ * 리포트를 만들기 전 *"빠진 날이 있다"* 를 알리는 확인 대화상자가 쓴다
+ * (`docs/AI_REPORT_SYSTEM.md` §10.1).
+ *
+ * ⚠ **짧은 `date.weekdays`를 쓰지 않는다.** 그건 캘린더 머리글용이라
+ *   문장에 넣으면 *"수에 남긴 조각이 없어요"* 가 된다 — 한국어에서 읽히지 않는다.
+ *
+ * ⚠ 구분자도 로케일이 갖는다(`date.listSeparator`). 일본어·중국어는 `、`다.
+ */
+export function formatWeekdayList(entryDates: string[]): string {
+  const names = translate('date.weekdaysLong') as unknown as string[];
+  return entryDates
+    .map((entryDate) => names[dayjs(entryDate).day()] ?? '')
+    .filter((name) => name.length > 0)
+    .join(translate('date.listSeparator'));
+}
+
+/**
  * `2026년 33주` — 목록의 부제.
  *
  * ⏭ 사람이 주차로 회상하지는 않지만 **진단용 식별자**다. 조각은 원격 관측이 0이라

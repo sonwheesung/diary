@@ -21,6 +21,8 @@ import {
   lastMonthKey,
   lastYearKey,
   keyRange,
+  eachDay,
+  missingDays,
 } from '../features/ai/period.ts';
 import { buildSystem, buildUser, isEmpty } from '../features/ai/prompt.ts';
 import { REPORT_SCHEMA, PROMPT_VERSION } from '../features/ai/types.ts';
@@ -156,6 +158,62 @@ check('월요일에 물으면 직전 주 전체', () => {
   const r = lastWeekRange(d('2026-08-10'));
   eq(r.from, '2026-08-03', 'from');
   eq(r.to, '2026-08-09', 'to');
+});
+
+console.log('\n빠진 날 (AI_REPORT_SYSTEM §10.1)');
+
+const WEEK = { from: '2026-08-03', to: '2026-08-09' };
+
+check('한 주는 7일로 펴진다', () => {
+  eq(eachDay(WEEK).length, 7, '일수');
+  eq(eachDay(WEEK)[0], '2026-08-03', '첫날');
+  eq(eachDay(WEEK)[6], '2026-08-09', '마지막날');
+});
+
+check('🔴 월 경계를 넘는 주도 7일 — 날짜 문자열을 더하지 않는 이유', () => {
+  eq(eachDay({ from: '2026-07-27', to: '2026-08-02' }).length, 7, '일수');
+});
+
+check('🔴 윤년 2월 말을 넘는 주', () => {
+  const days = eachDay({ from: '2024-02-26', to: '2024-03-03' });
+  eq(days.length, 7, '일수');
+  assert(days.includes('2024-02-29'), '2월 29일이 빠졌다');
+});
+
+check('뒤집힌 범위는 빈 배열 — 던지지 않는다', () => {
+  eq(eachDay({ from: '2026-08-09', to: '2026-08-03' }).length, 0, '일수');
+});
+
+check('7일 다 쓰면 빠진 날이 없다 — 묻지 않는 경우', () => {
+  eq(missingDays(WEEK, eachDay(WEEK)).length, 0, '빠진 날');
+});
+
+check('🔴 일요일만 쓰면 월~토 6일이 빠진다', () => {
+  const gaps = missingDays(WEEK, ['2026-08-09']);
+  eq(gaps.length, 6, '빠진 날 수');
+  eq(gaps[0], '2026-08-03', '첫 빠진 날은 월요일');
+  eq(gaps[5], '2026-08-08', '마지막 빠진 날은 토요일');
+});
+
+check('🔴 수요일만 빠지면 하루만 나온다', () => {
+  const written = eachDay(WEEK).filter((day) => day !== '2026-08-05');
+  eq(missingDays(WEEK, written).length, 1, '빠진 날 수');
+  eq(missingDays(WEEK, written)[0], '2026-08-05', '수요일');
+});
+
+check('빠진 날은 항상 월→일 순 — 화면이 정렬하지 않는다', () => {
+  const gaps = missingDays(WEEK, ['2026-08-05']);
+  eq(gaps.join(','), [...gaps].sort().join(','), '정렬이 어긋난다');
+});
+
+check('범위 밖 날짜가 섞여도 무시된다', () => {
+  // 다음 주 조각을 present에 넣어도 이번 주 빠진 날은 그대로 7일이다
+  eq(missingDays(WEEK, ['2026-08-10', '2026-07-31']).length, 7, '빠진 날 수');
+});
+
+check('🔴 0개인 주는 7일 전부 빠진다 — 화면이 이 경우를 안 물어야 한다', () => {
+  // 버튼이 이미 `empty`로 비활성이므로 확인 대화상자가 뜰 자리가 없다(§10.1)
+  eq(missingDays(WEEK, []).length, 7, '빠진 날 수');
 });
 
 console.log('\n프롬프트');
