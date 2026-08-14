@@ -140,24 +140,58 @@ throw new Error(translate('errors.alreadyWritten'));
 ### 🔴 4.5 수(數) 일치를 요구하는 문장을 쓰지 않는다 (2026-08-14 — 실기기에서 잡음)
 
 `{{count}}`를 문장에 박으면 **1일 때 틀린다.** 리포트 상세에서 `1 entries`를 눈으로 보고 잡았다.
-6개 언어가 같은 모양이었다(en · es · pt-BR · fr · de · it). 나머지 9개는 안전하다 —
-ko · ja · zh · id · vi · th는 수 일치가 없고, tr은 수사 뒤에 복수를 안 쓰며,
-**ru는 이미 라벨형**(`Записей: {{count}}`)이었다.
 
 ```
 ❌ "{{count}} entries"      → 1 entries
 ✅ "Entries: {{count}}"     → Entries: 1  ·  Entries: 4
 ```
 
+#### 🔴 형제 버그를 훑었다 — 한 곳이 아니라 **50개**였다
+
+`report.sourceCount` 하나를 고치고 끝낼 뻔했다. 서명(*"세는 변수 뒤에 낱말이 붙어 있다"*)으로
+전수 조사하니 같은 상태가 널려 있었다.
+
+| 키 | 1이 나오는 순간 | 깨진 언어 |
+|---|---|---|
+| 🔴 `home.streak` | **첫날 — 신규 사용자 전원** | de · fr · es · pt-BR · it · **ru** |
+| `search.resultCount` | 검색 결과 1건 | en · de · fr · es · pt-BR · it |
+| `backup.doneBody` | **작은 백업의 기본값**(`partCount=1`) | en · de · fr · es · pt-BR · it |
+| `backup.graceTitle` | 유예 마지막 날 | en · de · fr · es · pt-BR · it |
+| `backup.restoreFound` · `restoreLosing` · `restoreConfirmBody` | `losing > 0` 가드라 **1이 최빈값** | en · de · fr · es · pt-BR · it |
+| `backup.restorePhotosAbsent` | `absent > 0` 가드라 1이 최빈값 | en · de · fr · es · pt-BR · it |
+| `report.sourceCount` · `subReportCount` | 조각 1개 주 | en · de · fr · es · pt-BR · it |
+
+**총 50개 문자열.** 눈에 띈 것은 그중 하나였고, 제일 나쁜 것(`home.streak` — `1 Tage in Folge`)은
+**보이지도 않는 자리**에 있었다.
+
+안전했던 것: ko · ja · zh · id · vi · th는 수 일치가 없고, tr은 수사 뒤에 복수를 안 쓴다.
+**ru는 대부분 이미 라벨형**(`Записей: {{count}}`)이었다 — 확장할 규약이 이미 있었다는 뜻이다.
+
+#### 안전한 세 가지 모양
+
+```
+라벨형     Entries: {{count}}
+괄호형     Entries that exist only on this device ({{count}}) will be deleted   ← ru가 쓰던 방식
+붙임표·단위  {{days}}-day streak  ·  {{seconds}}s
+```
+
 **i18next 복수형(`_one`/`_few`/`_many`)을 도입하지 않는다.** 러시아어는 복수 카테고리가 넷이라
 키가 언어마다 다른 수로 늘고, Hermes의 `Intl.PluralRules` 지원까지 확인해야 한다.
-**라벨형은 그 전부를 문장 설계 하나로 없앤다.**
+위 세 모양은 그 전부를 **문장 설계 하나로** 없앤다.
 
 같은 함정을 같은 날 두 번 만났다 — AI 리포트의 빠진 날 안내도 처음에 *"이 날들에는"* 으로
 썼다가 하루일 때 거짓말이 되어 고쳤다(`AI_REPORT_SYSTEM.md` §10.1).
 
-⚠ **`check:i18n`은 이걸 못 잡는다.** 키가 다 있고 값도 비지 않았다 — 틀린 것은 문법이다.
-**새 문자열에 `{{count}}`를 넣을 때는 1을 넣어보고 읽는다.**
+#### 이제 `check:i18n`이 잡는다 (검사 ④)
+
+~~`check:i18n`은 이걸 못 잡는다~~ → **잡게 만들었다.** 굴절 언어 7개에서 **세는 변수**
+(`count`·`days`·`total`·`max`·`digits`·`dots`·`min`·`seconds`·`index`) 바로 뒤에
+공백 + 낱말이 오면 실패시킨다.
+
+- ⚠ **날짜 조각(`day`·`year`·`week`)과 문자열 변수(`period`·`vendor`)는 안 본다.**
+  처음엔 모든 변수를 봤는데 25건 중 대부분이 오탐이었다 — **오탐이 참탐을 덮는다.**
+- 면제는 `EXEMPT` 표에 **왜 안전한지와 함께** 적는다(상수 7개 · 불변화사 3개).
+  근거 없는 면제는 구멍이다. 추가할 때는 **호출부를 열어** 1이 구조상 불가능함을 확인한다.
 
 ---
 
@@ -192,8 +226,15 @@ i18next 쪽도 함께 잠가야 한다: `load: 'currentOnly'` + `nonExplicitSupp
 npm run check:i18n
 ```
 
-- 코드가 부르는 `t('...')` 키가 **모든** 로케일에 있는지
-- 언어끼리 키가 어긋나지 않는지
+| | 무엇을 | 왜 생겼나 |
+|---|---|---|
+| ① | 코드가 부르는 `t('...')` 키가 **모든** 로케일에 있는지 | 없으면 화면에 키 문자열이 그대로 뜬다 |
+| ② | 언어끼리 키가 어긋나지 않는지 | 한쪽에만 있는 키는 그 언어에서만 조용히 폴백된다 |
+| ③ | 다른 언어에 **한글**이 남아 있는지 | 2026-08-12 — 14개 언어에서 `조각 Pro`가 그대로 떴다(§7) |
+| ④ | **수 일치**를 요구하는 문장인지 | 2026-08-14 — `1 entries`. 형제가 50개였다(§4.5) |
+
+**③·④는 ①·②가 전부 통과한 뒤에 남은 것들이다.** 키가 다 있어도 값이 틀릴 수 있고,
+값이 채워져 있어도 문법이 틀릴 수 있다 — 검사를 늘린 이유가 매번 그거였다.
 
 리터럴 키만 본다 — 템플릿 문자열로 만드는 동적 키는 못 잡는다. 동적 키를 쓰는 곳은
 `emotion.*` · `lock.questions.*` · `settings.delay*` · `settings.themeOption*` 네 갈래뿐이고,
