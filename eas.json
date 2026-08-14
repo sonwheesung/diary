@@ -24,6 +24,20 @@
         "EXPO_PUBLIC_SERVER_URL": "https://common-server.vercel.app"
       }
     },
+    "stg": {
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle",
+        "autoIncrement": true
+      },
+      "env": {
+        "APP_VARIANT": "stg",
+        "EXPO_PUBLIC_BACKUP_SERVER_URL": "https://jogak-stg.vercel.app",
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "281316002652-v3959n7417plarerr1i1m7k9h71v5bgb.apps.googleusercontent.com",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_MCptOyHXXRAQrzNJQETqqOrNJan",
+        "EXPO_PUBLIC_SERVER_URL": "https://common-server.vercel.app"
+      }
+    },
     "production": {
       "distribution": "store",
       "android": {
@@ -44,6 +58,13 @@
       "android": {
         "track": "internal",
         "serviceAccountKeyPath": "../secrets/play-service-account.json",
+        "releaseStatus": "completed"
+      }
+    },
+    "stg": {
+      "android": {
+        "track": "internal",
+        "serviceAccountKeyPath": "../secrets/play-service-account-stg.json",
         "releaseStatus": "completed"
       }
     }
