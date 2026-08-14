@@ -181,7 +181,17 @@ Google Cloud → 인증 플랫폼 → **대상**의 게시 상태가 `테스트 
 | 로컬 `npx expo run:android` | `com.son0925.jogak` | `7F:F6:08:2D:6A:E8:72:0F:10:70:A1:C5:20:53:17:E2:09:74:F7:1B` | `jogak-android` ✅ |
 | EAS `development` APK | `com.son0925.jogak` | `5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25` | `jogak-android-eas` ✅ |
 | **Play 배포(내부 테스트 포함)** | `com.son0925.jogak` | `CD:86:BB:DB:BB:78:A0:CA:6D:38:1C:8A:DD:B6:2F:E8:37:9E:AC:CB` | `jogak-android-play` ✅ |
-| 🆕 **조각 stg — Play 배포** | `com.son0925.jogak.stg` | `BE:D3:98:65:93:15:F2:D4:35:2D:81:2D:7F:BD:A3:EB:93:F9:93:49` | ❌ **미발급** |
+| 🆕 **조각 stg — Play 배포** | `com.son0925.jogak.stg` | `BE:D3:98:65:93:15:F2:D4:35:2D:81:2D:7F:BD:A3:EB:93:F9:93:49` | ❌ **미발급** — 이름은 `jogak-stg-android-play`로 |
+
+✅ **위 3줄은 2026-08-14에 Cloud Console 실측으로 대조했다** — 클라이언트마다 상세 화면을 열어
+패키지명과 SHA-1을 눈으로 확인했고 **셋 다 이 표와 정확히 일치**한다. `jogak-web`의 클라이언트 ID
+(`281316002652-v395…`)도 `eas.json`의 `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`와 같다.
+같은 조회에서 **stg 클라이언트가 없다는 것도 확인**했다(프로젝트에 클라이언트 8개, stg 없음).
+
+⚠ **Cloud Console의 클라이언트 *생성* 폼은 자동화가 안 된다**(2026-08-14). `애플리케이션 유형`
+드롭다운이 **뷰포트 y≈14~25**에 렌더돼 콘솔 헤더 뒤로 깔리고, `aria-expanded`가 `false`에서
+안 열린다 — ref 클릭·좌표 클릭·JS `.click()`·합성 마우스 이벤트·창 리사이즈 전부 실패했다.
+반면 **목록과 상세 화면은 멀쩡히 읽힌다.** 생성은 사람이 한다.
 
 ⚠ **stg는 패키지명이 달라 클라이언트를 새로 만들어야 한다.** 지문만 추가하는 게 아니다 —
 클라이언트는 `패키지 + SHA-1` **쌍**이라 패키지가 바뀌면 무조건 새 클라이언트다.
