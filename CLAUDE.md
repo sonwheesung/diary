@@ -946,7 +946,11 @@ MVP를 이 범위로 내려면 **common_server 쪽 작업이 먼저** 끝나야 
   ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §11–§12)
 - ✅ **사진 백업(2차)** · 되찾기(`rebind`)·파기(`delete`)·리퍼(`cron/reap`) 라우트
   — 2026-08-13 정정. 이 줄이 ❌로 남아 있었다(`docs/README.md` §2가 정본이고 그쪽은 맞았다)
-- ❌ **RevenueCat 상품 import·attach** — 구독 배선의 마지막 한 칸
+- ✅ **RevenueCat 배선 완료**(2026-08-17) — 운영·stg 두 앱에 `jogak_pro` 월·연 import →
+  `pro` attach → 오퍼링 `default`의 `$rc_monthly`·`$rc_annual` 연결.
+  🔴 그 과정에서 **운영 앱조차 깨져 있던 것을 발견**했다: Play에 상품이 멀쩡히 있는데
+  RC에는 0개였고 `pro`에 붙은 2개는 **Test Store 상품**이었다 — 결제해도 권한이 안 붙는
+  상태였고 §7.2 함정 #2가 실제로 걸려 있었다. `npm run check:play-access`로 진단한다
 - ✅ **백업 기기 검증**(2026-08-11 에뮬레이터 15/18) — 5MB PUT 바이트 일치 · `backupDatabaseAsync` 9ms.
   ⏭ 암호 처리량만 실기기(ARM) 재측정이 남았다. 순수 JS 유지로 이미 결론냈다
 - ✅ **AI 서버** — 라우트·벤더 경계(OpenAI)·캡·잠금·`ai_usage`·`ai_reports`. 게이트 9개 통과
@@ -995,7 +999,7 @@ MVP를 이 범위로 내려면 **common_server 쪽 작업이 먼저** 끝나야 
 | 🟡 Play **앱 이전** 최종 승인 · **결제 수단 확인**(은행 입금) — 진행 중 | 사용자 |
 | 🟡 **조각 stg 앱 생성** + 내부 테스트 — 이전을 기다리지 않는 경로 | 사용자·나 |
 | ~~통신판매업 신고~~ | ✅ **완료** — 2026-07-14 신고, 공정위 조회 실측(§7.2). 블로커 아님 |
-| 🔴 **RevenueCat 상품 import·attach** — 안 하면 결제 화면이 빈다 | 사용자 |
+| ~~RevenueCat 상품 import·attach~~ | ✅ **완료**(2026-08-17). 남은 것은 stg 재빌드 후 **실결제 확인**뿐 |
 | 🔴 **AI 사업자 연락처**(§28-8② 3호) — `features/ai/vendor.ts` | 사용자 |
 | 🔴 데이터 보안 **`User IDs` 미선언** — 과소 선언(아래) | 백업 릴리스에 묶는다(2026-08-12 사용자 결정) |
 | 🟡 **스토어 등록정보** — 프로덕션 출시 전 필수 | |

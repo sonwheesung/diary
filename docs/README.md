@@ -63,7 +63,8 @@
 | **백업/복원 — 앱 쪽** | ✅ | 암호 계층·매니페스트·클라이언트·화면. [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
 | **백업/복원 — 기기 검증** | ✅ | 2026-08-11 에뮬레이터 15/18. 5MB PUT 바이트 일치 · `backupDatabaseAsync` 9ms. ⏭ 남은 3은 **암호 처리량**이고 "순수 JS 유지"로 결론냈다 — 실기기(ARM) 재측정만 남음([`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §8) |
 | 사진 백업(2차) | ✅ | 이미지 하나 = blob 하나. 증분(`plan`) · 복원 후 못 받은 사진만 `'missing'` |
-| 월 구독(RevenueCat) | ⏸ | ~~Phase 9 대기~~ → 앱·RC·**Play 상품 등록까지 완료**(2026-08-12). 남은 것은 RC 상품 import·attach와 결제 프로필. [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) |
+| 월 구독(RevenueCat) | ✅ | ~~Phase 9 대기~~ → ~~RC 상품 import·attach 남음~~ → **배선 완료**(2026-08-17). 운영·stg 두 앱 · Products → `pro` attach → 오퍼링 연결. 🔴 그 과정에서 **운영 앱도 Test Store 상품만 물고 있던 것**을 발견해 함께 고쳤다 — 결제해도 `pro`가 안 붙는 상태였다. 남은 것은 **실결제 확인**뿐([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1.3) |
+| **Play 서비스 계정 권한** | ✅ | 새 계정(`sonwheesung925`)에 서비스 계정 초대 + 앱/계정 권한. `npm run check:play-access`가 진단한다. ⚠ **앱 권한과 계정 권한이 여는 것이 다르다** — 카탈로그는 앱 권한, **구매 검증은 계정 권한** |
 | 백업/복원 — 서버 | ✅ | ~~조각 서버 대기~~ → `jogak-stg`(서울) + Vercel(`icn1`) 배포. 위 두 줄과 합쳐 읽는다 |
 | **AI 리포트 — 앱 쪽** | ✅ | 리포트 탭·상세·홈 카드·설정(리포트 언어)·DB v5·백업 포함. [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11 |
 | **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
