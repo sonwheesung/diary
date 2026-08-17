@@ -22,6 +22,7 @@
     "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs",
     "check:ai": "node scripts/check-ai.mjs",
     "check:legal": "node --experimental-strip-types --no-warnings scripts/check-legal.mjs",
+    "check:legal-one": "node --experimental-strip-types --no-warnings scripts/check-legal-one.mjs",
     "legal:stamp": "node --experimental-strip-types --no-warnings scripts/legal-stamp.mjs",
     "check:admin": "node scripts/check-admin.mjs"
   },
