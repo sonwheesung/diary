@@ -10,13 +10,11 @@ interface CardProps {
   children: ReactNode;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
-  /** 내부 여백 없이 쓰고 싶을 때(이미지가 카드 끝까지 차는 경우) */
-  flush?: boolean;
 }
 
-export function Card({ children, onPress, style, flush = false }: CardProps) {
+export function Card({ children, onPress, style }: CardProps) {
   const styles = useStyles(createStyles);
-  const content = [styles.base, flush ? styles.flush : styles.padded, style];
+  const content = [styles.base, styles.padded, style];
 
   if (onPress === undefined) {
     return <View style={content}>{children}</View>;
@@ -45,9 +43,6 @@ const createStyles = (colors: Palette) =>
     },
     padded: {
       padding: spacing.md,
-    },
-    flush: {
-      padding: 0,
     },
     pressed: {
       opacity: 0.75,

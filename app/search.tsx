@@ -182,7 +182,7 @@ function ResultRow({ diary, thumbnail }: { diary: Diary; thumbnail: DiaryImage |
   const emotion = diary.emotion === null ? undefined : emotionLabel(diary.emotion);
 
   return (
-    <Card onPress={() => router.push(`/diary/${diary.id}`)} flush>
+    <Card onPress={() => router.push(`/diary/${diary.id}`)}>
       <View style={styles.row}>
         {thumbnail !== undefined && (
           <Image
@@ -280,15 +280,17 @@ const createStyles = (colors: Palette) =>
     row: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.md,
     },
+    // 카드 끝까지 채우지 않는다 — 모서리를 깎고 여백 안에 넣어야 사진이 딱딱하지 않다.
     thumbnail: {
       width: 84,
       height: 84,
+      borderRadius: radius.md,
       backgroundColor: colors.surfaceMuted,
     },
     rowBody: {
       flex: 1,
-      padding: spacing.md,
       gap: 2,
     },
     rowMeta: {
