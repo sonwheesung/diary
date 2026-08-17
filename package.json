@@ -23,6 +23,7 @@
     "check:ai": "node scripts/check-ai.mjs",
     "check:legal": "node --experimental-strip-types --no-warnings scripts/check-legal.mjs",
     "check:legal-one": "node --experimental-strip-types --no-warnings scripts/check-legal-one.mjs",
+    "check:play-access": "node scripts/check-play-access.mjs",
     "legal:stamp": "node --experimental-strip-types --no-warnings scripts/legal-stamp.mjs",
     "check:admin": "node scripts/check-admin.mjs"
   },

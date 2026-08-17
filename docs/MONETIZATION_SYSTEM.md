@@ -386,7 +386,7 @@ RC 침해 시 테스트 트랙 게시까지 열린다. → **켜고 → 올리�
 | `applicationId` | `com.son0925.jogak` | stg는 별도 패키지명이 필요하다 — **Play는 패키지명으로 앱을 가른다** |
 | **AdMob 앱 ID · 광고 단위** | `ca-app-pub-2731473780180274~6800808068` | `app.json`에 박혀 네이티브 매니페스트로 간다. 바꾸면 `prebuild` + 재빌드(CLAUDE.md §7) |
 | **구글 OAuth 클라이언트 · SHA-1** | Android 클라이언트 1개 | 패키지명+지문 쌍이라 stg용을 **따로 발급**해야 로그인이 된다 |
-| RevenueCat 앱 | 1개 | stg를 같은 프로젝트에 둘지 나눌지 결정 필요 |
+| RevenueCat 앱 | **2개** | ~~stg를 같은 프로젝트에 둘지 나눌지 결정 필요~~ → **같은 프로젝트에 앱을 추가**(2026-08-17). RC가 한 프로젝트에 Play 앱 여럿을 허용한다(실측). 엔타이틀먼트 `pro`·오퍼링을 **한 벌만** 관리하게 되고, 그래야 *"stg에서 검증했으니 운영도 된다"* 가 성립한다 — 나누면 가장 자주 틀리는 **attach 누락**(§7.2 함정 #2)이 stg에서 안 잡힌다 |
 | 조각 서버 URL | `EXPO_PUBLIC_BACKUP_SERVER_URL` | 이미 env라 제일 쉽다 |
 | common_server `app` 코드 | `jogak` | stg를 따로 등록할지 확인 필요 |
 
@@ -438,6 +438,68 @@ eas build --profile production   → com.son0925.jogak     + EXPO_PUBLIC_ADS_REA
   stg용을 Google Cloud에 따로 발급해야 한다. ⚠ SHA-1은 **AAB를 한 번 올려야** Play가 발급한다(닭-달걀).
   `webClientId`는 그대로 쓴다 — 그건 패키지에 안 묶인다.
 - **결제** — RevenueCat 앱은 Play 패키지에 매핑된다. stg용 RC 앱을 나눌지 미정.
+
+### 6.1.3 🔴 Play 서비스 계정 — **앱 권한과 계정 권한은 다른 것을 연다** (2026-08-17)
+
+RevenueCat이 결제를 검증하려면 Play Developer API를 부를 권한이 필요하고, 그 권한은
+**서비스 계정**(`revenuecat-play@optimal-shard-426006-n3.iam.gserviceaccount.com`)이 갖는다.
+키 파일은 `C:\project\secrets\play-service-account.json` — 저장소 **밖**이고 `eas submit`이 같은 키를 쓴다.
+
+#### 층위가 둘이고, RevenueCat의 검사 3줄이 그 층위를 나눠서 요구한다
+
+| RevenueCat 검사 | 부르는 API | 필요한 권한 |
+|---|---|---|
+| Can read the in-app product catalog | `applications/{pkg}/subscriptions` | **앱 권한** — 앱 정보 보기(읽기 전용) |
+| Can read the subscription catalog and base plans | 〃 | **앱 권한** |
+| **Can validate subscription purchases** | `purchases/subscriptionsv2/tokens/…` | 🔴 **계정 권한** — 재무 데이터 + 주문 및 구독 관리 |
+
+**앱 권한만 주면 카탈로그 2줄만 초록이 되고 구매 검증은 빨강으로 남는다.** 실제로 그렇게 겪었다.
+RevenueCat 팁이 부르는 이름(*"View financial data, orders, and cancellation survey response"*)이
+정확히 **계정 권한** 탭의 라벨이고, 앱 권한 탭의 비슷한 이름(`재무 데이터 보기`)과 **다른 것**이다.
+
+⚠ 계정 권한은 **앱을 고를 수 없다.** 그 개발자 계정의 모든 앱(현재·미래)에 걸린다.
+
+#### 계정이 둘이면 권한도 두 벌이다
+
+```
+revenuecat-play@…  (로봇 1개)
+  ├─ Vivace Games (bjpio113 · 6530743120826503035)
+  │    앱 권한 0개 · 계정 권한 4개          ← 조각 운영·배구명가·my_word·책담이 이걸로 돈다
+  └─ Vivace Games Studio (sonwheesung925 · 6329667596149711059)
+       앱 권한 조각 stg 4개 · 계정 권한 2개  ← 2026-08-17 추가
+```
+
+두 벌은 **서로 독립**이다. 한쪽을 고쳐도 다른 쪽은 안 변한다(전후 실측으로 확인).
+
+🔴 **커지는 것은 계정이 아니라 키 하나의 도달 범위다.** 이 키가 새면 이제 두 계정의 매출·주문
+조회와 **환불·구독 취소**가 가능하다. 키를 나누는 대안을 검토했으나 **채택하지 않았다** —
+두 키가 같은 폴더·같은 노트북에 놓이므로 실질 위험이 안 줄고, `eas.json` submit 프로필과
+RC 업로드가 두 벌이 되는 부채만 영구히 남는다. 이 저장소가 반복해서 데는 지점이 정확히
+*"같은 것을 두 벌로 관리하기"* 다.
+
+⏭ **앱 이전이 끝나면 한 번 정리한다.** 조각 운영이 새 계정으로 넘어가면 옛 계정에서 RevenueCat이
+실제로 무엇을 쓰는지 다시 보고, 불필요한 권한을 빼서 반경을 줄인다.
+
+#### 진단은 대시보드가 아니라 **구글에게 직접 묻는다** — `npm run check:play-access`
+
+RevenueCat은 *"Credentials need attention"* 만 말하고 이유를 안 알려준다. 키 문제인지·API
+미활성인지·앱 인가인지 구분이 안 돼서 2026-08-17에 콘솔을 한참 뒤졌다. 스크립트를 만들어
+같은 토큰으로 여러 패키지를 부르니 **한 번에 갈렸다**:
+
+```
+조각 운영      com.son0925.jogak         카탈로그 ✅ 200   구매 검증 ✅ 400
+조각 stg      com.son0925.jogak.stg     카탈로그 ✅ 200   구매 검증 ❌ 401
+배구명가       com.son0925.volleyball    카탈로그 ✅ 204   구매 검증 ✅ 400
+LinkMemo     com.vivacegames.linkmemo  카탈로그 ❌ 403   구매 검증 ❌ 401   ← 권한 안 준 앱
+```
+
+- **같은 키로 한쪽만 실패하면 키·API·Cloud 프로젝트 문제일 수 없다.** 인가 문제다.
+  대조군이 있어야 이 추론이 선다 — 그래서 스크립트가 **잘 되는 앱을 함께** 부른다.
+- `204`는 정상이다. "구독 상품이 0개"일 뿐 읽을 권한은 있다.
+- 구매 검증은 **가짜 토큰**으로 부른다. 권한이 있으면 `400 Invalid Value`, 없으면 `401/403`이
+  온다 — 실제 구매 없이 인가만 가릴 수 있어서 아무 때나 돌린다.
+- ⚠ **권한 반영에 시간이 걸린다.** 저장 직후 실패해도 잠시 뒤 다시 돌려본다. 카탈로그 권한이
+  먼저 반영되고 구매 검증이 늦게 붙는 것을 실제로 봤다.
 
 ### 6.2 등록한 상품 (2026-08-12)
 
