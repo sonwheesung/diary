@@ -480,6 +480,23 @@ RC 업로드가 두 벌이 되는 부채만 영구히 남는다. 이 저장소�
 ⏭ **앱 이전이 끝나면 한 번 정리한다.** 조각 운영이 새 계정으로 넘어가면 옛 계정에서 RevenueCat이
 실제로 무엇을 쓰는지 다시 보고, 불필요한 권한을 빼서 반경을 줄인다.
 
+#### 최종 상태 (2026-08-17 실측)
+
+```
+조각 운영    com.son0925.jogak         카탈로그 ✅ 200   구매 검증 ✅ 400
+조각 stg     com.son0925.jogak.stg     카탈로그 ✅ 200   구매 검증 ✅ 400
+배구명가      com.son0925.volleyball    카탈로그 ✅ 204   구매 검증 ✅ 400
+My Word     com.myword.front          카탈로그 ✅ 204   구매 검증 ✅ 400
+책담         com.chaekdam.app          카탈로그 ✅ 204   구매 검증 ✅ 400
+LinkMemo    com.vivacegames.linkmemo  카탈로그 ❌ 403   구매 검증 ❌ 401   ← 권한 안 줌(의도)
+```
+
+RevenueCat 두 앱 모두 **`Valid credentials`**.
+
+⚠ **카탈로그는 즉시, 구매 검증은 늦게 반영됐다.** 계정 권한을 저장한 뒤에도 한동안 401이
+남아서 "저장이 안 됐나"를 의심했는데 콘솔에는 멀쩡히 저장돼 있었다 — **전파 지연**이었다.
+저장 상태(콘솔)와 반영 상태(API)를 따로 확인해야 이 구분이 선다.
+
 #### 진단은 대시보드가 아니라 **구글에게 직접 묻는다** — `npm run check:play-access`
 
 RevenueCat은 *"Credentials need attention"* 만 말하고 이유를 안 알려준다. 키 문제인지·API
