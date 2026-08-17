@@ -16,7 +16,7 @@
  * ⚠ 줄 수를 맞추라는 제약은 번역가에게 불편하다(한 문장을 둘로 쪼개고 싶을 때가 있다).
  *   그래도 유지한다 — 그 불편이 조항 누락을 잡아주는 유일한 신호다.
  */
-import { PRIVACY, DELETE_ACCOUNT } from '../features/legal/legal-text.ts';
+import { PRIVACY, DELETE_ACCOUNT, OPERATOR } from '../features/legal/legal-text.ts';
 import { fingerprint } from '../features/legal/fingerprint.ts';
 import {
   EXPECTED_TRANSLATIONS,
@@ -138,6 +138,35 @@ function checkDoc(label, source, translations) {
       );
     });
 
+    /*
+     * 🔴 **연락처는 한국어에서만 상수다.** 정본은 `${OPERATOR.contactEmail}`로 보간하는데
+     *   번역본은 그 상수를 임포트할 수 없어 **문자열을 그대로 박는다**(en이 그렇게 했고
+     *   13개가 따라갔다). 그래서 주소를 바꾸면 정본만 따라오고 14개가 옛 주소로 남는다 —
+     *   그리고 이 문서는 **계정 삭제를 요청하는 유일한 경로**라, 닿지 않는 주소가 남는 것이
+     *   구조 누락보다 나쁘다. 구조 검사로는 절대 안 잡히므로 여기서 본다.
+     */
+    check(`🔴 ${lang} — 연락처가 현재 값과 같다`, () => {
+      const joined = [
+        doc.intro,
+        ...doc.sections.flatMap((s) => s.body),
+        ...(doc.pending ?? []).flatMap((p) => [p.summary, ...p.sections.flatMap((s) => s.body)]),
+      ].join('\n');
+      const sourceJoined = [
+        source.intro,
+        ...source.sections.flatMap((s) => s.body),
+        ...(source.pending ?? []).flatMap((p) => [
+          p.summary,
+          ...p.sections.flatMap((s) => s.body),
+        ]),
+      ].join('\n');
+      // 정본이 연락처를 안 쓰는 문서라면 번역본에도 요구하지 않는다
+      if (!sourceJoined.includes(OPERATOR.contactEmail)) return;
+      assert(
+        joined.includes(OPERATOR.contactEmail),
+        `${OPERATOR.contactEmail}이 없다 — 주소를 바꿨다면 번역본 14개를 함께 고쳐야 한다`,
+      );
+    });
+
     check(`🔴 ${lang} — 한글이 남아 있지 않다`, () => {
       const all = [
         doc.title,
@@ -173,6 +202,18 @@ if (Object.keys(TRANSLATIONS).length !== EXPECTED_TRANSLATIONS) {
   process.exit(1);
 }
 
+/*
+ * ⚠ 계정 삭제 안내도 **처리방침과 같은 14개**여야 한다(2026-08-17에 채웠다).
+ *   같은 상수를 쓰는 이유: 두 문서 모두 앱이 지원하는 15개 언어를 겨냥하고,
+ *   한쪽만 비면 그 언어 사용자는 **삭제 방법을 못 읽는다.**
+ */
+if (Object.keys(DELETE_ACCOUNT_TRANSLATIONS).length !== EXPECTED_TRANSLATIONS) {
+  console.error(`
+계정 삭제 안내 번역이 ${Object.keys(DELETE_ACCOUNT_TRANSLATIONS).length}개다 — ${EXPECTED_TRANSLATIONS}개여야 한다.`);
+  console.error('이 문서의 URL은 Play 데이터 보안 선언에 등록된 주소다 — 심사자가 직접 연다.');
+  process.exit(1);
+}
+
 if (failures.length > 0) {
   console.error(`\n처리방침 번역 — ${failures.length}개 실패\n`);
   for (const f of failures) console.error(`  · ${f}`);
@@ -184,7 +225,9 @@ console.log(
     `계정 삭제 안내 ${Object.keys(DELETE_ACCOUNT_TRANSLATIONS).length}개 언어)\n`,
 );
 /*
- * ⏭ 계정 삭제 안내는 아직 영어 하나다. Play 심사가 여는 URL이라 영어를 먼저 넣었고,
- *   나머지 13개는 이어서 채운다 — 다 차면 `DELETE_ACCOUNT_TRANSLATIONS`도
- *   `EXPECTED_TRANSLATIONS`처럼 개수 검사를 붙인다.
+ * ⏭ 이 검사가 **못 보는 것** — 다음에 그물을 넓힌다면 여기부터다:
+ *   ① 번역 품질. 원어민 검수를 대신하지 않는다(`docs/I18N_SYSTEM.md`).
+ *   ② 삭제 안내 §1의 `[설정]`·`[문의하기]`·`[탈퇴]` 대괄호 라벨은 `locales/*.json`의
+ *      실제 앱 문자열을 보고 옮긴 것이다. 그 키를 바꾸면 **법적 문서가 조용히 어긋난다** —
+ *      구조도 지문도 안 바뀌므로 아무도 모른다. Play 심사자가 따라가는 클릭 경로라 아프다.
  */

@@ -1,18 +1,18 @@
 import type { LegalDoc } from './legal-text.ts';
-import { PRIVACY_DE } from './translations/de.ts';
+import { DELETE_ACCOUNT_DE, PRIVACY_DE } from './translations/de.ts';
 import { DELETE_ACCOUNT_EN, PRIVACY_EN } from './translations/en.ts';
-import { PRIVACY_ES } from './translations/es.ts';
-import { PRIVACY_FR } from './translations/fr.ts';
-import { PRIVACY_ID } from './translations/id.ts';
-import { PRIVACY_IT } from './translations/it.ts';
-import { PRIVACY_JA } from './translations/ja.ts';
-import { PRIVACY_PT_BR } from './translations/pt-BR.ts';
-import { PRIVACY_RU } from './translations/ru.ts';
-import { PRIVACY_TH } from './translations/th.ts';
-import { PRIVACY_TR } from './translations/tr.ts';
-import { PRIVACY_VI } from './translations/vi.ts';
-import { PRIVACY_ZH_HANS } from './translations/zh-Hans.ts';
-import { PRIVACY_ZH_HANT } from './translations/zh-Hant.ts';
+import { DELETE_ACCOUNT_ES, PRIVACY_ES } from './translations/es.ts';
+import { DELETE_ACCOUNT_FR, PRIVACY_FR } from './translations/fr.ts';
+import { DELETE_ACCOUNT_ID, PRIVACY_ID } from './translations/id.ts';
+import { DELETE_ACCOUNT_IT, PRIVACY_IT } from './translations/it.ts';
+import { DELETE_ACCOUNT_JA, PRIVACY_JA } from './translations/ja.ts';
+import { DELETE_ACCOUNT_PT_BR, PRIVACY_PT_BR } from './translations/pt-BR.ts';
+import { DELETE_ACCOUNT_RU, PRIVACY_RU } from './translations/ru.ts';
+import { DELETE_ACCOUNT_TH, PRIVACY_TH } from './translations/th.ts';
+import { DELETE_ACCOUNT_TR, PRIVACY_TR } from './translations/tr.ts';
+import { DELETE_ACCOUNT_VI, PRIVACY_VI } from './translations/vi.ts';
+import { DELETE_ACCOUNT_ZH_HANS, PRIVACY_ZH_HANS } from './translations/zh-Hans.ts';
+import { DELETE_ACCOUNT_ZH_HANT, PRIVACY_ZH_HANT } from './translations/zh-Hant.ts';
 
 /**
  * 번역본 목록 — **한 곳에서만 정의한다.**
@@ -54,8 +54,22 @@ export const EXPECTED_TRANSLATIONS = 14;
  *   있지도 않은 번역을 찾다가 실패하거나, 반대로 빠진 것을 못 잡는다.
  *
  * 🔴 이 문서의 URL은 **Play 데이터 보안 선언에 등록된 주소**다. Play 심사자가 여는 곳이라
- *   한국어만 있으면 심사에서 막힐 수 있다 — 그래서 영어가 첫 번역이다.
+ *   한국어만 있으면 심사에서 막힐 수 있다 — 그래서 영어가 첫 번역이었고,
+ *   2026-08-17에 나머지 13개를 채워 **처리방침과 같은 14개**가 됐다.
  */
 export const DELETE_ACCOUNT_TRANSLATIONS: Record<string, LegalDoc> = {
   en: DELETE_ACCOUNT_EN,
+  ja: DELETE_ACCOUNT_JA,
+  'zh-Hans': DELETE_ACCOUNT_ZH_HANS,
+  'zh-Hant': DELETE_ACCOUNT_ZH_HANT,
+  es: DELETE_ACCOUNT_ES,
+  'pt-BR': DELETE_ACCOUNT_PT_BR,
+  fr: DELETE_ACCOUNT_FR,
+  de: DELETE_ACCOUNT_DE,
+  it: DELETE_ACCOUNT_IT,
+  ru: DELETE_ACCOUNT_RU,
+  id: DELETE_ACCOUNT_ID,
+  vi: DELETE_ACCOUNT_VI,
+  th: DELETE_ACCOUNT_TH,
+  tr: DELETE_ACCOUNT_TR,
 };

@@ -276,3 +276,125 @@ export const PRIVACY_TR: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Hesap silme kılavuzu — Türkçe.
+ *
+ * 🔴 **Korece metin esastır** (`legal-text.ts`). Gizlilik politikasındaki kuralın aynısı
+ *   geçerlidir: farklılık hâlinde Korece metin bağlayıcıdır.
+ *
+ * ⚠ Bu belgenin **kendine ait bir genel URL’si** vardır; çünkü Google Play’in “Veri güvenliği”
+ *   formu silme için bir **web yolu** ister: uygulamayı çoktan kaldırmış olan birinin de talepte
+ *   bulunabilmesi gerekir. Play inceleme uzmanlarının açtığı adres budur — bu yüzden yalnızca
+ *   Korece kalamaz.
+ *
+ * ⚠ **Yapı Korece ile birebir aynı olmalıdır** — 5 bölüm (6/4/4/3/3 satır) ve iki yaklaşan
+ *   değişiklik. `npm run check:legal` bunu denetler. Sessizce düşen bir hüküm, burada
+ *   gerçekten önem taşıyan tek hatadır.
+ */
+export const DELETE_ACCOUNT_TR: LegalDoc = {
+  title: 'Jogak — Hesabını nasıl silersin',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Bu sayfada Jogak uygulamasındaki hesabını ve onunla ilgili verileri nasıl sileceğin anlatılıyor. Uygulamayı zaten sildiysen ya da giriş yapamıyorsan e-postayla da talepte bulunabilirsin.',
+  sections: [
+    {
+      h: '1. Uygulamadan kendin silme',
+      body: [
+        'Jogak uygulamasında aşağıdaki adımları izlersen işlem hemen gerçekleşir.',
+        '① Uygulamayı aç → alttaki [Ayarlar] sekmesi',
+        '② [İletişim] seçeneğini seç',
+        '③ Giriş yapmadıysan Google hesabınla giriş yap',
+        '④ Ekranın en altındaki [Hesabı sil] seçeneğini seçip onayla',
+        'Hesap silme işlemi geri alınamaz.',
+      ],
+    },
+    {
+      h: '2. E-postayla talep etme (uygulamayı sildiysen ya da giriş yapamıyorsan)',
+      body: [
+        'Aşağıdakileri support@vivace-games.com adresine gönder.',
+        '• Konu: Jogak hesap silme talebi',
+        '• İçerik: Jogak’a giriş yaparken kullandığın Google hesabının e-posta adresi',
+        'Kimliğini doğrulayabilmemiz için yazdığın adres ile kayıt olurken kullandığın adresin aynı olması gerekir. Talebi aldıktan sonra 7 iş günü içinde işleme alır ve sana yanıt veririz.',
+      ],
+    },
+    {
+      h: '3. Silinen veriler',
+      body: [
+        'Hesabını sildiğinde aşağıdaki bilgiler gecikmeksizin imha edilir veya izi sürülemez hâle getirilir.',
+        '• Sosyal hesabın benzersiz kimliği (Google “sub”)',
+        '• E-posta adresi',
+        '• Başvurular ile bunları yazan hesap arasındaki bağlantı',
+      ],
+    },
+    {
+      h: '4. Saklanan veriler ve süreleri',
+      body: [
+        'Aşağıdaki bilgiler mevzuat gereği saklanır ve saklama süresi boyunca da yalnızca yazarına ulaşılamayacak biçimde (takma adlaştırılmış olarak) kalır.',
+        '• Başvuru içeriği: 3 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu — tüketici şikâyetleri veya uyuşmazlık çözümüne ilişkin kayıtlar)',
+        'Saklama süresi dolduğunda gecikmeksizin imha ederiz.',
+      ],
+    },
+    {
+      h: '5. Silinmeyenler — cihazındaki kayıtlar',
+      body: [
+        'Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) yalnızca cihazının içinde saklanır ve işletmecinin sunucularına aktarılmaz.',
+        'Bu nedenle hesabını silsen de cihazındaki kayıtlar olduğu gibi kalır. Kayıtları da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.',
+        'Bunun tersine, uygulamayı silersen cihazdaki kayıtlar geri getirilemez.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'Aylık abonelik ile yedekleme/geri yüklemeyi içeren sürümün yayımlandığı günden itibaren',
+      summary:
+        'Yedeklemeyi açtıysan, hesabını sildiğinde sunucuda saklanan şifrelenmiş yedek de birlikte silinir. Abonelik işlem kayıtları mevzuat gereği takma adlaştırılarak saklanır.',
+      sections: [
+        {
+          h: 'a. Ek olarak silinen veriler',
+          body: [
+            '• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası — hesabınla birlikte silinir. 90 günlük süreyi beklemeyiz.',
+            '• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)',
+            '⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile geri yükleme yapamazsın.',
+            '⚠ Cihazındaki kayıtlar olduğu gibi kalır. Silinen yalnızca sunucudaki kopyadır.',
+          ],
+        },
+        {
+          h: 'b. Ek olarak saklanan veriler ve süreleri',
+          body: [
+            '• Abonelik işlem kayıtları (işlem kimliği, ürün, abonelik süresi, ödeme durumu değişikliği geçmişi): 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
+            '• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için; hesap kimliği bununla birlikte saklanmaz.',
+            'Yukarıdaki kayıtlar saklama süresi boyunca da yalnızca yazarına ulaşılamayacak biçimde kalır.',
+          ],
+        },
+        {
+          h: 'c. Aboneliği ayrıca iptal etmelisin',
+          body: [
+            'Hesabını silsen de Google Play aboneliğin kendiliğinden iptal olmaz; iptal etmezsen ücretlendirilmeye devam edersin.',
+            'İptal: Google Play Store uygulaması > profil > Ödemeler ve abonelikler > Abonelikler (https://play.google.com/store/account/subscriptions)',
+            'Ödenmiş tutarların iadesi, Google Play’in iade politikası ile işletmecinin iade politikasına tabidir. Sorularını aşağıdaki iletişim adresine iletebilirsin.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'Yapay zekâ özet raporlarını içeren sürümün yayımlandığı günden itibaren',
+      summary:
+        'Yapay zekâ raporlarının metni cihazında saklanır. Sunucuda, kalite denetimi için rapor özetleri en fazla 90 gün saklanır ve hesabını sildiğinde kullanım kayıtlarıyla birlikte silinir.',
+      sections: [
+        {
+          h: 'a. Yapay zekâ raporlarında neler silinir',
+          body: [
+            '• Sunucuda kalan rapor kullanım kayıtları (hesap kimliği, dönem, kaç kez oluşturulduğu, jeton sayısı) — hesabınla birlikte silinir.',
+            '• Sunucuda saklanan rapor özetleri (en fazla 90 gün) — hesabınla birlikte silinir. Günlük metninin kendisi saklanmadığı için orada silinecek bir şey yoktur.',
+            '⚠ Rapor metni cihazında da saklandığından hesabını silsen bile cihazda kalır. Kaldırmak istersen uygulamadan raporları sil ya da uygulamayı sil.',
+            '• Yedeklemeyi açtıysan raporlar da şifrelenmiş olarak yedeğe dâhildir ve yedek silindiğinde birlikte silinir.',
+          ],
+        },
+      ],
+    },
+  ],
+};

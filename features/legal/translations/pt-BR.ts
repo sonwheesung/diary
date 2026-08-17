@@ -276,3 +276,124 @@ export const PRIVACY_PT_BR: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Como excluir sua conta — português (Brasil).
+ *
+ * 🔴 **O texto em coreano é o original e prevalece** (`legal-text.ts`). Mesma regra da política
+ *   de privacidade: esta é uma tradução para facilitar a leitura.
+ *
+ * ⚠ Este documento tem uma URL pública própria porque o formulário de Segurança dos dados do
+ *   Play exige uma via de exclusão **na web**: quem já desinstalou o app precisa continuar
+ *   podendo pedir a exclusão. É essa URL que os revisores do Play abrem, então ela não pode
+ *   ficar só em coreano.
+ *
+ * ⚠ A estrutura deve coincidir exatamente com a coreana — 5 seções (6/4/4/3/3 linhas) mais
+ *   duas alterações previstas. `npm run check:legal` verifica isso.
+ */
+export const DELETE_ACCOUNT_PT_BR: LegalDoc = {
+  title: 'Como excluir sua conta do Jogak',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Esta página explica como excluir sua conta do Jogak e os dados associados a ela. Você também pode pedir a exclusão por e-mail caso já tenha desinstalado o app ou não consiga fazer login.',
+  sections: [
+    {
+      h: '1. Excluir você mesmo no app',
+      body: [
+        'Siga estes passos no app Jogak e a exclusão vale imediatamente.',
+        '① Abra o app → aba [Ajustes], na parte de baixo',
+        '② Escolha [Fale conosco]',
+        '③ Se você não estiver conectado, faça login com sua conta Google',
+        '④ Escolha [Excluir conta] no fim da tela e confirme',
+        'A exclusão da conta não pode ser desfeita.',
+      ],
+    },
+    {
+      h: '2. Pedir por e-mail (se você desinstalou o app ou não consegue fazer login)',
+      body: [
+        'Envie o seguinte para support@vivace-games.com.',
+        '• Assunto: pedido de exclusão de conta do Jogak',
+        '• Corpo: o e-mail da conta Google que você usou para entrar no Jogak',
+        'O endereço de onde você escreve precisa ser o mesmo que usou no cadastro, para que possamos confirmar que é você. Vamos tratar o pedido e responder em até 7 dias úteis.',
+      ],
+    },
+    {
+      h: '3. Dados que são excluídos',
+      body: [
+        'Ao excluir sua conta, as informações a seguir são destruídas de imediato ou deixadas em forma não rastreável.',
+        '• O identificador único da sua conta social (o “sub” do Google)',
+        '• Seu endereço de e-mail',
+        '• O vínculo entre suas mensagens e a conta de quem as escreveu',
+      ],
+    },
+    {
+      h: '4. Dados que são mantidos e por quanto tempo',
+      body: [
+        'As informações a seguir são mantidas conforme a lei e, mesmo durante esse prazo, permanecem apenas em uma forma que não permite rastrear quem as escreveu (pseudonimizada).',
+        '• Conteúdo das mensagens: 3 anos (Lei de Proteção ao Consumidor no Comércio Eletrônico — registros sobre reclamações ou solução de conflitos)',
+        'Decorrido o prazo de retenção, destruímos os dados sem demora.',
+      ],
+    },
+    {
+      h: '5. O que não é excluído — o diário que está no seu dispositivo',
+      body: [
+        'Os registros do Jogak (títulos, texto, fotos, tags e emoções) ficam guardados somente dentro do seu dispositivo e não são transmitidos aos servidores da operadora.',
+        'Por isso, excluir sua conta deixa intactos os registros do seu dispositivo. Para apagá-los também, desinstale o app ou use a função “Redefinir tudo” nos [Ajustes] do app.',
+        'Por outro lado, se você desinstalar o app, os registros do dispositivo não poderão ser recuperados.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'A partir do dia em que for publicada a versão que inclui a assinatura mensal e o backup/restauração',
+      summary:
+        'Se você tiver ativado o backup, excluir sua conta também exclui o backup criptografado guardado no servidor. Os registros de transação da assinatura são mantidos conforme a lei, em forma pseudonimizada.',
+      sections: [
+        {
+          h: 'a. Dados excluídos adicionalmente',
+          body: [
+            '• A cópia criptografada do seu diário guardada no servidor — excluída junto com sua conta. Não esperamos os 90 dias de carência.',
+            '• O identificador do backup e os registros de backup (horário, tamanho, número da geração)',
+            '⚠ Isso não pode ser desfeito. Mesmo que você ainda tenha seu código de recuperação, não será possível restaurar.',
+            '⚠ Os registros do seu dispositivo permanecem intactos. Só a cópia do servidor é excluída.',
+          ],
+        },
+        {
+          h: 'b. Dados mantidos adicionalmente e por quanto tempo',
+          body: [
+            '• Registros de transação da assinatura (identificador da transação, produto, período de assinatura, histórico de mudanças do status de pagamento): 5 anos (Lei de Proteção ao Consumidor no Comércio Eletrônico, art. 6)',
+            '• O registro de que um backup foi destruído (identificador do backup e horário da destruição): 1 ano — para que você possa descobrir “por que a restauração não funciona”. O identificador da sua conta não é mantido junto.',
+            'Mesmo durante esses prazos, esses registros permanecem apenas em uma forma que não permite rastrear quem os escreveu.',
+          ],
+        },
+        {
+          h: 'c. A assinatura precisa ser cancelada separadamente',
+          body: [
+            'Excluir sua conta não cancela sua assinatura do Google Play. Se você não cancelá-la, continuará sendo cobrado.',
+            'Para cancelar: app Google Play Store > perfil > Pagamentos e assinaturas > Assinaturas (https://play.google.com/store/account/subscriptions)',
+            'O reembolso de valores já cobrados segue a política de reembolso do Google Play e a política de reembolso da operadora. Fale conosco pelo contato indicado abaixo.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'A partir do dia em que a versão com os relatórios de resumo por IA for publicada',
+      summary:
+        'O texto dos relatórios de IA fica guardado no seu dispositivo. No servidor, os resumos dos relatórios são mantidos por até 90 dias para verificação de qualidade e são excluídos junto com seus registros de uso quando você exclui sua conta.',
+      sections: [
+        {
+          h: 'a. O que é excluído nos relatórios por IA',
+          body: [
+            '• Os registros de uso mantidos no servidor (identificador da conta, período, número de vezes, quantidade de tokens) — excluídos junto com sua conta.',
+            '• Os resumos dos relatórios mantidos no servidor (por até 90 dias) — excluídos junto com sua conta. O conteúdo do diário não é armazenado, portanto não há nada a apagar.',
+            '⚠ O texto dos relatórios também fica guardado no seu dispositivo, então permanece lá mesmo depois de você excluir sua conta. Para apagá-lo, exclua os relatórios no app ou desinstale o app.',
+            '• Se você tiver ativado o backup, os relatórios são incluídos nele de forma criptografada e são excluídos quando o backup é excluído.',
+          ],
+        },
+      ],
+    },
+  ],
+};

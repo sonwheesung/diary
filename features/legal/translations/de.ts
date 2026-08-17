@@ -276,3 +276,126 @@ export const PRIVACY_DE: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Anleitung zur Kontolöschung — Deutsch.
+ *
+ * 🔴 **Der koreanische Text ist maßgeblich** (`legal-text.ts`). Es gilt dieselbe Regel wie für
+ *   die Datenschutzerklärung: bei Abweichungen entscheidet das Koreanische.
+ *
+ * ⚠ Dieses Dokument hat eine **eigene öffentliche URL**, weil das Formular „Datensicherheit“
+ *   von Google Play einen **Weg über das Web** zur Löschung verlangt: Wer die App bereits
+ *   deinstalliert hat, muss die Löschung trotzdem verlangen können. Genau diese URL öffnen die
+ *   Prüferinnen und Prüfer von Play — sie darf deshalb nicht nur auf Koreanisch vorliegen.
+ *
+ * ⚠ **Die Struktur muss exakt dem Koreanischen entsprechen** — 5 Abschnitte (6/4/4/3/3 Zeilen)
+ *   und zwei angekündigte Änderungen. `npm run check:legal` prüft das. Eine stillschweigend
+ *   fehlende Klausel ist hier der einzige Fehler, der wirklich zählt.
+ */
+export const DELETE_ACCOUNT_DE: LegalDoc = {
+  title: 'Jogak — So löschst du dein Konto',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Diese Seite erklärt, wie du dein Konto bei der App Jogak und die damit verbundenen Daten löschst. Wenn du die App bereits gelöscht hast oder dich nicht anmelden kannst, kannst du die Löschung auch per E-Mail verlangen.',
+  sections: [
+    {
+      h: '1. Selbst in der App löschen',
+      body: [
+        'Gehe in der App Jogak wie folgt vor, dann wird es sofort wirksam.',
+        '① App öffnen → unten der Tab [Einstellungen]',
+        '② [Kontakt] auswählen',
+        '③ Wenn du nicht angemeldet bist, melde dich mit deinem Google-Konto an',
+        '④ Ganz unten auf dem Bildschirm [Konto löschen] auswählen und bestätigen',
+        'Das Löschen des Kontos lässt sich nicht rückgängig machen.',
+      ],
+    },
+    {
+      h: '2. Per E-Mail verlangen (wenn du die App gelöscht hast oder dich nicht anmelden kannst)',
+      body: [
+        'Sende das Folgende an support@vivace-games.com.',
+        '• Betreff: Antrag auf Löschung des Jogak-Kontos',
+        '• Text: die E-Mail-Adresse des Google-Kontos, mit dem du dich bei Jogak angemeldet hast',
+        'Damit wir prüfen können, dass du es bist, muss die Adresse, von der du schreibst, mit der bei der Anmeldung verwendeten übereinstimmen. Nach Eingang bearbeiten wir das Anliegen innerhalb von 7 Werktagen und antworten dir.',
+      ],
+    },
+    {
+      h: '3. Daten, die gelöscht werden',
+      body: [
+        'Wenn du dein Konto löschst, werden die folgenden Angaben unverzüglich vernichtet oder in eine nicht rückverfolgbare Form überführt.',
+        '• Die eindeutige Kennung des Social-Kontos (Google „sub“)',
+        '• Die E-Mail-Adresse',
+        '• Die Verknüpfung zwischen deinen Anfragen und dem Konto, das sie verfasst hat',
+      ],
+    },
+    {
+      h: '4. Daten, die aufbewahrt werden, und für wie lange',
+      body: [
+        'Die folgenden Angaben werden nach gesetzlicher Vorgabe aufbewahrt und verbleiben auch während dieser Dauer nur in einer Form, die sich nicht auf die verfassende Person zurückführen lässt (pseudonymisiert).',
+        '• Inhalt der Anfragen: 3 Jahre (Gesetz zum Verbraucherschutz im elektronischen Handel — Aufzeichnungen über Beschwerden von Verbraucherinnen und Verbrauchern oder über Streitbeilegung)',
+        'Nach Ablauf der Aufbewahrungsfrist vernichten wir sie unverzüglich.',
+      ],
+    },
+    {
+      h: '5. Was nicht gelöscht wird — die Einträge auf deinem Gerät',
+      body: [
+        'Die Einträge in Jogak (Titel, Text, Fotos, Tags und Gefühle) werden ausschließlich im Inneren deines Geräts gespeichert und nicht an die Server des Betreibers übermittelt.',
+        'Deshalb bleiben die Einträge auf deinem Gerät auch nach dem Löschen des Kontos unverändert erhalten. Willst du auch sie löschen, entferne die App oder führe in den [Einstellungen] der App das Zurücksetzen durch.',
+        'Umgekehrt gilt: Löschst du die App, lassen sich die Einträge auf dem Gerät nicht wiederherstellen.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'Ab dem Tag, an dem die Version mit Monatsabo und Backup/Wiederherstellung veröffentlicht wird',
+      summary:
+        'Hast du das Backup eingeschaltet, wird beim Löschen deines Kontos auch das auf dem Server gespeicherte verschlüsselte Backup mit gelöscht. Aufzeichnungen über Abotransaktionen werden nach gesetzlicher Vorgabe pseudonymisiert aufbewahrt.',
+      sections: [
+        {
+          h: 'a. Zusätzlich gelöschte Daten',
+          body: [
+            '• Die auf dem Server gespeicherte verschlüsselte Kopie deiner Einträge — sie wird beim Löschen des Kontos mit gelöscht. Wir warten die 90 Tage Kulanzfrist nicht ab.',
+            '• Backup-Kennung und Backup-Aufzeichnungen (Zeitpunkt, Größe, Generationsnummer)',
+            '⚠ Einmal gelöscht, lässt es sich nicht rückgängig machen. Auch wenn du deinen Wiederherstellungscode noch hast, kannst du nicht mehr wiederherstellen.',
+            '⚠ Die Einträge auf deinem Gerät bleiben unverändert. Gelöscht wird nur die Kopie auf dem Server.',
+          ],
+        },
+        {
+          h: 'b. Zusätzlich aufbewahrte Daten und deren Dauer',
+          body: [
+            '• Aufzeichnungen über Abotransaktionen (Transaktionskennung, Produkt, Abolaufzeit, Verlauf der Änderungen des Zahlungsstatus): 5 Jahre (Gesetz zum Verbraucherschutz im elektronischen Handel, Art. 6)',
+            '• Die Aufzeichnung der Vernichtung eines Backups (Backup-Kennung und Zeitpunkt der Vernichtung): 1 Jahr — damit du herausfinden kannst, „warum die Wiederherstellung nicht funktioniert“; die Kontokennung wird nicht mit aufbewahrt.',
+            'Auch während dieser Fristen verbleiben die genannten Aufzeichnungen nur in einer Form, die sich nicht auf die verfassende Person zurückführen lässt.',
+          ],
+        },
+        {
+          h: 'c. Das Abo musst du gesondert kündigen',
+          body: [
+            'Das Löschen deines Kontos kündigt dein Abo bei Google Play nicht automatisch; kündigst du es nicht, wird dir weiterhin Geld berechnet.',
+            'Kündigen: Google-Play-Store-App > Profil > Zahlungen und Abos > Abos (https://play.google.com/store/account/subscriptions)',
+            'Die Erstattung bereits gezahlter Beträge richtet sich nach der Erstattungsrichtlinie von Google Play und der des Betreibers. Fragen dazu richtest du an die unten genannte Kontaktadresse.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom:
+        'Ab dem Tag, an dem die Version mit den KI-Zusammenfassungsberichten veröffentlicht wird',
+      summary:
+        'Der Text der KI-Berichte wird auf deinem Gerät gespeichert. Auf dem Server werden die Zusammenfassungen der Berichte höchstens 90 Tage zur Qualitätsprüfung aufbewahrt und beim Löschen deines Kontos zusammen mit den Nutzungsaufzeichnungen gelöscht.',
+      sections: [
+        {
+          h: 'a. Was bei den KI-Berichten gelöscht wird',
+          body: [
+            '• Die auf dem Server verbleibenden Nutzungsaufzeichnungen der Berichte (Kontokennung, Zeitraum, Anzahl der Male, Anzahl der Token) — sie werden beim Löschen des Kontos mit gelöscht.',
+            '• Die auf dem Server aufbewahrten Zusammenfassungen der Berichte (höchstens 90 Tage) — sie werden beim Löschen des Kontos mit gelöscht. Der Tagebuchtext selbst wird nicht gespeichert, dort gibt es also nichts zu löschen.',
+            '⚠ Der Text der Berichte wird auch auf deinem Gerät gespeichert und bleibt dort nach dem Löschen des Kontos erhalten. Um ihn zu entfernen, lösche die Berichte in der App oder lösche die App.',
+            '• Hast du das Backup eingeschaltet, sind die Berichte verschlüsselt im Backup enthalten und werden gelöscht, wenn das Backup gelöscht wird.',
+          ],
+        },
+      ],
+    },
+  ],
+};

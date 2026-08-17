@@ -275,3 +275,122 @@ export const PRIVACY_VI: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Hướng dẫn xoá tài khoản — tiếng Việt.
+ *
+ * 🔴 **Bản tiếng Hàn có hiệu lực ưu tiên** (`legal-text.ts`). Cùng quy tắc với chính sách
+ *   quyền riêng tư.
+ *
+ * ⚠ Tài liệu này có URL công khai riêng vì biểu mẫu An toàn dữ liệu của Google Play yêu cầu
+ *   một lối xoá tài khoản trên **web**: người đã gỡ ứng dụng vẫn phải có cách để yêu cầu.
+ *   Đó chính là URL mà người thẩm định của Play mở ra, nên nó không thể chỉ có tiếng Hàn.
+ *
+ * ⚠ Cấu trúc phải khớp chính xác với bản tiếng Hàn — 5 mục (6/4/4/3/3 dòng) cùng hai phần
+ *   sửa đổi sắp áp dụng. `npm run check:legal` sẽ kiểm tra.
+ */
+export const DELETE_ACCOUNT_VI: LegalDoc = {
+  title: 'Jogak — Cách xoá tài khoản của bạn',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Trang này hướng dẫn cách xoá tài khoản của ứng dụng Jogak và dữ liệu liên quan. Ngay cả khi bạn đã gỡ ứng dụng hoặc không thể đăng nhập, bạn vẫn có thể yêu cầu qua email.',
+  sections: [
+    {
+      h: '1. Tự xoá trong ứng dụng',
+      body: [
+        'Nếu bạn làm theo các bước sau trong ứng dụng Jogak, yêu cầu sẽ được xử lý ngay lập tức.',
+        '① Mở ứng dụng → thẻ [Cài đặt] ở dưới cùng',
+        '② Chọn [Liên hệ]',
+        '③ Nếu bạn chưa đăng nhập, hãy đăng nhập bằng tài khoản Google',
+        '④ Chọn [Xoá tài khoản] ở dưới cùng màn hình rồi xác nhận',
+        'Việc xoá tài khoản không thể hoàn tác.',
+      ],
+    },
+    {
+      h: '2. Yêu cầu qua email (khi bạn đã gỡ ứng dụng hoặc không thể đăng nhập)',
+      body: [
+        'Xin gửi nội dung sau tới support@vivace-games.com.',
+        '• Tiêu đề: Yêu cầu xoá tài khoản Jogak',
+        '• Nội dung: địa chỉ email của tài khoản Google mà bạn đã dùng để đăng nhập Jogak',
+        'Để xác minh danh tính, địa chỉ bạn gửi đi phải trùng với địa chỉ bạn đã dùng khi đăng ký. Sau khi tiếp nhận, chúng tôi sẽ xử lý và hồi âm trong vòng 7 ngày làm việc.',
+      ],
+    },
+    {
+      h: '3. Dữ liệu bị xoá',
+      body: [
+        'Khi bạn xoá tài khoản, những thông tin sau bị tiêu huỷ ngay hoặc được chuyển sang dạng không thể truy vết.',
+        '• Mã định danh duy nhất của tài khoản mạng xã hội (“sub” của Google)',
+        '• Địa chỉ email',
+        '• Mối liên kết giữa lịch sử liên hệ và tài khoản của người gửi',
+      ],
+    },
+    {
+      h: '4. Dữ liệu được lưu giữ và thời hạn',
+      body: [
+        'Những thông tin sau được lưu giữ theo quy định của pháp luật, và ngay trong thời hạn đó cũng chỉ tồn tại ở dạng không thể truy vết ra người tạo (giả danh hoá).',
+        '• Nội dung liên hệ: 3 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử — hồ sơ về khiếu nại hoặc giải quyết tranh chấp của người tiêu dùng)',
+        'Khi hết thời hạn lưu giữ, chúng tôi tiêu huỷ ngay lập tức.',
+      ],
+    },
+    {
+      h: '5. Những gì không bị xoá — các mảnh nhật ký trên thiết bị',
+      body: [
+        'Các mảnh nhật ký của Jogak (tiêu đề, nội dung, ảnh, thẻ, cảm xúc) chỉ được lưu bên trong thiết bị của bạn và không được truyền tới máy chủ của nhà vận hành.',
+        'Vì vậy, dù bạn xoá tài khoản thì các mảnh trên thiết bị vẫn còn nguyên. Nếu muốn xoá cả những mảnh đó, hãy gỡ cài đặt ứng dụng hoặc thực hiện đặt lại trong [Cài đặt] của ứng dụng.',
+        'Ngược lại, nếu bạn gỡ cài đặt ứng dụng thì các mảnh trên thiết bị không thể khôi phục được.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom: 'Kể từ ngày phát hành phiên bản có gói đăng ký hằng tháng và sao lưu/khôi phục',
+      summary:
+        'Nếu bạn đã bật sao lưu, việc xoá tài khoản cũng xoá luôn bản sao lưu đã mã hoá trên máy chủ. Hồ sơ giao dịch gói đăng ký được lưu giữ theo pháp luật ở dạng không thể truy vết.',
+      sections: [
+        {
+          h: 'a. Dữ liệu bị xoá thêm',
+          body: [
+            '• Bản sao nhật ký đã mã hoá lưu trên máy chủ — bị xoá cùng lúc khi bạn xoá tài khoản. Chúng tôi không chờ hết 90 ngày ân hạn.',
+            '• Mã định danh bản sao lưu và các bản ghi sao lưu (thời điểm, dung lượng, số thế hệ)',
+            '⚠ Đã xoá thì không thể hoàn tác. Dù bạn còn giữ mã khôi phục, bạn cũng không thể khôi phục được nữa.',
+            '⚠ Các mảnh trên thiết bị của bạn vẫn còn nguyên. Thứ bị xoá chỉ là bản sao trên máy chủ.',
+          ],
+        },
+        {
+          h: 'b. Dữ liệu được lưu giữ thêm và thời hạn',
+          body: [
+            '• Hồ sơ giao dịch gói đăng ký (mã giao dịch, sản phẩm, kỳ hạn đăng ký, lịch sử thay đổi trạng thái thanh toán): 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)',
+            '• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.',
+            'Ngay trong thời hạn lưu giữ, những bản ghi trên cũng chỉ tồn tại ở dạng không thể truy vết ra người tạo.',
+          ],
+        },
+        {
+          h: 'c. Bạn phải tự huỷ gói đăng ký',
+          body: [
+            'Xoá tài khoản không tự động huỷ gói đăng ký trên Google Play, và nếu bạn không huỷ thì vẫn tiếp tục bị tính phí.',
+            'Cách huỷ: ứng dụng Google Play Store > hồ sơ > Thanh toán và gói đăng ký > Gói đăng ký (https://play.google.com/store/account/subscriptions)',
+            'Việc hoàn tiền cho khoản đã thanh toán tuân theo chính sách hoàn tiền của Google Play và chính sách hoàn tiền của nhà vận hành. Bạn có thể liên hệ theo địa chỉ dưới đây.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'Kể từ ngày phát hành phiên bản có tính năng báo cáo tóm tắt bằng AI',
+      summary:
+        'Nội dung báo cáo AI được lưu trên thiết bị của bạn. Trên máy chủ, bản tóm tắt báo cáo được lưu tối đa 90 ngày để kiểm tra chất lượng và bị xoá cùng với bản ghi sử dụng khi bạn xoá tài khoản.',
+      sections: [
+        {
+          h: 'a. Với báo cáo AI thì những gì bị xoá',
+          body: [
+            '• Bản ghi sử dụng báo cáo lưu trên máy chủ (mã định danh tài khoản, kỳ, số lần, số token) — bị xoá cùng lúc khi bạn xoá tài khoản.',
+            '• Bản tóm tắt báo cáo đang lưu trên máy chủ (tối đa 90 ngày) — bị xoá cùng lúc khi bạn xoá tài khoản. Nội dung nhật ký gốc không được lưu nên không có gì để xoá.',
+            '⚠ Nội dung báo cáo cũng được lưu trên thiết bị của bạn nên vẫn còn nguyên sau khi bạn xoá tài khoản. Nếu muốn xoá, hãy xoá báo cáo trong ứng dụng hoặc gỡ cài đặt ứng dụng.',
+            '• Nếu bạn đã bật sao lưu thì báo cáo cũng được mã hoá và nằm trong bản sao lưu, và sẽ bị xoá khi bản sao lưu bị xoá.',
+          ],
+        },
+      ],
+    },
+  ],
+};

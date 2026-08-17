@@ -276,3 +276,123 @@ export const PRIVACY_ID: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Panduan penghapusan akun — Bahasa Indonesia.
+ *
+ * 🔴 **Teks bahasa Korea yang berlaku** (`legal-text.ts`). Aturannya sama seperti kebijakan privasi.
+ *
+ * ⚠ Dokumen ini memiliki URL publik tersendiri karena formulir Keamanan data Google Play
+ *   mewajibkan jalur penghapusan melalui **web**: orang yang sudah menghapus aplikasinya pun
+ *   tetap harus punya cara untuk mengajukan permintaan. URL itulah yang dibuka peninjau Play,
+ *   sehingga dokumen ini tidak boleh hanya tersedia dalam bahasa Korea.
+ *
+ * ⚠ Strukturnya harus sama persis dengan versi Korea — 5 bagian (6/4/4/3/3 baris) ditambah
+ *   dua perubahan mendatang. `npm run check:legal` memeriksanya.
+ */
+export const DELETE_ACCOUNT_ID: LegalDoc = {
+  title: 'Jogak — Cara menghapus akunmu',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Halaman ini menjelaskan cara menghapus akun aplikasi Jogak beserta data yang terkait dengannya. Kamu juga dapat mengajukan permintaan lewat email bila sudah menghapus aplikasinya atau tidak dapat masuk.',
+  sections: [
+    {
+      h: '1. Menghapus sendiri di aplikasi',
+      body: [
+        'Ikuti langkah berikut di aplikasi Jogak dan permintaanmu langsung diproses.',
+        '① Buka aplikasi → tab [Pengaturan] di bagian bawah',
+        '② Pilih [Hubungi kami]',
+        '③ Jika kamu belum masuk, masuklah dengan akun Google',
+        '④ Pilih [Hapus akun] di bagian paling bawah layar lalu konfirmasi',
+        'Penghapusan akun tidak dapat dibatalkan.',
+      ],
+    },
+    {
+      h: '2. Meminta lewat email (bila kamu sudah menghapus aplikasinya atau tidak dapat masuk)',
+      body: [
+        'Kirimkan hal berikut ke support@vivace-games.com.',
+        '• Subjek: Permintaan penghapusan akun Jogak',
+        '• Isi: alamat email akun Google yang kamu gunakan untuk masuk ke Jogak',
+        'Agar kami dapat memastikan bahwa itu memang kamu, alamat pengirim harus sama dengan alamat yang kamu pakai saat mendaftar. Setelah permintaan diterima, kami memprosesnya dan membalas dalam 7 hari kerja.',
+      ],
+    },
+    {
+      h: '3. Data yang dihapus',
+      body: [
+        'Saat kamu menghapus akun, informasi berikut segera dimusnahkan atau diubah menjadi bentuk yang tidak dapat ditelusuri.',
+        '• Pengenal unik akun sosial (Google “sub”)',
+        '• Alamat email',
+        '• Keterkaitan antara riwayat pertanyaan dan akun penulisnya',
+      ],
+    },
+    {
+      h: '4. Data yang disimpan dan jangka waktunya',
+      body: [
+        'Informasi berikut disimpan sesuai peraturan perundang-undangan, dan bahkan selama jangka waktu itu hanya tersisa dalam bentuk yang tidak dapat ditelusuri kembali ke penulisnya (pseudonimisasi).',
+        '• Isi pertanyaan: 3 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik — catatan mengenai keluhan atau penyelesaian sengketa konsumen)',
+        'Setelah jangka waktu penyimpanan lewat, kami memusnahkannya tanpa penundaan.',
+      ],
+    },
+    {
+      h: '5. Yang tidak ikut dihapus — catatan di perangkatmu',
+      body: [
+        'Catatan Jogak (judul, isi, foto, tag, dan emosi) hanya disimpan di dalam perangkatmu dan tidak dikirim ke server operator.',
+        'Karena itu, menghapus akun tidak mengubah catatan yang ada di perangkatmu. Bila kamu ingin menghapus catatannya juga, hapus aplikasinya atau jalankan atur ulang lewat [Pengaturan] di aplikasi.',
+        'Sebaliknya, bila kamu menghapus aplikasinya, catatan di perangkatmu tidak dapat dipulihkan.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'Sejak hari versi yang memuat langganan bulanan dan pencadangan/pemulihan dirilis',
+      summary:
+        'Bila kamu mengaktifkan pencadangan, menghapus akun juga menghapus cadangan terenkripsi yang tersimpan di server. Catatan transaksi langganan disimpan sesuai peraturan perundang-undangan dalam bentuk yang tidak dapat ditelusuri.',
+      sections: [
+        {
+          h: 'a. Data yang dihapus sebagai tambahan',
+          body: [
+            '• Salinan catatanmu yang terenkripsi di server — dihapus bersamaan saat kamu menghapus akun. Kami tidak menunggu tenggang 90 hari.',
+            '• Pengenal cadangan dan catatan pencadangan (waktu, ukuran, nomor generasi)',
+            '⚠ Setelah dihapus, hal ini tidak dapat dibatalkan. Meski kamu masih memegang kode pemulihan, kamu tidak akan dapat memulihkannya.',
+            '⚠ Catatan di perangkatmu tetap utuh. Yang dihapus hanyalah salinan di server.',
+          ],
+        },
+        {
+          h: 'b. Data yang disimpan sebagai tambahan dan jangka waktunya',
+          body: [
+            '• Catatan transaksi langganan (pengenal transaksi, produk, periode langganan, riwayat perubahan status pembayaran): 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)',
+            '• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.',
+            'Catatan di atas pun, selama jangka waktu penyimpanannya, hanya tersisa dalam bentuk yang tidak dapat ditelusuri kembali ke penulisnya.',
+          ],
+        },
+        {
+          h: 'c. Langgananmu harus dibatalkan secara terpisah',
+          body: [
+            'Menghapus akun tidak otomatis membatalkan langgananmu di Google Play, dan bila tidak kamu batalkan, tagihan akan terus berjalan.',
+            'Cara membatalkan: aplikasi Google Play Store > profil > Pembayaran dan langganan > Langganan (https://play.google.com/store/account/subscriptions)',
+            'Pengembalian dana atas jumlah yang sudah dibayarkan mengikuti kebijakan pengembalian dana Google Play dan kebijakan pengembalian dana operator. Untuk pertanyaan, silakan hubungi alamat di bawah ini.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'Sejak hari versi yang memuat laporan ringkasan AI dirilis',
+      summary:
+        'Isi laporan AI disimpan di perangkatmu. Di server, ringkasan laporan disimpan paling lama 90 hari untuk pemeriksaan kualitas, dan dihapus bersama catatan penggunaanmu saat kamu menghapus akun.',
+      sections: [
+        {
+          h: 'a. Apa yang dihapus terkait laporan AI',
+          body: [
+            '• Catatan penggunaan laporan yang tersimpan di server (pengenal akun, periode, jumlah kali, jumlah token) — dihapus bersamaan saat kamu menghapus akun.',
+            '• Ringkasan laporan yang tersimpan di server (paling lama 90 hari) — dihapus bersamaan saat kamu menghapus akun. Isi catatan aslinya tidak pernah disimpan sehingga tidak ada yang perlu dihapus.',
+            '⚠ Isi laporan juga tersimpan di perangkatmu, sehingga tetap ada di sana meski kamu menghapus akun. Untuk menghapusnya, hapus laporan di aplikasi atau hapus aplikasinya.',
+            '• Bila kamu mengaktifkan pencadangan, laporan juga disertakan dalam cadangan dalam bentuk terenkripsi dan ikut terhapus ketika cadangan dihapus.',
+          ],
+        },
+      ],
+    },
+  ],
+};

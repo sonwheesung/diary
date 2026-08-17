@@ -276,3 +276,124 @@ export const PRIVACY_FR: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Suppression de compte — français.
+ *
+ * 🔴 **Le texte coréen fait foi** (`legal-text.ts`). Même règle que pour la politique de
+ *   confidentialité : ceci est une traduction de confort.
+ *
+ * ⚠ Ce document possède une URL publique propre parce que le formulaire « Sécurité des
+ *   données » de Play exige une voie de suppression **web** : une personne ayant déjà
+ *   désinstallé l’application doit pouvoir en faire la demande. C’est cette URL qu’ouvrent
+ *   les évaluateurs de Play, elle ne peut donc pas rester uniquement en coréen.
+ *
+ * ⚠ La structure doit correspondre exactement au coréen — 5 sections (6/4/4/3/3 lignes) plus
+ *   deux modifications à venir. `npm run check:legal` le vérifie.
+ */
+export const DELETE_ACCOUNT_FR: LegalDoc = {
+  title: 'Comment supprimer votre compte Jogak',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Cette page explique comment supprimer votre compte Jogak et les données qui y sont associées. Vous pouvez aussi en faire la demande par e-mail si vous avez déjà désinstallé l’application ou si vous ne parvenez pas à vous connecter.',
+  sections: [
+    {
+      h: '1. Supprimer vous-même depuis l’application',
+      body: [
+        'En suivant ces étapes dans l’application Jogak, la suppression prend effet immédiatement.',
+        '① Ouvrez l’application → onglet [Réglages], en bas',
+        '② Choisissez [Nous contacter]',
+        '③ Si vous n’êtes pas connecté, connectez-vous avec votre compte Google',
+        '④ Choisissez [Supprimer le compte] tout en bas de l’écran, puis confirmez',
+        'La suppression du compte est irréversible.',
+      ],
+    },
+    {
+      h: '2. Demander par e-mail (si vous avez désinstallé l’application ou ne pouvez pas vous connecter)',
+      body: [
+        'Envoyez les éléments suivants à support@vivace-games.com.',
+        '• Objet : demande de suppression du compte Jogak',
+        '• Corps du message : l’adresse e-mail du compte Google avec lequel vous vous êtes connecté à Jogak',
+        'L’adresse depuis laquelle vous écrivez doit être la même que celle utilisée à l’inscription, afin que nous puissions vérifier qu’il s’agit bien de vous. Nous traiterons la demande et vous répondrons sous 7 jours ouvrés.',
+      ],
+    },
+    {
+      h: '3. Données supprimées',
+      body: [
+        'À la suppression de votre compte, les informations suivantes sont détruites immédiatement ou rendues non traçables.',
+        '• L’identifiant unique de votre compte social (le « sub » Google)',
+        '• Votre adresse e-mail',
+        '• Le lien entre vos demandes et le compte de leur auteur',
+      ],
+    },
+    {
+      h: '4. Données conservées et durées',
+      body: [
+        'Les informations suivantes sont conservées en application de la loi et, même pendant cette durée, elles ne subsistent que sous une forme ne permettant pas de remonter à leur auteur (pseudonymisée).',
+        '• Contenu des demandes : 3 ans (loi sur la protection des consommateurs dans le commerce électronique — relevés relatifs aux réclamations ou au règlement des litiges)',
+        'Une fois la durée de conservation écoulée, nous détruisons les données sans délai.',
+      ],
+    },
+    {
+      h: '5. Ce qui n’est pas supprimé — le journal présent sur votre appareil',
+      body: [
+        'Les entrées de Jogak (titres, texte, photos, tags et émotions) sont enregistrées uniquement à l’intérieur de votre appareil et ne sont pas transmises aux serveurs de l’exploitant.',
+        'La suppression de votre compte laisse donc intactes les entrées présentes sur votre appareil. Pour les effacer aussi, désinstallez l’application ou utilisez la fonction « Tout réinitialiser » dans les [Réglages] de l’application.',
+        'À l’inverse, si vous désinstallez l’application, les entrées de votre appareil ne pourront pas être récupérées.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'À compter du jour de publication de la version incluant l’abonnement mensuel et la sauvegarde/restauration',
+      summary:
+        'Si vous avez activé la sauvegarde, la suppression de votre compte supprime aussi la sauvegarde chiffrée conservée sur le serveur. Les relevés de transaction d’abonnement sont conservés en application de la loi, sous une forme pseudonymisée.',
+      sections: [
+        {
+          h: 'a. Données supprimées en plus',
+          body: [
+            '• La copie chiffrée de votre journal conservée sur le serveur — supprimée en même temps que votre compte. Nous n’attendons pas le délai de grâce de 90 jours.',
+            '• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)',
+            '⚠ Cette opération est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer.',
+            '⚠ Les entrées présentes sur votre appareil restent intactes. Seule la copie côté serveur est supprimée.',
+          ],
+        },
+        {
+          h: 'b. Données conservées en plus et durées',
+          body: [
+            '• Relevés de transaction d’abonnement (identifiant de transaction, produit, période d’abonnement, historique des changements d’état de paiement) : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
+            '• Le relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne plus ». L’identifiant de votre compte n’est pas conservé avec lui.',
+            'Même pendant ces durées, ces relevés ne subsistent que sous une forme ne permettant pas de remonter à leur auteur.',
+          ],
+        },
+        {
+          h: 'c. L’abonnement doit être résilié séparément',
+          body: [
+            'La suppression de votre compte ne résilie pas votre abonnement Google Play. Si vous ne le résiliez pas, vous continuerez à être facturé.',
+            'Pour résilier : application Google Play Store > profil > Paiements et abonnements > Abonnements (https://play.google.com/store/account/subscriptions)',
+            'Le remboursement des sommes déjà prélevées relève de la politique de remboursement de Google Play et de celle de l’exploitant. Vous pouvez nous écrire à l’adresse de contact indiquée ci-dessous.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'À compter du jour de publication de la version incluant les rapports de synthèse par IA',
+      summary:
+        'Le texte des rapports par IA est enregistré sur votre appareil. Sur le serveur, les synthèses des rapports sont conservées au maximum 90 jours à des fins de contrôle de la qualité et sont supprimées avec vos relevés d’utilisation lors de la suppression de votre compte.',
+      sections: [
+        {
+          h: 'a. Ce qui est supprimé pour les rapports par IA',
+          body: [
+            '• Les relevés d’utilisation conservés sur le serveur (identifiant du compte, période, nombre de fois, nombre de jetons) — supprimés en même temps que votre compte.',
+            '• Les synthèses de rapports conservées sur le serveur (au maximum 90 jours) — supprimées en même temps que votre compte. Le contenu du journal n’étant jamais conservé, il n’y a rien à supprimer.',
+            '⚠ Le texte des rapports est aussi enregistré sur votre appareil et y reste après la suppression de votre compte. Pour l’effacer, supprimez les rapports dans l’application ou désinstallez celle-ci.',
+            '• Si vous avez activé la sauvegarde, les rapports y sont inclus sous forme chiffrée et sont supprimés en même temps que la sauvegarde.',
+          ],
+        },
+      ],
+    },
+  ],
+};

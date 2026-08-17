@@ -276,3 +276,124 @@ export const PRIVACY_ES: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Cómo eliminar tu cuenta — español.
+ *
+ * 🔴 **El texto coreano es el original y prevalece** (`legal-text.ts`). Misma regla que en la
+ *   política de privacidad: esta es una traducción para facilitar la lectura.
+ *
+ * ⚠ Este documento tiene una URL pública propia porque el formulario de seguridad de los datos
+ *   de Play exige una vía **web** de eliminación: quien ya haya desinstalado la aplicación debe
+ *   poder solicitarla igualmente. Esa URL es la que abren los revisores de Play, y por eso no
+ *   puede quedarse solo en coreano.
+ *
+ * ⚠ La estructura debe coincidir exactamente con la coreana — 5 secciones (6/4/4/3/3 líneas)
+ *   más dos modificaciones previstas. `npm run check:legal` lo verifica.
+ */
+export const DELETE_ACCOUNT_ES: LegalDoc = {
+  title: 'Cómo eliminar tu cuenta de Jogak',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Esta página explica cómo eliminar tu cuenta de Jogak y los datos asociados a ella. También puedes solicitarlo por correo electrónico si ya has desinstalado la aplicación o no puedes iniciar sesión.',
+  sections: [
+    {
+      h: '1. Eliminarla tú mismo en la aplicación',
+      body: [
+        'Si sigues estos pasos en la aplicación Jogak, la eliminación se aplica de inmediato.',
+        '① Abre la aplicación → pestaña [Ajustes], abajo',
+        '② Elige [Contacto]',
+        '③ Si no has iniciado sesión, inicia sesión con tu cuenta de Google',
+        '④ Elige [Eliminar cuenta] al final de la pantalla y confirma',
+        'Eliminar la cuenta no se puede deshacer.',
+      ],
+    },
+    {
+      h: '2. Solicitarlo por correo electrónico (si has desinstalado la aplicación o no puedes iniciar sesión)',
+      body: [
+        'Envía lo siguiente a support@vivace-games.com.',
+        '• Asunto: solicitud de eliminación de cuenta de Jogak',
+        '• Cuerpo: la dirección de correo de la cuenta de Google con la que iniciaste sesión en Jogak',
+        'La dirección desde la que escribes debe coincidir con la que usaste al registrarte, para que podamos confirmar que eres tú. Lo tramitaremos y te responderemos en un plazo de 7 días hábiles.',
+      ],
+    },
+    {
+      h: '3. Datos que se eliminan',
+      body: [
+        'Al eliminar tu cuenta, la siguiente información se destruye de inmediato o queda en una forma no rastreable.',
+        '• El identificador único de tu cuenta social (el «sub» de Google)',
+        '• Tu dirección de correo electrónico',
+        '• El vínculo entre tus consultas y la cuenta de quien las escribió',
+      ],
+    },
+    {
+      h: '4. Datos que se conservan y durante cuánto tiempo',
+      body: [
+        'La siguiente información se conserva conforme a la ley y, incluso durante ese plazo, solo permanece en una forma que no permite rastrear a su autor (seudonimizada).',
+        '• Contenido de las consultas: 3 años (Ley de Protección del Consumidor en el Comercio Electrónico — registros sobre reclamaciones o resolución de conflictos)',
+        'Una vez transcurrido el plazo de conservación, destruimos los datos sin demora.',
+      ],
+    },
+    {
+      h: '5. Lo que no se elimina — el diario que está en tu dispositivo',
+      body: [
+        'Las entradas de Jogak (títulos, texto, fotos, etiquetas y emociones) se guardan únicamente dentro de tu dispositivo y no se transmiten a los servidores del operador.',
+        'Por eso, eliminar tu cuenta deja intactas las entradas de tu dispositivo. Si también quieres borrarlas, desinstala la aplicación o usa la función «Restablecer todo» en los [Ajustes] de la aplicación.',
+        'A la inversa, si desinstalas la aplicación, las entradas de tu dispositivo no se podrán recuperar.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'Desde el día en que se publique la versión que incluye la suscripción mensual y la copia de seguridad/restauración',
+      summary:
+        'Si activaste la copia de seguridad, al eliminar tu cuenta se elimina también la copia cifrada guardada en el servidor. Los registros de transacción de la suscripción se conservan conforme a la ley, en forma seudonimizada.',
+      sections: [
+        {
+          h: 'a. Datos que se eliminan adicionalmente',
+          body: [
+            '• La copia cifrada de tu diario guardada en el servidor — se elimina junto con tu cuenta. No esperamos los 90 días de gracia.',
+            '• El identificador de la copia y los registros de copia (hora, tamaño, número de generación)',
+            '⚠ Esto no se puede deshacer. Aunque conserves tu código de recuperación, no podrás restaurar.',
+            '⚠ Las entradas de tu dispositivo quedan intactas. Solo se elimina la copia del servidor.',
+          ],
+        },
+        {
+          h: 'b. Datos que se conservan adicionalmente y durante cuánto tiempo',
+          body: [
+            '• Registros de transacción de la suscripción (identificador de la transacción, producto, periodo de suscripción, historial de cambios del estado de pago): 5 años (Ley de Protección del Consumidor en el Comercio Electrónico, art. 6)',
+            '• El registro de que una copia de seguridad fue destruida (identificador de la copia y hora de la destrucción): 1 año — para que puedas averiguar «por qué no funciona la restauración». El identificador de tu cuenta no se conserva junto a él.',
+            'Incluso durante esos plazos, estos registros solo permanecen en una forma que no permite rastrear a su autor.',
+          ],
+        },
+        {
+          h: 'c. La suscripción debes cancelarla por separado',
+          body: [
+            'Eliminar tu cuenta no cancela tu suscripción de Google Play. Si no la cancelas, se te seguirá cobrando.',
+            'Para cancelar: aplicación Google Play Store > perfil > Pagos y suscripciones > Suscripciones (https://play.google.com/store/account/subscriptions)',
+            'El reembolso de los importes ya cobrados se rige por la política de reembolsos de Google Play y por la del operador. Puedes consultarnos en la dirección de contacto indicada más abajo.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'Desde el día en que se publique la versión que incluye los informes de resumen con IA',
+      summary:
+        'El texto de los informes con IA se guarda en tu dispositivo. En el servidor, los resúmenes de los informes se conservan hasta 90 días para comprobar su calidad y se eliminan junto con tus registros de uso cuando eliminas tu cuenta.',
+      sections: [
+        {
+          h: 'a. Qué se elimina en los informes con IA',
+          body: [
+            '• Los registros de uso guardados en el servidor (identificador de la cuenta, periodo, número de veces, número de tokens) — se eliminan junto con tu cuenta.',
+            '• Los resúmenes de los informes conservados en el servidor (hasta 90 días) — se eliminan junto con tu cuenta. El contenido del diario no se almacena, así que no hay nada que borrar.',
+            '⚠ El texto de los informes también se guarda en tu dispositivo, por lo que permanece allí aunque elimines tu cuenta. Para borrarlo, elimina los informes en la aplicación o desinstálala.',
+            '• Si activaste la copia de seguridad, los informes se incluyen cifrados en ella y se eliminan cuando la copia se elimina.',
+          ],
+        },
+      ],
+    },
+  ],
+};

@@ -276,3 +276,124 @@ export const PRIVACY_IT: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Eliminazione dell’account — italiano.
+ *
+ * 🔴 **Il testo coreano fa fede** (`legal-text.ts`). Stessa regola dell’informativa sulla
+ *   privacy: questa è una traduzione di cortesia.
+ *
+ * ⚠ Questo documento ha una URL pubblica propria perché il modulo «Sicurezza dei dati» di Play
+ *   richiede una via di eliminazione **sul web**: chi ha già disinstallato l’app deve comunque
+ *   poterne fare richiesta. È quella URL che aprono i revisori di Play, quindi non può restare
+ *   solo in coreano.
+ *
+ * ⚠ La struttura deve coincidere esattamente con quella coreana — 5 sezioni (6/4/4/3/3 righe)
+ *   più due modifiche in arrivo. `npm run check:legal` lo verifica.
+ */
+export const DELETE_ACCOUNT_IT: LegalDoc = {
+  title: 'Come eliminare il tuo account Jogak',
+  sourceFingerprint: 'a6b3a8b5',
+  effective: '2026-08-10',
+  updated: '2026-08-10',
+  intro:
+    'Questa pagina spiega come eliminare il tuo account Jogak e i dati a esso associati. Puoi farne richiesta anche via e-mail se hai già disinstallato l’app o non riesci ad accedere.',
+  sections: [
+    {
+      h: '1. Eliminarlo tu stesso nell’app',
+      body: [
+        'Segui questi passaggi nell’app Jogak: l’eliminazione ha effetto immediato.',
+        '① Apri l’app → scheda [Impostazioni], in basso',
+        '② Scegli [Contattaci]',
+        '③ Se non hai effettuato l’accesso, accedi con il tuo account Google',
+        '④ Scegli [Elimina account] in fondo alla schermata e conferma',
+        'L’eliminazione dell’account non è reversibile.',
+      ],
+    },
+    {
+      h: '2. Richiederla via e-mail (se hai disinstallato l’app o non riesci ad accedere)',
+      body: [
+        'Invia quanto segue a support@vivace-games.com.',
+        '• Oggetto: richiesta di eliminazione dell’account Jogak',
+        '• Testo: l’indirizzo e-mail dell’account Google con cui hai effettuato l’accesso a Jogak',
+        'L’indirizzo da cui scrivi deve coincidere con quello usato in fase di registrazione, così da poter verificare che sei tu. Daremo seguito alla richiesta e ti risponderemo entro 7 giorni lavorativi.',
+      ],
+    },
+    {
+      h: '3. Dati che vengono eliminati',
+      body: [
+        'Quando elimini il tuo account, le informazioni seguenti vengono distrutte immediatamente o rese non tracciabili.',
+        '• L’identificatore univoco del tuo account social (il “sub” di Google)',
+        '• Il tuo indirizzo e-mail',
+        '• Il collegamento tra le tue richieste e l’account di chi le ha scritte',
+      ],
+    },
+    {
+      h: '4. Dati che vengono conservati e per quanto tempo',
+      body: [
+        'Le informazioni seguenti sono conservate in base alla legge e, anche durante tale periodo, restano soltanto in una forma che non consente di risalire a chi le ha scritte (pseudonimizzata).',
+        '• Contenuto delle richieste: 3 anni (Legge sulla tutela dei consumatori nel commercio elettronico — registri su reclami o composizione delle controversie)',
+        'Trascorso il periodo di conservazione, distruggiamo i dati senza indugio.',
+      ],
+    },
+    {
+      h: '5. Ciò che non viene eliminato — il diario presente sul dispositivo',
+      body: [
+        'Le voci di Jogak (titoli, testo, foto, tag ed emozioni) sono salvate soltanto all’interno del tuo dispositivo e non vengono trasmesse ai server del gestore.',
+        'Perciò, eliminando l’account, le voci sul tuo dispositivo restano intatte. Per cancellare anche quelle, disinstalla l’app oppure usa la funzione “Ripristina tutto” nelle [Impostazioni] dell’app.',
+        'Al contrario, se disinstalli l’app, le voci presenti sul dispositivo non potranno essere recuperate.',
+      ],
+    },
+  ],
+  pending: [
+    {
+      appliesFrom:
+        'Dal giorno in cui viene pubblicata la versione che include l’abbonamento mensile e il backup/ripristino',
+      summary:
+        'Se hai attivato il backup, eliminando l’account viene eliminata anche la copia cifrata conservata sul server. I registri delle transazioni di abbonamento sono conservati in base alla legge, in forma pseudonimizzata.',
+      sections: [
+        {
+          h: 'a. Dati eliminati in aggiunta',
+          body: [
+            '• La copia cifrata del tuo diario conservata sul server — eliminata insieme all’account. Non attendiamo i 90 giorni di tolleranza.',
+            '• L’identificatore del backup e i registri di backup (ora, dimensione, numero di generazione)',
+            '⚠ L’operazione non è reversibile. Anche se conservi il tuo codice di recupero, non potrai ripristinare.',
+            '⚠ Le voci presenti sul tuo dispositivo restano intatte. Viene eliminata soltanto la copia sul server.',
+          ],
+        },
+        {
+          h: 'b. Dati conservati in aggiunta e per quanto tempo',
+          body: [
+            '• Registri delle transazioni di abbonamento (identificatore della transazione, prodotto, periodo di abbonamento, cronologia delle variazioni dello stato di pagamento): 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)',
+            '• Il registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno — perché tu possa capire “perché il ripristino non funziona più”. L’identificatore del tuo account non viene conservato insieme.',
+            'Anche durante tali periodi, questi registri restano soltanto in una forma che non consente di risalire a chi li ha scritti.',
+          ],
+        },
+        {
+          h: 'c. L’abbonamento va disdetto separatamente',
+          body: [
+            'L’eliminazione dell’account non annulla il tuo abbonamento Google Play. Se non lo annulli, continuerai a essere addebitato.',
+            'Per annullare: app Google Play Store > profilo > Pagamenti e abbonamenti > Abbonamenti (https://play.google.com/store/account/subscriptions)',
+            'Il rimborso degli importi già addebitati segue la politica di rimborso di Google Play e quella del gestore. Puoi scriverci all’indirizzo di contatto indicato qui sotto.',
+          ],
+        },
+      ],
+    },
+    {
+      appliesFrom: 'Dal giorno in cui viene pubblicata la versione contenente i report di sintesi con IA',
+      summary:
+        'Il testo dei report con IA è salvato sul tuo dispositivo. Sul server le sintesi dei report sono conservate al massimo 90 giorni per il controllo della qualità e vengono eliminate insieme ai tuoi registri di utilizzo quando elimini l’account.',
+      sections: [
+        {
+          h: 'a. Che cosa viene eliminato per i report con IA',
+          body: [
+            '• I registri di utilizzo conservati sul server (identificatore dell’account, periodo, numero di volte, numero di token) — eliminati insieme all’account.',
+            '• Le sintesi dei report conservate sul server (al massimo 90 giorni) — eliminate insieme all’account. Il contenuto del diario non viene mai conservato, quindi non c’è nulla da eliminare.',
+            '⚠ Il testo dei report è salvato anche sul tuo dispositivo, quindi vi rimane dopo l’eliminazione dell’account. Per cancellarlo, elimina i report nell’app oppure disinstalla l’app.',
+            '• Se hai attivato il backup, i report vi sono inclusi in forma cifrata e vengono eliminati quando il backup viene eliminato.',
+          ],
+        },
+      ],
+    },
+  ],
+};
