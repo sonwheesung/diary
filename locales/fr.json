@@ -500,6 +500,7 @@
       "refused": "Nous n'avons pas pu rédiger le bilan cette fois. Cette tentative ne compte pas dans votre limite.",
       "in-progress": "La rédaction est déjà en cours. Patientez un instant.",
       "cooling-down": "Un problème est survenu de notre côté. Vous pourrez réessayer dans une heure.",
+      "coolingDownAt": "Un problème est survenu de notre côté. Vous pourrez réessayer à partir de {{time}}.",
       "rate-limited": "Réessayez dans un instant.",
       "upstream": "Le serveur rencontre un problème. Réessayez bientôt.",
       "error": "Un problème est survenu."

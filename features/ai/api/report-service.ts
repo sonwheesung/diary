@@ -31,7 +31,9 @@ import { i18next } from '@/lib/i18n';
 /** 생성 실패 사유 — 서버 사유에 앱에서만 나는 두 가지를 더한다 */
 export type CreateFail = AiFail | 'exists' | 'need-weekly' | 'need-monthly';
 
-export type CreateResult = { ok: true; reportId: string } | { ok: false; reason: CreateFail };
+export type CreateResult =
+  | { ok: true; reportId: string }
+  | { ok: false; reason: CreateFail; retryAt?: number };
 
 /** 그 종류가 지금 겨냥하는 기간. **항상 닫힌 기간이다** — 진행 중인 주·달·해는 요약하지 않는다 */
 export function targetPeriodKey(kind: ReportKind, now: Date = new Date()): string {
@@ -108,8 +110,13 @@ export async function createReport(
   }
 
   /*
-   * 멱등 키를 **호출 전에** 만든다. 서버가 진행 중인 키를 기억하므로, 앱이 응답을 놓치고
-   * 재시도해도 같은 키가 가면 두 번 과금되지 않는다(§7.3).
+   * 멱등 키를 **호출 전에** 만든다. 서버가 진행 중인 키를 기억해 **동시 중복 요청**을 막는다.
+   *
+   * ⚠ **재시도까지 막지는 못한다.** 이 함수가 불릴 때마다 새 UUID가 나오고 요청 전에
+   *   저장하지 않으므로, 같은 키가 두 번 가는 일이 없다 — 한때 주석이 그렇게 주장했는데
+   *   사실이 아니었다(2026-08-17 정정).
+   * ⏭ 진짜 재시도 멱등·응답 회수를 하려면 **여기서 키를 먼저 로컬에 남겨야** 한다.
+   *   서버는 이미 `ai_reports`에 90일 보관하므로 남은 것은 앱의 pending 저장과 조회 라우트다.
    */
   const reportId = Crypto.randomUUID();
   const response = await requestReport({
@@ -122,7 +129,8 @@ export async function createReport(
   });
 
   if (!response.ok) {
-    return { ok: false, reason: response.reason };
+    // `retryAt`은 `cooling-down`에만 실려 온다. 그대로 흘려보낸다 — 화면이 시각을 말한다
+    return { ok: false, reason: response.reason, ...(response.retryAt !== undefined && { retryAt: response.retryAt }) };
   }
 
   await saveReport({

@@ -20,7 +20,7 @@ import { hasAiConsent } from '@/features/ai/consent';
 import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
 import { useEntitlementStore } from '@/features/entitlement/store';
-import { formatWeekNumber, formatWeekdayList } from '@/lib/format';
+import { formatDateTime, formatWeekNumber, formatWeekdayList } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -108,7 +108,7 @@ export default function ReportScreen() {
         router.push(`/report/${result.reportId}`);
         return;
       }
-      Alert.alert(t('report.title'), failMessage(result.reason, kind, t));
+      Alert.alert(t('report.title'), failMessage(result.reason, kind, t, result.retryAt));
       // 실패 사유가 바뀌었을 수 있다(누가 다른 기기에서 만들었다든지) — 다시 판정한다
       await load(kind);
     } finally {
@@ -298,9 +298,19 @@ function failMessage(
   reason: CreateFail,
   kind: ReportKind,
   t: (key: string, opts?: Record<string, string>) => string,
+  retryAt?: number,
 ): string {
   const period = periodLabel(kind, targetPeriodKey(kind));
   switch (reason) {
+    /*
+     * ⚠ 서버가 정확한 시각을 준다(`retryAt`). *"한 시간 뒤"* 는 잠금이 걸린 시점 기준이라
+     *   5분 뒤에 다시 눌러본 사람에게 **틀린 안내**가 된다 — 실제로는 55분 남았다.
+     *   시각을 못 받았을 때만 뭉뚱그린 문장으로 떨어진다.
+     */
+    case 'cooling-down':
+      return retryAt === undefined
+        ? t('report.fail.cooling-down')
+        : t('report.fail.coolingDownAt', { time: formatDateTime(retryAt) });
     // ⚠ "주에 한 번"으로 뭉치지 않는다 — 월간 탭에서 그 문장은 거짓이다.
     //   무엇이 이미 있는지를 기간으로 말해야 다음에 할 일이 분명해진다
     case 'exists':

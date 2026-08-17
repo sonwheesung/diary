@@ -52,14 +52,27 @@ export interface AiReportResponse {
   promptVer: number;
 }
 
-export type AiResult<T> = ({ ok: true } & T) | { ok: false; reason: AiFail };
+/**
+ * ⚠ `retryAt`은 **`cooling-down`에만** 실려 온다(epoch ms). 없으면 화면이 뭉뚱그린 문장으로
+ *   떨어진다 — 서버가 보내주는데도 버려서 *"한 시간 뒤"* 라고만 말하던 것을 고쳤다(2026-08-17).
+ */
+export type AiResult<T> =
+  | ({ ok: true } & T)
+  | { ok: false; reason: AiFail; retryAt?: number };
 
 /**
  * 리포트 생성은 LLM 왕복이라 백업 호출보다 훨씬 느리다.
- * 서버는 스트리밍으로 받아 `maxDuration = 300`까지 버티므로, 앱도 그만큼 기다린다 —
- * 여기서 먼저 끊으면 **서버는 성공해 캡을 쓰는데 앱은 실패로 본다.**
+ *
+ * 🔴 **서버(`maxDuration = 300`)보다 반드시 길어야 한다.** 앱이 먼저 끊으면
+ *   **서버는 성공해 캡을 쓰는데 앱은 실패로 본다** — 주간 캡이 1이라 그 기간 리포트를
+ *   영영 잃는다. 반대로 서버가 먼저 끊기면 `ai_usage` 쓰기에 도달하지 못해 캡이 안 나간다.
+ *   즉 **긴 쪽이 앱이어야 안전한 실패**가 된다.
+ *
+ * ⚠ 한때 180초였다(서버 300초). 그 120초 창이 정확히 위 사고를 만들고 있었다.
+ * ⚠ 서버는 논스트리밍(`openai.responses.create()`)이라 이 시간 내내 아무것도 오지 않는다.
+ *   화면은 부정 진행 표시로 버틴다 — 정상은 20~60초이고 이 값은 꼬리를 위한 것이다.
  */
-const TIMEOUT_MS = 180_000;
+const TIMEOUT_MS = 310_000;
 
 function mapStatus(status: number): AiFail {
   if (status === 401) return 'unauthorized';
@@ -131,8 +144,17 @@ export async function requestReport(
 
   if (!res.ok) {
     const reason = typeof json.reason === 'string' ? json.reason : null;
-    // 서버가 사유를 명시했으면 그것을 믿는다 — 상태 코드보다 구체적이다
-    return { ok: false, reason: (reason as AiFail | null) ?? mapStatus(res.status) };
+    /*
+     * ⚠ 서버가 ISO 문자열로 준다. 파싱 실패는 **없는 것으로 본다** — 시각을 못 읽었다고
+     *   실패 안내 자체를 막을 이유가 없고, 화면은 시각 없는 문장으로 떨어지면 된다.
+     */
+    const parsed = typeof json.retryAt === 'string' ? Date.parse(json.retryAt) : Number.NaN;
+    return {
+      ok: false,
+      // 서버가 사유를 명시했으면 그것을 믿는다 — 상태 코드보다 구체적이다
+      reason: (reason as AiFail | null) ?? mapStatus(res.status),
+      ...(Number.isNaN(parsed) ? {} : { retryAt: parsed }),
+    };
   }
 
   const summary = typeof json.summary === 'string' ? json.summary : null;

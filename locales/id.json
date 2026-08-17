@@ -500,6 +500,7 @@
       "refused": "Kali ini kami belum bisa menulis laporan. Percobaan ini tidak dihitung dalam batasmu.",
       "in-progress": "Sedang ditulis. Mohon tunggu sebentar.",
       "cooling-down": "Terjadi masalah di sisi kami. Anda bisa mencoba lagi dalam satu jam.",
+      "coolingDownAt": "Terjadi masalah di sisi kami. Anda bisa mencoba lagi setelah {{time}}.",
       "rate-limited": "Coba lagi sebentar lagi.",
       "upstream": "Server sedang bermasalah. Coba lagi nanti.",
       "error": "Terjadi kesalahan."

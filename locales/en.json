@@ -500,6 +500,7 @@
       "refused": "We couldn't write a report this time. This attempt doesn't count toward your limit.",
       "in-progress": "It's already being written. Please wait a moment.",
       "cooling-down": "Something went wrong on our side. You can try again in an hour.",
+      "coolingDownAt": "Something went wrong on our side. You can try again after {{time}}.",
       "rate-limited": "Please try again in a moment.",
       "upstream": "The server is having trouble. Please try again shortly.",
       "error": "Something went wrong."

@@ -500,6 +500,7 @@
       "refused": "Questa volta non siamo riusciti a scrivere il resoconto. Questo tentativo non conta nel tuo limite.",
       "in-progress": "È già in scrittura. Attendi un momento.",
       "cooling-down": "Qualcosa non ha funzionato dalla nostra parte. Puoi riprovare tra un’ora.",
+      "coolingDownAt": "Qualcosa non ha funzionato dalla nostra parte. Puoi riprovare a partire da {{time}}.",
       "rate-limited": "Riprova tra poco.",
       "upstream": "Il server ha un problema. Riprova a breve.",
       "error": "Qualcosa è andato storto."

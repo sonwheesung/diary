@@ -500,6 +500,7 @@
       "refused": "Diesmal konnten wir keinen Bericht schreiben. Dieser Versuch zählt nicht auf dein Limit.",
       "in-progress": "Wird bereits geschrieben. Einen Moment bitte.",
       "cooling-down": "Bei uns ist etwas schiefgelaufen. In einer Stunde kannst du es erneut versuchen.",
+      "coolingDownAt": "Bei uns ist etwas schiefgelaufen. Ab {{time}} kannst du es erneut versuchen.",
       "rate-limited": "Bitte versuche es gleich noch einmal.",
       "upstream": "Der Server hat Probleme. Bitte versuche es später noch einmal.",
       "error": "Etwas ist schiefgelaufen."

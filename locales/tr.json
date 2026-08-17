@@ -500,6 +500,7 @@
       "refused": "Bu sefer rapor yazamadık. Bu deneme hakkından düşmez.",
       "in-progress": "Zaten yazılıyor. Biraz bekle.",
       "cooling-down": "Bizim tarafımızda bir sorun oldu. Bir saat sonra tekrar deneyebilirsin.",
+      "coolingDownAt": "Bizim tarafımızda bir sorun oldu. {{time}} tarihinden sonra tekrar deneyebilirsin.",
       "rate-limited": "Birazdan tekrar dene.",
       "upstream": "Sunucuda bir sorun var. Kısa süre sonra tekrar dene.",
       "error": "Bir şeyler ters gitti."
