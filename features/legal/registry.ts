@@ -1,18 +1,18 @@
 import type { LegalDoc } from './legal-text.ts';
-import { DELETE_ACCOUNT_DE, PRIVACY_DE } from './translations/de.ts';
-import { DELETE_ACCOUNT_EN, PRIVACY_EN } from './translations/en.ts';
-import { DELETE_ACCOUNT_ES, PRIVACY_ES } from './translations/es.ts';
-import { DELETE_ACCOUNT_FR, PRIVACY_FR } from './translations/fr.ts';
-import { DELETE_ACCOUNT_ID, PRIVACY_ID } from './translations/id.ts';
-import { DELETE_ACCOUNT_IT, PRIVACY_IT } from './translations/it.ts';
-import { DELETE_ACCOUNT_JA, PRIVACY_JA } from './translations/ja.ts';
-import { DELETE_ACCOUNT_PT_BR, PRIVACY_PT_BR } from './translations/pt-BR.ts';
-import { DELETE_ACCOUNT_RU, PRIVACY_RU } from './translations/ru.ts';
-import { DELETE_ACCOUNT_TH, PRIVACY_TH } from './translations/th.ts';
-import { DELETE_ACCOUNT_TR, PRIVACY_TR } from './translations/tr.ts';
-import { DELETE_ACCOUNT_VI, PRIVACY_VI } from './translations/vi.ts';
-import { DELETE_ACCOUNT_ZH_HANS, PRIVACY_ZH_HANS } from './translations/zh-Hans.ts';
-import { DELETE_ACCOUNT_ZH_HANT, PRIVACY_ZH_HANT } from './translations/zh-Hant.ts';
+import { DELETE_ACCOUNT_DE, PRIVACY_DE, TERMS_DE } from './translations/de.ts';
+import { DELETE_ACCOUNT_EN, PRIVACY_EN, TERMS_EN } from './translations/en.ts';
+import { DELETE_ACCOUNT_ES, PRIVACY_ES, TERMS_ES } from './translations/es.ts';
+import { DELETE_ACCOUNT_FR, PRIVACY_FR, TERMS_FR } from './translations/fr.ts';
+import { DELETE_ACCOUNT_ID, PRIVACY_ID, TERMS_ID } from './translations/id.ts';
+import { DELETE_ACCOUNT_IT, PRIVACY_IT, TERMS_IT } from './translations/it.ts';
+import { DELETE_ACCOUNT_JA, PRIVACY_JA, TERMS_JA } from './translations/ja.ts';
+import { DELETE_ACCOUNT_PT_BR, PRIVACY_PT_BR, TERMS_PT_BR } from './translations/pt-BR.ts';
+import { DELETE_ACCOUNT_RU, PRIVACY_RU, TERMS_RU } from './translations/ru.ts';
+import { DELETE_ACCOUNT_TH, PRIVACY_TH, TERMS_TH } from './translations/th.ts';
+import { DELETE_ACCOUNT_TR, PRIVACY_TR, TERMS_TR } from './translations/tr.ts';
+import { DELETE_ACCOUNT_VI, PRIVACY_VI, TERMS_VI } from './translations/vi.ts';
+import { DELETE_ACCOUNT_ZH_HANS, PRIVACY_ZH_HANS, TERMS_ZH_HANS } from './translations/zh-Hans.ts';
+import { DELETE_ACCOUNT_ZH_HANT, PRIVACY_ZH_HANT, TERMS_ZH_HANT } from './translations/zh-Hant.ts';
 
 /**
  * 번역본 목록 — **한 곳에서만 정의한다.**
@@ -45,6 +45,31 @@ export const TRANSLATIONS: Record<string, LegalDoc> = {
 
 /** 한국어를 뺀 지원 언어 수. 하나라도 비면 그 언어 사용자는 처리방침을 못 읽는다 */
 export const EXPECTED_TRANSLATIONS = 14;
+
+/**
+ * 이용약관의 번역본.
+ *
+ * 🔴 이 문서의 근거는 **전자상거래법 §13②**다 — 계약 체결 **전** 고지 + 계약 후 서면 교부.
+ *   특히 5호(청약철회 기한·행사방법·효과)와 6호(환불 조건·절차)는 **읽지 못하면 고지가
+ *   아니다.** 처리방침보다 오히려 번역이 급한 문서다: 처리방침은 "내 정보가 어떻게 쓰이나"이고
+ *   이건 "내 돈을 어떻게 돌려받나"라서, 못 읽으면 곧바로 분쟁이 된다.
+ */
+export const TERMS_TRANSLATIONS: Record<string, LegalDoc> = {
+  en: TERMS_EN,
+  ja: TERMS_JA,
+  'zh-Hans': TERMS_ZH_HANS,
+  'zh-Hant': TERMS_ZH_HANT,
+  es: TERMS_ES,
+  'pt-BR': TERMS_PT_BR,
+  fr: TERMS_FR,
+  de: TERMS_DE,
+  it: TERMS_IT,
+  ru: TERMS_RU,
+  id: TERMS_ID,
+  vi: TERMS_VI,
+  th: TERMS_TH,
+  tr: TERMS_TR,
+};
 
 /**
  * 계정 삭제 안내의 번역본.

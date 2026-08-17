@@ -394,3 +394,256 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Điều khoản sử dụng — tiếng Việt.
+ *
+ * 🔴 **Bản tiếng Hàn có hiệu lực ưu tiên** (`legal-text.ts`). Đây là bản dịch để dễ đọc; nếu hai
+ *   bản khác nhau, bản tiếng Hàn được áp dụng. Điều 22 đã nói rõ điều đó ngay trong tài liệu,
+ *   và chính điều đó khiến việc công bố bản dịch này là an toàn.
+ *
+ * ⚠ **Cấu trúc phải khớp chính xác với bản tiếng Hàn** — 22 điều, cùng số dòng trong mỗi điều,
+ *   và không có `pending`. `npm run check:legal` sẽ kiểm tra. Tách một câu tiếng Hàn thành hai
+ *   câu tiếng Việt sẽ khiến kiểm tra thất bại, còn gộp hai câu lại sẽ giấu mất một khoản bị rơi.
+ *
+ * ⚠ Tài liệu này tồn tại là vì **Điều 13(2) Luật Bảo vệ người tiêu dùng trong thương mại điện
+ *   tử** — thông tin *trước* khi giao kết cộng với văn bản về nội dung hợp đồng *sau* khi giao
+ *   kết. Các khoản 5 (rút lại đề nghị), 6 (hoàn tiền), 8 (khiếu nại và tranh chấp) và 9 (bản
+ *   điều khoản cùng cách kiểm tra nó) không có chỗ nào khác để đặt. Mỗi điều là chiếc bình chứa
+ *   một khoản cụ thể, nên **một điều không được đánh mất nội dung pháp lý của nó chỉ để đọc cho
+ *   trôi chảy hơn.** Ba điều nặng nhất:
+ *
+ *   - Điều 12 nhắc lại về mặt nội dung Điều 17(2)5 và 17(6). “việc cung ứng nội dung số đã bắt
+ *     đầu”, “phần chưa được cung ứng trong nội dung số được cung ứng thành nhiều lần” và “nêu rõ
+ *     sự việc này **đồng thời** cung cấp ... làm sản phẩm dùng thử” là các điều kiện luật định —
+ *     làm mờ chúng thì hạn chế trở nên vô hiệu.
+ *   - Dòng đầu Điều 20 là tấm chắn trước Điều 35 (hợp đồng bất lợi cho người tiêu dùng).
+ *     **Tuyệt đối không thêm “trong phạm vi tối đa pháp luật cho phép”** hay câu miễn trừ tương
+ *     tự: điều đó lật ngược câu văn thành đúng thứ mà nó được viết ra để từ chối.
+ *   - Điều 22 chính là Điều 36 (thẩm quyền riêng biệt) — địa chỉ của **người dùng**, không bao
+ *     giờ là trụ sở của nhà vận hành. Ghi trụ sở của nhà vận hành sẽ vô hiệu theo Điều 35.
+ *
+ * ⚠ “청약철회” được dịch là **“rút lại đề nghị”**, không phải “huỷ gói đăng ký”. Jogak Pro đúng là
+ *   một gói đăng ký, và Điều 14 mới là việc huỷ nó — hai khái niệm không được trùng nhau trong
+ *   cùng một tài liệu.
+ */
+export const TERMS_VI: LegalDoc = {
+  title: 'Điều khoản sử dụng Jogak',
+  sourceFingerprint: '898aa8d7',
+  effective: '2026-08-17',
+  updated: '2026-08-17',
+  intro:
+    'Bản điều khoản này quy định quyền, nghĩa vụ và trách nhiệm giữa Hwiseong Games (tên thương hiệu Vivace Games, sau đây gọi là “nhà vận hành”) và người dùng, liên quan đến việc sử dụng ứng dụng di động “Jogak” (sau đây gọi là “dịch vụ”) do nhà vận hành cung cấp. Xin bạn đọc trước khi sử dụng dịch vụ.',
+  sections: [
+    {
+      h: 'Điều 1 (Mục đích và phạm vi áp dụng)',
+      body: [
+        'Bản điều khoản này nhằm quy định điều kiện, thủ tục sử dụng dịch vụ cùng quyền và nghĩa vụ của nhà vận hành và người dùng.',
+        'Bản điều khoản này áp dụng cho mọi người dùng dịch vụ. Trường hợp bạn chỉ viết mảnh nhật ký mà không đăng nhập cũng như vậy.',
+        'Những vấn đề không được quy định trong bản điều khoản này sẽ theo pháp luật có liên quan như Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Luật Điều chỉnh điều khoản giao dịch chung, Luật Xúc tiến ngành công nghiệp nội dung, và theo tập quán thương mại.',
+      ],
+    },
+    {
+      h: 'Điều 2 (Thông tin nhà vận hành)',
+      body: [
+        'Tên doanh nghiệp: Hwiseong Games (tên thương hiệu Vivace Games)',
+        // ⚠ Đây là cách viết mà `PRIVACY_VI` mục 11 đang dùng. Hai tài liệu không được gọi cùng một người theo hai cách
+        'Người đại diện: Son Hwi-seong',
+        'Địa chỉ trụ sở kinh doanh: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Số điện thoại: +82 10-9926-0925',
+        'Địa chỉ thư điện tử: support@vivace-games.com',
+        'Mã số đăng ký kinh doanh: 749-25-02260',
+        'Số đăng ký kinh doanh bán hàng qua phương tiện điện tử: 2026-Ulsan Jung-gu-0170 (cơ quan tiếp nhận đăng ký: Quận Jung, Thành phố Ulsan)',
+      ],
+    },
+    {
+      h: 'Điều 3 (Định nghĩa thuật ngữ)',
+      body: [
+        '“Mảnh” (“jogak”) là một bản ghi nhật ký mà người dùng viết trong dịch vụ.',
+        '“Thiết bị” là điện thoại thông minh hoặc thiết bị đầu cuối khác mà người dùng cài đặt và sử dụng dịch vụ.',
+        '“Jogak Pro” là sản phẩm thanh toán định kỳ có phí, cung cấp việc bỏ quảng cáo, sao lưu và khôi phục, cùng báo cáo tóm tắt bằng AI.',
+        '“Chợ ứng dụng” là nền tảng phân phối ứng dụng như Google Play, nơi dịch vụ được phát hành và việc thanh toán sản phẩm có phí được thực hiện.',
+      ],
+    },
+    {
+      h: 'Điều 4 (Đăng tải và sửa đổi điều khoản)',
+      body: [
+        'Nhà vận hành đăng bản điều khoản này trên màn hình [Cài đặt] trong dịch vụ và tại địa chỉ dưới đây, để người dùng có thể xem bất cứ lúc nào.',
+        'https://sonwheesung.github.io/diary/terms.html',
+        'Nhà vận hành có thể sửa đổi bản điều khoản này trong phạm vi không vi phạm pháp luật có liên quan.',
+        'Khi sửa đổi bản điều khoản này, nhà vận hành nêu rõ ngày áp dụng và lý do sửa đổi, đồng thời thông báo trong dịch vụ từ 7 ngày trước ngày áp dụng. Tuy nhiên, với sửa đổi bất lợi cho người dùng, thông báo được đưa ra từ 30 ngày trước ngày áp dụng và trình bày nội dung trước và sau khi sửa đổi cạnh nhau theo cách dễ hiểu.',
+        'Người dùng không đồng ý với điều khoản sửa đổi có thể huỷ dịch vụ có phí và ngừng sử dụng dịch vụ trước ngày áp dụng. Nếu bạn tiếp tục sử dụng dịch vụ sau ngày áp dụng đã thông báo, bạn được xem là đã đồng ý với điều khoản sửa đổi.',
+      ],
+    },
+    {
+      h: 'Điều 5 (Nội dung dịch vụ)',
+      body: [
+        'Tên dịch vụ mà nhà vận hành cung cấp là “Jogak”, thuộc loại ứng dụng di động (nội dung số) dùng để viết và lưu giữ nhật ký.',
+        'Các tính năng cung cấp miễn phí: viết, sửa, xoá và tìm kiếm mảnh nhật ký, đính kèm ảnh, thẻ, ghi cảm xúc, xem lịch, khoá ứng dụng (mã PIN và hình mở khoá), chế độ tối, đa ngôn ngữ, xem thông báo và Liên hệ.',
+        'Các tính năng cung cấp qua sản phẩm có phí “Jogak Pro”: bỏ quảng cáo, sao lưu và khôi phục có mã hoá, báo cáo tóm tắt bằng AI.',
+        'Tiêu đề, nội dung, ảnh, thẻ và cảm xúc của các mảnh nhật ký người dùng viết chỉ được lưu bên trong thiết bị của người dùng, và không được truyền tới máy chủ của nhà vận hành trừ khi người dùng bật tính năng sao lưu.',
+        'Nếu bật sao lưu, các mảnh nhật ký được mã hoá ngay trên thiết bị của người dùng rồi mới truyền đi, và nhà vận hành không giữ khoá giải mã nên không thể đọc được nội dung đó.',
+        'Khi tạo báo cáo tóm tắt bằng AI, nội dung nhật ký của kỳ mà người dùng yêu cầu sẽ đi qua máy chủ của nhà vận hành và được chuyển tới nhà cung cấp trí tuệ nhân tạo. Nhà vận hành không lưu nội dung đó. Chi tiết theo chính sách quyền riêng tư.',
+      ],
+    },
+    {
+      h: 'Điều 6 (Giao kết hợp đồng và tài khoản)',
+      body: [
+        'Hợp đồng sử dụng dịch vụ được giao kết khi người dùng cài đặt dịch vụ, đồng ý với bản điều khoản này rồi sử dụng dịch vụ.',
+        'Các tính năng miễn phí, kể cả viết mảnh nhật ký, có thể dùng mà không cần tài khoản.',
+        'Liên hệ, thanh toán sản phẩm có phí, sao lưu và khôi phục, cùng báo cáo tóm tắt bằng AI đều cần đăng nhập bằng tài khoản Google.',
+        'Người dùng có thể xoá tài khoản bất cứ lúc nào tại màn hình [Cài đặt] → [Liên hệ] trong dịch vụ. Cách xoá tài khoản cùng những thông tin bị xoá hoặc được lưu giữ theo Hướng dẫn xoá tài khoản.',
+      ],
+    },
+    {
+      h: 'Điều 7 (Giá sản phẩm có phí và việc thanh toán)',
+      body: [
+        'Phí của Jogak Pro là 3.900 won mỗi tháng và 29.000 won mỗi năm, cả hai đều đã bao gồm thuế giá trị gia tăng.',
+        'Phí được tự động thu qua phương thức thanh toán của người dùng đã đăng ký tại chợ ứng dụng, vào thời điểm bắt đầu gói đăng ký và vào mỗi ngày gia hạn sau đó.',
+        'Ngoài khoản phí trên, người dùng không phải chịu thêm chi phí nào. Tuy nhiên, cước dữ liệu cần thiết để sử dụng dịch vụ theo chính sách của nhà mạng mà bạn đã đăng ký và do bạn chi trả.',
+        'Số tiền thực tế bị tính có thể khác với các mức trên tuỳ theo chính sách tỷ giá, phí hoặc chính sách giá theo quốc gia của chợ ứng dụng. Trong trường hợp đó, số tiền hiển thị trên màn hình thanh toán được ưu tiên.',
+        'Nếu nhà vận hành tăng phí, việc thông báo trước được thực hiện theo Điều 4, và mức giá tăng không áp dụng cho kỳ đăng ký đã thanh toán.',
+      ],
+    },
+    {
+      h: 'Điều 8 (Hạn chế về điều kiện bán hàng)',
+      body: [
+        'Dịch vụ chỉ có thể sử dụng tại những quốc gia mà chợ ứng dụng cho phép phân phối, và việc cài đặt cũng như thanh toán chỉ thực hiện được tại những quốc gia mà nhà vận hành đã chọn để phân phối.',
+        'Một gói đăng ký có phí chỉ gắn với một tài khoản tại cùng một thời điểm. Nếu bạn đăng nhập bằng tài khoản Google khác trên cùng thiết bị, gói đăng ký sẽ chuyển sang tài khoản đó và không dùng được ở tài khoản trước nữa.',
+        'Nhà vận hành có thể đặt giới hạn số lần sử dụng trong phạm vi cần thiết để cung cấp một số tính năng của dịch vụ. Số lần tạo báo cáo tóm tắt bằng AI bị giới hạn theo từng kỳ, và nội dung giới hạn đó được hiển thị trên màn hình dịch vụ.',
+      ],
+    },
+    {
+      h: 'Điều 9 (Thời điểm và cách thức cung ứng)',
+      body: [
+        'Jogak Pro được áp dụng vào tài khoản của người dùng ngay khi thanh toán hoàn tất, và không có thủ tục giao hàng riêng.',
+        'Nếu đã thanh toán xong mà quyền lợi chưa được áp dụng, người dùng có thể dùng [Khôi phục giao dịch mua] trên màn hình [Gói đăng ký] trong dịch vụ, hoặc liên hệ nhà vận hành theo cách nêu tại Điều 21.',
+        'Kỳ đăng ký kéo dài từ ngày thanh toán đến ngày liền trước ngày gia hạn kế tiếp, và sẽ tự động gia hạn với độ dài kỳ như cũ nếu không được huỷ.',
+      ],
+    },
+    {
+      h: 'Điều 10 (Môi trường sử dụng)',
+      body: [
+        'Dịch vụ có thể dùng trên thiết bị Android, và yêu cầu phiên bản hệ điều hành từ mức ghi trên trang chi tiết của chợ ứng dụng trở lên.',
+        'Các tính năng cơ bản như viết, xem và tìm kiếm mảnh nhật ký có thể dùng mà không cần kết nối internet.',
+        'Xem thông báo, Liên hệ, đăng nhập, thanh toán, sao lưu và khôi phục, cùng báo cáo tóm tắt bằng AI đều cần kết nối internet.',
+        'Nếu thiết bị của người dùng thiếu dung lượng lưu trữ hoặc hệ điều hành nằm ngoài phạm vi được hỗ trợ, một số tính năng có thể không hoạt động bình thường.',
+      ],
+    },
+    {
+      h: 'Điều 11 (Dùng thử miễn phí và chuyển sang trả phí)',
+      body: [
+        'Nhà vận hành cung cấp 7 ngày dùng thử miễn phí đối với Jogak Pro.',
+        'Khi thời gian dùng thử miễn phí kết thúc, gói sẽ tự động chuyển sang thanh toán định kỳ có phí và khoản phí tại Điều 7 sẽ được tính.',
+        'Trước khi việc chuyển đổi diễn ra, nhà vận hành hiển thị thời điểm chuyển đổi, mức giá trước và sau khi thay đổi cùng phương thức thanh toán, và xin sự đồng ý của người dùng; nếu người dùng không đồng ý thì việc thanh toán không được tiến hành.',
+        'Nếu bạn không muốn bị tính phí trong thời gian dùng thử miễn phí, xin hãy huỷ gói đăng ký theo cách nêu tại Điều 14 trước khi thời gian dùng thử kết thúc. Dù bạn huỷ, bạn vẫn có thể tiếp tục dùng Jogak Pro cho đến hết thời gian dùng thử.',
+      ],
+    },
+    {
+      h: 'Điều 12 (Rút lại đề nghị)',
+      body: [
+        'Người dùng có thể rút lại đề nghị của mình trong vòng 7 ngày kể từ ngày thanh toán sản phẩm có phí, hoặc kể từ ngày nhận được văn bản về nội dung hợp đồng.',
+        'Việc rút lại đề nghị được thực hiện bằng cách bày tỏ ý định đó tới kênh liên hệ tại Điều 21, và nhà vận hành thông báo kết quả xử lý trong vòng 3 ngày làm việc kể từ ngày tiếp nhận.',
+        'Khi đề nghị đã được rút lại, nhà vận hành hoàn trả tiền theo Điều 13, và quyền dùng Jogak Pro của người dùng chấm dứt ngay lập tức.',
+        'Tuy nhiên, theo Điều 17(2)5 Luật Bảo vệ người tiêu dùng trong thương mại điện tử, việc rút lại đề nghị bị hạn chế khi việc cung ứng nội dung số đã bắt đầu. Ngay cả trong trường hợp đó, người dùng vẫn có thể rút lại đề nghị đối với phần chưa được cung ứng trong nội dung số được cung ứng thành nhiều lần.',
+        'Để áp dụng hạn chế nêu trên, theo khoản 6 của cùng điều luật, nhà vận hành nêu rõ sự việc này đồng thời cung cấp 7 ngày dùng thử miễn phí tại Điều 11 làm sản phẩm dùng thử. Nếu nhà vận hành không thực hiện các biện pháp đó, người dùng vẫn có thể rút lại đề nghị bất kể hạn chế nêu trên.',
+        'Nhà vận hành không đòi tiền phạt vi phạm hay bồi thường thiệt hại với lý do người dùng rút lại đề nghị.',
+      ],
+    },
+    {
+      h: 'Điều 13 (Hoàn tiền)',
+      body: [
+        'Vì việc thanh toán sản phẩm có phí được thực hiện qua chợ ứng dụng nên về nguyên tắc việc hoàn tiền cũng được xử lý theo quy trình hoàn tiền của chợ ứng dụng.',
+        'Người dùng có thể yêu cầu hoàn tiền trực tiếp với chợ ứng dụng, hoặc yêu cầu nhà vận hành qua kênh liên hệ tại Điều 21. Nếu yêu cầu được gửi tới nhà vận hành, nhà vận hành sẽ phối hợp với chợ ứng dụng để xử lý.',
+        'Nhà vận hành hoàn trả tiền trong vòng 3 ngày làm việc kể từ ngày nhận được ý định rút lại đề nghị hoặc ý định tương tự. Thời gian tiền thực sự về tài khoản có thể lâu hơn tuỳ lịch xử lý của chợ ứng dụng.',
+        'Nếu nhà vận hành chậm hoàn tiền quá thời hạn nêu trên mà không có lý do chính đáng, nhà vận hành còn trả thêm lãi chậm trả cho khoảng thời gian chậm đó, tính bằng cách nhân với mức lãi suất do Nghị định thi hành Luật Bảo vệ người tiêu dùng trong thương mại điện tử quy định.',
+        'Nếu đã có khoảng thời gian sử dụng, nhà vận hành có thể khấu trừ số tiền tương ứng với khoảng thời gian đó rồi mới hoàn trả. Tuy nhiên, khoảng thời gian người dùng không sử dụng được dịch vụ do lỗi của nhà vận hành thì không bị khấu trừ.',
+        'Không có khoản phí riêng nào khi hoàn tiền.',
+      ],
+    },
+    {
+      h: 'Điều 14 (Huỷ gói đăng ký)',
+      body: [
+        'Người dùng có thể huỷ gói đăng ký bất cứ lúc nào. Việc huỷ phải do chính người dùng thực hiện trên màn hình quản lý gói đăng ký của chợ ứng dụng; nhà vận hành không thể huỷ thay.',
+        'Google Play: ứng dụng Store > hồ sơ > Thanh toán và gói đăng ký > Gói đăng ký (https://play.google.com/store/account/subscriptions)',
+        'Dù bạn đã huỷ, bạn vẫn có thể tiếp tục dùng Jogak Pro cho đến hết kỳ đăng ký đã thanh toán, và sau kỳ đó việc tự động gia hạn sẽ dừng lại.',
+        'Việc xoá tài khoản trong dịch vụ không huỷ gói đăng ký ở chợ ứng dụng. Nếu bạn không huỷ theo cách trên, tách biệt với việc xoá tài khoản, bạn sẽ vẫn tiếp tục bị tính phí.',
+      ],
+    },
+    {
+      h: 'Điều 15 (Hợp đồng của người chưa thành niên)',
+      body: [
+        'Nếu người chưa thành niên thanh toán sản phẩm có phí mà không có sự đồng ý của người đại diện hợp pháp, chính người chưa thành niên đó hoặc người đại diện hợp pháp có thể huỷ bỏ hợp đồng.',
+        'Tuy nhiên, không thể huỷ bỏ nếu người chưa thành niên đã thanh toán bằng tài sản mà người đại diện hợp pháp cho phép định đoạt, hoặc đã dùng thủ đoạn gian dối khiến người khác tin rằng mình đã thành niên.',
+        'Nếu bạn muốn huỷ bỏ, xin gửi yêu cầu qua kênh liên hệ tại Điều 21. Nhà vận hành có thể yêu cầu tài liệu chứng minh bạn là người đại diện hợp pháp.',
+      ],
+    },
+    {
+      h: 'Điều 16 (Nghĩa vụ của người dùng)',
+      body: [
+        'Người dùng phải tuân thủ pháp luật có liên quan và bản điều khoản này khi sử dụng dịch vụ.',
+        'Người dùng không được mạo dụng tài khoản của người khác, cản trở hoạt động bình thường của dịch vụ, truy cập hoặc tìm cách truy cập dịch vụ bằng cách thức không do nhà vận hành quy định, hay can thiệp vào quy trình thanh toán sản phẩm có phí.',
+        'Người dùng phải tự quản lý thông tin tài khoản cùng mật khẩu hoặc hình mở khoá của khoá ứng dụng.',
+        'Người dùng phải cất giữ an toàn mã khôi phục được cấp khi bật tính năng sao lưu. Nếu mất mã khôi phục thì nhà vận hành cũng không thể giải mã bản sao lưu nên việc khôi phục là không thể.',
+      ],
+    },
+    {
+      h: 'Điều 17 (Lưu giữ dữ liệu và sao lưu)',
+      body: [
+        'Bản gốc các mảnh nhật ký người dùng viết được lưu trên thiết bị của người dùng. Nếu gỡ cài đặt ứng dụng hoặc đặt lại thiết bị thì các mảnh nhật ký bên trong thiết bị không thể khôi phục được.',
+        'Nếu đã bật tính năng sao lưu, nhà vận hành giữ một bản sao đã mã hoá, và người dùng có thể khôi phục bằng mã khôi phục của mình.',
+        'Ngay cả sau khi gói đăng ký kết thúc, nhà vận hành vẫn giữ bản sao lưu đã mã hoá trong 90 ngày, và trong thời gian đó việc khôi phục vẫn dùng được. Sau khi 90 ngày trôi qua, bản sao lưu bị xoá.',
+        'Nhà vận hành không có phương tiện thông báo đẩy, nên việc báo trước về dự định xoá nêu trên chỉ được thực hiện bằng cách hiển thị trên màn hình khi người dùng mở ứng dụng.',
+        'Nếu người dùng xoá tài khoản, bản sao lưu đã mã hoá lưu trên máy chủ sẽ bị xoá cùng tài khoản mà không có 90 ngày ân hạn.',
+      ],
+    },
+    {
+      h: 'Điều 18 (Quyền sở hữu trí tuệ)',
+      body: [
+        'Quyền đối với các mảnh nhật ký người dùng viết trong dịch vụ và ảnh người dùng đính kèm thuộc về người dùng. Nhà vận hành không yêu sách bất kỳ quyền nào đối với chúng.',
+        'Nhà vận hành không sử dụng nhật ký của người dùng cho mục đích nào khác ngoài việc cung cấp dịch vụ, và không dùng cho mục đích quảng cáo, thống kê hay huấn luyện trí tuệ nhân tạo.',
+        'Quyền đối với bản thân dịch vụ và đối với thiết kế, nhãn hiệu, chương trình có trong dịch vụ thuộc về nhà vận hành hoặc người có quyền hợp pháp.',
+        'Người dùng không được sao chép, phân phối hay dịch ngược dịch vụ khi chưa có sự đồng ý trước của nhà vận hành.',
+      ],
+    },
+    {
+      h: 'Điều 19 (Thay đổi, tạm ngừng và chấm dứt dịch vụ)',
+      body: [
+        'Nhà vận hành có thể thay đổi nội dung dịch vụ nhằm nâng cao chất lượng. Trường hợp thay đổi nội dung sản phẩm có phí theo hướng bất lợi cho người dùng, việc thông báo trước được thực hiện theo Điều 4.',
+        'Nhà vận hành có thể tạm ngừng cung cấp dịch vụ khi có lý do bất khả kháng như kiểm tra, thay thế, hỏng hóc thiết bị hay gián đoạn liên lạc, và khi đó sẽ thông báo trước. Tuy nhiên, nếu có lý do bất khả kháng khiến không thể thông báo trước thì sẽ thông báo sau.',
+        'Trường hợp nhà vận hành chấm dứt dịch vụ, việc thông báo được thực hiện qua thông báo trong dịch vụ và trang chi tiết của chợ ứng dụng chậm nhất 30 ngày trước ngày chấm dứt, đồng thời nêu rõ khoảng thời gian người dùng có thể tải về hoặc khôi phục bản sao lưu.',
+        'Khi dịch vụ chấm dứt, khoản phí tương ứng với thời gian đã thanh toán nhưng chưa sử dụng sẽ được hoàn lại cho người dùng.',
+      ],
+    },
+    {
+      h: 'Điều 20 (Trách nhiệm)',
+      body: [
+        'Nhà vận hành chịu trách nhiệm theo pháp luật có liên quan trong việc cung cấp dịch vụ. Không một điều khoản nào trong bản điều khoản này loại trừ hay giới hạn trách nhiệm của nhà vận hành do pháp luật quy định.',
+        'Nhà vận hành không chịu trách nhiệm về thiệt hại phát sinh từ những nguyên nhân không do lỗi của nhà vận hành, như thiên tai, hỏng hóc, mất mát hay việc đặt lại thiết bị của người dùng, hoặc việc người dùng làm mất mã khôi phục hay mật khẩu khoá ứng dụng.',
+        'Báo cáo tóm tắt bằng AI là tài liệu tham khảo do trí tuệ nhân tạo tạo ra, không phải chẩn đoán hay lời khuyên về y tế, tâm lý hoặc pháp lý. Nhà vận hành không bảo đảm tính chính xác của nội dung đó.',
+        'Thiệt hại phát sinh trong quá trình thanh toán qua chợ ứng dụng do lỗi của chợ ứng dụng sẽ theo chính sách của chợ ứng dụng. Tuy vậy, nhà vận hành vẫn dành mọi sự hợp tác cần thiết để khắc phục thiệt hại cho người dùng.',
+      ],
+    },
+    {
+      h: 'Điều 21 (Khiếu nại của người tiêu dùng và xử lý tranh chấp)',
+      body: [
+        'Để xử lý ý kiến và khiếu nại của người dùng, nhà vận hành duy trì kênh [Cài đặt] → [Liên hệ] trong dịch vụ và kênh thư điện tử dưới đây.',
+        'Thư điện tử: support@vivace-games.com',
+        'Khi nhà vận hành nhận thấy ý kiến hay khiếu nại của người dùng là chính đáng, nhà vận hành xử lý ngay; nếu việc xử lý cần thời gian thì sẽ báo cho người dùng lý do và lịch xử lý.',
+        'Khi phát sinh tranh chấp giữa nhà vận hành và người dùng, người dùng có thể đề nghị các cơ quan sau hoà giải tranh chấp.',
+        '• Uỷ ban Hoà giải tranh chấp tiêu dùng (Cơ quan Người tiêu dùng Hàn Quốc): 1372 (từ Hàn Quốc) · https://www.kca.go.kr',
+        '• Uỷ ban Hoà giải tranh chấp nội dung: 1588-2594 · https://www.kcdrc.kr',
+        '• Uỷ ban Hoà giải tranh chấp giao dịch điện tử: 1661-5714 · https://www.ecmc.or.kr',
+      ],
+    },
+    {
+      h: 'Điều 22 (Luật áp dụng và thẩm quyền)',
+      body: [
+        'Luật của Đại Hàn Dân Quốc được áp dụng đối với bản điều khoản này và việc sử dụng dịch vụ.',
+        'Vụ kiện về tranh chấp phát sinh giữa nhà vận hành và người dùng thuộc thẩm quyền riêng biệt của toà án cấp quận nơi có địa chỉ của người dùng tại thời điểm khởi kiện, theo Điều 36 Luật Bảo vệ người tiêu dùng trong thương mại điện tử. Nếu không có địa chỉ thì thuộc thẩm quyền riêng biệt của toà án cấp quận nơi người dùng cư trú; và nếu tại thời điểm khởi kiện không rõ địa chỉ hay nơi cư trú của người dùng thì toà án có thẩm quyền được xác định theo Luật Tố tụng dân sự.',
+        'Bản tiếng Hàn của bản điều khoản này là bản chính thức. Nếu bản dịch sang ngôn ngữ khác có nghĩa khác biệt thì bản tiếng Hàn được ưu tiên áp dụng.',
+        'Điều khoản thi hành: Bản điều khoản này có hiệu lực từ ngày 17 tháng 8 năm 2026.',
+      ],
+    },
+  ],
+};

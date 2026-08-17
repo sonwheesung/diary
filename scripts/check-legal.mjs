@@ -16,12 +16,13 @@
  * ⚠ 줄 수를 맞추라는 제약은 번역가에게 불편하다(한 문장을 둘로 쪼개고 싶을 때가 있다).
  *   그래도 유지한다 — 그 불편이 조항 누락을 잡아주는 유일한 신호다.
  */
-import { PRIVACY, DELETE_ACCOUNT, OPERATOR } from '../features/legal/legal-text.ts';
+import { PRIVACY, DELETE_ACCOUNT, TERMS, OPERATOR } from '../features/legal/legal-text.ts';
 import { fingerprint } from '../features/legal/fingerprint.ts';
 import {
   EXPECTED_TRANSLATIONS,
   TRANSLATIONS,
   DELETE_ACCOUNT_TRANSLATIONS,
+  TERMS_TRANSLATIONS,
 } from '../features/legal/registry.ts';
 
 let passed = 0;
@@ -187,6 +188,7 @@ function checkDoc(label, source, translations) {
 
 checkDoc('처리방침', PRIVACY, TRANSLATIONS);
 checkDoc('계정 삭제 안내', DELETE_ACCOUNT, DELETE_ACCOUNT_TRANSLATIONS);
+checkDoc('이용약관', TERMS, TERMS_TRANSLATIONS);
 
 console.log('');
 /*
@@ -214,6 +216,18 @@ if (Object.keys(DELETE_ACCOUNT_TRANSLATIONS).length !== EXPECTED_TRANSLATIONS) {
   process.exit(1);
 }
 
+/*
+ * ⚠ 이용약관도 **같은 14개**여야 한다(2026-08-17에 채웠다).
+ *   전자상거래법 §13②5호(청약철회)·6호(환불)를 담은 문서라 **못 읽으면 곧바로 분쟁**이 된다 —
+ *   처리방침보다 오히려 번역 누락이 비싼 쪽이다.
+ */
+if (Object.keys(TERMS_TRANSLATIONS).length !== EXPECTED_TRANSLATIONS) {
+  console.error(`
+이용약관 번역이 ${Object.keys(TERMS_TRANSLATIONS).length}개다 — ${EXPECTED_TRANSLATIONS}개여야 한다.`);
+  console.error('§13②9호는 약관과 "그 내용을 확인할 수 있는 방법"을 함께 요구한다.');
+  process.exit(1);
+}
+
 if (failures.length > 0) {
   console.error(`\n처리방침 번역 — ${failures.length}개 실패\n`);
   for (const f of failures) console.error(`  · ${f}`);
@@ -221,8 +235,9 @@ if (failures.length > 0) {
 }
 console.log(
   `법적 고지 번역 ok — ${passed}개 검사 통과 ` +
-    `(처리방침 ${Object.keys(TRANSLATIONS).length}개 언어 · ` +
-    `계정 삭제 안내 ${Object.keys(DELETE_ACCOUNT_TRANSLATIONS).length}개 언어)\n`,
+    `(처리방침 ${Object.keys(TRANSLATIONS).length} · ` +
+    `계정 삭제 안내 ${Object.keys(DELETE_ACCOUNT_TRANSLATIONS).length} · ` +
+    `이용약관 ${Object.keys(TERMS_TRANSLATIONS).length}개 언어)\n`,
 );
 /*
  * ⏭ 이 검사가 **못 보는 것** — 다음에 그물을 넓힌다면 여기부터다:

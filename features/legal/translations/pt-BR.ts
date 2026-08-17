@@ -397,3 +397,256 @@ export const DELETE_ACCOUNT_PT_BR: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Termos de uso — português do Brasil.
+ *
+ * 🔴 **O texto coreano é o original e prevalece** (`legal-text.ts`). Esta é uma tradução para
+ *   facilitar a leitura; havendo divergência, rege o coreano. O próprio artigo 22 diz isso
+ *   dentro do documento, e é o que torna seguro publicar a tradução.
+ *
+ * ⚠ **A estrutura deve coincidir exatamente com a coreana** — 22 artigos, o mesmo número de
+ *   linhas em cada um e sem “alterações previstas”. `npm run check:legal` verifica isso.
+ *   Dividir uma frase coreana em duas reprova a checagem, e juntar duas esconde uma cláusula perdida.
+ *
+ * ⚠ Este documento existe por causa do **art. 13(2) da Lei de Proteção ao Consumidor no
+ *   Comércio Eletrônico**: informação antes do contrato e entrega por escrito das condições
+ *   depois dele. Os itens 5 (arrependimento), 6 (reembolsos), 8 (reclamações e conflitos) e
+ *   9 (os próprios termos e como consultá-los) não têm outro lugar onde caber. Cada artigo é
+ *   o recipiente de um item específico, portanto **nenhum artigo pode perder seu conteúdo
+ *   jurídico para ficar mais fácil de ler.** Os três mais delicados:
+ *
+ *   - O art. 12 reproduz em substância os arts. 17(2)5 e 17(6). “o fornecimento do conteúdo
+ *     digital já foi iniciado”, “a parte ainda não fornecida de um conteúdo digital fornecido
+ *     em partes” e “indicar esse fato **e, ao mesmo tempo**, oferecer ... como produto de
+ *     experimentação” são requisitos legais: se forem suavizados, a restrição é nula.
+ *   - A primeira linha do art. 20 é a proteção contra o art. 35 (contratos desfavoráveis ao
+ *     consumidor). **Nunca acrescentar “na máxima extensão permitida por lei”** nem fórmula
+ *     equivalente: isso inverte a frase e a transforma justamente no que ela veio recusar.
+ *   - O art. 22 é o art. 36 (foro exclusivo): o domicílio **da pessoa usuária**, nunca o da
+ *     operadora. Indicar o da operadora seria nulo nos termos do art. 35.
+ *
+ * ⚠ «청약철회» é traduzido como **“arrependimento”**, distinto do **“cancelamento”** da
+ *   assinatura do artigo 14: o Jogak Pro *é* uma assinatura, e os dois remédios não podem se
+ *   confundir dentro de um mesmo documento.
+ */
+export const TERMS_PT_BR: LegalDoc = {
+  title: 'Termos de Uso do Jogak',
+  sourceFingerprint: '898aa8d7',
+  effective: '2026-08-17',
+  updated: '2026-08-17',
+  intro:
+    'Estes termos definem os direitos, as obrigações e as responsabilidades entre a Hwiseong Games (marca: Vivace Games, “a operadora”) e as pessoas usuárias, quanto ao uso do aplicativo móvel “Jogak” (“o serviço”) oferecido pela operadora. Leia-os antes de usar o serviço.',
+  sections: [
+    {
+      h: 'Artigo 1 (Finalidade e âmbito de aplicação)',
+      body: [
+        'Estes termos têm por finalidade estabelecer as condições e os procedimentos de uso do serviço e os direitos e obrigações da operadora e da pessoa usuária.',
+        'Estes termos se aplicam a todas as pessoas que usam o serviço. Aplicam-se da mesma forma quando você apenas escreve registros sem fazer login.',
+        'O que não estiver previsto nestes termos rege-se pela legislação aplicável, incluindo a Lei de Proteção ao Consumidor no Comércio Eletrônico, a Lei sobre a Regulação das Condições Gerais dos Contratos e a Lei de Promoção da Indústria de Conteúdos, e pelos usos comerciais.',
+      ],
+    },
+    {
+      h: 'Artigo 2 (Informações da operadora)',
+      body: [
+        'Razão social: Hwiseong Games (marca: Vivace Games)',
+        // ⚠ É a grafia que a `PRIVACY_PT_BR` §11 já usa. Dois documentos não podem chamar a mesma pessoa de formas diferentes
+        'Representante: Son Hwi-seong',
+        'Endereço comercial: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Telefone: +82 10-9926-0925',
+        'E-mail: support@vivace-games.com',
+        'Número de registro empresarial: 749-25-02260',
+        'Número de registro de comércio a distância: 2026-Ulsan Jung-gu-0170 (órgão que recebeu o registro: Jung-gu, Cidade Metropolitana de Ulsan)',
+      ],
+    },
+    {
+      h: 'Artigo 3 (Definições)',
+      body: [
+        '“Peça” (“jogak”) é cada registro de diário que a pessoa usuária escreve no serviço.',
+        '“Dispositivo” é o smartphone ou outro aparelho em que a pessoa usuária instala e usa o serviço.',
+        '“Jogak Pro” é o produto pago de assinatura recorrente que oferece remoção de anúncios, backup e restauração e relatórios de resumo com IA.',
+        '“Loja de aplicativos” é um mercado de aplicativos, como o Google Play, pelo qual o serviço é distribuído e os produtos pagos são pagos.',
+      ],
+    },
+    {
+      h: 'Artigo 4 (Publicação e alteração destes termos)',
+      body: [
+        'A operadora publica estes termos na tela [Ajustes] do serviço e no endereço abaixo, para que você possa consultá-los a qualquer momento.',
+        'https://sonwheesung.github.io/diary/terms.html',
+        'A operadora pode alterar estes termos desde que isso não infrinja a legislação aplicável.',
+        'Ao alterá-los, a operadora informa a data de vigência e o motivo da alteração e avisa dentro do serviço a partir de 7 dias antes dessa data. Quando a alteração for desfavorável às pessoas usuárias, porém, o aviso é publicado a partir de 30 dias antes da data de vigência, mostrando lado a lado o conteúdo anterior e o posterior de forma fácil de entender.',
+        'Se você não concordar com os termos alterados, pode cancelar o serviço pago e parar de usar o serviço antes da data de vigência. Se continuar usando o serviço depois da data anunciada, entende-se que você concordou com os termos alterados.',
+      ],
+    },
+    {
+      h: 'Artigo 5 (Conteúdo do serviço)',
+      body: [
+        'O nome do serviço oferecido pela operadora é “Jogak”, e seu tipo é um aplicativo móvel (conteúdo digital) para escrever e guardar um diário.',
+        'Recursos oferecidos gratuitamente: escrever, editar, excluir e buscar registros, anexar fotos, tags, registro de emoções, visualização em calendário, bloqueio do aplicativo (PIN e padrão), modo escuro, vários idiomas, leitura de avisos e “Fale conosco”.',
+        'Recursos oferecidos pelo produto pago “Jogak Pro”: remoção de anúncios, backup criptografado e restauração e relatórios de resumo com IA.',
+        'Os títulos, o texto, as fotos, as tags e as emoções dos registros que você escreve ficam guardados somente dentro do seu dispositivo e não são transmitidos aos servidores da operadora, a menos que você ative o recurso de backup.',
+        'Se o backup estiver ativado, os registros são criptografados no seu dispositivo antes de serem transmitidos, e a operadora não guarda a chave de descriptografia, portanto não consegue ler o conteúdo deles.',
+        'Ao criar um relatório de resumo com IA, o texto do diário do período que você solicitou passa pelo servidor da operadora e é entregue ao provedor de inteligência artificial. A operadora não armazena esse texto. Os detalhes seguem a política de privacidade.',
+      ],
+    },
+    {
+      h: 'Artigo 6 (Formação do contrato e contas)',
+      body: [
+        'O contrato de uso do serviço se forma quando a pessoa usuária instala o serviço, concorda com estes termos e passa a usá-lo.',
+        'Os recursos gratuitos, inclusive escrever registros, podem ser usados sem conta.',
+        '“Fale conosco”, o pagamento de produtos pagos, o backup e a restauração e os relatórios de resumo com IA exigem login com uma conta Google.',
+        'Você pode excluir sua conta a qualquer momento na tela [Ajustes] → [Fale conosco] do serviço. Como excluir a conta e quais informações são excluídas ou mantidas seguem o guia de exclusão de conta.',
+      ],
+    },
+    {
+      h: 'Artigo 7 (Preço dos produtos pagos e pagamento)',
+      body: [
+        'A tarifa do Jogak Pro é de 3.900 KRW por mês e 29.000 KRW por ano, valores que já incluem o imposto sobre valor agregado.',
+        'A tarifa é cobrada automaticamente na forma de pagamento que você registrou na loja de aplicativos, no momento em que a assinatura começa e em cada renovação seguinte.',
+        'Não há custo adicional além da tarifa. As tarifas de dados necessárias para usar o serviço, porém, seguem a política da operadora de telecomunicações que você contratou e são pagas por você.',
+        'O valor efetivamente cobrado pode diferir dos valores acima conforme as políticas de câmbio e de taxas da loja de aplicativos ou seus preços por país. Nesse caso, prevalece o valor exibido na tela de pagamento.',
+        'Se a operadora aumentar a tarifa, avisará com antecedência conforme o artigo 4, e o preço aumentado não se aplica a um período de assinatura já pago.',
+      ],
+    },
+    {
+      h: 'Artigo 8 (Limites das condições de venda)',
+      body: [
+        'O serviço só pode ser usado nos países em que a loja de aplicativos permite a distribuição, e a instalação e o pagamento só são possíveis nos países definidos pela operadora para distribuição.',
+        'Uma assinatura paga fica vinculada a apenas uma conta por vez. Se você fizer login com outra conta Google no mesmo dispositivo, a assinatura é transferida para essa conta e deixa de poder ser usada na conta anterior.',
+        'A operadora pode definir um limite máximo de usos na medida necessária para oferecer parte do serviço. A quantidade de relatórios de resumo com IA que podem ser gerados é limitada por período, e esse limite é exibido nas telas do serviço.',
+      ],
+    },
+    {
+      h: 'Artigo 9 (Momento e forma do fornecimento)',
+      body: [
+        'O Jogak Pro é aplicado à sua conta assim que o pagamento é concluído, sem qualquer processo de entrega separado.',
+        'Se o pagamento tiver sido concluído mas o direito não tiver sido aplicado, você pode usar [Restaurar compras] na tela [Jogak Pro] do serviço ou procurar a operadora pela via do artigo 21.',
+        'O período de assinatura vai da data do pagamento até o dia anterior à próxima renovação e é renovado automaticamente pelo mesmo período, salvo cancelamento.',
+      ],
+    },
+    {
+      h: 'Artigo 10 (Ambiente de uso)',
+      body: [
+        'O serviço pode ser usado em dispositivos Android e exige a versão do sistema operacional indicada na página da loja de aplicativos ou uma posterior.',
+        'Os recursos básicos, como escrever, ver e buscar registros, podem ser usados sem conexão com a internet.',
+        'A leitura de avisos, “Fale conosco”, o login, o pagamento, o backup e a restauração e os relatórios de resumo com IA exigem conexão com a internet.',
+        'Se o seu dispositivo estiver com pouco espaço de armazenamento ou se o sistema operacional estiver fora da faixa suportada, alguns recursos podem não funcionar corretamente.',
+      ],
+    },
+    {
+      h: 'Artigo 11 (Teste gratuito e conversão em assinatura paga)',
+      body: [
+        'A operadora oferece um teste gratuito de 7 dias do Jogak Pro.',
+        'Quando o período de teste gratuito termina, ele é convertido automaticamente em assinatura paga recorrente e a tarifa do artigo 7 é cobrada.',
+        'Antes de a conversão ocorrer, a operadora exibe a data e a hora da conversão, o preço antes e depois da mudança e a forma de pagamento, e obtém o seu consentimento; sem esse consentimento, nenhum pagamento é feito.',
+        'Se você não quiser ser cobrado ao fim do teste gratuito, cancele a assinatura pela via do artigo 14 antes de o período de teste terminar. Mesmo cancelando, você pode continuar usando o Jogak Pro até o fim desse período.',
+      ],
+    },
+    {
+      h: 'Artigo 12 (Direito de arrependimento)',
+      body: [
+        'Você pode exercer o arrependimento em até 7 dias contados da data do pagamento de um produto pago ou da data em que receber por escrito as condições do contrato.',
+        'O arrependimento é exercido manifestando essa intenção ao canal de atendimento do artigo 21, e a operadora informa o resultado em até 3 dias úteis contados do recebimento.',
+        'Exercido o arrependimento, a operadora reembolsa o valor conforme o artigo 13 e o seu direito ao Jogak Pro termina imediatamente.',
+        'No entanto, nos termos do art. 17(2)5 da Lei de Proteção ao Consumidor no Comércio Eletrônico, o arrependimento fica restrito quando o fornecimento do conteúdo digital já foi iniciado. Mesmo nesse caso, o arrependimento continua possível quanto à parte ainda não fornecida de um conteúdo digital fornecido em partes.',
+        'Para aplicar essa restrição, a operadora, nos termos do parágrafo 6 do mesmo artigo, indica esse fato e, ao mesmo tempo, oferece o teste gratuito de 7 dias do artigo 11 como produto de experimentação. Se a operadora não tiver adotado essas medidas, você pode exercer o arrependimento apesar da restrição acima.',
+        'A operadora não cobra multa nem indenização pelo fato de você ter exercido o arrependimento.',
+      ],
+    },
+    {
+      h: 'Artigo 13 (Reembolsos)',
+      body: [
+        'Como o pagamento dos produtos pagos é feito pela loja de aplicativos, os reembolsos também são, em princípio, processados conforme o procedimento de reembolso dessa loja.',
+        'Você pode pedir o reembolso diretamente à loja de aplicativos ou à operadora pelo canal de atendimento do artigo 21. Se o pedido for feito à operadora, ela o tratará em conjunto com a loja.',
+        'A operadora reembolsa o valor em até 3 dias úteis contados da data em que recebe a manifestação de arrependimento ou equivalente. O crédito efetivo pode demorar mais, conforme o cronograma de processamento da loja de aplicativos.',
+        'Se a operadora atrasar o reembolso além desse prazo sem motivo justificado, pagará também juros de mora referentes ao período de atraso, calculados pela taxa prevista no Decreto Regulamentar da Lei de Proteção ao Consumidor no Comércio Eletrônico.',
+        'Se já houver período utilizado, a operadora pode deduzir o valor correspondente a esse período antes de reembolsar. Não se deduz, porém, o período em que você não pôde usar o serviço por motivo imputável à operadora.',
+        'Não há taxa adicional para o reembolso.',
+      ],
+    },
+    {
+      h: 'Artigo 14 (Cancelamento da assinatura)',
+      body: [
+        'Você pode cancelar a assinatura a qualquer momento. O cancelamento precisa ser feito por você na tela de gerenciamento de assinaturas da loja de aplicativos; a operadora não pode cancelar por você.',
+        'Google Play: app da loja > perfil > Pagamentos e assinaturas > Assinaturas (https://play.google.com/store/account/subscriptions)',
+        'Mesmo depois de cancelar, você pode continuar usando o Jogak Pro até o fim do período de assinatura já pago; passado esse período, a renovação automática é interrompida.',
+        'Excluir sua conta no serviço não cancela a assinatura na loja de aplicativos. Se você não cancelar pela via acima, separadamente da exclusão da conta, continuará sendo cobrado.',
+      ],
+    },
+    {
+      h: 'Artigo 15 (Contratos celebrados por menores)',
+      body: [
+        'Se uma pessoa menor de idade pagou por um produto pago sem o consentimento de seu representante legal, a própria pessoa menor ou seu representante legal podem anular esse contrato.',
+        'Não cabe a anulação, porém, quando a pessoa menor pagou com bens cuja disposição seu representante legal havia autorizado, ou quando usou de artifício para fazer crer que era maior de idade.',
+        'Se quiser anular, faça o pedido pelo canal de atendimento do artigo 21. A operadora pode solicitar documentos que comprovem a condição de representante legal.',
+      ],
+    },
+    {
+      h: 'Artigo 16 (Obrigações da pessoa usuária)',
+      body: [
+        'A pessoa usuária deve cumprir a legislação aplicável e estes termos ao usar o serviço.',
+        'A pessoa usuária não deve usar indevidamente a conta de outra pessoa, atrapalhar o funcionamento normal do serviço, acessar ou tentar acessar o serviço por meios diferentes dos previstos pela operadora, nem manipular o processo de pagamento dos produtos pagos.',
+        'A pessoa usuária deve cuidar por conta própria das informações de sua conta e do PIN ou padrão de bloqueio do aplicativo.',
+        'A pessoa usuária deve guardar com segurança o código de recuperação emitido ao ativar o recurso de backup. Se o perder, nem a operadora consegue descriptografar o backup, e a restauração se torna impossível.',
+      ],
+    },
+    {
+      h: 'Artigo 17 (Guarda dos dados e backup)',
+      body: [
+        'O original dos registros que você escreve fica guardado no seu dispositivo. Se você desinstalar o aplicativo ou restaurar o dispositivo aos padrões de fábrica, os registros que estavam nele não poderão ser recuperados.',
+        'Se o recurso de backup estiver ativado, a operadora guarda uma cópia criptografada, e você pode restaurá-la com o seu código de recuperação.',
+        'Mesmo depois que a assinatura termina, a operadora guarda o backup criptografado por 90 dias, e a restauração continua disponível nesse período. Passados os 90 dias, o backup é excluído.',
+        'A operadora não dispõe de canal de notificações push, portanto o aviso dessa exclusão programada é dado apenas na tela, quando você abre o aplicativo.',
+        'Se você excluir sua conta, o backup criptografado guardado no servidor é excluído junto com a conta, sem os 90 dias de carência.',
+      ],
+    },
+    {
+      h: 'Artigo 18 (Propriedade intelectual)',
+      body: [
+        'Os direitos sobre os registros que você escreve no serviço e sobre as fotos que anexa são seus. A operadora não reivindica direito algum sobre eles.',
+        'A operadora não usa os registros das pessoas usuárias para finalidade diversa da prestação do serviço, nem para publicidade, estatística ou treinamento de inteligência artificial.',
+        'Os direitos sobre o próprio serviço e sobre os designs, as marcas e os programas nele incluídos pertencem à operadora ou aos seus legítimos titulares.',
+        'A pessoa usuária não deve reproduzir, distribuir nem fazer engenharia reversa do serviço sem o consentimento prévio da operadora.',
+      ],
+    },
+    {
+      h: 'Artigo 19 (Alteração, suspensão e encerramento do serviço)',
+      body: [
+        'A operadora pode alterar o conteúdo do serviço para melhorar sua qualidade. Quando o conteúdo de um produto pago for alterado de forma desfavorável às pessoas usuárias, o aviso é dado com antecedência conforme o artigo 4.',
+        'A operadora pode suspender temporariamente a prestação do serviço quando houver motivos inevitáveis, como inspeção, troca ou falha de equipamentos ou interrupção das comunicações, avisando com antecedência. Quando o motivo inevitável impedir o aviso prévio, o aviso é dado depois.',
+        'Se a operadora encerrar o serviço, avisará por meio de comunicados dentro do serviço e na página da loja de aplicativos com pelo menos 30 dias de antecedência da data de encerramento, informando também o prazo em que será possível baixar ou restaurar o backup.',
+        'No encerramento do serviço, a tarifa correspondente ao período já pago e não usufruído é reembolsada à pessoa usuária.',
+      ],
+    },
+    {
+      h: 'Artigo 20 (Responsabilidade)',
+      body: [
+        'A operadora responde, quanto à prestação do serviço, nos termos da legislação aplicável. Nenhuma cláusula destes termos exclui ou limita a responsabilidade da operadora prevista em lei.',
+        'A operadora não responde por danos decorrentes de causas que não lhe sejam imputáveis, como caso fortuito ou força maior, falha, perda ou restauração do dispositivo da pessoa usuária, ou a perda, por ela, do código de recuperação ou do segredo de bloqueio do aplicativo.',
+        'O relatório de resumo com IA é material de referência gerado por inteligência artificial e não é diagnóstico nem aconselhamento médico, psicológico ou jurídico. A operadora não garante a exatidão de seu conteúdo.',
+        'Os danos ocorridos no processo de pagamento pela loja de aplicativos por causas imputáveis a ela seguem a política dessa loja. Ainda assim, a operadora prestará toda a cooperação necessária para a reparação do prejuízo da pessoa usuária.',
+      ],
+    },
+    {
+      h: 'Artigo 21 (Reclamações de consumo e solução de conflitos)',
+      body: [
+        'Para tratar opiniões e reclamações das pessoas usuárias, a operadora mantém o canal [Ajustes] → [Fale conosco] dentro do serviço e o canal de e-mail abaixo.',
+        'E-mail: support@vivace-games.com',
+        'Quando a operadora reconhecer que uma opinião ou reclamação é procedente, tratará dela sem demora; se o tratamento levar tempo, informará o motivo e o prazo previsto.',
+        'Havendo conflito entre a operadora e uma pessoa usuária, esta pode pedir mediação aos seguintes órgãos.',
+        '• Comitê de Mediação de Conflitos de Consumo (Agência Coreana do Consumidor): 1372 (na Coreia) · https://www.kca.go.kr',
+        '• Comitê de Mediação de Conflitos sobre Conteúdos: 1588-2594 · https://www.kcdrc.kr',
+        '• Comitê de Mediação de Conflitos do Comércio Eletrônico: 1661-5714 · https://www.ecmc.or.kr',
+      ],
+    },
+    {
+      h: 'Artigo 22 (Lei aplicável e foro)',
+      body: [
+        'A estes termos e ao uso do serviço aplica-se a lei da República da Coreia.',
+        'A ação relativa a conflito surgido entre a operadora e uma pessoa usuária submete-se, nos termos do art. 36 da Lei de Proteção ao Consumidor no Comércio Eletrônico, ao foro exclusivo do tribunal distrital do domicílio da pessoa usuária no momento da propositura da ação. Não havendo domicílio, ao foro exclusivo do tribunal distrital de sua residência; e se, no momento da propositura, o domicílio ou a residência não estiverem claros, o foro competente é definido conforme a Lei de Processo Civil.',
+        'A versão coreana destes termos é a versão autêntica. Havendo divergência de sentido com uma tradução para outro idioma, prevalece a versão coreana.',
+        'Disposição final: estes termos entram em vigor em 17 de agosto de 2026.',
+      ],
+    },
+  ],
+};

@@ -8,24 +8,24 @@
  * ⚠ 이건 `check:legal`을 대신하지 않는다. 지문·시행일·한글 잔존까지 보지만,
  *   "빠진 언어가 없는가"는 여전히 `check:legal`만 안다.
  */
-import { DELETE_ACCOUNT, PRIVACY } from '../features/legal/legal-text.ts';
+import { DELETE_ACCOUNT, PRIVACY, TERMS } from '../features/legal/legal-text.ts';
 import { fingerprint } from '../features/legal/fingerprint.ts';
 
 const [doc, lang] = process.argv.slice(2);
 if (doc === undefined || lang === undefined) {
-  console.error('사용법: node scripts/check-legal-one.mjs <privacy|delete-account> <lang>');
+  console.error('사용법: node scripts/check-legal-one.mjs <privacy|delete-account|terms> <lang>');
   process.exit(1);
 }
 
-const SOURCE = { privacy: PRIVACY, 'delete-account': DELETE_ACCOUNT }[doc];
+const SOURCE = { privacy: PRIVACY, 'delete-account': DELETE_ACCOUNT, terms: TERMS }[doc];
 if (SOURCE === undefined) {
-  console.error(`문서가 'privacy' 또는 'delete-account'여야 한다 — 받은 값: ${doc}`);
+  console.error(`문서가 'privacy', 'delete-account' 또는 'terms'여야 한다 — 받은 값: ${doc}`);
   process.exit(1);
 }
 
 /** `zh-Hans` → `ZH_HANS`. 번역 파일의 export 이름 규약 */
 const suffix = lang.toUpperCase().replace(/-/g, '_');
-const exportName = `${doc === 'privacy' ? 'PRIVACY' : 'DELETE_ACCOUNT'}_${suffix}`;
+const exportName = `${doc.toUpperCase().replace(/-/g, '_')}_${suffix}`;
 
 const mod = await import(`../features/legal/translations/${lang}.ts`);
 const target = mod[exportName];

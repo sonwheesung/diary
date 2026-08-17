@@ -55,6 +55,28 @@ if (WEB_CLIENT_ID) {
 /** 로그인 시도 결과. `null`이면 성공, `'cancelled'`면 사용자가 창을 닫은 것(오류 아님) */
 export type SignInOutcome = null | 'cancelled' | FailReason;
 
+/**
+ * 마지막 구글 SDK 오류 코드 — **릴리스 빌드에서 원인을 보는 유일한 창.**
+ *
+ * 🔴 진단 로그가 `__DEV__` 안에만 있었는데, **SHA-1·패키지 문제는 릴리스에서만 난다**
+ *   (dev build는 지문이 다르다). 그래서 정작 필요한 빌드에서 아무것도 안 남았다.
+ *
+ * 실제로 겪음(2026-08-17): stg AAB에서 계정 선택 직후 로그인이 끊겼는데 화면에 뜬 것은
+ * *"로그인하지 못했어요"* 한 줄뿐이라, Google Cloud 콘솔의 OAuth 클라이언트 목록을 열어
+ * 패키지명을 눈으로 대조하고서야 원인을 알았다 — `10`(DEVELOPER_ERROR) 하나만 보였으면
+ * 스크린샷 한 장으로 끝났을 일이다.
+ *
+ * ⚠ 훅 상태가 아니라 모듈 변수다. 알림은 `await signIn()` 직후에 읽으므로 재렌더가 필요 없고,
+ *   상태로 만들면 실패할 때마다 화면이 다시 그려진다.
+ *
+ * ⚠ **숫자만 담는다.** 오류 객체에는 계정 정보가 섞여 올 수 있어 그대로 두면 알림에 샌다.
+ */
+let lastSignInErrorCode: string | null = null;
+
+export function getLastSignInErrorCode(): string | null {
+  return lastSignInErrorCode;
+}
+
 export interface SupportAuth {
   /** 이 기기에 유효한 세션이 있는지. 확인이 끝나기 전에는 false */
   signedIn: boolean;
@@ -134,6 +156,8 @@ export function useSupportAuth(): SupportAuth {
     if (!WEB_CLIENT_ID) {
       return 'not-configured';
     }
+    // 지난 시도의 코드를 지운다 — 안 지우면 다음 실패에 옛 코드가 붙어 진단이 거짓말을 한다
+    lastSignInErrorCode = null;
     setBusy(true);
     try {
       /*
@@ -192,11 +216,11 @@ export function useSupportAuth(): SupportAuth {
        * 로그가 없어서 "서버가 거절했나"를 먼저 뒤졌다. 이 한 줄이면 5초에 갈린다.
        * DEVELOPER_ERROR면 의심 순서는 ① APK 서명 SHA-1 ② 패키지명 ③ webClientId다.
        */
+      const code = isErrorWithCode(error) ? String(error.code) : null;
+      // 릴리스에서도 남긴다 — 화면이 이 값을 알림에 덧붙인다(`getLastSignInErrorCode`)
+      lastSignInErrorCode = code;
       if (__DEV__) {
-        console.warn(
-          '[auth] google sign-in failed:',
-          isErrorWithCode(error) ? error.code : String(error),
-        );
+        console.warn('[auth] google sign-in failed:', code ?? String(error));
       }
       return 'error';
     } finally {

@@ -13,7 +13,7 @@ import { ActivityIndicator, Alert, Linking, Pressable, StyleSheet, Text, View } 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
 import { TextField } from '@/components/TextField';
-import { useSupportAuth } from '@/features/support/auth-gate';
+import { getLastSignInErrorCode, useSupportAuth } from '@/features/support/auth-gate';
 import type { SignInOutcome } from '@/features/support/auth-gate';
 import { useInquiryStore } from '@/features/support/inquiry-store';
 import { CONTENT_MAX, CONTENT_MIN } from '@/lib/common-server';
@@ -130,7 +130,16 @@ export default function SupportScreen() {
       return;
     }
     if (outcome === 'error' || outcome === 'unauthorized' || outcome === 'not-signed-in') {
-      Alert.alert(t('support.loginFailed'));
+      /*
+       * 🔴 **구글 SDK 오류 코드를 함께 띄운다.** 사용자가 할 수 있는 일은 없지만,
+       *   릴리스 빌드에서 원인을 아는 유일한 길이다 — 진단 로그는 `__DEV__` 안에만 있고
+       *   SHA-1·패키지 문제는 **릴리스에서만** 난다(2026-08-17 stg에서 겪음).
+       *
+       * ⚠ 숫자는 번역하지 않는다. `10`(DEVELOPER_ERROR)은 어느 언어에서도 `10`이고,
+       *   문구로 풀어 쓰면 검색이 안 된다 — 이 값의 쓸모는 그대로 옮겨 적히는 것이다.
+       */
+      const code = getLastSignInErrorCode();
+      Alert.alert(t('support.loginFailed'), code === null ? undefined : `(${code})`);
       return;
     }
     Alert.alert(t(FAIL_KEYS[outcome], { min: CONTENT_MIN }));

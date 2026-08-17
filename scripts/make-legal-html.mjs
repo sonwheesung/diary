@@ -24,11 +24,12 @@ const json = execFileSync(
     '--experimental-strip-types',
     '--no-warnings',
     '-e',
-    "Promise.all([import('./features/legal/legal-text.ts'), import('./features/legal/registry.ts')]).then(([m, r]) => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, operator: m.OPERATOR, translations: r.TRANSLATIONS, deleteTranslations: r.DELETE_ACCOUNT_TRANSLATIONS })))",
+    "Promise.all([import('./features/legal/legal-text.ts'), import('./features/legal/registry.ts')]).then(([m, r]) => console.log(JSON.stringify({ privacy: m.PRIVACY, deleteAccount: m.DELETE_ACCOUNT, terms: m.TERMS, operator: m.OPERATOR, translations: r.TRANSLATIONS, deleteTranslations: r.DELETE_ACCOUNT_TRANSLATIONS, termsTranslations: r.TERMS_TRANSLATIONS })))",
   ],
   { encoding: 'utf8', cwd: process.cwd() },
 );
-const { privacy, deleteAccount, operator, translations, deleteTranslations } = JSON.parse(json);
+const { privacy, deleteAccount, terms, operator, translations, deleteTranslations, termsTranslations } =
+  JSON.parse(json);
 
 /**
  * 🔴 **게시본도 다국어여야 한다** (2026-08-14).
@@ -281,6 +282,12 @@ for (const [file, byLang] of [
    */
   ['privacy.html', { ko: privacy, ...translations }],
   ['delete-account.html', { ko: deleteAccount, ...deleteTranslations }],
+  /*
+   * ⚠ 약관은 **전자상거래법 §13②9호가 "그 약관의 내용을 확인할 수 있는 방법"까지** 요구한다.
+   *   그 방법이 이 URL이고, 약관 제4조가 이 주소를 문서 안에 적어놨다 —
+   *   파일명을 바꾸면 약관이 자기 자신을 잘못 가리키게 된다.
+   */
+  ['terms.html', { ko: terms, ...termsTranslations }],
 ]) {
   const doc = byLang.ko;
   const out = render(byLang);
@@ -296,4 +303,5 @@ for (const [file, byLang] of [
   );
 }
 console.log('게시: https://sonwheesung.github.io/diary/privacy.html');
-console.log('      https://sonwheesung.github.io/diary/delete-account.html  (push하면 반영)');
+console.log('      https://sonwheesung.github.io/diary/delete-account.html');
+console.log('      https://sonwheesung.github.io/diary/terms.html  (push하면 반영)');

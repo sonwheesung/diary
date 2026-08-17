@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
 import { LegalDocView } from '@/features/legal/components/LegalDocView';
-import { resolvePrivacy } from '@/features/legal/resolve';
+import { resolveTerms } from '@/features/legal/resolve';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -13,26 +13,21 @@ import { spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
 /**
- * 개인정보처리방침 — 앱 내 표시.
+ * 이용약관 — 앱 내 표시.
  *
- * 원문을 앱에 **정적으로** 담는다. 법적 고지는 오프라인에서도 열려야 하고,
- * 조각은 서버 없이 완전히 동작하는 앱이라 더욱 그렇다(웹 링크로만 두면 비행기에서 못 본다).
+ * 🔴 **이 화면이 있어야 약관이 성립한다.** 전자상거래법 §13②9호는 *"거래에 관한 약관
+ *   (그 약관의 내용을 **확인할 수 있는 방법**을 포함한다)"* 을 계약 체결 전 고지 사항으로
+ *   열거한다 — 문서를 써놓고 볼 곳을 안 주면 9호를 충족하지 못한다.
+ *   웹 URL(약관 제4조)과 이 화면이 그 "방법" 두 가지다.
  *
- * ~~번역하지 않는다~~ → **번역한다**(2026-08-12 사용자 결정).
+ * ⚠ 처리방침과 같은 이유로 **앱에 정적으로** 담는다. 결제 직전에 약관을 확인하려는데
+ *   인터넷이 없어서 못 여는 상황을 만들지 않는다.
  *
- * 옛 근거는 *"번역본이 원문과 어긋나면 어느 쪽이 효력인지 다툼이 생긴다"* 였다. 걱정은 옳지만
- * 답이 틀렸다 — 다툼은 **"한국어본이 우선한다"** 한 줄로 막히고, 그 줄을 안 쓴 대가는
- * **자기 정보가 어떻게 처리되는지 못 읽는 사용자**다. 읽을 수 없는 고지는 고지가 아니다.
- *
- * 어긋남은 문구가 아니라 **구조**로 막는다 — `npm run check:legal`이 절 수와 줄 수를
- * 한국어와 대조한다. 번역이 없는 언어는 한국어 원문을 그대로 보여준다(반쪽 번역을 만들지 않는다).
- *
- * ⚠ 본문 렌더링은 `LegalDocView`가 갖는다 — 이용약관과 **같은 뷰**다(2026-08-17).
+ * ⚠ 본문 렌더링은 `LegalDocView`가 갖는다 — 처리방침과 **같은 뷰**다.
  */
-export default function PrivacyScreen() {
+export default function TermsScreen() {
   const { t, i18n } = useTranslation();
-  // 언어를 바꾸면 다시 고른다 — 화면이 열린 채 언어가 바뀌는 경로가 있다
-  const resolved = resolvePrivacy(i18n.language);
+  const resolved = resolveTerms(i18n.language);
   const colors = useColors();
   const styles = useStyles(createStyles);
 
@@ -46,7 +41,7 @@ export default function PrivacyScreen() {
       >
         <ChevronLeft size={26} color={colors.text} />
       </Pressable>
-      <Text style={styles.headerTitle}>{t('settings.privacy')}</Text>
+      <Text style={styles.headerTitle}>{t('settings.terms')}</Text>
     </View>
   );
 

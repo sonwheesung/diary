@@ -396,3 +396,257 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Ketentuan penggunaan — Bahasa Indonesia.
+ *
+ * 🔴 **Teks bahasa Korea yang berlaku** (`legal-text.ts`). Ini terjemahan agar mudah dibaca;
+ *   bila keduanya berbeda, versi Korea yang mengikat. Pasal 22 menyatakannya di dalam dokumen
+ *   ini sendiri — itulah yang membuat terjemahan ini aman untuk diterbitkan.
+ *
+ * ⚠ **Struktur harus sama persis dengan versi Korea** — 22 pasal, jumlah baris yang sama pada
+ *   setiap pasal, dan tanpa `pending`. `npm run check:legal` memeriksanya. Memecah satu kalimat
+ *   Korea menjadi dua kalimat Indonesia membuat pemeriksaan gagal, dan menggabungkan dua kalimat
+ *   menyembunyikan klausul yang hilang.
+ *
+ * ⚠ Dokumen ini ada karena **Pasal 13(2) Undang-Undang Perlindungan Konsumen dalam Perdagangan
+ *   Elektronik** — pengungkapan *sebelum* kontrak ditambah pernyataan tertulis isi kontrak
+ *   *sesudahnya*. Angka 5 (penarikan penawaran), 6 (pengembalian dana), 8 (keluhan dan sengketa)
+ *   dan 9 (ketentuan itu sendiri beserta cara memeriksanya) tidak punya wadah lain. Setiap pasal
+ *   adalah wadah bagi satu angka tertentu, jadi **sebuah pasal tidak boleh kehilangan substansi
+ *   hukumnya demi terbaca lebih lancar.** Tiga yang paling berat:
+ *
+ *   - Pasal 12 mengulang Pasal 17(2)5 dan 17(6) secara substansi. “penyediaan konten digital
+ *     telah dimulai”, “bagian ... yang disediakan secara bertahap yang belum disediakan” dan
+ *     “mencantumkan fakta ini **dan pada saat yang sama** menyediakan ... sebagai produk uji
+ *     coba” adalah syarat undang-undang — bila dikaburkan, pembatasannya batal.
+ *   - Baris pertama Pasal 20 adalah penjaga terhadap Pasal 35 (kontrak yang merugikan konsumen).
+ *     **Jangan pernah menambahkan “sejauh diizinkan hukum”** atau kalimat pembebasan sejenis:
+ *     itu membalik kalimatnya menjadi persis hal yang hendak ditolaknya.
+ *   - Pasal 22 adalah Pasal 36 (yurisdiksi eksklusif) — alamat **pengguna**, bukan kedudukan
+ *     operator. Menyebut kedudukan operator batal demi hukum berdasarkan Pasal 35.
+ *
+ * ⚠ “청약철회” diterjemahkan **“penarikan penawaran”**, bukan “pembatalan langganan”. Jogak Pro
+ *   memang sebuah langganan, dan Pasal 14 adalah pembatalannya — keduanya tidak boleh
+ *   bertabrakan dalam satu dokumen.
+ */
+export const TERMS_ID: LegalDoc = {
+  title: 'Ketentuan Penggunaan Jogak',
+  sourceFingerprint: '898aa8d7',
+  effective: '2026-08-17',
+  updated: '2026-08-17',
+  intro:
+    'Ketentuan ini mengatur hak, kewajiban, dan tanggung jawab antara Hwiseong Games (nama merek Vivace Games, selanjutnya “operator”) dan pengguna, sehubungan dengan penggunaan aplikasi seluler “Jogak” (selanjutnya “layanan”) yang disediakan operator. Mohon dibaca sebelum kamu menggunakan layanan.',
+  sections: [
+    {
+      h: 'Pasal 1 (Tujuan dan ruang lingkup)',
+      body: [
+        'Ketentuan ini bertujuan mengatur syarat dan prosedur penggunaan layanan serta hak dan kewajiban operator dan pengguna.',
+        'Ketentuan ini berlaku bagi seluruh pengguna layanan. Hal yang sama berlaku bila kamu hanya menulis catatan tanpa masuk ke akun.',
+        'Hal yang tidak diatur dalam ketentuan ini tunduk pada peraturan perundang-undangan yang berlaku, termasuk Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Undang-Undang Pengaturan Syarat dan Ketentuan, dan Undang-Undang Pemajuan Industri Konten, serta pada kelaziman perdagangan.',
+      ],
+    },
+    {
+      h: 'Pasal 2 (Informasi operator)',
+      body: [
+        'Nama badan usaha: Hwiseong Games (nama merek Vivace Games)',
+        // ⚠ Ejaan yang sudah dipakai `PRIVACY_ID` bagian 11. Dua dokumen tidak boleh menyebut orang yang sama dengan cara berbeda
+        'Perwakilan: Son Hwi-seong',
+        'Alamat tempat usaha: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Nomor telepon: +82 10-9926-0925',
+        'Alamat surel: support@vivace-games.com',
+        'Nomor pendaftaran usaha: 749-25-02260',
+        'Nomor pendaftaran usaha penjualan jarak jauh: 2026-Ulsan Jung-gu-0170 (instansi yang menerima pendaftaran: Jung-gu, Kota Metropolitan Ulsan)',
+      ],
+    },
+    {
+      h: 'Pasal 3 (Definisi)',
+      body: [
+        '“Kepingan” (“jogak”) berarti satu catatan harian yang ditulis pengguna di dalam layanan.',
+        '“Perangkat” berarti ponsel pintar atau terminal lain tempat pengguna memasang dan menggunakan layanan.',
+        '“Jogak Pro” berarti produk langganan berulang berbayar yang menyediakan penghilangan iklan, pencadangan dan pemulihan, serta laporan ringkasan AI.',
+        '“Pasar aplikasi” berarti gerai aplikasi seperti Google Play, tempat layanan didistribusikan dan pembayaran produk berbayar dilakukan.',
+      ],
+    },
+    {
+      h: 'Pasal 4 (Pemasangan dan perubahan ketentuan)',
+      body: [
+        'Operator memasang ketentuan ini pada layar [Pengaturan] di dalam layanan dan pada alamat di bawah ini, agar pengguna dapat memeriksanya kapan saja.',
+        'https://sonwheesung.github.io/diary/terms.html',
+        'Operator dapat mengubah ketentuan ini sepanjang tidak melanggar peraturan perundang-undangan yang berlaku.',
+        'Saat mengubah ketentuan ini, operator menyebutkan tanggal berlaku dan alasan perubahan, lalu mengumumkannya di dalam layanan mulai 7 hari sebelum tanggal berlaku. Namun untuk perubahan yang merugikan pengguna, pengumuman dilakukan mulai 30 hari sebelum tanggal berlaku, dengan menampilkan isi sebelum dan sesudah perubahan secara berdampingan dalam bentuk yang mudah dipahami.',
+        'Pengguna yang tidak menyetujui ketentuan yang diubah dapat membatalkan layanan berbayar dan berhenti menggunakan layanan sebelum tanggal berlaku. Jika kamu terus menggunakan layanan setelah tanggal berlaku yang diumumkan, kamu dianggap telah menyetujui ketentuan yang diubah.',
+      ],
+    },
+    {
+      h: 'Pasal 5 (Isi layanan)',
+      body: [
+        'Nama layanan yang disediakan operator adalah “Jogak”, dan jenisnya adalah aplikasi seluler (konten digital) untuk menulis dan menyimpan catatan harian.',
+        'Fitur yang disediakan gratis: menulis, menyunting, menghapus, dan mencari catatan, melampirkan foto, tag, mencatat emosi, tampilan kalender, kunci aplikasi (PIN dan pola), mode gelap, banyak bahasa, membaca pengumuman, dan Hubungi kami.',
+        'Fitur yang disediakan melalui produk berbayar “Jogak Pro”: penghilangan iklan, pencadangan dan pemulihan terenkripsi, serta laporan ringkasan AI.',
+        'Judul, isi, foto, tag, dan emosi catatan yang ditulis pengguna hanya disimpan di dalam perangkat pengguna, dan tidak dikirim ke server operator kecuali pengguna mengaktifkan fitur pencadangan.',
+        'Jika pencadangan diaktifkan, catatan dienkripsi di perangkat pengguna sebelum dikirim, dan operator tidak menyimpan kunci dekripsinya sehingga tidak dapat membaca isinya.',
+        'Saat laporan ringkasan AI dibuat, isi catatan pada periode yang diminta pengguna melewati server operator dan diteruskan kepada penyedia kecerdasan buatan. Operator tidak menyimpan isi tersebut. Rinciannya tunduk pada kebijakan privasi.',
+      ],
+    },
+    {
+      h: 'Pasal 6 (Terbentuknya kontrak dan akun)',
+      body: [
+        'Kontrak penggunaan layanan terbentuk ketika pengguna memasang layanan, menyetujui ketentuan ini, lalu menggunakan layanan.',
+        'Fitur gratis, termasuk menulis catatan, dapat digunakan tanpa akun.',
+        'Hubungi kami, pembayaran produk berbayar, pencadangan dan pemulihan, serta laporan ringkasan AI memerlukan masuk dengan akun Google.',
+        'Pengguna dapat menghapus akunnya kapan saja pada layar [Pengaturan] → [Hubungi kami] di dalam layanan. Cara menghapus akun serta informasi yang dihapus atau disimpan tunduk pada panduan penghapusan akun.',
+      ],
+    },
+    {
+      h: 'Pasal 7 (Harga produk berbayar dan pembayaran)',
+      body: [
+        'Biaya Jogak Pro adalah 3.900 won per bulan dan 29.000 won per tahun, keduanya sudah termasuk pajak pertambahan nilai.',
+        'Biaya tersebut ditagihkan otomatis ke metode pembayaran pengguna yang terdaftar di pasar aplikasi, pada saat langganan dimulai dan pada setiap tanggal perpanjangan berikutnya.',
+        'Tidak ada biaya lain yang harus ditanggung pengguna selain biaya tersebut. Namun biaya komunikasi data yang diperlukan untuk menggunakan layanan tunduk pada kebijakan penyedia telekomunikasi yang kamu gunakan, dan menjadi tanggunganmu.',
+        'Jumlah yang benar-benar ditagihkan dapat berbeda dari jumlah di atas, tergantung kebijakan kurs dan biaya pasar aplikasi atau kebijakan harga per negara. Dalam hal itu, jumlah yang tertera di layar pembayaran yang berlaku.',
+        'Bila operator menaikkan biaya, pemberitahuan diberikan lebih dahulu sesuai Pasal 4, dan harga yang dinaikkan tidak diterapkan pada periode langganan yang sudah dibayar.',
+      ],
+    },
+    {
+      h: 'Pasal 8 (Pembatasan syarat penjualan)',
+      body: [
+        'Layanan hanya dapat digunakan di negara tempat pasar aplikasi mengizinkan distribusi, dan pemasangan serta pembayaran hanya dapat dilakukan di negara yang ditetapkan operator sebagai tujuan distribusi.',
+        'Satu langganan berbayar hanya terhubung ke satu akun pada satu waktu. Jika kamu masuk dengan akun Google lain di perangkat yang sama, langganan berpindah ke akun tersebut dan tidak dapat lagi digunakan dari akun sebelumnya.',
+        'Operator dapat menetapkan batas atas jumlah pemakaian sepanjang diperlukan untuk menyediakan sebagian fitur layanan. Jumlah pembuatan laporan ringkasan AI dibatasi per periode, dan batas itu ditampilkan pada layar layanan.',
+      ],
+    },
+    {
+      h: 'Pasal 9 (Waktu dan cara penyediaan)',
+      body: [
+        'Jogak Pro diterapkan pada akun pengguna segera setelah pembayaran selesai, dan tidak ada proses pengiriman tersendiri.',
+        'Bila pembayaran sudah selesai tetapi haknya belum diterapkan, pengguna dapat menggunakan [Pulihkan pembelian] pada layar [Langganan] di dalam layanan, atau menghubungi operator dengan cara pada Pasal 21.',
+        'Periode langganan berjalan dari tanggal pembayaran sampai satu hari sebelum tanggal perpanjangan berikutnya, dan diperpanjang otomatis untuk jangka waktu yang sama bila tidak dibatalkan.',
+      ],
+    },
+    {
+      h: 'Pasal 10 (Lingkungan penggunaan)',
+      body: [
+        'Layanan dapat digunakan pada perangkat Android, dan memerlukan versi sistem operasi yang tertera pada halaman detail di pasar aplikasi atau versi yang lebih baru.',
+        'Fitur dasar seperti menulis, melihat, dan mencari catatan dapat digunakan tanpa koneksi internet.',
+        'Membaca pengumuman, Hubungi kami, masuk, pembayaran, pencadangan dan pemulihan, serta laporan ringkasan AI memerlukan koneksi internet.',
+        'Bila ruang penyimpanan perangkat pengguna tidak mencukupi atau sistem operasinya berada di luar rentang yang didukung, sebagian fitur dapat tidak berfungsi sebagaimana mestinya.',
+      ],
+    },
+    {
+      h: 'Pasal 11 (Uji coba gratis dan peralihan ke berbayar)',
+      body: [
+        'Operator menyediakan uji coba gratis selama 7 hari untuk Jogak Pro.',
+        'Ketika masa uji coba gratis berakhir, langganan beralih otomatis menjadi langganan berulang berbayar dan biaya pada Pasal 7 ditagihkan.',
+        'Sebelum peralihan itu terjadi, operator menampilkan tanggal dan waktu peralihan, harga sebelum dan sesudah perubahan, serta metode pembayaran, dan meminta persetujuan pengguna; bila pengguna tidak menyetujui, pembayaran tidak dilakukan.',
+        'Bila kamu tidak ingin ditagih selama uji coba gratis, batalkanlah langganan dengan cara pada Pasal 14 sebelum masa uji coba berakhir. Meski kamu membatalkannya, kamu tetap dapat menggunakan Jogak Pro sampai masa uji coba berakhir.',
+      ],
+    },
+    {
+      h: 'Pasal 12 (Penarikan penawaran)',
+      body: [
+        'Pengguna dapat menarik penawarannya dalam 7 hari sejak tanggal pembayaran produk berbayar, atau sejak tanggal menerima dokumen tertulis mengenai isi kontrak.',
+        'Penarikan penawaran dilakukan dengan menyampaikan maksud tersebut ke kanal pertanyaan pada Pasal 21, dan operator memberitahukan hasilnya dalam 3 hari kerja sejak tanggal penerimaan.',
+        'Setelah penawaran ditarik, operator mengembalikan pembayaran sesuai Pasal 13, dan hak Jogak Pro pengguna berakhir seketika.',
+        'Namun, berdasarkan Pasal 17(2)5 Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, penarikan penawaran dibatasi apabila penyediaan konten digital telah dimulai. Bahkan dalam hal itu, penarikan penawaran tetap dapat dilakukan atas bagian konten digital yang disediakan secara bertahap yang belum disediakan.',
+        'Untuk menerapkan pembatasan tersebut, operator, sesuai ayat (6) pasal yang sama, mencantumkan fakta ini dan pada saat yang sama menyediakan uji coba gratis 7 hari pada Pasal 11 sebagai produk uji coba. Bila operator tidak melakukan tindakan tersebut, pengguna dapat menarik penawarannya terlepas dari pembatasan di atas.',
+        'Operator tidak menuntut denda maupun ganti rugi dengan alasan pengguna menarik penawarannya.',
+      ],
+    },
+    {
+      h: 'Pasal 13 (Pengembalian dana)',
+      body: [
+        'Karena pembayaran produk berbayar dilakukan melalui pasar aplikasi, pengembalian dana pada prinsipnya juga diproses sesuai prosedur pengembalian dana pasar aplikasi.',
+        'Pengguna dapat meminta pengembalian dana langsung kepada pasar aplikasi, atau kepada operator melalui kanal pertanyaan pada Pasal 21. Bila permintaan disampaikan kepada operator, operator menanganinya dengan berkoordinasi bersama pasar aplikasi.',
+        'Operator mengembalikan dana dalam 3 hari kerja sejak tanggal menerima pernyataan penarikan penawaran atau pernyataan sejenis. Penerimaan uang secara nyata dapat memakan waktu lebih lama, tergantung jadwal pemrosesan pasar aplikasi.',
+        'Bila operator menunda pengembalian dana melewati jangka waktu tersebut tanpa alasan yang sah, operator juga membayar bunga keterlambatan untuk masa keterlambatan itu, yang dihitung dengan mengalikan tingkat bunga yang ditetapkan Peraturan Pelaksanaan Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik.',
+        'Bila ada masa yang sudah digunakan, operator dapat memotong jumlah yang sepadan dengan masa itu sebelum mengembalikan dana. Namun tidak ada pemotongan untuk masa ketika pengguna tidak dapat menggunakan layanan karena hal yang dapat dipersalahkan kepada operator.',
+        'Tidak ada biaya tersendiri yang dikenakan untuk pengembalian dana.',
+      ],
+    },
+    {
+      h: 'Pasal 14 (Pembatalan langganan)',
+      body: [
+        'Pengguna dapat membatalkan langganan kapan saja. Pembatalan harus dilakukan sendiri oleh pengguna pada layar pengelolaan langganan di pasar aplikasi; operator tidak dapat membatalkannya untuk pengguna.',
+        'Google Play: aplikasi Store > profil > Pembayaran dan langganan > Langganan (https://play.google.com/store/account/subscriptions)',
+        'Meski kamu membatalkannya, kamu tetap dapat menggunakan Jogak Pro sampai periode langganan yang sudah dibayar berakhir, dan setelah periode itu lewat perpanjangan otomatis berhenti.',
+        'Menghapus akun di layanan tidak membatalkan langganan di pasar aplikasi. Bila kamu tidak membatalkannya dengan cara di atas, terpisah dari penghapusan akun, tagihan akan terus berjalan.',
+      ],
+    },
+    {
+      h: 'Pasal 15 (Kontrak yang dibuat anak di bawah umur)',
+      body: [
+        'Bila anak di bawah umur membayar produk berbayar tanpa persetujuan wali sahnya, anak tersebut atau wali sahnya dapat membatalkan kontrak itu.',
+        'Namun pembatalan tidak dapat dilakukan bila anak di bawah umur membayar dengan harta yang telah diizinkan wali sahnya untuk digunakan, atau bila ia memakai tipu daya sehingga dipercaya sebagai orang dewasa.',
+        'Bila kamu ingin membatalkannya, silakan ajukan permintaan melalui kanal pertanyaan pada Pasal 21. Operator dapat meminta dokumen yang menunjukkan bahwa kamu adalah wali sahnya.',
+      ],
+    },
+    {
+      h: 'Pasal 16 (Kewajiban pengguna)',
+      body: [
+        'Pengguna wajib mematuhi peraturan perundang-undangan yang berlaku dan ketentuan ini saat menggunakan layanan.',
+        'Pengguna dilarang menyalahgunakan akun orang lain, mengganggu jalannya layanan secara normal, mengakses atau mencoba mengakses layanan dengan cara selain yang ditetapkan operator, serta memanipulasi proses pembayaran produk berbayar.',
+        'Pengguna wajib mengelola sendiri informasi akunnya serta kata sandi atau pola kunci aplikasinya.',
+        'Pengguna wajib menyimpan dengan aman kode pemulihan yang diterbitkan saat fitur pencadangan diaktifkan. Bila kode pemulihan hilang, operator pun tidak dapat mendekripsi cadangan sehingga pemulihan menjadi tidak mungkin.',
+      ],
+    },
+    {
+      h: 'Pasal 17 (Penyimpanan data dan pencadangan)',
+      body: [
+        'Catatan asli yang ditulis pengguna disimpan di perangkat pengguna. Bila aplikasi dihapus atau perangkat diatur ulang, catatan di dalam perangkat tidak dapat dipulihkan.',
+        'Bila fitur pencadangan diaktifkan, operator menyimpan salinan terenkripsi, dan pengguna dapat memulihkannya dengan kode pemulihan.',
+        'Bahkan setelah langganan berakhir, operator menyimpan cadangan terenkripsi selama 90 hari, dan pemulihan tetap dapat digunakan selama masa itu. Setelah 90 hari lewat, cadangan dihapus.',
+        'Operator tidak memiliki sarana notifikasi push, sehingga pemberitahuan mengenai rencana penghapusan di atas hanya dilakukan dengan menampilkannya di layar ketika pengguna membuka aplikasi.',
+        'Bila pengguna menghapus akunnya, cadangan terenkripsi yang tersimpan di server dihapus bersama akun tanpa tenggang 90 hari.',
+      ],
+    },
+    {
+      h: 'Pasal 18 (Hak kekayaan intelektual)',
+      body: [
+        'Hak atas catatan yang ditulis pengguna di layanan dan foto yang dilampirkannya berada pada pengguna. Operator tidak mengklaim hak apa pun atasnya.',
+        'Operator tidak menggunakan catatan pengguna untuk tujuan selain penyediaan layanan, dan tidak menggunakannya untuk keperluan iklan, statistik, maupun pelatihan kecerdasan buatan.',
+        'Hak atas layanan itu sendiri serta desain, merek, dan program yang terdapat di dalamnya berada pada operator atau pada pemegang hak yang sah.',
+        'Pengguna dilarang menggandakan, mendistribusikan, atau merekayasa balik layanan tanpa persetujuan operator terlebih dahulu.',
+      ],
+    },
+    {
+      h: 'Pasal 19 (Perubahan, penghentian sementara, dan pengakhiran layanan)',
+      body: [
+        'Operator dapat mengubah isi layanan untuk meningkatkan kualitasnya. Bila isi produk berbayar diubah dengan cara yang merugikan pengguna, pemberitahuan diberikan lebih dahulu sesuai Pasal 4.',
+        'Operator dapat menghentikan penyediaan layanan untuk sementara bila ada sebab yang tidak terhindarkan seperti pemeriksaan, penggantian, atau kerusakan perangkat, maupun terputusnya komunikasi, dan dalam hal itu pemberitahuan diberikan lebih dahulu. Namun bila ada sebab tidak terhindarkan yang membuat pemberitahuan awal tidak mungkin, pemberitahuan diberikan setelahnya.',
+        'Bila operator mengakhiri layanan, pemberitahuan diberikan melalui pengumuman di dalam layanan dan halaman detail di pasar aplikasi paling lambat 30 hari sebelum tanggal pengakhiran, disertai keterangan mengenai jangka waktu bagi pengguna untuk mengunduh atau memulihkan cadangannya.',
+        'Saat layanan diakhiri, biaya yang sepadan dengan masa yang sudah dibayar tetapi belum digunakan dikembalikan kepada pengguna.',
+      ],
+    },
+    {
+      h: 'Pasal 20 (Tanggung jawab)',
+      body: [
+        'Operator memikul tanggung jawab sebagaimana ditetapkan peraturan perundang-undangan yang berlaku sehubungan dengan penyediaan layanan. Tidak satu pun ketentuan dalam dokumen ini mengecualikan atau membatasi tanggung jawab operator yang ditetapkan peraturan perundang-undangan.',
+        'Operator tidak bertanggung jawab atas kerugian yang timbul dari sebab yang tidak dapat dipersalahkan kepada operator, seperti keadaan kahar, kerusakan, kehilangan, atau pengaturan ulang perangkat pengguna, maupun hilangnya kode pemulihan atau kata sandi kunci aplikasi pengguna.',
+        'Laporan ringkasan AI adalah bahan rujukan yang dihasilkan kecerdasan buatan, dan bukan diagnosis atau saran medis, psikologis, maupun hukum. Operator tidak menjamin ketepatan isinya.',
+        'Kerugian yang timbul dalam proses pembayaran melalui pasar aplikasi karena hal yang dapat dipersalahkan kepada pasar aplikasi tunduk pada kebijakan pasar aplikasi. Meskipun demikian, operator memberikan seluruh kerja sama yang diperlukan untuk memulihkan kerugian pengguna.',
+      ],
+    },
+    {
+      h: 'Pasal 21 (Keluhan konsumen dan penanganan sengketa)',
+      body: [
+        'Untuk menangani pendapat dan keluhan pengguna, operator menjalankan kanal [Pengaturan] → [Hubungi kami] di dalam layanan dan kanal surel di bawah ini.',
+        'Surel: support@vivace-games.com',
+        'Bila operator menilai pendapat atau keluhan yang diajukan pengguna beralasan, operator menanganinya tanpa penundaan; bila penanganannya memakan waktu, operator memberitahukan alasan dan jadwal penanganannya.',
+        'Bila timbul sengketa antara operator dan pengguna, pengguna dapat mengajukan mediasi sengketa kepada lembaga berikut.',
+        '• Komite Mediasi Sengketa Konsumen (Badan Konsumen Korea): 1372 (dari Korea) · https://www.kca.go.kr',
+        '• Komite Mediasi Sengketa Konten: 1588-2594 · https://www.kcdrc.kr',
+        '• Komite Mediasi Sengketa Transaksi Elektronik: 1661-5714 · https://www.ecmc.or.kr',
+      ],
+    },
+    {
+      h: 'Pasal 22 (Hukum yang berlaku dan yurisdiksi)',
+      body: [
+        'Hukum Republik Korea berlaku bagi ketentuan ini dan bagi penggunaan layanan.',
+        'Gugatan mengenai sengketa yang timbul antara operator dan pengguna tunduk pada yurisdiksi eksklusif pengadilan distrik yang wilayah hukumnya meliputi alamat pengguna pada saat gugatan diajukan, sesuai Pasal 36 Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik. Bila tidak ada alamat, gugatan tunduk pada yurisdiksi eksklusif pengadilan distrik yang wilayah hukumnya meliputi tempat tinggal pengguna; dan bila alamat atau tempat tinggal pengguna tidak jelas pada saat gugatan diajukan, pengadilan yang berwenang ditentukan sesuai Undang-Undang Hukum Acara Perdata.',
+        'Versi bahasa Korea dari ketentuan ini adalah versi yang mengikat. Bila terjemahan dalam bahasa lain berbeda maknanya, versi bahasa Korea yang berlaku.',
+        'Ketentuan penutup: Ketentuan ini mulai berlaku pada 17 Agustus 2026.',
+      ],
+    },
+  ],
+};

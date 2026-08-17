@@ -196,6 +196,33 @@ export default function SubscribeScreen() {
           <Text style={styles.agreeText}>{t('subscribe.consentAgree')}</Text>
         </Pressable>
 
+        {/*
+          🔴 **전자상거래법 §13③ 미성년자 고지.** 통신판매업자는 미성년자와 계약을 체결할 때
+            *"법정대리인이 동의하지 아니하면 취소할 수 있다"* 는 것을 **미성년자에게 고지**해야 한다.
+
+          ⚠ 우리는 이용자의 나이를 모른다 — 연령 게이트도 생년월일 수집도 없고, 일기 앱에
+            그것을 만드는 것은 기둥 1·3에 정면으로 어긋난다. 그래서 **결제 화면에서 모두에게
+            보여주는 것**이 이 조를 이행하는 유일하게 성립하는 방법이다. 성인에게 한 줄 더 보이는
+            비용이, 미성년자에게 고지하지 않는 위반보다 싸다.
+
+          ⚠ 동의 체크박스에 묶지 않는다. §13③은 **고지**이지 동의가 아니고, 묶으면
+            §13⑥ 동의의 대상이 흐려진다("무엇에 동의한 것인가"가 두 개가 된다).
+        */}
+        <Text style={styles.minorNotice}>{t('subscribe.consentMinor')}</Text>
+
+        {/*
+          §13②9호 — 약관은 "확인할 수 있는 방법"까지 갖춰야 한다. 결제 직전이 그 방법이
+          가장 필요한 자리다. 청약철회·환불이 거기 있다.
+        */}
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => router.push('/terms')}
+          hitSlop={8}
+          style={styles.consentBack}
+        >
+          <Text style={styles.link}>{t('subscribe.consentTerms')}</Text>
+        </Pressable>
+
         <Button
           label={t('subscribe.consentStart')}
           onPress={() => void buy(consent.pkg)}
@@ -445,6 +472,13 @@ const createStyles = (colors: Palette) =>
       borderRadius: radius.sm,
     },
     agreeText: { ...typography.body, color: colors.text, flex: 1 },
+    // 동의 체크박스와 눈으로 구분한다 — 고지이지 동의가 아니다(§13③)
+    minorNotice: {
+      ...typography.caption,
+      color: colors.textMuted,
+      lineHeight: 19,
+      marginTop: spacing.sm,
+    },
     consentBack: { alignSelf: 'center', marginTop: spacing.lg },
     legal: { gap: spacing.xs, marginTop: spacing.md },
     fine: { ...typography.caption, color: colors.textMuted, lineHeight: 18 },

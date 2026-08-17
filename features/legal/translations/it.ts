@@ -397,3 +397,257 @@ export const DELETE_ACCOUNT_IT: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Condizioni d’uso — italiano.
+ *
+ * 🔴 **Il testo coreano è l’originale e prevale** (`legal-text.ts`). Questa è una traduzione di
+ *   comodità; in caso di divergenza vale il coreano. Lo dice l’articolo 22 stesso all’interno
+ *   del documento, ed è ciò che rende sicura la pubblicazione della traduzione.
+ *
+ * ⚠ **La struttura deve coincidere esattamente con quella coreana** — 22 articoli, lo stesso
+ *   numero di righe in ciascuno e nessuna “modifica preannunciata”. `npm run check:legal` lo
+ *   verifica. Spezzare in due una frase coreana fa fallire il controllo, e fonderne due
+ *   nasconde una clausola persa.
+ *
+ * ⚠ Questo documento esiste per l’**art. 13(2) della Legge sulla tutela dei consumatori nel
+ *   commercio elettronico**: informazione prima del contratto e consegna per iscritto delle
+ *   condizioni dopo. I punti 5 (recesso), 6 (rimborsi), 8 (reclami e controversie) e 9 (le
+ *   condizioni stesse e come consultarle) non hanno altro posto in cui stare. Ogni articolo è
+ *   il contenitore di un punto preciso, quindi **nessun articolo può perdere la propria
+ *   sostanza giuridica per leggersi meglio.** I tre che pesano di più:
+ *
+ *   - L’art. 12 riproduce in sostanza gli artt. 17(2)5 e 17(6). «la fornitura del contenuto
+ *     digitale è iniziata», «la parte non ancora fornita di un contenuto digitale fornito in
+ *     più parti» e «indicare questo fatto **e nello stesso tempo** mettere a disposizione ...
+ *     come prodotto di prova» sono requisiti di legge: se li si attenua, il limite è nullo.
+ *   - La prima riga dell’art. 20 è la difesa contro l’art. 35 (contratti sfavorevoli al
+ *     consumatore). **Non aggiungere mai «nella massima misura consentita dalla legge»** né
+ *     formule equivalenti: rovescerebbe la frase in ciò che essa era scritta per rifiutare.
+ *   - L’art. 22 è l’art. 36 (competenza esclusiva): il domicilio **della persona utente**, mai
+ *     la sede del gestore. Indicare la sede del gestore sarebbe nullo ai sensi dell’art. 35.
+ *
+ * ⚠ «청약철회» è reso con **«recesso»**, distinto dalla **«disdetta»** dell’abbonamento
+ *   dell’art. 14: Jogak Pro *è* un abbonamento, e i due rimedi non devono confondersi
+ *   all’interno dello stesso documento.
+ */
+export const TERMS_IT: LegalDoc = {
+  title: 'Condizioni d’uso di Jogak',
+  sourceFingerprint: '898aa8d7',
+  effective: '2026-08-17',
+  updated: '2026-08-17',
+  intro:
+    'Le presenti condizioni disciplinano i diritti, gli obblighi e le responsabilità tra Hwiseong Games (marchio: Vivace Games, “il gestore”) e le persone utenti, in relazione all’uso dell’applicazione mobile “Jogak” (“il servizio”) fornita dal gestore. Ti invitiamo a leggerle prima di usare il servizio.',
+  sections: [
+    {
+      h: 'Articolo 1 (Finalità e ambito di applicazione)',
+      body: [
+        'Le presenti condizioni hanno lo scopo di stabilire le condizioni e le modalità d’uso del servizio nonché i diritti e gli obblighi del gestore e della persona utente.',
+        'Le presenti condizioni si applicano a tutte le persone che usano il servizio. Si applicano allo stesso modo anche quando ti limiti a scrivere voci senza effettuare l’accesso.',
+        'Quanto non previsto dalle presenti condizioni è disciplinato dalle norme applicabili, tra cui la Legge sulla tutela dei consumatori nel commercio elettronico, la Legge sulla disciplina delle condizioni generali di contratto e la Legge sulla promozione dell’industria dei contenuti, nonché dagli usi commerciali.',
+      ],
+    },
+    {
+      h: 'Articolo 2 (Informazioni sul gestore)',
+      body: [
+        'Denominazione: Hwiseong Games (marchio: Vivace Games)',
+        // ⚠ È la grafia che `PRIVACY_IT` §11 già usa. Due documenti non possono chiamare in modo diverso la stessa persona
+        'Rappresentante: Son Hwi-seong',
+        'Sede operativa: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Telefono: +82 10-9926-0925',
+        'Indirizzo e-mail: support@vivace-games.com',
+        'Numero di registrazione dell’impresa: 749-25-02260',
+        'Numero di registrazione come attività di vendita a distanza: 2026-Ulsan Jung-gu-0170 (autorità che ha ricevuto la registrazione: Jung-gu, Città metropolitana di Ulsan)',
+      ],
+    },
+    {
+      h: 'Articolo 3 (Definizioni)',
+      body: [
+        '“Frammento” (“jogak”) indica una singola voce di diario che la persona utente scrive nel servizio.',
+        '“Dispositivo” indica lo smartphone o altro terminale su cui la persona utente installa e usa il servizio.',
+        '“Jogak Pro” indica il prodotto in abbonamento ricorrente a pagamento che offre la rimozione della pubblicità, il backup e il ripristino e i report di sintesi con IA.',
+        '“Store” indica un negozio di applicazioni, come Google Play, attraverso cui il servizio viene distribuito e vengono pagati i prodotti a pagamento.',
+      ],
+    },
+    {
+      h: 'Articolo 4 (Pubblicazione e modifica delle presenti condizioni)',
+      body: [
+        'Il gestore pubblica le presenti condizioni nella schermata [Impostazioni] del servizio e all’indirizzo indicato di seguito, affinché tu possa consultarle in qualsiasi momento.',
+        'https://sonwheesung.github.io/diary/terms.html',
+        'Il gestore può modificare le presenti condizioni nei limiti in cui ciò non violi le norme applicabili.',
+        'In caso di modifica, il gestore indica la data di efficacia e il motivo e ne dà avviso all’interno del servizio a partire da 7 giorni prima di tale data. Tuttavia, quando la modifica è sfavorevole alle persone utenti, l’avviso è pubblicato a partire da 30 giorni prima della data di efficacia, mostrando in modo confrontabile e facilmente comprensibile il contenuto prima e dopo la modifica.',
+        'Se non accetti le condizioni modificate, puoi disdire il servizio a pagamento e smettere di usare il servizio prima della data di efficacia. Se continui a usare il servizio dopo la data comunicata, si intende che hai accettato le condizioni modificate.',
+      ],
+    },
+    {
+      h: 'Articolo 5 (Contenuto del servizio)',
+      body: [
+        'Il servizio fornito dal gestore si chiama “Jogak” ed è un’applicazione mobile (contenuto digitale) per scrivere e conservare un diario.',
+        'Funzioni offerte gratuitamente: scrivere, modificare, eliminare e cercare voci, allegare foto, tag, registrazione delle emozioni, vista calendario, blocco dell’app (PIN e sequenza), modalità scura, più lingue, lettura degli avvisi e “Contattaci”.',
+        'Funzioni offerte con il prodotto a pagamento “Jogak Pro”: rimozione della pubblicità, backup cifrato e ripristino e report di sintesi con IA.',
+        'I titoli, il testo, le foto, i tag e le emozioni delle voci che scrivi sono salvati soltanto all’interno del tuo dispositivo e non vengono trasmessi ai server del gestore, a meno che tu non attivi la funzione di backup.',
+        'Se il backup è attivo, le voci vengono cifrate sul tuo dispositivo prima di essere trasmesse e il gestore non conserva la chiave di decifratura, quindi non può leggerne il contenuto.',
+        'Quando viene creato un report di sintesi con IA, il testo del diario del periodo richiesto transita nel server del gestore e viene consegnato al fornitore di intelligenza artificiale. Il gestore non conserva quel testo. I dettagli sono disciplinati dall’informativa sulla privacy.',
+      ],
+    },
+    {
+      h: 'Articolo 6 (Conclusione del contratto e account)',
+      body: [
+        'Il contratto d’uso del servizio si conclude quando la persona utente installa il servizio, accetta le presenti condizioni e lo utilizza.',
+        'Le funzioni gratuite, compresa la scrittura delle voci, sono utilizzabili senza account.',
+        '“Contattaci”, il pagamento dei prodotti a pagamento, il backup e il ripristino e i report di sintesi con IA richiedono l’accesso con un account Google.',
+        'La persona utente può eliminare il proprio account in qualsiasi momento dalla schermata [Impostazioni] → [Contattaci] del servizio. Le modalità di eliminazione e le informazioni eliminate o conservate sono disciplinate dalla guida all’eliminazione dell’account.',
+      ],
+    },
+    {
+      h: 'Articolo 7 (Prezzo dei prodotti a pagamento e pagamento)',
+      body: [
+        'Il canone di Jogak Pro è di 3.900 KRW al mese e 29.000 KRW all’anno, importi comprensivi dell’imposta sul valore aggiunto.',
+        'Il canone viene addebitato automaticamente sul metodo di pagamento registrato dalla persona utente presso lo store, al momento dell’avvio dell’abbonamento e a ogni successiva data di rinnovo.',
+        'Non vi sono costi aggiuntivi oltre al canone. I costi di traffico dati necessari per usare il servizio seguono però la politica dell’operatore telefonico scelto dalla persona utente e restano a suo carico.',
+        'L’importo effettivamente addebitato può differire dagli importi indicati sopra in base alle politiche di cambio e di commissioni dello store o ai suoi prezzi per Paese. In tal caso prevale l’importo mostrato nella schermata di pagamento.',
+        'Se il gestore aumenta il canone, ne dà avviso in anticipo ai sensi dell’articolo 4, e il prezzo aumentato non si applica a un periodo di abbonamento già pagato.',
+      ],
+    },
+    {
+      h: 'Articolo 8 (Limiti delle condizioni di vendita)',
+      body: [
+        'Il servizio può essere usato soltanto nei Paesi in cui lo store ne consente la distribuzione, e l’installazione e il pagamento sono possibili soltanto nei Paesi individuati dal gestore per la distribuzione.',
+        'Un abbonamento a pagamento è collegato a un solo account per volta. Se accedi con un altro account Google sullo stesso dispositivo, l’abbonamento viene trasferito a quell’account e non è più utilizzabile dall’account precedente.',
+        'Il gestore può fissare un limite massimo al numero di utilizzi nella misura necessaria a fornire alcune funzioni del servizio. Il numero di report di sintesi con IA generabili è limitato per periodo e tale limite è indicato nelle schermate del servizio.',
+      ],
+    },
+    {
+      h: 'Articolo 9 (Momento e modalità della fornitura)',
+      body: [
+        'Jogak Pro viene applicato all’account della persona utente non appena il pagamento è completato, senza alcuna procedura di consegna separata.',
+        'Se il pagamento è stato completato ma il diritto non risulta applicato, la persona utente può usare [Ripristina acquisti] nella schermata [Jogak Pro] del servizio oppure contattare il gestore con le modalità dell’articolo 21.',
+        'Il periodo di abbonamento va dalla data del pagamento al giorno precedente il rinnovo successivo e si rinnova automaticamente per un periodo di pari durata, salvo disdetta.',
+      ],
+    },
+    {
+      h: 'Articolo 10 (Ambiente d’uso)',
+      body: [
+        'Il servizio è utilizzabile su dispositivi Android e richiede la versione del sistema operativo indicata nella scheda dello store o una successiva.',
+        'Le funzioni di base, come scrivere, consultare e cercare le voci, sono utilizzabili senza connessione a internet.',
+        'La lettura degli avvisi, “Contattaci”, l’accesso, il pagamento, il backup e il ripristino e i report di sintesi con IA richiedono una connessione a internet.',
+        'Se lo spazio di archiviazione del dispositivo è insufficiente o il sistema operativo è fuori dall’intervallo supportato, alcune funzioni potrebbero non funzionare correttamente.',
+      ],
+    },
+    {
+      h: 'Articolo 11 (Prova gratuita e passaggio all’abbonamento a pagamento)',
+      body: [
+        'Il gestore offre una prova gratuita di 7 giorni di Jogak Pro.',
+        'Al termine del periodo di prova gratuita, questo si converte automaticamente in un abbonamento ricorrente a pagamento e viene addebitato il canone dell’articolo 7.',
+        'Prima che la conversione avvenga, il gestore mostra la data e l’ora della conversione, il prezzo prima e dopo la variazione e il metodo di pagamento e raccoglie il consenso della persona utente; in mancanza di consenso non viene effettuato alcun pagamento.',
+        'Se non desideri che ti venga addebitato il canone al termine della prova gratuita, disdici l’abbonamento con le modalità dell’articolo 14 prima che il periodo di prova finisca. Anche dopo la disdetta puoi continuare a usare Jogak Pro fino alla fine di tale periodo.',
+      ],
+    },
+    {
+      h: 'Articolo 12 (Recesso)',
+      body: [
+        'La persona utente può recedere entro 7 giorni dalla data di pagamento di un prodotto a pagamento oppure dalla data in cui riceve per iscritto le condizioni del contratto.',
+        'Il recesso si esercita manifestando tale volontà al canale di assistenza dell’articolo 21, e il gestore comunica l’esito entro 3 giorni lavorativi dalla ricezione.',
+        'Esercitato il recesso, il gestore rimborsa l’importo ai sensi dell’articolo 13 e il diritto della persona utente a Jogak Pro cessa immediatamente.',
+        'Tuttavia, ai sensi dell’art. 17(2)5 della Legge sulla tutela dei consumatori nel commercio elettronico, il recesso è limitato quando la fornitura del contenuto digitale è iniziata. Anche in tal caso il recesso resta possibile per la parte non ancora fornita di un contenuto digitale fornito in più parti.',
+        'Per applicare tale limite il gestore, ai sensi del comma 6 del medesimo articolo, indica questo fatto e nello stesso tempo mette a disposizione la prova gratuita di 7 giorni dell’articolo 11 come prodotto di prova. Se il gestore non ha adottato tali misure, la persona utente può recedere nonostante il limite sopra indicato.',
+        'Il gestore non richiede penali né risarcimenti per il fatto che la persona utente abbia esercitato il recesso.',
+      ],
+    },
+    {
+      h: 'Articolo 13 (Rimborsi)',
+      body: [
+        'Poiché il pagamento dei prodotti a pagamento avviene tramite lo store, anche i rimborsi sono in linea di principio gestiti secondo la procedura di rimborso dello store.',
+        'La persona utente può chiedere il rimborso direttamente allo store oppure al gestore tramite il canale di assistenza dell’articolo 21. Se la richiesta è rivolta al gestore, questi la gestisce d’intesa con lo store.',
+        'Il gestore rimborsa l’importo entro 3 giorni lavorativi dalla data in cui riceve la dichiarazione di recesso o equivalente. L’accredito effettivo può richiedere più tempo, in base ai tempi di lavorazione dello store.',
+        'Se il gestore ritarda il rimborso oltre tale termine senza giustificato motivo, corrisponde anche gli interessi di mora per il periodo di ritardo, calcolati applicando il tasso previsto dal Decreto attuativo della Legge sulla tutela dei consumatori nel commercio elettronico.',
+        'Se una parte del periodo è già stata utilizzata, il gestore può detrarre l’importo corrispondente a tale periodo prima di rimborsare. Non si detrae però il periodo in cui la persona utente non ha potuto usare il servizio per cause imputabili al gestore.',
+        'Per il rimborso non è previsto alcun costo aggiuntivo.',
+      ],
+    },
+    {
+      h: 'Articolo 14 (Disdetta dell’abbonamento)',
+      body: [
+        'La persona utente può disdire l’abbonamento in qualsiasi momento. La disdetta va effettuata dalla persona utente nella schermata di gestione degli abbonamenti dello store; il gestore non può effettuarla al suo posto.',
+        'Google Play: app dello store > profilo > Pagamenti e abbonamenti > Abbonamenti (https://play.google.com/store/account/subscriptions)',
+        'Anche dopo la disdetta puoi continuare a usare Jogak Pro fino alla fine del periodo di abbonamento già pagato; trascorso tale periodo, il rinnovo automatico si interrompe.',
+        'L’eliminazione dell’account nel servizio non disdice l’abbonamento presso lo store. Se non lo disdici con le modalità sopra indicate, separatamente dall’eliminazione dell’account, continuerai a essere addebitato.',
+      ],
+    },
+    {
+      h: 'Articolo 15 (Contratti conclusi da minori)',
+      body: [
+        'Se una persona minorenne ha pagato un prodotto a pagamento senza il consenso del suo rappresentante legale, la persona minorenne stessa o il suo rappresentante legale possono annullare quel contratto.',
+        'L’annullamento non è però possibile quando la persona minorenne ha pagato con beni di cui il rappresentante legale le aveva consentito di disporre, oppure quando ha usato un inganno per far credere di essere maggiorenne.',
+        'Se desideri annullarlo, presenta la richiesta al canale di assistenza dell’articolo 21. Il gestore può chiedere documenti che attestino la qualità di rappresentante legale.',
+      ],
+    },
+    {
+      h: 'Articolo 16 (Obblighi della persona utente)',
+      body: [
+        'La persona utente deve rispettare le norme applicabili e le presenti condizioni quando usa il servizio.',
+        'La persona utente non deve appropriarsi dell’account altrui, ostacolare il normale funzionamento del servizio, accedere o tentare di accedere al servizio con modalità diverse da quelle previste dal gestore, né manipolare il processo di pagamento dei prodotti a pagamento.',
+        'La persona utente deve gestire autonomamente le informazioni del proprio account e il PIN o la sequenza di blocco dell’app.',
+        'La persona utente deve custodire in modo sicuro il codice di recupero rilasciato all’attivazione della funzione di backup. Se lo perde, nemmeno il gestore può decifrare il backup e il ripristino diventa impossibile.',
+      ],
+    },
+    {
+      h: 'Articolo 17 (Conservazione dei dati e backup)',
+      body: [
+        'L’originale delle voci scritte dalla persona utente è salvato sul suo dispositivo. Se l’app viene disinstallata o il dispositivo viene ripristinato, le voci presenti su di esso non possono essere recuperate.',
+        'Se la funzione di backup è stata attivata, il gestore conserva una copia cifrata e la persona utente può ripristinarla con il proprio codice di recupero.',
+        'Anche dopo la fine dell’abbonamento il gestore conserva il backup cifrato per 90 giorni e in tale periodo il ripristino resta disponibile. Trascorsi i 90 giorni il backup viene eliminato.',
+        'Il gestore non dispone di un canale di notifiche push, perciò l’avviso di tale eliminazione programmata viene dato soltanto a schermo, quando la persona utente apre l’app.',
+        'Se la persona utente elimina il proprio account, il backup cifrato conservato sul server viene eliminato insieme all’account, senza i 90 giorni di tolleranza.',
+      ],
+    },
+    {
+      h: 'Articolo 18 (Proprietà intellettuale)',
+      body: [
+        'I diritti sulle voci che la persona utente scrive nel servizio e sulle foto che vi allega appartengono a lei. Il gestore non rivendica alcun diritto su di esse.',
+        'Il gestore non usa le voci delle persone utenti per finalità diverse dalla fornitura del servizio e non le usa per pubblicità, statistiche o addestramento di intelligenza artificiale.',
+        'I diritti sul servizio stesso e su design, marchi e programmi in esso inclusi appartengono al gestore o ai legittimi titolari.',
+        'La persona utente non deve riprodurre, distribuire o sottoporre a ingegneria inversa il servizio senza il previo consenso del gestore.',
+      ],
+    },
+    {
+      h: 'Articolo 19 (Modifica, sospensione e cessazione del servizio)',
+      body: [
+        'Il gestore può modificare il contenuto del servizio per migliorarne la qualità. Quando il contenuto di un prodotto a pagamento viene modificato in modo sfavorevole alle persone utenti, l’avviso è dato in anticipo ai sensi dell’articolo 4.',
+        'Il gestore può sospendere temporaneamente la fornitura del servizio in presenza di cause inevitabili quali manutenzione, sostituzione o guasto delle apparecchiature o interruzione delle comunicazioni, dandone avviso in anticipo. Quando la causa inevitabile impedisce l’avviso preventivo, l’avviso è dato successivamente.',
+        'Se il gestore cessa il servizio, ne dà avviso tramite comunicazioni all’interno del servizio e nella scheda dello store almeno 30 giorni prima della data di cessazione, indicando anche il periodo entro cui sarà possibile scaricare o ripristinare il backup.',
+        'Alla cessazione del servizio, il canone corrispondente al periodo già pagato e non fruito viene rimborsato alla persona utente.',
+      ],
+    },
+    {
+      h: 'Articolo 20 (Responsabilità)',
+      body: [
+        'Il gestore risponde, in relazione alla fornitura del servizio, secondo quanto previsto dalle norme applicabili. Nessuna clausola delle presenti condizioni esclude o limita la responsabilità del gestore prevista dalla legge.',
+        'Il gestore non risponde dei danni derivanti da cause a lui non imputabili, quali forza maggiore, guasto, smarrimento o ripristino del dispositivo della persona utente, oppure la perdita da parte sua del codice di recupero o del segreto di blocco dell’app.',
+        'Il report di sintesi con IA è materiale di riferimento generato da un’intelligenza artificiale e non costituisce una diagnosi né una consulenza medica, psicologica o legale. Il gestore non garantisce l’esattezza del suo contenuto.',
+        'I danni verificatisi nel processo di pagamento tramite lo store per cause imputabili allo store sono disciplinati dalla politica dello store. Il gestore presta comunque tutta la collaborazione necessaria per il ristoro del pregiudizio subito dalla persona utente.',
+      ],
+    },
+    {
+      h: 'Articolo 21 (Reclami dei consumatori e composizione delle controversie)',
+      body: [
+        'Per gestire osservazioni e reclami delle persone utenti, il gestore mette a disposizione il canale [Impostazioni] → [Contattaci] all’interno del servizio e il canale e-mail indicato di seguito.',
+        'E-mail: support@vivace-games.com',
+        'Quando il gestore riconosce fondata un’osservazione o un reclamo, vi dà seguito senza indugio; se la trattazione richiede tempo, ne comunica il motivo e i tempi previsti.',
+        'In caso di controversia tra il gestore e una persona utente, quest’ultima può rivolgersi ai seguenti organismi per la composizione della controversia.',
+        '• Comitato di conciliazione per le controversie dei consumatori (Agenzia coreana per i consumatori): 1372 (dalla Corea) · https://www.kca.go.kr',
+        '• Comitato di conciliazione per le controversie sui contenuti: 1588-2594 · https://www.kcdrc.kr',
+        '• Comitato di conciliazione per le controversie del commercio elettronico: 1661-5714 · https://www.ecmc.or.kr',
+      ],
+    },
+    {
+      h: 'Articolo 22 (Legge applicabile e foro competente)',
+      body: [
+        'Alle presenti condizioni e all’uso del servizio si applica la legge della Repubblica di Corea.',
+        'L’azione relativa a una controversia sorta tra il gestore e una persona utente è soggetta, ai sensi dell’art. 36 della Legge sulla tutela dei consumatori nel commercio elettronico, alla competenza esclusiva del tribunale distrettuale del domicilio della persona utente al momento della proposizione della domanda. In mancanza di domicilio, alla competenza esclusiva del tribunale distrettuale della sua residenza; e se al momento della proposizione della domanda il domicilio o la residenza non risultano chiari, il giudice competente è determinato secondo la Legge sul processo civile.',
+        'La versione coreana delle presenti condizioni fa fede. In caso di divergenza di significato con una traduzione in un’altra lingua, prevale la versione coreana.',
+        'Disposizione finale: le presenti condizioni entrano in vigore il 17 agosto 2026.',
+      ],
+    },
+  ],
+};

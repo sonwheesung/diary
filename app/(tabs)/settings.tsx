@@ -495,6 +495,17 @@ export default function SettingsScreen() {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('settings.sectionAbout')}</Text>
+        {/*
+          🔴 **약관이 처리방침보다 위다.** 전자상거래법 §13②9호가 요구하는 "확인할 수 있는
+            방법"이 이 줄이고, 결제 전에 찾아야 하는 문서라 먼저 눈에 들어와야 한다.
+        */}
+        <Pressable accessibilityRole="button" onPress={() => router.push('/terms')} style={styles.row}>
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.terms')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+
         <Pressable
           accessibilityRole="button"
           onPress={() => router.push('/privacy')}

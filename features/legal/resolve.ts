@@ -1,6 +1,6 @@
-import { PRIVACY } from '@/features/legal/legal-text';
+import { PRIVACY, TERMS } from '@/features/legal/legal-text';
 import type { LegalDoc } from '@/features/legal/legal-text';
-import { TRANSLATIONS } from '@/features/legal/registry';
+import { TERMS_TRANSLATIONS, TRANSLATIONS } from '@/features/legal/registry';
 import { i18next } from '@/lib/i18n';
 
 /**
@@ -31,16 +31,38 @@ export interface ResolvedLegal {
   translated: boolean;
 }
 
-export function resolvePrivacy(lang: string = i18next.language): ResolvedLegal {
+/**
+ * 정본과 번역 목록을 받아 언어를 고른다. 문서마다 규칙이 같아서 한 곳에 둔다.
+ *
+ * ⚠ 번역이 없으면 **한국어**다. 영어로 떨어뜨리지 않는다 —
+ *   영어도 못 읽는 사람에게는 같은 상황이고, 정본이 무엇인지가 흐려진다.
+ */
+function pick(
+  source: LegalDoc,
+  translations: Record<string, LegalDoc>,
+  lang: string,
+): ResolvedLegal {
   if (lang.startsWith('ko')) {
-    return { doc: PRIVACY, translated: false };
+    return { doc: source, translated: false };
   }
-  const hit = TRANSLATIONS[lang] ?? TRANSLATIONS[lang.split('-')[0] ?? ''];
-  /*
-   * ⚠ 번역이 없으면 **한국어**다. 영어로 떨어뜨리지 않는다 —
-   *   영어도 못 읽는 사람에게는 같은 상황이고, 정본이 무엇인지가 흐려진다.
-   */
-  return hit === undefined ? { doc: PRIVACY, translated: false } : { doc: hit, translated: true };
+  const hit = translations[lang] ?? translations[lang.split('-')[0] ?? ''];
+  return hit === undefined ? { doc: source, translated: false } : { doc: hit, translated: true };
+}
+
+export function resolvePrivacy(lang: string = i18next.language): ResolvedLegal {
+  return pick(PRIVACY, TRANSLATIONS, lang);
+}
+
+/**
+ * 이용약관의 언어를 고른다.
+ *
+ * 🔴 처리방침보다 **번역이 급한 문서**다. 처리방침은 "내 정보가 어떻게 쓰이나"이고
+ *   약관은 "내 돈을 어떻게 돌려받나"라서, 못 읽으면 곧바로 분쟁이 된다 —
+ *   전자상거래법 §13②5호(청약철회 기한·행사방법·효과)·6호(환불 조건·절차)가
+ *   그 자리에 있다.
+ */
+export function resolveTerms(lang: string = i18next.language): ResolvedLegal {
+  return pick(TERMS, TERMS_TRANSLATIONS, lang);
 }
 
 /** 번역이 준비된 언어 코드. `check:legal`이 이 목록을 돈다 */

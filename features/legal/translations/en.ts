@@ -401,3 +401,256 @@ export const DELETE_ACCOUNT_EN: LegalDoc = {
     },
   ],
 };
+
+/**
+ * Terms of service — English.
+ *
+ * 🔴 **The Korean text is authoritative** (`legal-text.ts`). This is a translation for
+ *   readability; where the two differ, the Korean governs. Article 22 says so inside the
+ *   document itself, which is what makes the translation safe to publish at all.
+ *
+ * ⚠ **Structure must match the Korean exactly** — 22 articles, same number of lines in each,
+ *   and no `pending`. `npm run check:legal` enforces it. Splitting one Korean sentence into
+ *   two English ones fails the check, and merging two hides a dropped clause.
+ *
+ * ⚠ This document exists because of **art. 13(2) of the Act on Consumer Protection in
+ *   Electronic Commerce** — disclosure *before* the contract plus a written statement of the
+ *   contract terms *after* it. Items 5 (withdrawal of offer), 6 (refunds), 8 (complaints and
+ *   disputes) and 9 (the terms themselves and how to check them) have nowhere else to live.
+ *   Each article is the vessel for a specific item, so **an article must not lose its legal
+ *   substance to read more smoothly.** The three that carry the most weight:
+ *
+ *   - Art. 12 restates art. 17(2)5 and 17(6) verbatim in substance. "the supply of digital
+ *     content has begun", "any part ... supplied in instalments that has not yet been
+ *     supplied" and "indicates this fact **and at the same time** provides ... as a
+ *     trial-use product" are statutory conditions — blur them and the restriction is void.
+ *   - Art. 20 first line is the guard against art. 35 (contracts unfavourable to consumers).
+ *     **Never add "to the maximum extent permitted by law"** or any similar English
+ *     boilerplate: that inverts the sentence into the very thing it was written to refuse.
+ *   - Art. 22 is art. 36 (exclusive jurisdiction) — the **user's** address, never the
+ *     operator's seat. Naming the operator's seat is void under art. 35.
+ *
+ * ⚠ "청약철회" is rendered **"withdrawal of offer"**, not the "withdrawal of subscription"
+ *   used by some statute translations. Jogak Pro *is* a subscription, and art. 14 is
+ *   cancellation of it — the two must not collide in one document.
+ */
+export const TERMS_EN: LegalDoc = {
+  title: 'Jogak Terms of Service',
+  sourceFingerprint: '898aa8d7',
+  effective: '2026-08-17',
+  updated: '2026-08-17',
+  intro:
+    'These terms set out the rights, obligations and responsibilities between Hwiseong Games (brand: Vivace Games, "the operator") and users, in relation to the use of the mobile application "Jogak" ("the service") that the operator provides. Please read them before using the service.',
+  sections: [
+    {
+      h: 'Article 1 (Purpose and scope)',
+      body: [
+        'The purpose of these terms is to set out the conditions and procedures for using the service and the rights and obligations of the operator and the user.',
+        'These terms apply to every user of the service. They apply in the same way where you only write entries without signing in.',
+        'Matters not provided for in these terms are governed by applicable law, including the Act on Consumer Protection in Electronic Commerce, the Act on the Regulation of Terms and Conditions and the Content Industry Promotion Act, and by commercial practice.',
+      ],
+    },
+    {
+      h: 'Article 2 (Operator information)',
+      body: [
+        'Company name: Hwiseong Games (brand: Vivace Games)',
+        // ⚠ `PRIVACY_EN` §11이 이미 쓰는 표기다. 두 문서가 같은 사람을 다르게 부르면 안 된다
+        'Representative: Son Hwi-seong',
+        'Business address: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Telephone: +82 10-9926-0925',
+        'Email address: support@vivace-games.com',
+        'Business registration number: 749-25-02260',
+        'Mail-Order Business Registration No. 2026-Ulsan Jung-gu-0170 (authority that received the registration: Jung-gu, Ulsan Metropolitan City)',
+      ],
+    },
+    {
+      h: 'Article 3 (Definitions)',
+      body: [
+        '"Piece" ("jogak") means a single diary record that the user writes in the service.',
+        '"Device" means a smartphone or other terminal on which the user installs and uses the service.',
+        '"Jogak Pro" means the paid recurring subscription product that provides ad removal, backup and restore, and AI summary reports.',
+        '"Open market" means an application marketplace, such as Google Play, through which the service is distributed and payment for paid products is made.',
+      ],
+    },
+    {
+      h: 'Article 4 (Posting and amendment of these terms)',
+      body: [
+        'The operator posts these terms on the [Settings] screen inside the service and at the address below, so that users can check them at any time.',
+        'https://sonwheesung.github.io/diary/terms.html',
+        'The operator may amend these terms to the extent that doing so does not breach applicable law.',
+        'When amending these terms, the operator states the effective date and the reason for the amendment and gives notice inside the service from 7 days before the effective date. However, where an amendment is unfavourable to users, notice is given from 30 days before the effective date, showing the content before and after the amendment side by side in a form that is easy to understand.',
+        'A user who does not agree to the amended terms may cancel any paid service and stop using the service before the effective date. If you continue to use the service after the notified effective date, you are taken to have agreed to the amended terms.',
+      ],
+    },
+    {
+      h: 'Article 5 (Content of the service)',
+      body: [
+        'The name of the service the operator provides is "Jogak", and its type is a mobile application (digital content) for writing and keeping a diary.',
+        'Features provided free of charge: writing, editing, deleting and searching entries, attaching photos, tags, recording emotions, calendar view, app lock (PIN and pattern), dark mode, multiple languages, reading announcements, and Contact us.',
+        'Features provided through the paid product "Jogak Pro": ad removal, encrypted backup and restore, and AI summary reports.',
+        'The titles, text, photos, tags and emotions of the entries a user writes are stored only inside the user’s device, and are not transmitted to the operator’s servers unless the user turns the backup feature on.',
+        'If backup is turned on, entries are encrypted on the user’s device before being transmitted, and the operator does not keep the decryption key and therefore cannot read their content.',
+        'When an AI summary report is created, the diary text for the period the user requested passes through the operator’s server and is delivered to the artificial intelligence provider. The operator does not store that text. Further details are governed by the privacy policy.',
+      ],
+    },
+    {
+      h: 'Article 6 (Formation of the contract, and accounts)',
+      body: [
+        'The contract for use of the service is formed when the user installs the service, agrees to these terms, and then uses the service.',
+        'Free features, including writing entries, may be used without an account.',
+        'Contact us, payment for paid products, backup and restore, and AI summary reports require signing in with a Google account.',
+        'A user may delete their account at any time on the [Settings] → [Contact us] screen inside the service. How to delete an account, and which information is deleted or retained, are governed by the account deletion guide.',
+      ],
+    },
+    {
+      h: 'Article 7 (Price of paid products and payment)',
+      body: [
+        'The fee for Jogak Pro is KRW 3,900 per month and KRW 29,000 per year, both inclusive of value-added tax.',
+        'The fee is charged automatically to the user’s payment method registered with the open market, at the time the subscription begins and on each renewal date thereafter.',
+        'There is no cost the user has to bear in addition to the fee. However, the data communication charges required to use the service are governed by the policy of the telecommunications provider the user has signed up with, and are borne by the user.',
+        'The amount actually billed may differ from the amounts above depending on the open market’s exchange-rate and fee policies or its country-specific pricing. In that case the amount shown on the payment screen prevails.',
+        'Where the operator raises the fee, it gives advance notice under article 4, and the increased price is not applied to a subscription period already paid for.',
+      ],
+    },
+    {
+      h: 'Article 8 (Restrictions on the conditions of sale)',
+      body: [
+        'The service can be used only in the countries where the open market permits distribution, and installation and payment are possible only in the countries the operator has designated for distribution.',
+        'One paid subscription is linked to only one account at a time. If you sign in with a different Google account on the same device, the subscription transfers to that account and can no longer be used from the previous account.',
+        'The operator may set an upper limit on the number of times a feature may be used, to the extent necessary to provide part of the service. The number of AI summary reports that may be generated is limited per period, and those limits are shown on the service screens.',
+      ],
+    },
+    {
+      h: 'Article 9 (Time and method of supply)',
+      body: [
+        'Jogak Pro is applied to the user’s account as soon as payment is completed, and there is no separate delivery process.',
+        'Where payment has been completed but the entitlement has not been applied, the user may use [Restore purchases] on the [Subscription] screen inside the service, or contact the operator by the means in article 21.',
+        'The subscription period runs from the payment date to the day before the next renewal date, and renews automatically for the same length of period unless it is cancelled.',
+      ],
+    },
+    {
+      h: 'Article 10 (Operating environment)',
+      body: [
+        'The service can be used on Android devices, and requires the operating system version shown on the open market’s listing page or later.',
+        'Basic features such as writing, viewing and searching entries can be used without an internet connection.',
+        'Reading announcements, Contact us, signing in, payment, backup and restore, and AI summary reports require an internet connection.',
+        'Where the user’s device is short of storage space or its operating system falls outside the supported range, some features may not work properly.',
+      ],
+    },
+    {
+      h: 'Article 11 (Free trial and conversion to a paid subscription)',
+      body: [
+        'The operator provides a 7-day free trial of Jogak Pro.',
+        'When the free trial period ends, it converts automatically to a paid recurring subscription and the fee in article 7 is charged.',
+        'Before the conversion takes place, the operator displays the date and time of the conversion, the price before and after the change, and the payment method, and obtains the user’s consent; if the user does not consent, no payment is made.',
+        'If you do not wish to be charged during the free trial, please cancel the subscription by the means in article 14 before the trial period ends. Even if you cancel, you can continue to use Jogak Pro until the trial period ends.',
+      ],
+    },
+    {
+      h: 'Article 12 (Withdrawal of offer)',
+      body: [
+        'The user may withdraw their offer within 7 days from the date of payment for a paid product, or from the date of receiving the written statement of the contract terms.',
+        'Withdrawal of offer is made by communicating that intention to the enquiry channel in article 21, and the operator notifies the user of the outcome within 3 business days from the date of receipt.',
+        'Once the offer has been withdrawn, the operator refunds the payment under article 13, and the user’s Jogak Pro entitlement ends immediately.',
+        'However, under article 17(2)5 of the Act on Consumer Protection in Electronic Commerce, withdrawal of offer is restricted where the supply of digital content has begun. Even in that case, withdrawal of offer remains available in respect of any part of digital content supplied in instalments that has not yet been supplied.',
+        'In order to apply that restriction, the operator, in accordance with paragraph 6 of the same article, indicates this fact and at the same time provides the 7-day free trial in article 11 as a trial-use product. Where the operator has not taken those measures, the user may withdraw their offer notwithstanding the restriction above.',
+        'The operator does not claim any penalty or damages on the ground that a user has withdrawn their offer.',
+      ],
+    },
+    {
+      h: 'Article 13 (Refunds)',
+      body: [
+        'Because payment for paid products is made through the open market, refunds are also in principle processed in accordance with the open market’s refund procedure.',
+        'The user may request a refund directly from the open market, or from the operator through the enquiry channel in article 21. Where the request is made to the operator, the operator handles it in consultation with the open market.',
+        'The operator refunds the payment within 3 business days from the date it receives a declaration of withdrawal of offer or the like. Actual receipt of the money may take longer depending on the open market’s processing schedule.',
+        'Where the operator delays the refund beyond that period without justifiable grounds, it also pays delay interest for the period of the delay, calculated by applying the rate prescribed by the Enforcement Decree of the Act on Consumer Protection in Electronic Commerce.',
+        'Where a period has already been used, the operator may deduct the amount corresponding to that period before refunding. However, no deduction is made for any period during which the user could not use the service for reasons attributable to the operator.',
+        'No separate fee is charged for a refund.',
+      ],
+    },
+    {
+      h: 'Article 14 (Cancelling the subscription)',
+      body: [
+        'The user may cancel the subscription at any time. Cancellation must be done by the user on the open market’s subscription management screen; the operator cannot cancel it on the user’s behalf.',
+        'Google Play: Store app > profile > Payments and subscriptions > Subscriptions (https://play.google.com/store/account/subscriptions)',
+        'Even after cancelling, you can continue to use Jogak Pro until the subscription period already paid for ends, and once that period has passed automatic renewal stops.',
+        'Deleting your account in the service does not cancel the subscription on the open market. Unless you cancel it by the means above, separately from deleting your account, you will continue to be charged.',
+      ],
+    },
+    {
+      h: 'Article 15 (Contracts made by minors)',
+      body: [
+        'Where a minor has paid for a paid product without the consent of their legal representative, the minor or their legal representative may cancel that contract.',
+        'However, cancellation is not available where the minor paid with property that their legal representative had permitted them to dispose of, or where the minor used deception to make the operator believe they were of full age.',
+        'If you wish to cancel, please make the request through the enquiry channel in article 21. The operator may ask for documents confirming that you are the legal representative.',
+      ],
+    },
+    {
+      h: 'Article 16 (Obligations of the user)',
+      body: [
+        'The user must comply with applicable law and these terms when using the service.',
+        'The user must not misappropriate another person’s account, interfere with the normal operation of the service, access or attempt to access the service by any means other than those provided by the operator, or manipulate the payment process for paid products.',
+        'The user must manage their own account information and their app lock password or pattern.',
+        'The user must keep safe the recovery code issued when the backup feature is turned on. If the recovery code is lost, the operator cannot decrypt the backup either, and restoring becomes impossible.',
+      ],
+    },
+    {
+      h: 'Article 17 (Storage of data, and backup)',
+      body: [
+        'The original of the entries a user writes is stored on the user’s device. If the app is deleted or the device is reset, the entries inside the device cannot be recovered.',
+        'Where the backup feature has been turned on, the operator keeps an encrypted copy, and the user can restore it with their recovery code.',
+        'Even after a subscription ends, the operator keeps the encrypted backup for 90 days, and restoring remains available during that period. Once 90 days have passed the backup is deleted.',
+        'The operator has no push notification channel, so notice of the scheduled deletion above is given only by displaying it on screen when the user opens the app.',
+        'If the user deletes their account, the encrypted backup held on the server is deleted together with the account, without the 90-day grace period.',
+      ],
+    },
+    {
+      h: 'Article 18 (Intellectual property)',
+      body: [
+        'The rights in the entries a user writes in the service and the photos they attach belong to the user. The operator asserts no rights whatsoever over them.',
+        'The operator does not use users’ entries for any purpose other than providing the service, and does not use them for advertising, statistics or artificial intelligence training.',
+        'The rights in the service itself and in the designs, trade marks and programs included in the service belong to the operator or to the rightful holders.',
+        'The user must not reproduce, distribute or reverse-engineer the service without the operator’s prior consent.',
+      ],
+    },
+    {
+      h: 'Article 19 (Changes to, suspension of, and termination of the service)',
+      body: [
+        'The operator may change the content of the service in order to improve its quality. Where the content of a paid product is changed in a way unfavourable to users, advance notice is given under article 4.',
+        'The operator may temporarily suspend provision of the service where there are unavoidable grounds such as inspection, replacement or breakdown of equipment or interruption of communications, in which case notice is given in advance. However, where there are unavoidable grounds that make advance notice impossible, notice is given afterwards.',
+        'Where the operator terminates the service, it gives notice through announcements inside the service and the open market listing page at least 30 days before the termination date, and at the same time states the period during which users can download or restore their backups.',
+        'On termination of the service, the fee corresponding to any period already paid for but not used is refunded to the user.',
+      ],
+    },
+    {
+      h: 'Article 20 (Responsibility)',
+      body: [
+        'The operator bears the responsibility provided by applicable law in relation to the provision of the service. No provision of these terms excludes or limits any responsibility of the operator that is provided by law.',
+        'The operator is not responsible for damage arising from causes not attributable to the operator, such as force majeure, breakdown, loss or reset of the user’s device, or the user losing their recovery code or app lock password.',
+        'An AI summary report is reference material generated by artificial intelligence, and is not a medical, psychological or legal diagnosis or advice. The operator does not warrant the accuracy of its content.',
+        'Damage arising in the course of payment through the open market for reasons attributable to the open market is governed by the open market’s policy. The operator nonetheless gives all the cooperation needed to remedy the user’s loss.',
+      ],
+    },
+    {
+      h: 'Article 21 (Consumer complaints and handling of disputes)',
+      body: [
+        'To handle users’ comments and complaints, the operator runs the [Settings] → [Contact us] channel inside the service and the email channel below.',
+        'Email: support@vivace-games.com',
+        'Where the operator recognises that a comment or complaint raised by a user is justified, it handles it without delay; where handling takes time, it informs the user of the reason and the expected schedule.',
+        'Where a dispute arises between the operator and a user, the user may apply to the following bodies for dispute mediation.',
+        '• Consumer Dispute Settlement Commission (Korea Consumer Agency): 1372 (from Korea) · https://www.kca.go.kr',
+        '• Content Dispute Resolution Committee: 1588-2594 · https://www.kcdrc.kr',
+        '• Electronic Commerce Mediation Committee: 1661-5714 · https://www.ecmc.or.kr',
+      ],
+    },
+    {
+      h: 'Article 22 (Governing law and jurisdiction)',
+      body: [
+        'The law of the Republic of Korea applies to these terms and to the use of the service.',
+        'An action concerning a dispute arising between the operator and a user is subject to the exclusive jurisdiction of the district court having jurisdiction over the user’s address at the time the action is filed, in accordance with article 36 of the Act on Consumer Protection in Electronic Commerce. Where there is no address, it is subject to the exclusive jurisdiction of the district court having jurisdiction over the user’s place of residence; and where the user’s address or place of residence is unclear at the time the action is filed, the competent court is determined in accordance with the Civil Procedure Act.',
+        'The Korean version of these terms is the authoritative version. Where a translation into another language differs in meaning, the Korean version prevails.',
+        'Addendum: These terms take effect on 17 August 2026.',
+      ],
+    },
+  ],
+};
