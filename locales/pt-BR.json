@@ -487,7 +487,7 @@
     "reportIssue": "Denunciar",
     "reported": "Obrigado por avisar. Vamos analisar.",
     "delete": "Excluir relatório",
-    "deleteConfirm": "Excluir este relatório? Não é possível desfazer.",
+    "deleteConfirm": "O resumo será excluído e nunca mais será possível criar um relatório deste período. Excluir?",
     "concernTitle": "Parece que você está passando por um período difícil.",
     "concernBody": "Você não precisa carregar isso sozinha ou sozinho.",
     "concernChannel": "Considere conversar com alguém próximo ou com um profissional de saúde mental.",

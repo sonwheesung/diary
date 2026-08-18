@@ -487,7 +487,7 @@
     "reportIssue": "Báo cáo vi phạm",
     "reported": "Cảm ơn bạn đã cho chúng tôi biết. Chúng tôi sẽ xem xét.",
     "delete": "Xoá báo cáo",
-    "deleteConfirm": "Xoá báo cáo này? Không thể hoàn tác.",
+    "deleteConfirm": "Bản tóm tắt sẽ bị xoá. Bạn sẽ không bao giờ tạo lại được báo cáo cho khoảng thời gian này. Vẫn xoá chứ?",
     "concernTitle": "Có vẻ bạn đang trải qua một quãng thời gian khó khăn.",
     "concernBody": "Bạn không cần phải gánh điều đó một mình.",
     "concernChannel": "Hãy thử chia sẻ với người thân hoặc một chuyên gia sức khoẻ tinh thần.",

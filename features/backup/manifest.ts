@@ -22,12 +22,15 @@
  * 매니페스트 페이로드 형식 버전. 봉투의 `version`(암호 형식)과 **다른 축**이다.
  *
  * ~~1~~ → **2**(2026-08-12): `reports`를 추가했다.
+ * **2 → 3**(2026-08-18): `reports.deleted_at`을 추가했다 — 리포트 삭제가 묘비가 됐다
+ *   (`docs/AI_REPORT_SYSTEM.md` §11.9). 묘비를 안 실으면 **복원한 기기에서 그 기간이
+ *   되살아나** 다시 만들 수 있는 것처럼 보이고, 서버 캡이 막는다.
  *
  * ⚠ 옛 앱이 v2 매니페스트를 복원하면 `reports`를 모르고 버린다. 그건 `dbVersion`이
  *   알려주므로 **조용한 손실이 아니다** — 매니페스트 규약이 그렇게 설계돼 있다.
  *   반대로 새 앱이 v1을 복원하면 `reports`가 없을 뿐이고, 그때는 빈 배열로 읽는다.
  */
-export const MANIFEST_FORMAT = 2;
+export const MANIFEST_FORMAT = 3;
 
 /** `diaries` 원본 행. 컬럼 이름을 그대로 쓴다 — 매핑 층을 하나 없앤다 */
 export interface DiaryRow {
@@ -99,6 +102,17 @@ export interface ReportRow {
   model: string | null;
   prompt_ver: number | null;
   created_at: number;
+  /**
+   * 묘비. `null`이 아니면 사용자가 지운 리포트다 — `summary`는 비어 있다(§11.9).
+   *
+   * 🔴 **왜 지운 것까지 싣나**: 서버의 `uq_ai_usage_period`가 그 기간을 영구히 세기 때문이다.
+   *   안 실으면 복원한 기기에서 그 기간이 *"아직 안 만든 것"* 으로 보이고, 눌러야 막힌다.
+   *   `DiaryRow.deleted_at`과 같은 이유이고 같은 모양이다.
+   *
+   * ⚠ **v2 백업에는 이 필드가 없다** → `undefined`로 읽히고 살아있는 것으로 취급된다.
+   *   v2 시절에는 삭제가 하드 삭제였으므로 묘비가 애초에 존재하지 않았다 — 손실이 아니다.
+   */
+  deleted_at?: number | null;
 }
 
 /** 파트 하나 = 완결된 JSON 문서 */

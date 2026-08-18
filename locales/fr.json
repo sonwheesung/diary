@@ -487,7 +487,7 @@
     "reportIssue": "Signaler",
     "reported": "Merci de nous l'avoir signalé. Nous allons vérifier.",
     "delete": "Supprimer le bilan",
-    "deleteConfirm": "Supprimer ce bilan ? Cette action est irréversible.",
+    "deleteConfirm": "Le résumé sera supprimé et un bilan de cette période ne pourra plus jamais être créé. Le supprimer ?",
     "concernTitle": "Vous semblez traverser une période difficile.",
     "concernBody": "Vous n'avez pas à porter cela seul·e.",
     "concernChannel": "Envisagez d'en parler à un proche ou à un professionnel de santé mentale.",

@@ -487,7 +487,7 @@
     "reportIssue": "신고",
     "reported": "알려주셔서 고마워요. 살펴보겠습니다.",
     "delete": "리포트 삭제",
-    "deleteConfirm": "이 리포트를 삭제할까요? 되돌릴 수 없어요.",
+    "deleteConfirm": "요약이 지워집니다. 이 기간의 리포트는 다시 만들 수 없어요. 삭제할까요?",
     "concernTitle": "힘든 시간을 지나고 계신 것 같아요.",
     "concernBody": "혼자 감당하지 않으셔도 돼요.",
     "concernChannel": "자살예방 상담전화 109 · 24시간",

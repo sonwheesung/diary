@@ -82,6 +82,7 @@ SQLite의 `PRAGMA user_version`을 버전 카운터로 쓴다. 마이그레이�
 | 3 | `app_settings` 키-값 |
 | 4 | `backup_state`(커서) + `diary_images.blob_state` — [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
 | 5 | `ai_reports` — [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) |
+| 6 | `ai_reports.deleted_at` — 리포트 삭제를 **묘비**로 (§11.9) |
 
 ### v2 (2026-08-07) — 본문 블록 · 이미지 · 태그
 
@@ -179,11 +180,41 @@ CREATE INDEX IF NOT EXISTS idx_ai_reports_kind_created ON ai_reports (kind, crea
 | `(kind, period_key)` UNIQUE | 중복 생성의 **1차 방어**(서버 멱등 키가 2차). 캡보다 먼저 걸린다 |
 | `concern`을 **컬럼**으로 | 본문에 섞으면 배너 판정이 문자열 매칭이 되고, 조용히 안 뜨는 날이 온다 |
 | `model` · `prompt_ver` | 재현성. 둘 다 움직이면 *"왜 그때는 달랐지"* 에 답할 수 없다 |
-| 소프트 삭제 없음 | 리포트는 기기 간 병합 대상이 아니다. 복원은 **통째 교체**라 묘비가 필요 없다 |
+| ~~소프트 삭제 없음~~ | 🔴 **틀렸다. v6에서 뒤집혔다**(아래). 옛 근거는 *"복원은 통째 교체라 묘비가 필요 없다"* 였는데, **복원만 보고 서버 캡을 안 봤다.** 묘비가 필요한 이유는 병합이 아니라 `uq_ai_usage_period`다 |
 | 🔴 **구독 상태를 담지 않는다** | 만료가 기록을 뺏는 경로를 스키마 차원에서 만들지 않는다. 삭제는 사용자만 한다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11.3) |
 
 **복원의 교체 대상이다** — `backup_state`와 반대다. 기기에 매인 값이 아니라 사용자의 기록이므로
 복원하면 그 세대의 리포트로 통째로 바뀌는 것이 맞다.
+
+### 🔴 v6 — 리포트 삭제를 묘비로 (2026-08-18)
+
+```sql
+ALTER TABLE ai_reports ADD COLUMN deleted_at INTEGER;
+CREATE INDEX IF NOT EXISTS idx_ai_reports_deleted_at ON ai_reports (deleted_at);
+```
+
+**v5의 "소프트 삭제 없음"을 뒤집는다.** 그 판단은 *"복원은 통째 교체라 묘비가 필요 없다"* 였고,
+복원만 놓고 보면 지금도 맞다. 놓친 것은 **서버 쪽 축**이다:
+
+```
+로컬 ai_reports    리포트의 진실        ← 하드 삭제하면 없어진다
+서버 ai_usage      "이 기간을 썼다"      ← uq_ai_usage_period. 영구다
+```
+
+지운 뒤 기간 시트가 그 주를 다시 고르게 하고, 서버가 `cap-exceeded`로 막고,
+화면은 *"이미 있어요"* 라고 **거짓말**했다 — 그리고 되돌릴 수 없었다.
+`(kind, period_key)` UNIQUE는 **묘비가 있어야** 비로소 서버와 같은 뜻이 된다.
+
+| 결정 | 이유 |
+|---|---|
+| `summary`를 **함께 비운다** | `deleted_at`만 찍으면 지우려던 글이 기기에 그대로 남는다. 화면에서 안 보이는 것과 기기에 없는 것은 다르다 |
+| `summary` `NOT NULL`을 **안 푼다** | 묘비는 빈 문자열이다. SQLite에서 제약 변경은 테이블 재작성인데, 얻는 것이 `''`와 `NULL`의 구분뿐이다. 판정은 `deleted_at`이 혼자 한다 |
+| `concern`도 0으로 | 위기 배너의 **유일한 조건**이라, 본문 없는 묘비가 배너를 켜는 경로를 남기지 않는다 |
+| 백업에 **싣는다** (`MANIFEST_FORMAT` 3) | 안 실으면 복원한 기기에서 그 기간이 되살아나 같은 함정에 다시 빠진다 |
+
+⚠ **`ALIVE`를 붙이는 곳과 안 붙이는 곳이 이 변경의 전부다** — 목록·상세·개수·**상위 리포트의
+입력**에는 붙이고(본문이 없으니 당연하다), `findByPeriod`와 기간 시트의 *"이미 만들었어요"* 에는
+안 붙인다. 묻는 질문이 다르다: *"내용이 있는가"* vs *"이 기간을 썼는가"*.
 
 ---
 
@@ -198,7 +229,7 @@ CREATE INDEX IF NOT EXISTS idx_ai_reports_kind_created ON ai_reports (kind, crea
 | 삭제 전파(묘비) | ✅ `deleted_at` |
 | 마지막 백업 시각 | ✅ v4 `backup_state.last_backup_at` |
 | 암호화 메타(알고리즘·버전) | ✅ 봉투 헤더가 갖는다(`features/backup/envelope.ts`) — DB가 아니다 |
-| AI 리포트도 백업에 포함 | ✅ v5 + `MANIFEST_FORMAT = 2`의 `reports` |
+| AI 리포트도 백업에 포함 | ✅ v5 + `MANIFEST_FORMAT = 3`의 `reports`(v6에서 `deleted_at`이 붙어 **2 → 3**) |
 
 > 백업 단위는 **전체 스냅샷 + 차집합 경고**로 정해졌다(2026-08-11) —
 > [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md)가 정본이다.
@@ -211,6 +242,6 @@ CREATE INDEX IF NOT EXISTS idx_ai_reports_kind_created ON ai_reports (kind, crea
 |---|---|
 | 스키마 v1 결정 | ✅ 2026-08-07 |
 | `db/` 구현(연결·마이그레이션) | ✅ `db/client.ts`(단일 커넥션·WAL) · `db/migrations.ts`(user_version) |
-| **현재 user_version** | ✅ **5** (v4 백업 커서 · v5 AI 리포트) |
+| **현재 user_version** | ✅ **6** (v4 백업 커서 · v5 AI 리포트 · v6 리포트 묘비) |
 | 쿼리 계층 | ✅ `features/diary/api/diary-repository.ts` · `features/ai/api/report-repository.ts` |
 | 조각 서버 DB | ✅ ~~월 결제 착수 시~~ → `jogak-stg`(서울) 생성·배포됨. ⚠ 운영 프로젝트는 아직 없다 |

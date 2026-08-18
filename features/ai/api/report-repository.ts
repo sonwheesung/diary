@@ -8,6 +8,19 @@
 import { getDatabase } from '@/db/client';
 import type { ReportKind } from '@/features/ai/types';
 
+/**
+ * 🔴 **묘비를 뺀다** (`docs/AI_REPORT_SYSTEM.md` §11.9). `diaries`의 `ALIVE`와 같은 규약.
+ *
+ * 삭제는 행을 지우지 않고 `summary`를 비운 뒤 `deleted_at`을 찍는다. 그래야 서버의
+ * `uq_ai_usage_period`(기간을 영구히 센다)와 로컬이 어긋나지 않는다 — 어긋나면 지운 기간을
+ * 다시 고를 수 있게 보이고, 서버가 막고, 화면은 *"이미 있어요"* 라고 거짓말한다.
+ *
+ * ⚠ **어디에 붙이고 어디에 안 붙이는지가 이 파일의 전부다:**
+ *   · 붙인다 — 목록·상세·개수. 그리고 **월간·연간의 입력**(본문이 없으니 당연하다)
+ *   · 안 붙인다 — `findByPeriod`. *"이 기간을 썼는가"* 는 묘비도 참이어야 한다
+ */
+const ALIVE = 'deleted_at IS NULL';
+
 export interface Report {
   id: string;
   kind: ReportKind;
@@ -51,30 +64,55 @@ const toReport = (r: Row): Report => ({
   createdAt: r.created_at,
 });
 
-/** 종류별 목록. 최신순 */
+/**
+ * 종류별 목록. 최신순.
+ *
+ * ⚠ **월간·연간의 입력이기도 하다**(`report-service`의 `weeksInMonth`). 그래서 묘비가
+ *   여기서 빠지는 것이 곧 *"본문 없는 리포트는 상위 요약에 안 들어간다"* 가 된다.
+ */
 export async function listReports(kind: ReportKind): Promise<Report[]> {
   const db = await getDatabase();
   const rows = await db.getAllAsync<Row>(
     `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at
        FROM ai_reports
-      WHERE kind = ?
+      WHERE kind = ? AND ${ALIVE}
       ORDER BY period_key DESC`,
     kind,
   );
   return rows.map(toReport);
 }
 
+/**
+ * 🔴 **이 종류로 이미 써버린 기간 키들** — 묘비를 **포함한다**(§11.9).
+ *
+ * 기간 시트의 *"이미 만들었어요"* 가 이걸 본다. `listReports()`를 쓰면 지운 기간이
+ * 다시 고를 수 있게 보이고, 눌러야 서버가 막는다 — 실패를 설명하는 대신 없애는 것이 규약이다.
+ */
+export async function listUsedPeriodKeys(kind: ReportKind): Promise<string[]> {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<{ period_key: string }>(
+    'SELECT period_key FROM ai_reports WHERE kind = ?',
+    kind,
+  );
+  return rows.map((row) => row.period_key);
+}
+
 export async function getReport(id: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
     `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at
-       FROM ai_reports WHERE id = ?`,
+       FROM ai_reports WHERE id = ? AND ${ALIVE}`,
     id,
   );
   return row === null ? null : toReport(row);
 }
 
-/** 이 기간의 리포트가 이미 있는가. 생성 버튼의 1차 방어 */
+/**
+ * 이 기간의 리포트가 이미 있는가. 생성 버튼의 1차 방어.
+ *
+ * 🔴 **`ALIVE`를 붙이지 않는다**(§11.9). 지운 리포트도 서버 캡을 이미 소모했으므로
+ *   *"있다"* 가 맞다. 붙이면 지운 뒤 다시 만들 수 있는 것처럼 보이고 서버에서 실패한다.
+ */
 export async function findByPeriod(kind: ReportKind, periodKey: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
@@ -89,7 +127,9 @@ export async function findByPeriod(kind: ReportKind, periodKey: string): Promise
 /** 리포트가 하나라도 있는가. 무료 사용자에게 예시를 보일지 목록을 보일지의 기준(§11.3) */
 export async function hasAnyReport(): Promise<boolean> {
   const db = await getDatabase();
-  const row = await db.getFirstAsync<{ n: number }>('SELECT count(*) as n FROM ai_reports');
+  const row = await db.getFirstAsync<{ n: number }>(
+    `SELECT count(*) as n FROM ai_reports WHERE ${ALIVE}`,
+  );
   return (row?.n ?? 0) > 0;
 }
 
@@ -112,8 +152,21 @@ export async function saveReport(report: Report): Promise<void> {
   );
 }
 
-/** 삭제는 **사용자만** 한다. 구독 만료로 부르는 경로를 만들지 않는다 */
+/**
+ * 삭제 — **묘비를 남긴다**(§11.9). 삭제는 **사용자만** 한다(구독 만료로 부르는 경로는 없다).
+ *
+ * 🔴 `summary`를 **반드시 함께 비운다.** `deleted_at`만 찍으면 사용자가 지우려던 글이
+ *   기기에 그대로 남는다 — 감정 일기에서 그건 삭제가 아니다. 화면에서 안 보이는 것과
+ *   기기에서 없는 것은 다르다.
+ *
+ * ⚠ `concern`도 내린다. 위기 배너의 유일한 조건이라, 본문 없는 묘비가 어딘가에서
+ *   배너를 켜는 경로를 남기지 않는다.
+ */
 export async function deleteReport(id: string): Promise<void> {
   const db = await getDatabase();
-  await db.runAsync('DELETE FROM ai_reports WHERE id = ?', id);
+  await db.runAsync(
+    `UPDATE ai_reports SET summary = '', concern = 0, deleted_at = ? WHERE id = ?`,
+    Date.now(),
+    id,
+  );
 }

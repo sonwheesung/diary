@@ -487,7 +487,7 @@
     "reportIssue": "Bildir",
     "reported": "Bildirdiğin için teşekkürler. İnceleyeceğiz.",
     "delete": "Raporu sil",
-    "deleteConfirm": "Bu rapor silinsin mi? Bu işlem geri alınamaz.",
+    "deleteConfirm": "Özet silinecek. Bu döneme ait rapor bir daha asla oluşturulamaz. Yine de silinsin mi?",
     "concernTitle": "Zor bir dönemden geçiyor gibisin.",
     "concernBody": "Bunu tek başına taşımak zorunda değilsin.",
     "concernChannel": "Yakınındaki birine ya da bir ruh sağlığı uzmanına açılmayı düşünebilirsin.",

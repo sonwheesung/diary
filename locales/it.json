@@ -487,7 +487,7 @@
     "reportIssue": "Segnala",
     "reported": "Grazie per la segnalazione. Daremo un'occhiata.",
     "delete": "Elimina resoconto",
-    "deleteConfirm": "Eliminare questo resoconto? Non si può annullare.",
+    "deleteConfirm": "Il riassunto verrà eliminato e per questo periodo non potrai più creare un resoconto. Eliminare comunque?",
     "concernTitle": "Sembra che tu stia attraversando un periodo difficile.",
     "concernBody": "Non devi portarlo da sola o da solo.",
     "concernChannel": "Valuta di parlarne con una persona vicina o con un professionista della salute mentale.",

@@ -142,6 +142,21 @@ const MIGRATIONS: readonly string[] = [
   CREATE UNIQUE INDEX IF NOT EXISTS idx_ai_reports_period ON ai_reports (kind, period_key);
   CREATE INDEX IF NOT EXISTS idx_ai_reports_kind_created ON ai_reports (kind, created_at DESC);
   `,
+  // v6 — 리포트 삭제를 묘비로 (AI_REPORT_SYSTEM §11.9)
+  /*
+   * 🔴 하드 삭제가 **로컬(리포트의 진실)과 서버 캡을 갈라놨다.** 서버의
+   *   `uq_ai_usage_period`는 기간을 영구히 세는데 로컬 행은 사라져서, 지운 뒤 그 기간을
+   *   다시 고를 수 있게 보이고 서버가 `cap-exceeded`로 막았다 — 화면은 *"이미 있어요"* 라고
+   *   말했고 그건 거짓이었다.
+   *
+   * ⚠ `summary`가 `NOT NULL`이라 묘비는 **빈 문자열**로 남긴다. 컬럼 제약을 풀지 않는다 —
+   *   SQLite에서 그건 테이블 재작성이고, 얻는 것이 `''`와 `NULL`의 구분뿐이다.
+   *   판정은 `deleted_at`이 혼자 한다.
+   */
+  `
+  ALTER TABLE ai_reports ADD COLUMN deleted_at INTEGER;
+  CREATE INDEX IF NOT EXISTS idx_ai_reports_deleted_at ON ai_reports (deleted_at);
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

@@ -487,7 +487,7 @@
     "reportIssue": "檢舉",
     "reported": "謝謝告知，我們會查看。",
     "delete": "刪除報告",
-    "deleteConfirm": "要刪除這份報告嗎？此動作無法復原。",
+    "deleteConfirm": "摘要會被刪除，而且這段期間的報告以後再也無法產生。要刪除嗎？",
     "concernTitle": "你似乎正在經歷一段艱難的日子。",
     "concernBody": "你不必獨自承受。",
     "concernChannel": "可以試著和身邊的人或專業人士聊一聊。",

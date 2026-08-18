@@ -264,8 +264,9 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
       for (const row of rows) {
         await db.runAsync(
           `INSERT OR REPLACE INTO ai_reports
-             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver,
+              created_at, deleted_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           row.id,
           row.kind,
           row.period_key,
@@ -276,6 +277,13 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
           row.model,
           row.prompt_ver,
           row.created_at,
+          /*
+           * ⚠ **묘비를 그대로 옮긴다**(§11.9). 안 옮기면 복원한 기기에서 지운 기간이
+           *   되살아나 다시 만들 수 있는 것처럼 보이고, 서버 캡이 거기서 막는다.
+           * ⚠ v2 백업에는 이 필드가 없다 → `undefined`. `null`로 내려 살아있는 것으로 둔다 —
+           *   그 시절 삭제는 하드 삭제였으므로 묘비가 애초에 없었다.
+           */
+          row.deleted_at ?? null,
         );
       }
     });

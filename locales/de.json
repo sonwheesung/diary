@@ -487,7 +487,7 @@
     "reportIssue": "Melden",
     "reported": "Danke für den Hinweis. Wir sehen uns das an.",
     "delete": "Bericht löschen",
-    "deleteConfirm": "Diesen Bericht löschen? Das lässt sich nicht rückgängig machen.",
+    "deleteConfirm": "Die Zusammenfassung wird gelöscht. Für diesen Zeitraum lässt sich nie wieder ein Bericht erstellen. Trotzdem löschen?",
     "concernTitle": "Es klingt, als wäre das eine schwere Zeit für dich.",
     "concernBody": "Du musst das nicht allein tragen.",
     "concernChannel": "Sprich vielleicht mit jemandem, der dir nahesteht, oder mit einer Fachperson.",

@@ -487,7 +487,7 @@
     "reportIssue": "Denunciar",
     "reported": "Gracias por avisarnos. Lo revisaremos.",
     "delete": "Eliminar informe",
-    "deleteConfirm": "¿Eliminar este informe? No se puede deshacer.",
+    "deleteConfirm": "Se eliminará el resumen y nunca se podrá volver a crear un informe de este periodo. ¿Eliminarlo?",
     "concernTitle": "Parece que estás pasando por una época difícil.",
     "concernBody": "No tienes que llevarlo sola o solo.",
     "concernChannel": "Considera hablar con alguien cercano o con un profesional de salud mental.",

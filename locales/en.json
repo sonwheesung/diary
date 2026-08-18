@@ -487,7 +487,7 @@
     "reportIssue": "Report an issue",
     "reported": "Thanks for letting us know. We'll look into it.",
     "delete": "Delete report",
-    "deleteConfirm": "Delete this report? This can't be undone.",
+    "deleteConfirm": "The summary will be deleted, and a report for this period can never be created again. Delete it?",
     "concernTitle": "It sounds like you're going through a hard stretch.",
     "concernBody": "You don't have to carry it alone.",
     "concernChannel": "Consider reaching out to someone close to you, or a mental health professional.",

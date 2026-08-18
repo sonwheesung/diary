@@ -1,7 +1,12 @@
 import * as Crypto from 'expo-crypto';
 
 import { listDiariesBetween, listEntryTexts } from '@/features/diary/api/diary-repository';
-import { findByPeriod, listReports, saveReport } from '@/features/ai/api/report-repository';
+import {
+  findByPeriod,
+  listReports,
+  listUsedPeriodKeys,
+  saveReport,
+} from '@/features/ai/api/report-repository';
 import { requestReport, type AiFail } from '@/features/ai/api/client';
 import {
   creatableMonthKeys,
@@ -178,7 +183,11 @@ export async function listPeriodOptions(
 ): Promise<PeriodOption[]> {
   const keys = creatablePeriods(kind, now);
   if (keys.length === 0) return [];
-  const made = new Set((await listReports(kind)).map((report) => report.periodKey));
+  /*
+   * 🔴 **묘비를 포함해서 센다**(§11.9). `listReports()`는 묘비를 빼므로 지운 기간이
+   *   다시 고를 수 있게 보이고, 눌러야 서버가 `cap-exceeded`로 막는다.
+   */
+  const made = new Set(await listUsedPeriodKeys(kind));
 
   if (kind === 'weekly') {
     /*
@@ -208,6 +217,12 @@ export async function listPeriodOptions(
   }
 
   const childKind: ReportKind = kind === 'yearly' ? 'monthly' : 'weekly';
+  /*
+   * ⚠ **하위는 반대로 묘비를 뺀다.** 본문이 없는 리포트는 상위 요약의 입력이 못 된다 —
+   *   `weeksInMonth()`가 `listReports()`로 실제 입력을 고르는 것과 같은 집합이어야 한다.
+   *   위의 `made`와 여기가 다른 것은 실수가 아니라 **묻는 질문이 다르기** 때문이다:
+   *   위는 *"이 기간을 썼는가"*, 여기는 *"이 기간의 내용이 있는가"*.
+   */
   const childMade = new Set((await listReports(childKind)).map((report) => report.periodKey));
   const needFail: CreateFail = kind === 'yearly' ? 'need-monthly' : 'need-weekly';
 

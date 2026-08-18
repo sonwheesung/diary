@@ -487,7 +487,7 @@
     "reportIssue": "举报",
     "reported": "感谢告知，我们会查看。",
     "delete": "删除报告",
-    "deleteConfirm": "要删除这份报告吗？此操作无法撤销。",
+    "deleteConfirm": "摘要会被删除，而且这段时间的报告以后再也无法生成。要删除吗？",
     "concernTitle": "你似乎正在经历一段艰难的日子。",
     "concernBody": "你不必独自承受。",
     "concernChannel": "可以试着和身边的人或专业人士聊一聊。",
