@@ -1,12 +1,17 @@
 import { and, eq, sql } from 'drizzle-orm';
 
 /*
- * 🔴 **프롬프트를 복사하지 않는다.** `@shared/*` → `../features/*`(tsconfig paths)로
- *   앱과 **같은 파일**을 쓴다. 프롬프트가 사실상 상품이라(§8) 두 벌이 되는 순간
- *   앱이 보는 규약과 서버가 실제로 쓰는 규약이 조용히 갈라진다.
+ * 🔴 **앱과 갈라지지 않는다.** `@shared/*`는 `features/ai/*`를 **생성 복사**한 것이고
+ *   (`server/shared/`, `npm run sync:shared`), `npm run check:shared`가 한 바이트라도
+ *   다르면 실패한다. 프롬프트가 사실상 상품이라(§8) 규약이 **조용히** 갈라지면 안 된다.
  *
- * ⚠ 이게 가능한 이유는 `features/ai/{prompt,types}.ts`가 **순수 계층**(내부 임포트 0)이기
- *   때문이다. RN·Expo 것을 하나라도 들이면 이 임포트가 깨진다 — 그 규약을 지킨다.
+ * ⚠ ~~tsconfig paths로 `../features/*`를 직접 가리킨다~~ → **배포가 안 됐다**(2026-08-18 실측).
+ *   Vercel CLI는 `.vercel`이 있는 `server/`만 업로드해서 `../features`가 배포본에 없다.
+ *   로컬 빌드·로컬 e2e는 전부 통과했고, 그래서 **이 라우트는 만든 이래 배포된 적이 없었다**
+ *   (배포본에서 404). 자세한 근거는 `scripts/sync-shared.mjs`.
+ *
+ * ⚠ 이게 가능한 이유는 `features/ai/{prompt,types,period}.ts`가 **순수 계층**(내부 임포트 0)이기
+ *   때문이다. RN·Expo 것을 하나라도 들이면 서버 빌드가 그 자리에서 깨진다 — 그 규약을 지킨다.
  */
 import { isCreatablePeriod } from '@shared/ai/period';
 import { buildSystem, buildUser, isEmpty, withBody } from '@shared/ai/prompt';

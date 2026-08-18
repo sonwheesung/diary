@@ -21,6 +21,8 @@
     "legal:html": "node scripts/make-legal-html.mjs",
     "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs",
     "check:ai": "node scripts/check-ai.mjs",
+    "sync:shared": "node scripts/sync-shared.mjs",
+    "check:shared": "node scripts/sync-shared.mjs --check",
     "check:legal": "node --experimental-strip-types --no-warnings scripts/check-legal.mjs",
     "check:legal-one": "node --experimental-strip-types --no-warnings scripts/check-legal-one.mjs",
     "check:play-access": "node scripts/check-play-access.mjs",
