@@ -473,6 +473,7 @@
     "yearly": "Anual",
     "sourceCount": "Entradas: {{count}}",
     "subReportCount": "Informes: {{count}}",
+    "periodSubs": "Informes: {{count}}/{{total}}",
     "empty": "Aún no hay informes",
     "create": "Crear informe",
     "creating": "Escribiendo tu informe",
@@ -481,6 +482,7 @@
     "needMonthly": "Primero hacen falta los informes mensuales de {{period}}",
     "noEntries": "No hay entradas con texto en este periodo",
     "gapConfirm": "Sin entradas: {{days}}. ¿Crear el informe de todos modos?",
+    "subGapConfirm": "{{period}} · Informes: {{count}}/{{total}}\n\nSi lo creas ahora, el resto no se incluirá y este informe no se puede volver a crear. ¿Crearlo de todos modos?",
     "disclaimer": "Escrito por IA. Puede contener errores y no es un diagnóstico ni un consejo.",
     "reportIssue": "Denunciar",
     "reported": "Gracias por avisarnos. Lo revisaremos.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Algo falló por nuestra parte. Puedes volver a intentarlo a partir de {{time}}.",
       "rate-limited": "Inténtalo de nuevo en un momento.",
       "upstream": "El servidor tiene problemas. Inténtalo de nuevo en breve.",
-      "error": "Algo salió mal."
+      "error": "Algo salió mal.",
+      "too-early": "Hay un periodo que aún no ha terminado. Si lo creas cuando termine, no faltará nada.",
+      "out-of-range": "No es un periodo que se pueda crear."
     },
     "emptyWeekly": "Cuando pase una semana, reuniremos sus entradas en una breve reflexión.",
     "emptyMonthly": "Reuniremos los informes semanales de ese mes en una mirada al mes entero.",
     "emptyYearly": "Reuniremos los informes mensuales de ese año en una mirada al año entero.",
     "willCreate": "Ya puedes crear el informe de {{period}}",
     "alreadyExists": "Ya tienes un informe de {{period}}",
+    "periodSheet": "Elegir periodo",
+    "periodMade": "Ya creado",
+    "periodNoEntries": "Sin entradas",
+    "periodTooEarly": "Hay un periodo sin terminar",
+    "tooEarlyAt": "Hay un periodo sin terminar. Si lo creas a partir del {{date}}, no faltará nada.",
     "detailTitle": "Informe"
   },
   "aiConsent": {

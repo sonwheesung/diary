@@ -473,6 +473,7 @@
     "yearly": "年間",
     "sourceCount": "かけら {{count}}件",
     "subReportCount": "レポート {{count}}件",
+    "periodSubs": "レポート {{count}}/{{total}}",
     "empty": "まだレポートがありません",
     "create": "レポートを作る",
     "creating": "レポートを作成しています",
@@ -481,6 +482,7 @@
     "needMonthly": "先に{{period}}の月間レポートが必要です",
     "noEntries": "この期間に本文のあるかけらがありません",
     "gapConfirm": "{{days}}のかけらがありません。それでもレポートを作りますか？",
+    "subGapConfirm": "{{period}}・レポート {{count}}/{{total}}\n\n今作成すると残りは反映されず、このレポートは作り直せません。それでも作成しますか？",
     "disclaimer": "AIが書いた要約です。事実と異なる場合があり、診断や助言ではありません。",
     "reportIssue": "報告",
     "reported": "お知らせいただきありがとうございます。確認いたします。",
@@ -506,13 +508,20 @@
       "coolingDownAt": "問題が発生してレポートを作成できませんでした。{{time}} 以降に再度お試しいただけます。",
       "rate-limited": "しばらくしてからもう一度お試しください。",
       "upstream": "サーバーに問題があります。しばらくしてからお試しください。",
-      "error": "問題が発生しました。"
+      "error": "問題が発生しました。",
+      "too-early": "まだ終わっていない期間があります。その期間が終わってから作成すれば漏れません。",
+      "out-of-range": "作成できる期間ではありません。"
     },
     "emptyWeekly": "1週間が過ぎると、その週のかけらをまとめて振り返りをお作りします。",
     "emptyMonthly": "その月の週間レポートをまとめて、1か月を振り返ります。",
     "emptyYearly": "その年の月間レポートをまとめて、1年を振り返ります。",
     "willCreate": "{{period}}のレポートを作成できます",
     "alreadyExists": "{{period}}のレポートはすでにあります",
+    "periodSheet": "期間を選ぶ",
+    "periodMade": "作成済み",
+    "periodNoEntries": "かけらなし",
+    "periodTooEarly": "まだ終わっていない期間があります",
+    "tooEarlyAt": "まだ終わっていない期間があります。{{date}}以降に作成すれば漏れません。",
     "detailTitle": "レポート"
   },
   "aiConsent": {

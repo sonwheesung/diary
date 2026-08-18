@@ -473,6 +473,7 @@
     "yearly": "每年",
     "sourceCount": "{{count}} 篇碎片",
     "subReportCount": "{{count}} 份报告",
+    "periodSubs": "报告 {{count}}/{{total}}",
     "empty": "还没有报告",
     "create": "生成报告",
     "creating": "正在生成报告",
@@ -481,6 +482,7 @@
     "needMonthly": "需要先有 {{period}} 的每月报告",
     "noEntries": "这段时间没有写下内容的碎片",
     "gapConfirm": "{{days}}没有碎片。仍要生成报告吗？",
+    "subGapConfirm": "{{period}} · 报告 {{count}}/{{total}}\n\n现在生成的话，其余的不会计入，而且这份报告无法重新生成。仍要生成吗？",
     "disclaimer": "由 AI 撰写的摘要。内容可能有误，也不构成诊断或建议。",
     "reportIssue": "举报",
     "reported": "感谢告知，我们会查看。",
@@ -506,13 +508,20 @@
       "coolingDownAt": "我们这边出了问题，未能生成报告。{{time}} 之后可以再试。",
       "rate-limited": "请稍后再试。",
       "upstream": "服务器出现问题，请稍后再试。",
-      "error": "出了点问题。"
+      "error": "出了点问题。",
+      "too-early": "还有尚未结束的时间段。等这段时间结束后再生成就不会遗漏。",
+      "out-of-range": "这不是可以生成报告的时间段。"
     },
     "emptyWeekly": "一周过去后，我们会把这一周的碎片汇成一段回顾。",
     "emptyMonthly": "我们会把这个月的每周报告汇成一次月度回顾。",
     "emptyYearly": "我们会把这一年的每月报告汇成一次年度回顾。",
     "willCreate": "可以生成 {{period}} 的报告了",
     "alreadyExists": "{{period}} 的报告已经有了",
+    "periodSheet": "选择时间段",
+    "periodMade": "已生成",
+    "periodNoEntries": "没有碎片",
+    "periodTooEarly": "还有尚未结束的时间段",
+    "tooEarlyAt": "还有尚未结束的时间段。{{date}} 之后生成就不会遗漏。",
     "detailTitle": "报告"
   },
   "aiConsent": {

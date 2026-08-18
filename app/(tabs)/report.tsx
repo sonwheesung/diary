@@ -1,4 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
+import ChevronDown from 'lucide-react-native/icons/chevron-down';
 import Sparkles from 'lucide-react-native/icons/sparkles';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,15 +13,20 @@ import { listReports, type Report } from '@/features/ai/api/report-repository';
 import {
   canCreate,
   createReport,
+  listPeriodOptions,
+  subGaps,
+  subPeriodsOpenOn,
   targetPeriodKey,
   weeklyGaps,
   type CreateFail,
+  type PeriodOption,
 } from '@/features/ai/api/report-service';
+import { PeriodSheet } from '@/features/ai/components/PeriodSheet';
 import { hasAiConsent } from '@/features/ai/consent';
 import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
 import { useEntitlementStore } from '@/features/entitlement/store';
-import { formatDateTime, formatWeekNumber, formatWeekdayList } from '@/lib/format';
+import { formatDateTime, formatFullDate, formatWeekNumber, formatWeekdayList } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -48,15 +54,50 @@ export default function ReportScreen() {
   const [blocked, setBlocked] = useState<CreateFail | null>(null);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  /*
+   * 고른 기간(§6.4). 종류를 바꾸면 그 종류의 **기본값**으로 되돌아간다 —
+   * 주간에서 고른 `2026-W20`을 월간 탭이 들고 있으면 아무 뜻도 없는 키가 된다.
+   */
+  const [periodKey, setPeriodKey] = useState(() => targetPeriodKey('weekly'));
+  const [options, setOptions] = useState<PeriodOption[]>([]);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
-  const load = useCallback(async (target: ReportKind) => {
+  /**
+   * 목록·기간 후보·판정을 함께 읽는다.
+   *
+   * ⚠ `keepPeriod`가 없으면 기본 기간으로 되돌린다. 종류를 바꿀 때와 화면에 돌아올 때는
+   *   되돌리는 것이 맞고(다른 종류의 키를 들고 있으면 안 된다), 만들기 직후에는
+   *   **고른 기간을 유지**해야 방금 만든 것의 결과가 그 자리에 보인다.
+   */
+  const load = useCallback(async (target: ReportKind, keepPeriod?: string) => {
     const rows = await listReports(target);
     setReports(rows);
+    const nextPeriod = keepPeriod ?? targetPeriodKey(target);
+    setPeriodKey(nextPeriod);
+    /*
+     * ⚠ **구독자에게만 후보를 읽는다.** 주간 지평이 최대 2년이라 이 호출이 그 기간의
+     *   조각 본문을 통째로 훑는다 — 무료 사용자는 시트를 열 수조차 없는데(만들기 상자가
+     *   `LockedPreview`로 대체된다) 탭에 들어올 때마다 그 비용을 내게 할 이유가 없다.
+     * ⚠ 스토어를 직접 읽는다. `pro`를 `useCallback` 의존성에 넣으면 엔타이틀먼트가
+     *   갱신될 때마다 `load`의 정체성이 바뀌어 포커스 효과가 다시 돈다.
+     */
+    setOptions(useEntitlementStore.getState().pro ? await listPeriodOptions(target) : []);
     // 버튼을 누르기 전에 만들 수 있는지 답해둔다 — 서버를 부르지 않으므로 공짜다(§6.3)
-    const verdict = await canCreate(target);
+    const verdict = await canCreate(target, nextPeriod);
     setBlocked(verdict.ok ? null : verdict.reason);
     setLoading(false);
   }, []);
+
+  /** 시트에서 고른 기간 — 판정만 다시 하고 목록은 그대로 둔다 */
+  const onPickPeriod = useCallback(
+    async (next: string) => {
+      setSheetOpen(false);
+      setPeriodKey(next);
+      const verdict = await canCreate(kind, next);
+      setBlocked(verdict.ok ? null : verdict.reason);
+    },
+    [kind],
+  );
 
   // 돌아올 때마다 다시 읽는다. 상세에서 지우고 왔는데 목록에 남아 있으면 안 된다
   useFocusEffect(
@@ -95,22 +136,42 @@ export default function ReportScreen() {
      * ⚠ 주간에만. 월간·연간은 하위 리포트가 입력이라 "빠진 날"이 없다.
      */
     if (kind === 'weekly') {
-      const gaps = await weeklyGaps().catch(() => [] as string[]);
+      const gaps = await weeklyGaps(periodKey).catch(() => [] as string[]);
       if (gaps.length > 0 && !(await confirmGaps(gaps, t))) {
+        return;
+      }
+    } else {
+      /*
+       * 🔴 **하위가 덜 모였으면 한 번 묻는다**(§6.5). 월간·연간도 재생성이 없어서,
+       *   2개짜리로 만든 8월 월간은 나중에 나머지 주간을 만들어도 **영구히 2개짜리다.**
+       *
+       * ⚠ 아직 안 끝난 하위가 있는 경우는 여기 오지 않는다 — `canCreate`가 `too-early`로
+       *   이미 버튼을 막았다. 여기서 묻는 것은 **지금 만들 수 있는데 안 만든** 것뿐이라,
+       *   취소하고 그걸 먼저 만드는 길이 실제로 열려 있다(백필이 있어야 성립한다).
+       */
+      const gaps = await subGaps(kind, periodKey).catch(() => null);
+      if (
+        gaps !== null &&
+        gaps.missing.length > 0 &&
+        !(await confirmSubGaps(kind, periodKey, gaps.total - gaps.missing.length, gaps.total, t))
+      ) {
         return;
       }
     }
     setCreating(true);
     try {
-      const result = await createReport(kind);
+      const result = await createReport(kind, periodKey);
       if (result.ok) {
         await load(kind);
         router.push(`/report/${result.reportId}`);
         return;
       }
-      Alert.alert(t('report.title'), failMessage(result.reason, kind, t, result.retryAt));
+      Alert.alert(
+        t('report.title'),
+        failMessage(result.reason, kind, periodKey, t, result.retryAt),
+      );
       // 실패 사유가 바뀌었을 수 있다(누가 다른 기기에서 만들었다든지) — 다시 판정한다
-      await load(kind);
+      await load(kind, periodKey);
     } finally {
       setCreating(false);
     }
@@ -168,10 +229,23 @@ export default function ReportScreen() {
               **무엇이 만들어지는지를 먼저 적는다.** 캡만 적으면 "몇 월 리포트가 나오는 건데?"에
               답하지 못한다. 재생성 버튼은 없다 — 주 1회 캡과 정면으로 충돌한다(§6.3).
             */}
+            {/*
+              🔴 **기간을 고를 수 있다**(§6.4). 기본값은 지난주·지난달·작년이라
+                안 건드리면 예전과 똑같이 1탭이다 — 고르는 것은 선택이지 절차가 아니다.
+            */}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('report.periodSheet')}
+              onPress={() => setSheetOpen(true)}
+              style={styles.periodPicker}
+            >
+              <Text style={styles.periodValue}>{periodLabel(kind, periodKey)}</Text>
+              <ChevronDown size={18} color={colors.textMuted} />
+            </Pressable>
             <Text style={styles.createNote}>
               {blocked === null
-                ? t('report.willCreate', { period: periodLabel(kind, targetPeriodKey(kind)) })
-                : failMessage(blocked, kind, t)}
+                ? t('report.willCreate', { period: periodLabel(kind, periodKey) })
+                : failMessage(blocked, kind, periodKey, t)}
             </Text>
             {/* 주 1회 캡은 **주간에만** 해당한다. 월간·연간에 붙이면 거짓말이다 */}
             {blocked === null && kind === 'weekly' && (
@@ -192,6 +266,14 @@ export default function ReportScreen() {
           </View>
         </>
       )}
+      <PeriodSheet
+        visible={sheetOpen}
+        kind={kind}
+        options={options}
+        value={periodKey}
+        onSelect={(next) => void onPickPeriod(next)}
+        onClose={() => setSheetOpen(false)}
+      />
     </Screen>
   );
 }
@@ -215,6 +297,39 @@ function confirmGaps(gaps: string[], t: (key: string, opts?: Record<string, stri
         { text: t('common.cancel'), style: 'cancel', onPress: () => resolve(false) },
         { text: t('report.create'), onPress: () => resolve(true) },
       ],
+      { cancelable: true, onDismiss: () => resolve(false) },
+    );
+  });
+}
+
+/**
+ * *"하위 리포트가 {{count}}/{{total}}인데 그래도 만들까요?"* (§6.5).
+ *
+ * `confirmGaps`(빠진 **날**)와 짝이다. 저쪽은 주간이 조각을 보고, 이쪽은 월간·연간이
+ * **하위 리포트**를 본다 — 둘 다 *"되돌릴 수 없는 것 앞에서만 묻는다"* 는 같은 규약이다.
+ *
+ * ⚠ 확인 버튼이 `report.create`인 것도 같은 이유다. *"확인"* 으로는 무엇에 동의하는지 안 보인다.
+ */
+function confirmSubGaps(
+  kind: ReportKind,
+  periodKey: string,
+  have: number,
+  total: number,
+  t: (key: string, opts?: Record<string, string | number>) => string,
+) {
+  return new Promise<boolean>((resolve) => {
+    Alert.alert(
+      t('report.title'),
+      t('report.subGapConfirm', {
+        period: periodLabel(kind, periodKey),
+        count: have,
+        total,
+      }),
+      [
+        { text: t('common.cancel'), style: 'cancel', onPress: () => resolve(false) },
+        { text: t('report.create'), onPress: () => resolve(true) },
+      ],
+      // ⚠ `onDismiss`를 반드시 받는다 — 안 받으면 흘려보낸 사람에게서 `onCreate`가 안 끝난다
       { cancelable: true, onDismiss: () => resolve(false) },
     );
   });
@@ -297,10 +412,11 @@ function LockedPreview() {
 function failMessage(
   reason: CreateFail,
   kind: ReportKind,
+  periodKey: string,
   t: (key: string, opts?: Record<string, string>) => string,
   retryAt?: number,
 ): string {
-  const period = periodLabel(kind, targetPeriodKey(kind));
+  const period = periodLabel(kind, periodKey);
   switch (reason) {
     /*
      * ⚠ 서버가 정확한 시각을 준다(`retryAt`). *"한 시간 뒤"* 는 잠금이 걸린 시점 기준이라
@@ -327,6 +443,19 @@ function failMessage(
       return t('report.needWeekly', { period });
     case 'need-monthly':
       return t('report.needMonthly', { period });
+    /*
+     * 🔴 **언제부터 되는지를 말한다**(§6.5). *"나중에 다시 오세요"* 로 끝내면 사람은
+     *   매일 눌러본다. 마지막 하위 기간이 끝나는 날 다음이 그 날짜다.
+     *
+     * ⚠ 날짜를 못 구하면(키가 깨졌으면) 날짜 없는 문장으로 떨어진다 —
+     *   `cooling-down`이 `retryAt` 없이 떨어지는 것과 같은 규약이다.
+     */
+    case 'too-early': {
+      const opens = subPeriodsOpenOn(kind, periodKey);
+      return opens === null
+        ? t('report.fail.too-early')
+        : t('report.tooEarlyAt', { date: formatFullDate(opens) });
+    }
     default:
       return t(`report.fail.${reason}`);
   }
@@ -405,6 +534,27 @@ const createStyles = (colors: Palette) =>
     },
     createBox: {
       gap: spacing.sm,
+    },
+    /*
+     * 기간 선택 — 입력칸처럼 보이되 **누르는 것**임이 보여야 한다.
+     * 그래서 테두리를 주고 오른쪽에 화살표를 둔다. `TextField`와 같은 높이·radius다.
+     */
+    periodPicker: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: spacing.sm,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    periodValue: {
+      ...typography.body,
+      color: colors.text,
+      flexShrink: 1,
     },
     createNote: {
       ...typography.caption,

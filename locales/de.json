@@ -473,6 +473,7 @@
     "yearly": "Jährlich",
     "sourceCount": "Einträge: {{count}}",
     "subReportCount": "Berichte: {{count}}",
+    "periodSubs": "Berichte: {{count}}/{{total}}",
     "empty": "Noch keine Berichte",
     "create": "Bericht erstellen",
     "creating": "Bericht wird geschrieben",
@@ -481,6 +482,7 @@
     "needMonthly": "Dafür braucht es zuerst die Monatsberichte von {{period}}",
     "noEntries": "In diesem Zeitraum gibt es keine Einträge mit Text",
     "gapConfirm": "Keine Einträge: {{days}}. Bericht trotzdem erstellen?",
+    "subGapConfirm": "{{period}} · Berichte: {{count}}/{{total}}\n\nWenn du ihn jetzt erstellst, fließt der Rest nicht ein, und dieser Bericht lässt sich nicht noch einmal erstellen. Trotzdem erstellen?",
     "disclaimer": "Von einer KI verfasst. Der Text kann falsch sein und ist weder Diagnose noch Ratschlag.",
     "reportIssue": "Melden",
     "reported": "Danke für den Hinweis. Wir sehen uns das an.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Bei uns ist etwas schiefgelaufen. Ab {{time}} kannst du es erneut versuchen.",
       "rate-limited": "Bitte versuche es gleich noch einmal.",
       "upstream": "Der Server hat Probleme. Bitte versuche es später noch einmal.",
-      "error": "Etwas ist schiefgelaufen."
+      "error": "Etwas ist schiefgelaufen.",
+      "too-early": "Ein Zeitraum ist noch nicht vorbei. Wenn du den Bericht danach erstellst, fehlt nichts.",
+      "out-of-range": "Für diesen Zeitraum lässt sich kein Bericht erstellen."
     },
     "emptyWeekly": "Ist eine Woche vorbei, fassen wir ihre Einträge zu einem kurzen Rückblick zusammen.",
     "emptyMonthly": "Wir fassen die Wochenberichte des Monats zu einem Blick auf den Monat zusammen.",
     "emptyYearly": "Wir fassen die Monatsberichte des Jahres zu einem Blick auf das Jahr zusammen.",
     "willCreate": "Der Bericht für {{period}} kann erstellt werden",
     "alreadyExists": "Für {{period}} gibt es schon einen Bericht",
+    "periodSheet": "Zeitraum wählen",
+    "periodMade": "Schon erstellt",
+    "periodNoEntries": "Keine Einträge",
+    "periodTooEarly": "Zeitraum noch nicht vorbei",
+    "tooEarlyAt": "Ein Zeitraum ist noch nicht vorbei. Ab {{date}} fehlt nichts.",
     "detailTitle": "Bericht"
   },
   "aiConsent": {

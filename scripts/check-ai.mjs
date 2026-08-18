@@ -23,6 +23,16 @@ import {
   keyRange,
   eachDay,
   missingDays,
+  backfillFloor,
+  isClosed,
+  isCreatablePeriod,
+  opensOn,
+  creatableWeekKeys,
+  creatableMonthKeys,
+  creatableYearKeys,
+  weekKeysInMonth,
+  monthKeysInYear,
+  weekKeyForYmd,
 } from '../features/ai/period.ts';
 import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
 import { REPORT_SCHEMA, PROMPT_VERSION } from '../features/ai/types.ts';
@@ -158,6 +168,134 @@ check('월요일에 물으면 직전 주 전체', () => {
   const r = lastWeekRange(d('2026-08-10'));
   eq(r.from, '2026-08-03', 'from');
   eq(r.to, '2026-08-09', 'to');
+});
+
+
+console.log('\n백필 지평 (AI_REPORT_SYSTEM §6.4)');
+
+check('지평 바닥은 작년 1월 1일', () => {
+  eq(backfillFloor(d('2026-08-18')), '2025-01-01', '8월');
+  // ⚠ 연중 어디서 물어도 같다. rolling 365일이었다면 여기가 달라졌을 것이다
+  eq(backfillFloor(d('2026-01-02')), '2025-01-01', '연초');
+  eq(backfillFloor(d('2026-12-31')), '2025-01-01', '연말');
+});
+
+check('주 목록의 첫 항목은 지난주 — 기본 선택이 목록 맨 위여야 한다', () => {
+  const now = d('2026-08-18');
+  eq(creatableWeekKeys(now)[0], lastWeekKey(now), '첫 항목');
+});
+
+check('🔴 달 목록의 첫 항목은 지난달 — 이번 달이 아니다', () => {
+  // 0-based 월에서 한 칸 빼는 것을 잊으면 여기가 '2026-08'이 된다. 실제로 한 번 틀렸다
+  eq(creatableMonthKeys(d('2026-08-18'))[0], '2026-07', '8월에 물으면');
+  eq(creatableMonthKeys(d('2026-01-15'))[0], '2025-12', '1월에 물으면 작년 12월');
+});
+
+check('연 목록은 작년 하나 — 지평이 작년 1월 1일이라 그 위가 없다', () => {
+  const years = creatableYearKeys(d('2026-08-18'));
+  eq(years.length, 1, '개수');
+  eq(years[0], '2025', '값');
+});
+
+check('목록의 가장 오래된 항목도 지평 안이다', () => {
+  const now = d('2026-08-18');
+  const floor = backfillFloor(now);
+  for (const key of [...creatableWeekKeys(now), ...creatableMonthKeys(now)]) {
+    assert(keyRange(key).to >= floor, `${key}가 지평 밖이다`);
+  }
+});
+
+check('🔴 진행 중인 기간은 목록에 없다 — 안 끝난 주를 요약하지 않는다', () => {
+  const now = d('2026-08-18'); // 화요일. 이번 주는 2026-W34
+  assert(!creatableWeekKeys(now).includes('2026-W34'), '이번 주가 들어갔다');
+  assert(!creatableMonthKeys(now).includes('2026-08'), '이번 달이 들어갔다');
+  assert(!creatableYearKeys(now).includes('2026'), '올해가 들어갔다');
+});
+
+check('isClosed — 끝난 주만 참', () => {
+  const now = d('2026-08-18');
+  assert(isClosed('2026-W33', now), 'W33은 끝났다');
+  assert(!isClosed('2026-W34', now), 'W34는 진행 중이다');
+  // ⚠ 마지막 날 당일은 아직 안 끝난 것이다. 일요일에 그 주를 요약하면 하루가 빈다
+  assert(!isClosed('2026-W33', d('2026-08-16')), '일요일 당일');
+  assert(isClosed('2026-W33', d('2026-08-17')), '다음 월요일');
+});
+
+check('isCreatablePeriod — 앱과 서버가 같이 쓰는 판정', () => {
+  const now = d('2026-08-18');
+  assert(isCreatablePeriod('weekly', '2026-W33', now), '지난주');
+  assert(!isCreatablePeriod('weekly', '2026-W34', now), '이번 주');
+  assert(!isCreatablePeriod('weekly', '2024-W33', now), '지평 밖');
+  assert(isCreatablePeriod('monthly', '2025-01', now), '지평 바닥의 달');
+  assert(!isCreatablePeriod('monthly', '2024-12', now), '지평 바로 밖의 달');
+  assert(!isCreatablePeriod('yearly', '2026', now), '올해');
+  assert(isCreatablePeriod('yearly', '2025', now), '작년');
+});
+
+check('weekKeyForYmd — 문자열 하루가 어느 주에 속하나', () => {
+  eq(weekKeyForYmd('2026-08-16'), '2026-W33', '일요일');
+  eq(weekKeyForYmd('2026-08-17'), '2026-W34', '다음 월요일');
+  eq(weekKeyForYmd('망가진 값'), null, '깨진 입력은 null');
+});
+
+console.log('\n하위 완비 (AI_REPORT_SYSTEM §6.5)');
+
+check('8월에 속한 주는 5개 — 월요일이 든 달로 센다', () => {
+  const keys = weekKeysInMonth('2026-08');
+  eq(keys.length, 5, '개수');
+  eq(keys[0], '2026-W32', '첫 주');
+  eq(keys[4], '2026-W36', '마지막 주');
+  for (const key of keys) {
+    assert(keyRange(key).from.startsWith('2026-08'), `${key}의 월요일이 8월이 아니다`);
+  }
+});
+
+check('🔴 8/31(월)에 시작하는 주는 대부분 9월인데도 **8월 주**다', () => {
+  // `weeksInMonth()`(report-service)가 `range.from`으로 거르는 규칙과 같아야 한다.
+  // 두 곳이 갈라지면 "5개 중 2개"라고 경고해 놓고 3개를 넣는 식이 된다
+  eq(keyRange('2026-W36').from, '2026-08-31', 'W36의 월요일');
+  eq(keyRange('2026-W36').to, '2026-09-06', 'W36의 일요일');
+  assert(weekKeysInMonth('2026-08').includes('2026-W36'), 'W36이 8월에 없다');
+  assert(!weekKeysInMonth('2026-09').includes('2026-W36'), 'W36이 9월에도 있다');
+});
+
+check('🔴 이 버그의 핵심 — 8월 월간이 마지막 주보다 **먼저** 열린다', () => {
+  /*
+   * 8월 월간은 9/1부터, 그 달의 마지막 주(W36)는 9/7부터 만들 수 있다.
+   * 그 6일 사이에 월간을 누르면 W36이 **존재할 수조차 없어서** 반드시 빠지고,
+   * 재생성이 없으니 영구히 굳는다. `too-early` 차단이 있는 이유가 이 부등호다.
+   */
+  eq(opensOn('2026-08'), '2026-09-01', '월간이 열리는 날');
+  eq(opensOn('2026-W36'), '2026-09-07', '마지막 주가 열리는 날');
+  assert(opensOn('2026-08') < opensOn('2026-W36'), '부등호가 뒤집혔다 — 차단이 불필요해졌나?');
+});
+
+check('🔴 연간도 같다 — 12월 월간과 같은 날 열린다', () => {
+  // 2027-01-01에 둘 다 열린다. 연간을 먼저 누르면 12월이 통째로 빠진다
+  eq(opensOn('2026'), '2027-01-01', '연간');
+  eq(opensOn('2026-12'), '2027-01-01', '12월 월간');
+});
+
+check('한 해의 달은 열두 개', () => {
+  const months = monthKeysInYear('2026');
+  eq(months.length, 12, '개수');
+  eq(months[0], '2026-01', '첫 달');
+  eq(months[11], '2026-12', '끝 달');
+  eq(monthKeysInYear('망가진 값').length, 0, '깨진 입력은 빈 배열');
+});
+
+check('🔴 연간 체인이 성립한다 — 2027년 **아무 때나** 2026 열두 달이 살아 있다', () => {
+  /*
+   * 지평을 rolling 365일로 잡았다면 여기서 깨진다: 2027-03에 물으면 2026-01·02가
+   * 지평 밖으로 밀려 **1·2월이 빠진 2026 연간**이 만들어진다. 그게 백필이 고치려던 병이다.
+   */
+  for (const day of ['2027-01-05', '2027-03-20', '2027-12-31']) {
+    const now = d(day);
+    for (const month of monthKeysInYear('2026')) {
+      assert(isCreatablePeriod('monthly', month, now), `${day}에 ${month}가 막혔다`);
+    }
+    assert(isCreatablePeriod('yearly', '2026', now), `${day}에 2026 연간이 막혔다`);
+  }
 });
 
 console.log('\n빠진 날 (AI_REPORT_SYSTEM §10.1)');

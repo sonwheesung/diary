@@ -22,6 +22,7 @@ export type FailCode =
   | 'cap-exceeded'      // 429 — 이 기간 몫을 이미 썼다. rate-limited와 뜻이 다르다
   | 'refused'           // 422 — 모델이 거부했다. **캡을 소모하지 않았다**
   | 'empty'             // 422 — 요약할 내용이 없다
+  | 'out-of-range'      // 422 — 백필 지평 밖이거나 아직 안 끝난 기간이다(§6.4)
   | 'in-progress'       // 409 — 같은 멱등 키가 처리 중이다
   | 'cooling-down'      // 429 — 직전 호출이 모델을 부르고 실패했다. 1시간 뒤 다시(§5.1)
   | 'not-configured';   // 503 — API 키가 없다. 배포 문제이지 사용자 문제가 아니다
@@ -47,6 +48,11 @@ const STATUS: Record<FailCode, number> = {
   'cap-exceeded': 429,
   refused: 422,
   empty: 422,
+  /*
+   * ⚠ 422다. 요청은 형식상 멀쩡하고 **기간이 아직/이미 아닌** 것뿐이라 400이 아니고,
+   *   재시도해도 결과가 같으므로 5xx도 아니다. `empty`와 같은 성격이다.
+   */
+  'out-of-range': 422,
   'in-progress': 409,
   /*
    * ⚠ `rate-limited`·`cap-exceeded`와 같은 429지만 셋 다 뜻이 다르다:

@@ -473,6 +473,7 @@
     "yearly": "Anual",
     "sourceCount": "Registros: {{count}}",
     "subReportCount": "Relatórios: {{count}}",
+    "periodSubs": "Relatórios: {{count}}/{{total}}",
     "empty": "Ainda não há relatórios",
     "create": "Criar relatório",
     "creating": "Escrevendo seu relatório",
@@ -481,6 +482,7 @@
     "needMonthly": "Primeiro são necessários os relatórios mensais de {{period}}",
     "noEntries": "Nenhum registro com texto neste período",
     "gapConfirm": "Sem registros: {{days}}. Criar o relatório mesmo assim?",
+    "subGapConfirm": "{{period}} · Relatórios: {{count}}/{{total}}\n\nSe criar agora, o restante não será incluído e este relatório não pode ser criado de novo. Criar mesmo assim?",
     "disclaimer": "Escrito por IA. Pode conter erros e não é um diagnóstico nem um conselho.",
     "reportIssue": "Denunciar",
     "reported": "Obrigado por avisar. Vamos analisar.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Algo deu errado do nosso lado. Você pode tentar de novo a partir de {{time}}.",
       "rate-limited": "Tente novamente em instantes.",
       "upstream": "O servidor está com problemas. Tente novamente em breve.",
-      "error": "Algo deu errado."
+      "error": "Algo deu errado.",
+      "too-early": "Há um período que ainda não terminou. Se criar depois que ele terminar, nada fica de fora.",
+      "out-of-range": "Não é um período que possa ser criado."
     },
     "emptyWeekly": "Quando uma semana terminar, reuniremos seus registros em uma breve reflexão.",
     "emptyMonthly": "Reuniremos os relatórios semanais daquele mês em um olhar sobre o mês.",
     "emptyYearly": "Reuniremos os relatórios mensais daquele ano em um olhar sobre o ano.",
     "willCreate": "Já dá para criar o relatório de {{period}}",
     "alreadyExists": "Você já tem um relatório de {{period}}",
+    "periodSheet": "Escolher período",
+    "periodMade": "Já criado",
+    "periodNoEntries": "Sem registros",
+    "periodTooEarly": "Há um período ainda em andamento",
+    "tooEarlyAt": "Há um período ainda em andamento. Se criar a partir de {{date}}, nada fica de fora.",
     "detailTitle": "Relatório"
   },
   "aiConsent": {

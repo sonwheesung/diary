@@ -473,6 +473,7 @@
     "yearly": "Hằng năm",
     "sourceCount": "{{count}} mảnh ghi",
     "subReportCount": "{{count}} báo cáo",
+    "periodSubs": "Báo cáo {{count}}/{{total}}",
     "empty": "Chưa có báo cáo nào",
     "create": "Tạo báo cáo",
     "creating": "Đang viết báo cáo",
@@ -481,6 +482,7 @@
     "needMonthly": "Cần có báo cáo tháng của {{period}} trước",
     "noEntries": "Không có mảnh nào có nội dung trong khoảng thời gian này",
     "gapConfirm": "Không có mảnh nào: {{days}}. Vẫn tạo báo cáo chứ?",
+    "subGapConfirm": "{{period}} · Báo cáo thành phần {{count}}/{{total}}\n\nNếu tạo bây giờ, những phần còn lại sẽ không được đưa vào, và bạn cũng không thể tạo lại báo cáo này. Vẫn tạo chứ?",
     "disclaimer": "Do AI viết. Nội dung có thể không chính xác và không phải là chẩn đoán hay lời khuyên.",
     "reportIssue": "Báo cáo vi phạm",
     "reported": "Cảm ơn bạn đã cho chúng tôi biết. Chúng tôi sẽ xem xét.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Đã xảy ra sự cố từ phía chúng tôi. Bạn có thể thử lại sau {{time}}.",
       "rate-limited": "Vui lòng thử lại sau giây lát.",
       "upstream": "Máy chủ đang gặp sự cố. Vui lòng thử lại sau.",
-      "error": "Đã xảy ra lỗi."
+      "error": "Đã xảy ra lỗi.",
+      "too-early": "Có khoảng thời gian chưa kết thúc. Nếu tạo sau khi khoảng đó kết thúc thì sẽ không bỏ sót phần nào.",
+      "out-of-range": "Đây không phải khoảng thời gian có thể tạo báo cáo."
     },
     "emptyWeekly": "Khi một tuần trôi qua, chúng tôi sẽ gộp các mảnh của tuần đó thành một bản nhìn lại ngắn.",
     "emptyMonthly": "Chúng tôi sẽ gộp các báo cáo tuần của tháng đó thành một bản nhìn lại cả tháng.",
     "emptyYearly": "Chúng tôi sẽ gộp các báo cáo tháng của năm đó thành một bản nhìn lại cả năm.",
     "willCreate": "Có thể tạo báo cáo {{period}}",
     "alreadyExists": "Đã có báo cáo {{period}}",
+    "periodSheet": "Chọn khoảng thời gian",
+    "periodMade": "Đã tạo rồi",
+    "periodNoEntries": "Không có mảnh nào",
+    "periodTooEarly": "Có khoảng thời gian chưa kết thúc",
+    "tooEarlyAt": "Có khoảng thời gian chưa kết thúc. Nếu tạo từ {{date}} thì sẽ không bỏ sót phần nào.",
     "detailTitle": "Báo cáo"
   },
   "aiConsent": {

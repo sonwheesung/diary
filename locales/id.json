@@ -473,6 +473,7 @@
     "yearly": "Tahunan",
     "sourceCount": "{{count}} catatan",
     "subReportCount": "{{count}} laporan",
+    "periodSubs": "{{count}}/{{total}} laporan",
     "empty": "Belum ada laporan",
     "create": "Buat laporan",
     "creating": "Sedang menulis laporan",
@@ -481,6 +482,7 @@
     "needMonthly": "Perlu laporan bulanan {{period}} terlebih dahulu",
     "noEntries": "Tidak ada catatan berisi teks pada periode ini",
     "gapConfirm": "Tidak ada catatan: {{days}}. Tetap buat laporan?",
+    "subGapConfirm": "{{period}} · Laporan terkumpul: {{count}}/{{total}}\n\nJika dibuat sekarang, sisanya tidak akan ikut dan laporan ini tidak bisa dibuat ulang. Tetap buat?",
     "disclaimer": "Ditulis oleh AI. Bisa saja keliru, dan ini bukan diagnosis atau saran.",
     "reportIssue": "Laporkan masalah",
     "reported": "Terima kasih sudah memberi tahu. Kami akan memeriksanya.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Terjadi masalah di sisi kami. Anda bisa mencoba lagi setelah {{time}}.",
       "rate-limited": "Coba lagi sebentar lagi.",
       "upstream": "Server sedang bermasalah. Coba lagi nanti.",
-      "error": "Terjadi kesalahan."
+      "error": "Terjadi kesalahan.",
+      "too-early": "Ada periode yang belum berakhir. Jika dibuat setelah periode itu berakhir, tidak ada yang terlewat.",
+      "out-of-range": "Laporan tidak bisa dibuat untuk periode ini."
     },
     "emptyWeekly": "Setelah satu minggu berlalu, kami akan merangkum catatannya menjadi renungan singkat.",
     "emptyMonthly": "Kami akan merangkum laporan mingguan bulan itu menjadi tinjauan sebulan.",
     "emptyYearly": "Kami akan merangkum laporan bulanan tahun itu menjadi tinjauan setahun.",
     "willCreate": "Laporan {{period}} siap dibuat",
     "alreadyExists": "Laporan {{period}} sudah ada",
+    "periodSheet": "Pilih periode",
+    "periodMade": "Sudah dibuat",
+    "periodNoEntries": "Tidak ada catatan",
+    "periodTooEarly": "Ada periode yang belum berakhir",
+    "tooEarlyAt": "Ada periode yang belum berakhir. Jika dibuat mulai {{date}}, tidak ada yang terlewat.",
     "detailTitle": "Laporan"
   },
   "aiConsent": {

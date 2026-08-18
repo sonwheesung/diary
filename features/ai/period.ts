@@ -176,3 +176,176 @@ export function keyRange(periodKey: string): { from: string; to: string } | null
   if (periodKey.includes('-')) return monthKeyRange(periodKey);
   return yearKeyRange(periodKey);
 }
+
+/*
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 백필 — 지난 기간도 만든다 (`docs/AI_REPORT_SYSTEM.md` §6.4)
+ *
+ * 여기까지의 `lastWeekKey`·`lastMonthKey`·`lastYearKey`는 **기본 선택값**으로 남는다.
+ * 1탭 경로는 그대로다(기둥 1) — 아래 함수들이 여는 것은 *"다른 기간도 고를 수 있다"* 뿐이다.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/** 오늘 (로컬 달력일, `YYYY-MM-DD`). 기간이 끝났는지 판정하는 기준선 */
+function todayKey(now: Date): string {
+  return ymd(utcMidnight(now));
+}
+
+/**
+ * 백필의 **바닥** — `작년 1월 1일`.
+ *
+ * 🔴 **오늘로부터 1년(rolling 365일)이 아니다.** rolling이면 2027-03에 2026-01·02 월간이
+ *   지평 밖으로 밀려나 **1·2월이 빠진 2026 연간**이 만들어진다 — 백필이 고치려던 바로 그 병이
+ *   그대로 재발한다. 작년 1월 1일로 잡으면 **그 다음 해 아무 때나** 연간을 만들어도
+ *   12개월이 전부 살아 있다.
+ *
+ * ⚠ 연말에는 지평이 거의 2년이 된다(2026-12-31 기준 2025-01-01). 의도한 것이다 —
+ *   원가는 최악 ₩117이고 그건 한 달 실수령의 4%다(§6.4).
+ */
+export function backfillFloor(now: Date): string {
+  return `${now.getFullYear() - 1}-01-01`;
+}
+
+/**
+ * 이 기간이 **끝났는가.** 진행 중인 주·달·해는 만들지 않는다(§6.1과 같은 이유) —
+ * 안 끝난 주를 요약하면 목요일에 만든 리포트가 그 주의 전부인 것처럼 남는다.
+ */
+export function isClosed(periodKey: string, now: Date): boolean {
+  const range = keyRange(periodKey);
+  return range !== null && range.to < todayKey(now);
+}
+
+/**
+ * 이 기간을 만들 수 있게 되는 날 (`YYYY-MM-DD`) — 끝난 **다음 날**.
+ *
+ * 하위가 아직 안 끝나 상위를 막을 때, *"언제부터 되는지"* 를 말해주는 데 쓴다(§6.5).
+ * 날짜 없이 *"나중에 다시 오세요"* 라고만 하면 사람은 매일 눌러본다.
+ */
+export function opensOn(periodKey: string): string | null {
+  const range = keyRange(periodKey);
+  if (range === null) return null;
+  const end = Date.parse(`${range.to}T00:00:00Z`);
+  return Number.isNaN(end) ? null : ymd(new Date(end + DAY_MS));
+}
+
+/** 안전판 — 지평이 어떤 이유로 깨져도 무한히 돌지 않는다. 2년치 주가 105개다 */
+const MAX_PERIODS = 200;
+
+/** 만들 수 있는 주 키들 — **최신 순**. 지난주부터 지평 바닥까지 */
+export function creatableWeekKeys(now: Date): string[] {
+  const floor = backfillFloor(now);
+  const keys: string[] = [];
+  let monday = Date.parse(`${lastWeekRange(now).from}T00:00:00Z`);
+  if (Number.isNaN(monday)) return keys;
+  while (keys.length < MAX_PERIODS) {
+    const sunday = ymd(new Date(monday + 6 * DAY_MS));
+    if (sunday < floor) break;
+    keys.push(weekKey(new Date(monday)));
+    monday -= 7 * DAY_MS;
+  }
+  return keys;
+}
+
+/** 만들 수 있는 달 키들 — **최신 순**. 지난달부터 지평 바닥까지 */
+export function creatableMonthKeys(now: Date): string[] {
+  const floor = backfillFloor(now);
+  const keys: string[] = [];
+  // 이번 달 1일에서 한 달씩 뒤로. 날짜를 빼지 않는다 — 31일에 빼면 2월이 3월로 튄다
+  let year = now.getFullYear();
+  let month = now.getMonth() - 1; // 0-based에서 한 달 뒤로 = 지난달
+  while (keys.length < MAX_PERIODS) {
+    if (month < 0) {
+      month = 11;
+      year -= 1;
+    }
+    const key = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const range = monthKeyRange(key);
+    if (range === null || range.to < floor) break;
+    keys.push(key);
+    month -= 1;
+  }
+  return keys;
+}
+
+/**
+ * 만들 수 있는 해 키들 — **최신 순**.
+ *
+ * ⚠ 지평이 `작년 1월 1일`이라 실제로는 **작년 하나**다. 그래도 목록으로 돌려준다 —
+ *   화면이 세 종류를 같은 코드로 그리고, 지평을 넓히면 여기만 따라 넓어진다.
+ */
+export function creatableYearKeys(now: Date): string[] {
+  const floor = backfillFloor(now);
+  const keys: string[] = [];
+  for (let year = now.getFullYear() - 1; keys.length < MAX_PERIODS; year -= 1) {
+    if (`${year}-12-31` < floor) break;
+    keys.push(String(year));
+  }
+  return keys;
+}
+
+/**
+ * 그 달에 속하는 **주 키들** — 월간 리포트의 입력 집합.
+ *
+ * 🔴 **월요일이 든 달**로 센다. `weeksInMonth()`(report-service)가 `range.from`으로 거르는
+ *   것과 **같은 규칙이어야 한다** — 어긋나면 "5개 중 2개"라고 경고해 놓고 실제로는 3개를
+ *   넣는 식이 된다. 규칙이 두 곳에 있으면 반드시 갈라진다.
+ *
+ * ⚠ 그래서 8/31(월)에 시작하는 주는 대부분이 9월인데도 **8월 주**다.
+ *   그 주가 9/7에야 만들어질 수 있다는 것이 §6.5의 차단이 필요한 이유다.
+ */
+export function weekKeysInMonth(monthKeyValue: string): string[] {
+  const range = monthKeyRange(monthKeyValue);
+  if (range === null) return [];
+  const first = Date.parse(`${range.from}T00:00:00Z`);
+  const last = Date.parse(`${range.to}T00:00:00Z`);
+  // 그 달의 첫 월요일로 옮긴다
+  const firstDay = new Date(first).getUTCDay() || 7;
+  let monday = first + ((8 - firstDay) % 7) * DAY_MS;
+  const keys: string[] = [];
+  while (monday <= last && keys.length < MAX_PERIODS) {
+    keys.push(weekKey(new Date(monday)));
+    monday += 7 * DAY_MS;
+  }
+  return keys;
+}
+
+/** 그 해의 열두 달 키 — 연간 리포트의 입력 집합 */
+export function monthKeysInYear(yearKeyValue: string): string[] {
+  if (!/^\d{4}$/.test(yearKeyValue)) return [];
+  return Array.from({ length: 12 }, (_, i) => `${yearKeyValue}-${String(i + 1).padStart(2, '0')}`);
+}
+
+/**
+ * 🔴 **이 기간을 지금 만들 수 있는가** — 앱과 서버가 **같이 쓰는 단 하나의 판정**(§6.4).
+ *
+ * 서버도 이걸 본다(`server/app/api/v1/ai/report/route.ts`). 앱만 막으면 낡은 버전과 직접
+ * 호출이 남고, 조건을 서버에 다시 쓰면 지평을 바꿀 때 한쪽만 고치게 된다.
+ *
+ * ⚠ 종류를 `ReportKind`로 받지 않고 **인라인 유니온**으로 받는다. `types.ts`를 임포트하면
+ *   이 파일의 *"프로젝트 내부 임포트 0"* 이 깨지고, 그게 깨지면 서버가 이 파일을 못 쓴다.
+ */
+export function isCreatablePeriod(
+  kind: 'weekly' | 'monthly' | 'yearly',
+  periodKey: string,
+  now: Date,
+): boolean {
+  const keys =
+    kind === 'weekly'
+      ? creatableWeekKeys(now)
+      : kind === 'monthly'
+        ? creatableMonthKeys(now)
+        : creatableYearKeys(now);
+  return keys.includes(periodKey);
+}
+
+/**
+ * `YYYY-MM-DD` 하루가 어느 주에 속하는가 — 기간 시트가 조각을 주별로 담을 때 쓴다.
+ *
+ * ⚠ `new Date('2026-08-18')`로 파싱하지 않는다. 그건 **UTC 자정**으로 읽혀서
+ *   UTC보다 뒤인 지역(미주)에서는 하루 전날이 되고, 그러면 월요일 조각이 지난 주로 샌다.
+ */
+export function weekKeyForYmd(day: string): string | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+  if (match === null) return null;
+  return weekKey(new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+}

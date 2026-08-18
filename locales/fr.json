@@ -473,6 +473,7 @@
     "yearly": "Annuel",
     "sourceCount": "Entrées : {{count}}",
     "subReportCount": "Bilans : {{count}}",
+    "periodSubs": "Bilans : {{count}}/{{total}}",
     "empty": "Pas encore de bilan",
     "create": "Créer un bilan",
     "creating": "Rédaction de votre bilan",
@@ -481,6 +482,7 @@
     "needMonthly": "Les bilans mensuels de {{period}} sont nécessaires d'abord",
     "noEntries": "Aucune entrée avec du texte sur cette période",
     "gapConfirm": "Aucune entrée : {{days}}. Créer quand même le bilan ?",
+    "subGapConfirm": "{{period}} · Bilans : {{count}}/{{total}}\n\nSi vous le créez maintenant, le reste ne sera pas pris en compte, et ce bilan ne pourra pas être recréé. Le créer quand même ?",
     "disclaimer": "Rédigé par une IA. Le texte peut être inexact et ne constitue ni un diagnostic ni un conseil.",
     "reportIssue": "Signaler",
     "reported": "Merci de nous l'avoir signalé. Nous allons vérifier.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Un problème est survenu de notre côté. Vous pourrez réessayer à partir de {{time}}.",
       "rate-limited": "Réessayez dans un instant.",
       "upstream": "Le serveur rencontre un problème. Réessayez bientôt.",
-      "error": "Un problème est survenu."
+      "error": "Un problème est survenu.",
+      "too-early": "Une période n'est pas encore terminée. En créant le bilan après sa fin, il ne manquera rien.",
+      "out-of-range": "Cette période ne peut pas être créée."
     },
     "emptyWeekly": "Une fois la semaine écoulée, nous rassemblerons ses entrées en un court retour.",
     "emptyMonthly": "Nous rassemblerons les bilans hebdomadaires du mois en un regard sur le mois.",
     "emptyYearly": "Nous rassemblerons les bilans mensuels de l'année en un regard sur l'année.",
     "willCreate": "Le bilan de {{period}} peut être créé",
     "alreadyExists": "Vous avez déjà un bilan pour {{period}}",
+    "periodSheet": "Choisir une période",
+    "periodMade": "Déjà créé",
+    "periodNoEntries": "Aucune entrée",
+    "periodTooEarly": "Une période n'est pas terminée",
+    "tooEarlyAt": "Une période n'est pas encore terminée. À partir du {{date}}, il ne manquera rien.",
     "detailTitle": "Bilan"
   },
   "aiConsent": {

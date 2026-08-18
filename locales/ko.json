@@ -473,6 +473,7 @@
     "yearly": "연간",
     "sourceCount": "조각 {{count}}개",
     "subReportCount": "리포트 {{count}}개",
+    "periodSubs": "리포트 {{count}}/{{total}}",
     "empty": "아직 리포트가 없어요",
     "create": "리포트 만들기",
     "creating": "리포트를 만들고 있어요",
@@ -481,6 +482,7 @@
     "needMonthly": "{{period}}의 월간 리포트가 먼저 필요해요",
     "noEntries": "이 기간에 내용을 남긴 조각이 없어요",
     "gapConfirm": "{{days}}에 남긴 조각이 없어요. 그래도 리포트를 만들까요?",
+    "subGapConfirm": "{{period}} · 하위 리포트 {{count}}/{{total}}\n\n지금 만들면 나머지는 반영되지 않고, 이 리포트는 다시 만들 수 없어요. 그래도 만들까요?",
     "disclaimer": "AI가 쓴 요약이에요. 사실과 다를 수 있고, 진단이나 조언이 아닙니다.",
     "reportIssue": "신고",
     "reported": "알려주셔서 고마워요. 살펴보겠습니다.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "문제가 생겨 리포트를 만들지 못했어요. {{time}} 이후에 다시 시도할 수 있어요.",
       "rate-limited": "잠시 뒤 다시 시도해 주세요.",
       "upstream": "서버에 문제가 있어요. 잠시 뒤 다시 시도해 주세요.",
-      "error": "문제가 생겼어요."
+      "error": "문제가 생겼어요.",
+      "too-early": "아직 끝나지 않은 기간이 있어요. 그 기간이 끝난 뒤에 만들면 빠지지 않아요.",
+      "out-of-range": "만들 수 있는 기간이 아니에요."
     },
     "emptyWeekly": "한 주가 지나면 그 주의 조각을 모아 회고를 만들어 드려요.",
     "emptyMonthly": "그 달의 주간 리포트를 모아 한 달을 돌아봐요.",
     "emptyYearly": "그 해의 월간 리포트를 모아 한 해를 돌아봐요.",
     "willCreate": "{{period}} 리포트를 만들 수 있어요",
     "alreadyExists": "{{period}} 리포트는 이미 있어요",
+    "periodSheet": "기간 고르기",
+    "periodMade": "이미 만들었어요",
+    "periodNoEntries": "조각 없음",
+    "periodTooEarly": "아직 끝나지 않은 기간이 있어요",
+    "tooEarlyAt": "아직 끝나지 않은 기간이 있어요. {{date}}부터 만들면 빠지지 않아요.",
     "detailTitle": "리포트"
   },
   "aiConsent": {

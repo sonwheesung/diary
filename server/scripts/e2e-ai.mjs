@@ -53,7 +53,13 @@ async function ai(body, token = TOKEN) {
 
 let n = 0;
 const entry = (text) => ({ date: '2026-08-03', emotion: 'calm', title: null, text });
-/** 매번 다른 기간 키 — 캡에 걸리지 않게 */
+/**
+ * 매번 다른 기간 키 — 캡에 걸리지 않게.
+ *
+ * ⚠ **지평 안이어야 한다**(`AI_REPORT_SYSTEM.md` §6.4). 라우트가 `isCreatablePeriod`로
+ *   막으므로 지평(작년 1월 1일) 밖 키를 쓰면 검사하려던 것 대신 `out-of-range`가 나온다.
+ *   `2026-W1x`는 2027년까지 안전하고, 그 뒤에는 여기가 먼저 깨진다 — 그게 신호다.
+ */
 const fresh = () => `2026-W${String(10 + n++).padStart(2, '0')}`;
 
 console.log('\n인가');
@@ -80,6 +86,36 @@ await check('🔴 빈 입력은 empty(422) — 조각 0개로 모델을 부르�
   const r = await ai({ reportId: 'c', kind: 'weekly', periodKey: fresh(), lang: 'ko', entries: [] });
   eq(r.status, 422, 'status');
   eq(r.json.reason, 'empty', 'reason');
+});
+
+/*
+ * 🔴 **백필 지평**(§6.4). 앱이 먼저 막지만 앱은 고칠 수 없는 버전이 남는다 —
+ *   여기가 뚫리면 `uq_ai_usage_period`가 잘못 만든 기간을 **영구히 못 고치게** 굳힌다.
+ */
+await check('🔴 지평보다 오래된 기간은 out-of-range(422)', async () => {
+  const r = await ai({
+    reportId: 'oor-old',
+    kind: 'weekly',
+    periodKey: '2020-W10',
+    lang: 'ko',
+    entries: [entry('아주 오래된 주')],
+  });
+  eq(r.status, 422, 'status');
+  eq(r.json.reason, 'out-of-range', 'reason');
+});
+
+await check('🔴 아직 안 끝난 기간도 out-of-range — 진행 중인 주를 요약하지 않는다', async () => {
+  // 올해 연간은 정의상 아직 안 끝났다. 날짜에 안 물드는 유일한 케이스라 이걸 쓴다
+  const thisYear = String(new Date().getFullYear());
+  const r = await ai({
+    reportId: 'oor-open',
+    kind: 'yearly',
+    periodKey: thisYear,
+    lang: 'ko',
+    subReports: [{ periodKey: `${thisYear}-01`, summary: '아무 요약' }],
+  });
+  eq(r.status, 422, 'status');
+  eq(r.json.reason, 'out-of-range', 'reason');
 });
 
 await check('🔴 monthly는 entries가 있어도 비어 있다고 본다 — 계층 요약이다', async () => {

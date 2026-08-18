@@ -8,6 +8,7 @@ import { and, eq, sql } from 'drizzle-orm';
  * ⚠ 이게 가능한 이유는 `features/ai/{prompt,types}.ts`가 **순수 계층**(내부 임포트 0)이기
  *   때문이다. RN·Expo 것을 하나라도 들이면 이 임포트가 깨진다 — 그 규약을 지킨다.
  */
+import { isCreatablePeriod } from '@shared/ai/period';
 import { buildSystem, buildUser, isEmpty, withBody } from '@shared/ai/prompt';
 import { PROMPT_VERSION, REPORT_SCHEMA } from '@shared/ai/types';
 import type { BuildPromptArgs, ReportKind } from '@shared/ai/types';
@@ -156,6 +157,16 @@ export async function POST(req: Request): Promise<Response> {
 
   // 앱이 이미 막지만 서버도 본다 — 앱은 고칠 수 없는 버전이 남는다
   if (isEmpty(args)) return fail('empty');
+
+  /*
+   * 🔴 **백필 지평**(§6.4). 앱과 **같은 함수**를 쓴다 — 조건을 여기 다시 쓰면 지평을 바꿀 때
+   *   한쪽만 고치게 된다.
+   *
+   * 막는 것 두 가지: ① 작년 1월 1일보다 오래된 기간 ② **아직 안 끝난** 기간.
+   * ②가 없으면 진행 중인 주를 요약해 놓고 `uq_ai_usage_period`가 그걸 영구히 못 고치게 한다 —
+   * 캡이 데이터 손상을 굳히는 셈이라, 캡이 있어서 오히려 여기서 막아야 한다.
+   */
+  if (!isCreatablePeriod(kind, periodKey, new Date())) return fail('out-of-range');
 
   const system = buildSystem(args);
   const user = buildUser(args);

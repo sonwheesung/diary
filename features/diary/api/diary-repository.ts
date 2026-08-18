@@ -317,6 +317,33 @@ export async function getWrittenDates(fromDate: string, toDate: string): Promise
   return rows.map((row) => row.entry_date);
 }
 
+/**
+ * 리포트 기간 시트용 — 범위 안의 **날짜 + 본문**만 (`docs/AI_REPORT_SYSTEM.md` §6.4).
+ *
+ * ⚠ `listDiariesBetween`을 쓰지 않는 이유: 시트는 최대 **2년치**를 한 번에 훑는데
+ *   그쪽은 `SELECT *` + 태그 N+1 조회까지 한다. 여기서 필요한 것은 *"이 주에 쓸 게 있나"*
+ *   뿐이다.
+ *
+ * 🔴 **본문 유무를 SQL로 판정하지 않는다.** `TRIM()`은 공백만 걷어내지만 앱의 판정은
+ *   `hasBody()`(JS `trim()`, 유니코드 공백 포함) 하나뿐이다(§10.2). 여기서 `TRIM(content) <> ''`
+ *   로 거르면 시트는 *"조각 1개"* 라 해놓고 생성은 `empty`로 실패하는 날이 온다 —
+ *   판정을 두 곳에 두지 않는다.
+ */
+export async function listEntryTexts(
+  fromDate: string,
+  toDate: string,
+): Promise<{ entryDate: string; plainText: string }[]> {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<{ entry_date: string; content: string }>(
+    `SELECT entry_date, content FROM diaries
+     WHERE ${ALIVE} AND entry_date >= ? AND entry_date <= ?
+     ORDER BY entry_date ASC`,
+    fromDate,
+    toDate,
+  );
+  return rows.map((row) => ({ entryDate: row.entry_date, plainText: row.content }));
+}
+
 /** 캘린더 점 색깔용 — 날짜별 대표 감정. 하루에 여러 개면 가장 먼저 쓴 조각의 감정을 쓴다. */
 export async function getEmotionsByDate(
   fromDate: string,

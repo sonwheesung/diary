@@ -473,6 +473,7 @@
     "yearly": "Yıllık",
     "sourceCount": "{{count}} kayıt",
     "subReportCount": "{{count}} rapor",
+    "periodSubs": "Rapor {{count}}/{{total}}",
     "empty": "Henüz rapor yok",
     "create": "Rapor oluştur",
     "creating": "Raporun yazılıyor",
@@ -481,6 +482,7 @@
     "needMonthly": "Önce {{period}} aylık raporları gerekiyor",
     "noEntries": "Bu dönemde metin içeren kayıt yok",
     "gapConfirm": "Kayıt yok: {{days}}. Rapor yine de oluşturulsun mu?",
+    "subGapConfirm": "{{period}} · Alt rapor {{count}}/{{total}}\n\nŞimdi oluşturursan kalanlar bu rapora yansımaz ve bu rapor bir daha oluşturulamaz. Yine de oluşturulsun mu?",
     "disclaimer": "Bir yapay zekâ tarafından yazıldı. Yanlış olabilir; teşhis ya da tavsiye değildir.",
     "reportIssue": "Bildir",
     "reported": "Bildirdiğin için teşekkürler. İnceleyeceğiz.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Bizim tarafımızda bir sorun oldu. {{time}} tarihinden sonra tekrar deneyebilirsin.",
       "rate-limited": "Birazdan tekrar dene.",
       "upstream": "Sunucuda bir sorun var. Kısa süre sonra tekrar dene.",
-      "error": "Bir şeyler ters gitti."
+      "error": "Bir şeyler ters gitti.",
+      "too-early": "Henüz bitmemiş bir dönem var. O dönem bittikten sonra oluşturursan hiçbir şey eksik kalmaz.",
+      "out-of-range": "Bu, rapor oluşturulabilecek bir dönem değil."
     },
     "emptyWeekly": "Bir hafta tamamlandığında o haftanın kayıtlarını kısa bir geri bakışta toplarız.",
     "emptyMonthly": "O ayın haftalık raporlarını bir aylık geri bakışta toplarız.",
     "emptyYearly": "O yılın aylık raporlarını bir yıllık geri bakışta toplarız.",
     "willCreate": "{{period}} raporu oluşturulabilir",
     "alreadyExists": "{{period}} için zaten bir rapor var",
+    "periodSheet": "Dönem seç",
+    "periodMade": "Zaten oluşturuldu",
+    "periodNoEntries": "Kayıt yok",
+    "periodTooEarly": "Henüz bitmemiş bir dönem var",
+    "tooEarlyAt": "Henüz bitmemiş bir dönem var. {{date}} tarihinden itibaren oluşturursan hiçbir şey eksik kalmaz.",
     "detailTitle": "Rapor"
   },
   "aiConsent": {

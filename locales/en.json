@@ -473,6 +473,7 @@
     "yearly": "Yearly",
     "sourceCount": "Entries: {{count}}",
     "subReportCount": "Reports: {{count}}",
+    "periodSubs": "Reports: {{count}}/{{total}}",
     "empty": "No reports yet",
     "create": "Create report",
     "creating": "Writing your report",
@@ -481,6 +482,7 @@
     "needMonthly": "Monthly reports for {{period}} are needed first",
     "noEntries": "No written entries in this period",
     "gapConfirm": "No entries on {{days}}. Create the report anyway?",
+    "subGapConfirm": "{{period}} · Reports: {{count}}/{{total}}\n\nIf you create it now, the rest won't be included, and this report can't be created again. Create it anyway?",
     "disclaimer": "Written by AI. It may be inaccurate, and it is not a diagnosis or advice.",
     "reportIssue": "Report an issue",
     "reported": "Thanks for letting us know. We'll look into it.",
@@ -506,13 +508,20 @@
       "coolingDownAt": "Something went wrong on our side. You can try again after {{time}}.",
       "rate-limited": "Please try again in a moment.",
       "upstream": "The server is having trouble. Please try again shortly.",
-      "error": "Something went wrong."
+      "error": "Something went wrong.",
+      "too-early": "Some periods haven't ended yet. Create it after they end and nothing will be left out.",
+      "out-of-range": "That period can't be created."
     },
     "emptyWeekly": "Once a week has passed, we'll gather its entries into a short reflection.",
     "emptyMonthly": "We'll gather that month's weekly reports into a look back at the month.",
     "emptyYearly": "We'll gather that year's monthly reports into a look back at the year.",
     "willCreate": "Ready to write your {{period}} report",
     "alreadyExists": "You already have a report for {{period}}",
+    "periodSheet": "Choose a period",
+    "periodMade": "Already created",
+    "periodNoEntries": "No entries",
+    "periodTooEarly": "Some periods haven't ended yet",
+    "tooEarlyAt": "Some periods haven't ended yet. Create it from {{date}} and nothing will be left out.",
     "detailTitle": "Report"
   },
   "aiConsent": {
