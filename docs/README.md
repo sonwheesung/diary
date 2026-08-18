@@ -70,6 +70,7 @@
 | **AI 리포트 — 기간 선택(백필)** | ✅ | 2026-08-18 — 지평 **작년 1월 1일**까지 지난 기간을 고른다. 없을 땐 결제 직후 사용자가 첫 주들을 영영 잃었고, 1년 회고가 반쪽으로 굳었다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §6.4) |
 | **AI 리포트 — 삭제는 묘비** | ✅ | 2026-08-18 — DB v6 · `MANIFEST_FORMAT` 3. 하드 삭제가 **로컬과 서버 캡(`uq_ai_usage_period`)을 갈라놔** 지운 기간이 되살아난 것처럼 보이고 서버가 막았다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11.9). ⏭ 재설치·기기 2대는 서버 경로가 있어야 고쳐진다 |
 | **AI 리포트 — 하위 완비 확인** | ✅ | 2026-08-18 — 안 끝난 하위는 차단, 안 만든 하위는 확인. `canCreate`가 하위 **0개인지만** 봐서 2개짜리 월간이 영구히 굳던 버그(§6.5) |
+| 🔴 **AI 리포트 — 서버 배포** | ✅ | **2026-08-18에야 실제로 배포됐다.** 그전까지 `POST /api/v1/ai/report`가 배포본에서 **404** — `@shared/*`가 `../features/*`를 가리켰는데 Vercel CLI는 `server/`만 올린다. 순수 계층을 `server/shared/`로 생성 복사(`npm run sync:shared` · `check:shared`)해서 풀었다. ⚠ 그전의 "성공" 기록은 전부 **localhost** 기준이다 |
 | **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
 | 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
