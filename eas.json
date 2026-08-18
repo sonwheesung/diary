@@ -64,7 +64,7 @@
     "stg": {
       "android": {
         "track": "internal",
-        "serviceAccountKeyPath": "../secrets/play-service-account-stg.json",
+        "serviceAccountKeyPath": "../secrets/play-service-account.json",
         "releaseStatus": "completed"
       }
     }
