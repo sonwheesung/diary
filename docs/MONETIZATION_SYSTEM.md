@@ -518,6 +518,92 @@ LinkMemo     com.vivacegames.linkmemo  카탈로그 ❌ 403   구매 검증 ❌ 
 - ⚠ **권한 반영에 시간이 걸린다.** 저장 직후 실패해도 잠시 뒤 다시 돌려본다. 카탈로그 권한이
   먼저 반영되고 구매 검증이 늦게 붙는 것을 실제로 봤다.
 
+### 🔴 6.1.4 로컬에서 릴리스 AAB를 굽는 법 — 그리고 **왜 위험한가** (2026-08-18)
+
+**EAS 무료 플랜의 월 안드로이드 빌드를 다 써서** 어쩔 수 없이 로컬로 구웠다
+(*"reset in 13 days"*). 절차 자체는 되지만 **EAS가 공짜로 해주던 보호가 전부 사라진다** —
+그 목록이 이 절의 본론이다.
+
+#### 🔴 EAS가 대신 막아주던 것
+
+| | EAS | 로컬 |
+|---|---|---|
+| `.env.local` | **없다** (깨끗한 컨테이너) | **읽는다** — `prebuild` 첫 줄에 `env: load .env.local .env` |
+| 서명 키 | `Build Credentials`가 자동 | 템플릿 기본값이 **debug 키**다. 그대로 구우면 Play가 거부 |
+| `versionCode` | 원격 카운터가 자동 증가 | `app.json`의 **`1`** 을 쓴다. Play에 2가 있으면 거부 |
+| `APP_VARIANT` | 프로필 `env`에 있다 | 셸에 직접 넣어야 한다. 안 넣으면 **운영 패키지**로 구워진다 |
+
+첫 줄이 제일 위험하다. `.env.local`에 있던 값이 그대로 번들에 박힐 뻔했다:
+
+| 변수 | 개발용 값 | 박혔다면 |
+|---|---|---|
+| `EXPO_PUBLIC_BACKUP_SERVER_URL` | `http://10.0.2.2:3200` | 백업·AI가 **에뮬레이터 localhost**를 본다 |
+| `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | 다른 키 | **검증하려던 결제가 엉뚱한 앱에 붙는다** |
+| `EXPO_PUBLIC_DEVICE_CHECK=1` | | 매 실행마다 5MB 업로드 + DB 스왑 |
+
+🔴 **`EXPO_PUBLIC_*`는 빌드 시점에 문자열로 박힌다.** 올리고 나서 못 고친다.
+
+→ `npm run check:release-env`가 이걸 막는다(`scripts/check-release-env.mjs`).
+**AAB를 굽기 전에 반드시 돌린다.**
+
+#### ⚠ `__DEV__` 가드로 풀려다 말았다 — 그게 답이 아니다
+
+`EXPO_PUBLIC_DEV_LOGIN`은 이미 `__DEV__ && …`로 접힌다(`features/support/dev-auth.ts`).
+`EXPO_PUBLIC_DEVICE_CHECK`에 같은 걸 붙이자고 했다가 **되물렸다** — 그 점검의 목적이
+*"릴리스 번들에서 암호 처리량을 재는 것"* 이라 `__DEV__`로 막으면 **기능이 죽는다**
+(dev 번들은 Hermes lazy 컴파일이라 수치가 틀린다). `app/_layout.tsx`가 그 이유를 적어놨고,
+그 주석을 안 읽고 *"얘만 가드가 없네"* 로 읽은 것이 잘못이었다.
+
+그리고 토큰은 **fail-closed**다 — 배포된 서버가 `dev-emulator`를 401로 거절하므로
+권한이 뚫리는 문제가 아니다. 그래서 **소스가 아니라 빌드 게이트**에서 막는다.
+
+#### 절차
+
+```bash
+# ① 릴리스에 섞이면 안 되는 것부터 치운다
+npm run check:release-env          # 통과할 때까지. mv .env.local .env.local.aside
+
+# ② stg 패키지로 네이티브를 다시 만든다 (⚠ android/ 를 통째로 지우고 새로 만든다)
+APP_VARIANT=stg npx expo prebuild --platform android --clean --no-install
+
+# ③ 생성된 gradle 두 곳을 손본다 — CNG 산출물이라 ②를 돌릴 때마다 다시 해야 한다
+#    · android/app/build.gradle   versionCode 1 → 다음 번호
+#                                 release signingConfig: debug → upload
+#    · android/gradle.properties  JOGAK_UPLOAD_* 4개 (C:/project/secrets/jogak-keystore.env 에서)
+
+# ④ eas.json 의 stg 프로필 env 를 셸에 명시적으로 넣고 굽는다
+ANDROID_HOME=~/AppData/Local/Android/Sdk APP_VARIANT=stg \
+EXPO_PUBLIC_...=... ./gradlew bundleRelease --no-daemon
+#    → android/app/build/outputs/bundle/release/app-release.aab
+
+# ⑤ 🔴 서명 지문이 Play에 등록된 업로드 키와 같은지 **올리기 전에** 확인한다
+keytool -printcert -jarfile app-release.aab | grep SHA1
+#    기대값: 3A:47:42:B7:30:A4:33:00:4A:AA:FD:61:AE:A8:69:CE:87:47:CA:F2
+
+# ⑥ 끝나면 되돌린다
+mv .env.local.aside .env.local
+```
+
+#### 키스토어
+
+| | |
+|---|---|
+| 파일 | `C:\project\secrets\jogak-upload.jks` (EAS `Build Credentials oEjjkh-V_V`에서 내려받음) |
+| 비밀번호 | `C:\project\secrets\jogak-keystore.env` — 저장소 **밖**이다 |
+| SHA1 | `3A:47:42:B7:30:A4:33:00:4A:AA:FD:61:AE:A8:69:CE:87:47:CA:F2` (2026-08-14 생성) |
+
+🔴 **이것이 앱의 신원 그 자체다.** 잃으면 되돌리는 길이 키 교체뿐이고, Play App Signing
+등록을 다시 해야 한다. EAS에도 사본이 있지만 **EAS 계정을 잃으면 같이 잃는다.**
+
+⚠ `npx eas-cli credentials`는 다운로드할 때 **비밀번호를 터미널에 그대로 출력한다.**
+자동화·에이전트에게 시키지 말고 사람이 직접 받는다 — 로그에 남으면 회수할 방법이 없다.
+
+#### ⏭ 반복할 거라면
+
+③은 `prebuild`마다 손으로 다시 해야 한다. 두세 번 넘게 할 것 같으면
+**config plugin으로 박는 편이 낫다** — 지금은 한 번뿐이라 손으로 했다.
+
+
 ### 6.2 등록한 상품 (2026-08-12)
 
 ```

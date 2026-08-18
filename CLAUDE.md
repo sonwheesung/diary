@@ -819,6 +819,9 @@ transaction with the user"* 라고 못박는다. 그래서 아래가 전부 **�
 ② **문서** — 설계 결정을 코드보다 **먼저** 문서에(`CLAUDE.md` 또는 `docs/<SYS>_SYSTEM.md` + `docs/README.md` 색인)
 ③ **개발**
 ④ **검증** — `npm run typecheck` · `npm run lint` · `npm run check:i18n` 통과 후 커밋
+  ⚠ **릴리스 AAB를 로컬에서 구울 때는 `npm run check:release-env`를 먼저 돌린다** —
+  EAS는 깨끗한 컨테이너라 없던 문제인데, 로컬은 `.env.local`을 읽어 개발용 값이
+  **번들에 문자열로 박힌다**(올린 뒤에는 못 고친다). `docs/MONETIZATION_SYSTEM.md` §6.1.4
   ⚠ `features/ai/{types,prompt,period}.ts`를 고쳤으면 **`npm run sync:shared`도 돌린다** —
   서버가 그 복사본을 쓴다. `npm run check:shared`가 어긋남을 잡는다(§5)
 
@@ -875,6 +878,7 @@ transaction with the user"* 라고 못박는다. 그래서 아래가 전부 **�
 | 2026-08-13 | 🔴 **AI 리포트 본문을 서버에 90일 저장**(§5.1을 뒤집는다) | 리포트가 좋은지 나쁜지 볼 방법이 없으면 **프롬프트를 고칠 근거가 없다.** 원격 관측 0인 앱이라 사용자 문의 외에 신호가 없었다. ⚠ 저장하는 것은 **모델이 쓴 요약문**이지 일기 원문이 아니다 — 그 구분이 처리방침 문안의 전부다([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §5.2) |
 | 2026-08-13 | AI 호출 실패 시 **1시간 잠금 + Discord 알림** | 일일 캡이 `ai_usage`(성공만) 행을 세어 **실패 루프가 무제한이었다** — 그런데 비싼 쪽이 실패다(모델이 돌고 나서 거부). ⚠ 캡이 아니라 잠금이라 한 시간 뒤 같은 기간을 그대로 만들 수 있다 |
 | 2026-08-13 | 사진 blob은 **Supabase Storage 유지**(R2로 안 옮긴다) | "이미지는 Supabase에 두지 마라"의 근거는 **egress**인데 조각의 blob은 복원 때만 읽는 **cold 암호문**이라 egress가 250GB 중 9%도 안 찬다. 이미 낸 100GB가 비어 있어 **한계비용 0원**이고 교차점은 구독자 ~4,000명이다. ⚠ 단 `vault_id`가 경로에 박혀 지금이 가장 싼 결정 시점이고, 옮길 실익은 비용이 아니라 **`service_role` 제거**다([`docs/BACKUP_SYSTEM.md`](./docs/BACKUP_SYSTEM.md) §5.5-⑦) |
+| 2026-08-18 | **로컬 릴리스 빌드에는 `check:release-env` 게이트를 먼저 통과한다** | EAS 무료 빌드 쿼터가 떨어져 로컬로 굽자마자 드러났다 — `prebuild` 첫 줄이 `env: load .env.local .env`다. `.env.local`의 `EXPO_PUBLIC_BACKUP_SERVER_URL=http://10.0.2.2:3200` · 다른 RevenueCat 키 · `DEVICE_CHECK=1`이 **번들에 문자열로 박힐 뻔했다**(올린 뒤엔 못 고친다). ⚠ ~~`EXPO_PUBLIC_DEVICE_CHECK`에 `__DEV__` 가드를 붙인다~~ → **되물렸다.** 그 점검의 목적이 *"릴리스 번들에서 암호 처리량을 재는 것"* 이라 가드를 붙이면 기능이 죽는다 — `app/_layout.tsx` 주석이 그 이유를 적어놨는데 안 읽고 `DEV_LOGIN`과 나란히 놓고 판단했다. 토큰도 fail-closed다(서버가 401). **소스가 아니라 빌드 게이트가 맞는 자리다** ([`docs/MONETIZATION_SYSTEM.md`](./docs/MONETIZATION_SYSTEM.md) §6.1.4) |
 | 2026-08-18 | 🔴 **서버가 쓰는 순수 계층은 `server/shared/`로 생성 복사** | `@shared/*` → `../features/*`(tsconfig paths)가 **로컬에서만 됐다.** Vercel CLI는 `.vercel`이 있는 `server/`만 업로드해서 `../features`가 배포본에 없다 — **AI 라우트가 만든 이래 배포된 적이 없었고**(404) 로컬 빌드·e2e·typecheck가 전부 통과해 7일간 안 보였다. 레포 루트 배포는 대시보드 설정 2개에 의존하고 Expo 소스 전체를 매번 올린다. §8의 *"복사해서 쓴다"* 규약을 쓰되 **`check:shared`가 드리프트를 잡는다** — 라우트 주석이 막으려던 것은 복사 자체가 아니라 *"**조용히** 갈라지는 것"* 이었다 (`scripts/sync-shared.mjs`) |
 | 2026-08-18 | 🔴 **리포트 삭제는 묘비다** — 본문만 지우고 `(kind, period_key)`는 남긴다 | 하드 삭제가 **로컬(리포트의 진실)과 서버 캡(`uq_ai_usage_period`)을 갈라놨다.** 지운 뒤 기간 시트가 그 주를 다시 고르게 하고, 서버가 `cap-exceeded`로 막고, 화면은 *"이미 있어요"* 라고 **거짓말**했다 — 되돌릴 수도 없다. ~~삭제를 막는다~~는 증상만 가리고(재설치·기기 2대에서 재발) 기둥 3·§11.3(*"만든 것은 그의 것"*)과 어긋난다. `diaries`의 `emptyBodyIfDeleted`가 이미 쓰는 패턴을 한 테이블에 더 적용한 것뿐이다 ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §11.9) |
 | 2026-08-18 | 🔴 **리포트 기간을 고른다 — 지평은 작년 1월 1일** | `targetPeriodKey()`가 `now`에서 하나만 유도해 **놓친 주는 영영 못 만들었다.** 8/16 결제자는 8/1~8/9을 잃고, 3년 무료로 쓰다 결제하면 주간 4개가 전부다(월간은 그 달 주간이, 연간은 그 해 월간이 필요해 **연쇄로 막힌다**). 2027-01의 2026 연간이 8~12월만 든 채 굳는 것이 결정적이었다. **서버는 처음부터 허용하고 있었다** — 캡이 시계가 아니라 `uq_ai_usage_period`(기간 키 UNIQUE)라 *"평생 1번"*이고, 그래서 반복 착취 경로가 없다(최악 ₩117 = 한 달 실수령의 4%). ~~rolling 1년~~이 아닌 이유는 2027-03에 2026-01 월간이 지평 밖으로 나가 **같은 병이 재발**하기 때문 ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md) §6.4) |
