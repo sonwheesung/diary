@@ -179,7 +179,12 @@ async function confirmWithServer(): Promise<void> {
   const store = useEntitlementStore.getState();
   for (const wait of CONFIRM_BACKOFF_MS) {
     await new Promise((resolve) => setTimeout(resolve, wait));
-    await store.refresh().catch(() => undefined);
+    /*
+     * `fresh: true` — 서버가 구독을 모르면 **RC에 직접 되물어보게** 한다.
+     * 이게 없으면 서버는 웹훅만 기다리고, 웹훅은 유실될 수 있다(5회 재시도 후 포기).
+     * ⚠ 서버 쿨다운이 60초라 8회를 다 붙여도 실제 RC 호출은 2~3회로 수렴한다.
+     */
+    await store.refresh({ fresh: true }).catch(() => undefined);
     // 서버가 확정하면 `refresh`가 낙관 구간을 닫는다 — 그게 멈출 신호다
     if (useEntitlementStore.getState().optimisticUntil === null) return;
   }

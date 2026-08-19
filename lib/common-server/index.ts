@@ -1,7 +1,11 @@
 // 공통 서버 클라이언트 SDK.
-// ⚠️ 원본: common_server/client/index.ts 에서 복사 (2026-08-11, 엔타이틀먼트 추가본).
+// ⚠️ 원본: common_server/client/index.ts 에서 복사 (2026-08-19, `fetchEntitlements({fresh})` 추가본).
 //    이 파일은 손으로 고치지 말 것 — 서버 계약이 바뀌면 원본을 갱신하고 다시 복사한다.
 //    (앱 4~5개 규모에선 monorepo·npm 패키지 오버헤드가 이득보다 크다는 판단 — common_server 규약)
+//
+//    2026-08-19 재복사 사유: RC pull 폴백(웹훅 유실 복구). `fresh`는 **결제 직후·복원에서만**
+//    붙인다 — 포그라운드 복귀에 붙이면 서버 쿨다운(6시간)의 존재 이유가 사라진다.
+//    `registerDevice`(2026-08-14)도 함께 따라왔다. 조각은 안 쓰지만 사본은 통째로 맞춘다.
 //
 // 이 모듈은 **throw 하지 않는다**. 네트워크가 끊겨 있든 서버가 없든 화면은 조용히 안내만 하면 되므로,
 // 실패를 타입으로 돌려준다(호출부에서 try/catch를 강제하지 않는다).
@@ -22,7 +26,7 @@ import type {
 export type * from './types';
 
 /** 앱에 복사할 때 이 값을 복사본 주석에 남긴다 — 서버 계약이 바뀌었는지 판단하는 유일한 단서다. */
-export const SDK_VERSION = '2026-08-10';
+export const SDK_VERSION = '2026-08-19'; // +fetchEntitlements({fresh}) (RC pull 폴백 — 웹훅 유실 복구)
 
 const DEFAULT_TIMEOUT_MS = 10000;
 /** 서버가 요구하는 문의 최소 길이(라우트의 CONTENT_MIN과 같은 값). */
@@ -155,6 +159,37 @@ export function createCommonServer(cfg: CommonServerConfig) {
       return { ok: false, reason: mapFail(res.status) };
     },
 
+    /**
+     * 기기 등록(비회원 앱 — 2026-08-14) → 세션 토큰 발급.
+     *
+     * deviceId는 **앱이 최초 1회 만든 무작위 UUID**를 SecureStore 등에 보관해 넘긴다. 같은 값이면
+     * 서버가 같은 subject를 돌려주므로(멱등) 재호출해도 안전하다 — 세션이 없거나 401일 때 다시 부르면 된다.
+     * 등록 후에는 sendInquiry가 자동으로 귀속되고 fetchMyInquiries로 답변을 볼 수 있다.
+     *
+     * ⚠ 로그인이 아니다 — 이메일도 이름도 없다. 앱 삭제·기기 변경으로 deviceId가 사라지면
+     *   이전 문의와의 연결도 끊긴다(그 한계를 화면에 고지할 것).
+     */
+    async registerDevice(deviceId: string): Promise<Result<{ subject: Subject }>> {
+      if (!baseUrl) return { ok: false, reason: 'not-configured' };
+      if (!deviceId) return { ok: false, reason: 'unauthorized' };
+
+      const res = await req('/api/v1/devices', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ app: cfg.appCode, deviceId }),
+      });
+      if (!res) return { ok: false, reason: 'offline' };
+      if (!res.ok) return { ok: false, reason: mapFail(res.status) };
+      try {
+        const j = (await res.json()) as { token?: string; subject?: Subject };
+        if (!j.token || !j.subject) return { ok: false, reason: 'error' };
+        await setSession(j.token, j.subject);
+        return { ok: true, subject: j.subject };
+      } catch {
+        return { ok: false, reason: 'error' };
+      }
+    },
+
     // ───────────────────────── 로그인 ─────────────────────────
 
     /**
@@ -264,14 +299,19 @@ export function createCommonServer(cfg: CommonServerConfig) {
      * ⚠ 로그인했는데 active가 false라면 스토어에 구독이 남아 있을 수 있다(탈퇴 후 재가입 등으로
      *   subject가 바뀐 경우). 그때 `Purchases.restorePurchases()`를 부르면 RC가 소유자를 옮기고
      *   서버에 TRANSFER 웹훅이 온다. 안 부르면 "돈은 나가는데 pro가 아닌" 상태가 유지된다.
+     *
+     * `fresh`는 **구매 성공 직후·구매 내역 복원**에서만 켠다. 활성 구독이 없을 때 서버가 RevenueCat에
+     * 직접 물어보는 쿨다운을 6시간 → 60초로 줄인다(웹훅이 늦거나 유실돼도 그 자리에서 붙는다).
+     * ⚠ **포그라운드 복귀·주기 갱신에는 켜지 마라.** 쿨다운의 존재 이유가 사라져 서버가 RC를 계속 때린다.
+     * 서버가 이 파라미터를 모르는 배포여도 그냥 무시되므로, 배포 순서를 맞출 필요는 없다.
      */
-    async fetchEntitlements(): Promise<
-      Result<{ entitlements: Record<string, EntitlementView>; checkedAt: string }>
-    > {
+    async fetchEntitlements(
+      opts: { fresh?: boolean } = {},
+    ): Promise<Result<{ entitlements: Record<string, EntitlementView>; checkedAt: string }>> {
       if (!baseUrl) return { ok: false, reason: 'not-configured' };
       if (!(await loadToken())) return { ok: false, reason: 'not-signed-in' };
 
-      const res = await req('/api/v1/entitlements', undefined, true);
+      const res = await req(`/api/v1/entitlements${opts.fresh ? '?fresh=1' : ''}`, undefined, true);
       if (!res) return { ok: false, reason: 'offline' };
       if (res.status === 401) {
         await setSession(null, null);

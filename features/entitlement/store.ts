@@ -50,8 +50,16 @@ interface EntitlementState {
   optimisticUntil: number | null;
   /** 캐시에서 즉시 판정. 앱 시작 시 1회 */
   hydrate: () => Promise<void>;
-  /** 서버 조회 후 캐시 갱신. 실패하면 캐시를 **건드리지 않는다** */
-  refresh: () => Promise<void>;
+  /**
+   * 서버 조회 후 캐시 갱신. 실패하면 캐시를 **건드리지 않는다**.
+   *
+   * `fresh`는 **결제 직후·복원에서만** 켠다. 켜면 서버가 구독을 모를 때
+   * RevenueCat에 직접 되물어보고(웹훅 유실 복구), 쿨다운이 6시간 → 60초로 짧아진다.
+   *
+   * ⚠ **포그라운드 복귀·앱 시작에는 켜지 않는다.** 거기 켜면 서버 쿨다운의
+   *   존재 이유가 사라지고 미구독자가 화면을 열 때마다 RC를 때린다.
+   */
+  refresh: (opts?: { fresh?: boolean }) => Promise<void>;
   /**
    * 결제·복원 직후 — 서버가 확정할 때까지 **로컬로 켜둔다.**
    *
@@ -113,8 +121,8 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
    *   상태 쓰기만 맡는다. 판단을 여기 두면 검사할 수 없고, 검사가 없어서
    *   §6.1.6·§6.1.7 두 버그가 코드로 나갔다(`docs/MONETIZATION_SYSTEM.md` §6.1.7).
    */
-  refresh: async () => {
-    const result = await commonServer.fetchEntitlements();
+  refresh: async (opts) => {
+    const result = await commonServer.fetchEntitlements({ fresh: opts?.fresh });
     const pro = result.ok ? result.entitlements.pro : undefined;
     const answer: ServerAnswer = !result.ok
       ? { kind: 'unreachable' }
