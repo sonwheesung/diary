@@ -38,13 +38,38 @@ interface EntitlementState {
    * 만료는 이벤트로 오지 않으므로 이 값에서 앱이 직접 센다.
    */
   proUntil: string | null;
+  /**
+   * 결제 직후 낙관 구간의 끝(epoch ms). `null`이면 낙관 구간이 아니다.
+   *
+   * 🔴 **메모리에만 둔다 — 캐시에 쓰지 않는다.** 캐시에 쓰면 서버가 끝내 확정하지 않아도
+   *   RC가 준 만료일(한 달 뒤)까지 무료 이용이 되고, 그건 fail-closed 원칙을 뒤집는다.
+   *   앱을 다시 켜면 낙관은 사라지고 서버 판정만 남는다 — 안전한 쪽으로 잃는다.
+   */
+  optimisticUntil: number | null;
   /** 캐시에서 즉시 판정. 앱 시작 시 1회 */
   hydrate: () => Promise<void>;
   /** 서버 조회 후 캐시 갱신. 실패하면 캐시를 **건드리지 않는다** */
   refresh: () => Promise<void>;
+  /**
+   * 결제·복원 직후 — 서버가 확정할 때까지 **로컬로 켜둔다.**
+   *
+   * 스토어가 결제를 승인하고 RC가 `pro`를 실어왔다는 것은 근거로 충분하다.
+   * 다만 우리 서버는 RC **웹훅**으로만 그 사실을 알게 되므로 몇 초의 공백이 있고,
+   * 그 창에서 `refresh()`가 `pro=false`를 써버리면 화면이 거짓말을 한다
+   * (실제로 겪음 — 2026-08-19, `docs/MONETIZATION_SYSTEM.md` §6.1.6).
+   */
+  grantPending: () => void;
   /** 로그아웃·탈퇴 시. 권한은 계정에 붙어 있다 */
   clear: () => Promise<void>;
 }
+
+/**
+ * 결제 직후 서버 확정을 기다려주는 시간.
+ *
+ * ⚠ 무한이 아니다. 웹훅이 끝내 안 오면(라이선스 테스트의 SANDBOX 결제가 그렇다)
+ *   창이 닫히면서 화면이 정직하게 `이용 안 함`으로 돌아가야 한다.
+ */
+const OPTIMISTIC_WINDOW_MS = 3 * 60 * 1000;
 
 const NEVER = 'never';
 
@@ -56,11 +81,12 @@ function stillValid(until: string | null): boolean {
   return Number.isFinite(at) && at > Date.now();
 }
 
-export const useEntitlementStore = create<EntitlementState>((set) => ({
+export const useEntitlementStore = create<EntitlementState>((set, get) => ({
   pro: false,
   hydrated: false,
   inGracePeriod: false,
   proUntil: null,
+  optimisticUntil: null,
 
   hydrate: async () => {
     try {
@@ -83,18 +109,57 @@ export const useEntitlementStore = create<EntitlementState>((set) => ({
     }
     const pro = result.entitlements.pro;
     if (pro === undefined || !pro.active) {
+      /*
+       * 🔴 결제 직후 낙관 구간이면 되돌리지 않는다.
+       *
+       * 스토어는 결제를 승인했는데 우리 서버는 아직 RC **웹훅**을 못 받은 상태다.
+       * 여기서 `false`를 쓰면 *"구독이 시작됐어요"* 를 띄운 직후 화면이
+       * `이용 안 함`으로 돌아가고 광고도 그대로 남는다 — 사용자가 보는 건
+       * "돈 냈는데 안 됐다"이고, 그게 환불·문의로 직행하는 자리다.
+       *
+       * ⚠ 캐시(`pro_until`)도 건드리지 않는다. 지워버리면 앱을 껐다 켰을 때
+       *   낙관도 캐시도 없어 확실히 무료가 된다.
+       */
+      const optimisticUntil = get().optimisticUntil;
+      if (optimisticUntil !== null && Date.now() < optimisticUntil) {
+        set({ hydrated: true });
+        return;
+      }
       await setSetting(SETTING_KEYS.proUntil, '');
-      set({ pro: false, inGracePeriod: false, proUntil: null, hydrated: true });
+      set({
+        pro: false,
+        inGracePeriod: false,
+        proUntil: null,
+        optimisticUntil: null,
+        hydrated: true,
+      });
       return;
     }
     const until = pro.expiresAt ?? NEVER;
     await setSetting(SETTING_KEYS.proUntil, until);
-    set({ pro: true, inGracePeriod: pro.inGracePeriod, proUntil: until, hydrated: true });
+    // 서버가 확정했다 — 낙관 구간은 역할을 다했다
+    set({
+      pro: true,
+      inGracePeriod: pro.inGracePeriod,
+      proUntil: until,
+      optimisticUntil: null,
+      hydrated: true,
+    });
+  },
+
+  grantPending: () => {
+    set({ pro: true, optimisticUntil: Date.now() + OPTIMISTIC_WINDOW_MS, hydrated: true });
   },
 
   clear: async () => {
     await setSetting(SETTING_KEYS.proUntil, '').catch(() => undefined);
-    set({ pro: false, inGracePeriod: false, proUntil: null, hydrated: true });
+    set({
+      pro: false,
+      inGracePeriod: false,
+      proUntil: null,
+      optimisticUntil: null,
+      hydrated: true,
+    });
   },
 }));
 

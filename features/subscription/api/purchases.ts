@@ -154,6 +154,29 @@ export type PurchaseOutcome =
  *   `productChangeInfo`)는 상품을 갈아탈 때 쓰는데, 조각은 **단일 상품이라 전환이 없다**
  *   (월↔연도 하지 않는다 — Play 구독 관리에서 직접 한다).
  */
+/**
+ * 서버가 `pro`를 확정할 때까지 백오프로 다시 묻는다.
+ *
+ * RC 웹훅은 보통 몇 초 안에 도착하지만 보장이 없다. 한 번만 물어보고 끝내면
+ * 낙관 구간(3분)이 닫힐 때까지 아무도 다시 확인하지 않아, 이미 붙은 권한을
+ * 화면이 뒤늦게 되돌린다.
+ *
+ * ⚠ 낙관 구간보다 **먼저 끝나지 않게** 잡는다. 합이 약 3분이다.
+ * ⚠ 실패해도 조용히 끝낸다 — 사용자는 이미 성공 화면을 봤고, 앱을 다시 열 때
+ *   `hydrate` → `refresh`가 어차피 한 번 더 확인한다.
+ */
+const CONFIRM_BACKOFF_MS = [1_000, 2_000, 4_000, 8_000, 15_000, 30_000, 60_000, 60_000];
+
+async function confirmWithServer(): Promise<void> {
+  const store = useEntitlementStore.getState();
+  for (const wait of CONFIRM_BACKOFF_MS) {
+    await new Promise((resolve) => setTimeout(resolve, wait));
+    await store.refresh().catch(() => undefined);
+    // 서버가 확정하면 `refresh`가 낙관 구간을 닫는다 — 그게 멈출 신호다
+    if (useEntitlementStore.getState().optimisticUntil === null) return;
+  }
+}
+
 export async function purchase(pkg: PurchasesPackage): Promise<PurchaseOutcome> {
   try {
     const { customerInfo } = await Purchases.purchasePackage(pkg);
@@ -161,10 +184,15 @@ export async function purchase(pkg: PurchasesPackage): Promise<PurchaseOutcome> 
       return { kind: 'no-entitlement' };
     }
     /*
-     * 화면을 즉시 갱신하되 **진실은 서버**다. 웹훅이 도착하면 서버 값이 이걸 덮는다.
-     * 결제 직후 사용자를 기다리게 하지 않으려고 낙관적으로 켠다.
+     * 화면을 즉시 켜고, 서버가 확정할 때까지 뒤에서 조른다.
+     *
+     * 🔴 예전에는 여기서 `refresh()` 하나만 불렀는데, 그건 **낙관이 아니었다** —
+     *   `refresh()`는 서버를 읽고 서버는 RC 웹훅이 도착해야 `pro`를 안다.
+     *   그래서 결제 직후에는 거의 항상 `false`가 돌아오고, *"구독이 시작됐어요"* 를
+     *   띄운 화면이 `이용 안 함` + 광고 그대로가 됐다(2026-08-19 실측).
      */
-    void useEntitlementStore.getState().refresh();
+    useEntitlementStore.getState().grantPending();
+    void confirmWithServer();
     return { kind: 'ok' };
   } catch (error) {
     if (isCancelled(error)) {
@@ -186,8 +214,14 @@ export async function restore(): Promise<PurchaseOutcome> {
   }
   try {
     const customerInfo = await Purchases.restorePurchases();
-    void useEntitlementStore.getState().refresh();
-    return hasPro(customerInfo) ? { kind: 'ok' } : { kind: 'no-entitlement' };
+    if (!hasPro(customerInfo)) {
+      void useEntitlementStore.getState().refresh();
+      return { kind: 'no-entitlement' };
+    }
+    // 복원도 같은 경주를 한다 — 서버는 `TRANSFER` 웹훅이 와야 안다(CLAUDE.md §7.2)
+    useEntitlementStore.getState().grantPending();
+    void confirmWithServer();
+    return { kind: 'ok' };
   } catch {
     return { kind: 'error' };
   }
