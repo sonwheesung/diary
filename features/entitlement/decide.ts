@@ -102,11 +102,22 @@ export function cacheStillValid(until: string | null, now: number): boolean {
 /**
  * 결제 직후 **서버 확정을 기다리는 중**인가.
  *
- * 이 창에서는 앱과 서버의 답이 다르다 — 앱은 `pro`(낙관)인데 서버는 아직 아니라서
- * 서버가 게이트를 쥔 기능(AI 생성·백업 업로드)은 `not-subscribed`로 실패한다.
- * 그때 *"구독하면 이용할 수 있어요"* 를 그대로 보여주면 **방금 결제한 사람에게
- * 하는 거짓말**이 된다.
+ * 이 창에서는 앱과 서버의 답이 다르다 — 서버가 게이트를 쥔 기능(AI 생성·백업 업로드)이
+ * `not-subscribed`로 실패한다. 그때 *"구독하면 이용할 수 있어요"* 를 그대로 보여주면
+ * **방금 결제한 사람에게 하는 거짓말**이 된다.
+ *
+ * 🔴 **권한을 주는 창과 다른 창이다.** 둘을 하나로 두면 어느 한쪽이 반드시 틀린다:
+ *
+ * | | 창 | 왜 |
+ * |---|---|---|
+ * | 권한(`pro=true`) | **짧다**(3분) | 근거 없이 오래 열어두면 fail-closed가 무너진다 |
+ * | 안내("처리 중") | **길다**(30분) | 실측에서 Play 확정까지 **17분**이 걸렸다 |
+ *
+ * ⚠ 그 17분은 버그가 아니다. Play는 첫 결제를 확정하기 전에 **90초짜리 기간**을 발급하고,
+ *   확정된 뒤 `RENEWAL`로 한 달을 준다(2026-08-19 실결제 실측). 그 사이에는
+ *   **Play·RC·우리 서버가 모두 "만료"라고 답하는 것이 정상**이다.
+ *   그래서 이 구간에는 권한을 줄 수 없고, **말만 바꿀 수 있다.**
  */
-export function awaitingConfirm(optimisticUntil: number | null, now: number): boolean {
-  return optimisticUntil !== null && now < optimisticUntil;
+export function awaitingConfirm(purchasePendingUntil: number | null, now: number): boolean {
+  return purchasePendingUntil !== null && now < purchasePendingUntil;
 }

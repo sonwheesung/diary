@@ -48,6 +48,13 @@ interface EntitlementState {
    *   앱을 다시 켜면 낙관은 사라지고 서버 판정만 남는다 — 안전한 쪽으로 잃는다.
    */
   optimisticUntil: number | null;
+  /**
+   * 결제 직후 **"처리 중" 안내**를 띄우는 창의 끝(epoch ms). 권한과 무관하다.
+   *
+   * 🔴 `optimisticUntil`과 **따로 둔다.** 권한은 근거가 있어야 하므로 짧고,
+   *   안내는 Play 확정이 늦어도 정직해야 하므로 길다(`PURCHASE_PENDING_MS`).
+   */
+  purchasePendingUntil: number | null;
   /** 캐시에서 즉시 판정. 앱 시작 시 1회 */
   hydrate: () => Promise<void>;
   /**
@@ -82,6 +89,24 @@ interface EntitlementState {
 const OPTIMISTIC_WINDOW_MS = 3 * 60 * 1000;
 
 /**
+ * 결제 직후 **"처리 중"이라 말해주는** 창. 권한과 무관하다 — 문구만 바꾼다.
+ *
+ * 🔴 왜 낙관 구간(3분)보다 훨씬 긴가: **Play가 첫 결제를 확정하는 데 오래 걸린다.**
+ *   2026-08-19 실결제 실측:
+ *
+ *     14:06:21  결제
+ *     14:07:00  INITIAL_PURCHASE → 만료 14:07:51  ← **90초짜리** 기간
+ *     14:24:19  RENEWAL          → 만료 2026-09-19 ✅
+ *
+ *   그 사이 **17분** 동안은 Play·RC·우리 서버가 **모두 "만료"라고 답하는 것이 정상**이다.
+ *   버그가 아니라 Play의 결제 확정 절차다.
+ *
+ * ⚠ 그래서 이 구간에 권한을 줄 수는 없다(근거가 없다). **말만 바꾼다** —
+ *   *"구독하면 이용할 수 있어요"* 는 방금 돈 낸 사람에게 하는 거짓말이다.
+ */
+const PURCHASE_PENDING_MS = 30 * 60 * 1000;
+
+/**
  * 🔴 서버가 *"구독 없음"* 이라 답했을 때 **RC에 되묻는** 폴백.
  *
  * `features/subscription/api/purchases.ts`가 앱 시작 시 심는다. 여기서 직접 import하면
@@ -103,6 +128,7 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
   inGracePeriod: false,
   proUntil: null,
   optimisticUntil: null,
+  purchasePendingUntil: null,
 
   hydrate: async () => {
     try {
@@ -195,7 +221,13 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
   },
 
   grantPending: () => {
-    set({ pro: true, optimisticUntil: Date.now() + OPTIMISTIC_WINDOW_MS, hydrated: true });
+    const now = Date.now();
+    set({
+      pro: true,
+      optimisticUntil: now + OPTIMISTIC_WINDOW_MS,
+      purchasePendingUntil: now + PURCHASE_PENDING_MS,
+      hydrated: true,
+    });
   },
 
   clear: async () => {
@@ -205,6 +237,7 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
       inGracePeriod: false,
       proUntil: null,
       optimisticUntil: null,
+      purchasePendingUntil: null,
       hydrated: true,
     });
   },
@@ -233,5 +266,5 @@ export function isPro(): boolean {
  *   혜택은 낙관을 그대로 누리면 되고, 서버가 필요한 것만 다르게 말하면 된다.
  */
 export function isAwaitingEntitlementConfirm(): boolean {
-  return awaitingConfirm(useEntitlementStore.getState().optimisticUntil, Date.now());
+  return awaitingConfirm(useEntitlementStore.getState().purchasePendingUntil, Date.now());
 }

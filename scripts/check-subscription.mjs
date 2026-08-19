@@ -223,10 +223,44 @@ check('🔴 알 수 없는 캐시 값은 유효로 보지 않는다', () => {
   assert(cacheStillValid('언젠가', NOW) === false, '파싱 실패');
 });
 
-check('"확인 중" 판정은 낙관 구간과 정확히 같은 구간이다', () => {
+check('"확인 중" 판정은 창 안/밖을 가른다', () => {
   assert(awaitingConfirm(NOW + 1, NOW) === true, '창 안');
   assert(awaitingConfirm(NOW - 1, NOW) === false, '창 밖');
   assert(awaitingConfirm(null, NOW) === false, '창 없음');
+});
+
+/*
+ * 🔴 권한 창과 안내 창은 **다른 창이다** (2026-08-19 실결제 실측).
+ *
+ * Play는 첫 결제를 확정하기 전에 **90초짜리** 기간을 발급하고, 확정 뒤 RENEWAL로 한 달을 준다.
+ * 그 사이 **17분** 동안은 Play·RC·우리 서버가 전부 "만료"라고 답하는 것이 정상이다.
+ *   · 권한을 그 17분간 열어두면 → 근거 없는 부여(fail-closed 붕괴)
+ *   · 안내를 3분에 닫으면      → 돈 낸 사람에게 "구독하면 이용할 수 있어요"(거짓말)
+ * 그래서 하나로 합칠 수 없다. 아래 두 검사가 합치는 것을 막는다.
+ */
+check('🔴 Play 확정 지연(17분) 동안에도 "처리 중"이라 말한다 — 안내 창은 길다', () => {
+  const PLAY_SETTLE_MS = 17 * 60 * 1000;
+  const pendingUntil = NOW + 30 * 60 * 1000; // PURCHASE_PENDING_MS
+  assert(
+    awaitingConfirm(pendingUntil, NOW + PLAY_SETTLE_MS) === true,
+    '17분 뒤에도 안내 구간이어야 한다',
+  );
+});
+
+check('🔴 그 17분 동안 권한은 주지 않는다 — 근거가 없다', () => {
+  // 낙관 구간(3분)은 이미 닫혔고 되물을 수단도 없다 → 정직하게 끈다.
+  const optimisticUntil = NOW + 3 * 60 * 1000;
+  const at = NOW + 17 * 60 * 1000;
+  const d = decideEntitlement({ kind: 'none' }, { optimisticUntil, canProbe: false }, at);
+  assert(d.kind === 'revoke', `revoke여야 하는데 ${d.kind}`);
+});
+
+check('🔴 안내 창이 권한 창보다 길다 — 같아지면 둘 중 하나가 반드시 틀린다', () => {
+  const OPTIMISTIC = 3 * 60 * 1000;
+  const PENDING = 30 * 60 * 1000;
+  assert(PENDING > OPTIMISTIC, `안내(${PENDING}) > 권한(${OPTIMISTIC}) 이어야 한다`);
+  // Play 확정 실측치(17분)를 안내 창이 덮어야 한다
+  assert(PENDING >= 17 * 60 * 1000, '안내 창이 Play 확정 지연 실측치를 못 덮는다');
 });
 
 console.log(
