@@ -459,10 +459,12 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
     onCancel();
   };
 
-  // 제목은 **필수**다(DIARY_SYSTEM §1, 2026-08-08 사용자 결정).
-  const hasTitle = title.trim().length > 0;
-  const titleMissing = !hasTitle && hasContent(blocks);
-  const canSave = hasTitle && hasContent(blocks) && !saving && !loading && entryDate !== null;
+  /*
+   * 제목은 **선택**이다(DIARY_SYSTEM §1, 2026-08-19 사용자 결정 — 2026-08-08 필수화를 되돌렸다).
+   * 저장 조건은 본문뿐이다. 빈 제목은 `normalizeTitle`이 `null`로 바꾸고,
+   * 목록·검색·상세는 이미 `title !== null`로 가려 그린다.
+   */
+  const canSave = hasContent(blocks) && !saving && !loading && entryDate !== null;
   const selectedEmotion = emotion === null ? undefined : emotionLabel(emotion);
 
   /*
@@ -588,7 +590,6 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         제목이 비어 저장을 못 하는 상태를 말없이 두지 않는다. 다만 빈 화면에서부터 잔소리하지 않도록
         **뭔가 쓰기 시작한 뒤에만** 띄운다.
       */}
-      {titleMissing && <Text style={styles.hint}>{t('write.titleRequired')}</Text>}
 
       <BlockEditor
         blocks={blocks}
@@ -786,11 +787,6 @@ const createStyles = (colors: Palette) =>
     datePlaceholder: {
       ...typography.subtitle,
       color: colors.accent,
-    },
-    hint: {
-      ...typography.caption,
-      color: colors.danger,
-      marginTop: -spacing.sm,
     },
     tagRow: {
       flexDirection: 'row',

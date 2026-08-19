@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "เลือกวันที่",
     "titlePlaceholder": "หัวข้อ",
-    "titleRequired": "กรุณาใส่หัวข้อ",
     "bodyPlaceholder": "วันนี้เป็นอย่างไรบ้าง?",
     "changeDate": "เปลี่ยนวันที่",
     "pickMood": "เลือกอารมณ์",

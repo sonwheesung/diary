@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "Pick a date",
     "titlePlaceholder": "Title",
-    "titleRequired": "Please add a title",
     "bodyPlaceholder": "How was your day?",
     "changeDate": "Change date",
     "pickMood": "Pick a mood",

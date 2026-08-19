@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "Choisis une date",
     "titlePlaceholder": "Titre",
-    "titleRequired": "Ajoute un titre",
     "bodyPlaceholder": "Comment s'est passée ta journée ?",
     "changeDate": "Changer la date",
     "pickMood": "Choisir l'humeur",

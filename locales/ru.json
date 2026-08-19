@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "Выберите дату",
     "titlePlaceholder": "Заголовок",
-    "titleRequired": "Введите заголовок",
     "bodyPlaceholder": "Как прошёл ваш день?",
     "changeDate": "Изменить дату",
     "pickMood": "Выбрать настроение",

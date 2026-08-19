@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "日付を選んでください",
     "titlePlaceholder": "タイトル",
-    "titleRequired": "タイトルを入力してください",
     "bodyPlaceholder": "今日はどんな一日でしたか?",
     "changeDate": "日付を変更",
     "pickMood": "気分を選ぶ",

@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "請選擇日期",
     "titlePlaceholder": "標題",
-    "titleRequired": "請輸入標題",
     "bodyPlaceholder": "今天過得如何?",
     "changeDate": "更改日期",
     "pickMood": "選擇心情",

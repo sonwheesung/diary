@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "Bir tarih seç",
     "titlePlaceholder": "Başlık",
-    "titleRequired": "Lütfen bir başlık yaz",
     "bodyPlaceholder": "Günün nasıl geçti?",
     "changeDate": "Tarihi değiştir",
     "pickMood": "Ruh hâli seç",

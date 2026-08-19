@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "날짜를 골라주세요",
     "titlePlaceholder": "제목",
-    "titleRequired": "제목을 입력해 주세요",
     "bodyPlaceholder": "오늘 하루는 어땠나요?",
     "changeDate": "날짜 바꾸기",
     "pickMood": "기분 고르기",

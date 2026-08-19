@@ -106,7 +106,6 @@
   "write": {
     "pickDate": "Wähl ein Datum",
     "titlePlaceholder": "Titel",
-    "titleRequired": "Bitte gib einen Titel ein",
     "bodyPlaceholder": "Wie war dein Tag?",
     "changeDate": "Datum ändern",
     "pickMood": "Stimmung wählen",
