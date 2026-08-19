@@ -215,6 +215,13 @@ export function useSupportAuth(): SupportAuth {
        * 실제로 겪음(2026-08-09): SHA-1이 등록된 값과 다른 APK에서 `DEVELOPER_ERROR`(code 10)가 났는데,
        * 로그가 없어서 "서버가 거절했나"를 먼저 뒤졌다. 이 한 줄이면 5초에 갈린다.
        * DEVELOPER_ERROR면 의심 순서는 ① APK 서명 SHA-1 ② 패키지명 ③ webClientId다.
+       *
+       * ⚠ ①을 **콘솔에서 확인하지 마라**(2026-08-19에 그러다 반나절 썼다). Play 앱 서명 키는
+       *   이전 키·현재 키·양자 내성 키로 **여러 개**이고, Play Console은 이전 키의 지문을
+       *   화면에 보여주지 않는다 — 콘솔에 등록된 값과 기기가 쓰는 값이 다를 수 있다.
+       *   기기에서 직접 잰다: `adb pull` 후 `apksigner verify --print-certs`
+       *   (`keytool -jarfile`은 v1 전용이라 요즘 APK에는 안 통한다).
+       *   절차와 사연은 `docs/MONETIZATION_SYSTEM.md` §6.1.5.
        */
       const code = isErrorWithCode(error) ? String(error.code) : null;
       // 릴리스에서도 남긴다 — 화면이 이 값을 알림에 덧붙인다(`getLastSignInErrorCode`)

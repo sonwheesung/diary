@@ -434,10 +434,69 @@ eas build --profile production   → com.son0925.jogak     + EXPO_PUBLIC_ADS_REA
 쓰고 기본값이 테스트다. 하드코딩돼 있던 것은 `app.json`의 **앱 ID 하나**뿐이었다.
 
 ⏭ **stg에서 안 되는 것**(고칠 때까지):
-- **구글 로그인** — Android OAuth 클라이언트는 `패키지명 + SHA-1` 쌍에 묶인다.
-  stg용을 Google Cloud에 따로 발급해야 한다. ⚠ SHA-1은 **AAB를 한 번 올려야** Play가 발급한다(닭-달걀).
+- ~~**구글 로그인**~~ → ✅ **해소(2026-08-19)**. 사연은 §6.1.5 — 등록은 돼 있었는데 **지문이 하나 모자랐다.**
   `webClientId`는 그대로 쓴다 — 그건 패키지에 안 묶인다.
 - **결제** — RevenueCat 앱은 Play 패키지에 매핑된다. stg용 RC 앱을 나눌지 미정.
+
+### 6.1.5 🔴 stg 구글 로그인 `DEVELOPER_ERROR`(10) — **Play 앱 서명 키는 하나가 아니다** (2026-08-19)
+
+versionCode 4를 내부 테스트로 받아 깔았더니 로그인이 **코드 10**으로 죽었다. 이 절은
+*"등록했는데도 안 되는"* 경우를 위해 남긴다 — 우리가 정확히 그 경우였다.
+
+#### 무엇이 틀렸나
+
+`jogak-stg-android-play` 클라이언트는 **이미 있었고 패키지명도 맞았다.** 등록된 SHA-1은
+Play Console `앱 서명 › 기존 키`에서 복사한 값이었다. 그런데 **기기가 실제로 쓰는 지문이 달랐다.**
+
+| 지문 | 정체 | 당시 등록 |
+|---|---|---|
+| `D6:D9:72:C2:…:41:4D:C6` | **기기에 배포된 APK의 실제 서명** | 🔴 없음 |
+| `BE:D3:98:65:…:F9:93:49` | Play Console `기존 키` | ✅ (그런데 안 쓰임) |
+| `DB:1D:8C:B8:…:A2:D4:1E` | Play Console `양자 내성 암호화 키`(베타) | 없음 |
+| `3A:47:42:B7:…:47:CA:F2` | 업로드 키 | 없음 |
+
+이 앱에는 `이전 앱 서명 키`(2026-08-14 08:43부터)가 있고 그 뒤 키가 바뀌었는데,
+**Play가 배포하는 빌드는 아직 옛 키로 서명하고 있었다.** Play Console은 이전 키의 지문을
+**화면에 인라인으로 보여주지 않는다**(인증서 다운로드만 준다) — 그래서 콘솔만 보고는
+어긋난 것을 알 수 없다.
+
+→ `D6:D9…`와 업로드 키 `3A:47…`로 Android 클라이언트를 **두 개 더** 만들어 해결했다.
+   기존 `BE:D3…`는 **지우지 않는다** — Play가 새 키로 전환하는 날 그게 필요해진다.
+
+#### 🔴 진단은 콘솔이 아니라 **기기에서** 한다
+
+`패키지명 + SHA-1`이 맞는지는 콘솔끼리 대조해서는 확정할 수 없다. 기기에 깔린 것을 직접 잰다:
+
+```bash
+adb shell pm path com.son0925.jogak.stg          # 스플릿이면 Play 배포본이다
+adb pull <base.apk 경로> ./stg-device.apk
+"$ANDROID_HOME/build-tools/36.0.0/apksigner.bat" verify --print-certs -v ./stg-device.apk
+adb shell pm list packages -i com.son0925.jogak.stg   # installer=com.android.vending 확인
+```
+
+⚠ **`keytool -printcert -jarfile`을 쓰지 마라.** v1(JAR) 서명만 읽어서 요즘 APK에는
+`Not a signed jar file`이 뜬다 — 이걸 "파일이 깨졌나"로 오해하기 쉽다. **AAB에는 통하고
+APK에는 안 통한다**(우리 AAB는 v1이 있어서 됐다). APK는 `apksigner`다.
+
+⚠ **케이블이 안 되면 무선 디버깅이 빠르다.** `adb mdns services`가 기기를 찾아주므로
+포트를 손으로 옮겨 적을 필요가 없다 — 필요한 것은 폰이 보여주는 **6자리 코드**뿐이다.
+
+```bash
+adb mdns services                       # _adb-tls-pairing._tcp 는 페어링 팝업이 열려 있을 때만 뜬다
+adb pair <ip>:<pairing-port> <code>
+adb connect <ip>:<connect-port>
+```
+
+#### 이 일이 알려준 것
+
+- **"클라이언트가 없다"와 "지문이 틀렸다"는 증상이 같다**(둘 다 코드 10). 그래서
+  `features/support/auth-gate.ts`의 의심 순서 *"① SHA-1 ② 패키지명 ③ webClientId"* 는
+  맞지만, ①을 **콘솔에서 확인하면 안 된다**. 실측이 아니면 같은 함정에 다시 빠진다.
+- **Play 앱 서명 키는 시간에 따라 여러 개다** — 이전 키 · 현재 키 · 양자 내성 키.
+  API 제공자에 등록할 때는 **관련된 것을 전부** 넣는다. 지우는 것이 위험하지 넣는 것은 안 위험하다.
+- 재빌드는 **필요 없었다.** Android 클라이언트는 번들에 안 들어간다
+  (`google-services.json`을 쓰지 않으므로 앱이 들고 다니는 것은 `webClientId` 하나뿐이다).
+  이 사실을 먼저 확인한 덕에 20분짜리 빌드를 헛돌리지 않았다.
 
 ### 6.1.3 🔴 Play 서비스 계정 — **앱 권한과 계정 권한은 다른 것을 연다** (2026-08-17)
 
