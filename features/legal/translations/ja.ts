@@ -12,7 +12,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_JA: LegalDoc = {
   title: 'Jogak プライバシーポリシー',
-  sourceFingerprint: '0a627bd3',
+  sourceFingerprint: '4b621b97',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -247,7 +247,7 @@ export const PRIVACY_JA: LegalDoc = {
         {
           h: 'ウ. 国外移転に関する個別の同意',
           body: [
-            'AI事業者は国外に所在します。事業者名・移転先の国・連絡先は機能の提供開始時点でこの項目に具体的に記載し、アプリ内でも同意をいただく前にご案内します。',
+            '• OpenAI OpCo, LLC — 移転先の国：米国（1455 Third Street, San Francisco, California 94158, USA）。連絡先：dpo@openai.com 。アプリ内でも同意をいただく前に同じ内容をご案内します。',
             '・移転する項目：利用者がレポートを要求された期間の日記のタイトル・本文・感情・作成日',
             '・移転の目的：要約レポートの生成',
             '・移転の時期および方法：利用者がレポート作成を押されたとき、ネットワークを通じて送信',

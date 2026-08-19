@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '0a627bd3',
+  sourceFingerprint: '4b621b97',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -245,7 +245,7 @@ export const PRIVACY_TR: LegalDoc = {
         {
           h: 'c. Yurt dışına aktarım için ayrı rıza',
           body: [
-            'Yapay zekâ sağlayıcısı Kore dışında bulunmaktadır. Sağlayıcının adı, alıcı ülke ve iletişim bilgileri özellik yayımlandığında bu bentte somut olarak belirtilecek ve rıza alınmadan önce uygulama içinde de gösterilecektir.',
+            '• OpenAI OpCo, LLC — Ülke: ABD (1455 Third Street, San Francisco, California 94158, USA). İletişim: dpo@openai.com. Aynı bilgiler rıza alınmadan önce uygulama içinde de gösterilir.',
             '• Aktarılan veriler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi',
             '• Amaç: özet raporu oluşturmak',
             '• Zaman ve yöntem: Rapor oluştur’a bastığında ağ üzerinden aktarılır',

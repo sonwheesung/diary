@@ -8,7 +8,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ZH_HANS: LegalDoc = {
   title: 'Jogak 隐私政策',
-  sourceFingerprint: '0a627bd3',
+  sourceFingerprint: '4b621b97',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -242,7 +242,7 @@ export const PRIVACY_ZH_HANS: LegalDoc = {
         {
           h: '丙. 跨境转移的单独同意',
           body: [
-            'AI 服务商位于韩国境外。服务商名称、接收国家及联系方式将在功能发布时在本项中具体载明，并在应用内取得同意之前予以说明。',
+            '• OpenAI OpCo, LLC — 接收国家：美国（1455 Third Street, San Francisco, California 94158, USA）。联系方式：dpo@openai.com 。应用内在取得同意之前也会说明相同内容。',
             '• 转移项目：您请求生成报告的期间内日记的标题、正文、情绪与撰写日期',
             '• 转移目的：生成摘要报告',
             '• 转移时间与方式：在您按下创建报告时，通过网络传输',

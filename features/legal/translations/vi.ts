@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '0a627bd3',
+  sourceFingerprint: '4b621b97',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -244,7 +244,7 @@ export const PRIVACY_VI: LegalDoc = {
         {
           h: 'c. Đồng ý riêng đối với việc chuyển ra nước ngoài',
           body: [
-            'Nhà cung cấp AI đặt ở ngoài Hàn Quốc. Tên nhà cung cấp, quốc gia tiếp nhận và thông tin liên hệ sẽ được ghi cụ thể tại mục này khi tính năng ra mắt, và cũng được hiển thị trong ứng dụng trước khi lấy sự đồng ý.',
+            '• OpenAI OpCo, LLC — Quốc gia: Hoa Kỳ (1455 Third Street, San Francisco, California 94158, USA). Liên hệ: dpo@openai.com. Thông tin tương tự cũng được hiển thị trong ứng dụng trước khi lấy sự đồng ý.',
             '• Hạng mục chuyển: tiêu đề, nội dung, cảm xúc và ngày viết của các mục trong kỳ bạn yêu cầu báo cáo',
             '• Mục đích: tạo báo cáo tóm tắt',
             '• Thời điểm và cách thức: truyền qua mạng khi bạn nhấn Tạo báo cáo',

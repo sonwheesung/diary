@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: '0a627bd3',
+  sourceFingerprint: '4b621b97',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -245,7 +245,7 @@ export const PRIVACY_ID: LegalDoc = {
         {
           h: 'c. Persetujuan terpisah untuk transfer ke luar negeri',
           body: [
-            'Penyedia AI berlokasi di luar Korea. Nama penyedia, negara penerima, dan kontaknya akan dicantumkan secara spesifik pada huruf ini saat fitur dirilis, dan juga ditampilkan di aplikasi sebelum persetujuan diambil.',
+            '• OpenAI OpCo, LLC — Negara: Amerika Serikat (1455 Third Street, San Francisco, California 94158, USA). Kontak: dpo@openai.com. Informasi yang sama juga ditampilkan di aplikasi sebelum persetujuan diambil.',
             '• Item yang ditransfer: judul, isi, emosi, dan tanggal entri pada periode yang Anda mintakan laporannya',
             '• Tujuan: membuat laporan ringkasan',
             '• Waktu dan cara: dikirim melalui jaringan saat Anda menekan Buat laporan',

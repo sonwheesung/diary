@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_PT_BR: LegalDoc = {
   title: 'Política de Privacidade do Jogak',
-  sourceFingerprint: '0a627bd3',
+  sourceFingerprint: '4b621b97',
   effective: '2026-08-09',
   updated: '2026-08-11',
   intro:
@@ -245,7 +245,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
         {
           h: 'c. Consentimento separado para transferência ao exterior',
           body: [
-            'O provedor de IA está localizado fora da Coreia. O nome do provedor, o país receptor e seus dados de contato serão informados neste item quando o recurso for lançado, e também serão exibidos no aplicativo antes da coleta do consentimento.',
+            '• OpenAI OpCo, LLC — País: Estados Unidos (1455 Third Street, San Francisco, California 94158, USA). Contato: dpo@openai.com. As mesmas informações também são exibidas no aplicativo antes da coleta do consentimento.',
             '• Itens transferidos: o título, o texto, a emoção e a data das entradas do período para o qual você solicitou um relatório',
             '• Finalidade: gerar um relatório de resumo',
             '• Quando e como: transmitidos pela rede quando você toca em Criar relatório',
