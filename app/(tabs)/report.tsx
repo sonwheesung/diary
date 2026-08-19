@@ -25,7 +25,7 @@ import { PeriodSheet } from '@/features/ai/components/PeriodSheet';
 import { hasAiConsent } from '@/features/ai/consent';
 import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
-import { useEntitlementStore } from '@/features/entitlement/store';
+import { isAwaitingEntitlementConfirm, useEntitlementStore } from '@/features/entitlement/store';
 import { formatDateTime, formatFullDate, formatWeekNumber, formatWeekdayList } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
@@ -417,6 +417,14 @@ function failMessage(
   retryAt?: number,
 ): string {
   const period = periodLabel(kind, periodKey);
+  /*
+   * 🔴 결제 직후 낙관 구간이면 서버만 아직 모르는 상태다. 앱은 `pro`로 보이는데
+   *   서버가 `not-subscribed`를 준 것이므로, *"구독하면 이용할 수 있어요"* 는
+   *   **방금 결제한 사람에게 하는 거짓말**이다(2026-08-19 실기기 재현).
+   */
+  if (reason === 'not-subscribed' && isAwaitingEntitlementConfirm()) {
+    return t('subscribe.confirming');
+  }
   switch (reason) {
     /*
      * ⚠ 서버가 정확한 시각을 준다(`retryAt`). *"한 시간 뒤"* 는 잠금이 걸린 시점 기준이라

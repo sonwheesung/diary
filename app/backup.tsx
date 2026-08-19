@@ -20,7 +20,7 @@ import {
 import { runBackup } from '@/features/backup/api/run-backup';
 import type { BackupProgress } from '@/features/backup/api/run-backup';
 import { RecoveryCodeView } from '@/features/backup/components/RecoveryCodeView';
-import { useEntitlementStore } from '@/features/entitlement/store';
+import { isAwaitingEntitlementConfirm, useEntitlementStore } from '@/features/entitlement/store';
 import { GRACE_DAYS, daysUntil, purgeAtFrom } from '@/features/backup/policy';
 import { formatDateTime } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -75,7 +75,15 @@ export default function BackupScreen() {
     const result = await runBackup(setProgress);
     setProgress(null);
     if (!result.ok) {
-      Alert.alert(t('backup.failedTitle'), t(`backup.fail.${result.reason}`));
+      /*
+       * 🔴 결제 직후 낙관 구간이면 서버만 아직 모르는 상태다(§6.1.7 B1).
+       *   *"구독하면 이용할 수 있어요"* 는 방금 결제한 사람에게 하는 거짓말이 된다.
+       */
+      const body =
+        result.reason === 'not-subscribed' && isAwaitingEntitlementConfirm()
+          ? t('subscribe.confirming')
+          : t(`backup.fail.${result.reason}`);
+      Alert.alert(t('backup.failedTitle'), body);
       return;
     }
     await load();

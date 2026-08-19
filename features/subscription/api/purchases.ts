@@ -1,7 +1,7 @@
 import Purchases, { LOG_LEVEL } from 'react-native-purchases';
 import type { CustomerInfo, PurchasesOffering, PurchasesPackage } from 'react-native-purchases';
 
-import { useEntitlementStore } from '@/features/entitlement/store';
+import { setEntitlementProbe, useEntitlementStore } from '@/features/entitlement/store';
 import { trialTerms } from '@/features/subscription/trial';
 import type { TrialTerms } from '@/features/subscription/trial';
 
@@ -45,6 +45,14 @@ export function initializePurchases(): void {
     Purchases.setLogLevel(LOG_LEVEL.WARN);
   }
   Purchases.configure({ apiKey: API_KEY });
+  /*
+   * 🔴 서버가 "구독 없음"이라 답할 때 되물을 곳을 심는다(§6.1.7 A1 완화).
+   *   웹훅이 유실되면 우리 서버는 영영 모르는데, 스토어는 알고 있다.
+   */
+  setEntitlementProbe(async () => {
+    const info = await Purchases.getCustomerInfo();
+    return hasPro(info);
+  });
 }
 
 /**

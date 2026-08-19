@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
@@ -53,6 +54,29 @@ export default function RootLayout() {
   useEffect(() => {
     void hydrateEntitlement().then(() => refreshEntitlement());
   }, [hydrateEntitlement, refreshEntitlement]);
+
+  /*
+   * 🔴 **포그라운드로 돌아올 때 다시 묻는다**(§6.1.7 A2).
+   *
+   * 예전에는 마운트에서 딱 한 번만 조회해서, 웹훅이 앱을 백그라운드에 둔 사이 도착하면
+   * **앱을 완전히 재시작해야** 반영됐다. 결제 → 홈 버튼 → 5분 뒤 복귀 = 여전히 `이용 안 함`.
+   * 웹훅이 5~60초(취소는 약 2시간)라 이 창은 실제로 자주 열린다.
+   *
+   * ⚠ `background`만 보지 않고 **`active`로 돌아온 것**을 본다. 잠금(§7.1)과 반대다 —
+   *   거기서는 iOS의 `inactive`를 이탈로 세면 알림만 내려도 잠기므로 `background`만 셌지만,
+   *   여기서는 되묻는 것이 해가 없고 놓치는 쪽이 손해다.
+   * ⚠ 30초 스로틀. 앱 전환이 잦은 사용자에게 매번 왕복시키지 않는다.
+   */
+  useEffect(() => {
+    let lastAt = Date.now();
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next !== 'active') return;
+      if (Date.now() - lastAt < 30_000) return;
+      lastAt = Date.now();
+      void refreshEntitlement();
+    });
+    return () => sub.remove();
+  }, [refreshEntitlement]);
 
   /*
    * 실기기 점검 — **명시적으로 켰을 때만** 돈다(`EXPO_PUBLIC_DEVICE_CHECK=1`).

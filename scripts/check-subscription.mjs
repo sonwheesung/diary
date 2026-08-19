@@ -8,6 +8,11 @@
 import { GRACE_DAYS, GRACE_MS, daysUntil, purgeAtFrom } from '../features/backup/policy.ts';
 import { GRACE_MS as SERVER_GRACE_MS } from '../server/lib/policy.ts';
 import { trialTerms } from '../features/subscription/trial.ts';
+import {
+  awaitingConfirm,
+  cacheStillValid,
+  decideEntitlement,
+} from '../features/entitlement/decide.ts';
 
 let passed = 0;
 const failures = [];
@@ -109,6 +114,119 @@ check('남은 일수는 올림한다 — 반나절 남았는데 0일이라고 �
 
 check('이미 지났으면 0 — 음수가 화면에 나오지 않는다', () => {
   assert(daysUntil(NOW - 5 * DAY, NOW) === 0, '지난 뒤');
+});
+
+/*
+ * ─────────────────────────────────────────────────────────────────────────
+ * 엔타이틀먼트 상태 전이 (2026-08-19 신설)
+ *
+ * 🔴 **이 블록이 없어서 버그가 두 번 나갔다.** 전수조사(§6.1.7)의 지적이 정확히
+ *   *"스토어 상태 전이를 검사하는 것이 0개"* 였다 — 위의 14개는 전부 기간 계산이었다.
+ *   결제는 실기기가 필요해 자동화가 어렵지만, **"서버가 이렇게 답하면 무엇을 하나"는
+ *   순수 함수**라 여기서 잡을 수 있었다.
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+const NO_WINDOW = { optimisticUntil: null, canProbe: false };
+
+check(
+  '서버를 못 물어봤으면 아무것도 하지 않는다 — 장애에 캐시를 지우면 구독자에게 광고가 뜬다',
+  () => {
+    const d = decideEntitlement({ kind: 'unreachable' }, NO_WINDOW, NOW);
+    assert(d.kind === 'keep', `keep이어야 하는데 ${d.kind}`);
+  },
+);
+
+check('🔴 장애는 낙관 구간이 없어도 revoke가 아니다 — "모름"과 "없음"은 다르다', () => {
+  const d = decideEntitlement(
+    { kind: 'unreachable' },
+    { optimisticUntil: null, canProbe: true },
+    NOW,
+  );
+  assert(d.kind === 'keep', `keep이어야 하는데 ${d.kind}`);
+});
+
+check('구독이 있으면 켜고 만료 시각을 캐시에 쓴다', () => {
+  const d = decideEntitlement(
+    { kind: 'active', expiresAt: '2026-09-19T00:00:00Z', inGracePeriod: false },
+    NO_WINDOW,
+    NOW,
+  );
+  assert(d.kind === 'grant' && d.until === '2026-09-19T00:00:00Z', JSON.stringify(d));
+});
+
+check('기한 없는 구독은 never로 캐시한다 — 앱이 만료를 지어내지 않는다', () => {
+  const d = decideEntitlement(
+    { kind: 'active', expiresAt: null, inGracePeriod: false },
+    NO_WINDOW,
+    NOW,
+  );
+  assert(d.kind === 'grant' && d.until === 'never', JSON.stringify(d));
+});
+
+check('유예 중이라는 사실이 그대로 전달된다', () => {
+  const d = decideEntitlement(
+    { kind: 'active', expiresAt: 'x', inGracePeriod: true },
+    NO_WINDOW,
+    NOW,
+  );
+  assert(d.kind === 'grant' && d.inGracePeriod === true, JSON.stringify(d));
+});
+
+check('🔴 결제 직후 낙관 구간에는 서버의 "없음"으로 되돌리지 않는다 (§6.1.6)', () => {
+  // 이 한 줄이 없어서 "구독이 시작됐어요" 직후 화면이 `이용 안 함`으로 돌아갔다.
+  const d = decideEntitlement(
+    { kind: 'none' },
+    { optimisticUntil: NOW + 60_000, canProbe: false },
+    NOW,
+  );
+  assert(d.kind === 'hold', `hold여야 하는데 ${d.kind}`);
+});
+
+check('🔴 낙관 구간은 반드시 닫힌다 — 무한 낙관은 거짓말의 다른 형태다', () => {
+  const d = decideEntitlement({ kind: 'none' }, { optimisticUntil: NOW - 1, canProbe: false }, NOW);
+  assert(d.kind === 'revoke', `창이 지났으면 revoke여야 하는데 ${d.kind}`);
+});
+
+check('🔴 낙관 구간이 되묻기보다 먼저다 — 더 강한 근거가 있으니 왕복을 아낀다', () => {
+  const d = decideEntitlement(
+    { kind: 'none' },
+    { optimisticUntil: NOW + 60_000, canProbe: true },
+    NOW,
+  );
+  assert(d.kind === 'hold', `hold여야 하는데 ${d.kind}`);
+});
+
+check('🔴 서버가 "없다"고 해도 되물을 수단이 있으면 되묻는다 (§6.1.7 A1 완화)', () => {
+  // 웹훅은 유실될 수 있다(5회 재시도 후 포기). 그때 돈 낸 사람에게 광고가 나온다.
+  const d = decideEntitlement({ kind: 'none' }, { optimisticUntil: null, canProbe: true }, NOW);
+  assert(d.kind === 'probe', `probe여야 하는데 ${d.kind}`);
+});
+
+check('되물을 수단이 없으면 끈다 — 근거가 하나도 없으면 fail-closed다', () => {
+  const d = decideEntitlement({ kind: 'none' }, NO_WINDOW, NOW);
+  assert(d.kind === 'revoke', `revoke여야 하는데 ${d.kind}`);
+});
+
+check('캐시 유효성 — never는 영원, 빈 값·null은 무효', () => {
+  assert(cacheStillValid('never', NOW) === true, 'never');
+  assert(cacheStillValid(null, NOW) === false, 'null');
+  assert(cacheStillValid('', NOW) === false, '빈 문자열');
+});
+
+check('🔴 캐시가 만료됐으면 무효다 — 앱이 서버 없이도 만료를 존중한다', () => {
+  assert(cacheStillValid(new Date(NOW - DAY).toISOString(), NOW) === false, '지난 시각');
+  assert(cacheStillValid(new Date(NOW + DAY).toISOString(), NOW) === true, '남은 시각');
+});
+
+check('🔴 알 수 없는 캐시 값은 유효로 보지 않는다', () => {
+  assert(cacheStillValid('언젠가', NOW) === false, '파싱 실패');
+});
+
+check('"확인 중" 판정은 낙관 구간과 정확히 같은 구간이다', () => {
+  assert(awaitingConfirm(NOW + 1, NOW) === true, '창 안');
+  assert(awaitingConfirm(NOW - 1, NOW) === false, '창 밖');
+  assert(awaitingConfirm(null, NOW) === false, '창 없음');
 });
 
 console.log(

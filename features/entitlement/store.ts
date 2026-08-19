@@ -2,6 +2,8 @@ import { create } from 'zustand';
 
 import { SETTING_KEYS, getSetting, setSetting } from '@/features/settings/api/settings-store';
 import { commonServer } from '@/lib/common-server/client';
+import { awaitingConfirm, cacheStillValid, decideEntitlement } from '@/features/entitlement/decide';
+import type { ServerAnswer } from '@/features/entitlement/decide';
 
 /**
  * 구독 권한(`pro`) — 광고 제거 · 백업/복원 · AI 리포트의 단일 게이트.
@@ -71,14 +73,20 @@ interface EntitlementState {
  */
 const OPTIMISTIC_WINDOW_MS = 3 * 60 * 1000;
 
-const NEVER = 'never';
+/**
+ * 🔴 서버가 *"구독 없음"* 이라 답했을 때 **RC에 되묻는** 폴백.
+ *
+ * `features/subscription/api/purchases.ts`가 앱 시작 시 심는다. 여기서 직접 import하면
+ * `purchases → store → purchases` 순환이 되고, RN 번들러에서 순환은 **한쪽이 `undefined`로
+ * 초기화되는** 조용한 고장을 만든다. 그래서 주입으로 뒤집는다.
+ *
+ * ⚠ 심기지 않으면(키 없음·Expo Go) `null`이고 폴백은 그냥 일어나지 않는다 — 예전과 같다.
+ */
+let proProbe: (() => Promise<boolean>) | null = null;
 
-/** ISO 문자열(또는 `'never'`)이 아직 유효한가 */
-function stillValid(until: string | null): boolean {
-  if (until === null) return false;
-  if (until === NEVER) return true;
-  const at = Date.parse(until);
-  return Number.isFinite(at) && at > Date.now();
+/** 앱 시작 시 1회. `purchases.ts`가 부른다 */
+export function setEntitlementProbe(probe: () => Promise<boolean>): void {
+  proProbe = probe;
 }
 
 export const useEntitlementStore = create<EntitlementState>((set, get) => ({
@@ -91,60 +99,91 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
   hydrate: async () => {
     try {
       const until = await getSetting(SETTING_KEYS.proUntil);
-      set({ pro: stillValid(until), proUntil: until, hydrated: true });
+      set({ pro: cacheStillValid(until, Date.now()), proUntil: until, hydrated: true });
     } catch {
       // 캐시를 못 읽으면 무료로 본다. 곧 이어지는 refresh가 바로잡는다.
       set({ hydrated: true });
     }
   },
 
+  /**
+   * 서버에 묻고 그 답대로 움직인다.
+   *
+   * 🔴 **판단은 여기 없다** — `decideEntitlement`(순수 계층)가 한다. 이 함수는 I/O와
+   *   상태 쓰기만 맡는다. 판단을 여기 두면 검사할 수 없고, 검사가 없어서
+   *   §6.1.6·§6.1.7 두 버그가 코드로 나갔다(`docs/MONETIZATION_SYSTEM.md` §6.1.7).
+   */
   refresh: async () => {
     const result = await commonServer.fetchEntitlements();
-    if (!result.ok) {
-      /*
-       * ⚠ 실패에 캐시를 지우지 않는다. 네트워크가 끊겼거나 서버가 잠깐 죽은 것뿐인데
-       *   지우면 **구독자에게 광고가 뜬다.** 캐시는 만료 시각이 지날 때만 자연히 죽는다.
-       */
-      return;
-    }
-    const pro = result.entitlements.pro;
-    if (pro === undefined || !pro.active) {
-      /*
-       * 🔴 결제 직후 낙관 구간이면 되돌리지 않는다.
-       *
-       * 스토어는 결제를 승인했는데 우리 서버는 아직 RC **웹훅**을 못 받은 상태다.
-       * 여기서 `false`를 쓰면 *"구독이 시작됐어요"* 를 띄운 직후 화면이
-       * `이용 안 함`으로 돌아가고 광고도 그대로 남는다 — 사용자가 보는 건
-       * "돈 냈는데 안 됐다"이고, 그게 환불·문의로 직행하는 자리다.
-       *
-       * ⚠ 캐시(`pro_until`)도 건드리지 않는다. 지워버리면 앱을 껐다 켰을 때
-       *   낙관도 캐시도 없어 확실히 무료가 된다.
-       */
-      const optimisticUntil = get().optimisticUntil;
-      if (optimisticUntil !== null && Date.now() < optimisticUntil) {
+    const pro = result.ok ? result.entitlements.pro : undefined;
+    const answer: ServerAnswer = !result.ok
+      ? { kind: 'unreachable' }
+      : pro === undefined || !pro.active
+        ? { kind: 'none' }
+        : { kind: 'active', expiresAt: pro.expiresAt ?? null, inGracePeriod: pro.inGracePeriod };
+
+    const decision = decideEntitlement(
+      answer,
+      { optimisticUntil: get().optimisticUntil, canProbe: proProbe !== null },
+      Date.now(),
+    );
+
+    switch (decision.kind) {
+      // 못 물어봤다 — 캐시를 건드리지 않는다. 지우면 구독자에게 광고가 뜬다.
+      case 'keep':
+        return;
+
+      case 'grant':
+        await setSetting(SETTING_KEYS.proUntil, decision.until);
+        // 서버가 확정했다 — 낙관 구간은 역할을 다했다
+        set({
+          pro: true,
+          inGracePeriod: decision.inGracePeriod,
+          proUntil: decision.until,
+          optimisticUntil: null,
+          hydrated: true,
+        });
+        return;
+
+      // 결제 직후다. 서버만 아직 모르는 것이므로 화면을 되돌리지 않는다(§6.1.6).
+      case 'hold':
         set({ hydrated: true });
         return;
-      }
-      await setSetting(SETTING_KEYS.proUntil, '');
-      set({
-        pro: false,
-        inGracePeriod: false,
-        proUntil: null,
-        optimisticUntil: null,
-        hydrated: true,
-      });
-      return;
+
+      /*
+       * 서버가 "없다"는데 RC에 되물을 수단이 있다(§6.1.7 A1 완화).
+       *
+       * ⚠ 성공해도 **캐시에 쓰지 않는다.** 서버가 확정한 것이 아니라 기한을 지어낼 수 없고,
+       *   앱을 껐다 켜면 다시 서버부터 묻는 것이 맞다.
+       * ⚠ 여기서 열리는 것은 **로컬로 끝나는 혜택뿐**이다 — AI 생성·백업 업로드는
+       *   서버가 따로 막으므로 그대로 실패한다.
+       */
+      case 'probe':
+        if (proProbe !== null && (await proProbe().catch(() => false))) {
+          set({ pro: true, inGracePeriod: false, hydrated: true });
+          return;
+        }
+        await setSetting(SETTING_KEYS.proUntil, '');
+        set({
+          pro: false,
+          inGracePeriod: false,
+          proUntil: null,
+          optimisticUntil: null,
+          hydrated: true,
+        });
+        return;
+
+      case 'revoke':
+        await setSetting(SETTING_KEYS.proUntil, '');
+        set({
+          pro: false,
+          inGracePeriod: false,
+          proUntil: null,
+          optimisticUntil: null,
+          hydrated: true,
+        });
+        return;
     }
-    const until = pro.expiresAt ?? NEVER;
-    await setSetting(SETTING_KEYS.proUntil, until);
-    // 서버가 확정했다 — 낙관 구간은 역할을 다했다
-    set({
-      pro: true,
-      inGracePeriod: pro.inGracePeriod,
-      proUntil: until,
-      optimisticUntil: null,
-      hydrated: true,
-    });
   },
 
   grantPending: () => {
@@ -172,4 +211,19 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
  */
 export function isPro(): boolean {
   return useEntitlementStore.getState().pro;
+}
+
+/**
+ * 결제 직후 **서버 확정을 기다리는 중**인가.
+ *
+ * 🔴 이 창에서는 앱과 서버의 답이 다르다. 앱은 `pro`(낙관)이지만 서버는 아직 아니라서,
+ *   서버가 게이트를 쥔 기능(AI 리포트 생성 · 백업 업로드)은 `not-subscribed`로 실패한다.
+ *   그때 *"구독하면 이용할 수 있어요"* 를 그대로 보여주면 **방금 결제한 사람에게 하는
+ *   거짓말**이 된다(2026-08-19 실기기에서 그대로 재현했다).
+ *
+ * → 화면은 이 값을 보고 *"확인 중"* 으로 바꿔 말한다. 광고 제거처럼 **로컬로 끝나는**
+ *   혜택은 낙관을 그대로 누리면 되고, 서버가 필요한 것만 다르게 말하면 된다.
+ */
+export function isAwaitingEntitlementConfirm(): boolean {
+  return awaitingConfirm(useEntitlementStore.getState().optimisticUntil, Date.now());
 }
