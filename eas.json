@@ -61,6 +61,13 @@
         "releaseStatus": "completed"
       }
     },
+    "closed": {
+      "android": {
+        "track": "alpha",
+        "serviceAccountKeyPath": "../secrets/play-service-account.json",
+        "releaseStatus": "draft"
+      }
+    },
     "stg": {
       "android": {
         "track": "internal",

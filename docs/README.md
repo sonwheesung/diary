@@ -82,6 +82,18 @@
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
+### 비공개 테스트 (2026-08-20 제출 · 검토 중)
+
+운영 앱에서 **12명 · 14일** 요건을 채우는 중이다. versionCode 8 · 테스터 43명 · 대한민국.
+상세는 [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1.9, 트랙별 국가는 `CLAUDE.md` §9.1.
+
+| 오늘 배운 것 | |
+|---|---|
+| 🔴 스토어 등록정보 | **비공개 테스트에도 필수**다. 프로덕션 전용이 아니다 |
+| 🔴 트랙 국가 기본값 | *프로덕션과 동기화* = **활성 0개** — 그대로 두면 아무도 설치 못 한다 |
+| 🔴 청구 통화 | 우리 가격이 아니라 **구매자 계정**을 따른다(§6.1.10). 요금제를 건드리면 안 된다 |
+| 🟡 콘솔 이미지 업로드 | OS 창 없이 된다(`common/PLAY_RELEASE_AUTOMATION.md` §5.10) |
+
 ### ⚠ 출시 전에 반드시 처리할 것
 
 | 항목 | 내용 |
