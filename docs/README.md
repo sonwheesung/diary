@@ -73,7 +73,7 @@
 | 🔴 **AI 리포트 — 서버 배포** | ✅ | **2026-08-18에야 실제로 배포됐다.** 그전까지 `POST /api/v1/ai/report`가 배포본에서 **404** — `@shared/*`가 `../features/*`를 가리켰는데 Vercel CLI는 `server/`만 올린다. 순수 계층을 `server/shared/`로 생성 복사(`npm run sync:shared` · `check:shared`)해서 풀었다. ⚠ 그전의 "성공" 기록은 전부 **localhost** 기준이다 |
 | **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
-| 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
+| AI 사업자 **연락처** | ✅ | 2026-08-19 — `OpenAI OpCo, LLC` · `US` · `dpo@openai.com`(`features/ai/vendor.ts`). 처리방침 15개 언어 반영 · `check:ai` 통과. ~~출시 차단~~ 해제 |
 | AI 리포트 — 처리방침 | ✅ | 2026-08-13 — 리포트 90일 저장을 반영해 **15개 언어 재작성**(`check:legal` 378개). ⚠ 30일 시계는 **애초에 해당 없었다**(공개 사용자 0명, CLAUDE.md §12) |
 | **계정 삭제 안내 — 다국어** | ✅ | 2026-08-17 — 영어 하나였던 것을 **15개 언어**로. Play 데이터 보안 선언에 등록된 URL이라 심사자가 직접 연다 |
 | **이용약관** | 🔄 | 2026-08-17 신규 — 한국어 정본 22조(`TERMS`) · 앱 화면 · `docs/terms.html` · 설정/구독 링크 완료. **번역 14개 진행 중**. 근거는 전자상거래법 §13②([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §5.2) |
