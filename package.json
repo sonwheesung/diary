@@ -28,7 +28,8 @@
     "check:legal-one": "node --experimental-strip-types --no-warnings scripts/check-legal-one.mjs",
     "check:play-access": "node scripts/check-play-access.mjs",
     "legal:stamp": "node --experimental-strip-types --no-warnings scripts/legal-stamp.mjs",
-    "check:admin": "node scripts/check-admin.mjs"
+    "check:admin": "node scripts/check-admin.mjs",
+    "check:doc-counts": "node scripts/check-doc-counts.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.3.0",

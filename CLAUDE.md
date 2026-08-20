@@ -824,6 +824,8 @@ transaction with the user"* 라고 못박는다. 그래서 아래가 전부 **�
   **번들에 문자열로 박힌다**(올린 뒤에는 못 고친다). `docs/MONETIZATION_SYSTEM.md` §6.1.4
   ⚠ `features/ai/{types,prompt,period}.ts`를 고쳤으면 **`npm run sync:shared`도 돌린다** —
   서버가 그 복사본을 쓴다. `npm run check:shared`가 어긋남을 잡는다(§5)
+  ⚠ **검사를 늘렸으면 `npm run check:doc-counts`** — 문서에 박힌 "N개"가 같이 늙는다.
+  낡은 숫자는 *"이만큼 검사한다"* 는 거짓 안심을 준다(2026-08-20에 8군데가 어긋나 있었다)
 
 - 커밋 메시지: `YYMMDD :: [태그] 한국어 작업 요약` (예: `260807 :: [세팅] Expo SDK 54 부트 스캐폴드`)
   — Conventional Commit은 쓰지 않는다(2026-08-07 결정, volleyball 방식 승계).

@@ -74,7 +74,7 @@
 | **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
 | 🔴 AI 사업자 **연락처** | ❌ | **출시 차단**(§28-8② 3호). `features/ai/vendor.ts` — `check:ai`가 매번 경고 |
-| AI 리포트 — 처리방침 | ✅ | 2026-08-13 — 리포트 90일 저장을 반영해 **15개 언어 재작성**(`check:legal` 112개). ⚠ 30일 시계는 **애초에 해당 없었다**(공개 사용자 0명, CLAUDE.md §12) |
+| AI 리포트 — 처리방침 | ✅ | 2026-08-13 — 리포트 90일 저장을 반영해 **15개 언어 재작성**(`check:legal` 378개). ⚠ 30일 시계는 **애초에 해당 없었다**(공개 사용자 0명, CLAUDE.md §12) |
 | **계정 삭제 안내 — 다국어** | ✅ | 2026-08-17 — 영어 하나였던 것을 **15개 언어**로. Play 데이터 보안 선언에 등록된 URL이라 심사자가 직접 연다 |
 | **이용약관** | 🔄 | 2026-08-17 신규 — 한국어 정본 22조(`TERMS`) · 앱 화면 · `docs/terms.html` · 설정/구독 링크 완료. **번역 14개 진행 중**. 근거는 전자상거래법 §13②([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §5.2) |
 | **§13③ 미성년자 고지** | ✅ | 구독 동의 화면에 상시 표시. 나이를 모르므로 모두에게 보여주는 것이 유일한 이행 방법 |
@@ -117,7 +117,8 @@ npm install                    # 의존성
 npm run typecheck              # tsc --noEmit
 npm run lint                   # eslint
 npm run check:i18n             # 키 누락·언어 간 불일치 + **다른 언어에 한글이 남았는가**
-npm run check:legal            # 112개 — 절·줄 수 + **정본 지문**(문구만 바뀐 드리프트 방어)
+npm run check:legal            # 378개 — 절·줄 수 + **정본 지문**(문구만 바뀐 드리프트 방어).
+                               #   처리방침·계정 삭제 안내·이용약관 × 14개 언어
 npm run legal:stamp --check    # 지금 어긋난 언어만 본다. <lang>을 주면 다시 읽은 뒤 도장을 찍는다
 
 # 백업을 건드렸으면
@@ -125,14 +126,20 @@ npm run check:backup-crypto    # 46개 — KAT(RFC 5869·XChaCha) + 봉투·매�
 npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니페스트 왕복
 
 # 구독·AI를 건드렸으면
-npm run check:subscription     # 14개 — 체험 기간 계산(전자상거래법 §13⑥ 고지의 근거)
-npm run check:ai               # 47개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마·동의
+npm run check:subscription     # 31개 — 체험 기간 계산(§13⑥ 고지의 근거) + **스토어 상태 전이**
+                               #   ⚠ 전이 검사는 2026-08-19에 생겼다. 그전엔 0개였다(MONETIZATION §6.1.7 #2)
+npm run check:ai               # 79개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마·동의
+                               #   + 백필 지평·하위 완비(15개)
 
 # 운영 콘솔을 건드렸으면
 npm run check:admin            # 23개 — **fail-closed** · 헤더 판정 · KST 집계 창 · 원가 추정
 
 # API 키가 있을 때만 (실제 과금이 발생한다)
 cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effort 스윕·refusal
+
+# 검사를 늘렸으면 / 릴리스 전 (검사 6개를 실제로 돌려 2~3분)
+npm run check:doc-counts       # 문서에 박힌 "N개"가 실제와 같은가
+                               #   ⚠ 개수가 스크립트와 문서 두 곳에 산다. 2026-08-20에 8군데가 낡아 있었다
 
 # 새 런타임 의존성이 들어가는 커밋 / AAB 굽기 직전에만 (콜드 수 분)
 npm run check:bundle           # 번들 상한. 기준선 3.67MB

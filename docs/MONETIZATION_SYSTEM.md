@@ -987,7 +987,7 @@ sandboxGrantEnabled = () => (process.env.RC_SANDBOX_GRANT ?? '') === 'all'
 | AAB 내부 테스트 업로드 | ✅ v7(versionCode 7) — `eas submit`, 권한은 켰다 끄는 방식(§6.1) |
 | RC 상품 import·attach | ❌ **남은 마지막 배선.** Play 상품은 준비됐다 |
 | §13⑥ 전환 동의 플로우 | ✅ 체험이 붙은 상품에만. 체크박스 없이는 결제 버튼이 죽어 있다 |
-| 체험 기간 계산(순수) | ✅ `features/subscription/trial.ts` · `npm run check:subscription` 8개 — **법적 고지의 근거라 Node에서 검사한다** |
+| 체험 기간 계산(순수) | ✅ `features/subscription/trial.ts` · `npm run check:subscription` — **법적 고지의 근거라 Node에서 검사한다**(전체 31개 중 체험·유예 산술) |
 | 탈퇴 다이얼로그 — 구독 경고 + Play 링크 | ✅ 15개 언어 |
 | 로그인 후 자동 `restorePurchases` | ✅ `pro=false`일 때 **1회**. 계정이 바뀐 사람이 돈만 내는 것을 막는다 |
 | AI 혜택 표기 | ✅ **표시 해제**(2026-08-19) — 배포된 라우트로 생성이 도는 것을 확인하고 뗐다(§5). ⚠ Play 콘솔 상품 설명은 아직 2개짜리 |
