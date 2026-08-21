@@ -32,6 +32,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "./plugins/with-upload-signing",
       "expo-router",
       [
         "expo-splash-screen",
