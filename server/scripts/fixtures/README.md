@@ -24,6 +24,33 @@ OPENAI_API_KEY=... node --experimental-strip-types server/scripts/try-prompt.mjs
 
 ---
 
+## 1년 연쇄 시험 (주간 → 월간 → 연간)
+
+위 페르소나 9종은 전부 **주간 1주**다. 월간·연간은 [`year-2025/`](./year-2025/)가 맡는다 —
+직장인 한 명의 1년(일기 129개)으로 주간 49 → 월간 12 → 연간 1을 **실제로 이어서** 만든다.
+
+```bash
+OPENAI_API_KEY=... node --experimental-strip-types server/scripts/run-year.mjs
+node --experimental-strip-types server/scripts/show-year.mjs 2025
+```
+
+결과와 채점은 [`year-2025/RESULTS.md`](./year-2025/RESULTS.md).
+
+---
+
+## ⚠ 옛 페르소나는 **없는 감정 코드**를 쓴다
+
+`crisis`·`office` 등이 `emotion: 'anxious'` 를 쓰는데 **앱에 그런 코드는 없다**
+(`features/diary/emotions.ts` = joy · excited · calm · proud · neutral · tired · sad · angry).
+
+깨지지는 않는다 — `renderEntry`가 `emotionLabel()`을 거치지 않고 **코드를 그대로**
+프롬프트에 넣기 때문이다. 그래서 모델은 `anxious`를 영어 단어로 읽는다.
+
+🔴 **그래도 고치지 않는다.** 규약 4(본문을 바꾸지 않는다)이고, 고치면 `RESULTS.md`의
+v2 결과와 비교가 끊긴다. **새 fixture는 실제로 있는 8개만 쓴다**(`year-2025/`가 그렇다).
+
+---
+
 ## 페르소나
 
 | id | 누구 | 주로 무엇을 시험하나 |
