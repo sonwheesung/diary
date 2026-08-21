@@ -2,6 +2,7 @@ import Constants from 'expo-constants';
 import { router, useFocusEffect } from 'expo-router';
 import Bell from 'lucide-react-native/icons/bell';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
+import Clock from 'lucide-react-native/icons/clock';
 import CloudUpload from 'lucide-react-native/icons/cloud-upload';
 import Sparkles from 'lucide-react-native/icons/sparkles';
 import Globe from 'lucide-react-native/icons/globe';
@@ -13,9 +14,10 @@ import Moon from 'lucide-react-native/icons/moon';
 import Sun from 'lucide-react-native/icons/sun';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
+import { TimePickerSheet } from '@/components/TimePickerSheet';
 import { AdBanner } from '@/features/ads/components/AdBanner';
 import { useLockStore } from '@/features/lock/store';
 import { getBackupState } from '@/features/backup/api/backup-state';
@@ -28,9 +30,19 @@ import {
   SETTING_KEYS,
   getBoolSetting,
   getSetting,
-  setBoolSetting,
   setSetting,
 } from '@/features/settings/api/settings-store';
+import {
+  getReminderTime,
+  setReminderEnabled,
+  setReminderTime,
+} from '@/features/notification/api/reminder';
+import {
+  DEFAULT_REMINDER_TIME,
+  parseReminderTime,
+} from '@/features/notification/reminder-schedule';
+import type { ReminderTime } from '@/features/notification/reminder-schedule';
+import { formatTimeOfDay } from '@/lib/format';
 import { LANGUAGE_LABELS, isLanguageMode } from '@/lib/i18n';
 import type { LanguageMode } from '@/lib/i18n';
 import type { Palette, ThemeMode } from '@/theme/palettes';
@@ -50,6 +62,12 @@ const THEME_KEYS: Record<ThemeMode, string> = {
   system: 'settings.themeOptionSystem',
   light: 'settings.themeOptionLight',
   dark: 'settings.themeOptionDark',
+};
+
+/** 저장된 값을 읽기 전까지 보여줄 값. 읽고 나면 곧바로 덮인다 */
+const FALLBACK_REMINDER_TIME: ReminderTime = parseReminderTime(DEFAULT_REMINDER_TIME) ?? {
+  hour: 21,
+  minute: 0,
 };
 
 export default function SettingsScreen() {
@@ -79,6 +97,10 @@ export default function SettingsScreen() {
   const unreadReplies = useInquiryStore((state) => state.unreadCount);
   const refreshInquiries = useInquiryStore((state) => state.refresh);
   const [notifications, setNotifications] = useState(false);
+  /** 권한 팝업이 떠 있는 동안 스위치를 잠근다. 연타로 요청이 겹치면 상태가 꼬인다 */
+  const [notificationsBusy, setNotificationsBusy] = useState(false);
+  const [reminderTimeValue, setReminderTimeState] = useState<ReminderTime>(FALLBACK_REMINDER_TIME);
+  const [reminderSheetOpen, setReminderSheetOpen] = useState(false);
   // 잠금 설정은 게이트와 **같은 출처**를 본다. 각자 읽으면 켠 걸 게이트가 모른다.
   const lock = useLockStore((state) => state.config);
   const refreshLock = useLockStore((state) => state.refresh);
@@ -130,6 +152,11 @@ export default function SettingsScreen() {
       .catch(() => {
         // 설정 하나를 못 읽었다고 화면이 죽으면 안 된다. 기본값으로 둔다.
       });
+    void getReminderTime()
+      .then((value) => {
+        if (alive) setReminderTimeState(value);
+      })
+      .catch(() => undefined);
     return () => {
       alive = false;
     };
@@ -158,12 +185,34 @@ export default function SettingsScreen() {
     );
   };
 
+  /**
+   * ⚠ 켜기는 **권한이 걸려 있어 낙관적으로 처리할 수 없다.**
+   *   스위치를 먼저 켰다가 권한 거부로 되돌리면 손가락을 따라오지 않는 것보다 나쁘다 —
+   *   "켜졌다"를 봤는데 알림이 안 오는 상태가 되기 때문이다(`NOTIFICATION_SYSTEM.md` §5).
+   *   끄기는 권한과 무관하므로 그대로 낙관적으로 둔다.
+   */
   const toggleNotifications = (next: boolean) => {
-    // 먼저 화면을 바꾸고 저장한다 — 스위치가 손가락을 따라오지 않으면 고장 난 것처럼 느껴진다.
-    setNotifications(next);
-    void setBoolSetting(SETTING_KEYS.notificationsEnabled, next).catch(() => {
-      setNotifications(!next);
-    });
+    if (!next) {
+      setNotifications(false);
+      void setReminderEnabled(false).catch(() => setNotifications(true));
+      return;
+    }
+    setNotificationsBusy(true);
+    void setReminderEnabled(true)
+      .then((granted) => {
+        setNotifications(granted);
+        if (!granted) {
+          Alert.alert(t('settings.reminderDeniedTitle'), t('settings.reminderDeniedBody'));
+        }
+      })
+      .catch(() => setNotifications(false))
+      .finally(() => setNotificationsBusy(false));
+  };
+
+  const chooseReminderTime = (next: ReminderTime) => {
+    setReminderTimeState(next);
+    setReminderSheetOpen(false);
+    void setReminderTime(next).catch(() => undefined);
   };
 
   const version = Constants.expoConfig?.version ?? '—';
@@ -428,20 +477,47 @@ export default function SettingsScreen() {
           </View>
           <View style={styles.rowBody}>
             <Text style={styles.rowTitle}>{t('settings.reminder')}</Text>
-            {/*
-              화면만 만들고 기능은 하지 않기로 한 항목이다(CLAUDE.md §3).
-              토글만 두고 아무 말도 안 하면 '켰는데 안 온다'는 오해가 생긴다 — 대놓고 적는다.
-            */}
             <Text style={styles.rowNote}>{t('settings.reminderNote')}</Text>
           </View>
           <Switch
             value={notifications}
             onValueChange={toggleNotifications}
+            disabled={notificationsBusy}
             trackColor={{ false: colors.border, true: colors.accentMuted }}
             thumbColor={notifications ? colors.accent : colors.surface}
           />
         </View>
+
+        {/*
+          꺼져 있으면 시각 행을 아예 보여주지 않는다. 못 쓰는 설정을 회색으로 남겨두면
+          "왜 안 눌리지"를 겪게 된다(`NOTIFICATION_SYSTEM.md` §7).
+        */}
+        {notifications && (
+          <Pressable
+            accessibilityRole="button"
+            style={styles.row}
+            onPress={() => setReminderSheetOpen(true)}
+          >
+            <View style={styles.rowIcon}>
+              <Clock size={18} color={colors.accent} />
+            </View>
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitle}>{t('settings.reminderTime')}</Text>
+              <Text style={styles.rowNote}>
+                {formatTimeOfDay(reminderTimeValue.hour, reminderTimeValue.minute)}
+              </Text>
+            </View>
+            <ChevronRight size={18} color={colors.textMuted} />
+          </Pressable>
+        )}
       </View>
+
+      <TimePickerSheet
+        visible={reminderSheetOpen}
+        value={reminderTimeValue}
+        onSelect={chooseReminderTime}
+        onClose={() => setReminderSheetOpen(false)}
+      />
 
       <LanguageSheet
         visible={languageSheetOpen}

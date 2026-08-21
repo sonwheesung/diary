@@ -210,3 +210,21 @@ export function previewText(plainText: string, maxLength = 60): string {
   const flat = plainText.replace(/\s+/g, ' ').trim();
   return flat.length > maxLength ? `${flat.slice(0, maxLength)}…` : flat;
 }
+
+/**
+ * 시각 표기 — 리마인더 설정에 쓴다.
+ *
+ * ⚠ **12시간제와 24시간제가 언어마다 다르다.** 한국어는 `오후 9:00`, 영어는 `9:00 PM`,
+ *   독일어·프랑스어·러시아어는 `21:00`이다. 순서도 다르고 오전/오후의 자리도 다르다.
+ *   그래서 날짜와 같은 규약을 쓴다 — **조각만 넘기고 문장 틀은 `date.timeOfDay`가 갖는다.**
+ *   24시간제 언어는 틀에서 `{{hour12}}`·`{{meridiem}}`을 그냥 안 쓰면 된다.
+ */
+export function formatTimeOfDay(hour: number, minute: number): string {
+  const h12 = hour % 12 === 0 ? 12 : hour % 12;
+  return translate('date.timeOfDay', {
+    hour24: String(hour).padStart(2, '0'),
+    hour12: String(h12),
+    minute: String(minute).padStart(2, '0'),
+    meridiem: translate(hour < 12 ? 'date.am' : 'date.pm'),
+  });
+}

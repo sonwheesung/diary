@@ -29,6 +29,7 @@ const COUNTED = [
   'check:backup-crypto',
   'check:i18n-roundtrip',
   'check:subscription',
+  'check:notification',
   'check:ai',
   'check:admin',
 ];

@@ -82,7 +82,10 @@
       "ตุลาคม",
       "พฤศจิกายน",
       "ธันวาคม"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "ก่อนเที่ยง",
+    "pm": "หลังเที่ยง"
   },
   "emotion": {
     "joy": "มีความสุข",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "ค่าเริ่มต้น",
     "languageSheet": "เลือกภาษา",
     "reminder": "เตือนให้เขียน",
-    "reminderNote": "ยังไม่ได้ส่งการแจ้งเตือน กำลังเตรียมอยู่",
+    "reminderNote": "จะเตือนครั้งเดียวตามเวลาที่ตั้งไว้ วันที่เขียนแล้วจะไม่เตือน",
+    "reminderTime": "เวลาแจ้งเตือน",
+    "reminderHour": "ชม.",
+    "reminderMinute": "นาที",
+    "reminderDeniedTitle": "ต้องขออนุญาตแจ้งเตือน",
+    "reminderDeniedBody": "โปรดเปิดการแจ้งเตือนของ Jogak ในการตั้งค่าโทรศัพท์",
     "version": "เวอร์ชัน",
     "sectionSupport": "ความช่วยเหลือ",
     "notice": "ประกาศ",
@@ -214,6 +222,11 @@
     "aiReport": "รายงาน AI",
     "reportLanguage": "ภาษาของรายงาน AI",
     "reportLanguageSameAsApp": "เหมือนภาษาแอป"
+  },
+  "notification": {
+    "channelName": "เตือนให้เขียน",
+    "reminderTitle": "ชิ้นของวันนี้",
+    "reminderBody": "วันนี้เป็นอย่างไรบ้าง? เก็บไว้สักชิ้นสิ"
   },
   "lock": {
     "lockedTitle": "ชิ้นของคุณถูกล็อกอยู่",

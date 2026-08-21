@@ -23,6 +23,7 @@
 | [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) | 백업/복원 — 키 유도·봉투·매니페스트·서버 계약·전체 교체 (정책은 CLAUDE.md §5.1) | ✅ |
 | [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) | AI 리포트 — 처리 경로·위기 정책·모델/원가·캡·기간/언어·서버 계약 (정책은 CLAUDE.md §5.1) | ✅ |
 | [`ADMIN_SYSTEM.md`](./ADMIN_SYSTEM.md) | 운영 콘솔 — 배구 승계 범위·인가(fail-closed)·**개인 비특정 규칙**·읽기 전용 | ✅ |
+| [`NOTIFICATION_SYSTEM.md`](./NOTIFICATION_SYSTEM.md) | 기록 리마인더 — 로컬 알림·7일 롤링 창·권한·예약 언어 고착 | ✅ |
 | `UI_GUIDE.md` | 컬러·타이포·여백·공통 컴포넌트 사용법 | ❌ 미작성 |
 | `CHANGELOG.md` | 릴리스 변경 이력 | ❌ 미작성(첫 빌드 시점부터) |
 | `PROJECT_STRUCTURE.md` | 폴더 구조 상세 | ⏸ 보류 — 현재는 CLAUDE.md §8이 정본 |
@@ -76,9 +77,11 @@
 | AI 사업자 **연락처** | ✅ | 2026-08-19 — `OpenAI OpCo, LLC` · `US` · `dpo@openai.com`(`features/ai/vendor.ts`). 처리방침 15개 언어 반영 · `check:ai` 통과. ~~출시 차단~~ 해제 |
 | AI 리포트 — 처리방침 | ✅ | 2026-08-13 — 리포트 90일 저장을 반영해 **15개 언어 재작성**(`check:legal` 378개). ⚠ 30일 시계는 **애초에 해당 없었다**(공개 사용자 0명, CLAUDE.md §12) |
 | **계정 삭제 안내 — 다국어** | ✅ | 2026-08-17 — 영어 하나였던 것을 **15개 언어**로. Play 데이터 보안 선언에 등록된 URL이라 심사자가 직접 연다 |
-| **이용약관** | 🔄 | 2026-08-17 신규 — 한국어 정본 22조(`TERMS`) · 앱 화면 · `docs/terms.html` · 설정/구독 링크 완료. **번역 14개 진행 중**. 근거는 전자상거래법 §13②([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §5.2) |
+| **이용약관** | ✅ | 2026-08-17 신규 — 한국어 정본 22조(`TERMS`) · 앱 화면 · `docs/terms.html` · 설정/구독 링크. ~~번역 14개 진행 중~~ → **완료**(2026-08-21 정정 — `check:legal` 378개가 *이용약관 14개 언어*를 세고 있었다. 이 줄만 🔄로 남아 **끝난 일이 남은 일로 보였다**). 근거는 전자상거래법 §13②([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §5.2) |
 | **§13③ 미성년자 고지** | ✅ | 구독 동의 화면에 상시 표시. 나이를 모르므로 모두에게 보여주는 것이 유일한 이행 방법 |
 | **§13⑥ 전환 동의** | ✅ | ~~미구현~~ → **이미 있었다**(2026-08-17 실측 정정). 시행령 §20조의2의 **전환 전 30일** 창도 충족(체험 7일) |
+| **기록 리마인더(로컬 알림)** | ✅ | 2026-08-21 — `features/notification/`. **에뮬레이터 실동작 확인**: 예약 7건 → 오늘 저장 시 **오늘 것만 취소**(6건) → 시각 변경 시 전체 재예약 → 토글 OFF 시 0건. `npm run check:notification` 12개. 🔴 `expo-notifications`가 권한을 **13→37**로 늘려 21개를 걷어냈고, **걷어낸 뒤에도 앱이 뜬다**([`NOTIFICATION_SYSTEM.md`](./NOTIFICATION_SYSTEM.md) §5·§8) |
+| **업로드 서명 config plugin** | ✅ | 2026-08-21 — `plugins/with-upload-signing.js`. v8은 `android/`를 **손으로 고쳐** 구웠는데 `prebuild`가 그걸 날린다. 알림이 정확히 그 경우였다 |
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
@@ -98,7 +101,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| Lucide 번들 비대 | `import { House } from 'lucide-react-native'`가 아이콘 세트 **전체**를 끌어온다(번들 6.5MB → 10.4MB, 3056 모듈). 개별 경로 import로 바꾸거나 트리셰이킹을 확인할 것 |
+| ~~Lucide 번들 비대~~ | ✅ **해소.** 2026-08-21 실측 — `from 'lucide-react-native'` 형태의 import가 **0건**이고 전부 `lucide-react-native/icons/<name>` 개별 경로다. 이 줄이 남아 **끝난 일이 출시 블로커로 보였다** |
 | 패키지 설치 후 Metro 재시작 | 서버를 켠 채 설치하면 캐시가 낡아 `Unable to resolve module`이 난다(2026-08-07에 두 번 겪음). 설치 후 `--clear` 재시작이 기본 |
 
 ### 서버 (조각 밖 선행 작업 포함)
@@ -142,6 +145,10 @@ npm run check:subscription     # 31개 — 체험 기간 계산(§13⑥ 고지�
                                #   ⚠ 전이 검사는 2026-08-19에 생겼다. 그전엔 0개였다(MONETIZATION §6.1.7 #2)
 npm run check:ai               # 79개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마·동의
                                #   + 백필 지평·하위 완비(15개)
+
+# 알림을 건드렸으면
+npm run check:notification     # 12개 — 예약 날짜 계산(이미 쓴 날 제외·지난 시각 제외·달/해 경계)
+                               #   ⚠ 순수 계층만이다. 실제 발사·권한·재부팅 생존은 실기기에서만 안다
 
 # 운영 콘솔을 건드렸으면
 npm run check:admin            # 23개 — **fail-closed** · 헤더 판정 · KST 집계 창 · 원가 추정

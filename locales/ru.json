@@ -82,7 +82,10 @@
       "Октябрь",
       "Ноябрь",
       "Декабрь"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Радость",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "По умолчанию",
     "languageSheet": "Выбор языка",
     "reminder": "Напоминание писать",
-    "reminderNote": "Уведомления пока не отправляются. Скоро.",
+    "reminderNote": "Напомним один раз в выбранное время. В дни, когда вы уже написали, оно не придёт.",
+    "reminderTime": "Время напоминания",
+    "reminderHour": "Час",
+    "reminderMinute": "Мин",
+    "reminderDeniedTitle": "Нужно разрешение на уведомления",
+    "reminderDeniedBody": "Включите уведомления Jogak в настройках телефона.",
     "version": "Версия",
     "sectionSupport": "Поддержка",
     "notice": "Объявления",
@@ -214,6 +222,11 @@
     "aiReport": "Отчёты ИИ",
     "reportLanguage": "Язык отчётов ИИ",
     "reportLanguageSameAsApp": "Как язык приложения"
+  },
+  "notification": {
+    "channelName": "Напоминание писать",
+    "reminderTitle": "Сегодняшний кусочек",
+    "reminderBody": "Как прошёл ваш день? Оставьте кусочек."
   },
   "lock": {
     "lockedTitle": "Ваши записи заблокированы",

@@ -82,7 +82,10 @@
       "Oktober",
       "November",
       "Desember"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Senang",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Bawaan",
     "languageSheet": "Pilih bahasa",
     "reminder": "Pengingat menulis",
-    "reminderNote": "Belum mengirim notifikasi. Sedang disiapkan.",
+    "reminderNote": "Kami mengingatkan sekali pada jam yang kamu pilih. Tidak muncul di hari yang sudah kamu tulis.",
+    "reminderTime": "Jam pengingat",
+    "reminderHour": "Jam",
+    "reminderMinute": "Mnt",
+    "reminderDeniedTitle": "Butuh izin notifikasi",
+    "reminderDeniedBody": "Aktifkan notifikasi Jogak di pengaturan ponsel.",
     "version": "Versi",
     "sectionSupport": "Bantuan",
     "notice": "Pengumuman",
@@ -214,6 +222,11 @@
     "aiReport": "Laporan AI",
     "reportLanguage": "Bahasa laporan AI",
     "reportLanguageSameAsApp": "Sama dengan bahasa aplikasi"
+  },
+  "notification": {
+    "channelName": "Pengingat menulis",
+    "reminderTitle": "Kepingan hari ini",
+    "reminderBody": "Bagaimana harimu? Simpan satu kepingan."
   },
   "lock": {
     "lockedTitle": "Kepinganmu terkunci",

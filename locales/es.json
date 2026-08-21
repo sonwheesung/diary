@@ -82,7 +82,10 @@
       "Octubre",
       "Noviembre",
       "Diciembre"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "a. m.",
+    "pm": "p. m."
   },
   "emotion": {
     "joy": "Feliz",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Predeterminado",
     "languageSheet": "Elegir idioma",
     "reminder": "Recordatorio de escritura",
-    "reminderNote": "Todavía no enviamos notificaciones. Muy pronto.",
+    "reminderNote": "Te avisamos una vez a la hora que elijas. No llega los días que ya has escrito.",
+    "reminderTime": "Hora del aviso",
+    "reminderHour": "Hora",
+    "reminderMinute": "Min",
+    "reminderDeniedTitle": "Faltan permisos de notificación",
+    "reminderDeniedBody": "Activa las notificaciones de Jogak en los ajustes del teléfono.",
     "version": "Versión",
     "sectionSupport": "Ayuda",
     "notice": "Avisos",
@@ -214,6 +222,11 @@
     "aiReport": "Informes de IA",
     "reportLanguage": "Idioma de los informes de IA",
     "reportLanguageSameAsApp": "Igual que el idioma de la app"
+  },
+  "notification": {
+    "channelName": "Recordatorio de escritura",
+    "reminderTitle": "La pieza de hoy",
+    "reminderBody": "¿Qué tal ha ido tu día? Guarda una pieza."
   },
   "lock": {
     "lockedTitle": "Tus piezas están bloqueadas",

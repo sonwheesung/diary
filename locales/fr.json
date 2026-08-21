@@ -82,7 +82,10 @@
       "Octobre",
       "Novembre",
       "Décembre"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Joie",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Par défaut",
     "languageSheet": "Choisir la langue",
     "reminder": "Rappel d'écriture",
-    "reminderNote": "Aucune notification pour l'instant. Ça arrive bientôt.",
+    "reminderNote": "On te prévient une fois à l'heure choisie. Rien les jours où tu as déjà écrit.",
+    "reminderTime": "Heure du rappel",
+    "reminderHour": "Heure",
+    "reminderMinute": "Min",
+    "reminderDeniedTitle": "Autorisation de notification requise",
+    "reminderDeniedBody": "Active les notifications de Jogak dans les réglages du téléphone.",
     "version": "Version",
     "sectionSupport": "Aide",
     "notice": "Annonces",
@@ -214,6 +222,11 @@
     "aiReport": "Bilans IA",
     "reportLanguage": "Langue des bilans IA",
     "reportLanguageSameAsApp": "Comme la langue de l'app"
+  },
+  "notification": {
+    "channelName": "Rappel d'écriture",
+    "reminderTitle": "Le fragment du jour",
+    "reminderBody": "Comment s'est passée ta journée ? Garde-en un fragment."
   },
   "lock": {
     "lockedTitle": "Tes fragments sont verrouillés",

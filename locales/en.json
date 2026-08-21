@@ -82,7 +82,10 @@
       "October",
       "November",
       "December"
-    ]
+    ],
+    "timeOfDay": "{{hour12}}:{{minute}} {{meridiem}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Joyful",
@@ -203,7 +206,12 @@
     "languageManual": "Keeps the language you picked",
     "languageOptionSystem": "Default",
     "reminder": "Writing reminder",
-    "reminderNote": "Not sending notifications yet. Coming soon.",
+    "reminderNote": "We'll remind you once at the time you pick. Not on days you've already written.",
+    "reminderTime": "Reminder time",
+    "reminderHour": "Hour",
+    "reminderMinute": "Min",
+    "reminderDeniedTitle": "Notifications need permission",
+    "reminderDeniedBody": "Turn on notifications for Jogak in your phone settings.",
     "version": "Version",
     "languageSheet": "Choose language",
     "sectionSupport": "Support",
@@ -214,6 +222,11 @@
     "aiReport": "AI reports",
     "reportLanguage": "AI report language",
     "reportLanguageSameAsApp": "Same as app language"
+  },
+  "notification": {
+    "channelName": "Writing reminder",
+    "reminderTitle": "Today's piece",
+    "reminderBody": "How was your day? Leave a piece of it here."
   },
   "lock": {
     "lockedTitle": "Your pieces are locked",

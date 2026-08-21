@@ -10,6 +10,7 @@ import { initializeAds } from '@/features/ads/api/ads';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { LockGate } from '@/features/lock/components/LockGate';
 import { useNoticeStore } from '@/features/notice/store';
+import { syncReminders } from '@/features/notification/api/reminder';
 import { useLanguageStore } from '@/features/settings/language-store';
 import { initI18n } from '@/lib/i18n';
 import { ThemeProvider, useTheme } from '@/theme/theme';
@@ -74,9 +75,22 @@ export default function RootLayout() {
       if (Date.now() - lastAt < 30_000) return;
       lastAt = Date.now();
       void refreshEntitlement();
+      /*
+       * 리마인더 창을 다시 채운다(`docs/NOTIFICATION_SYSTEM.md` §3).
+       *
+       * 7일치를 미리 걸어두지만 **한 번이라도 앱을 열면 창이 다시 7일이 되어야** 한다.
+       * 지난 알림·지난 조각·바뀐 언어가 여기서 한꺼번에 정리된다.
+       * ⚠ 위 30초 스로틀 **안쪽**이다 — 앱 전환이 잦아도 재예약이 쏟아지지 않는다.
+       */
+      void syncReminders();
     });
     return () => sub.remove();
   }, [refreshEntitlement]);
+
+  // 앱 시작 시 한 번. 알림이 울린 뒤 그 알림을 눌러 들어온 경우가 여기로 온다.
+  useEffect(() => {
+    void syncReminders();
+  }, []);
 
   /*
    * 실기기 점검 — **명시적으로 켰을 때만** 돈다(`EXPO_PUBLIC_DEVICE_CHECK=1`).

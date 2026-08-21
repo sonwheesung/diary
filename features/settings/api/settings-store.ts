@@ -8,8 +8,15 @@ import { getDatabase } from '@/db/client';
  * 섞어두면 무엇이 비밀인지 흐려지고, 백업에 실어도 되는지 판단할 수 없게 된다.
  */
 export const SETTING_KEYS = {
-  /** 알림 토글. 지금은 화면만 있고 실제 발송은 하지 않는다(CLAUDE.md §3, §9) */
+  /** 기록 리마인더 토글(`'true'`/`'false'`). 로컬 알림만 — `docs/NOTIFICATION_SYSTEM.md` */
   notificationsEnabled: 'notifications_enabled',
+  /**
+   * 리마인더 시각 `"HH:mm"`(기기 로컬). 비어 있으면 기본값 21:00.
+   *
+   * ⚠ 시각을 바꾸면 **예약을 전부 다시 건다.** 이미 걸린 알림은 옛 시각을 들고 있고
+   *   OS 안에 있어서 우리가 고칠 수 없다(`NOTIFICATION_SYSTEM.md` §6).
+   */
+  reminderTime: 'reminder_time',
   /*
    * ⚠ 예전에 있던 `lock_delay`는 없앴다(2026-08-10) — 잠금은 나가면 즉시다.
    * 이미 저장된 행은 아무도 읽지 않으니 그대로 둔다. 마이그레이션으로 지울 값이 아니다.

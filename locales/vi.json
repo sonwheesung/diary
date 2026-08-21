@@ -82,7 +82,10 @@
       "Tháng 10",
       "Tháng 11",
       "Tháng 12"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "SA",
+    "pm": "CH"
   },
   "emotion": {
     "joy": "Vui",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Mặc định",
     "languageSheet": "Chọn ngôn ngữ",
     "reminder": "Nhắc viết nhật ký",
-    "reminderNote": "Hiện chưa gửi thông báo. Đang chuẩn bị.",
+    "reminderNote": "Nhắc một lần vào giờ bạn chọn. Những ngày đã viết thì không nhắc.",
+    "reminderTime": "Giờ nhắc",
+    "reminderHour": "Giờ",
+    "reminderMinute": "Phút",
+    "reminderDeniedTitle": "Cần quyền thông báo",
+    "reminderDeniedBody": "Hãy bật thông báo của Jogak trong cài đặt điện thoại.",
     "version": "Phiên bản",
     "sectionSupport": "Hỗ trợ",
     "notice": "Thông báo",
@@ -214,6 +222,11 @@
     "aiReport": "Báo cáo AI",
     "reportLanguage": "Ngôn ngữ báo cáo AI",
     "reportLanguageSameAsApp": "Giống ngôn ngữ ứng dụng"
+  },
+  "notification": {
+    "channelName": "Nhắc viết nhật ký",
+    "reminderTitle": "Mảnh của hôm nay",
+    "reminderBody": "Hôm nay của bạn thế nào? Hãy giữ lại một mảnh."
   },
   "lock": {
     "lockedTitle": "Các mảnh của bạn đang bị khóa",

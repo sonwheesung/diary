@@ -82,7 +82,10 @@
       "Oktober",
       "November",
       "Dezember"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Freude",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Standard",
     "languageSheet": "Sprache wählen",
     "reminder": "Schreib-Erinnerung",
-    "reminderNote": "Wir senden noch keine Mitteilungen. Kommt bald.",
+    "reminderNote": "Wir erinnern dich einmal zur gewählten Zeit. An Tagen, an denen du schon geschrieben hast, nicht.",
+    "reminderTime": "Uhrzeit der Erinnerung",
+    "reminderHour": "Std.",
+    "reminderMinute": "Min.",
+    "reminderDeniedTitle": "Mitteilungen brauchen eine Erlaubnis",
+    "reminderDeniedBody": "Aktiviere die Mitteilungen von Jogak in den Telefoneinstellungen.",
     "version": "Version",
     "sectionSupport": "Hilfe",
     "notice": "Mitteilungen",
@@ -214,6 +222,11 @@
     "aiReport": "KI-Berichte",
     "reportLanguage": "Sprache der KI-Berichte",
     "reportLanguageSameAsApp": "Wie die App-Sprache"
+  },
+  "notification": {
+    "channelName": "Schreib-Erinnerung",
+    "reminderTitle": "Das Stück von heute",
+    "reminderBody": "Wie war dein Tag? Behalte ein Stück davon."
   },
   "lock": {
     "lockedTitle": "Deine Stücke sind gesperrt",

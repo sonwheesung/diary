@@ -36,6 +36,7 @@ import { BlockEditor } from '@/features/diary/components/BlockEditor';
 import { EmotionPicker } from '@/features/diary/components/EmotionPicker';
 import { TagInput } from '@/features/diary/components/TagInput';
 import { withExcursion } from '@/features/lock/excursion';
+import { syncReminders } from '@/features/notification/api/reminder';
 import { emotionLabel } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
@@ -388,6 +389,16 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       await reconcileImages();
       savedRef.current = true;
       onSaved();
+
+      /*
+       * 리마인더 재예약. **오늘 쓴 사람에게 "오늘 조각을 남겨보세요"가 가면 안 된다**
+       * (`docs/NOTIFICATION_SYSTEM.md` §1). 로컬 알림은 발송 시점에 조건을 볼 수 없어서,
+       * 조건이 확정되는 이 자리에서 예약을 다시 맞춘다.
+       *
+       * ⚠ `await`하지 않는다 — 저장은 이미 끝났고, 알림 때문에 화면 전환이 늦어지면 안 된다.
+       *   실패해도 `syncReminders()`가 안에서 삼킨다.
+       */
+      void syncReminders();
 
       /*
        * 광고는 **저장과 화면 전환이 끝난 뒤**에 띄운다(CLAUDE.md §7).

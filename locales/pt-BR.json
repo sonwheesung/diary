@@ -82,7 +82,10 @@
       "Outubro",
       "Novembro",
       "Dezembro"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Feliz",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Padrão",
     "languageSheet": "Escolher idioma",
     "reminder": "Lembrete de escrita",
-    "reminderNote": "Ainda não enviamos notificações. Em breve.",
+    "reminderNote": "Avisamos uma vez no horário que você escolher. Não chega nos dias em que você já escreveu.",
+    "reminderTime": "Horário do lembrete",
+    "reminderHour": "Hora",
+    "reminderMinute": "Min",
+    "reminderDeniedTitle": "Falta permissão de notificação",
+    "reminderDeniedBody": "Ative as notificações do Jogak nas configurações do celular.",
     "version": "Versão",
     "sectionSupport": "Suporte",
     "notice": "Avisos",
@@ -214,6 +222,11 @@
     "aiReport": "Relatórios de IA",
     "reportLanguage": "Idioma dos relatórios de IA",
     "reportLanguageSameAsApp": "Igual ao idioma do app"
+  },
+  "notification": {
+    "channelName": "Lembrete de escrita",
+    "reminderTitle": "O pedaço de hoje",
+    "reminderBody": "Como foi o seu dia? Guarde um pedaço."
   },
   "lock": {
     "lockedTitle": "Seus pedaços estão bloqueados",

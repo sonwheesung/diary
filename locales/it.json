@@ -82,7 +82,10 @@
       "Ottobre",
       "Novembre",
       "Dicembre"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "AM",
+    "pm": "PM"
   },
   "emotion": {
     "joy": "Felice",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Predefinita",
     "languageSheet": "Scegli la lingua",
     "reminder": "Promemoria di scrittura",
-    "reminderNote": "Non inviamo ancora notifiche. Presto disponibile.",
+    "reminderNote": "Ti avvisiamo una volta all'ora che scegli. Non nei giorni in cui hai già scritto.",
+    "reminderTime": "Ora del promemoria",
+    "reminderHour": "Ora",
+    "reminderMinute": "Min",
+    "reminderDeniedTitle": "Serve il permesso per le notifiche",
+    "reminderDeniedBody": "Attiva le notifiche di Jogak nelle impostazioni del telefono.",
     "version": "Versione",
     "sectionSupport": "Assistenza",
     "notice": "Avvisi",
@@ -214,6 +222,11 @@
     "aiReport": "Resoconti IA",
     "reportLanguage": "Lingua dei resoconti IA",
     "reportLanguageSameAsApp": "Come la lingua dell'app"
+  },
+  "notification": {
+    "channelName": "Promemoria di scrittura",
+    "reminderTitle": "Il pezzo di oggi",
+    "reminderBody": "Com'è andata la giornata? Tienine un pezzo."
   },
   "lock": {
     "lockedTitle": "I tuoi pezzi sono bloccati",

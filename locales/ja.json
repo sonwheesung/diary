@@ -82,7 +82,10 @@
       "10月",
       "11月",
       "12月"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "午前",
+    "pm": "午後"
   },
   "emotion": {
     "joy": "うれしい",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "デフォルト",
     "languageSheet": "言語を選ぶ",
     "reminder": "記録リマインダー",
-    "reminderNote": "まだ通知は送っていません。準備中です。",
+    "reminderNote": "決めた時刻に一度だけお知らせします。すでに書いた日には届きません。",
+    "reminderTime": "通知の時刻",
+    "reminderHour": "時",
+    "reminderMinute": "分",
+    "reminderDeniedTitle": "通知の許可が必要です",
+    "reminderDeniedBody": "スマホの設定でJogakの通知をオンにしてください。",
     "version": "バージョン",
     "sectionSupport": "サポート",
     "notice": "お知らせ",
@@ -214,6 +222,11 @@
     "aiReport": "AIレポート",
     "reportLanguage": "AIレポートの言語",
     "reportLanguageSameAsApp": "アプリの言語と同じ"
+  },
+  "notification": {
+    "channelName": "記録リマインダー",
+    "reminderTitle": "今日のかけら",
+    "reminderBody": "今日はどんな一日でしたか? ひとかけら残してみましょう。"
   },
   "lock": {
     "lockedTitle": "かけらはロックされています",

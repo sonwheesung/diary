@@ -82,7 +82,10 @@
       "Ekim",
       "Kasım",
       "Aralık"
-    ]
+    ],
+    "timeOfDay": "{{hour24}}:{{minute}}",
+    "am": "ÖÖ",
+    "pm": "ÖS"
   },
   "emotion": {
     "joy": "Mutlu",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "Varsayılan",
     "languageSheet": "Dil seç",
     "reminder": "Yazma hatırlatıcısı",
-    "reminderNote": "Henüz bildirim göndermiyoruz. Yakında.",
+    "reminderNote": "Seçtiğin saatte bir kez hatırlatırız. Zaten yazdığın günlerde gelmez.",
+    "reminderTime": "Hatırlatma saati",
+    "reminderHour": "Saat",
+    "reminderMinute": "Dk",
+    "reminderDeniedTitle": "Bildirim izni gerekiyor",
+    "reminderDeniedBody": "Telefon ayarlarından Jogak bildirimlerini aç.",
     "version": "Sürüm",
     "sectionSupport": "Destek",
     "notice": "Duyurular",
@@ -214,6 +222,11 @@
     "aiReport": "Yapay zekâ raporları",
     "reportLanguage": "Yapay zekâ raporu dili",
     "reportLanguageSameAsApp": "Uygulama diliyle aynı"
+  },
+  "notification": {
+    "channelName": "Yazma hatırlatıcısı",
+    "reminderTitle": "Bugünün parçası",
+    "reminderBody": "Günün nasıl geçti? Bir parçasını sakla."
   },
   "lock": {
     "lockedTitle": "Parçaların kilitli",

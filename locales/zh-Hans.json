@@ -82,7 +82,10 @@
       "10月",
       "11月",
       "12月"
-    ]
+    ],
+    "timeOfDay": "{{meridiem}}{{hour12}}:{{minute}}",
+    "am": "上午",
+    "pm": "下午"
   },
   "emotion": {
     "joy": "开心",
@@ -204,7 +207,12 @@
     "languageOptionSystem": "默认",
     "languageSheet": "选择语言",
     "reminder": "记录提醒",
-    "reminderNote": "目前还不会发送通知。正在准备中。",
+    "reminderNote": "会在你设定的时间提醒一次。已经写过的日子不会打扰你。",
+    "reminderTime": "提醒时间",
+    "reminderHour": "时",
+    "reminderMinute": "分",
+    "reminderDeniedTitle": "需要通知权限",
+    "reminderDeniedBody": "请在手机设置中打开 Jogak 的通知。",
     "version": "版本",
     "sectionSupport": "支持",
     "notice": "公告",
@@ -214,6 +222,11 @@
     "aiReport": "AI 报告",
     "reportLanguage": "AI 报告语言",
     "reportLanguageSameAsApp": "与应用语言相同"
+  },
+  "notification": {
+    "channelName": "记录提醒",
+    "reminderTitle": "今天的一片",
+    "reminderBody": "今天过得怎么样? 留下一片吧。"
   },
   "lock": {
     "lockedTitle": "你的碎片已锁定",

@@ -82,7 +82,10 @@
       "10월",
       "11월",
       "12월"
-    ]
+    ],
+    "timeOfDay": "{{meridiem}} {{hour12}}:{{minute}}",
+    "am": "오전",
+    "pm": "오후"
   },
   "emotion": {
     "joy": "기쁨",
@@ -203,7 +206,12 @@
     "languageManual": "직접 고른 언어를 유지해요",
     "languageOptionSystem": "기본",
     "reminder": "기록 리마인더",
-    "reminderNote": "아직 실제 알림은 보내지 않아요. 준비 중이에요.",
+    "reminderNote": "정한 시각에 한 번 알려드려요. 이미 쓴 날에는 오지 않아요.",
+    "reminderTime": "알림 시각",
+    "reminderHour": "시",
+    "reminderMinute": "분",
+    "reminderDeniedTitle": "알림 권한이 필요해요",
+    "reminderDeniedBody": "휴대폰 설정에서 조각의 알림을 켜주세요.",
     "version": "버전",
     "languageSheet": "언어 선택",
     "sectionSupport": "지원",
@@ -214,6 +222,11 @@
     "aiReport": "AI 리포트",
     "reportLanguage": "AI 리포트 언어",
     "reportLanguageSameAsApp": "앱 언어와 같음"
+  },
+  "notification": {
+    "channelName": "기록 리마인더",
+    "reminderTitle": "오늘의 조각",
+    "reminderBody": "오늘 하루는 어떠셨나요? 한 조각 남겨보세요."
   },
   "lock": {
     "lockedTitle": "조각이 잠겨 있어요",

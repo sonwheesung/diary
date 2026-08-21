@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+import { syncReminders } from '@/features/notification/api/reminder';
 import { SETTING_KEYS, getSetting, setSetting } from '@/features/settings/api/settings-store';
 import { isLanguageMode, resolveLanguage, setLanguage } from '@/lib/i18n';
 import type { LanguageCode, LanguageMode } from '@/lib/i18n';
@@ -37,5 +38,12 @@ export const useLanguageStore = create<LanguageState>((set) => ({
     setLanguage(next);
     set({ mode: next, code: resolveLanguage(next) });
     void setSetting(SETTING_KEYS.language, next).catch(() => undefined);
+    /*
+     * 🔴 **예약된 알림은 예약 시점의 언어로 굳는다.** OS가 문자열을 들고 있어서
+     *   §9.1 규칙 2("코드/id만 저장")를 적용할 수 없다 — 다시 걸어야 바뀐다.
+     *   안 하면 언어를 바꾼 사람이 **일주일 동안 옛 언어 알림**을 받는다
+     *   (`docs/NOTIFICATION_SYSTEM.md` §6).
+     */
+    void syncReminders();
   },
 }));
