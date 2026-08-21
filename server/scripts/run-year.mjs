@@ -29,10 +29,11 @@ import {
   weekKeyRange,
   weekKeysInMonth,
 } from '../../features/ai/period.ts';
-import { ENTRIES } from './fixtures/year-2025/index.mjs';
-
 const year = process.argv.find((a) => /^\d{4}$/.test(a)) ?? '2025';
 const fresh = process.argv.includes('--fresh');
+
+/** 픽스처는 연도별 폴더다. 없으면 여기서 죽는다 — 조용히 빈 해를 만드는 것보다 낫다 */
+const { ENTRIES } = await import(`./fixtures/year-${year}/index.mjs`);
 
 const OUT = join(dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/, '$1'), `.cache/year-${year}.json`);
 
