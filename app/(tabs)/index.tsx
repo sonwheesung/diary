@@ -194,6 +194,7 @@ const createStyles = (colors: Palette) =>
     streakText: {
       ...typography.label,
       color: colors.accent,
+      flexShrink: 1,
     },
     sectionHeader: {
       flexDirection: 'row',
@@ -203,6 +204,7 @@ const createStyles = (colors: Palette) =>
     sectionTitle: {
       ...typography.title,
       color: colors.text,
+      flexShrink: 1,
     },
     more: {
       ...typography.label,
@@ -239,14 +241,17 @@ const createStyles = (colors: Palette) =>
     rowDate: {
       ...typography.caption,
       color: colors.text,
+      flexShrink: 1,
     },
     rowRelative: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     rowEmotion: {
       ...typography.caption,
       color: colors.accentMuted,
+      flexShrink: 1,
     },
     rowTitle: {
       ...typography.subtitle,

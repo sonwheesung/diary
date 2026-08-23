@@ -191,6 +191,7 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     center: {
       flex: 1,
@@ -208,6 +209,11 @@ const createStyles = (colors: Palette) =>
       borderRadius: radius.md,
       backgroundColor: colors.accentSoft,
     },
+    /*
+     * `flex: 1`이 §10(행 안의 Text에 `flexShrink`)을 여기서 이미 지킨다 — 위기 배너의
+     * 세 줄은 이 상자 안에 있어 폭이 확정된다. **`concernTitle`·`concernText`·`concernChannel`에
+     * 따로 줄 필요가 없고, 이 `flex: 1`을 떼면 상담 채널 문구가 잘린다.**
+     */
     concernBody: {
       flex: 1,
       gap: spacing.xs,
@@ -237,10 +243,12 @@ const createStyles = (colors: Palette) =>
     period: {
       ...typography.title,
       color: colors.text,
+      flexShrink: 1,
     },
     week: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     summary: {
       ...typography.body,
@@ -272,5 +280,6 @@ const createStyles = (colors: Palette) =>
     reportLabel: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
     },
   });

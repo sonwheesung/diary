@@ -363,6 +363,7 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     headerLinkWrap: {
       flexDirection: 'row',
@@ -373,6 +374,7 @@ const createStyles = (colors: Palette) =>
     headerLink: {
       ...typography.label,
       color: colors.accent,
+      flexShrink: 1,
     },
     headerDot: {
       width: 6,
@@ -406,6 +408,7 @@ const createStyles = (colors: Palette) =>
     categoryLabel: {
       ...typography.label,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     categoryLabelOn: {
       color: colors.textOnAccent,

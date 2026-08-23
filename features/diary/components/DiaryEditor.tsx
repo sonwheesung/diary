@@ -769,6 +769,7 @@ const createStyles = (colors: Palette) =>
     dateRest: {
       ...typography.label,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     emotionButton: {
       minWidth: 38,
@@ -798,6 +799,7 @@ const createStyles = (colors: Palette) =>
     datePlaceholder: {
       ...typography.subtitle,
       color: colors.accent,
+      flexShrink: 1,
     },
     tagRow: {
       flexDirection: 'row',

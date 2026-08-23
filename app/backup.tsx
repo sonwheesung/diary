@@ -294,6 +294,7 @@ const createStyles = (colors: Palette) =>
       ...typography.label,
       color: colors.text,
       marginLeft: spacing.md,
+      flexShrink: 1,
     },
     headerSpacer: {
       flex: 1,
@@ -325,10 +326,12 @@ const createStyles = (colors: Palette) =>
     statusLabel: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     statusValue: {
       ...typography.label,
       color: colors.text,
+      flexShrink: 1,
     },
     graceBox: {
       gap: spacing.xs,
@@ -394,6 +397,7 @@ const createStyles = (colors: Palette) =>
     linkText: {
       ...typography.body,
       color: colors.accent,
+      flexShrink: 1,
     },
     subtle: {
       ...typography.caption,

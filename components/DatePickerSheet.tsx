@@ -123,6 +123,7 @@ const createStyles = (colors: Palette) =>
     monthLabel: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     hint: {
       ...typography.caption,

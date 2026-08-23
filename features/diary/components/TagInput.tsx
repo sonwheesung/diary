@@ -166,6 +166,7 @@ const createStyles = (colors: Palette) =>
     chipLabel: {
       ...typography.label,
       color: colors.accent,
+      flexShrink: 1,
     },
     suggestionBlock: {
       gap: spacing.sm,
@@ -188,5 +189,6 @@ const createStyles = (colors: Palette) =>
     suggestionLabel: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
     },
   });

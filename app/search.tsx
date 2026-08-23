@@ -301,10 +301,12 @@ const createStyles = (colors: Palette) =>
     rowDate: {
       ...typography.caption,
       color: colors.text,
+      flexShrink: 1,
     },
     rowEmotion: {
       ...typography.caption,
       color: colors.accentMuted,
+      flexShrink: 1,
     },
     rowTitle: {
       ...typography.subtitle,

@@ -650,9 +650,14 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
     },
+    /*
+     * `rowValue`만 `flexShrink`를 갖는다(CLAUDE.md §10) — 행의 **직계 자식**이 이것뿐이기
+     * 때문이다. `rowTitle`·`rowSub`·`rowNote`는 `rowBody`(flex:1) 안에 있어 폭이 이미 확정된다.
+     */
     rowValue: {
       ...typography.label,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     badge: {
       width: 8,

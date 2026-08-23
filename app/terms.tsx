@@ -64,5 +64,6 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
   });

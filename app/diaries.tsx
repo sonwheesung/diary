@@ -197,6 +197,7 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     center: {
       flex: 1,
@@ -239,10 +240,12 @@ const createStyles = (colors: Palette) =>
     rowDate: {
       ...typography.caption,
       color: colors.text,
+      flexShrink: 1,
     },
     rowEmotion: {
       ...typography.caption,
       color: colors.accentMuted,
+      flexShrink: 1,
     },
     rowTitle: {
       ...typography.subtitle,

@@ -137,6 +137,7 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     center: {
       flex: 1,
@@ -187,6 +188,7 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
       marginLeft: 'auto',
+      flexShrink: 1,
     },
     cardTitle: {
       ...typography.body,

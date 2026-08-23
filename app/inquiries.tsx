@@ -248,6 +248,7 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     center: {
       flex: 1,
@@ -295,6 +296,7 @@ const createStyles = (colors: Palette) =>
     categoryLabel: {
       ...typography.caption,
       color: colors.accent,
+      flexShrink: 1,
     },
     statusChip: {
       paddingHorizontal: spacing.sm,
@@ -324,6 +326,7 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
       marginLeft: 'auto',
+      flexShrink: 1,
     },
     question: {
       ...typography.body,
@@ -350,11 +353,13 @@ const createStyles = (colors: Palette) =>
     replyLabel: {
       ...typography.label,
       color: colors.accent,
+      flexShrink: 1,
     },
     replyDate: {
       ...typography.caption,
       color: colors.textMuted,
       marginLeft: 'auto',
+      flexShrink: 1,
     },
     replyBody: {
       ...typography.body,

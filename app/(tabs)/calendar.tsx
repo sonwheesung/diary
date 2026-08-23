@@ -177,6 +177,7 @@ const createStyles = (colors: Palette) =>
     monthLabel: {
       ...typography.title,
       color: colors.text,
+      flexShrink: 1,
     },
     dayHeader: {
       marginTop: -spacing.sm,
@@ -199,6 +200,7 @@ const createStyles = (colors: Palette) =>
     emptyActionLabel: {
       ...typography.label,
       color: colors.accent,
+      flexShrink: 1,
     },
     row: {
       flexDirection: 'row',

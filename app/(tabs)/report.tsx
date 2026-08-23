@@ -533,10 +533,12 @@ const createStyles = (colors: Palette) =>
     rowPeriod: {
       ...typography.subtitle,
       color: colors.text,
+      flexShrink: 1,
     },
     rowWeek: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     rowSummary: {
       ...typography.body,

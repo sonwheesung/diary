@@ -107,6 +107,7 @@ const createStyles = (colors: Palette) =>
     label: {
       ...typography.body,
       color: colors.text,
+      flexShrink: 1,
     },
     labelSelected: {
       color: colors.accent,

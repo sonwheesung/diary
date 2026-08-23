@@ -306,6 +306,7 @@ const createStyles = (colors: Palette) =>
     headerTitle: {
       ...typography.label,
       color: colors.text,
+      flexShrink: 1,
     },
     center: {
       flex: 1,

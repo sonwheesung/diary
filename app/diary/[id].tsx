@@ -325,6 +325,7 @@ const createStyles = (colors: Palette) =>
     dateRest: {
       ...typography.label,
       color: colors.textMuted,
+      flexShrink: 1,
     },
     emotionChip: {
       paddingHorizontal: spacing.md,
