@@ -95,4 +95,4 @@ export const REPORT_SCHEMA = {
  * ⚠ 리포트와 함께 저장한다. 안 그러면 나중에 "왜 그때 리포트는 달랐지"에 답할 수 없다 —
  *   모델 버전과 프롬프트 버전 둘 다 움직이면 원인을 분리하지 못한다.
  */
-export const PROMPT_VERSION = 4;
+export const PROMPT_VERSION = 6;
