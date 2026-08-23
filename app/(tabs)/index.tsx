@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import Feather from 'lucide-react-native/icons/feather';
 import Flame from 'lucide-react-native/icons/flame';
 import Pencil from 'lucide-react-native/icons/pencil';
 import Search from 'lucide-react-native/icons/search';
@@ -81,14 +82,19 @@ export default function HomeScreen() {
 
       <ReportReadyCard />
 
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{t('home.recent')}</Text>
-        {recent.length > 0 && (
+      {/*
+        🔴 **조각이 없으면 제목을 세우지 않는다.** 빈 목록 위의 "최근의 조각들"은
+          첫 사용자에게 *"여기 뭔가 있어야 하는데 없다"* 로 읽힌다 — 없는 것의 이름을
+          부르는 셈이다. 하나라도 있으면 그때 목록이 되고 제목이 필요해진다.
+      */}
+      {recent.length > 0 && (
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{t('home.recent')}</Text>
           <Pressable accessibilityRole="button" onPress={() => router.push('/diaries')} hitSlop={8}>
             <Text style={styles.more}>{t('common.more')}</Text>
           </Pressable>
-        )}
-      </View>
+        </View>
+      )}
 
       {loading ? (
         <ActivityIndicator color={colors.accentMuted} style={styles.loading} />
@@ -97,10 +103,17 @@ export default function HomeScreen() {
           <Text style={styles.errorText}>{error}</Text>
         </Card>
       ) : recent.length === 0 ? (
-        <Card>
+        /*
+         * 🔴 **카드를 벗겼다.** 테두리 안에 두 줄만 있으면 "비어 있는 상자"가 되어
+         *   고장 난 것처럼 보인다. 첫 화면에서 유일하게 남는 인상이라 조용한 여백이 낫다.
+         * ⚠ **버튼을 넣지 않는다.** 위에 이미 `조각 쓰기`가 있고, 레퍼런스가 공통으로
+         *   말하는 것이 *"하나의 CTA"* 다 — 같은 화면에 두 개를 두면 둘 다 약해진다.
+         */
+        <View style={styles.empty}>
+          <Feather size={28} color={colors.accentMuted} />
           <Text style={styles.emptyTitle}>{t('home.emptyTitle')}</Text>
           <Text style={styles.emptyBody}>{t('home.emptyBody')}</Text>
-        </Card>
+        </View>
       ) : (
         <View style={styles.list}>
           {recent.map((diary) => (
@@ -241,14 +254,23 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
     },
+    /* 모바일 빈 상태는 가운데로 모은다 — 레퍼런스가 공통으로 말하는 한 가지다 */
+    empty: {
+      alignItems: 'center',
+      gap: spacing.sm,
+      paddingVertical: spacing.xxl,
+      paddingHorizontal: spacing.lg,
+    },
     emptyTitle: {
       ...typography.subtitle,
       color: colors.text,
+      textAlign: 'center',
     },
     emptyBody: {
       ...typography.caption,
       color: colors.textMuted,
-      marginTop: spacing.xs,
+      textAlign: 'center',
+      lineHeight: 20,
     },
     errorText: {
       ...typography.caption,

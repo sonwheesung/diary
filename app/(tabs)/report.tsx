@@ -9,6 +9,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { AdBanner } from '@/features/ads/components/AdBanner';
+import { CreatingOverlay } from '@/features/ai/components/CreatingOverlay';
 import { listReports, type Report } from '@/features/ai/api/report-repository';
 import {
   canCreate,
@@ -254,6 +255,7 @@ export default function ReportScreen() {
             <Button
               label={creating ? t('report.creating') : t('report.create')}
               fullWidth
+              loading={creating}
               disabled={creating || blocked !== null || !pro}
               icon={<Sparkles size={18} color={colors.textOnAccent} />}
               onPress={() => void onCreate()}
@@ -266,6 +268,12 @@ export default function ReportScreen() {
           </View>
         </>
       )}
+      {/*
+        🔴 생성은 **5초 안팎**이고 그동안 화면이 그대로면 눌렸는지 알 수 없다.
+          더 중요한 건 **이탈 방지**다 — 서버 왕복 뒤에 로컬 저장이라 그 사이 앱이 죽으면
+          캡만 소모되고 리포트가 없다(재생성도 회수 경로도 없다).
+      */}
+      <CreatingOverlay visible={creating} />
       <PeriodSheet
         visible={sheetOpen}
         kind={kind}

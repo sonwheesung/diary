@@ -103,7 +103,7 @@
     "streak": "Jours d'affilée : {{days}}",
     "recent": "Fragments récents",
     "emptyTitle": "Aucun fragment pour l'instant",
-    "emptyBody": "Écris le premier aujourd'hui.",
+    "emptyBody": "Un court fragment par jour. Plus tard, tu les reliras tous ensemble.",
     "loadError": "Impossible de charger tes fragments."
   },
   "write": {
@@ -384,7 +384,7 @@
     },
     "failedTitle": "Sauvegarde impossible",
     "graceAction": "Réabonnez-vous et tout est conservé. Touchez pour voir la date.",
-    "graceBody": "Elle sera supprimée le {{date}}. Vous réabonner avant cette date la conserve.",
+    "graceBody": "Elle sera supprimée le {{date}}. Si vous vous réabonnez avant cette date, elle est conservée.",
     "graceTitle": "Jours avant la suppression de votre sauvegarde : {{days}}",
     "lastBackup": "Dernière sauvegarde",
     "lead": "Vos entrées sont chiffrées avant de quitter cet appareil, vous pouvez donc les récupérer si vous perdez votre téléphone.",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Aucune entrée",
     "periodTooEarly": "Une période n'est pas terminée",
     "tooEarlyAt": "Une période n'est pas encore terminée. À partir du {{date}}, il ne manquera rien.",
-    "detailTitle": "Bilan"
+    "detailTitle": "Bilan",
+    "creatingNote": "C'est l'affaire d'un instant. Gardez l'application ouverte."
   },
   "aiConsent": {
     "title": "Consentement aux bilans IA",

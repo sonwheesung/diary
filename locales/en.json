@@ -103,7 +103,7 @@
     "streak": "{{days}}-day streak",
     "recent": "Recent pieces",
     "emptyTitle": "No pieces yet",
-    "emptyBody": "Write your first one today.",
+    "emptyBody": "One short piece a day. Later you can look back on them all together.",
     "loadError": "Couldn't load your pieces."
   },
   "write": {
@@ -384,7 +384,7 @@
     },
     "failedTitle": "Couldn't back up",
     "graceAction": "Resubscribe and it stays. Tap to see the date.",
-    "graceBody": "It will be removed on {{date}}. Resubscribing before then keeps it.",
+    "graceBody": "It will be deleted on {{date}}. Resubscribing before then keeps it.",
     "graceTitle": "Days until your backup is deleted: {{days}}",
     "lastBackup": "Last backup",
     "lead": "Your entries are encrypted before they leave this device, so you can get them back if you lose your phone.",
@@ -501,7 +501,7 @@
     "reported": "Thanks for letting us know. We'll look into it.",
     "delete": "Delete report",
     "deleteConfirm": "The summary will be deleted, and a report for this period can never be created again. Delete it?",
-    "concernTitle": "It sounds like you're going through a hard stretch.",
+    "concernTitle": "It sounds like you're going through a hard time.",
     "concernBody": "You don't have to carry it alone.",
     "concernChannel": "Consider reaching out to someone close to you, or a mental health professional.",
     "lockedTitle": "A moment to look back, every week",
@@ -535,7 +535,8 @@
     "periodNoEntries": "No entries",
     "periodTooEarly": "Some periods haven't ended yet",
     "tooEarlyAt": "Some periods haven't ended yet. Create it from {{date}} and nothing will be left out.",
-    "detailTitle": "Report"
+    "detailTitle": "Report",
+    "creatingNote": "It only takes a moment. Please keep the app open."
   },
   "aiConsent": {
     "title": "AI report consent",

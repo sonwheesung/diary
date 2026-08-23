@@ -103,7 +103,7 @@
     "streak": "已連續記錄 {{days}} 天",
     "recent": "最近的碎片",
     "emptyTitle": "還沒有任何碎片",
-    "emptyBody": "試著留下今天的第一片吧。",
+    "emptyBody": "每天短短記下一片，以後就能一起回頭看。",
     "loadError": "無法載入你的碎片。"
   },
   "write": {
@@ -535,7 +535,8 @@
     "periodNoEntries": "沒有碎片",
     "periodTooEarly": "還有尚未結束的期間",
     "tooEarlyAt": "還有尚未結束的期間。{{date}} 之後產生就不會遺漏。",
-    "detailTitle": "報告"
+    "detailTitle": "報告",
+    "creatingNote": "很快就好，請先不要關閉應用程式。"
   },
   "aiConsent": {
     "title": "AI 報告同意",

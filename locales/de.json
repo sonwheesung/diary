@@ -103,7 +103,7 @@
     "streak": "Tage in Folge: {{days}}",
     "recent": "Neueste Stücke",
     "emptyTitle": "Noch keine Stücke",
-    "emptyBody": "Schreib heute das erste.",
+    "emptyBody": "Jeden Tag ein kurzes Stück. Später kannst du alles zusammen durchsehen.",
     "loadError": "Deine Stücke konnten nicht geladen werden."
   },
   "write": {
@@ -444,7 +444,7 @@
     "cancelNotice": "• Kündigen oder Tarif wechseln kannst du in den Abo-Einstellungen von Play.",
     "confirming": "Dein Abo wird gerade bestätigt. Bitte versuche es gleich noch einmal.",
     "consentAgree": "Ich habe das Obige gelesen und stimme zu, dass nach Ende der Testphase automatisch abgebucht wird.",
-    "consentMinor": "Wenn eine minderjährige Person ohne Zustimmung ihres gesetzlichen Vertreters bezahlt, können die minderjährige Person selbst oder ihr gesetzlicher Vertreter den Vertrag rückgängig machen.",
+    "consentMinor": "Wenn eine minderjährige Person ohne Zustimmung ihres gesetzlichen Vertreters bezahlt, kann die minderjährige Person selbst oder ihr gesetzlicher Vertreter den Vertrag rückgängig machen.",
     "consentTerms": "Nutzungsbedingungen ansehen",
     "consentCancel": "Kündige in den Play-Abos mindestens 24 Stunden vor Ende der Testphase, dann wird nichts abgebucht. Der Zugang bleibt bis zum Ende der Testphase bestehen.",
     "consentCancelLabel": "So kündigst du",
@@ -503,7 +503,7 @@
     "deleteConfirm": "Die Zusammenfassung wird gelöscht. Für diesen Zeitraum lässt sich nie wieder ein Bericht erstellen. Trotzdem löschen?",
     "concernTitle": "Es klingt, als wäre das eine schwere Zeit für dich.",
     "concernBody": "Du musst das nicht allein tragen.",
-    "concernChannel": "Sprich vielleicht mit jemandem, der dir nahesteht, oder mit einer Fachperson.",
+    "concernChannel": "Vielleicht hilft es, mit jemandem zu sprechen, der dir nahesteht, oder mit einer Fachperson.",
     "lockedTitle": "Jede Woche ein Moment zum Zurückblicken",
     "lockedBody": "Wir fassen die Einträge der letzten Woche zu einem Rückblick wie diesem zusammen.",
     "sampleBadge": "Beispiel",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Keine Einträge",
     "periodTooEarly": "Zeitraum noch nicht vorbei",
     "tooEarlyAt": "Ein Zeitraum ist noch nicht vorbei. Ab {{date}} fehlt nichts.",
-    "detailTitle": "Bericht"
+    "detailTitle": "Bericht",
+    "creatingNote": "Dauert nur einen Moment. Lass die App bitte offen."
   },
   "aiConsent": {
     "title": "Einwilligung für KI-Berichte",

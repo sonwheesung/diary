@@ -103,7 +103,7 @@
     "streak": "{{days}} gündür aralıksız",
     "recent": "Son parçalar",
     "emptyTitle": "Henüz parça yok",
-    "emptyBody": "Bugün ilkini yaz.",
+    "emptyBody": "Günde kısa bir parça yazarsan, sonra hepsini birlikte okuyabilirsin.",
     "loadError": "Parçaların yüklenemedi."
   },
   "write": {
@@ -354,7 +354,7 @@
     "codeSaved": "Kaydettim",
     "codeTitle": "Kurtarma kodu",
     "codeUnconfirmed": "Kurtarma kodunu henüz doğrulamadın. O olmadan yedek açılamaz.",
-    "codeWarnLost": "• Bu kodu kaybedersen yedeğini kimse açamaz — biz bile.",
+    "codeWarnLost": "• Bu kodu kaybedersen yedeğini kimse açamaz; biz bile açamayız.",
     "codeWarnShared": "• Bu kodu gören herkes bundan sonra yedeğini açabilir ve bu geri alınamaz.",
     "codeWarnWhere": "• Giriş yaptığın Google hesabının dışında sakla. Kâğıt ya da başka bir parola yöneticisi iyi olur.",
     "confirmCodeBack": "Kodu tekrar göster",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Kayıt yok",
     "periodTooEarly": "Henüz bitmemiş bir dönem var",
     "tooEarlyAt": "Henüz bitmemiş bir dönem var. {{date}} tarihinden itibaren oluşturursan hiçbir şey eksik kalmaz.",
-    "detailTitle": "Rapor"
+    "detailTitle": "Rapor",
+    "creatingNote": "Birazdan biter. Uygulamayı açık tut."
   },
   "aiConsent": {
     "title": "Yapay zekâ raporu onayı",

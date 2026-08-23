@@ -103,7 +103,7 @@
     "streak": "已连续记录 {{days}} 天",
     "recent": "最近的碎片",
     "emptyTitle": "还没有任何碎片",
-    "emptyBody": "试着留下今天的第一片吧。",
+    "emptyBody": "每天短短记下一片，以后就能一起回头看。",
     "loadError": "无法加载你的碎片。"
   },
   "write": {
@@ -535,7 +535,8 @@
     "periodNoEntries": "没有碎片",
     "periodTooEarly": "还有尚未结束的时间段",
     "tooEarlyAt": "还有尚未结束的时间段。{{date}} 之后生成就不会遗漏。",
-    "detailTitle": "报告"
+    "detailTitle": "报告",
+    "creatingNote": "很快就好，请先不要关闭应用。"
   },
   "aiConsent": {
     "title": "AI 报告同意",

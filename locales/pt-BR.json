@@ -103,7 +103,7 @@
     "streak": "Dias seguidos: {{days}}",
     "recent": "Pedaços recentes",
     "emptyTitle": "Ainda não há pedaços",
-    "emptyBody": "Escreva o primeiro hoje.",
+    "emptyBody": "Um pedaço curto por dia. Depois dá para revê-los todos juntos.",
     "loadError": "Não foi possível carregar seus pedaços."
   },
   "write": {
@@ -502,7 +502,7 @@
     "delete": "Excluir relatório",
     "deleteConfirm": "O resumo será excluído e nunca mais será possível criar um relatório deste período. Excluir?",
     "concernTitle": "Parece que você está passando por um período difícil.",
-    "concernBody": "Você não precisa carregar isso sozinha ou sozinho.",
+    "concernBody": "Você não precisa carregar isso sozinho(a).",
     "concernChannel": "Considere conversar com alguém próximo ou com um profissional de saúde mental.",
     "lockedTitle": "Um momento para olhar para trás, toda semana",
     "lockedBody": "Reunimos os registros da semana passada em uma reflexão como esta.",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Sem registros",
     "periodTooEarly": "Há um período ainda em andamento",
     "tooEarlyAt": "Há um período ainda em andamento. Se criar a partir de {{date}}, nada fica de fora.",
-    "detailTitle": "Relatório"
+    "detailTitle": "Relatório",
+    "creatingNote": "Termina em instantes. Mantenha o aplicativo aberto."
   },
   "aiConsent": {
     "title": "Consentimento para relatórios de IA",

@@ -103,7 +103,7 @@
     "streak": "{{days}} hari berturut-turut",
     "recent": "Kepingan terbaru",
     "emptyTitle": "Belum ada kepingan",
-    "emptyBody": "Tulis yang pertama hari ini.",
+    "emptyBody": "Satu kepingan singkat tiap hari. Nanti bisa dilihat kembali sekaligus.",
     "loadError": "Tidak bisa memuat kepinganmu."
   },
   "write": {
@@ -384,7 +384,7 @@
     },
     "failedTitle": "Gagal mencadangkan",
     "graceAction": "Berlangganan lagi dan cadangan tetap tersimpan. Ketuk untuk melihat tanggalnya.",
-    "graceBody": "Akan dihapus pada {{date}}. Berlangganan lagi sebelum itu akan menyimpannya.",
+    "graceBody": "Akan dihapus pada {{date}}. Kalau kamu berlangganan lagi sebelum tanggal itu, cadanganmu tetap tersimpan.",
     "graceTitle": "Cadanganmu akan dihapus dalam {{days}} hari",
     "lastBackup": "Pencadangan terakhir",
     "lead": "Catatanmu dienkripsi sebelum meninggalkan perangkat ini, jadi kamu bisa mendapatkannya kembali kalau ponselmu hilang.",
@@ -503,7 +503,7 @@
     "deleteConfirm": "Ringkasannya akan dihapus. Laporan untuk periode ini tidak akan pernah bisa dibuat lagi. Tetap hapus?",
     "concernTitle": "Sepertinya kamu sedang melewati masa yang berat.",
     "concernBody": "Kamu tidak harus menanggungnya sendirian.",
-    "concernChannel": "Pertimbangkan untuk berbicara dengan orang terdekat atau tenaga profesional.",
+    "concernChannel": "Mungkin ada baiknya bercerita ke orang terdekat atau ke tenaga profesional.",
     "lockedTitle": "Waktu untuk menengok ke belakang, setiap minggu",
     "lockedBody": "Kami merangkum catatan minggu lalu menjadi renungan seperti ini.",
     "sampleBadge": "Contoh",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Tidak ada catatan",
     "periodTooEarly": "Ada periode yang belum berakhir",
     "tooEarlyAt": "Ada periode yang belum berakhir. Jika dibuat mulai {{date}}, tidak ada yang terlewat.",
-    "detailTitle": "Laporan"
+    "detailTitle": "Laporan",
+    "creatingNote": "Sebentar saja. Jangan tutup aplikasi dulu, ya."
   },
   "aiConsent": {
     "title": "Persetujuan laporan AI",

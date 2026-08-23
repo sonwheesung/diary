@@ -103,7 +103,7 @@
     "streak": "Ghi liên tục {{days}} ngày",
     "recent": "Những mảnh gần đây",
     "emptyTitle": "Chưa có mảnh nào",
-    "emptyBody": "Hãy viết mảnh đầu tiên hôm nay.",
+    "emptyBody": "Mỗi ngày một mảnh ngắn. Sau này bạn có thể xem lại tất cả cùng lúc.",
     "loadError": "Không tải được các mảnh của bạn."
   },
   "write": {
@@ -355,7 +355,7 @@
     "codeTitle": "Mã khôi phục",
     "codeUnconfirmed": "Bạn chưa xác nhận mã khôi phục. Không có mã thì không mở được bản sao lưu.",
     "codeWarnLost": "• Nếu mất mã này, không ai mở được bản sao lưu của bạn — kể cả chúng tôi.",
-    "codeWarnShared": "• Ai nhìn thấy mã này đều có thể mở bản sao lưu của bạn từ nay về sau, và không thể thu hồi.",
+    "codeWarnShared": "• Bất kỳ ai nhìn thấy mã này đều có thể mở bản sao lưu của bạn từ nay về sau, và không thể thu hồi.",
     "codeWarnWhere": "• Hãy lưu bên ngoài tài khoản Google mà bạn dùng để đăng nhập. Giấy hoặc một trình quản lý mật khẩu khác đều phù hợp.",
     "confirmCodeBack": "Xem lại mã",
     "confirmCodeBody": "Nhập nhóm {{index}} — bốn ký tự.",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Không có mảnh nào",
     "periodTooEarly": "Có khoảng thời gian chưa kết thúc",
     "tooEarlyAt": "Có khoảng thời gian chưa kết thúc. Nếu tạo từ {{date}} thì sẽ không bỏ sót phần nào.",
-    "detailTitle": "Báo cáo"
+    "detailTitle": "Báo cáo",
+    "creatingNote": "Chỉ một lát thôi. Bạn giữ ứng dụng mở nhé."
   },
   "aiConsent": {
     "title": "Đồng ý cho báo cáo AI",

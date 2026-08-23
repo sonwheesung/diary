@@ -103,7 +103,7 @@
     "streak": "{{days}}일 연속 기록 중",
     "recent": "최근의 조각들",
     "emptyTitle": "아직 모은 조각이 없어요",
-    "emptyBody": "오늘의 첫 조각을 남겨보세요.",
+    "emptyBody": "하루에 하나씩 짧게 남기면, 나중에 모아서 돌아볼 수 있어요.",
     "loadError": "조각을 불러오지 못했습니다."
   },
   "write": {
@@ -535,7 +535,8 @@
     "periodNoEntries": "조각 없음",
     "periodTooEarly": "아직 끝나지 않은 기간이 있어요",
     "tooEarlyAt": "아직 끝나지 않은 기간이 있어요. {{date}}부터 만들면 빠지지 않아요.",
-    "detailTitle": "리포트"
+    "detailTitle": "리포트",
+    "creatingNote": "잠시면 끝나요. 앱을 닫지 말아 주세요."
   },
   "aiConsent": {
     "title": "AI 리포트 동의",

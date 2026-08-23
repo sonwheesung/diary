@@ -103,7 +103,7 @@
     "streak": "Giorni di fila: {{days}}",
     "recent": "Pezzi recenti",
     "emptyTitle": "Ancora nessun pezzo",
-    "emptyBody": "Scrivi oggi il primo.",
+    "emptyBody": "Un pezzo breve al giorno. Più avanti potrai rileggerli tutti insieme.",
     "loadError": "Non è stato possibile caricare i tuoi pezzi."
   },
   "write": {
@@ -384,7 +384,7 @@
     },
     "failedTitle": "Backup non riuscito",
     "graceAction": "Se ti riabboni resta tutto. Tocca per vedere la data.",
-    "graceBody": "Verrà eliminato il {{date}}. Se ti riabboni prima, resta tutto.",
+    "graceBody": "Verrà eliminato il {{date}}. Se ti riabboni prima di quella data, resta tutto.",
     "graceTitle": "Giorni prima dell'eliminazione del backup: {{days}}",
     "lastBackup": "Ultimo backup",
     "lead": "Le tue voci vengono cifrate prima di lasciare questo dispositivo, così puoi riaverle se perdi il telefono.",
@@ -502,7 +502,7 @@
     "delete": "Elimina resoconto",
     "deleteConfirm": "Il riassunto verrà eliminato e per questo periodo non potrai più creare un resoconto. Eliminare comunque?",
     "concernTitle": "Sembra che tu stia attraversando un periodo difficile.",
-    "concernBody": "Non devi portarlo da sola o da solo.",
+    "concernBody": "Non devi affrontarlo in solitudine.",
     "concernChannel": "Valuta di parlarne con una persona vicina o con un professionista della salute mentale.",
     "lockedTitle": "Ogni settimana, un momento per guardare indietro",
     "lockedBody": "Raccogliamo le voci della settimana scorsa in una riflessione come questa.",
@@ -535,7 +535,8 @@
     "periodNoEntries": "Nessuna voce",
     "periodTooEarly": "C'è un periodo non ancora concluso",
     "tooEarlyAt": "C'è un periodo non ancora concluso. Creandolo dal {{date}} non manca nulla.",
-    "detailTitle": "Resoconto"
+    "detailTitle": "Resoconto",
+    "creatingNote": "Ci vuole solo un attimo. Tieni l'app aperta."
   },
   "aiConsent": {
     "title": "Consenso ai resoconti IA",
