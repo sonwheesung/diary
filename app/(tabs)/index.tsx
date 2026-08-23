@@ -173,6 +173,8 @@ const createStyles = (colors: Palette) =>
     date: {
       ...typography.label,
       color: colors.textMuted,
+      // 돋보기와 나란한 행이라 같은 문제를 겪는다 — `Sun, August 23,`에서 연도가 사라졌다
+      flexShrink: 1,
     },
     greeting: {
       ...typography.display,
