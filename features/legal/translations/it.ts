@@ -7,23 +7,36 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  *   prevale `legal-text.ts` (coreano).
  * ⚠ **La struttura deve coincidere esattamente con quella coreana** — stesso numero di sezioni
  *   e di righe in ciascuna. `npm run check:legal` lo verifica.
+ *
+ * ⚠ **Backup e IA dicono frasi opposte** e non vanno mai fuse in una sola:
+ *     backup = conservato ma illeggibile → «lo conserviamo ma non possiamo leggerlo»
+ *     IA     = letto ma non conservato  → «non lo conserviamo», e mai «non possiamo vederlo»
+ *   La sezione 1 enuncia questa differenza di proposito: non va attenuata traducendo.
+ *
+ * ⚠ Ogni durata va tradotta indicando **da quando decorre e fino a quando** (90 giorni,
+ *   30 giorni, 5 anni, 3 anni, 1 anno). Un «prima» o un «poi» senza termine di riferimento
+ *   rende la clausola inapplicabile.
  */
 export const PRIVACY_IT: LegalDoc = {
   title: 'Informativa sulla privacy di Jogak',
-  sourceFingerprint: '4b621b97',
-  effective: '2026-08-09',
-  updated: '2026-08-11',
+  sourceFingerprint: '47ec2dc4',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
-    'Vivace Games (“il gestore”) rispetta la Legge sulla protezione delle informazioni personali e le altre norme applicabili e tratta i dati personali delle persone che usano “Jogak” (“il servizio”) come indicato di seguito. Jogak non invia ad alcun server le voci di diario che scrivi e, per principio, raccoglie soltanto le informazioni minime necessarie.',
+    'Vivace Games (“il gestore”) rispetta la Legge sulla protezione delle informazioni personali e le altre norme applicabili e tratta i dati personali delle persone che usano “Jogak” (“il servizio”) come indicato di seguito. Per principio Jogak conserva sul tuo dispositivo le voci di diario che scrivi, e le invia a un server soltanto per il backup che attivi tu e per i report di sintesi con IA che crei tu. Per il resto raccoglie soltanto le informazioni minime necessarie.',
   sections: [
     {
-      h: '1. Ciò che non raccogliamo (lo diciamo per primo)',
+      h: '1. Dove sono conservate le voci di diario (lo diciamo per primo)',
       body: [
-        'Il gestore non raccoglie le informazioni seguenti e non le trasmette fuori dal tuo dispositivo.',
-        '• Titoli, testo, elenchi, foto, tag ed emozioni delle voci — restano solo nella memoria interna del tuo dispositivo.',
+        'Le voci (titoli, testo, elenchi, foto, tag ed emozioni) sono conservate nella memoria interna del tuo dispositivo e, in linea di principio, non escono da esso.',
+        '⚠ Esistono però due eccezioni, e solo se le scegli tu. Nessuna delle due avviene automaticamente.',
+        '• Se attivi il backup — una copia delle tue voci, cifrata sul tuo dispositivo, è conservata sul server del gestore. Il gestore non può leggere quella copia. I dettagli sono alla sezione 2(c).',
+        '• Se crei un report di sintesi con IA — il contenuto delle voci di quel periodo transita non cifrato attraverso il server del gestore ed è inviato al fornitore di IA. Il gestore non conserva quel contenuto. I dettagli sono alla sezione 2(e).',
+        '⚠ Le due frasi qui sopra dicono cose diverse. Il backup lo conserviamo ma non possiamo leggerlo; il contenuto per il report con IA lo leggiamo ma non lo conserviamo. Lo diciamo chiaramente, senza attenuarlo.',
+        'Il gestore non raccoglie in nessun caso le informazioni seguenti e non le trasmette fuori dal tuo dispositivo.',
         '• Il PIN, la sequenza o la risposta del suggerimento del blocco app — restano nella memoria sicura del dispositivo solo in forma non recuperabile (un hash); l’originale non è conservato da nessuna parte.',
         '• Il tuo nome, la data di nascita, il numero di telefono, l’indirizzo, la rubrica, la posizione, né alcun registro di accesso all’intera libreria foto.',
-        'Le foto che scegli nell’app vengono solo copiate nella cartella dedicata dell’app sul tuo dispositivo per poterle inserire in una voce; non vengono trasmesse da nessuna parte.',
+        'Le foto che scegli nell’app vengono copiate nella cartella dedicata dell’app sul tuo dispositivo per poterle inserire in una voce e, se non attivi il backup, non vengono trasmesse all’esterno. Ai report di sintesi con IA non viene trasmessa alcuna foto.',
       ],
     },
     {
@@ -35,11 +48,31 @@ export const PRIVACY_IT: LegalDoc = {
         '  — Finalità: identificare chi scrive, inviare la risposta e permetterti di consultare il tuo storico',
         '• Categoria e contenuto della richiesta',
         '• Tipo di dispositivo (Android/iOS) e versione dell’app — per capire in quale ambiente si è verificato il problema',
-        '※ L’accesso serve solo per “Contatti”; scrivere voci, il blocco app e le altre funzioni non lo richiedono.',
+        '※ L’accesso serve per “Contatti”, per l’abbonamento, per il backup e per i report con IA; scrivere voci, il blocco app e le altre funzioni non lo richiedono.',
         '※ I minori di 14 anni non possono usare la funzione di accesso.',
         'b. Informazioni raccolte automaticamente durante la pubblicazione degli annunci',
         '• Identificatore pubblicitario (ID pubblicità Android), informazioni su dispositivo e rete, registri di impressioni e clic',
         '• Quanto sopra è raccolto da Google (AdMob); i dettagli e come opporsi sono nella sezione 7.',
+        'c. Se attivi il backup (è necessario l’abbonamento)',
+        '• Una copia cifrata delle tue voci — in una forma che il gestore non può decifrare',
+        '• Identificatore del backup, ora del backup, numero di generazione e dimensione — queste informazioni non sono cifrate. Il gestore può sapere quale account ha eseguito il backup, quando e di quale dimensione.',
+        '  — Base giuridica: il tuo consenso specifico (raccolto nella schermata in cui attivi il backup)',
+        '⚠ Per essere precisi: il gestore conserva quella copia ma non può leggerla. La chiave di decifratura esiste solo sul tuo dispositivo e nel codice di recupero che custodisci tu; il gestore non la possiede.',
+        '⚠ Se perdi il codice di recupero non esiste alcun modo di aprire il backup. Nemmeno il gestore può aprirlo per te.',
+        'd. Se usi un abbonamento',
+        '• Stato dell’abbonamento — chiave del diritto, scadenza, periodo di tolleranza per pagamenti non riusciti, se è previsto il rinnovo',
+        '• L’identificatore di transazione rilasciato dallo store, l’identificatore del prodotto e la distinzione dell’ambiente di pagamento (produzione/test)',
+        '• I registri di variazione dello stato dell’abbonamento inviati dal servizio di pagamento (acquisto, rinnovo, disdetta, rimborso ecc.) e il loro contenuto originale',
+        '  — Base giuridica: Legge sulla protezione delle informazioni personali, art. 15(1)4 (necessario per eseguire le misure richieste, ossia fornire il diritto di abbonamento richiesto)',
+        '  — Finalità: verificare il diritto di abbonamento (rimozione degli annunci, uso del backup, uso dei report con IA), gestire richieste di pagamento e rimborsi',
+        '⚠ I dati di pagamento come numeri di carta o di conto sono gestiti da Google Play e non vengono trasmessi al gestore. Il gestore può sapere solo che hai pagato e fino a quando l’abbonamento è valido.',
+        'e. Se crei report di sintesi con IA (è necessario l’abbonamento)',
+        '• Ciò che transita per il server del gestore ed è inviato al fornitore di IA: titolo, testo, emozione e data delle voci del periodo per cui hai richiesto un report',
+        '• Ciò che il gestore conserva: la sintesi generata dall’IA, l’identificativo dell’account che ha creato il report, il periodo, il numero di volte e il numero di token utilizzati',
+        '⚠ Per essere precisi: il gestore non conserva il contenuto del diario in sé. Tuttavia ① nel momento in cui la sintesi viene prodotta il contenuto transita nel server del gestore, quindi non possiamo dirti che «il gestore non può vederlo», e ② la sintesi generata è conservata per 90 giorni. Lo diciamo chiaramente, senza attenuarlo.',
+        '⚠ La sintesi è scritta a partire dal tuo diario, quindi può contenerne il contenuto.',
+        '• Consenso specifico per le informazioni sensibili: un diario può contenere informazioni sensibili, come lo stato di salute o psicologico, ai sensi dell’art. 23 della Legge sulla protezione delle informazioni personali. Poiché i report di sintesi con IA trattano tale contenuto non cifrato, al primo utilizzo della funzione raccogliamo un consenso specifico al trattamento di informazioni sensibili. Questo consenso è distinto dal consenso al trasferimento all’estero di cui alla sezione 6, e puoi sceglierli separatamente.',
+        'Anche senza il consenso, tutte le funzioni diverse dai report con IA restano pienamente disponibili. I report sono generati soltanto quando li crei tu e non vengono mai prodotti automaticamente.',
       ],
     },
     {
@@ -48,6 +81,9 @@ export const PRIVACY_IT: LegalDoc = {
         '• Ricezione e gestione delle richieste: esaminare ciò che hai inviato e individuare e correggere i malfunzionamenti',
         '• Identificazione e risposta: recapitarti la risposta e permetterti di rivedere il tuo storico',
         '• Pubblicazione di annunci: mostrare pubblicità a chi usa la versione gratuita e misurarne il rendimento',
+        '• Backup e ripristino: se lo hai attivato, conservare la copia cifrata delle tue voci e restituirtela su tua richiesta',
+        '• Verifica del diritto di abbonamento: fornire a chi ha pagato la rimozione degli annunci, il backup e i report con IA, e gestire richieste di pagamento e rimborsi',
+        '• Creazione dei report di sintesi con IA e miglioramento della qualità: produrre la sintesi del periodo che hai richiesto e, esaminandone il risultato, migliorarne la qualità',
         'Il gestore non usa i dati personali per finalità diverse da quelle sopra indicate e, in caso di cambio di finalità, acquisirà il consenso in anticipo.',
       ],
     },
@@ -57,6 +93,14 @@ export const PRIVACY_IT: LegalDoc = {
         '• Dati dell’account (indirizzo e-mail, “sub” di Google): fino all’eliminazione dell’account. All’eliminazione li distruggiamo senza indugio o li rendiamo non tracciabili.',
         '• Contenuto delle richieste: 3 anni dalla ricezione (Legge sulla tutela dei consumatori nel commercio elettronico — registri su reclami o composizione delle controversie)',
         '• Dati comportamentali basati sull’identificatore pubblicitario: fino a 1 anno dalla raccolta',
+        '• Copia di backup cifrata: conservata finché il backup resta attivo e fino a 90 giorni dopo la fine dell’abbonamento, poi distrutta automaticamente. Se disattivi il backup, ne chiedi la cancellazione o elimini il tuo account, la distruggiamo senza indugio, senza attendere quei 90 giorni. I backup a cui non si accede da 3 anni o più vengono distrutti (riguarda chi ha disinstallato l’app senza eliminare l’account).',
+        '• Registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno dalla distruzione — perché tu possa capire “perché il ripristino non funziona”; l’identificatore dell’account non viene conservato insieme.',
+        '• Sintesi generata dall’IA: 90 giorni dal giorno della creazione. Trascorsi i quali viene eliminata automaticamente.',
+        '• Registri di utilizzo dei report (identificatore dell’account, periodo, numero di volte, numero di token): fino al raggiungimento della finalità o fino all’eliminazione dell’account',
+        '• Registri su contratti o recesso e su pagamento e fornitura di beni: 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)',
+        'Se elimini l’account, gli identificatori dell’account (e-mail, “sub” di Google) sono resi non tracciabili senza indugio, e i registri delle transazioni sopra indicati sono conservati separatamente e in forma non tracciabile per il periodo indicato e poi distrutti.',
+        '⚠ L’eliminazione dell’account non annulla automaticamente il tuo abbonamento Google Play. Devi annullarlo tu in Google Play > Abbonamenti; in caso contrario continuerai a essere addebitato.',
+        '⚠ L’avviso della cancellazione del backup dovuta alla scadenza dell’abbonamento ti raggiunge solo a schermo, quando apri l’app. Se non la apri, quell’avviso potrebbe non raggiungerti.',
         'Trascorso il periodo o raggiunta la finalità, distruggiamo i dati senza indugio.',
       ],
     },
@@ -64,6 +108,7 @@ export const PRIVACY_IT: LegalDoc = {
       h: '5. Comunicazione a terzi',
       body: [
         'Il gestore non comunica a terzi i dati personali delle persone che usano il servizio.',
+        'Le società indicate nella sezione 6 trattano i dati per conto del gestore e non li usano per finalità proprie. Il fornitore di IA non utilizza il contenuto del diario che riceve per addestrare i modelli.',
         'Fanno eccezione i casi in cui vi sia una specifica previsione di legge o in cui un’autorità inquirente lo richieda secondo le procedure e le forme previste dalla legge.',
       ],
     },
@@ -71,10 +116,13 @@ export const PRIVACY_IT: LegalDoc = {
       h: '6. Esternalizzazione del trattamento e trasferimento all’estero',
       body: [
         'Per erogare il servizio il gestore esternalizza il trattamento come segue, e una parte avviene fuori dalla Corea.',
-        '• Google LLC — Paese: Stati Uniti. Contatto: https://support.google.com/policies/contact/general_privacy_form. Finalità: pubblicazione e misurazione degli annunci (AdMob), accesso con account Google. Dati: identificatore pubblicitario, informazioni su dispositivo e rete e, all’accesso, indirizzo e-mail e identificatore dell’account. Quando e come: trasmessi in rete alla richiesta di un annuncio e all’accesso. Conservazione: secondo l’informativa privacy di Google',
-        '• Supabase Inc. — Paese: Stati Uniti (sede legale). Contatto: privacy@supabase.com. Finalità: conservare in banca dati le informazioni su richieste e account. Dati: quelli della sezione 2(a). Quando e come: trasmessi in rete all’invio di una richiesta. Conservazione: i periodi della sezione 4. ※ Il luogo fisico di archiviazione è la Repubblica di Corea (regione di Seoul), ma lo indichiamo come trasferimento all’estero perché la società che opera ha sede fuori dalla Corea.',
-        '• Vercel Inc. — Paese: Stati Uniti. Contatto: privacy@vercel.com. Finalità: gestire il server che riceve le richieste. Dati: quelli della sezione 2(a). Quando e come: trasmessi in rete all’invio di una richiesta. Conservazione: fino al termine del contratto di esternalizzazione',
-        'Puoi opporti al trasferimento all’estero dei tuoi dati. Per opporti ai trasferimenti legati alla pubblicità, disattiva gli annunci personalizzati secondo la sezione 7; per quelli legati alle richieste, basta non usare la funzione “Contatti” (tutte le altre funzioni, compresa la scrittura delle voci, restano disponibili).',
+        '• Google LLC — Paese: Stati Uniti. Contatto: https://support.google.com/policies/contact/general_privacy_form. Finalità: pubblicazione e misurazione degli annunci (AdMob), accesso con account Google, elaborazione e verifica dei pagamenti dell’abbonamento. Dati: identificatore pubblicitario, informazioni su dispositivo e rete, all’accesso indirizzo e-mail e identificatore dell’account, e dati di transazione dello store. Quando e come: trasmessi in rete alla richiesta di un annuncio, all’accesso e al pagamento. Conservazione: secondo l’informativa privacy di Google',
+        '• Supabase Inc. — Paese: Stati Uniti (sede legale). Contatto: privacy@supabase.com. Finalità: conservare in banca dati le informazioni su richieste e account, nonché la copia di backup cifrata e lo stato dell’abbonamento. Dati: quelli delle sezioni 2(a), 2(c) e 2(d). Quando e come: trasmessi in rete all’invio di una richiesta e all’esecuzione del backup. Conservazione: i periodi della sezione 4. ※ Il luogo fisico di archiviazione è la Repubblica di Corea (regione di Seoul), ma lo indichiamo come trasferimento all’estero perché la società che opera ha sede fuori dalla Corea.',
+        '• Vercel Inc. — Paese: Stati Uniti. Contatto: privacy@vercel.com. Finalità: gestire il server che riceve le richieste e i server di backup e di IA. Dati: quelli della sezione 2(a). Quando e come: trasmessi in rete all’invio di una richiesta. Conservazione: fino al termine del contratto di esternalizzazione. ※ La copia di backup cifrata viene inviata direttamente all’archivio senza passare da questo server.',
+        '• RevenueCat, Inc. — Paese: Stati Uniti. Contatto: compliance@revenuecat.com. Finalità: verificare i pagamenti dell’abbonamento e controllarne lo stato. Dati: identificatore dell’account, identificatori di transazione e prodotto dello store, informazioni su dispositivo e app. Quando e come: trasmessi in rete all’apertura della schermata di abbonamento e al pagamento. Conservazione: fino al termine del contratto di esternalizzazione',
+        '• OpenAI OpCo, LLC — Paese: Stati Uniti (1455 Third Street, San Francisco, California 94158, USA). Contatto: dpo@openai.com. Finalità: generare un report di sintesi. Dati: titolo, testo, emozione e data delle voci del periodo per cui hai richiesto un report. Quando e come: trasmessi in rete nel momento in cui premi Crea report. Conservazione: il server del gestore non conserva il contenuto del diario — resta in memoria solo mentre la sintesi viene prodotta e viene scartato subito dopo. Il fornitore di IA lo conserva per un massimo di 30 giorni per il monitoraggio degli abusi e poi lo elimina, e anche in tale periodo non lo utilizza per addestrare i modelli.',
+        '⚠ Il trasferimento all’estero per i report con IA richiede un consenso specifico. Al primo utilizzo della funzione ti mostriamo le stesse informazioni dentro l’app e raccogliamo il tuo consenso; questo consenso è distinto dal consenso sulle informazioni sensibili di cui alla sezione 2(e).',
+        'Puoi opporti al trasferimento all’estero dei tuoi dati. Per opporti ai trasferimenti legati alla pubblicità, disattiva gli annunci personalizzati secondo la sezione 7; i trasferimenti legati alle richieste non avvengono se non usi “Contatti”. Se non attivi il backup, non ti abboni e non crei report, i trasferimenti collegati non avvengono, e tutte le altre funzioni, compresa la scrittura delle voci, restano disponibili.',
       ],
     },
     {
@@ -85,6 +133,7 @@ export const PRIVACY_IT: LegalDoc = {
         'Come opporsi (Android): Impostazioni > Privacy > Annunci > “Elimina ID pubblicità” oppure “Disattiva la personalizzazione degli annunci”',
         'Come opporsi (iOS): Impostazioni > Privacy e sicurezza > Tracciamento > disattiva “Consenti alle app di richiedere il tracciamento”',
         'Anche opponendoti, gli annunci potrebbero continuare a comparire, ma saranno annunci generici non basati sui tuoi interessi.',
+        'Se ti abboni non ti vengono mostrati annunci, e la raccolta pubblicitaria sopra descritta non avviene.',
         'Maggiori informazioni su come Google tratta i dati personali a fini pubblicitari: https://policies.google.com/technologies/ads',
       ],
     },
@@ -93,7 +142,9 @@ export const PRIVACY_IT: LegalDoc = {
       body: [
         'Procedura: i dati personali il cui periodo è scaduto o la cui finalità è stata raggiunta vengono distrutti senza indugio. Se la legge ne impone la conservazione, restano archiviati separatamente dagli altri per quel periodo e poi vengono distrutti.',
         'Modalità: le informazioni in formato di file elettronico vengono cancellate in modo permanente con mezzi tecnici che rendono impossibile il recupero o la ricostruzione.',
-        'Voci, foto e informazioni di blocco salvate sul tuo dispositivo vengono rimosse da esso usando la funzione “Ripristina tutto” dell’app o disinstallandola. Il gestore non detiene tali informazioni e quindi non può eliminarle al posto tuo.',
+        'Voci, foto e informazioni di blocco salvate sul tuo dispositivo vengono rimosse da esso usando la funzione “Ripristina tutto” dell’app o disinstallandola.',
+        'Se hai attivato il backup, la copia cifrata conservata sul server viene distrutta quando la elimini dalla schermata di backup dell’app oppure quando elimini il tuo account. In caso di eliminazione dell’account distruggiamo prima il backup e solo dopo eliminiamo l’account: se sparisse prima l’account, non resterebbe nessuno con il diritto di cancellare quel backup.',
+        'Se non hai attivato il backup, il gestore non detiene le voci presenti sul tuo dispositivo e quindi non può eliminarle al posto tuo.',
       ],
     },
     {
@@ -103,6 +154,9 @@ export const PRIVACY_IT: LegalDoc = {
         '• Chiedere l’accesso ai tuoi dati • Chiedere la rettifica in caso di errore • Chiedere la cancellazione • Chiedere la sospensione del trattamento • Chiedere la trasmissione dei tuoi dati (Legge sulla protezione delle informazioni personali, art. 35-2)',
         'Puoi esercitarli per iscritto o via e-mail usando il contatto della sezione 11, e il gestore agirà senza indugio.',
         'Se chiedi la rettifica di un errore nei tuoi dati, non li useremo né li comunicheremo fino al completamento della rettifica.',
+        '⚠ Limiti del diritto di accesso al backup: se chiedi l’accesso al tuo backup, il gestore può consegnarti soltanto il testo cifrato, non decifrabile, e i metadati di cui alla sezione 2(c). Non possiamo fornirti le tue voci in forma leggibile da una persona — il gestore non ha la chiave. Tu stesso puoi ripristinare in qualsiasi momento nell’app con il tuo codice di recupero.',
+        'Puoi eliminare in qualsiasi momento dall’app un report con IA che hai creato. Eliminandolo nell’app sparisce dal tuo dispositivo; la sintesi conservata sul server viene eliminata automaticamente trascorsi 90 giorni dalla creazione. Se desideri una cancellazione anticipata, puoi richiederla tramite “Contatti”.',
+        '⚠ Le sintesi generate dall’IA possono discostarsi dai fatti e non costituiscono una diagnosi o un consiglio medico o psicologico. L’app offre un modo per segnalare un report.',
         'Il rappresentante legale di un minore di 14 anni può esercitare i diritti sopra indicati per suo conto.',
       ],
     },
@@ -111,6 +165,7 @@ export const PRIVACY_IT: LegalDoc = {
       body: [
         '• Organizzative: ridurre al minimo il numero di persone che trattano dati personali e formarle periodicamente',
         '• Tecniche: gestione dei permessi di accesso al sistema di trattamento, cifratura in transito (HTTPS), memorizzazione del segreto di blocco come hash e uso della memoria sicura del dispositivo (Keystore/Keychain)',
+        '• Cifratura end-to-end del backup: la copia di backup viene cifrata sul tuo dispositivo prima di essere trasmessa, e la chiave di decifratura esiste solo sul dispositivo e nel tuo codice di recupero. Sul server del gestore non c’è alcuna chiave.',
         '• Fisiche: i server che ospitano dati personali si trovano nei data center di fornitori cloud nazionali ed esteri e seguono le loro politiche di controllo degli accessi fisici.',
         '⚠ La funzione di blocco impedisce l’accesso allo schermo; non cifra i file di diario salvati sul dispositivo. Se il dispositivo viene perso o sottratto e la sua sicurezza viene aggirata, il contenuto delle voci può essere esposto.',
       ],
@@ -145,133 +200,8 @@ export const PRIVACY_IT: LegalDoc = {
         'Cronologia delle modifiche',
         '• 2026-08-09 prima adozione',
         '• 2026-08-11 pubblicazione di una modifica in arrivo — prevista introduzione dell’abbonamento mensile e del backup/ripristino (il testo principale non è ancora cambiato)',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'Dal giorno in cui viene pubblicata la versione che include l’abbonamento mensile e il backup/ripristino',
-      summary:
-        'Vengono aggiunti l’abbonamento mensile e il backup/ripristino. Se ti abboni, saranno trattati lo stato dell’abbonamento e l’identificatore della transazione; e soltanto se attivi il backup, una copia delle tue voci cifrata sul tuo dispositivo sarà conservata sul server del gestore. Il gestore non può decifrare tale copia.',
-      sections: [
-        {
-          h: 'a. Che cosa cambia (prima → dopo)',
-          body: [
-            'Prima: titoli, testo e foto delle voci non vengono trasmessi fuori dal tuo dispositivo.',
-            'Dopo: **soltanto se attivi tu il backup**, una copia delle tue voci cifrata sul tuo dispositivo sarà conservata sul server del gestore. Se non lo attivi, non viene trasmesso neppure un carattere, esattamente come prima.',
-            '⚠ Per essere precisi: il gestore **conserva quella copia ma non può leggerla.** La chiave di decifratura esiste solo sul tuo dispositivo e nel codice di recupero che custodisci tu; il gestore non la possiede.',
-          ],
-        },
-        {
-          h: 'b. Informazioni aggiuntive conservate se attivi il backup',
-          body: [
-            '• Una copia cifrata delle tue voci — in una forma che il gestore non può decifrare',
-            '• Identificatore del backup, ora del backup, numero di generazione e dimensione — **queste informazioni non sono cifrate.** Il gestore può sapere quale account ha eseguito il backup, quando e di quale dimensione.',
-            '• Base giuridica: il tuo consenso specifico (raccolto nella schermata in cui attivi il backup)',
-          ],
-        },
-        {
-          h: 'c. Periodo di conservazione',
-          body: [
-            '• Conservata finché il backup resta attivo e fino a 90 giorni dopo la fine dell’abbonamento, poi distrutta automaticamente.',
-            '• Se disattivi il backup, ne chiedi la cancellazione o elimini il tuo account, la distruggiamo senza indugio, senza attendere i 90 giorni.',
-            '• I backup senza accessi da 3 anni o più vengono distrutti. (Riguarda chi ha disinstallato l’app senza eliminare l’account.)',
-            '• Il registro della distruzione (identificatore del backup e ora) è conservato 1 anno — perché tu possa capire “perché il ripristino non funziona”; l’identificatore dell’account non viene conservato insieme.',
-            '⚠ L’avviso di scadenza dell’abbonamento ti raggiunge solo a schermo, quando apri l’app. Se non la apri, quell’avviso potrebbe non raggiungerti.',
-          ],
-        },
-        {
-          h: 'd. Limiti del diritto di accesso',
-          body: [
-            'Se chiedi l’accesso al tuo backup, il gestore può consegnarti soltanto **il testo cifrato, non decifrabile, e i metadati di cui alla lettera (b).** Non possiamo fornirti le tue voci in forma leggibile — il gestore non ha la chiave.',
-            'Tu stesso puoi ripristinare in qualsiasi momento nell’app con il tuo codice di recupero.',
-            '⚠ Se perdi il codice di recupero non esiste alcun modo di aprire il backup. Nemmeno il gestore può aprirlo per te.',
-          ],
-        },
-        {
-          h: 'e. Informazioni conservate se usi un abbonamento',
-          body: [
-            '• Stato dell’abbonamento — chiave del diritto, scadenza, periodo di tolleranza per pagamenti non riusciti, se è previsto il rinnovo',
-            '• L’identificatore di transazione rilasciato dallo store, l’identificatore del prodotto e la distinzione dell’ambiente di pagamento (produzione/test)',
-            '• I registri di variazione di stato inviati dal servizio di pagamento (acquisto, rinnovo, disdetta, rimborso ecc.) e il loro contenuto originale',
-            '⚠ I dati di pagamento come numeri di carta o di conto sono gestiti da Google Play e non vengono trasmessi al gestore. Il gestore può sapere solo che hai pagato e fino a quando l’abbonamento è valido.',
-            '• Base giuridica: Legge sulla protezione delle informazioni personali, art. 15(1)4 (necessario per eseguire le misure richieste, ossia fornire il diritto di abbonamento richiesto)',
-            '• Finalità: verificare il diritto di abbonamento (rimozione degli annunci, uso del backup), gestire richieste di pagamento e rimborsi',
-          ],
-        },
-        {
-          h: 'f. Periodo di conservazione delle informazioni sull’abbonamento',
-          body: [
-            '• Registri su contratti o recesso e su pagamento e fornitura di beni: 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)',
-            '• Se elimini l’account, gli identificatori dell’account (e-mail, “sub” di Google) sono resi non tracciabili senza indugio, e i registri delle transazioni sopra indicati sono conservati separatamente e in forma non tracciabile per il periodo indicato e poi distrutti.',
-            '⚠ L’eliminazione dell’account non annulla automaticamente il tuo abbonamento Google Play. Devi annullarlo tu in Google Play > Abbonamenti; in caso contrario continuerai a essere addebitato.',
-          ],
-        },
-        {
-          h: 'g. Esternalizzazione e trasferimento all’estero (ulteriore)',
-          body: [
-            '• Supabase Inc. — Paese: Stati Uniti (sede legale). Contatto: privacy@supabase.com. Finalità: conservare la copia di backup cifrata e lo stato dell’abbonamento. Dati: quelli delle lettere (b) ed (e). Conservazione: i periodi delle lettere (c) ed (f). ※ Il luogo fisico di archiviazione è la Repubblica di Corea (regione di Seoul).',
-            '• Vercel Inc. — Paese: Stati Uniti. Contatto: privacy@vercel.com. Finalità: gestire il server di backup. ※ La copia cifrata viene inviata direttamente all’archivio senza passare da questo server.',
-            '• RevenueCat, Inc. — Paese: Stati Uniti. Contatto: compliance@revenuecat.com. Finalità: verificare i pagamenti dell’abbonamento e controllarne lo stato. Dati: identificatore dell’account, identificatori di transazione e prodotto dello store, informazioni su dispositivo e app. Quando e come: trasmessi in rete all’apertura della schermata di abbonamento e al pagamento. Conservazione: fino al termine del contratto di esternalizzazione',
-            '• Google LLC — oltre al trasferimento descritto nella sezione 6, i dati di transazione dello store sono trattati per elaborare e verificare i pagamenti dell’abbonamento.',
-            'Puoi opporti al trasferimento all’estero. Se non attivi il backup e non ti abboni, tali trasferimenti non avvengono, e tutte le altre funzioni, compresa la scrittura delle voci, restano disponibili.',
-          ],
-        },
-      ],
-    },
-    {
-      appliesFrom: 'Dal giorno in cui viene pubblicata la versione contenente i report di sintesi con IA',
-      summary:
-        'Vengono aggiunti i report di sintesi con IA. Solo quando crei tu stesso un report, il contenuto del diario di quel periodo transita non cifrato attraverso il server dell’operatore e viene inviato al fornitore di IA. L’operatore non conserva il contenuto del diario, ma conserva la sintesi generata per 90 giorni al fine di migliorare la qualità dei report. Il fornitore di IA la conserva per un massimo di 30 giorni per il monitoraggio degli abusi, poi la elimina, e non la utilizza per addestrare i modelli.',
-      sections: [
-        {
-          h: 'a. Che cosa cambia (prima → dopo)',
-          body: [
-            'Prima: i titoli e i testi del diario non vengono trasmessi fuori dal tuo dispositivo. Anche con il backup attivo, vengono trasmessi solo come testo cifrato che l’operatore non può leggere.',
-            'Dopo: **solo quando premi tu stesso Crea report**, il contenuto del diario di quel periodo viene inviato **non cifrato** tramite il server dell’operatore al fornitore di IA e viene generata una sintesi.',
-            '⚠ Per essere precisi: l’operatore **non conserva il contenuto del diario in sé**. Tuttavia ① nel momento in cui la sintesi viene prodotta il contenuto transita nel server dell’operatore, quindi non possiamo dirti che «l’operatore non può vederlo», e ② **la sintesi generata viene conservata per 90 giorni** (vedi lettera d). Lo diciamo chiaramente, senza attenuarlo.',
-            'Se non crei un report, questa trasmissione non avviene affatto e tutte le altre funzioni, compresa la scrittura, restano pienamente disponibili.',
-          ],
-        },
-        {
-          h: 'b. Consenso separato per le informazioni sensibili',
-          body: [
-            'Un diario può contenere informazioni sensibili, come lo stato di salute o psicologico, ai sensi dell’articolo 23 della legge sulla protezione delle informazioni personali.',
-            'Poiché i report di sintesi con IA trattano tale contenuto non cifrato, raccogliamo un **consenso separato al trattamento di informazioni sensibili** al primo utilizzo della funzione. Questo consenso è **distinto** dal consenso al trasferimento all’estero di cui alla lettera (c), e puoi scegliere separatamente.',
-            'Anche senza il consenso, tutte le funzioni diverse dai report con IA restano pienamente disponibili.',
-          ],
-        },
-        {
-          h: 'c. Consenso separato per il trasferimento all’estero',
-          body: [
-            '• OpenAI OpCo, LLC — Paese: Stati Uniti (1455 Third Street, San Francisco, California 94158, USA). Contatto: dpo@openai.com. Le stesse informazioni sono mostrate anche nell’app prima della raccolta del consenso.',
-            '• Elementi trasferiti: titolo, testo, emozione e data delle voci del periodo per cui hai richiesto un report',
-            '• Finalità: generare un report di sintesi',
-            '• Quando e come: trasmessi in rete quando premi Crea report',
-            '• Conservazione: il server dell’operatore **non conserva gli elementi trasferiti (il contenuto del diario)** — restano in memoria solo mentre la sintesi viene prodotta e poi vengono eliminati. La conservazione della sintesi generata è indicata separatamente alla lettera (d). Il fornitore di IA li conserva per **un massimo di 30 giorni** per il monitoraggio degli abusi e poi li elimina, e anche in tale periodo **non li utilizza per addestrare i modelli.**',
-            'Puoi rifiutare il trasferimento all’estero; in tal caso solo i report con IA non saranno disponibili e tutte le altre funzioni resteranno pienamente utilizzabili.',
-          ],
-        },
-        {
-          h: 'd. Che cosa conserva l’operatore',
-          body: [
-            'Non conserviamo il contenuto del diario (titoli e testi). Conserviamo quanto segue.',
-            '• **La sintesi generata dall’IA** — conservata per verificare e migliorare la qualità dei report. Conservazione: **90 giorni dal giorno della creazione**, dopo i quali viene eliminata automaticamente.',
-            '• L’identificativo dell’account che ha creato il report, il periodo, il numero di volte e il numero di token utilizzati — usati per la fatturazione e la prevenzione degli abusi. Conservazione: fino al raggiungimento della finalità o fino all’eliminazione del tuo account',
-            '⚠ La sintesi è scritta a partire dal tuo diario, quindi può contenerne il contenuto. Lo diciamo chiaramente, senza attenuarlo.',
-            'Il report completato viene salvato **anche sul tuo dispositivo** e, se hai attivato il backup, vi è incluso in forma cifrata.',
-          ],
-        },
-        {
-          h: 'e. I tuoi diritti',
-          body: [
-            '• I report vengono generati solo quando li crei tu; non vengono mai generati automaticamente.',
-            '• Puoi eliminare in qualsiasi momento dall’app un report che hai creato.',
-            '• Eliminandolo nell’app sparisce dal tuo dispositivo; la sintesi conservata sul server dell’operatore viene eliminata automaticamente dopo 90 giorni. Se desideri una cancellazione anticipata, puoi richiederla tramite Contattaci.',
-            '• Le sintesi generate dall’IA possono discostarsi dai fatti e non costituiscono una diagnosi o un consiglio medico o psicologico. L’app offre un modo per segnalare una sintesi.',
-          ],
-        },
+        '• 2026-08-12 pubblicazione di una modifica in arrivo — prevista introduzione dei report di sintesi con IA (il testo principale non è ancora cambiato)',
+        '• 2026-08-23 modifica — le due modifiche annunciate sopra sono state recepite nel testo principale. Il trattamento relativo all’abbonamento mensile, al backup/ripristino e ai report di sintesi con IA è stato aggiunto alle sezioni 1, 2, 3, 4, 6, 8, 9 e 10.',
       ],
     },
   ],
@@ -288,14 +218,14 @@ export const PRIVACY_IT: LegalDoc = {
  *   poterne fare richiesta. È quella URL che aprono i revisori di Play, quindi non può restare
  *   solo in coreano.
  *
- * ⚠ La struttura deve coincidere esattamente con quella coreana — 5 sezioni (6/4/4/3/3 righe)
- *   più due modifiche in arrivo. `npm run check:legal` lo verifica.
+ * ⚠ La struttura deve coincidere esattamente con quella coreana — 6 sezioni (6/4/9/5/4/3 righe)
+ *   e nessuna modifica in arrivo. `npm run check:legal` lo verifica.
  */
 export const DELETE_ACCOUNT_IT: LegalDoc = {
   title: 'Come eliminare il tuo account Jogak',
-  sourceFingerprint: 'a6b3a8b5',
-  effective: '2026-08-10',
-  updated: '2026-08-10',
+  sourceFingerprint: 'a8b0c8b9',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
     'Questa pagina spiega come eliminare il tuo account Jogak e i dati a esso associati. Puoi farne richiesta anche via e-mail se hai già disinstallato l’app o non riesci ad accedere.',
   sections: [
@@ -326,6 +256,11 @@ export const DELETE_ACCOUNT_IT: LegalDoc = {
         '• L’identificatore univoco del tuo account social (il “sub” di Google)',
         '• Il tuo indirizzo e-mail',
         '• Il collegamento tra le tue richieste e l’account di chi le ha scritte',
+        '• La copia cifrata del tuo diario conservata sul server (se hai attivato il backup) — viene eliminata insieme all’account, senza attendere i 90 giorni di tolleranza.',
+        '• L’identificatore del backup e i registri di backup (ora, dimensione, numero di generazione)',
+        '• Le sintesi dei report con IA conservate sul server (al massimo 90 giorni dalla creazione) e i registri di utilizzo dei report (periodo, numero di volte, numero di token)',
+        '⚠ In caso di eliminazione dell’account distruggiamo prima il backup e solo dopo eliminiamo l’account: se sparisse prima l’account, non resterebbe nessuno con il diritto di cancellare quel backup. Se la cancellazione del backup non riesce, neppure l’eliminazione dell’account viene portata a termine; riprova poco più tardi.',
+        '⚠ L’operazione non è reversibile. Anche se conservi il tuo codice di recupero, non potrai ripristinare il backup presente sul server.',
       ],
     },
     {
@@ -333,66 +268,26 @@ export const DELETE_ACCOUNT_IT: LegalDoc = {
       body: [
         'Le informazioni seguenti sono conservate in base alla legge e, anche durante tale periodo, restano soltanto in una forma che non consente di risalire a chi le ha scritte (pseudonimizzata).',
         '• Contenuto delle richieste: 3 anni (Legge sulla tutela dei consumatori nel commercio elettronico — registri su reclami o composizione delle controversie)',
+        '• Registri delle transazioni di abbonamento (identificatore della transazione, prodotto, periodo di abbonamento, cronologia delle variazioni dello stato di pagamento): 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)',
+        '• Registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno dalla distruzione — perché tu possa capire “perché il ripristino non funziona”; l’identificatore del tuo account non viene conservato insieme.',
         'Trascorso il periodo di conservazione, distruggiamo i dati senza indugio.',
       ],
     },
     {
-      h: '5. Ciò che non viene eliminato — il diario presente sul dispositivo',
+      h: '5. Ciò che resta sul dispositivo — l’eliminazione dell’account non lo cancella',
       body: [
-        'Le voci di Jogak (titoli, testo, foto, tag ed emozioni) sono salvate soltanto all’interno del tuo dispositivo e non vengono trasmesse ai server del gestore.',
-        'Perciò, eliminando l’account, le voci sul tuo dispositivo restano intatte. Per cancellare anche quelle, disinstalla l’app oppure usa la funzione “Ripristina tutto” nelle [Impostazioni] dell’app.',
-        'Al contrario, se disinstalli l’app, le voci presenti sul dispositivo non potranno essere recuperate.',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'Dal giorno in cui viene pubblicata la versione che include l’abbonamento mensile e il backup/ripristino',
-      summary:
-        'Se hai attivato il backup, eliminando l’account viene eliminata anche la copia cifrata conservata sul server. I registri delle transazioni di abbonamento sono conservati in base alla legge, in forma pseudonimizzata.',
-      sections: [
-        {
-          h: 'a. Dati eliminati in aggiunta',
-          body: [
-            '• La copia cifrata del tuo diario conservata sul server — eliminata insieme all’account. Non attendiamo i 90 giorni di tolleranza.',
-            '• L’identificatore del backup e i registri di backup (ora, dimensione, numero di generazione)',
-            '⚠ L’operazione non è reversibile. Anche se conservi il tuo codice di recupero, non potrai ripristinare.',
-            '⚠ Le voci presenti sul tuo dispositivo restano intatte. Viene eliminata soltanto la copia sul server.',
-          ],
-        },
-        {
-          h: 'b. Dati conservati in aggiunta e per quanto tempo',
-          body: [
-            '• Registri delle transazioni di abbonamento (identificatore della transazione, prodotto, periodo di abbonamento, cronologia delle variazioni dello stato di pagamento): 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)',
-            '• Il registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno — perché tu possa capire “perché il ripristino non funziona più”. L’identificatore del tuo account non viene conservato insieme.',
-            'Anche durante tali periodi, questi registri restano soltanto in una forma che non consente di risalire a chi li ha scritti.',
-          ],
-        },
-        {
-          h: 'c. L’abbonamento va disdetto separatamente',
-          body: [
-            'L’eliminazione dell’account non annulla il tuo abbonamento Google Play. Se non lo annulli, continuerai a essere addebitato.',
-            'Per annullare: app Google Play Store > profilo > Pagamenti e abbonamenti > Abbonamenti (https://play.google.com/store/account/subscriptions)',
-            'Il rimborso degli importi già addebitati segue la politica di rimborso di Google Play e quella del gestore. Puoi scriverci all’indirizzo di contatto indicato qui sotto.',
-          ],
-        },
+        'Le voci di Jogak (titoli, testo, foto, tag ed emozioni) e il testo dei report con IA sono salvati all’interno del tuo dispositivo.',
+        'Perciò, eliminando l’account, le voci e i report presenti sul dispositivo restano intatti. Per cancellarli anche dal dispositivo, disinstalla l’app oppure usa la funzione di ripristino nelle [Impostazioni] dell’app.',
+        'Al contrario, se disinstalli l’app, le voci presenti sul dispositivo non potranno essere recuperate. Puoi recuperarle solo se avevi attivato il backup e conservi il codice di recupero, e soltanto finché non hai eliminato l’account.',
+        '⚠ Se non hai attivato il backup, il gestore non dispone delle voci presenti sul tuo dispositivo e quindi non può né eliminarle né restituirtele.',
       ],
     },
     {
-      appliesFrom: 'Dal giorno in cui viene pubblicata la versione contenente i report di sintesi con IA',
-      summary:
-        'Il testo dei report con IA è salvato sul tuo dispositivo. Sul server le sintesi dei report sono conservate al massimo 90 giorni per il controllo della qualità e vengono eliminate insieme ai tuoi registri di utilizzo quando elimini l’account.',
-      sections: [
-        {
-          h: 'a. Che cosa viene eliminato per i report con IA',
-          body: [
-            '• I registri di utilizzo conservati sul server (identificatore dell’account, periodo, numero di volte, numero di token) — eliminati insieme all’account.',
-            '• Le sintesi dei report conservate sul server (al massimo 90 giorni) — eliminate insieme all’account. Il contenuto del diario non viene mai conservato, quindi non c’è nulla da eliminare.',
-            '⚠ Il testo dei report è salvato anche sul tuo dispositivo, quindi vi rimane dopo l’eliminazione dell’account. Per cancellarlo, elimina i report nell’app oppure disinstalla l’app.',
-            '• Se hai attivato il backup, i report vi sono inclusi in forma cifrata e vengono eliminati quando il backup viene eliminato.',
-          ],
-        },
+      h: '6. L’abbonamento va disdetto separatamente',
+      body: [
+        'L’eliminazione dell’account non annulla automaticamente il tuo abbonamento Google Play. Se non lo annulli, continuerai a essere addebitato.',
+        'Per annullare: app Google Play Store > profilo > Pagamenti e abbonamenti > Abbonamenti (https://play.google.com/store/account/subscriptions)',
+        'Il rimborso degli importi già addebitati segue la politica di rimborso di Google Play e quella del gestore. Puoi scriverci all’indirizzo di contatto indicato qui sopra.',
       ],
     },
   ],

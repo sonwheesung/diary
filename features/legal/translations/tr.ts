@@ -10,20 +10,24 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '4b621b97',
-  effective: '2026-08-09',
-  updated: '2026-08-11',
+  sourceFingerprint: '47ec2dc4',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
-    'Vivace Games (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, yazdığın günlük kayıtlarını hiçbir sunucuya göndermez ve ilke olarak yalnızca gereken en az bilgiyi toplar.',
+    'Vivace Games (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
   sections: [
     {
-      h: '1. Toplamadıklarımız (önce bunu söylüyoruz)',
+      h: '1. Önce kayıtlarının nerede saklandığını söylüyoruz',
       body: [
-        'İşletmeci aşağıdaki bilgileri toplamaz ve cihazının dışına aktarmaz.',
-        '• Kayıtların başlıkları, metni, listeleri, fotoğrafları, etiketleri ve duyguları — yalnızca cihazının dâhilî depolamasında tutulur.',
+        'Günlük kayıtları (başlık, metin, listeler, fotoğraflar, etiketler ve duygular) cihazının dâhilî depolamasında tutulur ve kural olarak cihazın dışına çıkmaz.',
+        '⚠ Ancak yalnızca kendi seçtiğin durumlarda geçerli olan iki istisna vardır. İkisi de kendiliğinden gerçekleşmez.',
+        '• Yedeklemeyi açarsan — kayıtlarının cihazında şifrelenmiş bir kopyası işletmecinin sunucusunda saklanır. İşletmeci bu kopyayı okuyamaz. Ayrıntıları 2(c) bendinde yazdık.',
+        '• Yapay zekâ özet raporu oluşturursan — o döneme ait günlük içeriği şifrelenmemiş hâlde işletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına iletilir. İşletmeci bu içeriği saklamaz. Ayrıntıları 2(e) bendinde yazdık.',
+        '⚠ Yukarıdaki iki cümle birbirinden farklıdır. Yedeklemede saklarız ama okuyamayız; yapay zekâda okuruz ama saklamayız. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.',
+        'İşletmeci aşağıdaki bilgileri hiçbir durumda toplamaz ve cihazının dışına aktarmaz.',
         '• Uygulama kilidinde kullanılan PIN, desen veya ipucu yanıtı — cihazın güvenli depolamasında yalnızca geri döndürülemez biçimde (özet/hash) tutulur; aslı hiçbir yerde saklanmaz.',
         '• Adın, doğum tarihin, telefon numaran, adresin, rehberin, konumun veya tüm fotoğraf kitaplığına erişime dair herhangi bir kayıt.',
-        'Uygulamada seçtiğin fotoğraflar, yalnızca bir kayda eklenebilmesi için cihazındaki uygulamaya ait klasöre kopyalanır; hiçbir yere aktarılmaz.',
+        'Uygulamada seçtiğin fotoğraflar, bir kayda eklenebilmesi için cihazındaki uygulamaya ait klasöre kopyalanır ve yedeklemeyi açmadıysan dışarıya aktarılmaz. Yapay zekâ özet raporuna hiçbir fotoğraf gönderilmez.',
       ],
     },
     {
@@ -35,11 +39,31 @@ export const PRIVACY_TR: LegalDoc = {
         '  — Amaç: gönderen kişiyi belirlemek, yanıtı iletmek ve kendi başvuru geçmişini görüntülemeni sağlamak',
         '• Başvurunun kategorisi ve içeriği',
         '• Cihaz türü (Android/iOS) ve uygulama sürümü — sorunun hangi ortamda oluştuğunu anlamak için',
-        '※ Giriş yalnızca “İletişim” için gereklidir; kayıt yazma, uygulama kilidi ve diğer özellikler giriş gerektirmez.',
+        '※ Giriş; “İletişim”, abonelik, yedekleme ve yapay zekâ raporları için gereklidir. Kayıt yazma, uygulama kilidi ve diğer özellikler giriş gerektirmez.',
         '※ 14 yaşından küçük çocuklar giriş özelliğini kullanamaz.',
         'b. Reklam gösterimi sırasında otomatik olarak toplanan bilgiler',
         '• Reklam kimliği (Android reklam kimliği), cihaz ve ağ bilgileri, reklam gösterim ve tıklama kayıtları',
         '• Yukarıdakiler Google (AdMob) tarafından toplanır; ayrıntılar ve reddetme yolu 7. bölümdedir.',
+        'c. Yedeklemeyi açarsan (abonelik gerekir)',
+        '• Kayıtlarının şifrelenmiş bir kopyası — işletmecinin çözemeyeceği bir biçimde',
+        '• Yedek kimliği, yedekleme zamanı, kuşak numarası ve boyut — bu bilgiler şifrelenmez. İşletmeci hangi hesabın ne zaman ve ne kadar yedeklediğini bilebilir.',
+        '  — Toplama dayanağı: senin ayrı onayın (yedeklemeyi açtığın ekranda alınır)',
+        '⚠ Tam olarak: işletmeci bu kopyayı saklar ama okuyamaz. Şifre çözme anahtarı yalnızca cihazında ve senin sakladığın kurtarma kodunda bulunur; işletmecide yoktur.',
+        '⚠ Kurtarma kodunu kaybedersen yedeği açmanın hiçbir yolu yoktur. İşletmeci de senin için açamaz.',
+        'd. Abonelik kullanırsan',
+        '• Abonelik durumu — hak anahtarı, bitiş zamanı, ödeme başarısızlığında tanınan süre, yenilenip yenilenmeyeceği',
+        '• Mağazanın verdiği işlem kimliği, ürün kimliği ve ödeme ortamının (canlı/test) ayrımı',
+        '• Ödeme hizmetinin gönderdiği abonelik durumu değişikliği kayıtları (satın alma, yenileme, iptal, iade vb.) ve bunların özgün içeriği',
+        '  — Toplama dayanağı: Kişisel Bilgilerin Korunması Kanunu md. 15(1)4 (kullanıcının talebi üzerine alınacak önlemlerin, yani başvurduğun abonelik hakkının sağlanmasının yerine getirilmesi için gerekli olması)',
+        '  — Amaç: abonelik hakkını doğrulamak (reklamların kaldırılması ile yedekleme ve yapay zekâ raporlarının kullanımı), ödeme sorularını ve iadeleri ele almak',
+        '⚠ Kredi kartı veya hesap numarası gibi ödeme bilgilerini Google Play işler ve bunlar işletmeciye iletilmez. İşletmeci yalnızca ödeme yaptığını ve aboneliğin ne zamana kadar geçerli olduğunu bilebilir.',
+        'e. Yapay zekâ özet raporu oluşturursan (abonelik gerekir)',
+        '• İşletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına iletilenler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi',
+        '• İşletmecinin sakladıkları: yapay zekânın oluşturduğu özet, raporu oluşturan hesabın kimliği, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı',
+        '⚠ Tam olarak: işletmeci günlük içeriğinin kendisini saklamaz. Ancak ① özet oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana “işletmeci göremez” diyemeyiz ve ② oluşturulan özeti 90 gün saklarız. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.',
+        '⚠ Özet, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir.',
+        '• Hassas bilgiler için ayrı rıza: bir günlük, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruhsal durum gibi hassas bilgiler içerebilir. Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında hassas bilgilerin işlenmesine ilişkin ayrı bir rıza alırız. Bu rıza, 6. bölümdeki yurt dışına aktarım rızasından ayrıdır ve her birini ayrı ayrı seçebilirsin.',
+        'Rıza vermesen de yapay zekâ raporları dışındaki tüm özellikleri aynen kullanabilirsin. Raporlar yalnızca sen oluşturduğunda üretilir ve asla kendiliğinden oluşturulmaz.',
       ],
     },
     {
@@ -48,6 +72,9 @@ export const PRIVACY_TR: LegalDoc = {
         '• Başvuruların alınması ve ele alınması: gönderdiğin içeriği incelemek, hataları tespit edip düzeltmek',
         '• Gönderenin belirlenmesi ve yanıt: başvuran kişiye yanıtı ulaştırmak ve kendi geçmişini yeniden görüntülemesini sağlamak',
         '• Reklam gösterimi: ücretsiz sürümü kullananlara reklam sunmak ve reklam performansını ölçmek',
+        '• Yedekleme ve geri yükleme: yedeklemeyi açtıysan kayıtlarının şifrelenmiş kopyasını saklamak ve talebin üzerine sana geri vermek',
+        '• Abonelik hakkının doğrulanması: ödeme yapan kullanıcılara reklamsız kullanım, yedekleme ve yapay zekâ raporları sunmak, ödeme sorularını ve iadeleri ele almak',
+        '• Yapay zekâ özet raporlarının oluşturulması ve kalitesinin iyileştirilmesi: istediğin döneme ait özeti hazırlamak ve sonucu inceleyerek kaliteyi geliştirmek',
         'İşletmeci kişisel verileri yukarıdaki amaçlar dışında kullanmaz; amaç değişirse önceden onay alır.',
       ],
     },
@@ -57,6 +84,14 @@ export const PRIVACY_TR: LegalDoc = {
         '• Hesap bilgileri (e-posta adresi, Google “sub”): hesabını silene kadar. Sildiğinde gecikmeksizin imha eder veya izi sürülemez hâle getiririz.',
         '• Başvuru içeriği: alındığı tarihten itibaren 3 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu — tüketici şikâyetleri veya uyuşmazlık çözümüne ilişkin kayıtlar)',
         '• Reklam kimliğine dayalı davranışsal veriler: toplandığı tarihten itibaren en fazla 1 yıl',
+        '• Şifrelenmiş yedek kopyası: yedekleme açık kaldığı sürece ve abonelik bittikten sonra 90 güne kadar saklanır, ardından otomatik olarak imha edilir. Yedeklemeyi kapatırsan, silinmesini istersen veya hesabını silersen 90 günü beklemeden gecikmeksizin imha ederiz. 3 yıl veya daha uzun süre erişilmeyen yedekler imha edilir (bu, uygulamayı silip hesabını silmeyenler için geçerlidir).',
+        '• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için tutulur; hesap kimliği bununla birlikte saklanmaz.',
+        '• Yapay zekânın oluşturduğu özet: oluşturulduğu günden itibaren 90 gün. Bu sürenin sonunda otomatik olarak silinir.',
+        '• Rapor kullanım kayıtları (hesap kimliği, dönem, kaç kez oluşturulduğu, jeton sayısı): işleme amacı gerçekleşene kadar ya da hesabını silene kadar',
+        '• Sözleşme veya cayma ile ödeme ve malların sağlanmasına ilişkin kayıtlar: 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
+        'Hesabını silersen hesap kimlikleri (e-posta adresi ve Google “sub”) gecikmeksizin izi sürülemez hâle getirilir; yukarıdaki işlem kayıtları ise yazarına ulaşılamayacak biçimde, belirtilen süre boyunca ayrı saklanır ve ardından imha edilir.',
+        '⚠ Hesabını silmek Google Play aboneliğini kendiliğinden iptal etmez. İptali Google Play > Abonelikler bölümünden kendin yapmalısın; yapmazsan ücretlendirilmeye devam edersin.',
+        '⚠ Abonelik bittiği için yedeğinin silineceğine dair bildirim sana yalnızca uygulamayı açtığında ekranda ulaşır. Uygulamayı açmazsan bu bildirim sana ulaşmayabilir.',
         'Süre dolduğunda veya amaç gerçekleştiğinde verileri gecikmeksizin imha ederiz.',
       ],
     },
@@ -64,6 +99,7 @@ export const PRIVACY_TR: LegalDoc = {
       h: '5. Üçüncü kişilere aktarım',
       body: [
         'İşletmeci kullanıcıların kişisel verilerini üçüncü kişilere aktarmaz.',
+        '6. bölümdeki şirketler, işletmeci adına veri işleyen hizmet sağlayıcılardır ve bu verileri kendi amaçları için kullanmazlar. Yapay zekâ sağlayıcısı, kendisine iletilen günlük içeriğini model eğitiminde kullanmaz.',
         'Mevzuatta özel bir hüküm bulunması veya soruşturma makamının kanunda öngörülen usul ve biçimde talepte bulunması hâlleri bunun dışındadır.',
       ],
     },
@@ -71,10 +107,13 @@ export const PRIVACY_TR: LegalDoc = {
       h: '6. İşlemenin dışarıya verilmesi ve yurt dışına aktarım',
       body: [
         'Hizmeti sunabilmek için işletmeci, işlemeyi aşağıdaki şekilde dışarıya verir ve bir kısmı Kore dışında gerçekleşir.',
-        '• Google LLC — Ülke: ABD. İletişim: https://support.google.com/policies/contact/general_privacy_form. Amaç: reklam gösterimi ve ölçümü (AdMob), Google hesabıyla giriş. Veriler: reklam kimliği, cihaz ve ağ bilgileri ve girişte e-posta adresi ile hesap kimliği. Ne zaman ve nasıl: reklam istendiğinde ve giriş yapıldığında ağ üzerinden iletilir. Saklama: Google’ın gizlilik politikasına göre',
-        '• Supabase Inc. — Ülke: ABD (tüzel kişiliğin bulunduğu yer). İletişim: privacy@supabase.com. Amaç: başvuru ve hesap bilgilerini veritabanında saklamak. Veriler: 2(a) bölümündeki bilgiler. Ne zaman ve nasıl: başvuru gönderildiğinde ağ üzerinden iletilir. Saklama: 4. bölümdeki süreler. ※ Fiziksel saklama yeri Kore Cumhuriyeti’dir (Seul bölgesi); ancak işleten şirket Kore dışında bulunduğundan yurt dışına aktarım olarak bildiriyoruz.',
-        '• Vercel Inc. — Ülke: ABD. İletişim: privacy@vercel.com. Amaç: başvuruları alan sunucuyu işletmek. Veriler: 2(a) bölümündeki bilgiler. Ne zaman ve nasıl: başvuru gönderildiğinde ağ üzerinden iletilir. Saklama: hizmet sözleşmesi sona erene kadar',
-        'Kişisel verilerinin yurt dışına aktarılmasını reddedebilirsin. Reklamla ilgili aktarımı reddetmek için 7. bölümdeki yöntemle kişiselleştirilmiş reklamları kapat; başvuruyla ilgili aktarımı reddetmek içinse “İletişim” özelliğini kullanmaman yeterlidir (kayıt yazma dâhil diğer tüm özellikler aynen kullanılabilir).',
+        '• Google LLC — Ülke: ABD. İletişim: https://support.google.com/policies/contact/general_privacy_form. Amaç: reklam gösterimi ve ölçümü (AdMob), Google hesabıyla giriş, abonelik ödemelerinin işlenmesi ve doğrulanması. Veriler: reklam kimliği, cihaz ve ağ bilgileri, girişte e-posta adresi ile hesap kimliği, mağaza işlem bilgileri. Ne zaman ve nasıl: reklam istendiğinde, giriş yapıldığında ve ödeme yapıldığında ağ üzerinden iletilir. Saklama: Google’ın gizlilik politikasına göre',
+        '• Supabase Inc. — Ülke: ABD (tüzel kişiliğin bulunduğu yer). İletişim: privacy@supabase.com. Amaç: başvuru ve hesap bilgilerini veritabanında saklamak, şifrelenmiş yedek kopyasını ve abonelik durumunu saklamak. Veriler: 2(a), 2(c) ve 2(d) bentlerindeki bilgiler. Ne zaman ve nasıl: başvuru gönderildiğinde ve yedekleme yapıldığında ağ üzerinden iletilir. Saklama: 4. bölümdeki sürelerin sonuna kadar. ※ Fiziksel saklama yeri Kore Cumhuriyeti’dir (Seul bölgesi); ancak işleten şirket Kore dışında bulunduğundan yurt dışına aktarım olarak bildiriyoruz.',
+        '• Vercel Inc. — Ülke: ABD. İletişim: privacy@vercel.com. Amaç: başvuruları alan sunucu ile yedekleme ve yapay zekâ sunucularını işletmek. Veriler: 2(a) bölümündeki bilgiler. Ne zaman ve nasıl: başvuru gönderildiğinde ağ üzerinden iletilir. Saklama: hizmet sözleşmesi sona erene kadar. ※ Şifrelenmiş yedek kopyası bu sunucudan geçmeden doğrudan depolamaya gönderilir.',
+        '• RevenueCat, Inc. — Ülke: ABD. İletişim: compliance@revenuecat.com. Amaç: abonelik ödemelerini doğrulamak ve abonelik durumunu denetlemek. Veriler: hesap kimliği, mağaza işlem ve ürün kimlikleri, cihaz ve uygulama bilgileri. Ne zaman ve nasıl: abonelik ekranına girildiğinde ve ödeme yapıldığında ağ üzerinden iletilir. Saklama: hizmet sözleşmesi sona erene kadar',
+        '• OpenAI OpCo, LLC — Ülke: ABD (1455 Third Street, San Francisco, California 94158, USA). İletişim: dpo@openai.com. Amaç: özet raporu oluşturmak. Veriler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi. Ne zaman ve nasıl: rapor oluştur düğmesine bastığın anda ağ üzerinden aktarılır. Saklama: işletmecinin sunucusu günlük içeriğini saklamaz — içerik yalnızca özet oluşturulurken bellekte tutulur ve hemen ardından atılır. Yapay zekâ sağlayıcısı bunları kötüye kullanım denetimi için en fazla 30 gün saklar ve sonra siler; bu süre boyunca da model eğitiminde kullanmaz.',
+        '⚠ Yapay zekâ raporları için yapılan yurt dışına aktarım ayrı bir rızaya tabidir. Özelliği ilk kez kullandığında yukarıdaki bilgileri uygulama içinde sana gösterir ve rızanı alırız; bu rıza, 2(e) bendindeki hassas bilgi rızasından ayrıdır.',
+        'Kişisel verilerinin yurt dışına aktarılmasını reddedebilirsin. Reklamla ilgili aktarımı reddetmek için 7. bölümdeki yöntemle kişiselleştirilmiş reklamları kapat; başvuruyla ilgili aktarım ise “İletişim” özelliğini kullanmazsan hiç doğmaz. Yedeklemeyi açmaz, abone olmaz ve rapor oluşturmazsan bunlara bağlı aktarımlar gerçekleşmez; kayıt yazma dâhil diğer tüm özellikleri aynen kullanabilirsin.',
       ],
     },
     {
@@ -85,6 +124,7 @@ export const PRIVACY_TR: LegalDoc = {
         'Reddetme (Android): Ayarlar > Gizlilik > Reklamlar > “Reklam kimliğini sil” veya “Reklam kişiselleştirmeyi kapat”',
         'Reddetme (iOS): Ayarlar > Gizlilik ve Güvenlik > İzleme > “Uygulamaların İzleme İzni İstemesine İzin Ver” seçeneğini kapat',
         'Reddetsen de reklamlar görünmeye devam edebilir; ancak bunlar ilgi alanlarına dayanmayan genel reklamlar olur.',
+        'Abone olursan hiç reklam gösterilmez ve yukarıdaki reklamla ilgili toplama da gerçekleşmez.',
         'Google’ın reklam amacıyla kişisel verileri nasıl işlediğine dair ayrıntı: https://policies.google.com/technologies/ads',
       ],
     },
@@ -93,7 +133,9 @@ export const PRIVACY_TR: LegalDoc = {
       body: [
         'Usul: süresi dolan veya amacı gerçekleşen kişisel veriler gecikmeksizin imha edilir. Mevzuat saklamayı gerektiriyorsa, bu süre boyunca diğer verilerden ayrı tutulur ve ardından imha edilir.',
         'Yöntem: elektronik dosya biçimindeki bilgiler, kurtarılmasını veya yeniden oluşturulmasını olanaksız kılan teknik yöntemlerle kalıcı olarak silinir.',
-        'Cihazında saklanan kayıtlar, fotoğraflar ve kilit bilgileri, uygulamadaki “Her şeyi sıfırla” özelliğini kullandığında veya uygulamayı sildiğinde cihazdan kaldırılır. İşletmeci bu bilgilere sahip olmadığından senin adına silemez.',
+        'Cihazında saklanan kayıtlar, fotoğraflar ve kilit bilgileri, uygulamadaki “Her şeyi sıfırla” özelliğini kullandığında veya uygulamayı sildiğinde cihazdan kaldırılır.',
+        'Yedeklemeyi açtıysan, sunucuda saklanan şifrelenmiş kopya, uygulamanın yedekleme ekranından sildiğinde ya da hesabını sildiğinde birlikte imha edilir. Hesap silmede önce yedeği imha eder, sonra hesabı sileriz — çünkü hesap önce yok olursa o yedeği silmeye yetkili kimse kalmaz.',
+        'Yedeklemeyi açmadıysan cihazındaki kayıtlar işletmecide bulunmadığından işletmeci bunları senin adına silemez.',
       ],
     },
     {
@@ -103,6 +145,9 @@ export const PRIVACY_TR: LegalDoc = {
         '• Verilerine erişim talep etme • Hata varsa düzeltme talep etme • Silme talep etme • İşlemenin durdurulmasını talep etme • Verilerinin aktarılmasını talep etme (Kişisel Bilgilerin Korunması Kanunu md. 35-2)',
         'Bu hakları 11. bölümdeki iletişim adresi üzerinden yazılı olarak veya e-postayla kullanabilirsin; işletmeci gecikmeksizin işlem yapar.',
         'Verilerindeki bir hatanın düzeltilmesini talep edersen, düzeltme tamamlanana kadar o veriyi kullanmaz ve aktarmayız.',
+        '⚠ Yedeğe ilişkin erişim hakkının sınırı: yedeğine erişim talep edersen işletmecinin sana verebileceği tek şey, şifresi çözülemeyen metin ile 2(c) bendindeki üst verilerdir. Kayıtlarını insanın okuyabileceği biçimde veremeyiz — çünkü işletmecide anahtar yoktur. Kendin, kurtarma kodunla istediğin zaman uygulamada geri yükleyebilirsin.',
+        'Oluşturduğun yapay zekâ raporlarını uygulamada istediğin zaman silebilirsin. Uygulamada sildiğinde rapor cihazından kaybolur; sunucuda saklanan özet ise 90 gün sonra otomatik olarak silinir. Daha erken silinmesini istersen “İletişim” üzerinden talep edebilirsin.',
+        '⚠ Yapay zekânın oluşturduğu özetler gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis veya tavsiye değildir. Uygulama, bir raporu bildirmen için bir yol sunar.',
         '14 yaşından küçük bir çocuğun yasal temsilcisi, yukarıdaki hakları çocuk adına kullanabilir.',
       ],
     },
@@ -111,6 +156,7 @@ export const PRIVACY_TR: LegalDoc = {
       body: [
         '• İdari: kişisel verilerle ilgilenen kişi sayısını en aza indirmek ve onlara düzenli eğitim vermek',
         '• Teknik: işleme sistemine erişim yetkilerinin yönetimi, aktarım sırasında şifreleme (HTTPS), uygulama kilidi sırrının özet olarak saklanması ve cihazın güvenli depolamasının (Keystore/Keychain) kullanılması',
+        '• Yedeklemede uçtan uca şifreleme: yedek kopyası önce senin cihazında şifrelenir, sonra aktarılır; şifre çözme anahtarı yalnızca o cihazda ve senin kurtarma kodunda bulunur. İşletmecinin sunucusunda bu anahtar yoktur.',
         '• Fiziksel: kişisel verilerin bulunduğu sunucular yurt içi ve yurt dışı bulut sağlayıcılarının veri merkezlerinde yer alır ve bu sağlayıcıların fiziksel erişim denetimi politikalarına tabidir.',
         '⚠ Uygulama kilidi ekrana erişimi engeller; cihazda saklanan günlük dosyalarının kendisini şifrelemez. Cihaz kaybolur veya ele geçirilir ve cihazın kendi güvenliği aşılırsa kayıtların içeriği açığa çıkabilir.',
       ],
@@ -145,133 +191,8 @@ export const PRIVACY_TR: LegalDoc = {
         'Değişiklik geçmişi',
         '• 2026-08-09 ilk kez yürürlüğe kondu',
         '• 2026-08-11 yaklaşan değişiklik yayımlandı — aylık abonelik ödemesi ile yedekleme/geri yükleme getirilmesi planlanıyor (ana metin henüz değişmedi)',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'Aylık abonelik ile yedekleme/geri yüklemeyi içeren sürümün yayımlandığı günden itibaren',
-      summary:
-        'Aylık abonelik ile yedekleme/geri yükleme ekleniyor. Abone olursan abonelik durumu ve işlem kimliği işlenir; ve yalnızca yedeklemeyi açarsan, kayıtlarının cihazında şifrelenmiş bir kopyası işletmecinin sunucusunda saklanır. İşletmeci bu kopyanın şifresini çözemez.',
-      sections: [
-        {
-          h: 'a. Ne değişiyor (öncesi → sonrası)',
-          body: [
-            'Öncesi: kayıtlarının başlıkları, metni ve fotoğrafları cihazının dışına aktarılmaz.',
-            'Sonrası: **yalnızca yedeklemeyi kendin açarsan**, kayıtlarının cihazında şifrelenmiş bir kopyası işletmecinin sunucusunda saklanır. Açmazsan, eskisi gibi tek bir karakter bile aktarılmaz.',
-            '⚠ Tam olarak: işletmeci bu kopyayı **saklar ama okuyamaz.** Şifre çözme anahtarı yalnızca cihazında ve senin sakladığın kurtarma kodunda bulunur; işletmecide yoktur.',
-          ],
-        },
-        {
-          h: 'b. Yedeklemeyi açarsan ek olarak saklanan bilgiler',
-          body: [
-            '• Kayıtlarının şifrelenmiş bir kopyası — işletmecinin çözemeyeceği bir biçimde',
-            '• Yedek kimliği, yedekleme zamanı, kuşak numarası ve boyut — **bu bilgiler şifrelenmez.** İşletmeci hangi hesabın ne zaman ve ne kadar yedeklediğini bilebilir.',
-            '• Toplama dayanağı: senin ayrı onayın (yedeklemeyi açtığın ekranda alınır)',
-          ],
-        },
-        {
-          h: 'c. Saklama süresi',
-          body: [
-            '• Yedekleme açık kaldığı sürece ve abonelik bittikten sonra 90 güne kadar saklanır, ardından otomatik olarak imha edilir.',
-            '• Yedeklemeyi kapatırsan, silinmesini istersen veya hesabını silersen, 90 günü beklemeden gecikmeksizin imha ederiz.',
-            '• 3 yıl veya daha uzun süre erişilmeyen yedekler imha edilir. (Uygulamayı silip hesabını silmeyenler için geçerlidir.)',
-            '• İmha kaydı (yedek kimliği ve imha zamanı) 1 yıl saklanır — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için; hesap kimliği bununla birlikte saklanmaz.',
-            '⚠ Aboneliğin sona erdiği bildirimi sana yalnızca uygulamayı açtığında ekranda ulaşır. Uygulamayı açmazsan bu bildirim sana ulaşmayabilir.',
-          ],
-        },
-        {
-          h: 'd. Erişim hakkının sınırları',
-          body: [
-            'Yedeğine erişim talep edersen, işletmecinin verebileceği tek şey **şifresi çözülemeyen metin ile (b) bendindeki üst verilerdir.** Kayıtlarını insanın okuyabileceği biçimde veremeyiz — işletmecide anahtar yoktur.',
-            'Kendin, kurtarma kodunla istediğin zaman uygulamada geri yükleyebilirsin.',
-            '⚠ Kurtarma kodunu kaybedersen yedeği açmanın hiçbir yolu yoktur. İşletmeci de senin için açamaz.',
-          ],
-        },
-        {
-          h: 'e. Abonelik kullanırsan saklanan bilgiler',
-          body: [
-            '• Abonelik durumu — hak anahtarı, bitiş zamanı, ödeme başarısızlığında tanınan süre, yenilenip yenilenmeyeceği',
-            '• Mağazanın verdiği işlem kimliği, ürün kimliği ve ödeme ortamının (canlı/test) ayrımı',
-            '• Ödeme hizmetinin gönderdiği abonelik durumu değişikliği kayıtları (satın alma, yenileme, iptal, iade vb.) ve bunların özgün içeriği',
-            '⚠ Kredi kartı veya hesap numarası gibi ödeme bilgilerini Google Play işler ve işletmeciye iletilmez. İşletmeci yalnızca ödeme yaptığını ve aboneliğin ne zamana kadar geçerli olduğunu bilebilir.',
-            '• Toplama dayanağı: Kişisel Bilgilerin Korunması Kanunu md. 15(1)4 (kullanıcının talebi üzerine alınacak önlemlerin, yani başvurduğun abonelik hakkının sağlanmasının yerine getirilmesi için gerekli olması)',
-            '• Amaç: abonelik hakkını doğrulamak (reklamların kaldırılması, yedeklemenin kullanımı), ödeme sorularını ve iadeleri ele almak',
-          ],
-        },
-        {
-          h: 'f. Abonelikle ilgili bilgilerin saklama süresi',
-          body: [
-            '• Sözleşme veya cayma ile ödeme ve malların sağlanmasına ilişkin kayıtlar: 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
-            '• Hesabını silersen hesap kimlikleri (e-posta, Google “sub”) gecikmeksizin izi sürülemez hâle getirilir; yukarıdaki işlem kayıtları ise yazarına ulaşılamayacak biçimde, belirtilen süre boyunca ayrı saklanır ve ardından imha edilir.',
-            '⚠ Hesabını silmek Google Play aboneliğini kendiliğinden iptal etmez. İptali Google Play > Abonelikler bölümünden kendin yapmalısın; yapmazsan ücretlendirilmeye devam edersin.',
-          ],
-        },
-        {
-          h: 'g. İşlemenin dışarıya verilmesi ve yurt dışına aktarım (ek)',
-          body: [
-            '• Supabase Inc. — Ülke: ABD (tüzel kişiliğin yeri). İletişim: privacy@supabase.com. Amaç: şifrelenmiş yedek kopyasını ve abonelik durumunu saklamak. Veriler: yukarıdaki (b) ve (e) bentlerindeki bilgiler. Saklama: (c) ve (f) bentlerindeki süreler. ※ Fiziksel saklama yeri Kore Cumhuriyeti’dir (Seul bölgesi).',
-            '• Vercel Inc. — Ülke: ABD. İletişim: privacy@vercel.com. Amaç: yedekleme sunucusunu işletmek. ※ Şifrelenmiş kopya bu sunucudan geçmeden doğrudan depolamaya gönderilir.',
-            '• RevenueCat, Inc. — Ülke: ABD. İletişim: compliance@revenuecat.com. Amaç: abonelik ödemelerini doğrulamak ve abonelik durumunu denetlemek. Veriler: hesap kimliği, mağaza işlem ve ürün kimlikleri, cihaz ve uygulama bilgileri. Ne zaman ve nasıl: abonelik ekranına girildiğinde ve ödeme yapıldığında ağ üzerinden iletilir. Saklama: hizmet sözleşmesi sona erene kadar',
-            '• Google LLC — yukarıdaki 6. bölümde belirtilen aktarıma ek olarak, abonelik ödemelerinin işlenmesi ve doğrulanması amacıyla mağaza işlem bilgileri işlenir.',
-            'Yurt dışına aktarımı reddedebilirsin. Yedeklemeyi açmaz ve abone olmazsan yukarıdaki aktarımlar gerçekleşmez; kayıt yazma dâhil diğer tüm özellikler aynen kullanılabilir.',
-          ],
-        },
-      ],
-    },
-    {
-      appliesFrom: 'Yapay zekâ özet raporlarını içeren sürümün yayımlandığı günden itibaren',
-      summary:
-        'Yapay zekâ özet raporları ekleniyor. Yalnızca raporu kendin oluşturduğunda, o döneme ait günlük içeriği şifrelenmemiş hâlde işletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına gönderilir. İşletmeci günlük içeriğini saklamaz, ancak rapor kalitesini iyileştirmek için oluşturulan özeti 90 gün saklar. Yapay zekâ sağlayıcısı kötüye kullanım denetimi için en fazla 30 gün saklar, sonra siler ve model eğitiminde kullanmaz.',
-      sections: [
-        {
-          h: 'a. Ne değişiyor (öncesi → sonrası)',
-          body: [
-            'Öncesi: günlüklerin başlığı ve metni cihazının dışına aktarılmaz. Yedeklemeyi açmış olsan bile yalnızca işletmecinin okuyamayacağı şifreli metin olarak aktarılır.',
-            'Sonrası: **yalnızca Rapor oluştur’a kendin bastığında**, o döneme ait günlük içeriği **şifrelenmemiş hâlde** işletmecinin sunucusu üzerinden yapay zekâ sağlayıcısına gönderilir ve bir özet oluşturulur.',
-            '⚠ Tam olarak: işletmeci **günlük içeriğinin kendisini saklamaz.** Ancak ① özet oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana "işletmeci göremez" diyemeyiz ve ② **oluşturulan özet 90 gün saklanır** (aşağıdaki d bendine bakınız). Bunu bulanıklaştırmadan açıkça belirtiyoruz.',
-            'Rapor oluşturmazsan bu aktarım hiç gerçekleşmez ve günlük yazma dâhil diğer tüm özellikler eksiksiz kullanılabilir.',
-          ],
-        },
-        {
-          h: 'b. Hassas bilgiler için ayrı rıza',
-          body: [
-            'Bir günlük, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruhsal durum gibi hassas bilgiler içerebilir.',
-            'Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında **hassas bilgilerin işlenmesine ilişkin ayrı bir rıza** alırız. Bu rıza, (c) bendindeki yurt dışına aktarım rızasından **ayrıdır** ve her birini ayrı ayrı seçebilirsin.',
-            'Rıza vermesen de yapay zekâ raporları dışındaki tüm özellikler eksiksiz kullanılabilir.',
-          ],
-        },
-        {
-          h: 'c. Yurt dışına aktarım için ayrı rıza',
-          body: [
-            '• OpenAI OpCo, LLC — Ülke: ABD (1455 Third Street, San Francisco, California 94158, USA). İletişim: dpo@openai.com. Aynı bilgiler rıza alınmadan önce uygulama içinde de gösterilir.',
-            '• Aktarılan veriler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi',
-            '• Amaç: özet raporu oluşturmak',
-            '• Zaman ve yöntem: Rapor oluştur’a bastığında ağ üzerinden aktarılır',
-            '• Saklama süresi: işletmecinin sunucusu **aktarılan verileri (günlük içeriğini) saklamaz** — yalnızca özet oluşturulurken bellekte tutulur ve ardından atılır. Oluşturulan özetin saklanması (d) bendinde ayrıca belirtilmiştir. Yapay zekâ sağlayıcısı bunları kötüye kullanım denetimi için **en fazla 30 gün** saklar ve sonra siler; bu süre boyunca da **model eğitiminde kullanmaz.**',
-            'Yurt dışına aktarımı reddedebilirsin; reddedersen yalnızca yapay zekâ raporları kullanılamaz, diğer tüm özellikler eksiksiz kullanılabilir.',
-          ],
-        },
-        {
-          h: 'd. İşletmecinin sakladıkları',
-          body: [
-            'Günlük içeriğini (başlık ve metin) saklamayız. Aşağıdakileri saklarız.',
-            '• **Yapay zekânın oluşturduğu özet** — rapor kalitesini kontrol etmek ve iyileştirmek için saklanır. Saklama süresi: **oluşturulduğu günden itibaren 90 gün**, ardından otomatik olarak silinir.',
-            '• Raporu oluşturan hesabın tanımlayıcısı, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı — ücretlendirme ve kötüye kullanımın önlenmesi için kullanılır. Saklama süresi: amaç gerçekleşene kadar ya da hesabını silene kadar',
-            '⚠ Özet, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir. Bunu bulanıklaştırmadan açıkça belirtiyoruz.',
-            'Tamamlanan rapor **cihazında da** saklanır ve yedeklemeyi açtıysan şifrelenmiş olarak yedeğe dâhil edilir.',
-          ],
-        },
-        {
-          h: 'e. Haklarınız',
-          body: [
-            '• Raporlar yalnızca sen oluşturduğunda üretilir; asla otomatik olarak oluşturulmaz.',
-            '• Oluşturduğun bir raporu uygulamada istediğin zaman silebilirsin.',
-            '• Uygulamada sildiğinde cihazından kaybolur; işletmecinin sunucusunda saklanan özet 90 gün sonra otomatik olarak silinir. Daha erken silinmesini istersen Bize ulaşın üzerinden talep edebilirsin.',
-            '• Yapay zekânın oluşturduğu özetler gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis veya tavsiye değildir. Uygulama, bir özeti bildirmen için bir yol sunar.',
-          ],
-        },
+        '• 2026-08-12 yaklaşan değişiklik yayımlandı — yapay zekâ özet raporu özelliğinin getirilmesi planlanıyor (ana metin henüz değişmedi)',
+        '• 2026-08-23 değişiklik — yukarıdaki iki duyuru ana metne işlendi. Aylık abonelik, yedekleme/geri yükleme ve yapay zekâ özet raporlarına ilişkin işleme faaliyetleri 1, 2, 3, 4, 6, 8, 9 ve 10. bölümlere eklendi.',
       ],
     },
   ],
@@ -288,15 +209,15 @@ export const PRIVACY_TR: LegalDoc = {
  *   bulunabilmesi gerekir. Play inceleme uzmanlarının açtığı adres budur — bu yüzden yalnızca
  *   Korece kalamaz.
  *
- * ⚠ **Yapı Korece ile birebir aynı olmalıdır** — 5 bölüm (6/4/4/3/3 satır) ve iki yaklaşan
- *   değişiklik. `npm run check:legal` bunu denetler. Sessizce düşen bir hüküm, burada
+ * ⚠ **Yapı Korece ile birebir aynı olmalıdır** — 6 bölüm (6/4/9/5/4/3 satır) ve yaklaşan
+ *   değişiklik yok. `npm run check:legal` bunu denetler. Sessizce düşen bir hüküm, burada
  *   gerçekten önem taşıyan tek hatadır.
  */
 export const DELETE_ACCOUNT_TR: LegalDoc = {
   title: 'Jogak — Hesabını nasıl silersin',
-  sourceFingerprint: 'a6b3a8b5',
-  effective: '2026-08-10',
-  updated: '2026-08-10',
+  sourceFingerprint: 'a8b0c8b9',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
     'Bu sayfada Jogak uygulamasındaki hesabını ve onunla ilgili verileri nasıl sileceğin anlatılıyor. Uygulamayı zaten sildiysen ya da giriş yapamıyorsan e-postayla da talepte bulunabilirsin.',
   sections: [
@@ -327,6 +248,11 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
         '• Sosyal hesabın benzersiz kimliği (Google “sub”)',
         '• E-posta adresi',
         '• Başvurular ile bunları yazan hesap arasındaki bağlantı',
+        '• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası (yedeklemeyi açtıysan) — 90 günlük süreyi beklemeden birlikte silinir.',
+        '• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)',
+        '• Sunucuda saklanan yapay zekâ rapor özetleri (en fazla 90 gün) ve rapor kullanım kayıtları (dönem, kaç kez oluşturulduğu, jeton sayısı)',
+        '⚠ Hesap silmede önce yedeği imha eder, sonra hesabı sileriz — çünkü hesap önce yok olursa o yedeği silmeye yetkili kimse kalmaz. Yedeğin silinmesi başarısız olursa hesap silme işlemi hiç başlamaz; lütfen biraz sonra yeniden dene.',
+        '⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile sunucudaki yedeği geri yükleyemezsin.',
       ],
     },
     {
@@ -334,66 +260,26 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
       body: [
         'Aşağıdaki bilgiler mevzuat gereği saklanır ve saklama süresi boyunca da yalnızca yazarına ulaşılamayacak biçimde (takma adlaştırılmış olarak) kalır.',
         '• Başvuru içeriği: 3 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu — tüketici şikâyetleri veya uyuşmazlık çözümüne ilişkin kayıtlar)',
+        '• Abonelik işlem kayıtları (işlem kimliği, ürün, abonelik süresi, ödeme durumu değişikliği geçmişi): 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
+        '• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için tutulur; hesap kimliği bununla birlikte saklanmaz.',
         'Saklama süresi dolduğunda gecikmeksizin imha ederiz.',
       ],
     },
     {
-      h: '5. Silinmeyenler — cihazındaki kayıtlar',
+      h: '5. Cihazında kalanlar — hesabını silmek bunları silmez',
       body: [
-        'Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) yalnızca cihazının içinde saklanır ve işletmecinin sunucularına aktarılmaz.',
-        'Bu nedenle hesabını silsen de cihazındaki kayıtlar olduğu gibi kalır. Kayıtları da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.',
-        'Bunun tersine, uygulamayı silersen cihazdaki kayıtlar geri getirilemez.',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'Aylık abonelik ile yedekleme/geri yüklemeyi içeren sürümün yayımlandığı günden itibaren',
-      summary:
-        'Yedeklemeyi açtıysan, hesabını sildiğinde sunucuda saklanan şifrelenmiş yedek de birlikte silinir. Abonelik işlem kayıtları mevzuat gereği takma adlaştırılarak saklanır.',
-      sections: [
-        {
-          h: 'a. Ek olarak silinen veriler',
-          body: [
-            '• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası — hesabınla birlikte silinir. 90 günlük süreyi beklemeyiz.',
-            '• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)',
-            '⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile geri yükleme yapamazsın.',
-            '⚠ Cihazındaki kayıtlar olduğu gibi kalır. Silinen yalnızca sunucudaki kopyadır.',
-          ],
-        },
-        {
-          h: 'b. Ek olarak saklanan veriler ve süreleri',
-          body: [
-            '• Abonelik işlem kayıtları (işlem kimliği, ürün, abonelik süresi, ödeme durumu değişikliği geçmişi): 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
-            '• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için; hesap kimliği bununla birlikte saklanmaz.',
-            'Yukarıdaki kayıtlar saklama süresi boyunca da yalnızca yazarına ulaşılamayacak biçimde kalır.',
-          ],
-        },
-        {
-          h: 'c. Aboneliği ayrıca iptal etmelisin',
-          body: [
-            'Hesabını silsen de Google Play aboneliğin kendiliğinden iptal olmaz; iptal etmezsen ücretlendirilmeye devam edersin.',
-            'İptal: Google Play Store uygulaması > profil > Ödemeler ve abonelikler > Abonelikler (https://play.google.com/store/account/subscriptions)',
-            'Ödenmiş tutarların iadesi, Google Play’in iade politikası ile işletmecinin iade politikasına tabidir. Sorularını aşağıdaki iletişim adresine iletebilirsin.',
-          ],
-        },
+        'Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) ve yapay zekâ raporlarının metni cihazının içinde saklanır.',
+        'Bu nedenle hesabını silsen de cihazındaki kayıtlar ve raporlar olduğu gibi kalır. Bunları cihazdan da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.',
+        'Bunun tersine, uygulamayı silersen cihazdaki kayıtlar geri getirilemez. Yalnızca yedeklemeyi açtıysan ve kurtarma kodunu sakladıysan, üstelik yalnızca hesabını silmeden önce bunları geri alabilirsin.',
+        '⚠ Yedeklemeyi açmadıysan cihazındaki kayıtlar işletmecide bulunmadığından işletmeci bunları ne silebilir ne de sana geri verebilir.',
       ],
     },
     {
-      appliesFrom: 'Yapay zekâ özet raporlarını içeren sürümün yayımlandığı günden itibaren',
-      summary:
-        'Yapay zekâ raporlarının metni cihazında saklanır. Sunucuda, kalite denetimi için rapor özetleri en fazla 90 gün saklanır ve hesabını sildiğinde kullanım kayıtlarıyla birlikte silinir.',
-      sections: [
-        {
-          h: 'a. Yapay zekâ raporlarında neler silinir',
-          body: [
-            '• Sunucuda kalan rapor kullanım kayıtları (hesap kimliği, dönem, kaç kez oluşturulduğu, jeton sayısı) — hesabınla birlikte silinir.',
-            '• Sunucuda saklanan rapor özetleri (en fazla 90 gün) — hesabınla birlikte silinir. Günlük metninin kendisi saklanmadığı için orada silinecek bir şey yoktur.',
-            '⚠ Rapor metni cihazında da saklandığından hesabını silsen bile cihazda kalır. Kaldırmak istersen uygulamadan raporları sil ya da uygulamayı sil.',
-            '• Yedeklemeyi açtıysan raporlar da şifrelenmiş olarak yedeğe dâhildir ve yedek silindiğinde birlikte silinir.',
-          ],
-        },
+      h: '6. Aboneliği ayrıca iptal etmelisin',
+      body: [
+        'Hesabını silsen de Google Play aboneliğin kendiliğinden iptal olmaz; iptal etmezsen ücretlendirilmeye devam edersin.',
+        'İptal: Google Play Store uygulaması > profil > Ödemeler ve abonelikler > Abonelikler (https://play.google.com/store/account/subscriptions)',
+        'Ödenmiş tutarların iadesi, Google Play’in iade politikası ile işletmecinin iade politikasına tabidir. Sorularını yukarıdaki iletişim adresine iletebilirsin.',
       ],
     },
   ],

@@ -10,20 +10,24 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '4b621b97',
-  effective: '2026-08-09',
-  updated: '2026-08-11',
+  sourceFingerprint: '47ec2dc4',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
-    'Vivace Games (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Jogak không gửi các mảnh nhật ký bạn viết đến bất kỳ máy chủ nào và về nguyên tắc chỉ thu thập lượng thông tin tối thiểu cần thiết.',
+    'Vivace Games (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
   sections: [
     {
-      h: '1. Những gì chúng tôi không thu thập (nói trước)',
+      h: '1. Trước hết, xin nói rõ nhật ký của bạn được lưu ở đâu',
       body: [
-        'Nhà vận hành không thu thập những thông tin sau và không truyền chúng ra khỏi thiết bị của bạn.',
-        '• Tiêu đề, nội dung, danh sách, ảnh, thẻ và cảm xúc của các mảnh — chỉ được lưu trong bộ nhớ trong của thiết bị bạn.',
+        'Các mảnh nhật ký (tiêu đề, nội dung, danh sách, ảnh, thẻ và cảm xúc) được lưu trong bộ nhớ trong của thiết bị bạn và về cơ bản không ra khỏi thiết bị đó.',
+        '⚠ Tuy nhiên có hai ngoại lệ, và cả hai chỉ xảy ra khi chính bạn lựa chọn. Không điều nào diễn ra tự động.',
+        '• Khi bạn bật sao lưu — bản sao nhật ký đã được mã hoá trên thiết bị sẽ được lưu trên máy chủ của nhà vận hành. Nhà vận hành không thể đọc bản sao đó. Chi tiết ở mục 2(c).',
+        '• Khi bạn tạo báo cáo tóm tắt bằng AI — nội dung nhật ký của kỳ đó đi qua máy chủ của nhà vận hành ở dạng không mã hoá rồi được gửi tới nhà cung cấp AI. Nhà vận hành không lưu nội dung đó. Chi tiết ở mục 2(e).',
+        '⚠ Hai câu trên khác nhau. Với sao lưu, chúng tôi lưu nhưng không đọc được; với AI, chúng tôi đọc nhưng không lưu. Chúng tôi nói rõ điều này chứ không làm mờ đi.',
+        'Trong mọi trường hợp, nhà vận hành không thu thập những thông tin sau và không truyền chúng ra khỏi thiết bị của bạn.',
         '• Mã PIN, hình mở khoá hoặc câu trả lời gợi ý dùng cho khoá ứng dụng — chỉ được lưu trong vùng lưu trữ an toàn của thiết bị ở dạng không thể khôi phục (mã băm); bản gốc không được lưu ở bất kỳ đâu.',
         '• Tên, ngày sinh, số điện thoại, địa chỉ, danh bạ, vị trí, hay bất kỳ bản ghi truy cập nào vào toàn bộ thư viện ảnh của bạn.',
-        'Ảnh bạn chọn trong ứng dụng chỉ được sao chép vào thư mục riêng của ứng dụng trên thiết bị để có thể chèn vào một mảnh; chúng không được truyền đi đâu cả.',
+        'Ảnh bạn chọn trong ứng dụng được sao chép vào thư mục riêng của ứng dụng trên thiết bị để có thể chèn vào một mảnh, và nếu bạn không bật sao lưu thì chúng không được truyền ra ngoài. Ảnh không bao giờ được gửi kèm trong báo cáo tóm tắt bằng AI.',
       ],
     },
     {
@@ -35,11 +39,31 @@ export const PRIVACY_VI: LegalDoc = {
         '  — Mục đích: xác định người gửi, gửi phản hồi và cho phép bạn xem lại lịch sử liên hệ của mình',
         '• Phân loại và nội dung liên hệ',
         '• Loại thiết bị (Android/iOS) và phiên bản ứng dụng — để hiểu sự cố xảy ra trong môi trường nào',
-        '※ Đăng nhập chỉ cần cho “Liên hệ”; viết mảnh, khoá ứng dụng và các tính năng khác không cần.',
+        '※ Đăng nhập cần cho “Liên hệ”, gói đăng ký, sao lưu và báo cáo AI; viết mảnh, khoá ứng dụng và các tính năng khác thì không cần.',
         '※ Trẻ em dưới 14 tuổi không thể dùng tính năng đăng nhập.',
         'b. Thông tin được thu thập tự động trong quá trình hiển thị quảng cáo',
         '• Mã quảng cáo (ID quảng cáo Android), thông tin thiết bị và mạng, bản ghi hiển thị và nhấp chuột',
         '• Những mục trên do Google (AdMob) thu thập; chi tiết và cách từ chối có ở mục 7.',
+        'c. Khi bạn bật sao lưu (cần gói đăng ký)',
+        '• Bản sao nhật ký đã mã hoá — ở dạng nhà vận hành không thể giải mã',
+        '• Mã định danh bản sao lưu, thời điểm sao lưu, số thế hệ và dung lượng — những thông tin này không được mã hoá. Nhà vận hành có thể biết tài khoản nào đã sao lưu, vào lúc nào và dung lượng bao nhiêu.',
+        '  — Căn cứ thu thập: sự đồng ý riêng của bạn (được lấy ở màn hình bật sao lưu)',
+        '⚠ Nói cho chính xác: nhà vận hành lưu bản sao đó nhưng không thể đọc được. Khoá giải mã chỉ tồn tại trên thiết bị của bạn và trong mã khôi phục mà bạn giữ; nhà vận hành không có khoá đó.',
+        '⚠ Nếu bạn mất mã khôi phục thì không có cách nào mở được bản sao lưu. Nhà vận hành cũng không thể mở giúp bạn.',
+        'd. Khi bạn dùng gói đăng ký',
+        '• Trạng thái đăng ký — khoá quyền lợi, thời điểm hết hạn, thời gian ân hạn khi thanh toán lỗi, có gia hạn hay không',
+        '• Mã giao dịch do cửa hàng cấp, mã sản phẩm và phân biệt môi trường thanh toán (chính thức/thử nghiệm)',
+        '• Bản ghi thay đổi trạng thái đăng ký do dịch vụ thanh toán gửi (mua, gia hạn, huỷ, hoàn tiền, v.v.) cùng nội dung gốc',
+        '  — Căn cứ thu thập: Luật Bảo vệ thông tin cá nhân, Điều 15(1)4 (cần thiết để thực hiện biện pháp theo yêu cầu của người dùng, tức là cung cấp quyền lợi đăng ký đã yêu cầu)',
+        '  — Mục đích: xác nhận quyền lợi đăng ký (bỏ quảng cáo, dùng sao lưu và báo cáo AI), xử lý thắc mắc thanh toán và hoàn tiền',
+        '⚠ Thông tin thanh toán như số thẻ hay số tài khoản do Google Play xử lý và không được chuyển cho nhà vận hành. Nhà vận hành chỉ biết bạn đã thanh toán và gói đăng ký có hiệu lực đến khi nào.',
+        'e. Khi bạn tạo báo cáo tóm tắt bằng AI (cần gói đăng ký)',
+        '• Những gì đi qua máy chủ của nhà vận hành tới nhà cung cấp AI: tiêu đề, nội dung, cảm xúc và ngày viết của các mảnh trong kỳ bạn yêu cầu báo cáo',
+        '• Những gì nhà vận hành lưu: bản tóm tắt do AI tạo ra, mã định danh tài khoản đã tạo báo cáo, kỳ, số lần và số token đã dùng',
+        '⚠ Nói cho chính xác: nhà vận hành không lưu bản thân nội dung nhật ký. Tuy nhiên ① tại thời điểm tạo bản tóm tắt, nội dung đi qua máy chủ của nhà vận hành nên chúng tôi không thể nói rằng “nhà vận hành không thể xem”, và ② bản tóm tắt được tạo ra sẽ được lưu 90 ngày. Chúng tôi nói rõ điều này chứ không làm mờ đi.',
+        '⚠ Bản tóm tắt được viết dựa trên nhật ký của bạn nên có thể chứa nội dung nhật ký.',
+        '• Đồng ý riêng đối với thông tin nhạy cảm: nhật ký có thể chứa thông tin nhạy cảm như tình trạng sức khoẻ hoặc tâm lý theo Điều 23 Luật Bảo vệ thông tin cá nhân. Vì báo cáo tóm tắt bằng AI xử lý nội dung đó ở dạng không mã hoá, chúng tôi lấy sự đồng ý riêng cho việc xử lý thông tin nhạy cảm khi bạn dùng tính năng lần đầu. Sự đồng ý này tách biệt với đồng ý chuyển ra nước ngoài ở mục 6, và bạn có thể chọn riêng từng mục.',
+        'Dù không đồng ý, bạn vẫn dùng được đầy đủ mọi tính năng ngoài báo cáo AI. Báo cáo chỉ được tạo khi chính bạn tạo và không bao giờ được tạo tự động.',
       ],
     },
     {
@@ -48,6 +72,9 @@ export const PRIVACY_VI: LegalDoc = {
         '• Tiếp nhận và xử lý liên hệ: kiểm tra nội dung bạn gửi, tìm và khắc phục lỗi',
         '• Xác định người gửi và phản hồi: chuyển phản hồi tới người đã liên hệ và cho phép bạn xem lại lịch sử của mình',
         '• Hiển thị quảng cáo: cung cấp quảng cáo cho người dùng bản miễn phí và đo lường hiệu quả',
+        '• Sao lưu và khôi phục: khi bạn bật tính năng này, lưu giữ bản sao nhật ký đã mã hoá và trả lại cho bạn theo yêu cầu',
+        '• Xác nhận quyền lợi đăng ký: cung cấp việc bỏ quảng cáo, sao lưu và báo cáo AI cho người đã thanh toán, đồng thời xử lý thắc mắc thanh toán và hoàn tiền',
+        '• Tạo báo cáo tóm tắt bằng AI và cải thiện chất lượng: soạn bản tóm tắt cho kỳ bạn yêu cầu rồi kiểm tra kết quả để nâng cao chất lượng',
         'Nhà vận hành không dùng dữ liệu cá nhân cho mục đích khác ngoài những mục đích trên, và nếu mục đích thay đổi sẽ xin sự đồng ý trước.',
       ],
     },
@@ -57,6 +84,14 @@ export const PRIVACY_VI: LegalDoc = {
         '• Thông tin tài khoản (email, “sub” của Google): cho đến khi bạn xoá tài khoản. Khi xoá, chúng tôi tiêu huỷ ngay hoặc chuyển sang dạng không thể truy vết.',
         '• Nội dung liên hệ: 3 năm kể từ ngày tiếp nhận (Luật Bảo vệ người tiêu dùng trong thương mại điện tử — hồ sơ về khiếu nại hoặc giải quyết tranh chấp)',
         '• Dữ liệu hành vi dựa trên mã quảng cáo: tối đa 1 năm kể từ khi thu thập',
+        '• Bản sao lưu đã mã hoá: được lưu trong thời gian bạn bật sao lưu và tối đa 90 ngày sau khi gói đăng ký kết thúc, sau đó tự động tiêu huỷ. Nếu bạn tắt sao lưu, yêu cầu xoá hoặc xoá tài khoản, chúng tôi tiêu huỷ ngay mà không chờ đủ 90 ngày. Bản sao lưu không được truy cập từ 3 năm trở lên sẽ bị tiêu huỷ (áp dụng cho trường hợp chỉ gỡ ứng dụng mà không xoá tài khoản).',
+        '• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.',
+        '• Bản tóm tắt do AI tạo ra: 90 ngày kể từ ngày tạo. Sau đó tự động bị xoá.',
+        '• Bản ghi sử dụng báo cáo (mã định danh tài khoản, kỳ, số lần, số token): đến khi đạt được mục đích xử lý hoặc đến khi bạn xoá tài khoản',
+        '• Hồ sơ về hợp đồng hoặc rút lại đề nghị, về thanh toán và cung ứng hàng hoá: 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)',
+        'Khi bạn xoá tài khoản, mã định danh tài khoản (email và “sub” của Google) được chuyển ngay sang dạng không thể truy vết, còn các hồ sơ giao dịch trên được lưu tách biệt ở dạng không truy vết được người tạo trong thời hạn nêu trên rồi mới tiêu huỷ.',
+        '⚠ Xoá tài khoản không tự động huỷ gói đăng ký trên Google Play. Bạn phải tự huỷ tại Google Play > Gói đăng ký; nếu không, bạn vẫn tiếp tục bị tính phí.',
+        '⚠ Thông báo về việc xoá bản sao lưu sau khi gói đăng ký hết hạn chỉ đến với bạn trên màn hình khi bạn mở ứng dụng. Nếu bạn không mở, thông báo này có thể không đến được.',
         'Khi hết thời hạn hoặc đạt được mục đích, chúng tôi tiêu huỷ dữ liệu ngay lập tức.',
       ],
     },
@@ -64,6 +99,7 @@ export const PRIVACY_VI: LegalDoc = {
       h: '5. Cung cấp cho bên thứ ba',
       body: [
         'Nhà vận hành không cung cấp dữ liệu cá nhân của người dùng cho bên thứ ba.',
+        'Các doanh nghiệp nêu ở mục 6 là bên nhận uỷ thác xử lý thông tin thay cho nhà vận hành và không sử dụng thông tin đó cho mục đích riêng của họ. Nhà cung cấp AI không dùng nội dung nhật ký nhận được để huấn luyện mô hình.',
         'Ngoại lệ áp dụng khi pháp luật có quy định riêng hoặc khi cơ quan điều tra yêu cầu theo trình tự và hình thức luật định.',
       ],
     },
@@ -71,10 +107,13 @@ export const PRIVACY_VI: LegalDoc = {
       h: '6. Uỷ thác xử lý và chuyển ra nước ngoài',
       body: [
         'Để cung cấp dịch vụ, nhà vận hành uỷ thác việc xử lý như sau, và một phần diễn ra ngoài Hàn Quốc.',
-        '• Google LLC — Quốc gia: Hoa Kỳ. Liên hệ: https://support.google.com/policies/contact/general_privacy_form. Mục đích: hiển thị và đo lường quảng cáo (AdMob), đăng nhập bằng tài khoản Google. Dữ liệu: mã quảng cáo, thông tin thiết bị và mạng, và khi đăng nhập là email cùng mã định danh tài khoản. Khi nào và bằng cách nào: truyền qua mạng khi yêu cầu quảng cáo và khi đăng nhập. Lưu giữ: theo chính sách quyền riêng tư của Google',
-        '• Supabase Inc. — Quốc gia: Hoa Kỳ (nơi đặt pháp nhân). Liên hệ: privacy@supabase.com. Mục đích: lưu thông tin liên hệ và tài khoản trong cơ sở dữ liệu. Dữ liệu: thông tin ở mục 2(a). Khi nào và bằng cách nào: truyền qua mạng khi bạn gửi liên hệ. Lưu giữ: theo thời hạn ở mục 4. ※ Vị trí lưu trữ vật lý là Hàn Quốc (vùng Seoul), nhưng chúng tôi công bố là chuyển ra nước ngoài vì pháp nhân vận hành đặt ngoài Hàn Quốc.',
-        '• Vercel Inc. — Quốc gia: Hoa Kỳ. Liên hệ: privacy@vercel.com. Mục đích: vận hành máy chủ tiếp nhận liên hệ. Dữ liệu: thông tin ở mục 2(a). Khi nào và bằng cách nào: truyền qua mạng khi bạn gửi liên hệ. Lưu giữ: cho đến khi hợp đồng uỷ thác kết thúc',
-        'Bạn có thể từ chối việc chuyển dữ liệu ra nước ngoài. Để từ chối phần liên quan đến quảng cáo, hãy tắt quảng cáo cá nhân hoá theo mục 7; để từ chối phần liên quan đến liên hệ, chỉ cần không dùng tính năng “Liên hệ” (mọi tính năng khác, kể cả viết mảnh, vẫn dùng được bình thường).',
+        '• Google LLC — Quốc gia: Hoa Kỳ. Liên hệ: https://support.google.com/policies/contact/general_privacy_form. Mục đích: hiển thị và đo lường quảng cáo (AdMob), đăng nhập bằng tài khoản Google, xử lý và xác minh thanh toán gói đăng ký. Dữ liệu: mã quảng cáo, thông tin thiết bị và mạng, email cùng mã định danh tài khoản khi đăng nhập, thông tin giao dịch của cửa hàng. Khi nào và bằng cách nào: truyền qua mạng khi yêu cầu quảng cáo, khi đăng nhập và khi thanh toán. Lưu giữ: theo chính sách quyền riêng tư của Google',
+        '• Supabase Inc. — Quốc gia: Hoa Kỳ (nơi đặt pháp nhân). Liên hệ: privacy@supabase.com. Mục đích: lưu thông tin liên hệ và tài khoản trong cơ sở dữ liệu, lưu bản sao lưu đã mã hoá và trạng thái đăng ký. Dữ liệu: thông tin ở mục 2(a), 2(c) và 2(d). Khi nào và bằng cách nào: truyền qua mạng khi bạn gửi liên hệ và khi sao lưu. Lưu giữ: đến hết thời hạn ở mục 4. ※ Vị trí lưu trữ vật lý là Hàn Quốc (vùng Seoul), nhưng chúng tôi công bố là chuyển ra nước ngoài vì pháp nhân vận hành đặt ngoài Hàn Quốc.',
+        '• Vercel Inc. — Quốc gia: Hoa Kỳ. Liên hệ: privacy@vercel.com. Mục đích: vận hành máy chủ tiếp nhận liên hệ cùng máy chủ sao lưu và AI. Dữ liệu: thông tin ở mục 2(a). Khi nào và bằng cách nào: truyền qua mạng khi bạn gửi liên hệ. Lưu giữ: cho đến khi hợp đồng uỷ thác kết thúc. ※ Bản sao lưu đã mã hoá được gửi thẳng tới kho lưu trữ mà không đi qua máy chủ này.',
+        '• RevenueCat, Inc. — Quốc gia: Hoa Kỳ. Liên hệ: compliance@revenuecat.com. Mục đích: xác minh thanh toán đăng ký và kiểm tra trạng thái đăng ký. Dữ liệu: mã định danh tài khoản, mã giao dịch và mã sản phẩm của cửa hàng, thông tin thiết bị và ứng dụng. Khi nào và bằng cách nào: truyền qua mạng khi mở màn hình đăng ký và khi thanh toán. Lưu giữ: cho đến khi hợp đồng uỷ thác kết thúc',
+        '• OpenAI OpCo, LLC — Quốc gia: Hoa Kỳ (1455 Third Street, San Francisco, California 94158, USA). Liên hệ: dpo@openai.com. Mục đích: tạo báo cáo tóm tắt. Dữ liệu: tiêu đề, nội dung, cảm xúc và ngày viết của các mảnh trong kỳ bạn yêu cầu báo cáo. Khi nào và bằng cách nào: truyền qua mạng vào lúc bạn nhấn nút tạo báo cáo. Lưu giữ: máy chủ của nhà vận hành không lưu nội dung nhật ký — nội dung chỉ nằm trong bộ nhớ trong lúc bản tóm tắt đang được tạo rồi bị huỷ ngay. Nhà cung cấp AI lưu tối đa 30 ngày nhằm giám sát lạm dụng rồi xoá, và ngay cả trong thời gian đó cũng không dùng để huấn luyện mô hình.',
+        '⚠ Việc chuyển ra nước ngoài phục vụ báo cáo AI là một sự đồng ý riêng. Khi bạn dùng tính năng lần đầu, chúng tôi hiển thị nội dung như trên ngay trong ứng dụng rồi xin sự đồng ý của bạn; sự đồng ý này tách biệt với đồng ý về thông tin nhạy cảm ở mục 2(e).',
+        'Bạn có thể từ chối việc chuyển dữ liệu ra nước ngoài. Để từ chối phần liên quan đến quảng cáo, hãy tắt quảng cáo cá nhân hoá theo mục 7; phần liên quan đến liên hệ sẽ không phát sinh nếu bạn không dùng tính năng “Liên hệ”. Nếu bạn không bật sao lưu, không đăng ký và không tạo báo cáo thì những lần chuyển liên quan sẽ không xảy ra, và mọi tính năng khác kể cả viết mảnh vẫn dùng được bình thường.',
       ],
     },
     {
@@ -85,6 +124,7 @@ export const PRIVACY_VI: LegalDoc = {
         'Cách từ chối (Android): Cài đặt > Quyền riêng tư > Quảng cáo > “Xoá ID quảng cáo” hoặc “Tắt cá nhân hoá quảng cáo”',
         'Cách từ chối (iOS): Cài đặt > Quyền riêng tư & Bảo mật > Theo dõi > tắt “Cho phép Ứng dụng Yêu cầu Theo dõi”',
         'Dù bạn từ chối, quảng cáo vẫn có thể tiếp tục hiển thị, nhưng là quảng cáo chung không dựa trên sở thích của bạn.',
+        'Nếu bạn đăng ký gói trả phí thì quảng cáo không hiển thị nữa, và việc thu thập liên quan đến quảng cáo nêu trên cũng không phát sinh.',
         'Tìm hiểu thêm về cách Google xử lý dữ liệu cá nhân cho quảng cáo: https://policies.google.com/technologies/ads',
       ],
     },
@@ -93,7 +133,9 @@ export const PRIVACY_VI: LegalDoc = {
       body: [
         'Trình tự: dữ liệu cá nhân đã hết thời hạn hoặc đã đạt mục đích sẽ bị tiêu huỷ ngay. Nếu pháp luật yêu cầu lưu giữ, dữ liệu được lưu tách biệt với dữ liệu khác trong thời hạn đó rồi mới tiêu huỷ.',
         'Cách thức: thông tin dạng tệp điện tử được xoá vĩnh viễn bằng biện pháp kỹ thuật khiến không thể khôi phục hay tái tạo.',
-        'Các mảnh, ảnh và thông tin khoá được lưu trên thiết bị của bạn sẽ bị gỡ khỏi thiết bị khi bạn dùng tính năng “Đặt lại toàn bộ” trong ứng dụng hoặc gỡ cài đặt ứng dụng. Nhà vận hành không nắm giữ những thông tin này nên không thể xoá giúp bạn.',
+        'Các mảnh, ảnh và thông tin khoá được lưu trên thiết bị của bạn sẽ bị gỡ khỏi thiết bị khi bạn dùng tính năng “Đặt lại toàn bộ” trong ứng dụng hoặc gỡ cài đặt ứng dụng.',
+        'Nếu bạn đã bật sao lưu, bản sao đã mã hoá lưu trên máy chủ sẽ bị tiêu huỷ khi bạn xoá nó ở màn hình sao lưu trong ứng dụng hoặc khi bạn xoá tài khoản. Khi xoá tài khoản, chúng tôi tiêu huỷ bản sao lưu trước rồi mới xoá tài khoản — vì nếu tài khoản biến mất trước thì không còn ai có quyền xoá bản sao lưu đó nữa.',
+        'Nếu bạn không bật sao lưu, nhà vận hành không nắm giữ các mảnh trên thiết bị của bạn nên không thể xoá giúp bạn.',
       ],
     },
     {
@@ -103,6 +145,9 @@ export const PRIVACY_VI: LegalDoc = {
         '• Yêu cầu truy cập dữ liệu của mình • Yêu cầu chỉnh sửa khi có sai sót • Yêu cầu xoá • Yêu cầu ngừng xử lý • Yêu cầu chuyển dữ liệu của mình (Luật Bảo vệ thông tin cá nhân, Điều 35-2)',
         'Bạn có thể thực hiện bằng văn bản hoặc email theo thông tin liên hệ ở mục 11, và nhà vận hành sẽ xử lý ngay.',
         'Nếu bạn yêu cầu chỉnh sửa một sai sót trong dữ liệu, chúng tôi sẽ không sử dụng hay cung cấp dữ liệu đó cho đến khi việc chỉnh sửa hoàn tất.',
+        '⚠ Giới hạn của quyền truy cập đối với bản sao lưu: nếu bạn yêu cầu truy cập bản sao lưu, thứ nhà vận hành có thể cung cấp chỉ là bản mã hoá không thể giải mã cùng siêu dữ liệu ở mục 2(c). Chúng tôi không thể cung cấp nội dung nhật ký ở dạng con người đọc được — nhà vận hành không có khoá. Chính bạn có thể khôi phục bất cứ lúc nào trong ứng dụng bằng mã khôi phục của mình.',
+        'Bạn có thể xoá báo cáo AI đã tạo bất cứ lúc nào trong ứng dụng. Khi xoá trong ứng dụng, báo cáo biến mất khỏi thiết bị, còn bản tóm tắt lưu trên máy chủ sẽ tự động xoá sau 90 ngày. Nếu muốn xoá sớm hơn, bạn có thể yêu cầu qua mục “Liên hệ”.',
+        '⚠ Bản tóm tắt do AI tạo ra có thể khác với sự thật và không phải là chẩn đoán hay lời khuyên y tế, tâm lý. Ứng dụng cung cấp cách báo cáo một bản tóm tắt.',
         'Người đại diện hợp pháp của trẻ dưới 14 tuổi có thể thực hiện các quyền trên thay cho trẻ.',
       ],
     },
@@ -111,6 +156,7 @@ export const PRIVACY_VI: LegalDoc = {
       body: [
         '• Về quản lý: giảm tối đa số người tiếp xúc với dữ liệu cá nhân và đào tạo họ định kỳ',
         '• Về kỹ thuật: quản lý quyền truy cập hệ thống xử lý, mã hoá khi truyền (HTTPS), lưu bí mật khoá ứng dụng dưới dạng mã băm và dùng vùng lưu trữ an toàn của thiết bị (Keystore/Keychain)',
+        '• Mã hoá đầu cuối cho bản sao lưu: bản sao lưu được mã hoá ngay trên thiết bị của bạn rồi mới truyền đi, và khoá giải mã chỉ tồn tại trên thiết bị đó cùng trong mã khôi phục của bạn. Máy chủ của nhà vận hành không có khoá này.',
         '• Về vật lý: máy chủ chứa dữ liệu cá nhân đặt tại trung tâm dữ liệu của các nhà cung cấp đám mây trong và ngoài nước, tuân theo chính sách kiểm soát ra vào của họ.',
         '⚠ Tính năng khoá ứng dụng chỉ chặn truy cập vào màn hình; nó không mã hoá bản thân tệp nhật ký lưu trên thiết bị. Nếu thiết bị bị mất hoặc bị lấy và bảo mật của chính thiết bị bị vô hiệu hoá, nội dung các mảnh có thể bị lộ.',
       ],
@@ -145,132 +191,8 @@ export const PRIVACY_VI: LegalDoc = {
         'Lịch sử sửa đổi',
         '• 2026-08-09 ban hành lần đầu',
         '• 2026-08-11 đăng thông báo sửa đổi sắp áp dụng — dự kiến bổ sung gói đăng ký hằng tháng và sao lưu/khôi phục (nội dung chính chưa thay đổi)',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom: 'Kể từ ngày phát hành phiên bản có gói đăng ký hằng tháng và sao lưu/khôi phục',
-      summary:
-        'Gói đăng ký hằng tháng và sao lưu/khôi phục được bổ sung. Nếu bạn đăng ký, trạng thái đăng ký và mã giao dịch sẽ được xử lý; và chỉ khi bạn bật sao lưu, bản sao nhật ký đã được mã hoá trên thiết bị của bạn mới được lưu trên máy chủ của nhà vận hành. Nhà vận hành không thể giải mã bản sao đó.',
-      sections: [
-        {
-          h: 'a. Điều gì thay đổi (trước → sau)',
-          body: [
-            'Trước: tiêu đề, nội dung và ảnh của các mảnh không được truyền ra khỏi thiết bị của bạn.',
-            'Sau: **chỉ khi chính bạn bật sao lưu**, bản sao nhật ký đã mã hoá trên thiết bị của bạn mới được lưu trên máy chủ của nhà vận hành. Nếu bạn không bật, sẽ không có một ký tự nào được truyền đi, giống như trước đây.',
-            '⚠ Nói cho chính xác: nhà vận hành **lưu bản sao đó nhưng không thể đọc được.** Khoá giải mã chỉ tồn tại trên thiết bị của bạn và trong mã khôi phục mà bạn giữ; nhà vận hành không có khoá đó.',
-          ],
-        },
-        {
-          h: 'b. Thông tin được lưu thêm nếu bạn bật sao lưu',
-          body: [
-            '• Bản sao nhật ký đã mã hoá — ở dạng nhà vận hành không thể giải mã',
-            '• Mã định danh bản sao lưu, thời điểm sao lưu, số thế hệ và dung lượng — **những thông tin này không được mã hoá.** Nhà vận hành có thể biết tài khoản nào đã sao lưu, vào lúc nào và dung lượng bao nhiêu.',
-            '• Căn cứ thu thập: sự đồng ý riêng của bạn (được lấy ở màn hình bật sao lưu)',
-          ],
-        },
-        {
-          h: 'c. Thời hạn lưu giữ',
-          body: [
-            '• Được lưu trong thời gian bạn bật sao lưu và tối đa 90 ngày sau khi gói đăng ký kết thúc, sau đó tự động tiêu huỷ.',
-            '• Nếu bạn tắt sao lưu, yêu cầu xoá hoặc xoá tài khoản, chúng tôi tiêu huỷ ngay mà không chờ đủ 90 ngày.',
-            '• Bản sao lưu không được truy cập từ 3 năm trở lên sẽ bị tiêu huỷ. (Áp dụng cho trường hợp chỉ gỡ ứng dụng mà không xoá tài khoản.)',
-            '• Bản ghi việc tiêu huỷ (mã bản sao lưu và thời điểm) được giữ 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.',
-            '⚠ Thông báo hết hạn gói đăng ký chỉ đến với bạn trên màn hình khi bạn mở ứng dụng. Nếu bạn không mở, thông báo này có thể không đến được.',
-          ],
-        },
-        {
-          h: 'd. Giới hạn của quyền truy cập',
-          body: [
-            'Nếu bạn yêu cầu truy cập bản sao lưu, thứ nhà vận hành có thể cung cấp chỉ là **bản mã hoá không thể giải mã và siêu dữ liệu ở điểm (b).** Chúng tôi không thể cung cấp nội dung nhật ký ở dạng con người đọc được — nhà vận hành không có khoá.',
-            'Chính bạn có thể khôi phục bất cứ lúc nào trong ứng dụng bằng mã khôi phục của mình.',
-            '⚠ Nếu bạn mất mã khôi phục thì không có cách nào mở được bản sao lưu. Nhà vận hành cũng không thể mở giúp bạn.',
-          ],
-        },
-        {
-          h: 'e. Thông tin được lưu nếu bạn dùng gói đăng ký',
-          body: [
-            '• Trạng thái đăng ký — khoá quyền lợi, thời điểm hết hạn, thời gian ân hạn khi thanh toán lỗi, có gia hạn hay không',
-            '• Mã giao dịch do cửa hàng cấp, mã sản phẩm và phân biệt môi trường thanh toán (chính thức/thử nghiệm)',
-            '• Bản ghi thay đổi trạng thái đăng ký do dịch vụ thanh toán gửi (mua, gia hạn, huỷ, hoàn tiền, v.v.) cùng nội dung gốc',
-            '⚠ Thông tin thanh toán như số thẻ hay số tài khoản do Google Play xử lý và không được chuyển cho nhà vận hành. Nhà vận hành chỉ biết bạn đã thanh toán và gói đăng ký có hiệu lực đến khi nào.',
-            '• Căn cứ thu thập: Luật Bảo vệ thông tin cá nhân, Điều 15(1)4 (cần thiết để thực hiện biện pháp theo yêu cầu của người dùng, tức là cung cấp quyền lợi đăng ký đã yêu cầu)',
-            '• Mục đích: xác nhận quyền lợi đăng ký (bỏ quảng cáo, dùng sao lưu), xử lý thắc mắc thanh toán và hoàn tiền',
-          ],
-        },
-        {
-          h: 'f. Thời hạn lưu giữ thông tin liên quan đến gói đăng ký',
-          body: [
-            '• Hồ sơ về hợp đồng hoặc rút lại đề nghị, về thanh toán và cung ứng hàng hoá: 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)',
-            '• Khi bạn xoá tài khoản, mã định danh tài khoản (email, “sub” của Google) sẽ được chuyển ngay sang dạng không thể truy vết, còn các hồ sơ giao dịch trên được lưu tách biệt ở dạng không truy vết được người tạo trong thời hạn nêu trên rồi mới tiêu huỷ.',
-            '⚠ Xoá tài khoản không tự động huỷ gói đăng ký trên Google Play. Bạn phải tự huỷ tại Google Play > Gói đăng ký; nếu không, bạn vẫn tiếp tục bị tính phí.',
-          ],
-        },
-        {
-          h: 'g. Uỷ thác xử lý và chuyển ra nước ngoài (bổ sung)',
-          body: [
-            '• Supabase Inc. — Quốc gia: Hoa Kỳ (nơi đặt pháp nhân). Liên hệ: privacy@supabase.com. Mục đích: lưu bản sao lưu đã mã hoá và trạng thái đăng ký. Dữ liệu: thông tin ở điểm (b) và (e). Lưu giữ: thời hạn ở điểm (c) và (f). ※ Vị trí lưu trữ vật lý là Hàn Quốc (vùng Seoul).',
-            '• Vercel Inc. — Quốc gia: Hoa Kỳ. Liên hệ: privacy@vercel.com. Mục đích: vận hành máy chủ sao lưu. ※ Bản sao đã mã hoá được gửi thẳng tới kho lưu trữ mà không đi qua máy chủ này.',
-            '• RevenueCat, Inc. — Quốc gia: Hoa Kỳ. Liên hệ: compliance@revenuecat.com. Mục đích: xác minh thanh toán đăng ký và kiểm tra trạng thái. Dữ liệu: mã định danh tài khoản, mã giao dịch và mã sản phẩm của cửa hàng, thông tin thiết bị và ứng dụng. Khi nào và bằng cách nào: truyền qua mạng khi mở màn hình đăng ký và khi thanh toán. Lưu giữ: cho đến khi hợp đồng uỷ thác kết thúc',
-            '• Google LLC — ngoài phần chuyển đã nêu ở mục 6, thông tin giao dịch của cửa hàng được xử lý nhằm thực hiện và xác minh thanh toán đăng ký.',
-            'Bạn có thể từ chối việc chuyển ra nước ngoài. Nếu bạn không bật sao lưu và không đăng ký, những lần chuyển trên sẽ không xảy ra, và mọi tính năng khác, kể cả viết mảnh, vẫn dùng được bình thường.',
-          ],
-        },
-      ],
-    },
-    {
-      appliesFrom: 'Kể từ ngày phát hành phiên bản có tính năng báo cáo tóm tắt bằng AI',
-      summary:
-        'Tính năng báo cáo tóm tắt bằng AI được bổ sung. Chỉ khi bạn tự tạo báo cáo, nội dung nhật ký của kỳ đó mới đi qua máy chủ của nhà vận hành ở dạng không mã hóa và được gửi tới nhà cung cấp AI. Nhà vận hành không lưu nội dung nhật ký, nhưng lưu bản tóm tắt được tạo ra trong 90 ngày để cải thiện chất lượng báo cáo. Nhà cung cấp AI lưu tối đa 30 ngày nhằm giám sát lạm dụng rồi xóa, và không dùng để huấn luyện mô hình.',
-      sections: [
-        {
-          h: 'a. Điều gì thay đổi (trước → sau)',
-          body: [
-            'Trước: tiêu đề và nội dung nhật ký không được truyền ra khỏi thiết bị của bạn. Ngay cả khi bạn bật sao lưu, chúng chỉ được truyền dưới dạng bản mã mà nhà vận hành không thể đọc.',
-            'Sau: **chỉ khi bạn tự nhấn Tạo báo cáo**, nội dung nhật ký của kỳ đó được gửi **ở dạng không mã hóa** qua máy chủ của nhà vận hành tới nhà cung cấp AI và bản tóm tắt được tạo ra.',
-            '⚠ Nói chính xác: nhà vận hành **không lưu bản thân nội dung nhật ký.** Tuy nhiên ① tại thời điểm tạo bản tóm tắt, nội dung đi qua máy chủ của nhà vận hành nên chúng tôi không thể nói rằng "nhà vận hành không thể xem", và ② **bản tóm tắt được tạo ra sẽ được lưu 90 ngày** (xem mục d). Chúng tôi nói rõ điều này chứ không làm mờ đi.',
-            'Nếu bạn không tạo báo cáo, việc truyền này hoàn toàn không xảy ra, và mọi tính năng khác kể cả viết nhật ký vẫn dùng được đầy đủ.',
-          ],
-        },
-        {
-          h: 'b. Đồng ý riêng đối với thông tin nhạy cảm',
-          body: [
-            'Nhật ký có thể chứa thông tin nhạy cảm như tình trạng sức khỏe hoặc tâm lý theo Điều 23 Luật Bảo vệ Thông tin Cá nhân.',
-            'Vì báo cáo tóm tắt bằng AI xử lý nội dung đó ở dạng không mã hóa, chúng tôi lấy **sự đồng ý riêng cho việc xử lý thông tin nhạy cảm** khi bạn dùng tính năng lần đầu. Sự đồng ý này **tách biệt** với đồng ý chuyển ra nước ngoài ở mục (c), và bạn có thể chọn riêng từng mục.',
-            'Dù không đồng ý, mọi tính năng ngoài báo cáo AI vẫn dùng được đầy đủ.',
-          ],
-        },
-        {
-          h: 'c. Đồng ý riêng đối với việc chuyển ra nước ngoài',
-          body: [
-            '• OpenAI OpCo, LLC — Quốc gia: Hoa Kỳ (1455 Third Street, San Francisco, California 94158, USA). Liên hệ: dpo@openai.com. Thông tin tương tự cũng được hiển thị trong ứng dụng trước khi lấy sự đồng ý.',
-            '• Hạng mục chuyển: tiêu đề, nội dung, cảm xúc và ngày viết của các mục trong kỳ bạn yêu cầu báo cáo',
-            '• Mục đích: tạo báo cáo tóm tắt',
-            '• Thời điểm và cách thức: truyền qua mạng khi bạn nhấn Tạo báo cáo',
-            '• Thời gian lưu giữ: máy chủ của nhà vận hành **không lưu các hạng mục được chuyển (nội dung nhật ký)** — chúng chỉ nằm trong bộ nhớ khi bản tóm tắt đang được tạo rồi bị hủy. Việc lưu bản tóm tắt được tạo ra ghi riêng ở mục (d). Nhà cung cấp AI lưu **tối đa 30 ngày** để giám sát lạm dụng rồi xóa, và ngay cả trong thời gian đó **cũng không dùng để huấn luyện mô hình.**',
-            'Bạn có thể từ chối việc chuyển ra nước ngoài; khi đó chỉ báo cáo AI không dùng được, mọi tính năng khác vẫn dùng được đầy đủ.',
-          ],
-        },
-        {
-          h: 'd. Nhà vận hành lưu những gì',
-          body: [
-            'Chúng tôi không lưu nội dung nhật ký (tiêu đề và nội dung). Chúng tôi lưu những mục sau.',
-            '• **Bản tóm tắt do AI tạo ra** — được lưu để kiểm tra và cải thiện chất lượng báo cáo. Thời gian lưu giữ: **90 ngày kể từ ngày tạo**, sau đó tự động xóa.',
-            '• Định danh tài khoản đã tạo báo cáo, kỳ, số lần và số token đã dùng — dùng cho việc thanh toán và ngăn chặn lạm dụng. Thời gian lưu giữ: đến khi đạt mục đích hoặc đến khi bạn xóa tài khoản',
-            '⚠ Bản tóm tắt được viết dựa trên nhật ký của bạn nên có thể chứa nội dung nhật ký. Chúng tôi nói rõ điều này chứ không làm mờ đi.',
-            'Báo cáo hoàn thành cũng được lưu **trên thiết bị của bạn**, và nếu bạn đã bật sao lưu thì được đưa vào bản sao lưu ở dạng mã hóa.',
-          ],
-        },
-        {
-          h: 'e. Quyền của bạn',
-          body: [
-            '• Báo cáo chỉ được tạo khi bạn tự tạo; không bao giờ được tạo tự động.',
-            '• Bạn có thể xóa báo cáo đã tạo bất cứ lúc nào trong ứng dụng.',
-            '• Khi xóa trong ứng dụng, báo cáo biến mất khỏi thiết bị; bản tóm tắt lưu trên máy chủ của nhà vận hành sẽ tự động xóa sau 90 ngày. Nếu muốn xóa sớm hơn, bạn có thể yêu cầu qua mục Liên hệ.',
-            '• Bản tóm tắt do AI tạo ra có thể khác với sự thật và không phải là chẩn đoán hay lời khuyên y tế, tâm lý. Ứng dụng cung cấp cách báo cáo một bản tóm tắt.',
-          ],
-        },
+        '• 2026-08-12 đăng thông báo sửa đổi sắp áp dụng — dự kiến bổ sung tính năng báo cáo tóm tắt bằng AI (nội dung chính chưa thay đổi)',
+        '• 2026-08-23 sửa đổi — hai thông báo trên đã được đưa vào nội dung chính. Việc xử lý liên quan đến gói đăng ký hằng tháng, sao lưu/khôi phục và báo cáo tóm tắt bằng AI được bổ sung vào các mục 1, 2, 3, 4, 6, 8, 9 và 10.',
       ],
     },
   ],
@@ -286,14 +208,14 @@ export const PRIVACY_VI: LegalDoc = {
  *   một lối xoá tài khoản trên **web**: người đã gỡ ứng dụng vẫn phải có cách để yêu cầu.
  *   Đó chính là URL mà người thẩm định của Play mở ra, nên nó không thể chỉ có tiếng Hàn.
  *
- * ⚠ Cấu trúc phải khớp chính xác với bản tiếng Hàn — 5 mục (6/4/4/3/3 dòng) cùng hai phần
+ * ⚠ Cấu trúc phải khớp chính xác với bản tiếng Hàn — 6 mục (6/4/9/5/4/3 dòng) và không có phần
  *   sửa đổi sắp áp dụng. `npm run check:legal` sẽ kiểm tra.
  */
 export const DELETE_ACCOUNT_VI: LegalDoc = {
   title: 'Jogak — Cách xoá tài khoản của bạn',
-  sourceFingerprint: 'a6b3a8b5',
-  effective: '2026-08-10',
-  updated: '2026-08-10',
+  sourceFingerprint: 'a8b0c8b9',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
     'Trang này hướng dẫn cách xoá tài khoản của ứng dụng Jogak và dữ liệu liên quan. Ngay cả khi bạn đã gỡ ứng dụng hoặc không thể đăng nhập, bạn vẫn có thể yêu cầu qua email.',
   sections: [
@@ -324,6 +246,11 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
         '• Mã định danh duy nhất của tài khoản mạng xã hội (“sub” của Google)',
         '• Địa chỉ email',
         '• Mối liên kết giữa lịch sử liên hệ và tài khoản của người gửi',
+        '• Bản sao nhật ký đã mã hoá lưu trên máy chủ (nếu bạn đã bật sao lưu) — bị xoá cùng lúc mà không chờ hết 90 ngày ân hạn.',
+        '• Mã định danh bản sao lưu và các bản ghi sao lưu (thời điểm, dung lượng, số thế hệ)',
+        '• Bản tóm tắt báo cáo AI đang lưu trên máy chủ (tối đa 90 ngày) và bản ghi sử dụng báo cáo (kỳ, số lần, số token)',
+        '⚠ Khi bạn xoá tài khoản, chúng tôi tiêu huỷ bản sao lưu trước rồi mới xoá tài khoản — vì nếu tài khoản biến mất trước thì không còn ai có quyền xoá bản sao lưu đó nữa. Nếu việc xoá bản sao lưu thất bại, việc xoá tài khoản sẽ không được tiến hành; xin bạn thử lại sau ít phút.',
+        '⚠ Đã xoá thì không thể hoàn tác. Dù bạn còn giữ mã khôi phục, bạn cũng không thể khôi phục bản sao lưu trên máy chủ được nữa.',
       ],
     },
     {
@@ -331,65 +258,26 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
       body: [
         'Những thông tin sau được lưu giữ theo quy định của pháp luật, và ngay trong thời hạn đó cũng chỉ tồn tại ở dạng không thể truy vết ra người tạo (giả danh hoá).',
         '• Nội dung liên hệ: 3 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử — hồ sơ về khiếu nại hoặc giải quyết tranh chấp của người tiêu dùng)',
+        '• Hồ sơ giao dịch gói đăng ký (mã giao dịch, sản phẩm, kỳ hạn đăng ký, lịch sử thay đổi trạng thái thanh toán): 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)',
+        '• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.',
         'Khi hết thời hạn lưu giữ, chúng tôi tiêu huỷ ngay lập tức.',
       ],
     },
     {
-      h: '5. Những gì không bị xoá — các mảnh nhật ký trên thiết bị',
+      h: '5. Những gì còn lại trên thiết bị — xoá tài khoản không xoá được chúng',
       body: [
-        'Các mảnh nhật ký của Jogak (tiêu đề, nội dung, ảnh, thẻ, cảm xúc) chỉ được lưu bên trong thiết bị của bạn và không được truyền tới máy chủ của nhà vận hành.',
-        'Vì vậy, dù bạn xoá tài khoản thì các mảnh trên thiết bị vẫn còn nguyên. Nếu muốn xoá cả những mảnh đó, hãy gỡ cài đặt ứng dụng hoặc thực hiện đặt lại trong [Cài đặt] của ứng dụng.',
-        'Ngược lại, nếu bạn gỡ cài đặt ứng dụng thì các mảnh trên thiết bị không thể khôi phục được.',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom: 'Kể từ ngày phát hành phiên bản có gói đăng ký hằng tháng và sao lưu/khôi phục',
-      summary:
-        'Nếu bạn đã bật sao lưu, việc xoá tài khoản cũng xoá luôn bản sao lưu đã mã hoá trên máy chủ. Hồ sơ giao dịch gói đăng ký được lưu giữ theo pháp luật ở dạng không thể truy vết.',
-      sections: [
-        {
-          h: 'a. Dữ liệu bị xoá thêm',
-          body: [
-            '• Bản sao nhật ký đã mã hoá lưu trên máy chủ — bị xoá cùng lúc khi bạn xoá tài khoản. Chúng tôi không chờ hết 90 ngày ân hạn.',
-            '• Mã định danh bản sao lưu và các bản ghi sao lưu (thời điểm, dung lượng, số thế hệ)',
-            '⚠ Đã xoá thì không thể hoàn tác. Dù bạn còn giữ mã khôi phục, bạn cũng không thể khôi phục được nữa.',
-            '⚠ Các mảnh trên thiết bị của bạn vẫn còn nguyên. Thứ bị xoá chỉ là bản sao trên máy chủ.',
-          ],
-        },
-        {
-          h: 'b. Dữ liệu được lưu giữ thêm và thời hạn',
-          body: [
-            '• Hồ sơ giao dịch gói đăng ký (mã giao dịch, sản phẩm, kỳ hạn đăng ký, lịch sử thay đổi trạng thái thanh toán): 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)',
-            '• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.',
-            'Ngay trong thời hạn lưu giữ, những bản ghi trên cũng chỉ tồn tại ở dạng không thể truy vết ra người tạo.',
-          ],
-        },
-        {
-          h: 'c. Bạn phải tự huỷ gói đăng ký',
-          body: [
-            'Xoá tài khoản không tự động huỷ gói đăng ký trên Google Play, và nếu bạn không huỷ thì vẫn tiếp tục bị tính phí.',
-            'Cách huỷ: ứng dụng Google Play Store > hồ sơ > Thanh toán và gói đăng ký > Gói đăng ký (https://play.google.com/store/account/subscriptions)',
-            'Việc hoàn tiền cho khoản đã thanh toán tuân theo chính sách hoàn tiền của Google Play và chính sách hoàn tiền của nhà vận hành. Bạn có thể liên hệ theo địa chỉ dưới đây.',
-          ],
-        },
+        'Các mảnh nhật ký của Jogak (tiêu đề, nội dung, ảnh, thẻ, cảm xúc) và nội dung báo cáo AI được lưu bên trong thiết bị của bạn.',
+        'Vì vậy, dù bạn xoá tài khoản thì các mảnh và báo cáo trên thiết bị vẫn còn nguyên. Nếu muốn xoá cả trên thiết bị, hãy gỡ cài đặt ứng dụng hoặc thực hiện đặt lại trong [Cài đặt] của ứng dụng.',
+        'Ngược lại, nếu bạn gỡ cài đặt ứng dụng thì các mảnh trên thiết bị không thể khôi phục được. Chỉ khi bạn đã bật sao lưu và còn giữ mã khôi phục, và chỉ khi bạn chưa xoá tài khoản, bạn mới có thể lấy lại chúng.',
+        '⚠ Nếu bạn không bật sao lưu, nhà vận hành không nắm giữ các mảnh trên thiết bị của bạn nên không thể xoá giúp bạn, cũng không thể trả lại cho bạn.',
       ],
     },
     {
-      appliesFrom: 'Kể từ ngày phát hành phiên bản có tính năng báo cáo tóm tắt bằng AI',
-      summary:
-        'Nội dung báo cáo AI được lưu trên thiết bị của bạn. Trên máy chủ, bản tóm tắt báo cáo được lưu tối đa 90 ngày để kiểm tra chất lượng và bị xoá cùng với bản ghi sử dụng khi bạn xoá tài khoản.',
-      sections: [
-        {
-          h: 'a. Với báo cáo AI thì những gì bị xoá',
-          body: [
-            '• Bản ghi sử dụng báo cáo lưu trên máy chủ (mã định danh tài khoản, kỳ, số lần, số token) — bị xoá cùng lúc khi bạn xoá tài khoản.',
-            '• Bản tóm tắt báo cáo đang lưu trên máy chủ (tối đa 90 ngày) — bị xoá cùng lúc khi bạn xoá tài khoản. Nội dung nhật ký gốc không được lưu nên không có gì để xoá.',
-            '⚠ Nội dung báo cáo cũng được lưu trên thiết bị của bạn nên vẫn còn nguyên sau khi bạn xoá tài khoản. Nếu muốn xoá, hãy xoá báo cáo trong ứng dụng hoặc gỡ cài đặt ứng dụng.',
-            '• Nếu bạn đã bật sao lưu thì báo cáo cũng được mã hoá và nằm trong bản sao lưu, và sẽ bị xoá khi bản sao lưu bị xoá.',
-          ],
-        },
+      h: '6. Bạn phải tự huỷ gói đăng ký',
+      body: [
+        'Xoá tài khoản không tự động huỷ gói đăng ký trên Google Play, và nếu bạn không huỷ thì vẫn tiếp tục bị tính phí.',
+        'Cách huỷ: ứng dụng Google Play Store > hồ sơ > Thanh toán và gói đăng ký > Gói đăng ký (https://play.google.com/store/account/subscriptions)',
+        'Việc hoàn tiền cho khoản đã thanh toán tuân theo chính sách hoàn tiền của Google Play và chính sách hoàn tiền của nhà vận hành. Bạn có thể liên hệ theo địa chỉ nêu ở trên.',
       ],
     },
   ],

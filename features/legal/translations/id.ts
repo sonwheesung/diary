@@ -10,20 +10,24 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: '4b621b97',
-  effective: '2026-08-09',
-  updated: '2026-08-11',
+  sourceFingerprint: '47ec2dc4',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
-    'Vivace Games (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Jogak tidak mengirimkan catatan harian yang kamu tulis ke server mana pun dan, sebagai prinsip, hanya mengumpulkan informasi seminimal mungkin.',
+    'Vivace Games (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
   sections: [
     {
-      h: '1. Yang tidak kami kumpulkan (kami sampaikan lebih dulu)',
+      h: '1. Kami sampaikan lebih dulu: di mana catatanmu disimpan',
       body: [
-        'Operator tidak mengumpulkan informasi berikut dan tidak mengirimkannya keluar dari perangkatmu.',
-        '• Judul, isi, daftar, foto, tag, dan emosi catatan — hanya disimpan di penyimpanan internal perangkatmu.',
+        'Catatan harian (judul, isi, daftar, foto, tag, dan emosi) disimpan di penyimpanan internal perangkatmu dan pada dasarnya tidak keluar dari perangkat itu.',
+        '⚠ Namun ada dua pengecualian, dan keduanya hanya terjadi bila kamu sendiri yang memilihnya. Tidak satu pun berjalan otomatis.',
+        '• Bila kamu mengaktifkan pencadangan — salinan catatanmu yang dienkripsi di perangkat disimpan di server operator. Operator tidak dapat membaca salinan itu. Rinciannya ada di bagian 2(c).',
+        '• Bila kamu membuat laporan ringkasan AI — isi catatan pada periode tersebut dikirim tanpa enkripsi melalui server operator kepada penyedia AI. Operator tidak menyimpan isi itu. Rinciannya ada di bagian 2(e).',
+        '⚠ Kedua kalimat di atas tidak sama. Pencadangan: kami menyimpannya tetapi tidak dapat membacanya. AI: kami membacanya tetapi tidak menyimpannya. Kami sampaikan apa adanya tanpa mengaburkannya.',
+        'Informasi berikut tidak pernah kami kumpulkan dalam keadaan apa pun dan tidak kami kirim keluar dari perangkatmu.',
         '• PIN, pola, atau jawaban petunjuk untuk kunci aplikasi — disimpan di penyimpanan aman perangkat hanya dalam bentuk yang tidak dapat dipulihkan (hash); aslinya tidak disimpan di mana pun.',
         '• Nama, tanggal lahir, nomor telepon, alamat, daftar kontak, lokasi, maupun catatan akses ke seluruh galeri fotomu.',
-        'Foto yang kamu pilih di aplikasi hanya disalin ke folder khusus aplikasi di perangkatmu agar dapat dimasukkan ke sebuah catatan; foto tersebut tidak dikirim ke mana pun.',
+        'Foto yang kamu pilih di aplikasi disalin ke folder khusus aplikasi di perangkatmu agar dapat dimasukkan ke sebuah catatan, dan tidak dikirim keluar bila kamu tidak mengaktifkan pencadangan. Foto tidak pernah diteruskan ke laporan ringkasan AI.',
       ],
     },
     {
@@ -35,11 +39,31 @@ export const PRIVACY_ID: LegalDoc = {
         '  — Tujuan: mengidentifikasi pengirim, mengirim balasan, dan memungkinkanmu melihat riwayat pertanyaanmu sendiri',
         '• Kategori dan isi pertanyaan',
         '• Jenis perangkat (Android/iOS) dan versi aplikasi — untuk memahami di lingkungan mana masalah terjadi',
-        '※ Masuk hanya diperlukan untuk “Hubungi kami”; menulis catatan, kunci aplikasi, dan fitur lain tidak memerlukannya.',
+        '※ Masuk diperlukan untuk “Hubungi kami”, langganan, pencadangan, dan laporan AI; menulis catatan, kunci aplikasi, dan fitur lainnya tidak memerlukannya.',
         '※ Anak di bawah 14 tahun tidak dapat menggunakan fitur masuk.',
         'b. Informasi yang dikumpulkan otomatis saat iklan ditayangkan',
         '• Pengenal iklan (ID iklan Android), informasi perangkat dan jaringan, catatan tayangan dan klik iklan',
         '• Hal di atas dikumpulkan oleh Google (AdMob); detail dan cara menolak ada di bagian 7.',
+        'c. Bila kamu mengaktifkan pencadangan (perlu berlangganan)',
+        '• Salinan catatanmu yang terenkripsi — dalam bentuk yang tidak dapat didekripsi operator',
+        '• Pengenal cadangan, waktu pencadangan, nomor generasi, dan ukuran — informasi ini tidak dienkripsi. Operator dapat mengetahui akun mana yang mencadangkan, kapan, dan seberapa besar.',
+        '  — Dasar hukum: persetujuan terpisah darimu (diambil di layar tempat kamu mengaktifkan pencadangan)',
+        '⚠ Ketepatannya: operator menyimpan salinan itu tetapi tidak dapat membacanya. Kunci dekripsi hanya ada di perangkatmu dan pada kode pemulihan yang kamu simpan; operator tidak memilikinya.',
+        '⚠ Bila kamu kehilangan kode pemulihan, tidak ada cara untuk membuka cadangan itu. Operator pun tidak dapat membukanya untukmu.',
+        'd. Bila kamu menggunakan langganan',
+        '• Status langganan — kunci hak, waktu berakhirnya langganan, tenggang saat pembayaran gagal, dan apakah akan diperpanjang',
+        '• Pengenal transaksi yang diterbitkan toko, pengenal produk, dan pembeda lingkungan pembayaran (produksi/uji coba)',
+        '• Catatan perubahan status langganan yang dikirim layanan pembayaran (pembelian, perpanjangan, pembatalan, pengembalian dana, dan sebagainya) beserta isi aslinya',
+        '  — Dasar hukum: Undang-Undang Perlindungan Informasi Pribadi, Pasal 15(1)4 (diperlukan untuk melaksanakan tindakan yang diminta pengguna, yaitu memberikan hak langganan yang diajukan)',
+        '  — Tujuan: memastikan hak langganan (menghilangkan iklan serta menggunakan pencadangan dan laporan AI), menangani pertanyaan pembayaran dan pengembalian dana',
+        '⚠ Data pembayaran seperti nomor kartu kredit atau nomor rekening ditangani Google Play dan tidak diteruskan ke operator. Operator hanya dapat mengetahui bahwa kamu telah membayar dan sampai kapan langganan itu berlaku.',
+        'e. Bila kamu membuat laporan ringkasan AI (perlu berlangganan)',
+        '• Yang dikirim melalui server operator kepada penyedia AI: judul, isi, emosi, dan tanggal catatan pada periode yang kamu mintakan laporannya',
+        '• Yang disimpan operator: ringkasan yang dihasilkan AI, pengenal akun yang membuat laporan, periode, jumlah kali, dan jumlah token yang digunakan',
+        '⚠ Ketepatannya: operator tidak menyimpan isi catatan itu sendiri. Namun ① pada saat ringkasan dibuat, isinya melewati server operator, sehingga kami tidak dapat mengatakan bahwa “operator tidak dapat melihatnya”, dan ② ringkasan yang dihasilkan kami simpan selama 90 hari. Kami sampaikan hal ini apa adanya tanpa mengaburkannya.',
+        '⚠ Ringkasan ditulis berdasarkan catatanmu, sehingga isi catatan itu dapat termuat di dalamnya.',
+        '• Persetujuan terpisah untuk informasi sensitif: catatan harian dapat memuat informasi sensitif seperti kondisi kesehatan atau psikologis sebagaimana dimaksud Pasal 23 Undang-Undang Perlindungan Informasi Pribadi. Karena laporan ringkasan AI memproses isi tersebut tanpa enkripsi, kami meminta persetujuan terpisah untuk pemrosesan informasi sensitif saat kamu pertama kali menggunakan fitur ini. Persetujuan ini terpisah dari persetujuan transfer ke luar negeri pada bagian 6, dan kamu dapat memilih masing-masing secara sendiri-sendiri.',
+        'Meski tidak menyetujuinya, semua fitur selain laporan AI tetap dapat kamu gunakan seperti biasa. Laporan hanya dibuat ketika kamu sendiri membuatnya dan tidak pernah dibuat secara otomatis.',
       ],
     },
     {
@@ -48,6 +72,9 @@ export const PRIVACY_ID: LegalDoc = {
         '• Menerima dan menangani pertanyaan: memeriksa apa yang kamu kirim serta menemukan dan memperbaiki kesalahan',
         '• Mengidentifikasi pengirim dan membalas: menyampaikan balasan kepada pengirim dan memungkinkanmu meninjau riwayatmu sendiri',
         '• Menayangkan iklan: menampilkan iklan kepada pengguna versi gratis dan mengukur kinerjanya',
+        '• Pencadangan dan pemulihan: bila kamu mengaktifkannya, menyimpan salinan catatanmu yang terenkripsi dan mengembalikannya atas permintaanmu',
+        '• Memastikan hak langganan: memberikan penghapusan iklan, pencadangan, dan laporan AI kepada pengguna yang telah membayar, serta menangani pertanyaan pembayaran dan pengembalian dana',
+        '• Membuat laporan ringkasan AI dan meningkatkan kualitasnya: menyusun ringkasan untuk periode yang kamu minta lalu memeriksa hasilnya untuk memperbaiki kualitas',
         'Operator tidak menggunakan data pribadi untuk tujuan selain di atas, dan bila tujuannya berubah akan meminta persetujuan terlebih dahulu.',
       ],
     },
@@ -57,6 +84,14 @@ export const PRIVACY_ID: LegalDoc = {
         '• Informasi akun (alamat email, Google “sub”): sampai kamu menghapus akun. Saat dihapus, kami memusnahkannya tanpa penundaan atau menjadikannya tidak dapat ditelusuri.',
         '• Isi pertanyaan: 3 tahun sejak diterima (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik — catatan mengenai keluhan atau penyelesaian sengketa konsumen)',
         '• Data perilaku berbasis pengenal iklan: maksimal 1 tahun sejak dikumpulkan',
+        '• Salinan cadangan yang terenkripsi: disimpan selama pencadangan aktif dan sampai 90 hari setelah langganan berakhir, lalu dimusnahkan otomatis. Bila kamu menonaktifkan pencadangan, meminta penghapusan, atau menghapus akun, kami memusnahkannya tanpa penundaan tanpa menunggu 90 hari. Cadangan yang tidak diakses selama 3 tahun atau lebih akan dimusnahkan (ini berlaku bila aplikasi dihapus tetapi akun tidak).',
+        '• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.',
+        '• Ringkasan yang dihasilkan AI: 90 hari sejak dibuat. Setelah itu dihapus secara otomatis.',
+        '• Catatan penggunaan laporan (pengenal akun, periode, jumlah kali, jumlah token): sampai tujuan pemrosesan tercapai atau sampai kamu menghapus akun',
+        '• Catatan mengenai kontrak atau penarikan penawaran, serta pembayaran dan penyediaan barang: 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)',
+        'Bila kamu menghapus akun, pengenal akun (alamat email dan Google “sub”) segera dijadikan tidak dapat ditelusuri, sedangkan catatan transaksi di atas disimpan terpisah dalam bentuk yang tidak dapat ditelusuri selama jangka waktu tersebut lalu dimusnahkan.',
+        '⚠ Menghapus akun tidak otomatis membatalkan langgananmu di Google Play. Pembatalan harus kamu lakukan sendiri di Google Play > Langganan; bila tidak, tagihan akan terus berjalan.',
+        '⚠ Pemberitahuan tentang penghapusan cadangan setelah langganan berakhir hanya sampai kepadamu di layar ketika kamu membuka aplikasi. Bila kamu tidak membukanya, pemberitahuan itu mungkin tidak sampai.',
         'Setelah jangka waktunya lewat atau tujuannya tercapai, kami memusnahkan data tanpa penundaan.',
       ],
     },
@@ -64,6 +99,7 @@ export const PRIVACY_ID: LegalDoc = {
       h: '5. Pemberian kepada pihak ketiga',
       body: [
         'Operator tidak memberikan data pribadi pengguna kepada pihak ketiga.',
+        'Perusahaan pada bagian 6 adalah penerima alih daya yang memproses informasi atas nama operator dan tidak menggunakannya untuk tujuan mereka sendiri. Penyedia AI tidak menggunakan isi catatan yang diterimanya untuk melatih model.',
         'Pengecualian berlaku bila ada ketentuan khusus dalam peraturan perundang-undangan atau bila aparat penyidik memintanya sesuai prosedur dan cara yang ditetapkan undang-undang.',
       ],
     },
@@ -71,10 +107,13 @@ export const PRIVACY_ID: LegalDoc = {
       h: '6. Pengalihdayaan pemrosesan dan transfer ke luar negeri',
       body: [
         'Untuk menyediakan layanan, operator mengalihdayakan pemrosesan sebagai berikut, dan sebagiannya berlangsung di luar Korea.',
-        '• Google LLC — Negara: Amerika Serikat. Kontak: https://support.google.com/policies/contact/general_privacy_form. Tujuan: menayangkan dan mengukur iklan (AdMob), masuk dengan akun Google. Data: pengenal iklan, informasi perangkat dan jaringan, serta saat masuk alamat email dan pengenal akun. Kapan dan bagaimana: dikirim melalui jaringan saat iklan diminta dan saat masuk. Penyimpanan: sesuai kebijakan privasi Google',
-        '• Supabase Inc. — Negara: Amerika Serikat (tempat pendirian badan hukum). Kontak: privacy@supabase.com. Tujuan: menyimpan informasi pertanyaan dan akun dalam basis data. Data: informasi pada bagian 2(a). Kapan dan bagaimana: dikirim melalui jaringan saat kamu mengirim pertanyaan. Penyimpanan: jangka waktu pada bagian 4. ※ Lokasi fisik penyimpanan adalah Republik Korea (region Seoul), tetapi kami menyebutnya transfer ke luar negeri karena badan hukum yang mengoperasikan berada di luar Korea.',
-        '• Vercel Inc. — Negara: Amerika Serikat. Kontak: privacy@vercel.com. Tujuan: mengoperasikan server penerima pertanyaan. Data: informasi pada bagian 2(a). Kapan dan bagaimana: dikirim melalui jaringan saat kamu mengirim pertanyaan. Penyimpanan: sampai kontrak pengalihdayaan berakhir',
-        'Kamu dapat menolak transfer data pribadimu ke luar negeri. Untuk menolak transfer terkait iklan, matikan iklan yang dipersonalisasi sesuai bagian 7; untuk menolak transfer terkait pertanyaan, cukup tidak menggunakan fitur “Hubungi kami” (semua fitur lain, termasuk menulis catatan, tetap dapat digunakan).',
+        '• Google LLC — Negara: Amerika Serikat. Kontak: https://support.google.com/policies/contact/general_privacy_form. Tujuan: menayangkan dan mengukur iklan (AdMob), masuk dengan akun Google, serta memproses dan memverifikasi pembayaran langganan. Data: pengenal iklan, informasi perangkat dan jaringan, alamat email dan pengenal akun saat masuk, serta informasi transaksi toko. Kapan dan bagaimana: dikirim melalui jaringan saat iklan diminta, saat masuk, dan saat membayar. Penyimpanan: sesuai kebijakan privasi Google',
+        '• Supabase Inc. — Negara: Amerika Serikat (tempat pendirian badan hukum). Kontak: privacy@supabase.com. Tujuan: menyimpan informasi pertanyaan dan akun dalam basis data serta menyimpan salinan cadangan terenkripsi dan status langganan. Data: informasi pada bagian 2(a), 2(c), dan 2(d). Kapan dan bagaimana: dikirim melalui jaringan saat kamu mengirim pertanyaan dan saat mencadangkan. Penyimpanan: sampai berakhirnya jangka waktu pada bagian 4. ※ Lokasi fisik penyimpanan adalah Republik Korea (region Seoul), tetapi kami menyebutnya transfer ke luar negeri karena badan hukum yang mengoperasikan berada di luar Korea.',
+        '• Vercel Inc. — Negara: Amerika Serikat. Kontak: privacy@vercel.com. Tujuan: mengoperasikan server penerima pertanyaan serta server pencadangan dan AI. Data: informasi pada bagian 2(a). Kapan dan bagaimana: dikirim melalui jaringan saat kamu mengirim pertanyaan. Penyimpanan: sampai kontrak pengalihdayaan berakhir. ※ Salinan cadangan yang terenkripsi dikirim langsung ke penyimpanan tanpa melewati server ini.',
+        '• RevenueCat, Inc. — Negara: Amerika Serikat. Kontak: compliance@revenuecat.com. Tujuan: memverifikasi pembayaran langganan dan memeriksa status langganan. Data: pengenal akun, pengenal transaksi dan produk dari toko, informasi perangkat dan aplikasi. Kapan dan bagaimana: dikirim melalui jaringan saat membuka layar langganan dan saat membayar. Penyimpanan: sampai kontrak pengalihdayaan berakhir',
+        '• OpenAI OpCo, LLC — Negara: Amerika Serikat (1455 Third Street, San Francisco, California 94158, USA). Kontak: dpo@openai.com. Tujuan: membuat laporan ringkasan. Data: judul, isi, emosi, dan tanggal catatan pada periode yang kamu mintakan laporannya. Kapan dan bagaimana: dikirim melalui jaringan pada saat kamu menekan tombol buat laporan. Penyimpanan: server operator tidak menyimpan isi catatan — isinya hanya ditahan di memori selama ringkasan dibuat lalu langsung dibuang. Penyedia AI menyimpannya paling lama 30 hari untuk pemantauan penyalahgunaan lalu menghapusnya, dan bahkan selama periode itu tidak menggunakannya untuk melatih model.',
+        '⚠ Transfer ke luar negeri untuk laporan AI merupakan persetujuan tersendiri. Saat kamu pertama kali menggunakan fitur ini, kami menampilkan keterangan di atas di dalam aplikasi lalu meminta persetujuanmu; persetujuan ini terpisah dari persetujuan informasi sensitif pada bagian 2(e).',
+        'Kamu dapat menolak transfer data pribadimu ke luar negeri. Untuk menolak transfer terkait iklan, matikan iklan yang dipersonalisasi sesuai bagian 7; transfer terkait pertanyaan tidak terjadi bila kamu tidak menggunakan “Hubungi kami”. Bila kamu tidak mengaktifkan pencadangan, tidak berlangganan, dan tidak membuat laporan, transfer yang berkaitan dengannya tidak terjadi, dan semua fitur lain termasuk menulis catatan tetap dapat kamu gunakan seperti biasa.',
       ],
     },
     {
@@ -85,6 +124,7 @@ export const PRIVACY_ID: LegalDoc = {
         'Cara menolak (Android): Setelan > Privasi > Iklan > “Hapus ID iklan” atau “Nonaktifkan personalisasi iklan”',
         'Cara menolak (iOS): Pengaturan > Privasi & Keamanan > Pelacakan > matikan “Izinkan App Meminta untuk Melacak”',
         'Meski kamu menolak, iklan tetap dapat muncul, tetapi berupa iklan umum yang tidak didasarkan pada minatmu.',
+        'Bila kamu berlangganan, iklan tidak ditampilkan sama sekali dan pengumpulan terkait iklan di atas juga tidak terjadi.',
         'Selengkapnya tentang cara Google memproses data pribadi untuk iklan: https://policies.google.com/technologies/ads',
       ],
     },
@@ -93,7 +133,9 @@ export const PRIVACY_ID: LegalDoc = {
       body: [
         'Prosedur: data pribadi yang jangka waktunya telah lewat atau tujuannya telah tercapai dimusnahkan tanpa penundaan. Bila undang-undang mewajibkan penyimpanan, data disimpan terpisah dari data lain selama jangka waktu tersebut lalu dimusnahkan.',
         'Cara: informasi berbentuk berkas elektronik dihapus permanen dengan cara teknis yang membuatnya tidak dapat dipulihkan atau direkonstruksi.',
-        'Catatan, foto, dan informasi kunci yang tersimpan di perangkatmu terhapus dari perangkat saat kamu menggunakan fitur “Atur ulang semua” di aplikasi atau menghapus aplikasinya. Operator tidak memiliki informasi tersebut sehingga tidak dapat menghapusnya untukmu.',
+        'Catatan, foto, dan informasi kunci yang tersimpan di perangkatmu terhapus dari perangkat saat kamu menggunakan fitur “Atur ulang semua” di aplikasi atau menghapus aplikasinya.',
+        'Bila kamu mengaktifkan pencadangan, salinan terenkripsi yang tersimpan di server ikut dimusnahkan ketika kamu menghapusnya dari layar pencadangan di aplikasi atau ketika kamu menghapus akun. Saat akun dihapus, kami memusnahkan cadangan lebih dulu baru menghapus akunnya — sebab bila akunnya lenyap lebih dulu, tidak ada lagi orang yang berwenang menghapus cadangan itu.',
+        'Bila kamu tidak mengaktifkan pencadangan, operator tidak memiliki catatan yang ada di perangkatmu sehingga tidak dapat menghapusnya untukmu.',
       ],
     },
     {
@@ -103,6 +145,9 @@ export const PRIVACY_ID: LegalDoc = {
         '• Meminta akses ke datamu • Meminta koreksi bila ada kesalahan • Meminta penghapusan • Meminta penghentian pemrosesan • Meminta pengiriman datamu (Undang-Undang Perlindungan Informasi Pribadi, Pasal 35-2)',
         'Hak tersebut dapat digunakan secara tertulis atau melalui email ke kontak pada bagian 11, dan operator akan bertindak tanpa penundaan.',
         'Bila kamu meminta koreksi atas kesalahan dalam datamu, kami tidak akan menggunakan atau memberikan data itu sampai koreksinya selesai.',
+        '⚠ Batas hak akses terhadap cadangan: bila kamu meminta akses ke cadanganmu, yang dapat diberikan operator hanyalah teks terenkripsi yang tidak dapat didekripsi beserta metadata pada bagian 2(c). Kami tidak dapat memberikan isi catatanmu dalam bentuk yang terbaca manusia — operator tidak memegang kuncinya. Kamu sendiri dapat memulihkannya kapan saja di aplikasi dengan kode pemulihanmu.',
+        'Laporan AI yang sudah jadi dapat kamu hapus kapan saja di aplikasi. Menghapusnya di aplikasi menghilangkannya dari perangkatmu, sedangkan ringkasan yang tersimpan di server dihapus otomatis setelah 90 hari. Bila kamu ingin dihapus lebih cepat, kamu dapat memintanya melalui “Hubungi kami”.',
+        '⚠ Ringkasan yang dihasilkan AI dapat berbeda dari fakta dan bukan merupakan diagnosis maupun saran medis atau psikologis. Aplikasi menyediakan cara untuk melaporkan sebuah laporan.',
         'Wali sah anak di bawah 14 tahun dapat menggunakan hak di atas atas nama anak tersebut.',
       ],
     },
@@ -111,6 +156,7 @@ export const PRIVACY_ID: LegalDoc = {
       body: [
         '• Administratif: meminimalkan jumlah orang yang menangani data pribadi dan memberi mereka pelatihan berkala',
         '• Teknis: pengelolaan hak akses ke sistem pemrosesan, enkripsi saat transit (HTTPS), penyimpanan rahasia kunci aplikasi sebagai hash, dan penggunaan penyimpanan aman perangkat (Keystore/Keychain)',
+        '• Enkripsi ujung ke ujung untuk pencadangan: salinan cadangan dienkripsi di perangkatmu sebelum dikirim, dan kunci dekripsinya hanya ada di perangkat itu dan pada kode pemulihanmu. Server operator tidak memiliki kunci tersebut.',
         '• Fisik: server yang menyimpan data pribadi berada di pusat data penyedia cloud dalam dan luar negeri serta mengikuti kebijakan kontrol akses fisik penyedia tersebut.',
         '⚠ Fitur kunci aplikasi mencegah akses ke layar; fitur ini tidak mengenkripsi berkas catatan yang tersimpan di perangkat. Jika perangkat hilang atau diambil dan keamanan perangkat itu sendiri ditembus, isi catatan dapat terekspos.',
       ],
@@ -145,133 +191,8 @@ export const PRIVACY_ID: LegalDoc = {
         'Riwayat perubahan',
         '• 2026-08-09 ditetapkan pertama kali',
         '• 2026-08-11 pengumuman perubahan mendatang — rencana penerapan langganan bulanan dan pencadangan/pemulihan (teks utama belum berubah)',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'Sejak hari versi yang memuat langganan bulanan dan pencadangan/pemulihan dirilis',
-      summary:
-        'Langganan bulanan dan pencadangan/pemulihan ditambahkan. Jika kamu berlangganan, status langganan dan pengenal transaksi akan diproses; dan hanya jika kamu mengaktifkan pencadangan, salinan catatanmu yang dienkripsi di perangkatmu akan disimpan di server operator. Operator tidak dapat mendekripsi salinan itu.',
-      sections: [
-        {
-          h: 'a. Apa yang berubah (sebelum → sesudah)',
-          body: [
-            'Sebelum: judul, isi, dan foto catatan tidak dikirim keluar dari perangkatmu.',
-            'Sesudah: **hanya jika kamu sendiri mengaktifkan pencadangan**, salinan catatanmu yang dienkripsi di perangkatmu akan disimpan di server operator. Jika tidak kamu aktifkan, tidak satu huruf pun dikirim, sama seperti sebelumnya.',
-            '⚠ Ketepatannya: operator **menyimpan salinan itu tetapi tidak dapat membacanya.** Kunci dekripsi hanya ada di perangkatmu dan pada kode pemulihan yang kamu simpan; operator tidak memilikinya.',
-          ],
-        },
-        {
-          h: 'b. Informasi tambahan yang disimpan jika kamu mengaktifkan pencadangan',
-          body: [
-            '• Salinan catatanmu yang terenkripsi — dalam bentuk yang tidak dapat didekripsi operator',
-            '• Pengenal cadangan, waktu pencadangan, nomor generasi, dan ukuran — **informasi ini tidak dienkripsi.** Operator dapat mengetahui akun mana yang mencadangkan, kapan, dan seberapa besar.',
-            '• Dasar hukum: persetujuan terpisah darimu (diambil di layar tempat kamu mengaktifkan pencadangan)',
-          ],
-        },
-        {
-          h: 'c. Jangka waktu penyimpanan',
-          body: [
-            '• Disimpan selama pencadangan aktif dan sampai 90 hari setelah langganan berakhir, lalu dimusnahkan otomatis.',
-            '• Jika kamu menonaktifkan pencadangan, meminta penghapusan, atau menghapus akun, kami memusnahkannya tanpa penundaan tanpa menunggu 90 hari.',
-            '• Cadangan yang tidak diakses selama 3 tahun atau lebih akan dimusnahkan. (Ini berlaku bila aplikasi dihapus tetapi akun tidak.)',
-            '• Catatan pemusnahan (pengenal cadangan dan waktunya) disimpan 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.',
-            '⚠ Pemberitahuan berakhirnya langganan hanya sampai kepadamu di layar ketika kamu membuka aplikasi. Jika kamu tidak membukanya, pemberitahuan itu mungkin tidak sampai.',
-          ],
-        },
-        {
-          h: 'd. Batas hak akses',
-          body: [
-            'Jika kamu meminta akses ke cadanganmu, yang dapat diberikan operator hanyalah **teks terenkripsi yang tidak dapat didekripsi dan metadata pada huruf (b).** Kami tidak dapat memberikan catatanmu dalam bentuk yang terbaca manusia — operator tidak memegang kuncinya.',
-            'Kamu sendiri dapat memulihkan kapan saja di aplikasi menggunakan kode pemulihanmu.',
-            '⚠ Jika kamu kehilangan kode pemulihan, tidak ada cara untuk membuka cadangan itu. Operator pun tidak dapat membukanya untukmu.',
-          ],
-        },
-        {
-          h: 'e. Informasi yang disimpan jika kamu menggunakan langganan',
-          body: [
-            '• Status langganan — kunci hak, waktu berakhir, tenggang saat pembayaran gagal, dan apakah akan diperpanjang',
-            '• Pengenal transaksi yang diterbitkan toko, pengenal produk, dan pembeda lingkungan pembayaran (produksi/uji coba)',
-            '• Catatan perubahan status langganan yang dikirim layanan pembayaran (pembelian, perpanjangan, pembatalan, pengembalian dana, dsb.) beserta isi aslinya',
-            '⚠ Data pembayaran seperti nomor kartu atau rekening ditangani Google Play dan tidak diteruskan ke operator. Operator hanya dapat mengetahui bahwa kamu telah membayar dan sampai kapan langganannya berlaku.',
-            '• Dasar hukum: Undang-Undang Perlindungan Informasi Pribadi, Pasal 15(1)4 (diperlukan untuk melaksanakan tindakan yang diminta pengguna, yaitu memberikan hak langganan yang diajukan)',
-            '• Tujuan: memastikan hak langganan (menghilangkan iklan, menggunakan pencadangan), menangani pertanyaan pembayaran dan pengembalian dana',
-          ],
-        },
-        {
-          h: 'f. Jangka waktu penyimpanan informasi langganan',
-          body: [
-            '• Catatan mengenai kontrak atau pembatalan, serta pembayaran dan penyediaan barang: 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)',
-            '• Jika kamu menghapus akun, pengenal akun (email, Google “sub”) segera dijadikan tidak dapat ditelusuri, dan catatan transaksi di atas disimpan terpisah dalam bentuk yang tidak dapat ditelusuri selama jangka waktu tersebut lalu dimusnahkan.',
-            '⚠ Menghapus akun tidak otomatis membatalkan langgananmu di Google Play. Kamu harus membatalkannya sendiri di Google Play > Langganan; bila tidak, tagihan akan terus berjalan.',
-          ],
-        },
-        {
-          h: 'g. Pengalihdayaan dan transfer ke luar negeri (tambahan)',
-          body: [
-            '• Supabase Inc. — Negara: Amerika Serikat (tempat pendirian). Kontak: privacy@supabase.com. Tujuan: menyimpan salinan cadangan terenkripsi dan status langganan. Data: informasi pada huruf (b) dan (e). Penyimpanan: jangka waktu pada huruf (c) dan (f). ※ Lokasi fisik penyimpanan adalah Republik Korea (region Seoul).',
-            '• Vercel Inc. — Negara: Amerika Serikat. Kontak: privacy@vercel.com. Tujuan: mengoperasikan server pencadangan. ※ Salinan terenkripsi dikirim langsung ke penyimpanan tanpa melewati server ini.',
-            '• RevenueCat, Inc. — Negara: Amerika Serikat. Kontak: compliance@revenuecat.com. Tujuan: memverifikasi pembayaran langganan dan memeriksa statusnya. Data: pengenal akun, pengenal transaksi dan produk dari toko, informasi perangkat dan aplikasi. Kapan dan bagaimana: dikirim melalui jaringan saat membuka layar langganan dan saat membayar. Penyimpanan: sampai kontrak pengalihdayaan berakhir',
-            '• Google LLC — selain transfer yang dijelaskan pada bagian 6, informasi transaksi toko diproses untuk menangani dan memverifikasi pembayaran langganan.',
-            'Kamu dapat menolak transfer ke luar negeri. Jika kamu tidak mengaktifkan pencadangan dan tidak berlangganan, transfer di atas tidak terjadi, dan semua fitur lain termasuk menulis catatan tetap dapat digunakan.',
-          ],
-        },
-      ],
-    },
-    {
-      appliesFrom: 'Sejak hari versi yang memuat laporan ringkasan AI dirilis',
-      summary:
-        'Laporan ringkasan AI ditambahkan. Hanya ketika Anda sendiri membuat laporan, isi diari untuk periode tersebut melewati server operator tanpa enkripsi dan dikirim ke penyedia AI. Operator tidak menyimpan isi diari, tetapi menyimpan ringkasan yang dihasilkan selama 90 hari untuk meningkatkan kualitas laporan. Penyedia AI menyimpannya paling lama 30 hari untuk pemantauan penyalahgunaan, lalu menghapusnya, dan tidak menggunakannya untuk melatih model.',
-      sections: [
-        {
-          h: 'a. Apa yang berubah (sebelum → sesudah)',
-          body: [
-            'Sebelum: judul dan isi diari tidak dikirim keluar dari perangkat Anda. Meskipun Anda mengaktifkan pencadangan, keduanya hanya dikirim sebagai teks terenkripsi yang tidak dapat dibaca operator.',
-            'Sesudah: **hanya ketika Anda sendiri menekan Buat laporan**, isi diari untuk periode tersebut dikirim **tanpa enkripsi** melalui server operator ke penyedia AI, lalu ringkasan dibuat.',
-            '⚠ Secara tepat: operator **tidak menyimpan isi diari itu sendiri.** Namun ① pada saat ringkasan dibuat, isinya melewati server operator, sehingga kami tidak dapat mengatakan bahwa "operator tidak dapat melihatnya", dan ② **ringkasan yang dihasilkan disimpan selama 90 hari** (lihat huruf d). Kami menyampaikannya apa adanya tanpa mengaburkannya.',
-            'Jika Anda tidak membuat laporan, pengiriman ini sama sekali tidak terjadi, dan semua fitur lain termasuk menulis diari tetap dapat digunakan sepenuhnya.',
-          ],
-        },
-        {
-          h: 'b. Persetujuan terpisah untuk informasi sensitif',
-          body: [
-            'Diari dapat memuat informasi sensitif seperti kondisi kesehatan atau psikologis sebagaimana dimaksud Pasal 23 Undang-Undang Perlindungan Informasi Pribadi.',
-            'Karena laporan ringkasan AI memproses isi tersebut tanpa enkripsi, kami meminta **persetujuan terpisah untuk pemrosesan informasi sensitif** saat Anda pertama kali menggunakan fitur ini. Persetujuan ini **terpisah** dari persetujuan transfer ke luar negeri pada huruf (c), dan Anda dapat memilih masing-masing secara terpisah.',
-            'Meski tidak menyetujui, semua fitur selain laporan AI tetap dapat digunakan sepenuhnya.',
-          ],
-        },
-        {
-          h: 'c. Persetujuan terpisah untuk transfer ke luar negeri',
-          body: [
-            '• OpenAI OpCo, LLC — Negara: Amerika Serikat (1455 Third Street, San Francisco, California 94158, USA). Kontak: dpo@openai.com. Informasi yang sama juga ditampilkan di aplikasi sebelum persetujuan diambil.',
-            '• Item yang ditransfer: judul, isi, emosi, dan tanggal entri pada periode yang Anda mintakan laporannya',
-            '• Tujuan: membuat laporan ringkasan',
-            '• Waktu dan cara: dikirim melalui jaringan saat Anda menekan Buat laporan',
-            '• Masa penyimpanan: server operator **tidak menyimpan item yang ditransfer (isi diari)** — hanya ditahan di memori selama ringkasan dibuat lalu dibuang. Penyimpanan ringkasan yang dihasilkan dicantumkan terpisah pada huruf (d). Penyedia AI menyimpannya **paling lama 30 hari** untuk pemantauan penyalahgunaan lalu menghapusnya, dan bahkan selama periode itu **tidak menggunakannya untuk melatih model.**',
-            'Anda dapat menolak transfer ke luar negeri; jika menolak, hanya laporan AI yang tidak tersedia dan semua fitur lain tetap dapat digunakan sepenuhnya.',
-          ],
-        },
-        {
-          h: 'd. Apa yang disimpan operator',
-          body: [
-            'Kami tidak menyimpan isi diari (judul dan teks). Kami menyimpan hal berikut.',
-            '• **Ringkasan yang dihasilkan AI** — disimpan untuk memeriksa dan meningkatkan kualitas laporan. Masa penyimpanan: **90 hari sejak hari dibuat**, setelah itu dihapus otomatis.',
-            '• Pengenal akun yang membuat laporan, periode, jumlah kali, dan jumlah token yang digunakan — dipakai untuk penagihan dan pencegahan penyalahgunaan. Masa penyimpanan: sampai tujuan tercapai atau sampai Anda menghapus akun',
-            '⚠ Ringkasan ditulis berdasarkan diari Anda, sehingga isi diari dapat termuat di dalamnya. Kami menyampaikannya apa adanya tanpa mengaburkannya.',
-            'Laporan yang selesai juga disimpan **di perangkat Anda**, dan jika pencadangan aktif, disertakan dalam cadangan dalam bentuk terenkripsi.',
-          ],
-        },
-        {
-          h: 'e. Hak Anda',
-          body: [
-            '• Laporan hanya dibuat ketika Anda sendiri membuatnya; tidak pernah dibuat otomatis.',
-            '• Anda dapat menghapus laporan yang telah Anda buat kapan saja di aplikasi.',
-            '• Menghapusnya di aplikasi akan menghilangkannya dari perangkat Anda; ringkasan yang disimpan di server operator dihapus otomatis setelah 90 hari. Jika ingin dihapus lebih cepat, Anda dapat memintanya melalui Hubungi kami.',
-            '• Ringkasan yang dihasilkan AI dapat berbeda dari fakta dan bukan merupakan diagnosis atau saran medis maupun psikologis. Aplikasi menyediakan cara untuk melaporkan sebuah ringkasan.',
-          ],
-        },
+        '• 2026-08-12 pengumuman perubahan mendatang — rencana penerapan laporan ringkasan AI (teks utama belum berubah)',
+        '• 2026-08-23 revisi — kedua pengumuman di atas telah dimasukkan ke dalam teks utama. Pemrosesan yang berkaitan dengan langganan bulanan, pencadangan/pemulihan, dan laporan ringkasan AI ditambahkan ke bagian 1, 2, 3, 4, 6, 8, 9, dan 10.',
       ],
     },
   ],
@@ -287,14 +208,14 @@ export const PRIVACY_ID: LegalDoc = {
  *   tetap harus punya cara untuk mengajukan permintaan. URL itulah yang dibuka peninjau Play,
  *   sehingga dokumen ini tidak boleh hanya tersedia dalam bahasa Korea.
  *
- * ⚠ Strukturnya harus sama persis dengan versi Korea — 5 bagian (6/4/4/3/3 baris) ditambah
- *   dua perubahan mendatang. `npm run check:legal` memeriksanya.
+ * ⚠ Strukturnya harus sama persis dengan versi Korea — 6 bagian (6/4/9/5/4/3 baris) dan tanpa
+ *   perubahan mendatang. `npm run check:legal` memeriksanya.
  */
 export const DELETE_ACCOUNT_ID: LegalDoc = {
   title: 'Jogak — Cara menghapus akunmu',
-  sourceFingerprint: 'a6b3a8b5',
-  effective: '2026-08-10',
-  updated: '2026-08-10',
+  sourceFingerprint: 'a8b0c8b9',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
     'Halaman ini menjelaskan cara menghapus akun aplikasi Jogak beserta data yang terkait dengannya. Kamu juga dapat mengajukan permintaan lewat email bila sudah menghapus aplikasinya atau tidak dapat masuk.',
   sections: [
@@ -325,6 +246,11 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
         '• Pengenal unik akun sosial (Google “sub”)',
         '• Alamat email',
         '• Keterkaitan antara riwayat pertanyaan dan akun penulisnya',
+        '• Salinan catatanmu yang terenkripsi di server (bila kamu mengaktifkan pencadangan) — ikut dihapus tanpa menunggu tenggang 90 hari.',
+        '• Pengenal cadangan dan catatan pencadangan (waktu, ukuran, nomor generasi)',
+        '• Ringkasan laporan AI yang tersimpan di server (paling lama 90 hari) dan catatan penggunaan laporan (periode, jumlah kali, jumlah token)',
+        '⚠ Saat kamu menghapus akun, kami memusnahkan cadangan lebih dulu baru menghapus akunnya — sebab bila akunnya lenyap lebih dulu, tidak ada lagi orang yang berwenang menghapus cadangan itu. Bila penghapusan cadangan gagal, penghapusan akun tidak dilanjutkan; silakan coba lagi beberapa saat kemudian.',
+        '⚠ Setelah dihapus, hal ini tidak dapat dibatalkan. Meski kamu masih memegang kode pemulihan, kamu tidak akan dapat memulihkan cadangan yang ada di server.',
       ],
     },
     {
@@ -332,66 +258,26 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
       body: [
         'Informasi berikut disimpan sesuai peraturan perundang-undangan, dan bahkan selama jangka waktu itu hanya tersisa dalam bentuk yang tidak dapat ditelusuri kembali ke penulisnya (pseudonimisasi).',
         '• Isi pertanyaan: 3 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik — catatan mengenai keluhan atau penyelesaian sengketa konsumen)',
+        '• Catatan transaksi langganan (pengenal transaksi, produk, periode langganan, riwayat perubahan status pembayaran): 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)',
+        '• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.',
         'Setelah jangka waktu penyimpanan lewat, kami memusnahkannya tanpa penundaan.',
       ],
     },
     {
-      h: '5. Yang tidak ikut dihapus — catatan di perangkatmu',
+      h: '5. Yang tertinggal di perangkatmu — menghapus akun tidak menghapusnya',
       body: [
-        'Catatan Jogak (judul, isi, foto, tag, dan emosi) hanya disimpan di dalam perangkatmu dan tidak dikirim ke server operator.',
-        'Karena itu, menghapus akun tidak mengubah catatan yang ada di perangkatmu. Bila kamu ingin menghapus catatannya juga, hapus aplikasinya atau jalankan atur ulang lewat [Pengaturan] di aplikasi.',
-        'Sebaliknya, bila kamu menghapus aplikasinya, catatan di perangkatmu tidak dapat dipulihkan.',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'Sejak hari versi yang memuat langganan bulanan dan pencadangan/pemulihan dirilis',
-      summary:
-        'Bila kamu mengaktifkan pencadangan, menghapus akun juga menghapus cadangan terenkripsi yang tersimpan di server. Catatan transaksi langganan disimpan sesuai peraturan perundang-undangan dalam bentuk yang tidak dapat ditelusuri.',
-      sections: [
-        {
-          h: 'a. Data yang dihapus sebagai tambahan',
-          body: [
-            '• Salinan catatanmu yang terenkripsi di server — dihapus bersamaan saat kamu menghapus akun. Kami tidak menunggu tenggang 90 hari.',
-            '• Pengenal cadangan dan catatan pencadangan (waktu, ukuran, nomor generasi)',
-            '⚠ Setelah dihapus, hal ini tidak dapat dibatalkan. Meski kamu masih memegang kode pemulihan, kamu tidak akan dapat memulihkannya.',
-            '⚠ Catatan di perangkatmu tetap utuh. Yang dihapus hanyalah salinan di server.',
-          ],
-        },
-        {
-          h: 'b. Data yang disimpan sebagai tambahan dan jangka waktunya',
-          body: [
-            '• Catatan transaksi langganan (pengenal transaksi, produk, periode langganan, riwayat perubahan status pembayaran): 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)',
-            '• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.',
-            'Catatan di atas pun, selama jangka waktu penyimpanannya, hanya tersisa dalam bentuk yang tidak dapat ditelusuri kembali ke penulisnya.',
-          ],
-        },
-        {
-          h: 'c. Langgananmu harus dibatalkan secara terpisah',
-          body: [
-            'Menghapus akun tidak otomatis membatalkan langgananmu di Google Play, dan bila tidak kamu batalkan, tagihan akan terus berjalan.',
-            'Cara membatalkan: aplikasi Google Play Store > profil > Pembayaran dan langganan > Langganan (https://play.google.com/store/account/subscriptions)',
-            'Pengembalian dana atas jumlah yang sudah dibayarkan mengikuti kebijakan pengembalian dana Google Play dan kebijakan pengembalian dana operator. Untuk pertanyaan, silakan hubungi alamat di bawah ini.',
-          ],
-        },
+        'Catatan Jogak (judul, isi, foto, tag, dan emosi) serta isi laporan AI disimpan di dalam perangkatmu.',
+        'Karena itu, menghapus akun tidak mengubah catatan dan laporan yang ada di perangkatmu. Bila kamu ingin menghapusnya dari perangkat juga, hapus aplikasinya atau jalankan atur ulang lewat [Pengaturan] di aplikasi.',
+        'Sebaliknya, bila kamu menghapus aplikasinya, catatan di perangkatmu tidak dapat dipulihkan. Pemulihan hanya mungkin bila kamu mengaktifkan pencadangan dan masih menyimpan kode pemulihanmu, dan hanya selama kamu belum menghapus akun.',
+        '⚠ Bila kamu tidak mengaktifkan pencadangan, operator tidak memiliki catatan yang ada di perangkatmu sehingga tidak dapat menghapusnya maupun mengembalikannya untukmu.',
       ],
     },
     {
-      appliesFrom: 'Sejak hari versi yang memuat laporan ringkasan AI dirilis',
-      summary:
-        'Isi laporan AI disimpan di perangkatmu. Di server, ringkasan laporan disimpan paling lama 90 hari untuk pemeriksaan kualitas, dan dihapus bersama catatan penggunaanmu saat kamu menghapus akun.',
-      sections: [
-        {
-          h: 'a. Apa yang dihapus terkait laporan AI',
-          body: [
-            '• Catatan penggunaan laporan yang tersimpan di server (pengenal akun, periode, jumlah kali, jumlah token) — dihapus bersamaan saat kamu menghapus akun.',
-            '• Ringkasan laporan yang tersimpan di server (paling lama 90 hari) — dihapus bersamaan saat kamu menghapus akun. Isi catatan aslinya tidak pernah disimpan sehingga tidak ada yang perlu dihapus.',
-            '⚠ Isi laporan juga tersimpan di perangkatmu, sehingga tetap ada di sana meski kamu menghapus akun. Untuk menghapusnya, hapus laporan di aplikasi atau hapus aplikasinya.',
-            '• Bila kamu mengaktifkan pencadangan, laporan juga disertakan dalam cadangan dalam bentuk terenkripsi dan ikut terhapus ketika cadangan dihapus.',
-          ],
-        },
+      h: '6. Langgananmu harus dibatalkan secara terpisah',
+      body: [
+        'Menghapus akun tidak otomatis membatalkan langgananmu di Google Play, dan bila tidak kamu batalkan, tagihan akan terus berjalan.',
+        'Cara membatalkan: aplikasi Google Play Store > profil > Pembayaran dan langganan > Langganan (https://play.google.com/store/account/subscriptions)',
+        'Pengembalian dana atas jumlah yang sudah dibayarkan mengikuti kebijakan pengembalian dana Google Play dan kebijakan pengembalian dana operator. Untuk pertanyaan, silakan hubungi alamat kontak di atas.',
       ],
     },
   ],

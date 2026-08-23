@@ -7,23 +7,37 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  *   c’est `legal-text.ts` (coréen) qui prévaut.
  * ⚠ **La structure doit correspondre exactement au coréen** — même nombre de sections et de
  *   lignes dans chacune. `npm run check:legal` le vérifie.
+ *
+ * ⚠ **Vouvoiement.** Les chaînes d’interface tutoient, les avis juridiques vouvoient.
+ *   Ce document est un avis juridique : `vous` partout.
+ *
+ * 🔴 **La sauvegarde et l’IA disent l’inverse l’une de l’autre.** Ne pas les fondre en une
+ *   seule phrase :
+ *     sauvegarde = conservée mais illisible → « conserve … mais ne peut pas la lire »
+ *     IA         = lue mais non conservée  → « ne conserve pas … », jamais « ne peut pas le voir »
+ *   Le coréen reconnaît expressément qu’on ne peut pas dire que l’exploitant « ne peut pas le
+ *   voir ». Atténuer cette phrase rendrait l’avis juridique mensonger.
  */
 export const PRIVACY_FR: LegalDoc = {
   title: 'Politique de confidentialité de Jogak',
-  sourceFingerprint: '4b621b97',
-  effective: '2026-08-09',
-  updated: '2026-08-11',
+  sourceFingerprint: '47ec2dc4',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
-    'Vivace Games (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Jogak n’envoie à aucun serveur les entrées de journal que vous écrivez et, par principe, ne recueille que le minimum d’informations nécessaires.',
+    'Vivace Games (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Par principe, Jogak conserve sur votre appareil les entrées de journal que vous écrivez ; celles-ci ne sont transmises à un serveur que dans deux cas : la sauvegarde que vous activez vous-même et les rapports de synthèse par IA que vous créez vous-même. Pour le reste, nous ne recueillons que le minimum d’informations.',
   sections: [
     {
-      h: '1. Ce que nous ne recueillons pas (dit en premier)',
+      h: '1. Nous vous disons d’abord où votre journal est conservé',
       body: [
-        'L’exploitant ne recueille pas les informations suivantes et ne les transmet pas hors de votre appareil.',
-        '• Les titres, le texte, les listes, les photos, les tags et les émotions de vos entrées — conservés uniquement dans le stockage interne de votre appareil.',
+        'Les entrées (titre, texte, listes, photos, tags et émotions) sont conservées dans le stockage interne de votre appareil et, par défaut, n’en sortent pas.',
+        '⚠ Il n’existe que deux exceptions, et uniquement si vous les choisissez vous-même. Aucune des deux ne se produit automatiquement.',
+        '• Si vous activez la sauvegarde — une copie de vos entrées, chiffrée sur votre appareil, est conservée sur le serveur de l’exploitant. L’exploitant ne peut pas lire cette copie. Les détails figurent à la section 2(c).',
+        '• Si vous créez un rapport de synthèse par IA — le contenu du journal de la période concernée transite non chiffré par le serveur de l’exploitant et est remis au fournisseur d’IA. L’exploitant ne conserve pas ce contenu. Les détails figurent à la section 2(e).',
+        '⚠ Ces deux phrases ne disent pas la même chose : l’exploitant conserve la copie de sauvegarde mais ne peut pas la lire, tandis que le contenu envoyé à l’IA, il le lit mais ne le conserve pas. Nous vous le disons tel quel, sans l’atténuer.',
+        'L’exploitant ne recueille en aucun cas les informations suivantes et ne les transmet pas hors de votre appareil.',
         '• Le code PIN, le schéma ou la réponse à la question de rappel du verrouillage — conservés dans le stockage sécurisé de l’appareil uniquement sous une forme non réversible (une empreinte), l’original n’étant stocké nulle part.',
         '• Votre nom, date de naissance, numéro de téléphone, adresse, liste de contacts, position, ni aucun relevé d’accès à l’ensemble de votre photothèque.',
-        'Les photos que vous choisissez dans l’application sont seulement copiées dans le dossier propre à l’application sur votre appareil afin d’être insérées dans une entrée ; elles ne sont transmises nulle part.',
+        'Les photos que vous choisissez dans l’application sont copiées dans le dossier propre à l’application sur votre appareil afin d’être insérées dans une entrée et, si vous n’activez pas la sauvegarde, elles ne sont transmises nulle part. Aucune photo n’est transmise aux rapports de synthèse par IA.',
       ],
     },
     {
@@ -35,11 +49,31 @@ export const PRIVACY_FR: LegalDoc = {
         '  — Finalité : identifier l’auteur du message, envoyer la réponse et vous permettre de consulter votre propre historique',
         '• Catégorie et contenu de la demande',
         '• Type d’appareil (Android/iOS) et version de l’application — pour comprendre dans quel environnement le problème est survenu',
-        '※ La connexion n’est nécessaire que pour « Nous contacter » ; l’écriture d’entrées, le verrouillage et les autres fonctions n’en ont pas besoin.',
+        '※ La connexion est nécessaire pour « Nous contacter », l’abonnement, la sauvegarde et les rapports par IA ; l’écriture d’entrées, le verrouillage et les autres fonctions n’en ont pas besoin.',
         '※ Les enfants de moins de 14 ans ne peuvent pas utiliser la fonction de connexion.',
         'b. Informations recueillies automatiquement lors de la diffusion des publicités',
         '• Identifiant publicitaire (identifiant publicitaire Android), informations sur l’appareil et le réseau, relevés d’affichages et de clics',
         '• Ces éléments sont recueillis par Google (AdMob) ; les détails et les modalités d’opposition figurent à la section 7.',
+        'c. Si vous activez la sauvegarde (abonnement requis)',
+        '• Une copie chiffrée de vos entrées — sous une forme que l’exploitant ne peut pas déchiffrer',
+        '• Identifiant de sauvegarde, heure de la sauvegarde, numéro de génération et taille — ces informations ne sont pas chiffrées. L’exploitant peut savoir quel compte a sauvegardé, quand et quel volume.',
+        '  — Base légale : votre consentement distinct (recueilli sur l’écran où vous activez la sauvegarde)',
+        '⚠ Pour être précis : l’exploitant conserve cette copie mais ne peut pas la lire. La clé de déchiffrement n’existe que sur votre appareil et dans le code de récupération que vous conservez ; l’exploitant ne l’a pas.',
+        '⚠ Si vous perdez votre code de récupération, il n’existe aucun moyen d’ouvrir la sauvegarde. L’exploitant ne peut pas l’ouvrir non plus.',
+        'd. Si vous utilisez un abonnement',
+        '• État de l’abonnement — clé de droit, date d’expiration, délai de grâce en cas d’échec de paiement, renouvellement prévu ou non',
+        '• L’identifiant de transaction délivré par la boutique, l’identifiant du produit et l’environnement d’achat (production ou test)',
+        '• Les relevés de changement d’état de l’abonnement envoyés par le service de paiement (achat, renouvellement, résiliation, remboursement, etc.) et leur contenu d’origine',
+        '  — Base légale : loi sur la protection des informations personnelles, art. 15(1)4 (nécessaire pour exécuter les mesures demandées par l’utilisateur, à savoir fournir le droit d’abonnement souscrit)',
+        '  — Finalité : vérifier le droit d’abonnement (suppression des publicités, sauvegarde et rapports par IA), traiter les demandes de paiement et les remboursements',
+        '⚠ Les données de paiement telles que les numéros de carte ou de compte sont gérées par Google Play et ne sont pas transmises à l’exploitant. L’exploitant sait seulement que vous avez payé et jusqu’à quand l’abonnement est valable.',
+        'e. Si vous créez des rapports de synthèse par IA (abonnement requis)',
+        '• Ce qui est remis au fournisseur d’IA via le serveur de l’exploitant : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport',
+        '• Ce que l’exploitant conserve : la synthèse générée par l’IA, l’identifiant du compte ayant créé le rapport, la période, le nombre de fois et le nombre de jetons utilisés',
+        '⚠ Pour être précis : l’exploitant ne conserve pas le contenu du journal lui-même. Toutefois, ① au moment où la synthèse est produite, ce contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② la synthèse générée est conservée 90 jours. Nous vous le disons tel quel, sans l’atténuer.',
+        '⚠ La synthèse est rédigée à partir de vos entrées ; elle peut donc contenir le contenu de votre journal.',
+        '• Consentement distinct pour les informations sensibles : un journal peut contenir des informations sensibles, telles que l’état de santé ou psychologique, au sens de l’art. 23 de la loi sur la protection des informations personnelles. Les rapports de synthèse par IA traitant ce contenu non chiffré, nous recueillons un consentement distinct au traitement des informations sensibles lors de votre première utilisation de la fonctionnalité. Ce consentement est distinct du consentement au transfert hors du pays de la section 6, et vous pouvez choisir chacun séparément.',
+        'Même si vous ne le donnez pas, vous pouvez continuer à utiliser normalement toutes les fonctionnalités autres que les rapports par IA. Les rapports ne sont générés que lorsque vous les créez vous-même ; ils ne le sont jamais automatiquement.',
       ],
     },
     {
@@ -48,6 +82,9 @@ export const PRIVACY_FR: LegalDoc = {
         '• Réception et traitement des demandes : examiner ce que vous avez envoyé, puis identifier et corriger les défauts',
         '• Identification de l’auteur et réponse : vous transmettre la réponse et vous permettre de revoir votre propre historique',
         '• Diffusion de publicités : proposer des publicités aux utilisateurs de la version gratuite et en mesurer la performance',
+        '• Sauvegarde et restauration : si vous l’activez, conserver une copie chiffrée de vos entrées et vous la restituer à votre demande',
+        '• Vérification du droit d’abonnement : fournir aux personnes ayant payé la suppression des publicités, la sauvegarde et les rapports par IA, et traiter les demandes de paiement et les remboursements',
+        '• Génération des rapports de synthèse par IA et amélioration de leur qualité : produire la synthèse de la période que vous avez demandée et en examiner le résultat pour améliorer la qualité',
         'L’exploitant n’utilise pas les données personnelles à d’autres fins que celles ci-dessus et, en cas de changement de finalité, recueillera votre consentement au préalable.',
       ],
     },
@@ -57,6 +94,14 @@ export const PRIVACY_FR: LegalDoc = {
         '• Informations de compte (adresse e-mail, « sub » Google) : jusqu’à la suppression de votre compte. À la suppression, nous les détruisons sans délai ou les rendons non traçables.',
         '• Contenu des demandes : 3 ans à compter de la réception (loi sur la protection des consommateurs dans le commerce électronique — relevés relatifs aux réclamations ou au règlement des litiges)',
         '• Données comportementales fondées sur l’identifiant publicitaire : jusqu’à 1 an à compter du recueil',
+        '• Copie de sauvegarde chiffrée : conservée tant que la sauvegarde est activée et jusqu’à 90 jours après la fin de l’abonnement, puis détruite automatiquement. Si vous désactivez la sauvegarde, demandez sa suppression ou supprimez votre compte, nous la détruisons sans délai, sans attendre les 90 jours. Les sauvegardes sans accès depuis 3 ans ou plus sont détruites (cas où l’application a été désinstallée sans suppression du compte).',
+        '• Relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne pas » ; l’identifiant du compte n’est pas conservé avec lui.',
+        '• Synthèse générée par l’IA : 90 jours à compter du jour de sa création. Elle est ensuite supprimée automatiquement.',
+        '• Relevés d’utilisation des rapports (identifiant du compte, période, nombre de fois, nombre de jetons) : jusqu’à la réalisation de la finalité ou jusqu’à la suppression de votre compte',
+        '• Relevés relatifs aux contrats ou à la rétractation, et au paiement et à la fourniture de biens : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
+        'Si vous supprimez votre compte, les identifiants de compte (e-mail, « sub » Google) sont rendus non traçables sans délai, et les relevés de transaction ci-dessus sont conservés séparément et sous une forme non traçable pendant la durée indiquée, puis détruits.',
+        '⚠ La suppression de votre compte ne résilie pas automatiquement votre abonnement Google Play. Vous devez le résilier vous-même dans Google Play > Abonnements ; à défaut, vous continuerez à être facturé.',
+        '⚠ L’avis de suppression de la sauvegarde à l’expiration de l’abonnement ne vous parvient qu’à l’écran, à l’ouverture de l’application. Si vous ne l’ouvrez pas, cet avis peut ne pas vous parvenir.',
         'Une fois la durée écoulée ou la finalité atteinte, nous détruisons les données sans délai.',
       ],
     },
@@ -64,6 +109,7 @@ export const PRIVACY_FR: LegalDoc = {
       h: '5. Communication à des tiers',
       body: [
         'L’exploitant ne communique pas les données personnelles des utilisateurs à des tiers.',
+        'Les sociétés mentionnées à la section 6 sont des sous-traitants qui traitent les informations pour le compte de l’exploitant et ne les utilisent pas à leurs propres fins. Le fournisseur d’IA n’utilise pas pour entraîner ses modèles le contenu du journal qui lui est transmis.',
         'Font exception les cas où une disposition légale particulière l’impose, ou lorsqu’une autorité d’enquête en fait la demande selon les procédures et formes prévues par la loi.',
       ],
     },
@@ -71,10 +117,13 @@ export const PRIVACY_FR: LegalDoc = {
       h: '6. Sous-traitance et transfert hors du pays',
       body: [
         'Pour fournir le service, l’exploitant sous-traite le traitement comme suit, une partie ayant lieu hors de Corée.',
-        '• Google LLC — Pays : États-Unis. Contact : https://support.google.com/policies/contact/general_privacy_form. Finalité : diffusion et mesure des publicités (AdMob), connexion au compte Google. Données : identifiant publicitaire, informations sur l’appareil et le réseau et, lors de la connexion, l’adresse e-mail et l’identifiant du compte. Quand et comment : transmises par le réseau lors d’une demande de publicité et lors de la connexion. Conservation : selon la politique de confidentialité de Google',
-        '• Supabase Inc. — Pays : États-Unis (siège social). Contact : privacy@supabase.com. Finalité : stocker en base de données les informations de demandes et de comptes. Données : celles de la section 2(a). Quand et comment : transmises par le réseau lors de l’envoi d’une demande. Conservation : les durées de la section 4. ※ Le lieu physique de stockage est la République de Corée (région de Séoul), mais nous l’indiquons comme transfert hors du pays car la société exploitante est située hors de Corée.',
-        '• Vercel Inc. — Pays : États-Unis. Contact : privacy@vercel.com. Finalité : exploiter le serveur qui reçoit les demandes. Données : celles de la section 2(a). Quand et comment : transmises par le réseau lors de l’envoi d’une demande. Conservation : jusqu’à la fin du contrat de sous-traitance',
-        'Vous pouvez refuser le transfert de vos données hors du pays. Pour refuser les transferts liés à la publicité, désactivez les publicités personnalisées selon la section 7 ; pour refuser ceux liés aux demandes, il suffit de ne pas utiliser « Nous contacter » (toutes les autres fonctions, dont l’écriture d’entrées, restent disponibles).',
+        '• Google LLC — Pays : États-Unis. Contact : https://support.google.com/policies/contact/general_privacy_form. Finalité : diffusion et mesure des publicités (AdMob), connexion au compte Google, traitement et vérification des paiements d’abonnement. Données : identifiant publicitaire, informations sur l’appareil et le réseau, lors de la connexion l’adresse e-mail et l’identifiant du compte, et informations de transaction de la boutique. Quand et comment : transmises par le réseau lors d’une demande de publicité, lors de la connexion et lors du paiement. Conservation : selon la politique de confidentialité de Google',
+        '• Supabase Inc. — Pays : États-Unis (siège social). Contact : privacy@supabase.com. Finalité : stocker en base de données les informations de demandes et de comptes, et conserver la copie de sauvegarde chiffrée et l’état de l’abonnement. Données : celles des sections 2(a), 2(c) et 2(d). Quand et comment : transmises par le réseau lors de l’envoi d’une demande et lors d’une sauvegarde. Conservation : les durées de la section 4. ※ Le lieu physique de stockage est la République de Corée (région de Séoul), mais nous l’indiquons comme transfert hors du pays car la société exploitante est située hors de Corée.',
+        '• Vercel Inc. — Pays : États-Unis. Contact : privacy@vercel.com. Finalité : exploiter le serveur qui reçoit les demandes ainsi que les serveurs de sauvegarde et d’IA. Données : celles de la section 2(a). Quand et comment : transmises par le réseau lors de l’envoi d’une demande. Conservation : jusqu’à la fin du contrat de sous-traitance. ※ La copie de sauvegarde chiffrée est envoyée directement au stockage sans passer par ce serveur.',
+        '• RevenueCat, Inc. — Pays : États-Unis. Contact : compliance@revenuecat.com. Finalité : vérifier les paiements d’abonnement et contrôler son état. Données : identifiant de compte, identifiants de transaction et de produit de la boutique, informations sur l’appareil et l’application. Quand et comment : transmises par le réseau à l’ouverture de l’écran d’abonnement et lors du paiement. Conservation : jusqu’à la fin du contrat de sous-traitance',
+        '• OpenAI OpCo, LLC — Pays : États-Unis (1455 Third Street, San Francisco, California 94158, USA). Contact : dpo@openai.com. Finalité : générer des rapports de synthèse. Données : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport. Quand et comment : transmises par le réseau au moment où vous appuyez sur Créer un rapport. Conservation : le serveur de l’exploitant ne conserve pas le contenu du journal — il ne le garde en mémoire que le temps de produire la synthèse, puis le supprime aussitôt. Le fournisseur d’IA le conserve au maximum 30 jours à des fins de surveillance des abus puis le supprime, et même pendant cette période ne l’utilise pas pour entraîner ses modèles.',
+        '⚠ Le transfert hors du pays pour les rapports par IA fait l’objet d’un consentement distinct. Lors de votre première utilisation de la fonctionnalité, nous vous présentons les informations ci-dessus dans l’application et recueillons votre consentement ; ce consentement est distinct du consentement relatif aux informations sensibles de la section 2(e).',
+        'Vous pouvez refuser le transfert de vos données personnelles hors du pays. Pour refuser les transferts liés à la publicité, désactivez les publicités personnalisées selon la section 7 ; ceux liés aux demandes n’ont pas lieu si vous n’utilisez pas « Nous contacter ». Si vous n’activez pas la sauvegarde, ne vous abonnez pas et ne créez pas de rapport, les transferts correspondants n’ont pas lieu non plus, et toutes les autres fonctions, dont l’écriture d’entrées, restent disponibles.',
       ],
     },
     {
@@ -85,6 +134,7 @@ export const PRIVACY_FR: LegalDoc = {
         'Modalités d’opposition (Android) : Paramètres > Confidentialité > Annonces > « Supprimer l’identifiant publicitaire » ou « Désactiver la personnalisation des annonces »',
         'Modalités d’opposition (iOS) : Réglages > Confidentialité et sécurité > Suivi > désactivez « Autoriser les app à demander de vous suivre »',
         'Même en cas d’opposition, des publicités peuvent continuer à s’afficher, mais il s’agira de publicités génériques non fondées sur vos centres d’intérêt.',
+        'Si vous vous abonnez, aucune publicité n’est affichée et le recueil publicitaire ci-dessus n’a pas lieu non plus.',
         'Pour en savoir plus sur le traitement des données personnelles par Google à des fins publicitaires : https://policies.google.com/technologies/ads',
       ],
     },
@@ -93,7 +143,9 @@ export const PRIVACY_FR: LegalDoc = {
       body: [
         'Procédure : les données personnelles dont la durée est écoulée ou la finalité atteinte sont détruites sans délai. Lorsque la loi impose leur conservation, elles sont conservées séparément des autres pendant cette durée puis détruites.',
         'Modalités : les informations sous forme de fichier électronique sont supprimées définitivement par des moyens techniques rendant impossible toute récupération ou reconstitution.',
-        'Les entrées, photos et informations de verrouillage enregistrées sur votre appareil en sont retirées lorsque vous utilisez la fonction « Tout réinitialiser » de l’application ou que vous la désinstallez. L’exploitant ne détient pas ces informations et ne peut donc pas les supprimer à votre place.',
+        'Les entrées, photos et informations de verrouillage enregistrées sur votre appareil en sont retirées lorsque vous utilisez la fonction « Tout réinitialiser » de l’application ou que vous la désinstallez.',
+        'Si vous avez activé la sauvegarde, la copie chiffrée conservée sur le serveur est détruite lorsque vous la supprimez depuis l’écran de sauvegarde de l’application ou lorsque vous supprimez votre compte. Lors de la suppression du compte, nous détruisons d’abord la sauvegarde puis le compte — si le compte disparaissait d’abord, plus personne n’aurait le droit d’effacer cette sauvegarde.',
+        'Si vous n’avez pas activé la sauvegarde, l’exploitant ne détient pas les entrées présentes sur votre appareil et ne peut donc pas les supprimer à votre place.',
       ],
     },
     {
@@ -103,6 +155,9 @@ export const PRIVACY_FR: LegalDoc = {
         '• Demander l’accès à vos données • Demander la rectification en cas d’erreur • Demander l’effacement • Demander la suspension du traitement • Demander la transmission de vos données (loi sur la protection des informations personnelles, art. 35-2)',
         'Vous pouvez les exercer par écrit ou par e-mail à l’adresse figurant à la section 11, et l’exploitant agira sans délai.',
         'Si vous demandez la rectification d’une erreur dans vos données, nous ne les utiliserons ni ne les communiquerons tant que la rectification n’est pas achevée.',
+        '⚠ Limites du droit d’accès à la sauvegarde : si vous en demandez l’accès, l’exploitant ne peut vous remettre que le texte chiffré, indéchiffrable, et les métadonnées de la section 2(c). Nous ne pouvons pas vous fournir le contenu de vos entrées sous une forme lisible par un être humain — l’exploitant n’a pas la clé. Vous pouvez vous-même restaurer à tout moment dans l’application à l’aide de votre code de récupération.',
+        'Vous pouvez supprimer à tout moment dans l’application un rapport par IA déjà créé. La suppression dans l’application l’efface de votre appareil, et la synthèse conservée sur le serveur est supprimée automatiquement au bout de 90 jours. Si vous souhaitez une suppression plus rapide, vous pouvez en faire la demande via « Nous contacter ».',
+        '⚠ Les synthèses générées par IA peuvent différer des faits et ne constituent ni un diagnostic ni un conseil médical ou psychologique. L’application propose un moyen de signaler un rapport.',
         'Le représentant légal d’un enfant de moins de 14 ans peut exercer les droits ci-dessus en son nom.',
       ],
     },
@@ -111,6 +166,7 @@ export const PRIVACY_FR: LegalDoc = {
       body: [
         '• Organisationnelles : limiter au minimum le nombre de personnes traitant des données personnelles et les former régulièrement',
         '• Techniques : gestion des droits d’accès au système de traitement, chiffrement en transit (HTTPS), stockage du secret de verrouillage sous forme d’empreinte et utilisation du stockage sécurisé de l’appareil (Keystore/Keychain)',
+        '• Chiffrement de bout en bout de la sauvegarde : la copie de sauvegarde est chiffrée sur votre appareil avant d’être transmise, et la clé de déchiffrement n’existe que sur votre appareil et dans votre code de récupération. Le serveur de l’exploitant n’a pas la clé.',
         '• Physiques : les serveurs hébergeant des données personnelles se trouvent dans les centres de données de fournisseurs cloud nationaux et étrangers et suivent leurs politiques de contrôle d’accès physique.',
         '⚠ La fonction de verrouillage empêche l’accès à l’écran ; elle ne chiffre pas les fichiers de journal enregistrés sur l’appareil. Si l’appareil est perdu ou dérobé et que sa propre sécurité est contournée, le contenu des entrées peut être exposé.',
       ],
@@ -145,133 +201,8 @@ export const PRIVACY_FR: LegalDoc = {
         'Historique des modifications',
         '• 2026-08-09 première version',
         '• 2026-08-11 publication d’une modification à venir — introduction prévue de l’abonnement mensuel et de la sauvegarde/restauration (le texte principal n’a pas encore changé)',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'À compter du jour de publication de la version incluant l’abonnement mensuel et la sauvegarde/restauration',
-      summary:
-        'L’abonnement mensuel et la sauvegarde/restauration sont ajoutés. Si vous vous abonnez, l’état de l’abonnement et l’identifiant de transaction sont traités ; et uniquement si vous activez la sauvegarde, une copie de vos entrées chiffrée sur votre appareil est conservée sur le serveur de l’exploitant. L’exploitant ne peut pas déchiffrer cette copie.',
-      sections: [
-        {
-          h: 'a. Ce qui change (avant → après)',
-          body: [
-            'Avant : les titres, le texte et les photos de vos entrées ne sont pas transmis hors de votre appareil.',
-            'Après : **uniquement si vous activez vous-même la sauvegarde**, une copie de vos entrées chiffrée sur votre appareil est conservée sur le serveur de l’exploitant. Si vous ne l’activez pas, pas un seul caractère n’est transmis, exactement comme avant.',
-            '⚠ Pour être précis : l’exploitant **conserve cette copie mais ne peut pas la lire.** La clé de déchiffrement n’existe que sur votre appareil et dans le code de récupération que vous conservez ; l’exploitant ne l’a pas.',
-          ],
-        },
-        {
-          h: 'b. Informations supplémentaires conservées si vous activez la sauvegarde',
-          body: [
-            '• Une copie chiffrée de vos entrées — sous une forme que l’exploitant ne peut pas déchiffrer',
-            '• Identifiant de sauvegarde, heure de la sauvegarde, numéro de génération et taille — **ces informations ne sont pas chiffrées.** L’exploitant peut savoir quel compte a sauvegardé, quand et quel volume.',
-            '• Base légale : votre consentement distinct (recueilli sur l’écran où vous activez la sauvegarde)',
-          ],
-        },
-        {
-          h: 'c. Durée de conservation',
-          body: [
-            '• Conservée tant que la sauvegarde est activée, et jusqu’à 90 jours après la fin de l’abonnement, puis détruite automatiquement.',
-            '• Si vous désactivez la sauvegarde, demandez sa suppression ou supprimez votre compte, nous la détruisons sans délai, sans attendre les 90 jours.',
-            '• Les sauvegardes sans accès depuis 3 ans ou plus sont détruites. (Cas où l’application a été désinstallée sans suppression du compte.)',
-            '• Le relevé de la destruction (identifiant de sauvegarde et heure) est conservé 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne pas » ; l’identifiant du compte n’est pas conservé avec lui.',
-            '⚠ L’avis d’expiration de l’abonnement ne vous parvient qu’à l’écran, à l’ouverture de l’application. Si vous ne l’ouvrez pas, cet avis peut ne pas vous parvenir.',
-          ],
-        },
-        {
-          h: 'd. Limites du droit d’accès',
-          body: [
-            'Si vous demandez l’accès à votre sauvegarde, l’exploitant ne peut vous remettre que **le texte chiffré, indéchiffrable, et les métadonnées du point (b).** Nous ne pouvons pas vous fournir vos entrées sous une forme lisible — l’exploitant n’a pas la clé.',
-            'Vous pouvez vous-même restaurer à tout moment dans l’application à l’aide de votre code de récupération.',
-            '⚠ Si vous perdez votre code de récupération, il n’existe aucun moyen d’ouvrir la sauvegarde. L’exploitant ne peut pas l’ouvrir non plus.',
-          ],
-        },
-        {
-          h: 'e. Informations conservées si vous utilisez un abonnement',
-          body: [
-            '• État de l’abonnement — clé de droit, date d’expiration, délai de grâce en cas d’échec de paiement, renouvellement prévu ou non',
-            '• L’identifiant de transaction délivré par la boutique, l’identifiant du produit et l’environnement d’achat (production ou test)',
-            '• Les relevés de changement d’état envoyés par le service de paiement (achat, renouvellement, résiliation, remboursement, etc.) et leur contenu d’origine',
-            '⚠ Les données de paiement telles que les numéros de carte ou de compte sont gérées par Google Play et ne sont pas transmises à l’exploitant. L’exploitant sait seulement que vous avez payé et jusqu’à quand l’abonnement est valable.',
-            '• Base légale : loi sur la protection des informations personnelles, art. 15(1)4 (nécessaire pour exécuter les mesures demandées par l’utilisateur, à savoir fournir le droit d’abonnement souscrit)',
-            '• Finalité : vérifier le droit d’abonnement (suppression des publicités, usage de la sauvegarde), traiter les demandes de paiement et les remboursements',
-          ],
-        },
-        {
-          h: 'f. Durée de conservation des informations d’abonnement',
-          body: [
-            '• Relevés relatifs aux contrats ou à la rétractation, et au paiement et à la fourniture de biens : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
-            '• Si vous supprimez votre compte, les identifiants de compte (e-mail, « sub » Google) sont rendus non traçables sans délai, et les relevés de transaction ci-dessus sont conservés séparément et sous une forme non traçable pendant la durée indiquée, puis détruits.',
-            '⚠ La suppression de votre compte ne résilie pas automatiquement votre abonnement Google Play. Vous devez le résilier vous-même dans Google Play > Abonnements ; à défaut, vous continuerez à être facturé.',
-          ],
-        },
-        {
-          h: 'g. Sous-traitance et transfert hors du pays (complément)',
-          body: [
-            '• Supabase Inc. — Pays : États-Unis (siège social). Contact : privacy@supabase.com. Finalité : stocker la copie de sauvegarde chiffrée et l’état de l’abonnement. Données : celles des points (b) et (e). Conservation : les durées des points (c) et (f). ※ Le lieu physique de stockage est la République de Corée (région de Séoul).',
-            '• Vercel Inc. — Pays : États-Unis. Contact : privacy@vercel.com. Finalité : exploiter le serveur de sauvegarde. ※ La copie chiffrée est envoyée directement au stockage sans passer par ce serveur.',
-            '• RevenueCat, Inc. — Pays : États-Unis. Contact : compliance@revenuecat.com. Finalité : vérifier les paiements d’abonnement et contrôler son état. Données : identifiant de compte, identifiants de transaction et de produit de la boutique, informations sur l’appareil et l’application. Quand et comment : transmises par le réseau à l’ouverture de l’écran d’abonnement et lors du paiement. Conservation : jusqu’à la fin du contrat de sous-traitance',
-            '• Google LLC — outre le transfert décrit à la section 6, des informations de transaction de la boutique sont traitées aux fins du traitement et de la vérification des paiements d’abonnement.',
-            'Vous pouvez refuser le transfert hors du pays. Si vous n’activez pas la sauvegarde et ne vous abonnez pas, ces transferts n’ont pas lieu, et toutes les autres fonctions, dont l’écriture d’entrées, restent disponibles.',
-          ],
-        },
-      ],
-    },
-    {
-      appliesFrom: 'À compter du jour de publication de la version contenant les rapports de synthèse par IA',
-      summary:
-        'Les rapports de synthèse par IA sont ajoutés. Uniquement lorsque vous créez vous-même un rapport, le contenu du journal de cette période transite non chiffré par le serveur de l’exploitant et est envoyé au fournisseur d’IA. L’exploitant ne conserve pas le contenu du journal, mais conserve la synthèse générée pendant 90 jours afin d’améliorer la qualité des rapports. Le fournisseur d’IA la conserve au maximum 30 jours à des fins de surveillance des abus, puis la supprime, et ne l’utilise pas pour entraîner ses modèles.',
-      sections: [
-        {
-          h: 'a. Ce qui change (avant → après)',
-          body: [
-            'Avant : les titres et textes du journal ne sont pas transmis hors de votre appareil. Même si vous avez activé la sauvegarde, ils ne sont transmis que sous forme chiffrée, illisible par l’exploitant.',
-            'Après : **uniquement lorsque vous appuyez vous-même sur Créer un rapport**, le contenu du journal de cette période est envoyé **non chiffré** via le serveur de l’exploitant au fournisseur d’IA, et une synthèse est générée.',
-            '⚠ Pour être précis : l’exploitant **ne conserve pas le contenu du journal lui-même**. Toutefois, ① au moment où la synthèse est produite, le contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② **la synthèse générée est conservée 90 jours** (voir le point d). Nous l’indiquons clairement, sans l’atténuer.',
-            'Si vous ne créez pas de rapport, cette transmission n’a pas lieu du tout, et toutes les autres fonctionnalités, y compris la rédaction d’entrées, restent pleinement disponibles.',
-          ],
-        },
-        {
-          h: 'b. Consentement distinct pour les informations sensibles',
-          body: [
-            'Un journal peut contenir des informations sensibles, telles que l’état de santé ou psychologique, au sens de l’article 23 de la loi sur la protection des informations personnelles.',
-            'Les rapports de synthèse par IA traitant ce contenu non chiffré, nous recueillons un **consentement distinct au traitement des informations sensibles** lors de votre première utilisation de la fonctionnalité. Ce consentement est **distinct** du consentement au transfert à l’étranger du point (c), et vous pouvez choisir chacun séparément.',
-            'Si vous ne le donnez pas, toutes les fonctionnalités autres que les rapports par IA restent pleinement disponibles.',
-          ],
-        },
-        {
-          h: 'c. Consentement distinct pour le transfert à l’étranger',
-          body: [
-            '• OpenAI OpCo, LLC — Pays : États-Unis (1455 Third Street, San Francisco, California 94158, USA). Contact : dpo@openai.com. Les mêmes informations sont également affichées dans l’application avant le recueil du consentement.',
-            '• Éléments transférés : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport',
-            '• Finalité : générer un rapport de synthèse',
-            '• Quand et comment : transmis par le réseau lorsque vous appuyez sur Créer un rapport',
-            '• Conservation : le serveur de l’exploitant **ne conserve pas les éléments transférés (le contenu du journal)** — ils ne sont gardés en mémoire que le temps de produire la synthèse, puis supprimés. La conservation de la synthèse générée est indiquée séparément au point (d). Le fournisseur d’IA les conserve **au maximum 30 jours** à des fins de surveillance des abus puis les supprime, et même pendant cette période **ne les utilise pas pour entraîner ses modèles.**',
-            'Vous pouvez refuser le transfert à l’étranger ; dans ce cas, seuls les rapports par IA deviennent indisponibles et toutes les autres fonctionnalités restent pleinement disponibles.',
-          ],
-        },
-        {
-          h: 'd. Ce que l’exploitant conserve',
-          body: [
-            'Nous ne conservons pas le contenu du journal (titres et textes). Nous conservons ce qui suit.',
-            '• **La synthèse générée par l’IA** — conservée afin de vérifier et d’améliorer la qualité des rapports. Conservation : **90 jours à compter du jour de sa création**, après quoi elle est supprimée automatiquement.',
-            '• L’identifiant du compte ayant créé le rapport, la période, le nombre de fois et le nombre de jetons utilisés — utilisés pour la facturation et la prévention des abus. Conservation : jusqu’à la réalisation de la finalité ou jusqu’à la suppression de votre compte',
-            '⚠ La synthèse est rédigée à partir de votre journal ; elle peut donc en contenir le contenu. Nous l’indiquons clairement, sans l’atténuer.',
-            'Le rapport terminé est également enregistré **sur votre appareil** et, si vous avez activé la sauvegarde, il y est inclus sous forme chiffrée.',
-          ],
-        },
-        {
-          h: 'e. Vos droits',
-          body: [
-            '• Les rapports ne sont générés que lorsque vous les créez vous-même ; ils ne sont jamais générés automatiquement.',
-            '• Vous pouvez supprimer à tout moment dans l’application un rapport que vous avez créé.',
-            '• La suppression dans l’application l’efface de votre appareil ; la synthèse conservée sur le serveur de l’exploitant est supprimée automatiquement au bout de 90 jours. Si vous souhaitez une suppression plus rapide, vous pouvez en faire la demande via Nous contacter.',
-            '• Les synthèses générées par IA peuvent différer des faits et ne constituent ni un diagnostic ni un conseil médical ou psychologique. L’application propose un moyen de signaler une synthèse.',
-          ],
-        },
+        '• 2026-08-12 publication d’une modification à venir — introduction prévue des rapports de synthèse par IA (le texte principal n’a pas encore changé)',
+        '• 2026-08-23 modification — les deux modifications annoncées ci-dessus ont été intégrées au texte principal. Le traitement relatif à l’abonnement mensuel, à la sauvegarde/restauration et aux rapports de synthèse par IA a été ajouté aux sections 1, 2, 3, 4, 6, 8, 9 et 10.',
       ],
     },
   ],
@@ -288,14 +219,14 @@ export const PRIVACY_FR: LegalDoc = {
  *   désinstallé l’application doit pouvoir en faire la demande. C’est cette URL qu’ouvrent
  *   les évaluateurs de Play, elle ne peut donc pas rester uniquement en coréen.
  *
- * ⚠ La structure doit correspondre exactement au coréen — 5 sections (6/4/4/3/3 lignes) plus
- *   deux modifications à venir. `npm run check:legal` le vérifie.
+ * ⚠ La structure doit correspondre exactement au coréen — 6 sections (6/4/9/5/4/3 lignes)
+ *   et aucune modification à venir. `npm run check:legal` le vérifie.
  */
 export const DELETE_ACCOUNT_FR: LegalDoc = {
   title: 'Comment supprimer votre compte Jogak',
-  sourceFingerprint: 'a6b3a8b5',
-  effective: '2026-08-10',
-  updated: '2026-08-10',
+  sourceFingerprint: 'a8b0c8b9',
+  effective: '2026-08-23',
+  updated: '2026-08-23',
   intro:
     'Cette page explique comment supprimer votre compte Jogak et les données qui y sont associées. Vous pouvez aussi en faire la demande par e-mail si vous avez déjà désinstallé l’application ou si vous ne parvenez pas à vous connecter.',
   sections: [
@@ -326,6 +257,11 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
         '• L’identifiant unique de votre compte social (le « sub » Google)',
         '• Votre adresse e-mail',
         '• Le lien entre vos demandes et le compte de leur auteur',
+        '• La copie chiffrée de votre journal conservée sur le serveur (si vous avez activé la sauvegarde) — supprimée en même temps que le compte, sans attendre le délai de grâce de 90 jours.',
+        '• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)',
+        '• Les synthèses de rapports par IA conservées sur le serveur (au maximum 90 jours) et les relevés d’utilisation des rapports (période, nombre de fois, nombre de jetons)',
+        '⚠ Lors de la suppression du compte, nous détruisons d’abord la sauvegarde puis le compte : si le compte disparaissait d’abord, plus personne n’aurait le droit d’effacer cette sauvegarde. Si la destruction de la sauvegarde échoue, la suppression du compte n’a pas lieu ; il vous suffit de réessayer un peu plus tard.',
+        '⚠ La suppression est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer la sauvegarde présente sur le serveur.',
       ],
     },
     {
@@ -333,66 +269,26 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
       body: [
         'Les informations suivantes sont conservées en application de la loi et, même pendant cette durée, elles ne subsistent que sous une forme ne permettant pas de remonter à leur auteur (pseudonymisée).',
         '• Contenu des demandes : 3 ans (loi sur la protection des consommateurs dans le commerce électronique — relevés relatifs aux réclamations ou au règlement des litiges)',
+        '• Relevés de transaction d’abonnement (identifiant de transaction, produit, période d’abonnement, historique des changements d’état de paiement) : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
+        '• Relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne pas » ; l’identifiant de votre compte n’est pas conservé avec lui.',
         'Une fois la durée de conservation écoulée, nous détruisons les données sans délai.',
       ],
     },
     {
-      h: '5. Ce qui n’est pas supprimé — le journal présent sur votre appareil',
+      h: '5. Ce qui reste sur votre appareil — la suppression du compte ne l’efface pas',
       body: [
-        'Les entrées de Jogak (titres, texte, photos, tags et émotions) sont enregistrées uniquement à l’intérieur de votre appareil et ne sont pas transmises aux serveurs de l’exploitant.',
-        'La suppression de votre compte laisse donc intactes les entrées présentes sur votre appareil. Pour les effacer aussi, désinstallez l’application ou utilisez la fonction « Tout réinitialiser » dans les [Réglages] de l’application.',
-        'À l’inverse, si vous désinstallez l’application, les entrées de votre appareil ne pourront pas être récupérées.',
-      ],
-    },
-  ],
-  pending: [
-    {
-      appliesFrom:
-        'À compter du jour de publication de la version incluant l’abonnement mensuel et la sauvegarde/restauration',
-      summary:
-        'Si vous avez activé la sauvegarde, la suppression de votre compte supprime aussi la sauvegarde chiffrée conservée sur le serveur. Les relevés de transaction d’abonnement sont conservés en application de la loi, sous une forme pseudonymisée.',
-      sections: [
-        {
-          h: 'a. Données supprimées en plus',
-          body: [
-            '• La copie chiffrée de votre journal conservée sur le serveur — supprimée en même temps que votre compte. Nous n’attendons pas le délai de grâce de 90 jours.',
-            '• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)',
-            '⚠ Cette opération est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer.',
-            '⚠ Les entrées présentes sur votre appareil restent intactes. Seule la copie côté serveur est supprimée.',
-          ],
-        },
-        {
-          h: 'b. Données conservées en plus et durées',
-          body: [
-            '• Relevés de transaction d’abonnement (identifiant de transaction, produit, période d’abonnement, historique des changements d’état de paiement) : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
-            '• Le relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne plus ». L’identifiant de votre compte n’est pas conservé avec lui.',
-            'Même pendant ces durées, ces relevés ne subsistent que sous une forme ne permettant pas de remonter à leur auteur.',
-          ],
-        },
-        {
-          h: 'c. L’abonnement doit être résilié séparément',
-          body: [
-            'La suppression de votre compte ne résilie pas votre abonnement Google Play. Si vous ne le résiliez pas, vous continuerez à être facturé.',
-            'Pour résilier : application Google Play Store > profil > Paiements et abonnements > Abonnements (https://play.google.com/store/account/subscriptions)',
-            'Le remboursement des sommes déjà prélevées relève de la politique de remboursement de Google Play et de celle de l’exploitant. Vous pouvez nous écrire à l’adresse de contact indiquée ci-dessous.',
-          ],
-        },
+        'Les entrées de Jogak (titres, texte, photos, tags et émotions) et le texte des rapports par IA sont enregistrés à l’intérieur de votre appareil.',
+        'La suppression de votre compte laisse donc intacts les entrées et les rapports présents sur votre appareil. Pour les effacer aussi de l’appareil, désinstallez l’application ou lancez la réinitialisation dans les [Réglages] de l’application.',
+        'À l’inverse, si vous désinstallez l’application, les entrées de votre appareil ne pourront pas être récupérées. Vous ne pourrez les restaurer que si vous aviez activé la sauvegarde et conservé votre code de récupération, et uniquement avant la suppression de votre compte.',
+        '⚠ Si vous n’avez pas activé la sauvegarde, l’exploitant ne détient pas les entrées présentes sur votre appareil : il ne peut donc ni les supprimer ni vous les restituer.',
       ],
     },
     {
-      appliesFrom: 'À compter du jour de publication de la version incluant les rapports de synthèse par IA',
-      summary:
-        'Le texte des rapports par IA est enregistré sur votre appareil. Sur le serveur, les synthèses des rapports sont conservées au maximum 90 jours à des fins de contrôle de la qualité et sont supprimées avec vos relevés d’utilisation lors de la suppression de votre compte.',
-      sections: [
-        {
-          h: 'a. Ce qui est supprimé pour les rapports par IA',
-          body: [
-            '• Les relevés d’utilisation conservés sur le serveur (identifiant du compte, période, nombre de fois, nombre de jetons) — supprimés en même temps que votre compte.',
-            '• Les synthèses de rapports conservées sur le serveur (au maximum 90 jours) — supprimées en même temps que votre compte. Le contenu du journal n’étant jamais conservé, il n’y a rien à supprimer.',
-            '⚠ Le texte des rapports est aussi enregistré sur votre appareil et y reste après la suppression de votre compte. Pour l’effacer, supprimez les rapports dans l’application ou désinstallez celle-ci.',
-            '• Si vous avez activé la sauvegarde, les rapports y sont inclus sous forme chiffrée et sont supprimés en même temps que la sauvegarde.',
-          ],
-        },
+      h: '6. L’abonnement doit être résilié séparément',
+      body: [
+        'La suppression de votre compte ne résilie pas automatiquement votre abonnement Google Play et, si vous ne le résiliez pas, vous continuerez à être facturé.',
+        'Pour résilier : application Google Play Store > profil > Paiements et abonnements > Abonnements (https://play.google.com/store/account/subscriptions)',
+        'Le remboursement des sommes déjà prélevées relève de la politique de remboursement de Google Play et de celle de l’exploitant. Vous pouvez nous écrire à l’adresse de contact indiquée ci-dessus.',
       ],
     },
   ],

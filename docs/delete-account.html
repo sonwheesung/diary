@@ -78,7 +78,7 @@
   </nav>
     <article class="doc" data-lang="ko" lang="ko">
       <h1>조각 계정 삭제 안내</h1>
-      <p class="meta">시행일 2026-08-10 · 최종 수정일 2026-08-10</p>
+      <p class="meta">시행일 2026-08-23 · 최종 수정일 2026-08-23</p>
       <p class="intro">조각(Jogak) 앱의 계정과 관련 데이터를 삭제하는 방법을 안내합니다. 앱을 이미 삭제하셨거나 로그인할 수 없는 경우에도 이메일로 요청하실 수 있습니다.</p>
       <section>
         <h2>1. 앱에서 직접 삭제하기</h2>
@@ -102,51 +102,38 @@
         <p>• 소셜 계정 고유 식별자(구글 sub)</p>
         <p>• 이메일 주소</p>
         <p>• 문의 내역과 작성자 계정의 연결</p>
+        <p>• 서버에 보관된 암호화된 일기 사본(백업을 켜신 경우) — 90일 유예를 기다리지 않고 함께 삭제됩니다.</p>
+        <p>• 백업 식별자와 백업 기록(시각·용량·세대 번호)</p>
+        <p>• 서버에 보관 중인 AI 리포트 요약문(최대 90일)과 리포트 이용 기록(기간·횟수·토큰 수)</p>
+        <p>⚠ 탈퇴 시에는 백업을 먼저 파기한 뒤 계정을 삭제합니다. 계정이 먼저 사라지면 그 백업을 지울 권한이 있는 사람이 없어지기 때문입니다. 백업 삭제에 실패하면 탈퇴 자체가 진행되지 않으며, 잠시 후 다시 시도해 주시면 됩니다.</p>
+        <p>⚠ 삭제하면 되돌릴 수 없습니다. 복구 코드를 가지고 계셔도 서버의 백업을 복원하실 수 없습니다.</p>
       </section>
       <section>
         <h2>4. 보관되는 데이터와 기간</h2>
         <p>아래 정보는 법령에 따라 보관되며, 보관 기간 동안에도 작성자를 되짚을 수 없는 형태(가명처리)로만 남습니다.</p>
         <p>• 문의 내용: 3년 (전자상거래 등에서의 소비자보호에 관한 법률 — 소비자의 불만 또는 분쟁처리에 관한 기록)</p>
+        <p>• 구독 거래 기록(거래 식별자·상품·구독 기간·결제 상태 변경 이력): 5년 (전자상거래 등에서의 소비자보호에 관한 법률 제6조)</p>
+        <p>• 백업 파기 사실의 기록(백업 식별자와 파기 시각): 1년 — 이용자가 "왜 복원이 안 되는지" 확인하실 수 있도록 하기 위함이며, 계정 식별자는 함께 보관하지 않습니다.</p>
         <p>보관 기간이 지나면 지체 없이 파기합니다.</p>
       </section>
       <section>
-        <h2>5. 삭제 대상이 아닌 것 — 기기에 있는 일기</h2>
-        <p>조각의 일기(제목·본문·사진·태그·감정)는 이용자의 기기 내부에만 저장되며 운영자의 서버로 전송되지 않습니다.</p>
-        <p>따라서 계정을 삭제해도 기기의 일기는 그대로 남습니다. 일기까지 지우시려면 앱을 삭제하시거나, 앱의 [설정]에서 초기화를 진행해 주세요.</p>
-        <p>반대로 앱을 삭제하면 기기의 일기는 복구할 수 없습니다.</p>
+        <h2>5. 기기에 남는 것 — 탈퇴로는 지워지지 않습니다</h2>
+        <p>조각의 일기(제목·본문·사진·태그·감정)와 AI 리포트 본문은 이용자의 기기 내부에 저장됩니다.</p>
+        <p>따라서 계정을 삭제해도 기기의 일기와 리포트는 그대로 남습니다. 기기에서까지 지우시려면 앱을 삭제하시거나, 앱의 [설정]에서 초기화를 진행해 주세요.</p>
+        <p>반대로 앱을 삭제하면 기기의 일기는 복구할 수 없습니다. 백업을 켜 두셨고 복구 코드를 보관하고 계신 경우에만, 탈퇴하기 전에 한하여 되돌리실 수 있습니다.</p>
+        <p>⚠ 백업을 켜지 않으신 경우 기기의 일기는 운영자에게 없으므로 운영자가 삭제해 드릴 수도, 되돌려 드릴 수도 없습니다.</p>
       </section>
-      <section class="pending">
-        <h2>개정 예고</h2>
-        <p class="pending-when">적용 시점: 월 구독과 백업/복원 기능이 포함된 버전이 배포되는 날부터</p>
-        <p>백업을 켜신 경우, 탈퇴하면 서버에 보관된 암호화 백업도 함께 삭제됩니다. 구독 거래 기록은 법령에 따라 가명처리 후 보관됩니다.</p>
-        <h3>가. 추가로 삭제되는 데이터</h3>
-        <p>• 서버에 보관된 암호화된 일기 사본 — 탈퇴 시 함께 삭제됩니다. 90일 유예를 기다리지 않습니다.</p>
-        <p>• 백업 식별자와 백업 기록(시각·용량·세대 번호)</p>
-        <p>⚠ 삭제하면 되돌릴 수 없습니다. 복구 코드를 가지고 계셔도 복원하실 수 없습니다.</p>
-        <p>⚠ 기기에 있는 일기는 그대로 남습니다. 삭제되는 것은 서버의 사본뿐입니다.</p>
-        <h3>나. 추가로 보관되는 데이터와 기간</h3>
-        <p>• 구독 거래 기록(거래 식별자·상품·구독 기간·결제 상태 변경 이력): 5년 (전자상거래 등에서의 소비자보호에 관한 법률 제6조)</p>
-        <p>• 백업 파기 사실의 기록(백업 식별자와 파기 시각): 1년 — 이용자가 "왜 복원이 안 되는지" 확인하실 수 있도록 하기 위함이며, 계정 식별자는 함께 보관하지 않습니다.</p>
-        <p>위 기록은 보관 기간 동안에도 작성자를 되짚을 수 없는 형태로만 남습니다.</p>
-        <h3>다. 구독은 따로 해지하셔야 합니다</h3>
+      <section>
+        <h2>6. 구독은 따로 해지하셔야 합니다</h2>
         <p>탈퇴해도 구글 플레이의 구독은 자동으로 해지되지 않으며, 해지하지 않으시면 계속 청구됩니다.</p>
         <p>해지: 구글 플레이 스토어 앱 &gt; 프로필 &gt; 결제 및 정기 결제 &gt; 정기 결제 (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>이미 결제된 금액의 환불은 구글 플레이의 환불 정책과 운영자의 환불 정책에 따릅니다. 문의는 아래 연락처로 주시면 됩니다.</p>
+        <p>이미 결제된 금액의 환불은 구글 플레이의 환불 정책과 운영자의 환불 정책에 따릅니다. 문의는 위 연락처로 주시면 됩니다.</p>
       </section>
-      <section class="pending">
-        <h2>개정 예고</h2>
-        <p class="pending-when">적용 시점: AI 요약 리포트 기능이 포함된 버전이 배포되는 날부터</p>
-        <p>AI 리포트 본문은 이용자 기기에 저장됩니다. 서버에는 품질 점검을 위해 리포트 요약문이 최대 90일 보관되며, 이용 기록과 함께 탈퇴 시 삭제됩니다.</p>
-        <h3>가. AI 리포트는 무엇이 지워지나요</h3>
-        <p>• 서버에 남는 리포트 이용 기록(계정 식별자·기간·횟수·토큰 수) — 탈퇴 시 함께 삭제됩니다.</p>
-        <p>• 서버에 보관 중인 리포트 요약문(최대 90일) — 탈퇴 시 함께 삭제됩니다. 일기 원문은 저장되지 않으므로 지울 것이 없습니다.</p>
-        <p>⚠ 리포트 본문은 이용자 기기에도 저장되므로 탈퇴해도 기기에 그대로 남습니다. 지우시려면 앱에서 리포트를 삭제하시거나 앱을 삭제해 주세요.</p>
-        <p>• 백업을 켜 두셨다면 리포트도 암호화되어 백업에 포함되어 있으며, 백업이 삭제될 때 함께 삭제됩니다.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="en" lang="en" hidden>
       <h1>Jogak — How to delete your account</h1>
-      <p class="meta">Effective 2026-08-10 · Last updated 2026-08-10</p>
+      <p class="meta">Effective 2026-08-23 · Last updated 2026-08-23</p>
       <p class="governs">This is a translation for readability. Where it differs from the Korean original, the Korean version governs.</p>
       <p class="intro">This page explains how to delete your Jogak account and the data associated with it. You can also ask by email if you have already uninstalled the app or cannot sign in.</p>
       <section>
@@ -171,51 +158,38 @@
         <p>• Your social account identifier (Google "sub")</p>
         <p>• Your email address</p>
         <p>• The link between your enquiries and your account</p>
+        <p>• The encrypted copy of your diary held on the server (if you turned backup on) — deleted together with your account, without waiting out the 90-day grace period.</p>
+        <p>• The backup identifier and backup records (time, size, generation number)</p>
+        <p>• The AI report summaries held on the server (up to 90 days) and the report usage records (period, count, token counts)</p>
+        <p>⚠ On account deletion we destroy the backup first and then delete the account. If the account went first, no one would be left with the right to delete that backup. If deleting the backup fails, the account deletion does not go ahead at all; please try again shortly.</p>
+        <p>⚠ This cannot be undone. Even if you still hold your recovery code, you will not be able to restore the backup from the server.</p>
       </section>
       <section>
         <h2>4. Data that is kept, and for how long</h2>
         <p>The following is kept as required by law, and even during that period it remains only in a form that cannot be traced back to its author (pseudonymised).</p>
         <p>• Enquiry contents: 3 years (Act on Consumer Protection in Electronic Commerce — records of consumer complaints and dispute handling)</p>
+        <p>• Subscription transaction records (transaction identifier, product, subscription period, history of payment state changes): 5 years (Act on Consumer Protection in Electronic Commerce, art. 6)</p>
+        <p>• A record that a backup was destroyed (backup identifier and time of destruction): 1 year — so that you can find out "why restore no longer works". Your account identifier is not kept alongside it.</p>
         <p>Once the retention period ends we destroy it without delay.</p>
       </section>
       <section>
-        <h2>5. What is not deleted — the diary on your device</h2>
-        <p>Your Jogak entries (titles, text, photos, tags and emotions) are stored only inside your own device and are not transmitted to the operator’s servers.</p>
-        <p>So deleting your account leaves the entries on your device untouched. To erase those as well, uninstall the app or use the reset option in the app’s [Settings].</p>
-        <p>Conversely, if you uninstall the app the entries on your device cannot be recovered.</p>
+        <h2>5. What stays on your device — deleting your account does not erase it</h2>
+        <p>Your Jogak entries (titles, text, photos, tags and emotions) and the text of your AI reports are stored inside your own device.</p>
+        <p>So deleting your account leaves the entries and reports on your device untouched. To erase those from the device as well, uninstall the app or use the reset option in the app’s [Settings].</p>
+        <p>Conversely, if you uninstall the app the entries on your device cannot be recovered. Only if you had turned backup on and still keep your recovery code can you bring them back, and only before you delete your account.</p>
+        <p>⚠ If you did not turn backup on, the operator does not have the entries on your device and can neither delete them nor bring them back for you.</p>
       </section>
-      <section class="pending">
-        <h2>Upcoming amendment</h2>
-        <p class="pending-when">Applies from: From the day a version including the monthly subscription and backup/restore features is released</p>
-        <p>If you turned backup on, deleting your account also deletes the encrypted backup held on the server. Subscription transaction records are kept as required by law, pseudonymised.</p>
-        <h3>a. Data that is additionally deleted</h3>
-        <p>• The encrypted copy of your diary held on the server — deleted together with your account. We do not wait out the 90-day grace period.</p>
-        <p>• The backup identifier and backup records (time, size, generation number)</p>
-        <p>⚠ This cannot be undone. Even if you still hold your recovery code, you will not be able to restore.</p>
-        <p>⚠ The entries on your device remain untouched. Only the server-side copy is deleted.</p>
-        <h3>b. Data that is additionally kept, and for how long</h3>
-        <p>• Subscription transaction records (transaction identifier, product, subscription period, history of payment state changes): 5 years (Act on Consumer Protection in Electronic Commerce, art. 6)</p>
-        <p>• A record that a backup was destroyed (backup identifier and time of destruction): 1 year — so that you can find out "why restore no longer works". Your account identifier is not kept alongside it.</p>
-        <p>Even during those periods, these records remain only in a form that cannot be traced back to their author.</p>
-        <h3>c. You must cancel the subscription separately</h3>
+      <section>
+        <h2>6. You must cancel the subscription separately</h2>
         <p>Deleting your account does not cancel your Google Play subscription. If you do not cancel it, you will keep being charged.</p>
         <p>To cancel: Google Play Store app &gt; profile &gt; Payments and subscriptions &gt; Subscriptions (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Refunds of amounts already charged follow Google Play’s refund policy and the operator’s refund policy. Ask us using the contact address below.</p>
+        <p>Refunds of amounts already charged follow Google Play’s refund policy and the operator’s refund policy. Ask us using the contact address above.</p>
       </section>
-      <section class="pending">
-        <h2>Upcoming amendment</h2>
-        <p class="pending-when">Applies from: From the day a version including the AI summary report feature is released</p>
-        <p>AI report text is stored on your device. On the server, report summaries are kept for up to 90 days for quality review, and are deleted together with your usage records when you delete your account.</p>
-        <h3>a. What gets deleted for AI reports</h3>
-        <p>• The usage records kept on the server (account identifier, period, count, token counts) — deleted together with your account.</p>
-        <p>• The report summaries held on the server (up to 90 days) — deleted together with your account. The diary text itself is never stored, so there is nothing to delete.</p>
-        <p>⚠ Report text is also stored on your device, so it stays there after you delete your account. To erase it, delete the reports in the app or uninstall the app.</p>
-        <p>• If you turned backup on, reports are included in the backup in encrypted form and are deleted when the backup is deleted.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="ja" lang="ja" hidden>
       <h1>Jogak アカウント削除のご案内</h1>
-      <p class="meta">施行日 2026-08-10 · 最終更新日 2026-08-10</p>
+      <p class="meta">施行日 2026-08-23 · 最終更新日 2026-08-23</p>
       <p class="governs">読みやすさのための翻訳です。韓国語の原文と異なる場合は、韓国語版が優先します。</p>
       <p class="intro">Jogak アプリのアカウントと関連するデータを削除する方法をご案内します。アプリをすでに削除された場合やログインできない場合も、メールでご依頼いただけます。</p>
       <section>
@@ -240,51 +214,38 @@
         <p>• ソーシャルアカウント固有識別子（Google の sub）</p>
         <p>• メールアドレス</p>
         <p>• お問い合わせ履歴と作成者アカウントとの紐付け</p>
+        <p>• サーバーに保管された暗号化された日記の写し（バックアップをオンにされた場合） — 90日の猶予を待たずに併せて削除されます。</p>
+        <p>• バックアップ識別子とバックアップの記録（時刻・容量・世代番号）</p>
+        <p>• サーバーに保管中のAIレポートの要約文（最大90日）とレポートの利用記録（期間・回数・トークン数）</p>
+        <p>⚠ 退会時にはバックアップを先に破棄したうえでアカウントを削除します。アカウントが先になくなると、そのバックアップを消す権限を持つ人がいなくなるためです。バックアップの削除に失敗した場合は退会自体が進みませんので、しばらくしてから再度お試しください。</p>
+        <p>⚠ 削除すると元に戻せません。復旧コードをお持ちであっても、サーバーのバックアップを復元することはできません。</p>
       </section>
       <section>
         <h2>4. 保管されるデータと期間</h2>
         <p>下記の情報は法令に基づき保管され、保管期間中も作成者を遡れない形式（仮名処理）でのみ残ります。</p>
         <p>• お問い合わせ内容：3年（電子商取引等における消費者保護に関する法律 — 消費者の苦情または紛争処理に関する記録）</p>
+        <p>• サブスクリプションの取引記録（取引識別子・商品・購読期間・決済状態の変更履歴）：5年（電子商取引等における消費者保護に関する法律 第6条）</p>
+        <p>• バックアップを破棄した事実の記録（バックアップ識別子と破棄時刻）：1年 — 利用者が「なぜ復元できないのか」を確認できるようにするためであり、アカウント識別子は併せて保管しません。</p>
         <p>保管期間が過ぎたものは遅滞なく破棄します。</p>
       </section>
       <section>
-        <h2>5. 削除の対象ではないもの — 端末にある日記</h2>
-        <p>Jogak の日記（タイトル・本文・写真・タグ・感情）は利用者の端末の内部にのみ保存され、運営者のサーバーへは送信されません。</p>
-        <p>そのため、アカウントを削除されても端末の日記はそのまま残ります。日記まで消されたい場合は、アプリを削除されるか、アプリの[設定]から初期化を行ってください。</p>
-        <p>逆に、アプリを削除されると端末の日記は復元できません。</p>
+        <h2>5. 端末に残るもの — 退会では消えません</h2>
+        <p>Jogak の日記（タイトル・本文・写真・タグ・感情）とAIレポートの本文は、利用者の端末の内部に保存されます。</p>
+        <p>そのため、アカウントを削除されても端末の日記とレポートはそのまま残ります。端末からも消されたい場合は、アプリを削除されるか、アプリの[設定]から初期化を行ってください。</p>
+        <p>逆に、アプリを削除されると端末の日記は復元できません。バックアップをオンにしておられ、復旧コードを保管されている場合に限り、退会される前であれば元に戻せます。</p>
+        <p>⚠ バックアップをオンにされていない場合、端末の日記は運営者にはないため、運営者が削除して差し上げることも、元に戻して差し上げることもできません。</p>
       </section>
-      <section class="pending">
-        <h2>改定予告</h2>
-        <p class="pending-when">適用時期: 月額サブスクリプションとバックアップ/復元機能を含むバージョンが配信される日から</p>
-        <p>バックアップをオンにされていた場合、退会されるとサーバーに保管された暗号化バックアップも併せて削除されます。サブスクリプションの取引記録は法令に基づき仮名処理のうえ保管されます。</p>
-        <h3>ア．追加で削除されるデータ</h3>
-        <p>• サーバーに保管された暗号化された日記の写し — 退会時に併せて削除されます。90日の猶予を待ちません。</p>
-        <p>• バックアップ識別子とバックアップの記録（時刻・容量・世代番号）</p>
-        <p>⚠ 削除すると元に戻せません。復旧コードをお持ちであっても復元はできません。</p>
-        <p>⚠ 端末にある日記はそのまま残ります。削除されるのはサーバー上の写しだけです。</p>
-        <h3>イ．追加で保管されるデータと期間</h3>
-        <p>• サブスクリプションの取引記録（取引識別子・商品・購読期間・決済状態の変更履歴）：5年（電子商取引等における消費者保護に関する法律 第6条）</p>
-        <p>• バックアップを破棄した事実の記録（バックアップ識別子と破棄時刻）：1年 — 利用者が「なぜ復元できないのか」を確認できるようにするためであり、アカウント識別子は併せて保管しません。</p>
-        <p>上記の記録は保管期間中も作成者を遡れない形式でのみ残ります。</p>
-        <h3>ウ．サブスクリプションは別途解約していただく必要があります</h3>
+      <section>
+        <h2>6. サブスクリプションは別途解約していただく必要があります</h2>
         <p>退会されても Google Play のサブスクリプションは自動的に解約されず、解約されない限り請求が続きます。</p>
         <p>解約：Google Play ストア アプリ &gt; プロフィール &gt; お支払いと定期購入 &gt; 定期購入（<a href="https://play.google.com/store/account/subscriptions）" rel="noopener">https://play.google.com/store/account/subscriptions）</a></p>
-        <p>すでに決済された金額の返金は、Google Play の返金ポリシーおよび運営者の返金ポリシーに従います。お問い合わせは下記の連絡先までお願いいたします。</p>
+        <p>すでに決済された金額の返金は、Google Play の返金ポリシーおよび運営者の返金ポリシーに従います。お問い合わせは上記の連絡先までお願いいたします。</p>
       </section>
-      <section class="pending">
-        <h2>改定予告</h2>
-        <p class="pending-when">適用時期: AI要約レポート機能を含むバージョンが配信される日から</p>
-        <p>AIレポートの本文は利用者の端末に保存されます。サーバーには品質確認のためレポートの要約文が最大90日間保管され、利用記録とともに退会時に削除されます。</p>
-        <h3>ア．AIレポートは何が消えますか</h3>
-        <p>• サーバーに残るレポートの利用記録（アカウント識別子・期間・回数・トークン数） — 退会時に併せて削除されます。</p>
-        <p>• サーバーに保管中のレポートの要約文（最大90日） — 退会時に併せて削除されます。日記の原文は保存されないため、消すものがありません。</p>
-        <p>⚠ レポートの本文は利用者の端末にも保存されるため、退会されても端末にはそのまま残ります。消されたい場合は、アプリでレポートを削除されるか、アプリを削除してください。</p>
-        <p>• バックアップをオンにされていた場合、レポートも暗号化されてバックアップに含まれており、バックアップが削除される際に併せて削除されます。</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="zh-Hans" lang="zh-Hans" hidden>
       <h1>Jogak 账号删除说明</h1>
-      <p class="meta">生效日 2026-08-10 · 最后更新 2026-08-10</p>
+      <p class="meta">生效日 2026-08-23 · 最后更新 2026-08-23</p>
       <p class="governs">本文为便于阅读的译文。如与韩文原文有出入，以韩文版为准。</p>
       <p class="intro">本页说明如何删除 Jogak 应用的账号及相关数据。即使您已卸载应用或无法登录，也可以通过电子邮件提出请求。</p>
       <section>
@@ -309,51 +270,38 @@
         <p>• 社交账号唯一标识符（Google sub）</p>
         <p>• 电子邮件地址</p>
         <p>• 咨询记录与提交者账号之间的关联</p>
+        <p>• 保存在服务器上的加密日记副本（若您开启了备份）— 不等待90天的宽限期，一并删除。</p>
+        <p>• 备份标识符与备份记录（时间、容量、世代编号）</p>
+        <p>• 保存在服务器上的 AI 报告摘要（最长 90 天）与报告使用记录（期间、次数、令牌数）</p>
+        <p>⚠ 注销账号时我们先销毁备份再删除账号。因为账号若先消失，就再没有人有权限删除那份备份。若备份删除失败，注销本身也不会继续，请稍后再试。</p>
+        <p>⚠ 删除后无法撤销。即使您仍持有恢复代码，也无法再恢复服务器上的备份。</p>
       </section>
       <section>
         <h2>4. 会被保存的数据及期限</h2>
         <p>下列信息依法保存，且在保存期间内也仅以无法追溯到作者的形式（假名化处理）留存。</p>
         <p>• 咨询内容：3年（《电子商务等消费者保护法》— 关于消费者投诉或纠纷处理的记录）</p>
+        <p>• 订阅交易记录（交易标识符、商品、订阅期间、付款状态变更历史）：5年（《电子商务等消费者保护法》第6条）</p>
+        <p>• 备份销毁事实的记录（备份标识符与销毁时间）：1年 — 以便您确认“为什么无法恢复”，且不会一并保存账号标识符。</p>
         <p>保有期限届满后，我们会立即销毁。</p>
       </section>
       <section>
-        <h2>5. 不在删除范围内的内容 — 设备上的日记</h2>
-        <p>Jogak 的日记（标题、正文、照片、标签与情绪）仅保存在用户设备内部，不会发送到运营者的服务器。</p>
-        <p>因此，即使删除账号，设备上的日记仍会原样保留。若您想连日记一并清除，请卸载应用，或在应用的[设置]中执行重置。</p>
-        <p>反之，一旦卸载应用，设备上的日记将无法恢复。</p>
+        <h2>5. 会留在设备上的内容 — 注销账号并不会清除</h2>
+        <p>Jogak 的日记（标题、正文、照片、标签与情绪）与 AI 报告的正文保存在用户设备内部。</p>
+        <p>因此，即使删除账号，设备上的日记与报告仍会原样保留。若您想连设备上的内容一并清除，请卸载应用，或在应用的[设置]中执行重置。</p>
+        <p>反之，一旦卸载应用，设备上的日记将无法恢复。只有在您已开启备份并保管着恢复代码时，才可以在注销账号之前将其取回。</p>
+        <p>⚠ 若您未开启备份，设备上的日记运营者并不持有，因此运营者既无法代为删除，也无法代为取回。</p>
       </section>
-      <section class="pending">
-        <h2>修订预告</h2>
-        <p class="pending-when">适用时间：自包含按月订阅与备份/恢复功能的版本发布之日起</p>
-        <p>若您已开启备份，注销账号时保存在服务器上的加密备份也会一并删除。订阅交易记录将依法在假名化处理后保存。</p>
-        <h3>甲. 额外删除的数据</h3>
-        <p>• 保存在服务器上的加密日记副本 — 注销账号时一并删除。我们不会等待90天的宽限期。</p>
-        <p>• 备份标识符与备份记录（时间、容量、世代编号）</p>
-        <p>⚠ 删除后无法撤销。即使您仍持有恢复代码，也无法再进行恢复。</p>
-        <p>⚠ 设备上的日记仍会原样保留。被删除的只有服务器上的副本。</p>
-        <h3>乙. 额外保存的数据及期限</h3>
-        <p>• 订阅交易记录（交易标识符、商品、订阅期间、付款状态变更历史）：5年（《电子商务等消费者保护法》第6条）</p>
-        <p>• 备份销毁事实的记录（备份标识符与销毁时间）：1年 — 以便您确认“为什么无法恢复”，且不会一并保存账号标识符。</p>
-        <p>上述记录在保存期间内也仅以无法追溯到作者的形式留存。</p>
-        <h3>丙. 订阅需要您另行取消</h3>
+      <section>
+        <h2>6. 订阅需要您另行取消</h2>
         <p>注销账号不会自动取消 Google Play 的订阅，若不取消将继续扣费。</p>
         <p>取消方式：Google Play 商店应用 &gt; 个人资料 &gt; 付款和订阅 &gt; 订阅（<a href="https://play.google.com/store/account/subscriptions）" rel="noopener">https://play.google.com/store/account/subscriptions）</a></p>
-        <p>已扣款金额的退款依 Google Play 的退款政策与运营者的退款政策处理。如有疑问，请通过下方联系方式与我们联系。</p>
+        <p>已扣款金额的退款依 Google Play 的退款政策与运营者的退款政策处理。如有疑问，请通过上方联系方式与我们联系。</p>
       </section>
-      <section class="pending">
-        <h2>修订预告</h2>
-        <p class="pending-when">适用时间：自包含 AI 摘要报告功能的版本发布之日起</p>
-        <p>AI 报告的正文保存在用户设备上。服务器上为质量检查最多保留报告摘要 90 天，并在您注销账号时与使用记录一并删除。</p>
-        <h3>甲. AI 报告会删除哪些内容</h3>
-        <p>• 保存在服务器上的报告使用记录（账号标识符、期间、次数、令牌数）— 注销账号时一并删除。</p>
-        <p>• 保存在服务器上的报告摘要（最长 90 天）— 注销账号时一并删除。日记原文不会被保存，因此没有可删除的内容。</p>
-        <p>⚠ 报告正文也保存在用户设备上，因此注销账号后仍会原样留在设备上。若要清除，请在应用中删除报告，或卸载应用。</p>
-        <p>• 若您已开启备份，报告也会以加密形式包含在备份中，并在备份被删除时一并删除。</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="zh-Hant" lang="zh-Hant" hidden>
       <h1>Jogak 帳號刪除說明</h1>
-      <p class="meta">生效日 2026-08-10 · 最後更新 2026-08-10</p>
+      <p class="meta">生效日 2026-08-23 · 最後更新 2026-08-23</p>
       <p class="governs">本文為便於閱讀的譯文。如與韓文原文有出入，以韓文版為準。</p>
       <p class="intro">本頁說明如何刪除 Jogak 應用程式的帳號及相關資料。即使您已解除安裝應用程式或無法登入，也可以透過電子郵件提出請求。</p>
       <section>
@@ -378,51 +326,38 @@
         <p>• 社群帳號唯一識別碼（Google sub）</p>
         <p>• 電子郵件地址</p>
         <p>• 詢問紀錄與提出者帳號之間的關聯</p>
+        <p>• 保存在伺服器上的加密日記副本（若您已開啟備份）— 不等待90天的寬限期，一併刪除。</p>
+        <p>• 備份識別碼與備份紀錄（時間、容量、世代編號）</p>
+        <p>• 保存在伺服器上的 AI 報告摘要（最長 90 天）與報告使用紀錄（期間、次數、權杖數）</p>
+        <p>⚠ 刪除帳號時我們先銷毀備份再刪除帳號。因為帳號若先消失，就再沒有人有權限刪除那份備份。若備份刪除失敗，刪除帳號本身也不會繼續，請稍後再試。</p>
+        <p>⚠ 刪除後無法復原。即使您仍持有復原代碼，也無法再還原伺服器上的備份。</p>
       </section>
       <section>
         <h2>4. 會被保存的資料及期間</h2>
         <p>下列資訊依法保存，且於保存期間內也僅以無法追溯至作成者的形式（假名化處理）留存。</p>
         <p>• 詢問內容：3年（《電子商務等消費者保護法》— 關於消費者申訴或爭議處理的紀錄）</p>
+        <p>• 訂閱交易紀錄（交易識別碼、商品、訂閱期間、付款狀態變更歷程）：5年（《電子商務等消費者保護法》第6條）</p>
+        <p>• 備份銷毀事實的紀錄（備份識別碼與銷毀時間）：1年 — 以便您確認「為什麼無法還原」，且不會一併保存帳號識別碼。</p>
         <p>保有期間屆滿後，我們會立即銷毀。</p>
       </section>
       <section>
-        <h2>5. 不在刪除範圍內的內容 — 裝置上的日記</h2>
-        <p>Jogak 的日記（標題、內文、照片、標籤與情緒）僅保存在使用者裝置內部，不會傳送至營運者的伺服器。</p>
-        <p>因此，即使刪除帳號，裝置上的日記仍會原樣保留。若您想連日記一併清除，請解除安裝應用程式，或在應用程式的[設定]中執行重設。</p>
-        <p>反之，一旦解除安裝應用程式，裝置上的日記將無法復原。</p>
+        <h2>5. 會留在裝置上的內容 — 刪除帳號並不會清除</h2>
+        <p>Jogak 的日記（標題、內文、照片、標籤與情緒）與 AI 報告的內文保存在使用者裝置內部。</p>
+        <p>因此，即使刪除帳號，裝置上的日記與報告仍會原樣保留。若您想連裝置上的內容一併清除，請解除安裝應用程式，或在應用程式的[設定]中執行重設。</p>
+        <p>反之，一旦解除安裝應用程式，裝置上的日記將無法復原。只有在您已開啟備份並保管著復原代碼時，才可以在刪除帳號之前將其取回。</p>
+        <p>⚠ 若您未開啟備份，裝置上的日記營運者並未持有，因此營運者既無法代為刪除，也無法代為取回。</p>
       </section>
-      <section class="pending">
-        <h2>修訂預告</h2>
-        <p class="pending-when">適用時間：自包含按月訂閱與備份/還原功能的版本發布之日起</p>
-        <p>若您已開啟備份，刪除帳號時保存在伺服器上的加密備份也會一併刪除。訂閱交易紀錄將依法於假名化處理後保存。</p>
-        <h3>甲. 額外刪除的資料</h3>
-        <p>• 保存在伺服器上的加密日記副本 — 刪除帳號時一併刪除。我們不會等待90天的寬限期。</p>
-        <p>• 備份識別碼與備份紀錄（時間、容量、世代編號）</p>
-        <p>⚠ 刪除後無法復原。即使您仍持有復原代碼，也無法再進行還原。</p>
-        <p>⚠ 裝置上的日記仍會原樣保留。被刪除的只有伺服器上的副本。</p>
-        <h3>乙. 額外保存的資料及期間</h3>
-        <p>• 訂閱交易紀錄（交易識別碼、商品、訂閱期間、付款狀態變更歷程）：5年（《電子商務等消費者保護法》第6條）</p>
-        <p>• 備份銷毀事實的紀錄（備份識別碼與銷毀時間）：1年 — 以便您確認「為什麼無法還原」，且不會一併保存帳號識別碼。</p>
-        <p>上述紀錄於保存期間內也僅以無法追溯至作成者的形式留存。</p>
-        <h3>丙. 訂閱需要您另行取消</h3>
+      <section>
+        <h2>6. 訂閱需要您另行取消</h2>
         <p>刪除帳號不會自動取消 Google Play 的訂閱，若不取消將持續扣款。</p>
         <p>取消方式：Google Play 商店應用程式 &gt; 個人資料 &gt; 付款與訂閱 &gt; 訂閱項目（<a href="https://play.google.com/store/account/subscriptions）" rel="noopener">https://play.google.com/store/account/subscriptions）</a></p>
-        <p>已扣款金額的退款依 Google Play 的退款政策與營運者的退款政策處理。如有疑問，請透過下方聯絡方式與我們聯繫。</p>
+        <p>已扣款金額的退款依 Google Play 的退款政策與營運者的退款政策處理。如有疑問，請透過上方聯絡方式與我們聯繫。</p>
       </section>
-      <section class="pending">
-        <h2>修訂預告</h2>
-        <p class="pending-when">適用時間：自包含 AI 摘要報告功能的版本發布之日起</p>
-        <p>AI 報告的內文保存在使用者裝置上。伺服器上為品質檢查最多保留報告摘要 90 天，並在您刪除帳號時與使用紀錄一併刪除。</p>
-        <h3>甲. AI 報告會刪除哪些內容</h3>
-        <p>• 保存在伺服器上的報告使用紀錄（帳號識別碼、期間、次數、權杖數）— 刪除帳號時一併刪除。</p>
-        <p>• 保存在伺服器上的報告摘要（最長 90 天）— 刪除帳號時一併刪除。日記原文不會被保存，因此沒有可刪除的內容。</p>
-        <p>⚠ 報告內文也保存在使用者裝置上，因此刪除帳號後仍會原樣留在裝置上。若要清除，請在應用程式中刪除報告，或解除安裝應用程式。</p>
-        <p>• 若您已開啟備份，報告也會以加密形式包含在備份中，並在備份被刪除時一併刪除。</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="es" lang="es" hidden>
       <h1>Cómo eliminar tu cuenta de Jogak</h1>
-      <p class="meta">En vigor desde 2026-08-10 · Última actualización 2026-08-10</p>
+      <p class="meta">En vigor desde 2026-08-23 · Última actualización 2026-08-23</p>
       <p class="governs">Esta es una traducción para facilitar la lectura. En caso de discrepancia con el original en coreano, prevalece la versión coreana.</p>
       <p class="intro">Esta página explica cómo eliminar tu cuenta de Jogak y los datos asociados a ella. También puedes solicitarlo por correo electrónico si ya has desinstalado la aplicación o no puedes iniciar sesión.</p>
       <section>
@@ -447,51 +382,38 @@
         <p>• El identificador único de tu cuenta social (el «sub» de Google)</p>
         <p>• Tu dirección de correo electrónico</p>
         <p>• El vínculo entre tus consultas y la cuenta de quien las escribió</p>
+        <p>• La copia cifrada de tu diario guardada en el servidor (si activaste la copia de seguridad): se elimina con la cuenta, sin esperar los 90 días de gracia.</p>
+        <p>• El identificador de la copia y los registros de copia (hora, tamaño, número de generación)</p>
+        <p>• Los resúmenes de informes con IA conservados en el servidor (hasta 90 días) y los registros de uso de los informes (periodo, número de veces, número de tokens)</p>
+        <p>⚠ Al eliminar la cuenta destruimos primero la copia de seguridad y después la cuenta: si la cuenta desapareciera antes, ya no quedaría nadie con permiso para borrar esa copia. Si la eliminación de la copia falla, la eliminación de la cuenta no llega a realizarse; basta con que lo intentes de nuevo un poco más tarde.</p>
+        <p>⚠ La eliminación no se puede deshacer. Aunque conserves tu código de recuperación, no podrás restaurar la copia guardada en el servidor.</p>
       </section>
       <section>
         <h2>4. Datos que se conservan y durante cuánto tiempo</h2>
         <p>La siguiente información se conserva conforme a la ley y, incluso durante ese plazo, solo permanece en una forma que no permite rastrear a su autor (seudonimizada).</p>
         <p>• Contenido de las consultas: 3 años (Ley de Protección del Consumidor en el Comercio Electrónico — registros sobre reclamaciones o resolución de conflictos)</p>
+        <p>• Registros de transacción de la suscripción (identificador de la transacción, producto, periodo de suscripción, historial de cambios del estado de pago): 5 años (Ley de Protección del Consumidor en el Comercio Electrónico, art. 6)</p>
+        <p>• Registro de la destrucción de una copia de seguridad (identificador de la copia y hora de la destrucción): 1 año, para que puedas averiguar «por qué no funciona la restauración»; el identificador de tu cuenta no se conserva junto a él.</p>
         <p>Una vez transcurrido el plazo de conservación, destruimos los datos sin demora.</p>
       </section>
       <section>
-        <h2>5. Lo que no se elimina — el diario que está en tu dispositivo</h2>
-        <p>Las entradas de Jogak (títulos, texto, fotos, etiquetas y emociones) se guardan únicamente dentro de tu dispositivo y no se transmiten a los servidores del operador.</p>
-        <p>Por eso, eliminar tu cuenta deja intactas las entradas de tu dispositivo. Si también quieres borrarlas, desinstala la aplicación o usa la función «Restablecer todo» en los [Ajustes] de la aplicación.</p>
-        <p>A la inversa, si desinstalas la aplicación, las entradas de tu dispositivo no se podrán recuperar.</p>
+        <h2>5. Lo que queda en tu dispositivo: eliminar la cuenta no lo borra</h2>
+        <p>Las entradas de Jogak (títulos, texto, fotos, etiquetas y emociones) y el texto de los informes con IA se guardan dentro de tu dispositivo.</p>
+        <p>Por eso, eliminar tu cuenta deja intactos las entradas y los informes de tu dispositivo. Si también quieres borrarlos del dispositivo, desinstala la aplicación o usa el restablecimiento en los [Ajustes] de la aplicación.</p>
+        <p>A la inversa, si desinstalas la aplicación, las entradas de tu dispositivo no se podrán recuperar. Solo podrás recuperarlas si habías activado la copia de seguridad y conservas tu código de recuperación, y únicamente antes de eliminar tu cuenta.</p>
+        <p>⚠ Si no activaste la copia de seguridad, el operador no dispone de las entradas de tu dispositivo, por lo que no puede ni eliminarlas ni devolvértelas.</p>
       </section>
-      <section class="pending">
-        <h2>Modificación prevista</h2>
-        <p class="pending-when">Se aplica desde: Desde el día en que se publique la versión que incluye la suscripción mensual y la copia de seguridad/restauración</p>
-        <p>Si activaste la copia de seguridad, al eliminar tu cuenta se elimina también la copia cifrada guardada en el servidor. Los registros de transacción de la suscripción se conservan conforme a la ley, en forma seudonimizada.</p>
-        <h3>a. Datos que se eliminan adicionalmente</h3>
-        <p>• La copia cifrada de tu diario guardada en el servidor — se elimina junto con tu cuenta. No esperamos los 90 días de gracia.</p>
-        <p>• El identificador de la copia y los registros de copia (hora, tamaño, número de generación)</p>
-        <p>⚠ Esto no se puede deshacer. Aunque conserves tu código de recuperación, no podrás restaurar.</p>
-        <p>⚠ Las entradas de tu dispositivo quedan intactas. Solo se elimina la copia del servidor.</p>
-        <h3>b. Datos que se conservan adicionalmente y durante cuánto tiempo</h3>
-        <p>• Registros de transacción de la suscripción (identificador de la transacción, producto, periodo de suscripción, historial de cambios del estado de pago): 5 años (Ley de Protección del Consumidor en el Comercio Electrónico, art. 6)</p>
-        <p>• El registro de que una copia de seguridad fue destruida (identificador de la copia y hora de la destrucción): 1 año — para que puedas averiguar «por qué no funciona la restauración». El identificador de tu cuenta no se conserva junto a él.</p>
-        <p>Incluso durante esos plazos, estos registros solo permanecen en una forma que no permite rastrear a su autor.</p>
-        <h3>c. La suscripción debes cancelarla por separado</h3>
-        <p>Eliminar tu cuenta no cancela tu suscripción de Google Play. Si no la cancelas, se te seguirá cobrando.</p>
+      <section>
+        <h2>6. La suscripción debes cancelarla por separado</h2>
+        <p>Eliminar tu cuenta no cancela automáticamente tu suscripción de Google Play y, si no la cancelas, se te seguirá cobrando.</p>
         <p>Para cancelar: aplicación Google Play Store &gt; perfil &gt; Pagos y suscripciones &gt; Suscripciones (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>El reembolso de los importes ya cobrados se rige por la política de reembolsos de Google Play y por la del operador. Puedes consultarnos en la dirección de contacto indicada más abajo.</p>
+        <p>El reembolso de los importes ya cobrados se rige por la política de reembolsos de Google Play y por la del operador. Puedes consultarnos en la dirección de contacto indicada más arriba.</p>
       </section>
-      <section class="pending">
-        <h2>Modificación prevista</h2>
-        <p class="pending-when">Se aplica desde: Desde el día en que se publique la versión que incluye los informes de resumen con IA</p>
-        <p>El texto de los informes con IA se guarda en tu dispositivo. En el servidor, los resúmenes de los informes se conservan hasta 90 días para comprobar su calidad y se eliminan junto con tus registros de uso cuando eliminas tu cuenta.</p>
-        <h3>a. Qué se elimina en los informes con IA</h3>
-        <p>• Los registros de uso guardados en el servidor (identificador de la cuenta, periodo, número de veces, número de tokens) — se eliminan junto con tu cuenta.</p>
-        <p>• Los resúmenes de los informes conservados en el servidor (hasta 90 días) — se eliminan junto con tu cuenta. El contenido del diario no se almacena, así que no hay nada que borrar.</p>
-        <p>⚠ El texto de los informes también se guarda en tu dispositivo, por lo que permanece allí aunque elimines tu cuenta. Para borrarlo, elimina los informes en la aplicación o desinstálala.</p>
-        <p>• Si activaste la copia de seguridad, los informes se incluyen cifrados en ella y se eliminan cuando la copia se elimina.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="pt-BR" lang="pt-BR" hidden>
       <h1>Como excluir sua conta do Jogak</h1>
-      <p class="meta">Em vigor desde 2026-08-10 · Última atualização 2026-08-10</p>
+      <p class="meta">Em vigor desde 2026-08-23 · Última atualização 2026-08-23</p>
       <p class="governs">Esta é uma tradução para facilitar a leitura. Em caso de divergência com o original em coreano, prevalece a versão coreana.</p>
       <p class="intro">Esta página explica como excluir sua conta do Jogak e os dados associados a ela. Você também pode pedir a exclusão por e-mail caso já tenha desinstalado o app ou não consiga fazer login.</p>
       <section>
@@ -516,51 +438,38 @@
         <p>• O identificador único da sua conta social (o “sub” do Google)</p>
         <p>• Seu endereço de e-mail</p>
         <p>• O vínculo entre suas mensagens e a conta de quem as escreveu</p>
+        <p>• A cópia criptografada do seu diário guardada no servidor (se você ativou o backup) — excluída junto com a conta, sem esperar os 90 dias de carência.</p>
+        <p>• O identificador do backup e os registros de backup (horário, tamanho, número da geração)</p>
+        <p>• Os resumos de relatórios por IA mantidos no servidor (por até 90 dias) e os registros de uso dos relatórios (período, número de vezes, quantidade de tokens)</p>
+        <p>⚠ Na exclusão da conta, destruímos primeiro o backup e depois a conta: se a conta sumisse antes, não sobraria ninguém com permissão para apagar esse backup. Se a exclusão do backup falhar, a exclusão da conta não chega a acontecer; basta tentar de novo daqui a pouco.</p>
+        <p>⚠ A exclusão não pode ser desfeita. Mesmo que você ainda tenha seu código de recuperação, não será possível restaurar o backup do servidor.</p>
       </section>
       <section>
         <h2>4. Dados que são mantidos e por quanto tempo</h2>
         <p>As informações a seguir são mantidas conforme a lei e, mesmo durante esse prazo, permanecem apenas em uma forma que não permite rastrear quem as escreveu (pseudonimizada).</p>
         <p>• Conteúdo das mensagens: 3 anos (Lei de Proteção ao Consumidor no Comércio Eletrônico — registros sobre reclamações ou solução de conflitos)</p>
+        <p>• Registros de transação da assinatura (identificador da transação, produto, período de assinatura, histórico de mudanças do status de pagamento): 5 anos (Lei de Proteção ao Consumidor no Comércio Eletrônico, art. 6)</p>
+        <p>• Registro da destruição de um backup (identificador do backup e horário da destruição): 1 ano — para que você possa descobrir “por que a restauração não funciona”; o identificador da sua conta não é mantido junto.</p>
         <p>Decorrido o prazo de retenção, destruímos os dados sem demora.</p>
       </section>
       <section>
-        <h2>5. O que não é excluído — o diário que está no seu dispositivo</h2>
-        <p>Os registros do Jogak (títulos, texto, fotos, tags e emoções) ficam guardados somente dentro do seu dispositivo e não são transmitidos aos servidores da operadora.</p>
-        <p>Por isso, excluir sua conta deixa intactos os registros do seu dispositivo. Para apagá-los também, desinstale o app ou use a função “Redefinir tudo” nos [Ajustes] do app.</p>
-        <p>Por outro lado, se você desinstalar o app, os registros do dispositivo não poderão ser recuperados.</p>
+        <h2>5. O que fica no dispositivo — excluir a conta não apaga isso</h2>
+        <p>Os registros do Jogak (títulos, texto, fotos, tags e emoções) e o texto dos relatórios por IA ficam guardados dentro do seu dispositivo.</p>
+        <p>Por isso, excluir sua conta deixa intactos os registros e os relatórios do seu dispositivo. Para apagá-los também do dispositivo, desinstale o app ou faça a redefinição nos [Ajustes] do app.</p>
+        <p>Por outro lado, se você desinstalar o app, os registros do dispositivo não poderão ser recuperados. Só será possível recuperá-los se você tiver ativado o backup e guardado o código de recuperação, e apenas antes de excluir sua conta.</p>
+        <p>⚠ Se você não tiver ativado o backup, a operadora não tem os registros do seu dispositivo e, portanto, não pode nem excluí-los nem devolvê-los a você.</p>
       </section>
-      <section class="pending">
-        <h2>Alteração prevista</h2>
-        <p class="pending-when">Aplica-se a partir de: A partir do dia em que for publicada a versão que inclui a assinatura mensal e o backup/restauração</p>
-        <p>Se você tiver ativado o backup, excluir sua conta também exclui o backup criptografado guardado no servidor. Os registros de transação da assinatura são mantidos conforme a lei, em forma pseudonimizada.</p>
-        <h3>a. Dados excluídos adicionalmente</h3>
-        <p>• A cópia criptografada do seu diário guardada no servidor — excluída junto com sua conta. Não esperamos os 90 dias de carência.</p>
-        <p>• O identificador do backup e os registros de backup (horário, tamanho, número da geração)</p>
-        <p>⚠ Isso não pode ser desfeito. Mesmo que você ainda tenha seu código de recuperação, não será possível restaurar.</p>
-        <p>⚠ Os registros do seu dispositivo permanecem intactos. Só a cópia do servidor é excluída.</p>
-        <h3>b. Dados mantidos adicionalmente e por quanto tempo</h3>
-        <p>• Registros de transação da assinatura (identificador da transação, produto, período de assinatura, histórico de mudanças do status de pagamento): 5 anos (Lei de Proteção ao Consumidor no Comércio Eletrônico, art. 6)</p>
-        <p>• O registro de que um backup foi destruído (identificador do backup e horário da destruição): 1 ano — para que você possa descobrir “por que a restauração não funciona”. O identificador da sua conta não é mantido junto.</p>
-        <p>Mesmo durante esses prazos, esses registros permanecem apenas em uma forma que não permite rastrear quem os escreveu.</p>
-        <h3>c. A assinatura precisa ser cancelada separadamente</h3>
-        <p>Excluir sua conta não cancela sua assinatura do Google Play. Se você não cancelá-la, continuará sendo cobrado.</p>
+      <section>
+        <h2>6. A assinatura precisa ser cancelada separadamente</h2>
+        <p>Excluir sua conta não cancela automaticamente sua assinatura do Google Play e, se você não cancelá-la, continuará sendo cobrado.</p>
         <p>Para cancelar: app Google Play Store &gt; perfil &gt; Pagamentos e assinaturas &gt; Assinaturas (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>O reembolso de valores já cobrados segue a política de reembolso do Google Play e a política de reembolso da operadora. Fale conosco pelo contato indicado abaixo.</p>
+        <p>O reembolso de valores já cobrados segue a política de reembolso do Google Play e a política de reembolso da operadora. Fale conosco pelo contato indicado acima.</p>
       </section>
-      <section class="pending">
-        <h2>Alteração prevista</h2>
-        <p class="pending-when">Aplica-se a partir de: A partir do dia em que a versão com os relatórios de resumo por IA for publicada</p>
-        <p>O texto dos relatórios de IA fica guardado no seu dispositivo. No servidor, os resumos dos relatórios são mantidos por até 90 dias para verificação de qualidade e são excluídos junto com seus registros de uso quando você exclui sua conta.</p>
-        <h3>a. O que é excluído nos relatórios por IA</h3>
-        <p>• Os registros de uso mantidos no servidor (identificador da conta, período, número de vezes, quantidade de tokens) — excluídos junto com sua conta.</p>
-        <p>• Os resumos dos relatórios mantidos no servidor (por até 90 dias) — excluídos junto com sua conta. O conteúdo do diário não é armazenado, portanto não há nada a apagar.</p>
-        <p>⚠ O texto dos relatórios também fica guardado no seu dispositivo, então permanece lá mesmo depois de você excluir sua conta. Para apagá-lo, exclua os relatórios no app ou desinstale o app.</p>
-        <p>• Se você tiver ativado o backup, os relatórios são incluídos nele de forma criptografada e são excluídos quando o backup é excluído.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="fr" lang="fr" hidden>
       <h1>Comment supprimer votre compte Jogak</h1>
-      <p class="meta">En vigueur le 2026-08-10 · Dernière mise à jour 2026-08-10</p>
+      <p class="meta">En vigueur le 2026-08-23 · Dernière mise à jour 2026-08-23</p>
       <p class="governs">Ceci est une traduction de confort. En cas de divergence avec l’original coréen, la version coréenne prévaut.</p>
       <p class="intro">Cette page explique comment supprimer votre compte Jogak et les données qui y sont associées. Vous pouvez aussi en faire la demande par e-mail si vous avez déjà désinstallé l’application ou si vous ne parvenez pas à vous connecter.</p>
       <section>
@@ -585,51 +494,38 @@
         <p>• L’identifiant unique de votre compte social (le « sub » Google)</p>
         <p>• Votre adresse e-mail</p>
         <p>• Le lien entre vos demandes et le compte de leur auteur</p>
+        <p>• La copie chiffrée de votre journal conservée sur le serveur (si vous avez activé la sauvegarde) — supprimée en même temps que le compte, sans attendre le délai de grâce de 90 jours.</p>
+        <p>• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)</p>
+        <p>• Les synthèses de rapports par IA conservées sur le serveur (au maximum 90 jours) et les relevés d’utilisation des rapports (période, nombre de fois, nombre de jetons)</p>
+        <p>⚠ Lors de la suppression du compte, nous détruisons d’abord la sauvegarde puis le compte : si le compte disparaissait d’abord, plus personne n’aurait le droit d’effacer cette sauvegarde. Si la destruction de la sauvegarde échoue, la suppression du compte n’a pas lieu ; il vous suffit de réessayer un peu plus tard.</p>
+        <p>⚠ La suppression est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer la sauvegarde présente sur le serveur.</p>
       </section>
       <section>
         <h2>4. Données conservées et durées</h2>
         <p>Les informations suivantes sont conservées en application de la loi et, même pendant cette durée, elles ne subsistent que sous une forme ne permettant pas de remonter à leur auteur (pseudonymisée).</p>
         <p>• Contenu des demandes : 3 ans (loi sur la protection des consommateurs dans le commerce électronique — relevés relatifs aux réclamations ou au règlement des litiges)</p>
+        <p>• Relevés de transaction d’abonnement (identifiant de transaction, produit, période d’abonnement, historique des changements d’état de paiement) : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)</p>
+        <p>• Relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne pas » ; l’identifiant de votre compte n’est pas conservé avec lui.</p>
         <p>Une fois la durée de conservation écoulée, nous détruisons les données sans délai.</p>
       </section>
       <section>
-        <h2>5. Ce qui n’est pas supprimé — le journal présent sur votre appareil</h2>
-        <p>Les entrées de Jogak (titres, texte, photos, tags et émotions) sont enregistrées uniquement à l’intérieur de votre appareil et ne sont pas transmises aux serveurs de l’exploitant.</p>
-        <p>La suppression de votre compte laisse donc intactes les entrées présentes sur votre appareil. Pour les effacer aussi, désinstallez l’application ou utilisez la fonction « Tout réinitialiser » dans les [Réglages] de l’application.</p>
-        <p>À l’inverse, si vous désinstallez l’application, les entrées de votre appareil ne pourront pas être récupérées.</p>
+        <h2>5. Ce qui reste sur votre appareil — la suppression du compte ne l’efface pas</h2>
+        <p>Les entrées de Jogak (titres, texte, photos, tags et émotions) et le texte des rapports par IA sont enregistrés à l’intérieur de votre appareil.</p>
+        <p>La suppression de votre compte laisse donc intacts les entrées et les rapports présents sur votre appareil. Pour les effacer aussi de l’appareil, désinstallez l’application ou lancez la réinitialisation dans les [Réglages] de l’application.</p>
+        <p>À l’inverse, si vous désinstallez l’application, les entrées de votre appareil ne pourront pas être récupérées. Vous ne pourrez les restaurer que si vous aviez activé la sauvegarde et conservé votre code de récupération, et uniquement avant la suppression de votre compte.</p>
+        <p>⚠ Si vous n’avez pas activé la sauvegarde, l’exploitant ne détient pas les entrées présentes sur votre appareil : il ne peut donc ni les supprimer ni vous les restituer.</p>
       </section>
-      <section class="pending">
-        <h2>Modification à venir</h2>
-        <p class="pending-when">Applicable à partir de : À compter du jour de publication de la version incluant l’abonnement mensuel et la sauvegarde/restauration</p>
-        <p>Si vous avez activé la sauvegarde, la suppression de votre compte supprime aussi la sauvegarde chiffrée conservée sur le serveur. Les relevés de transaction d’abonnement sont conservés en application de la loi, sous une forme pseudonymisée.</p>
-        <h3>a. Données supprimées en plus</h3>
-        <p>• La copie chiffrée de votre journal conservée sur le serveur — supprimée en même temps que votre compte. Nous n’attendons pas le délai de grâce de 90 jours.</p>
-        <p>• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)</p>
-        <p>⚠ Cette opération est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer.</p>
-        <p>⚠ Les entrées présentes sur votre appareil restent intactes. Seule la copie côté serveur est supprimée.</p>
-        <h3>b. Données conservées en plus et durées</h3>
-        <p>• Relevés de transaction d’abonnement (identifiant de transaction, produit, période d’abonnement, historique des changements d’état de paiement) : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)</p>
-        <p>• Le relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne plus ». L’identifiant de votre compte n’est pas conservé avec lui.</p>
-        <p>Même pendant ces durées, ces relevés ne subsistent que sous une forme ne permettant pas de remonter à leur auteur.</p>
-        <h3>c. L’abonnement doit être résilié séparément</h3>
-        <p>La suppression de votre compte ne résilie pas votre abonnement Google Play. Si vous ne le résiliez pas, vous continuerez à être facturé.</p>
+      <section>
+        <h2>6. L’abonnement doit être résilié séparément</h2>
+        <p>La suppression de votre compte ne résilie pas automatiquement votre abonnement Google Play et, si vous ne le résiliez pas, vous continuerez à être facturé.</p>
         <p>Pour résilier : application Google Play Store &gt; profil &gt; Paiements et abonnements &gt; Abonnements (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Le remboursement des sommes déjà prélevées relève de la politique de remboursement de Google Play et de celle de l’exploitant. Vous pouvez nous écrire à l’adresse de contact indiquée ci-dessous.</p>
+        <p>Le remboursement des sommes déjà prélevées relève de la politique de remboursement de Google Play et de celle de l’exploitant. Vous pouvez nous écrire à l’adresse de contact indiquée ci-dessus.</p>
       </section>
-      <section class="pending">
-        <h2>Modification à venir</h2>
-        <p class="pending-when">Applicable à partir de : À compter du jour de publication de la version incluant les rapports de synthèse par IA</p>
-        <p>Le texte des rapports par IA est enregistré sur votre appareil. Sur le serveur, les synthèses des rapports sont conservées au maximum 90 jours à des fins de contrôle de la qualité et sont supprimées avec vos relevés d’utilisation lors de la suppression de votre compte.</p>
-        <h3>a. Ce qui est supprimé pour les rapports par IA</h3>
-        <p>• Les relevés d’utilisation conservés sur le serveur (identifiant du compte, période, nombre de fois, nombre de jetons) — supprimés en même temps que votre compte.</p>
-        <p>• Les synthèses de rapports conservées sur le serveur (au maximum 90 jours) — supprimées en même temps que votre compte. Le contenu du journal n’étant jamais conservé, il n’y a rien à supprimer.</p>
-        <p>⚠ Le texte des rapports est aussi enregistré sur votre appareil et y reste après la suppression de votre compte. Pour l’effacer, supprimez les rapports dans l’application ou désinstallez celle-ci.</p>
-        <p>• Si vous avez activé la sauvegarde, les rapports y sont inclus sous forme chiffrée et sont supprimés en même temps que la sauvegarde.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="de" lang="de" hidden>
       <h1>Jogak — So löschst du dein Konto</h1>
-      <p class="meta">Gültig ab 2026-08-10 · Zuletzt geändert 2026-08-10</p>
+      <p class="meta">Gültig ab 2026-08-23 · Zuletzt geändert 2026-08-23</p>
       <p class="governs">Dies ist eine Übersetzung zur besseren Lesbarkeit. Bei Abweichungen vom koreanischen Original gilt die koreanische Fassung.</p>
       <p class="intro">Diese Seite erklärt, wie du dein Konto bei der App Jogak und die damit verbundenen Daten löschst. Wenn du die App bereits gelöscht hast oder dich nicht anmelden kannst, kannst du die Löschung auch per E-Mail verlangen.</p>
       <section>
@@ -654,51 +550,38 @@
         <p>• Die eindeutige Kennung des Social-Kontos (Google „sub“)</p>
         <p>• Die E-Mail-Adresse</p>
         <p>• Die Verknüpfung zwischen deinen Anfragen und dem Konto, das sie verfasst hat</p>
+        <p>• Die auf dem Server gespeicherte verschlüsselte Kopie deiner Einträge (wenn du das Backup eingeschaltet hast) — sie wird mit gelöscht, ohne die 90 Tage Kulanzfrist abzuwarten.</p>
+        <p>• Backup-Kennung und Backup-Aufzeichnungen (Zeitpunkt, Größe, Generationsnummer)</p>
+        <p>• Die auf dem Server aufbewahrten Zusammenfassungen der KI-Berichte (höchstens 90 Tage) und die Nutzungsaufzeichnungen der Berichte (Zeitraum, Anzahl der Male, Anzahl der Token)</p>
+        <p>⚠ Beim Löschen des Kontos vernichten wir zuerst das Backup und löschen danach das Konto. Verschwindet das Konto zuerst, gibt es niemanden mehr, der berechtigt wäre, dieses Backup zu löschen. Schlägt die Löschung des Backups fehl, wird auch das Löschen des Kontos nicht durchgeführt; versuche es dann bitte etwas später erneut.</p>
+        <p>⚠ Einmal gelöscht, lässt es sich nicht rückgängig machen. Auch wenn du deinen Wiederherstellungscode noch hast, kannst du das Backup auf dem Server nicht wiederherstellen.</p>
       </section>
       <section>
         <h2>4. Daten, die aufbewahrt werden, und für wie lange</h2>
         <p>Die folgenden Angaben werden nach gesetzlicher Vorgabe aufbewahrt und verbleiben auch während dieser Dauer nur in einer Form, die sich nicht auf die verfassende Person zurückführen lässt (pseudonymisiert).</p>
         <p>• Inhalt der Anfragen: 3 Jahre (Gesetz zum Verbraucherschutz im elektronischen Handel — Aufzeichnungen über Beschwerden von Verbraucherinnen und Verbrauchern oder über Streitbeilegung)</p>
+        <p>• Aufzeichnungen über Abotransaktionen (Transaktionskennung, Produkt, Abolaufzeit, Verlauf der Änderungen des Zahlungsstatus): 5 Jahre (Gesetz zum Verbraucherschutz im elektronischen Handel, Art. 6)</p>
+        <p>• Die Aufzeichnung der Vernichtung eines Backups (Backup-Kennung und Zeitpunkt der Vernichtung): 1 Jahr — damit du herausfinden kannst, „warum die Wiederherstellung nicht funktioniert“; die Kontokennung wird nicht mit aufbewahrt.</p>
         <p>Nach Ablauf der Aufbewahrungsfrist vernichten wir sie unverzüglich.</p>
       </section>
       <section>
-        <h2>5. Was nicht gelöscht wird — die Einträge auf deinem Gerät</h2>
-        <p>Die Einträge in Jogak (Titel, Text, Fotos, Tags und Gefühle) werden ausschließlich im Inneren deines Geräts gespeichert und nicht an die Server des Betreibers übermittelt.</p>
-        <p>Deshalb bleiben die Einträge auf deinem Gerät auch nach dem Löschen des Kontos unverändert erhalten. Willst du auch sie löschen, entferne die App oder führe in den [Einstellungen] der App das Zurücksetzen durch.</p>
-        <p>Umgekehrt gilt: Löschst du die App, lassen sich die Einträge auf dem Gerät nicht wiederherstellen.</p>
+        <h2>5. Was auf deinem Gerät bleibt — durch das Löschen des Kontos verschwindet es nicht</h2>
+        <p>Die Einträge in Jogak (Titel, Text, Fotos, Tags und Gefühle) sowie der Text der KI-Berichte werden im Inneren deines Geräts gespeichert.</p>
+        <p>Deshalb bleiben Einträge und Berichte auf deinem Gerät auch nach dem Löschen des Kontos erhalten. Willst du sie auch vom Gerät entfernen, lösche die App oder führe in den [Einstellungen] der App das Zurücksetzen durch.</p>
+        <p>Umgekehrt gilt: Löschst du die App, lassen sich die Einträge auf dem Gerät nicht wiederherstellen. Nur wenn du das Backup eingeschaltet und deinen Wiederherstellungscode aufbewahrt hast, kannst du sie zurückholen — und das ausschließlich, solange du dein Konto noch nicht gelöscht hast.</p>
+        <p>⚠ Hast du das Backup nicht eingeschaltet, liegen die Einträge auf deinem Gerät nicht beim Betreiber; er kann sie daher weder für dich löschen noch für dich zurückholen.</p>
       </section>
-      <section class="pending">
-        <h2>Angekündigte Änderung</h2>
-        <p class="pending-when">Gilt ab: Ab dem Tag, an dem die Version mit Monatsabo und Backup/Wiederherstellung veröffentlicht wird</p>
-        <p>Hast du das Backup eingeschaltet, wird beim Löschen deines Kontos auch das auf dem Server gespeicherte verschlüsselte Backup mit gelöscht. Aufzeichnungen über Abotransaktionen werden nach gesetzlicher Vorgabe pseudonymisiert aufbewahrt.</p>
-        <h3>a. Zusätzlich gelöschte Daten</h3>
-        <p>• Die auf dem Server gespeicherte verschlüsselte Kopie deiner Einträge — sie wird beim Löschen des Kontos mit gelöscht. Wir warten die 90 Tage Kulanzfrist nicht ab.</p>
-        <p>• Backup-Kennung und Backup-Aufzeichnungen (Zeitpunkt, Größe, Generationsnummer)</p>
-        <p>⚠ Einmal gelöscht, lässt es sich nicht rückgängig machen. Auch wenn du deinen Wiederherstellungscode noch hast, kannst du nicht mehr wiederherstellen.</p>
-        <p>⚠ Die Einträge auf deinem Gerät bleiben unverändert. Gelöscht wird nur die Kopie auf dem Server.</p>
-        <h3>b. Zusätzlich aufbewahrte Daten und deren Dauer</h3>
-        <p>• Aufzeichnungen über Abotransaktionen (Transaktionskennung, Produkt, Abolaufzeit, Verlauf der Änderungen des Zahlungsstatus): 5 Jahre (Gesetz zum Verbraucherschutz im elektronischen Handel, Art. 6)</p>
-        <p>• Die Aufzeichnung der Vernichtung eines Backups (Backup-Kennung und Zeitpunkt der Vernichtung): 1 Jahr — damit du herausfinden kannst, „warum die Wiederherstellung nicht funktioniert“; die Kontokennung wird nicht mit aufbewahrt.</p>
-        <p>Auch während dieser Fristen verbleiben die genannten Aufzeichnungen nur in einer Form, die sich nicht auf die verfassende Person zurückführen lässt.</p>
-        <h3>c. Das Abo musst du gesondert kündigen</h3>
+      <section>
+        <h2>6. Das Abo musst du gesondert kündigen</h2>
         <p>Das Löschen deines Kontos kündigt dein Abo bei Google Play nicht automatisch; kündigst du es nicht, wird dir weiterhin Geld berechnet.</p>
         <p>Kündigen: Google-Play-Store-App &gt; Profil &gt; Zahlungen und Abos &gt; Abos (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Die Erstattung bereits gezahlter Beträge richtet sich nach der Erstattungsrichtlinie von Google Play und der des Betreibers. Fragen dazu richtest du an die unten genannte Kontaktadresse.</p>
+        <p>Die Erstattung bereits gezahlter Beträge richtet sich nach der Erstattungsrichtlinie von Google Play und der des Betreibers. Fragen dazu richtest du an die oben genannte Kontaktadresse.</p>
       </section>
-      <section class="pending">
-        <h2>Angekündigte Änderung</h2>
-        <p class="pending-when">Gilt ab: Ab dem Tag, an dem die Version mit den KI-Zusammenfassungsberichten veröffentlicht wird</p>
-        <p>Der Text der KI-Berichte wird auf deinem Gerät gespeichert. Auf dem Server werden die Zusammenfassungen der Berichte höchstens 90 Tage zur Qualitätsprüfung aufbewahrt und beim Löschen deines Kontos zusammen mit den Nutzungsaufzeichnungen gelöscht.</p>
-        <h3>a. Was bei den KI-Berichten gelöscht wird</h3>
-        <p>• Die auf dem Server verbleibenden Nutzungsaufzeichnungen der Berichte (Kontokennung, Zeitraum, Anzahl der Male, Anzahl der Token) — sie werden beim Löschen des Kontos mit gelöscht.</p>
-        <p>• Die auf dem Server aufbewahrten Zusammenfassungen der Berichte (höchstens 90 Tage) — sie werden beim Löschen des Kontos mit gelöscht. Der Tagebuchtext selbst wird nicht gespeichert, dort gibt es also nichts zu löschen.</p>
-        <p>⚠ Der Text der Berichte wird auch auf deinem Gerät gespeichert und bleibt dort nach dem Löschen des Kontos erhalten. Um ihn zu entfernen, lösche die Berichte in der App oder lösche die App.</p>
-        <p>• Hast du das Backup eingeschaltet, sind die Berichte verschlüsselt im Backup enthalten und werden gelöscht, wenn das Backup gelöscht wird.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="it" lang="it" hidden>
       <h1>Come eliminare il tuo account Jogak</h1>
-      <p class="meta">In vigore dal 2026-08-10 · Ultimo aggiornamento 2026-08-10</p>
+      <p class="meta">In vigore dal 2026-08-23 · Ultimo aggiornamento 2026-08-23</p>
       <p class="governs">Questa è una traduzione di cortesia. In caso di difformità con l’originale coreano, prevale la versione coreana.</p>
       <p class="intro">Questa pagina spiega come eliminare il tuo account Jogak e i dati a esso associati. Puoi farne richiesta anche via e-mail se hai già disinstallato l’app o non riesci ad accedere.</p>
       <section>
@@ -723,51 +606,38 @@
         <p>• L’identificatore univoco del tuo account social (il “sub” di Google)</p>
         <p>• Il tuo indirizzo e-mail</p>
         <p>• Il collegamento tra le tue richieste e l’account di chi le ha scritte</p>
+        <p>• La copia cifrata del tuo diario conservata sul server (se hai attivato il backup) — viene eliminata insieme all’account, senza attendere i 90 giorni di tolleranza.</p>
+        <p>• L’identificatore del backup e i registri di backup (ora, dimensione, numero di generazione)</p>
+        <p>• Le sintesi dei report con IA conservate sul server (al massimo 90 giorni dalla creazione) e i registri di utilizzo dei report (periodo, numero di volte, numero di token)</p>
+        <p>⚠ In caso di eliminazione dell’account distruggiamo prima il backup e solo dopo eliminiamo l’account: se sparisse prima l’account, non resterebbe nessuno con il diritto di cancellare quel backup. Se la cancellazione del backup non riesce, neppure l’eliminazione dell’account viene portata a termine; riprova poco più tardi.</p>
+        <p>⚠ L’operazione non è reversibile. Anche se conservi il tuo codice di recupero, non potrai ripristinare il backup presente sul server.</p>
       </section>
       <section>
         <h2>4. Dati che vengono conservati e per quanto tempo</h2>
         <p>Le informazioni seguenti sono conservate in base alla legge e, anche durante tale periodo, restano soltanto in una forma che non consente di risalire a chi le ha scritte (pseudonimizzata).</p>
         <p>• Contenuto delle richieste: 3 anni (Legge sulla tutela dei consumatori nel commercio elettronico — registri su reclami o composizione delle controversie)</p>
+        <p>• Registri delle transazioni di abbonamento (identificatore della transazione, prodotto, periodo di abbonamento, cronologia delle variazioni dello stato di pagamento): 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)</p>
+        <p>• Registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno dalla distruzione — perché tu possa capire “perché il ripristino non funziona”; l’identificatore del tuo account non viene conservato insieme.</p>
         <p>Trascorso il periodo di conservazione, distruggiamo i dati senza indugio.</p>
       </section>
       <section>
-        <h2>5. Ciò che non viene eliminato — il diario presente sul dispositivo</h2>
-        <p>Le voci di Jogak (titoli, testo, foto, tag ed emozioni) sono salvate soltanto all’interno del tuo dispositivo e non vengono trasmesse ai server del gestore.</p>
-        <p>Perciò, eliminando l’account, le voci sul tuo dispositivo restano intatte. Per cancellare anche quelle, disinstalla l’app oppure usa la funzione “Ripristina tutto” nelle [Impostazioni] dell’app.</p>
-        <p>Al contrario, se disinstalli l’app, le voci presenti sul dispositivo non potranno essere recuperate.</p>
+        <h2>5. Ciò che resta sul dispositivo — l’eliminazione dell’account non lo cancella</h2>
+        <p>Le voci di Jogak (titoli, testo, foto, tag ed emozioni) e il testo dei report con IA sono salvati all’interno del tuo dispositivo.</p>
+        <p>Perciò, eliminando l’account, le voci e i report presenti sul dispositivo restano intatti. Per cancellarli anche dal dispositivo, disinstalla l’app oppure usa la funzione di ripristino nelle [Impostazioni] dell’app.</p>
+        <p>Al contrario, se disinstalli l’app, le voci presenti sul dispositivo non potranno essere recuperate. Puoi recuperarle solo se avevi attivato il backup e conservi il codice di recupero, e soltanto finché non hai eliminato l’account.</p>
+        <p>⚠ Se non hai attivato il backup, il gestore non dispone delle voci presenti sul tuo dispositivo e quindi non può né eliminarle né restituirtele.</p>
       </section>
-      <section class="pending">
-        <h2>Modifica in arrivo</h2>
-        <p class="pending-when">Si applica dal: Dal giorno in cui viene pubblicata la versione che include l’abbonamento mensile e il backup/ripristino</p>
-        <p>Se hai attivato il backup, eliminando l’account viene eliminata anche la copia cifrata conservata sul server. I registri delle transazioni di abbonamento sono conservati in base alla legge, in forma pseudonimizzata.</p>
-        <h3>a. Dati eliminati in aggiunta</h3>
-        <p>• La copia cifrata del tuo diario conservata sul server — eliminata insieme all’account. Non attendiamo i 90 giorni di tolleranza.</p>
-        <p>• L’identificatore del backup e i registri di backup (ora, dimensione, numero di generazione)</p>
-        <p>⚠ L’operazione non è reversibile. Anche se conservi il tuo codice di recupero, non potrai ripristinare.</p>
-        <p>⚠ Le voci presenti sul tuo dispositivo restano intatte. Viene eliminata soltanto la copia sul server.</p>
-        <h3>b. Dati conservati in aggiunta e per quanto tempo</h3>
-        <p>• Registri delle transazioni di abbonamento (identificatore della transazione, prodotto, periodo di abbonamento, cronologia delle variazioni dello stato di pagamento): 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)</p>
-        <p>• Il registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno — perché tu possa capire “perché il ripristino non funziona più”. L’identificatore del tuo account non viene conservato insieme.</p>
-        <p>Anche durante tali periodi, questi registri restano soltanto in una forma che non consente di risalire a chi li ha scritti.</p>
-        <h3>c. L’abbonamento va disdetto separatamente</h3>
-        <p>L’eliminazione dell’account non annulla il tuo abbonamento Google Play. Se non lo annulli, continuerai a essere addebitato.</p>
+      <section>
+        <h2>6. L’abbonamento va disdetto separatamente</h2>
+        <p>L’eliminazione dell’account non annulla automaticamente il tuo abbonamento Google Play. Se non lo annulli, continuerai a essere addebitato.</p>
         <p>Per annullare: app Google Play Store &gt; profilo &gt; Pagamenti e abbonamenti &gt; Abbonamenti (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Il rimborso degli importi già addebitati segue la politica di rimborso di Google Play e quella del gestore. Puoi scriverci all’indirizzo di contatto indicato qui sotto.</p>
+        <p>Il rimborso degli importi già addebitati segue la politica di rimborso di Google Play e quella del gestore. Puoi scriverci all’indirizzo di contatto indicato qui sopra.</p>
       </section>
-      <section class="pending">
-        <h2>Modifica in arrivo</h2>
-        <p class="pending-when">Si applica dal: Dal giorno in cui viene pubblicata la versione contenente i report di sintesi con IA</p>
-        <p>Il testo dei report con IA è salvato sul tuo dispositivo. Sul server le sintesi dei report sono conservate al massimo 90 giorni per il controllo della qualità e vengono eliminate insieme ai tuoi registri di utilizzo quando elimini l’account.</p>
-        <h3>a. Che cosa viene eliminato per i report con IA</h3>
-        <p>• I registri di utilizzo conservati sul server (identificatore dell’account, periodo, numero di volte, numero di token) — eliminati insieme all’account.</p>
-        <p>• Le sintesi dei report conservate sul server (al massimo 90 giorni) — eliminate insieme all’account. Il contenuto del diario non viene mai conservato, quindi non c’è nulla da eliminare.</p>
-        <p>⚠ Il testo dei report è salvato anche sul tuo dispositivo, quindi vi rimane dopo l’eliminazione dell’account. Per cancellarlo, elimina i report nell’app oppure disinstalla l’app.</p>
-        <p>• Se hai attivato il backup, i report vi sono inclusi in forma cifrata e vengono eliminati quando il backup viene eliminato.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="ru" lang="ru" hidden>
       <h1>Jogak — как удалить аккаунт</h1>
-      <p class="meta">Действует с 2026-08-10 · Обновлено 2026-08-10</p>
+      <p class="meta">Действует с 2026-08-23 · Обновлено 2026-08-23</p>
       <p class="governs">Это перевод для удобства чтения. При расхождении с корейским оригиналом преимущественную силу имеет корейская версия.</p>
       <p class="intro">Здесь описано, как удалить аккаунт в приложении Jogak и связанные с ним данные. Если вы уже удалили приложение или не можете войти, вы также можете запросить удаление по электронной почте.</p>
       <section>
@@ -792,51 +662,38 @@
         <p>• Уникальный идентификатор социального аккаунта (Google «sub»)</p>
         <p>• Адрес электронной почты</p>
         <p>• Связь между обращениями и аккаунтом их автора</p>
+        <p>• Хранящаяся на сервере зашифрованная копия ваших записей (если вы включили резервное копирование) — удаляется вместе с аккаунтом, без ожидания 90-дневной отсрочки.</p>
+        <p>• Идентификатор резервной копии и записи о копировании (время, объём, номер поколения)</p>
+        <p>• Хранящиеся на сервере сводки отчётов ИИ (не более 90 дней со дня создания) и записи об использовании отчётов (период, количество раз, количество токенов)</p>
+        <p>⚠ При удалении аккаунта мы сначала уничтожаем резервную копию и лишь затем удаляем аккаунт: если аккаунт исчезнет первым, не останется никого, кто вправе удалить эту копию. Если удалить резервную копию не удастся, само удаление аккаунта тоже не будет выполнено — попробуйте, пожалуйста, чуть позже.</p>
+        <p>⚠ Удаление необратимо. Даже если код восстановления у вас сохранился, восстановить резервную копию с сервера будет нельзя.</p>
       </section>
       <section>
         <h2>4. Какие данные хранятся и как долго</h2>
         <p>Указанные ниже сведения хранятся в силу закона и даже в течение срока хранения остаются только в виде, не позволяющем установить их автора (псевдонимизированном).</p>
         <p>• Содержание обращений: 3 года (Закон о защите прав потребителей в электронной торговле — записи о жалобах потребителей или об урегулировании споров)</p>
+        <p>• Записи о транзакциях по подписке (идентификатор транзакции, товар, период подписки, история изменений статуса оплаты): 5 лет (Закон о защите прав потребителей в электронной торговле, ст. 6)</p>
+        <p>• Запись о факте уничтожения резервной копии (идентификатор копии и время уничтожения): 1 год с момента уничтожения — чтобы вы могли выяснить, «почему восстановление не работает»; идентификатор аккаунта вместе с ней не хранится.</p>
         <p>По истечении срока хранения мы уничтожаем их без промедления.</p>
       </section>
       <section>
-        <h2>5. Что не удаляется — записи на вашем устройстве</h2>
-        <p>Записи в Jogak (заголовок, текст, фотографии, теги, эмоции) хранятся только внутри вашего устройства и не передаются на серверы оператора.</p>
-        <p>Поэтому после удаления аккаунта записи на устройстве остаются на месте. Чтобы удалить и их, удалите приложение либо выполните сброс в разделе [Настройки] приложения.</p>
-        <p>И наоборот: если вы удалите приложение, восстановить записи на устройстве будет невозможно.</p>
+        <h2>5. Что остаётся на устройстве — удалением аккаунта это не стирается</h2>
+        <p>Записи в Jogak (заголовок, текст, фотографии, теги, эмоции) и текст отчётов ИИ хранятся внутри вашего устройства.</p>
+        <p>Поэтому после удаления аккаунта записи и отчёты на устройстве остаются на месте. Чтобы стереть их и с устройства, удалите приложение либо выполните сброс в разделе [Настройки] приложения.</p>
+        <p>И наоборот: если вы удалите приложение, восстановить записи на устройстве будет невозможно. Вернуть их можно, только если вы включили резервное копирование и сохранили код восстановления, и только до удаления аккаунта.</p>
+        <p>⚠ Если вы не включили резервное копирование, записей с вашего устройства у оператора нет, поэтому он не может ни удалить их за вас, ни вернуть их вам.</p>
       </section>
-      <section class="pending">
-        <h2>Предстоящее изменение</h2>
-        <p class="pending-when">Применяется с: Со дня выпуска версии, включающей ежемесячную подписку и резервное копирование/восстановление</p>
-        <p>Если вы включили резервное копирование, при удалении аккаунта вместе с ним будет удалена и зашифрованная резервная копия, хранящаяся на сервере. Записи о транзакциях по подписке хранятся в силу закона после псевдонимизации.</p>
-        <h3>а. Какие данные удаляются дополнительно</h3>
-        <p>• Хранящаяся на сервере зашифрованная копия ваших записей — удаляется вместе с аккаунтом. Мы не дожидаемся 90-дневной отсрочки.</p>
-        <p>• Идентификатор резервной копии и записи о копировании (время, объём, номер поколения)</p>
-        <p>⚠ Удаление необратимо. Даже если код восстановления у вас сохранился, восстановить данные будет нельзя.</p>
-        <p>⚠ Записи на устройстве остаются на месте. Удаляется только копия на сервере.</p>
-        <h3>б. Какие данные дополнительно хранятся и как долго</h3>
-        <p>• Записи о транзакциях по подписке (идентификатор транзакции, товар, период подписки, история изменений статуса оплаты): 5 лет (Закон о защите прав потребителей в электронной торговле, ст. 6)</p>
-        <p>• Запись о факте уничтожения резервной копии (идентификатор копии и время уничтожения): 1 год — чтобы вы могли выяснить, «почему восстановление не работает»; идентификатор аккаунта вместе с ней не хранится.</p>
-        <p>Указанные записи и в течение срока хранения остаются только в виде, не позволяющем установить их автора.</p>
-        <h3>в. Подписку нужно отменить отдельно</h3>
+      <section>
+        <h2>6. Подписку нужно отменить отдельно</h2>
         <p>Удаление аккаунта не отменяет автоматически подписку в Google Play, и, если вы её не отмените, списания продолжатся.</p>
         <p>Отмена: приложение Google Play Маркет &gt; профиль &gt; Платежи и подписки &gt; Подписки (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Возврат уже уплаченных сумм регулируется политикой возврата Google Play и политикой возврата оператора. С вопросами обращайтесь по указанному ниже контакту.</p>
+        <p>Возврат уже уплаченных сумм регулируется политикой возврата Google Play и политикой возврата оператора. С вопросами обращайтесь по указанному выше контакту.</p>
       </section>
-      <section class="pending">
-        <h2>Предстоящее изменение</h2>
-        <p class="pending-when">Применяется с: Со дня выпуска версии, содержащей сводные отчёты ИИ</p>
-        <p>Текст отчётов ИИ хранится на вашем устройстве. На сервере сводки отчётов хранятся не более 90 дней для проверки качества и удаляются вместе с записями об использовании при удалении аккаунта.</p>
-        <h3>а. Что удаляется в части отчётов ИИ</h3>
-        <p>• Остающиеся на сервере записи об использовании отчётов (идентификатор аккаунта, период, количество раз, количество токенов) — удаляются вместе с аккаунтом.</p>
-        <p>• Хранящиеся на сервере сводки отчётов (не более 90 дней) — удаляются вместе с аккаунтом. Сам текст дневника не сохраняется, поэтому там удалять нечего.</p>
-        <p>⚠ Текст отчёта хранится также на вашем устройстве, поэтому после удаления аккаунта он там остаётся. Чтобы его убрать, удалите отчёты в приложении или удалите приложение.</p>
-        <p>• Если вы включили резервное копирование, отчёты входят в него в зашифрованном виде и удаляются вместе с резервной копией.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="id" lang="id" hidden>
       <h1>Jogak — Cara menghapus akunmu</h1>
-      <p class="meta">Berlaku 2026-08-10 · Terakhir diperbarui 2026-08-10</p>
+      <p class="meta">Berlaku 2026-08-23 · Terakhir diperbarui 2026-08-23</p>
       <p class="governs">Ini adalah terjemahan untuk memudahkan pembacaan. Jika berbeda dengan naskah asli bahasa Korea, versi Korea yang berlaku.</p>
       <p class="intro">Halaman ini menjelaskan cara menghapus akun aplikasi Jogak beserta data yang terkait dengannya. Kamu juga dapat mengajukan permintaan lewat email bila sudah menghapus aplikasinya atau tidak dapat masuk.</p>
       <section>
@@ -861,51 +718,38 @@
         <p>• Pengenal unik akun sosial (Google “sub”)</p>
         <p>• Alamat email</p>
         <p>• Keterkaitan antara riwayat pertanyaan dan akun penulisnya</p>
+        <p>• Salinan catatanmu yang terenkripsi di server (bila kamu mengaktifkan pencadangan) — ikut dihapus tanpa menunggu tenggang 90 hari.</p>
+        <p>• Pengenal cadangan dan catatan pencadangan (waktu, ukuran, nomor generasi)</p>
+        <p>• Ringkasan laporan AI yang tersimpan di server (paling lama 90 hari) dan catatan penggunaan laporan (periode, jumlah kali, jumlah token)</p>
+        <p>⚠ Saat kamu menghapus akun, kami memusnahkan cadangan lebih dulu baru menghapus akunnya — sebab bila akunnya lenyap lebih dulu, tidak ada lagi orang yang berwenang menghapus cadangan itu. Bila penghapusan cadangan gagal, penghapusan akun tidak dilanjutkan; silakan coba lagi beberapa saat kemudian.</p>
+        <p>⚠ Setelah dihapus, hal ini tidak dapat dibatalkan. Meski kamu masih memegang kode pemulihan, kamu tidak akan dapat memulihkan cadangan yang ada di server.</p>
       </section>
       <section>
         <h2>4. Data yang disimpan dan jangka waktunya</h2>
         <p>Informasi berikut disimpan sesuai peraturan perundang-undangan, dan bahkan selama jangka waktu itu hanya tersisa dalam bentuk yang tidak dapat ditelusuri kembali ke penulisnya (pseudonimisasi).</p>
         <p>• Isi pertanyaan: 3 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik — catatan mengenai keluhan atau penyelesaian sengketa konsumen)</p>
+        <p>• Catatan transaksi langganan (pengenal transaksi, produk, periode langganan, riwayat perubahan status pembayaran): 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)</p>
+        <p>• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.</p>
         <p>Setelah jangka waktu penyimpanan lewat, kami memusnahkannya tanpa penundaan.</p>
       </section>
       <section>
-        <h2>5. Yang tidak ikut dihapus — catatan di perangkatmu</h2>
-        <p>Catatan Jogak (judul, isi, foto, tag, dan emosi) hanya disimpan di dalam perangkatmu dan tidak dikirim ke server operator.</p>
-        <p>Karena itu, menghapus akun tidak mengubah catatan yang ada di perangkatmu. Bila kamu ingin menghapus catatannya juga, hapus aplikasinya atau jalankan atur ulang lewat [Pengaturan] di aplikasi.</p>
-        <p>Sebaliknya, bila kamu menghapus aplikasinya, catatan di perangkatmu tidak dapat dipulihkan.</p>
+        <h2>5. Yang tertinggal di perangkatmu — menghapus akun tidak menghapusnya</h2>
+        <p>Catatan Jogak (judul, isi, foto, tag, dan emosi) serta isi laporan AI disimpan di dalam perangkatmu.</p>
+        <p>Karena itu, menghapus akun tidak mengubah catatan dan laporan yang ada di perangkatmu. Bila kamu ingin menghapusnya dari perangkat juga, hapus aplikasinya atau jalankan atur ulang lewat [Pengaturan] di aplikasi.</p>
+        <p>Sebaliknya, bila kamu menghapus aplikasinya, catatan di perangkatmu tidak dapat dipulihkan. Pemulihan hanya mungkin bila kamu mengaktifkan pencadangan dan masih menyimpan kode pemulihanmu, dan hanya selama kamu belum menghapus akun.</p>
+        <p>⚠ Bila kamu tidak mengaktifkan pencadangan, operator tidak memiliki catatan yang ada di perangkatmu sehingga tidak dapat menghapusnya maupun mengembalikannya untukmu.</p>
       </section>
-      <section class="pending">
-        <h2>Perubahan mendatang</h2>
-        <p class="pending-when">Berlaku sejak: Sejak hari versi yang memuat langganan bulanan dan pencadangan/pemulihan dirilis</p>
-        <p>Bila kamu mengaktifkan pencadangan, menghapus akun juga menghapus cadangan terenkripsi yang tersimpan di server. Catatan transaksi langganan disimpan sesuai peraturan perundang-undangan dalam bentuk yang tidak dapat ditelusuri.</p>
-        <h3>a. Data yang dihapus sebagai tambahan</h3>
-        <p>• Salinan catatanmu yang terenkripsi di server — dihapus bersamaan saat kamu menghapus akun. Kami tidak menunggu tenggang 90 hari.</p>
-        <p>• Pengenal cadangan dan catatan pencadangan (waktu, ukuran, nomor generasi)</p>
-        <p>⚠ Setelah dihapus, hal ini tidak dapat dibatalkan. Meski kamu masih memegang kode pemulihan, kamu tidak akan dapat memulihkannya.</p>
-        <p>⚠ Catatan di perangkatmu tetap utuh. Yang dihapus hanyalah salinan di server.</p>
-        <h3>b. Data yang disimpan sebagai tambahan dan jangka waktunya</h3>
-        <p>• Catatan transaksi langganan (pengenal transaksi, produk, periode langganan, riwayat perubahan status pembayaran): 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)</p>
-        <p>• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.</p>
-        <p>Catatan di atas pun, selama jangka waktu penyimpanannya, hanya tersisa dalam bentuk yang tidak dapat ditelusuri kembali ke penulisnya.</p>
-        <h3>c. Langgananmu harus dibatalkan secara terpisah</h3>
+      <section>
+        <h2>6. Langgananmu harus dibatalkan secara terpisah</h2>
         <p>Menghapus akun tidak otomatis membatalkan langgananmu di Google Play, dan bila tidak kamu batalkan, tagihan akan terus berjalan.</p>
         <p>Cara membatalkan: aplikasi Google Play Store &gt; profil &gt; Pembayaran dan langganan &gt; Langganan (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Pengembalian dana atas jumlah yang sudah dibayarkan mengikuti kebijakan pengembalian dana Google Play dan kebijakan pengembalian dana operator. Untuk pertanyaan, silakan hubungi alamat di bawah ini.</p>
+        <p>Pengembalian dana atas jumlah yang sudah dibayarkan mengikuti kebijakan pengembalian dana Google Play dan kebijakan pengembalian dana operator. Untuk pertanyaan, silakan hubungi alamat kontak di atas.</p>
       </section>
-      <section class="pending">
-        <h2>Perubahan mendatang</h2>
-        <p class="pending-when">Berlaku sejak: Sejak hari versi yang memuat laporan ringkasan AI dirilis</p>
-        <p>Isi laporan AI disimpan di perangkatmu. Di server, ringkasan laporan disimpan paling lama 90 hari untuk pemeriksaan kualitas, dan dihapus bersama catatan penggunaanmu saat kamu menghapus akun.</p>
-        <h3>a. Apa yang dihapus terkait laporan AI</h3>
-        <p>• Catatan penggunaan laporan yang tersimpan di server (pengenal akun, periode, jumlah kali, jumlah token) — dihapus bersamaan saat kamu menghapus akun.</p>
-        <p>• Ringkasan laporan yang tersimpan di server (paling lama 90 hari) — dihapus bersamaan saat kamu menghapus akun. Isi catatan aslinya tidak pernah disimpan sehingga tidak ada yang perlu dihapus.</p>
-        <p>⚠ Isi laporan juga tersimpan di perangkatmu, sehingga tetap ada di sana meski kamu menghapus akun. Untuk menghapusnya, hapus laporan di aplikasi atau hapus aplikasinya.</p>
-        <p>• Bila kamu mengaktifkan pencadangan, laporan juga disertakan dalam cadangan dalam bentuk terenkripsi dan ikut terhapus ketika cadangan dihapus.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="vi" lang="vi" hidden>
       <h1>Jogak — Cách xoá tài khoản của bạn</h1>
-      <p class="meta">Hiệu lực 2026-08-10 · Cập nhật 2026-08-10</p>
+      <p class="meta">Hiệu lực 2026-08-23 · Cập nhật 2026-08-23</p>
       <p class="governs">Đây là bản dịch để dễ đọc. Nếu có khác biệt với bản gốc tiếng Hàn, bản tiếng Hàn được ưu tiên áp dụng.</p>
       <p class="intro">Trang này hướng dẫn cách xoá tài khoản của ứng dụng Jogak và dữ liệu liên quan. Ngay cả khi bạn đã gỡ ứng dụng hoặc không thể đăng nhập, bạn vẫn có thể yêu cầu qua email.</p>
       <section>
@@ -930,51 +774,38 @@
         <p>• Mã định danh duy nhất của tài khoản mạng xã hội (“sub” của Google)</p>
         <p>• Địa chỉ email</p>
         <p>• Mối liên kết giữa lịch sử liên hệ và tài khoản của người gửi</p>
+        <p>• Bản sao nhật ký đã mã hoá lưu trên máy chủ (nếu bạn đã bật sao lưu) — bị xoá cùng lúc mà không chờ hết 90 ngày ân hạn.</p>
+        <p>• Mã định danh bản sao lưu và các bản ghi sao lưu (thời điểm, dung lượng, số thế hệ)</p>
+        <p>• Bản tóm tắt báo cáo AI đang lưu trên máy chủ (tối đa 90 ngày) và bản ghi sử dụng báo cáo (kỳ, số lần, số token)</p>
+        <p>⚠ Khi bạn xoá tài khoản, chúng tôi tiêu huỷ bản sao lưu trước rồi mới xoá tài khoản — vì nếu tài khoản biến mất trước thì không còn ai có quyền xoá bản sao lưu đó nữa. Nếu việc xoá bản sao lưu thất bại, việc xoá tài khoản sẽ không được tiến hành; xin bạn thử lại sau ít phút.</p>
+        <p>⚠ Đã xoá thì không thể hoàn tác. Dù bạn còn giữ mã khôi phục, bạn cũng không thể khôi phục bản sao lưu trên máy chủ được nữa.</p>
       </section>
       <section>
         <h2>4. Dữ liệu được lưu giữ và thời hạn</h2>
         <p>Những thông tin sau được lưu giữ theo quy định của pháp luật, và ngay trong thời hạn đó cũng chỉ tồn tại ở dạng không thể truy vết ra người tạo (giả danh hoá).</p>
         <p>• Nội dung liên hệ: 3 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử — hồ sơ về khiếu nại hoặc giải quyết tranh chấp của người tiêu dùng)</p>
+        <p>• Hồ sơ giao dịch gói đăng ký (mã giao dịch, sản phẩm, kỳ hạn đăng ký, lịch sử thay đổi trạng thái thanh toán): 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)</p>
+        <p>• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.</p>
         <p>Khi hết thời hạn lưu giữ, chúng tôi tiêu huỷ ngay lập tức.</p>
       </section>
       <section>
-        <h2>5. Những gì không bị xoá — các mảnh nhật ký trên thiết bị</h2>
-        <p>Các mảnh nhật ký của Jogak (tiêu đề, nội dung, ảnh, thẻ, cảm xúc) chỉ được lưu bên trong thiết bị của bạn và không được truyền tới máy chủ của nhà vận hành.</p>
-        <p>Vì vậy, dù bạn xoá tài khoản thì các mảnh trên thiết bị vẫn còn nguyên. Nếu muốn xoá cả những mảnh đó, hãy gỡ cài đặt ứng dụng hoặc thực hiện đặt lại trong [Cài đặt] của ứng dụng.</p>
-        <p>Ngược lại, nếu bạn gỡ cài đặt ứng dụng thì các mảnh trên thiết bị không thể khôi phục được.</p>
+        <h2>5. Những gì còn lại trên thiết bị — xoá tài khoản không xoá được chúng</h2>
+        <p>Các mảnh nhật ký của Jogak (tiêu đề, nội dung, ảnh, thẻ, cảm xúc) và nội dung báo cáo AI được lưu bên trong thiết bị của bạn.</p>
+        <p>Vì vậy, dù bạn xoá tài khoản thì các mảnh và báo cáo trên thiết bị vẫn còn nguyên. Nếu muốn xoá cả trên thiết bị, hãy gỡ cài đặt ứng dụng hoặc thực hiện đặt lại trong [Cài đặt] của ứng dụng.</p>
+        <p>Ngược lại, nếu bạn gỡ cài đặt ứng dụng thì các mảnh trên thiết bị không thể khôi phục được. Chỉ khi bạn đã bật sao lưu và còn giữ mã khôi phục, và chỉ khi bạn chưa xoá tài khoản, bạn mới có thể lấy lại chúng.</p>
+        <p>⚠ Nếu bạn không bật sao lưu, nhà vận hành không nắm giữ các mảnh trên thiết bị của bạn nên không thể xoá giúp bạn, cũng không thể trả lại cho bạn.</p>
       </section>
-      <section class="pending">
-        <h2>Sửa đổi sắp áp dụng</h2>
-        <p class="pending-when">Áp dụng từ: Kể từ ngày phát hành phiên bản có gói đăng ký hằng tháng và sao lưu/khôi phục</p>
-        <p>Nếu bạn đã bật sao lưu, việc xoá tài khoản cũng xoá luôn bản sao lưu đã mã hoá trên máy chủ. Hồ sơ giao dịch gói đăng ký được lưu giữ theo pháp luật ở dạng không thể truy vết.</p>
-        <h3>a. Dữ liệu bị xoá thêm</h3>
-        <p>• Bản sao nhật ký đã mã hoá lưu trên máy chủ — bị xoá cùng lúc khi bạn xoá tài khoản. Chúng tôi không chờ hết 90 ngày ân hạn.</p>
-        <p>• Mã định danh bản sao lưu và các bản ghi sao lưu (thời điểm, dung lượng, số thế hệ)</p>
-        <p>⚠ Đã xoá thì không thể hoàn tác. Dù bạn còn giữ mã khôi phục, bạn cũng không thể khôi phục được nữa.</p>
-        <p>⚠ Các mảnh trên thiết bị của bạn vẫn còn nguyên. Thứ bị xoá chỉ là bản sao trên máy chủ.</p>
-        <h3>b. Dữ liệu được lưu giữ thêm và thời hạn</h3>
-        <p>• Hồ sơ giao dịch gói đăng ký (mã giao dịch, sản phẩm, kỳ hạn đăng ký, lịch sử thay đổi trạng thái thanh toán): 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)</p>
-        <p>• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.</p>
-        <p>Ngay trong thời hạn lưu giữ, những bản ghi trên cũng chỉ tồn tại ở dạng không thể truy vết ra người tạo.</p>
-        <h3>c. Bạn phải tự huỷ gói đăng ký</h3>
+      <section>
+        <h2>6. Bạn phải tự huỷ gói đăng ký</h2>
         <p>Xoá tài khoản không tự động huỷ gói đăng ký trên Google Play, và nếu bạn không huỷ thì vẫn tiếp tục bị tính phí.</p>
         <p>Cách huỷ: ứng dụng Google Play Store &gt; hồ sơ &gt; Thanh toán và gói đăng ký &gt; Gói đăng ký (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Việc hoàn tiền cho khoản đã thanh toán tuân theo chính sách hoàn tiền của Google Play và chính sách hoàn tiền của nhà vận hành. Bạn có thể liên hệ theo địa chỉ dưới đây.</p>
+        <p>Việc hoàn tiền cho khoản đã thanh toán tuân theo chính sách hoàn tiền của Google Play và chính sách hoàn tiền của nhà vận hành. Bạn có thể liên hệ theo địa chỉ nêu ở trên.</p>
       </section>
-      <section class="pending">
-        <h2>Sửa đổi sắp áp dụng</h2>
-        <p class="pending-when">Áp dụng từ: Kể từ ngày phát hành phiên bản có tính năng báo cáo tóm tắt bằng AI</p>
-        <p>Nội dung báo cáo AI được lưu trên thiết bị của bạn. Trên máy chủ, bản tóm tắt báo cáo được lưu tối đa 90 ngày để kiểm tra chất lượng và bị xoá cùng với bản ghi sử dụng khi bạn xoá tài khoản.</p>
-        <h3>a. Với báo cáo AI thì những gì bị xoá</h3>
-        <p>• Bản ghi sử dụng báo cáo lưu trên máy chủ (mã định danh tài khoản, kỳ, số lần, số token) — bị xoá cùng lúc khi bạn xoá tài khoản.</p>
-        <p>• Bản tóm tắt báo cáo đang lưu trên máy chủ (tối đa 90 ngày) — bị xoá cùng lúc khi bạn xoá tài khoản. Nội dung nhật ký gốc không được lưu nên không có gì để xoá.</p>
-        <p>⚠ Nội dung báo cáo cũng được lưu trên thiết bị của bạn nên vẫn còn nguyên sau khi bạn xoá tài khoản. Nếu muốn xoá, hãy xoá báo cáo trong ứng dụng hoặc gỡ cài đặt ứng dụng.</p>
-        <p>• Nếu bạn đã bật sao lưu thì báo cáo cũng được mã hoá và nằm trong bản sao lưu, và sẽ bị xoá khi bản sao lưu bị xoá.</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="th" lang="th" hidden>
       <h1>Jogak — วิธีลบบัญชีของคุณ</h1>
-      <p class="meta">มีผล 2026-08-10 · ปรับปรุงล่าสุด 2026-08-10</p>
+      <p class="meta">มีผล 2026-08-23 · ปรับปรุงล่าสุด 2026-08-23</p>
       <p class="governs">นี่คือคำแปลเพื่อความสะดวกในการอ่าน หากขัดแย้งกับต้นฉบับภาษาเกาหลี ให้ยึดฉบับภาษาเกาหลีเป็นหลัก</p>
       <p class="intro">หน้านี้อธิบายวิธีลบบัญชีของแอป Jogak และข้อมูลที่เกี่ยวข้อง แม้คุณจะถอนการติดตั้งแอปไปแล้วหรือเข้าสู่ระบบไม่ได้ ก็ยังขอผ่านอีเมลได้</p>
       <section>
@@ -999,51 +830,38 @@
         <p>• ตัวระบุเฉพาะของบัญชีโซเชียล (“sub” ของ Google)</p>
         <p>• ที่อยู่อีเมล</p>
         <p>• ความเชื่อมโยงระหว่างประวัติคำถามกับบัญชีของผู้ส่ง</p>
+        <p>• สำเนาไดอารีที่เข้ารหัสซึ่งเก็บอยู่บนเซิร์ฟเวอร์ (กรณีที่คุณเปิดการสำรองข้อมูลไว้) — จะถูกลบไปพร้อมกันโดยไม่รอจนครบระยะผ่อนผัน 90 วัน</p>
+        <p>• ตัวระบุการสำรองข้อมูลและบันทึกการสำรองข้อมูล (เวลา ขนาด หมายเลขรุ่น)</p>
+        <p>• ข้อความสรุปของรายงาน AI ที่เก็บอยู่บนเซิร์ฟเวอร์ (ไม่เกิน 90 วัน) และบันทึกการใช้งานรายงาน (ช่วงเวลา จำนวนครั้ง จำนวนโทเค็น)</p>
+        <p>⚠ ในการลบบัญชี เราจะทำลายข้อมูลสำรองก่อนแล้วจึงลบบัญชี เพราะหากบัญชีหายไปก่อน ก็จะไม่มีผู้ใดมีสิทธิลบข้อมูลสำรองนั้นอีก หากการลบข้อมูลสำรองล้มเหลว การลบบัญชีจะไม่ดำเนินต่อ โปรดลองใหม่อีกครั้งในภายหลัง</p>
+        <p>⚠ เมื่อลบแล้วจะย้อนกลับไม่ได้ แม้คุณจะยังมีรหัสกู้คืนอยู่ ก็จะกู้คืนข้อมูลสำรองบนเซิร์ฟเวอร์ไม่ได้อีก</p>
       </section>
       <section>
         <h2>4. ข้อมูลที่เก็บรักษาไว้และระยะเวลา</h2>
         <p>ข้อมูลต่อไปนี้จะถูกเก็บรักษาตามที่กฎหมายกำหนด และแม้ในระหว่างระยะเวลานั้นก็จะคงอยู่เฉพาะในรูปแบบที่ย้อนกลับหาผู้จัดทำไม่ได้ (การแปลงเป็นนามแฝง) เท่านั้น</p>
         <p>• เนื้อหาคำถาม: 3 ปี (พระราชบัญญัติคุ้มครองผู้บริโภคในพาณิชย์อิเล็กทรอนิกส์ — บันทึกเกี่ยวกับข้อร้องเรียนหรือการระงับข้อพิพาทของผู้บริโภค)</p>
+        <p>• บันทึกธุรกรรมการสมัครสมาชิก (ตัวระบุธุรกรรม สินค้า ระยะเวลาการสมัครสมาชิก ประวัติการเปลี่ยนสถานะการชำระเงิน): 5 ปี (พระราชบัญญัติคุ้มครองผู้บริโภคในพาณิชย์อิเล็กทรอนิกส์ มาตรา 6)</p>
+        <p>• บันทึกข้อเท็จจริงเรื่องการทำลายข้อมูลสำรอง (ตัวระบุการสำรองข้อมูลและเวลาที่ทำลาย): 1 ปี — เพื่อให้คุณตรวจสอบได้ว่า “ทำไมจึงกู้คืนไม่ได้” และจะไม่เก็บตัวระบุบัญชีไว้ด้วย</p>
         <p>เมื่อพ้นระยะเวลาเก็บรักษาแล้ว เราจะทำลายโดยไม่ชักช้า</p>
       </section>
       <section>
-        <h2>5. สิ่งที่ไม่ถูกลบ — บันทึกที่อยู่ในอุปกรณ์</h2>
-        <p>บันทึกของ Jogak (หัวข้อ เนื้อหา รูปภาพ แท็ก และอารมณ์) จัดเก็บอยู่ภายในอุปกรณ์ของคุณเท่านั้น และไม่ถูกส่งไปยังเซิร์ฟเวอร์ของผู้ให้บริการ</p>
-        <p>ดังนั้นแม้คุณลบบัญชี บันทึกในอุปกรณ์ก็ยังคงอยู่ตามเดิม หากต้องการลบบันทึกด้วย โปรดถอนการติดตั้งแอปหรือใช้การรีเซ็ตใน [ตั้งค่า] ของแอป</p>
-        <p>ในทางกลับกัน หากคุณถอนการติดตั้งแอป บันทึกในอุปกรณ์จะกู้คืนไม่ได้</p>
+        <h2>5. สิ่งที่ยังอยู่ในอุปกรณ์ — การลบบัญชีไม่ได้ลบสิ่งเหล่านี้</h2>
+        <p>บันทึกของ Jogak (หัวข้อ เนื้อหา รูปภาพ แท็ก และอารมณ์) และเนื้อหาของรายงาน AI จัดเก็บอยู่ภายในอุปกรณ์ของคุณ</p>
+        <p>ดังนั้นแม้คุณลบบัญชี บันทึกและรายงานในอุปกรณ์ก็ยังคงอยู่ตามเดิม หากต้องการลบออกจากอุปกรณ์ด้วย โปรดถอนการติดตั้งแอปหรือใช้การรีเซ็ตใน [ตั้งค่า] ของแอป</p>
+        <p>ในทางกลับกัน หากคุณถอนการติดตั้งแอป บันทึกในอุปกรณ์จะกู้คืนไม่ได้ จะกู้คืนได้ก็ต่อเมื่อคุณเปิดการสำรองข้อมูลไว้และยังเก็บรหัสกู้คืนอยู่ และเฉพาะก่อนที่คุณจะลบบัญชีเท่านั้น</p>
+        <p>⚠ หากคุณไม่เปิดการสำรองข้อมูล ผู้ให้บริการไม่มีบันทึกที่อยู่ในอุปกรณ์ของคุณ จึงไม่สามารถลบให้คุณได้ และคืนให้คุณก็ไม่ได้เช่นกัน</p>
       </section>
-      <section class="pending">
-        <h2>การแก้ไขที่จะมีผล</h2>
-        <p class="pending-when">มีผลตั้งแต่: ตั้งแต่วันที่เผยแพร่เวอร์ชันที่มีการสมัครสมาชิกรายเดือนและการสำรอง/กู้คืนข้อมูล</p>
-        <p>หากคุณเปิดการสำรองข้อมูลไว้ การลบบัญชีจะลบข้อมูลสำรองที่เข้ารหัสบนเซิร์ฟเวอร์ไปพร้อมกันด้วย ส่วนบันทึกธุรกรรมการสมัครสมาชิกจะถูกเก็บรักษาตามกฎหมายในรูปแบบที่ย้อนกลับหาผู้จัดทำไม่ได้</p>
-        <h3>ก. ข้อมูลที่ถูกลบเพิ่มเติม</h3>
-        <p>• สำเนาบันทึกที่เข้ารหัสซึ่งเก็บอยู่บนเซิร์ฟเวอร์ — จะถูกลบไปพร้อมกับการลบบัญชี เราไม่รอจนครบระยะผ่อนผัน 90 วัน</p>
-        <p>• ตัวระบุการสำรองข้อมูลและบันทึกการสำรองข้อมูล (เวลา ขนาด หมายเลขรุ่น)</p>
-        <p>⚠ เมื่อลบแล้วจะย้อนกลับไม่ได้ แม้คุณจะยังมีรหัสกู้คืนอยู่ ก็จะกู้คืนไม่ได้อีก</p>
-        <p>⚠ บันทึกในอุปกรณ์ของคุณยังคงอยู่ตามเดิม สิ่งที่ถูกลบมีเพียงสำเนาบนเซิร์ฟเวอร์เท่านั้น</p>
-        <h3>ข. ข้อมูลที่เก็บรักษาเพิ่มเติมและระยะเวลา</h3>
-        <p>• บันทึกธุรกรรมการสมัครสมาชิก (ตัวระบุธุรกรรม สินค้า ระยะเวลาการสมัครสมาชิก ประวัติการเปลี่ยนสถานะการชำระเงิน): 5 ปี (พระราชบัญญัติคุ้มครองผู้บริโภคในพาณิชย์อิเล็กทรอนิกส์ มาตรา 6)</p>
-        <p>• บันทึกข้อเท็จจริงเรื่องการทำลายข้อมูลสำรอง (ตัวระบุการสำรองข้อมูลและเวลาที่ทำลาย): 1 ปี — เพื่อให้คุณตรวจสอบได้ว่า “ทำไมจึงกู้คืนไม่ได้” และจะไม่เก็บตัวระบุบัญชีไว้ด้วย</p>
-        <p>บันทึกข้างต้นก็เช่นกัน แม้ในระหว่างระยะเวลาเก็บรักษาก็จะคงอยู่เฉพาะในรูปแบบที่ย้อนกลับหาผู้จัดทำไม่ได้เท่านั้น</p>
-        <h3>ค. คุณต้องยกเลิกการสมัครสมาชิกแยกต่างหาก</h3>
+      <section>
+        <h2>6. คุณต้องยกเลิกการสมัครสมาชิกแยกต่างหาก</h2>
         <p>การลบบัญชีไม่ได้ยกเลิกการสมัครสมาชิกใน Google Play โดยอัตโนมัติ หากคุณไม่ยกเลิก ก็จะยังถูกเรียกเก็บเงินต่อไป</p>
         <p>วิธียกเลิก: แอป Google Play Store &gt; โปรไฟล์ &gt; การชำระเงินและการสมัครใช้บริการ &gt; การสมัครใช้บริการ (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>การคืนเงินสำหรับจำนวนที่ชำระไปแล้วเป็นไปตามนโยบายการคืนเงินของ Google Play และนโยบายการคืนเงินของผู้ให้บริการ หากมีคำถามโปรดติดต่อตามช่องทางด้านล่าง</p>
+        <p>การคืนเงินสำหรับจำนวนที่ชำระไปแล้วเป็นไปตามนโยบายการคืนเงินของ Google Play และนโยบายการคืนเงินของผู้ให้บริการ หากมีคำถามโปรดติดต่อตามช่องทางข้างต้น</p>
       </section>
-      <section class="pending">
-        <h2>การแก้ไขที่จะมีผล</h2>
-        <p class="pending-when">มีผลตั้งแต่: ตั้งแต่วันที่เผยแพร่เวอร์ชันที่มีฟีเจอร์รายงานสรุปด้วย AI</p>
-        <p>เนื้อหาของรายงาน AI จะถูกเก็บไว้ในอุปกรณ์ของคุณ ส่วนบนเซิร์ฟเวอร์จะเก็บข้อความสรุปของรายงานไว้ไม่เกิน 90 วันเพื่อตรวจสอบคุณภาพ และจะถูกลบพร้อมกับบันทึกการใช้งานเมื่อคุณลบบัญชี</p>
-        <h3>ก. รายงาน AI มีอะไรบ้างที่ถูกลบ</h3>
-        <p>• บันทึกการใช้งานรายงานที่อยู่บนเซิร์ฟเวอร์ (ตัวระบุบัญชี ช่วงเวลา จำนวนครั้ง จำนวนโทเค็น) — จะถูกลบไปพร้อมกับการลบบัญชี</p>
-        <p>• ข้อความสรุปของรายงานที่เก็บอยู่บนเซิร์ฟเวอร์ (ไม่เกิน 90 วัน) — จะถูกลบไปพร้อมกับการลบบัญชี เนื้อหาไดอารีต้นฉบับไม่ได้ถูกจัดเก็บไว้ จึงไม่มีอะไรให้ลบ</p>
-        <p>⚠ เนื้อหาของรายงานถูกเก็บไว้ในอุปกรณ์ของคุณด้วย จึงยังคงอยู่ในอุปกรณ์แม้คุณลบบัญชีแล้ว หากต้องการลบ โปรดลบรายงานในแอปหรือถอนการติดตั้งแอป</p>
-        <p>• หากคุณเปิดการสำรองข้อมูลไว้ รายงานก็จะถูกเข้ารหัสและรวมอยู่ในข้อมูลสำรองด้วย และจะถูกลบไปพร้อมกับตอนที่ข้อมูลสำรองถูกลบ</p>
-      </section>
+
     </article>
     <article class="doc" data-lang="tr" lang="tr" hidden>
       <h1>Jogak — Hesabını nasıl silersin</h1>
-      <p class="meta">Yürürlük 2026-08-10 · Son güncelleme 2026-08-10</p>
+      <p class="meta">Yürürlük 2026-08-23 · Son güncelleme 2026-08-23</p>
       <p class="governs">Bu, okuma kolaylığı için hazırlanmış bir çeviridir. Korece aslıyla çelişmesi hâlinde Korece sürüm geçerlidir.</p>
       <p class="intro">Bu sayfada Jogak uygulamasındaki hesabını ve onunla ilgili verileri nasıl sileceğin anlatılıyor. Uygulamayı zaten sildiysen ya da giriş yapamıyorsan e-postayla da talepte bulunabilirsin.</p>
       <section>
@@ -1068,47 +886,34 @@
         <p>• Sosyal hesabın benzersiz kimliği (Google “sub”)</p>
         <p>• E-posta adresi</p>
         <p>• Başvurular ile bunları yazan hesap arasındaki bağlantı</p>
+        <p>• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası (yedeklemeyi açtıysan) — 90 günlük süreyi beklemeden birlikte silinir.</p>
+        <p>• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)</p>
+        <p>• Sunucuda saklanan yapay zekâ rapor özetleri (en fazla 90 gün) ve rapor kullanım kayıtları (dönem, kaç kez oluşturulduğu, jeton sayısı)</p>
+        <p>⚠ Hesap silmede önce yedeği imha eder, sonra hesabı sileriz — çünkü hesap önce yok olursa o yedeği silmeye yetkili kimse kalmaz. Yedeğin silinmesi başarısız olursa hesap silme işlemi hiç başlamaz; lütfen biraz sonra yeniden dene.</p>
+        <p>⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile sunucudaki yedeği geri yükleyemezsin.</p>
       </section>
       <section>
         <h2>4. Saklanan veriler ve süreleri</h2>
         <p>Aşağıdaki bilgiler mevzuat gereği saklanır ve saklama süresi boyunca da yalnızca yazarına ulaşılamayacak biçimde (takma adlaştırılmış olarak) kalır.</p>
         <p>• Başvuru içeriği: 3 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu — tüketici şikâyetleri veya uyuşmazlık çözümüne ilişkin kayıtlar)</p>
+        <p>• Abonelik işlem kayıtları (işlem kimliği, ürün, abonelik süresi, ödeme durumu değişikliği geçmişi): 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)</p>
+        <p>• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için tutulur; hesap kimliği bununla birlikte saklanmaz.</p>
         <p>Saklama süresi dolduğunda gecikmeksizin imha ederiz.</p>
       </section>
       <section>
-        <h2>5. Silinmeyenler — cihazındaki kayıtlar</h2>
-        <p>Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) yalnızca cihazının içinde saklanır ve işletmecinin sunucularına aktarılmaz.</p>
-        <p>Bu nedenle hesabını silsen de cihazındaki kayıtlar olduğu gibi kalır. Kayıtları da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.</p>
-        <p>Bunun tersine, uygulamayı silersen cihazdaki kayıtlar geri getirilemez.</p>
+        <h2>5. Cihazında kalanlar — hesabını silmek bunları silmez</h2>
+        <p>Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) ve yapay zekâ raporlarının metni cihazının içinde saklanır.</p>
+        <p>Bu nedenle hesabını silsen de cihazındaki kayıtlar ve raporlar olduğu gibi kalır. Bunları cihazdan da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.</p>
+        <p>Bunun tersine, uygulamayı silersen cihazdaki kayıtlar geri getirilemez. Yalnızca yedeklemeyi açtıysan ve kurtarma kodunu sakladıysan, üstelik yalnızca hesabını silmeden önce bunları geri alabilirsin.</p>
+        <p>⚠ Yedeklemeyi açmadıysan cihazındaki kayıtlar işletmecide bulunmadığından işletmeci bunları ne silebilir ne de sana geri verebilir.</p>
       </section>
-      <section class="pending">
-        <h2>Yaklaşan değişiklik</h2>
-        <p class="pending-when">Şu tarihten itibaren geçerli: Aylık abonelik ile yedekleme/geri yüklemeyi içeren sürümün yayımlandığı günden itibaren</p>
-        <p>Yedeklemeyi açtıysan, hesabını sildiğinde sunucuda saklanan şifrelenmiş yedek de birlikte silinir. Abonelik işlem kayıtları mevzuat gereği takma adlaştırılarak saklanır.</p>
-        <h3>a. Ek olarak silinen veriler</h3>
-        <p>• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası — hesabınla birlikte silinir. 90 günlük süreyi beklemeyiz.</p>
-        <p>• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)</p>
-        <p>⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile geri yükleme yapamazsın.</p>
-        <p>⚠ Cihazındaki kayıtlar olduğu gibi kalır. Silinen yalnızca sunucudaki kopyadır.</p>
-        <h3>b. Ek olarak saklanan veriler ve süreleri</h3>
-        <p>• Abonelik işlem kayıtları (işlem kimliği, ürün, abonelik süresi, ödeme durumu değişikliği geçmişi): 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)</p>
-        <p>• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için; hesap kimliği bununla birlikte saklanmaz.</p>
-        <p>Yukarıdaki kayıtlar saklama süresi boyunca da yalnızca yazarına ulaşılamayacak biçimde kalır.</p>
-        <h3>c. Aboneliği ayrıca iptal etmelisin</h3>
+      <section>
+        <h2>6. Aboneliği ayrıca iptal etmelisin</h2>
         <p>Hesabını silsen de Google Play aboneliğin kendiliğinden iptal olmaz; iptal etmezsen ücretlendirilmeye devam edersin.</p>
         <p>İptal: Google Play Store uygulaması &gt; profil &gt; Ödemeler ve abonelikler &gt; Abonelikler (<a href="https://play.google.com/store/account/subscriptions)" rel="noopener">https://play.google.com/store/account/subscriptions)</a></p>
-        <p>Ödenmiş tutarların iadesi, Google Play’in iade politikası ile işletmecinin iade politikasına tabidir. Sorularını aşağıdaki iletişim adresine iletebilirsin.</p>
+        <p>Ödenmiş tutarların iadesi, Google Play’in iade politikası ile işletmecinin iade politikasına tabidir. Sorularını yukarıdaki iletişim adresine iletebilirsin.</p>
       </section>
-      <section class="pending">
-        <h2>Yaklaşan değişiklik</h2>
-        <p class="pending-when">Şu tarihten itibaren geçerli: Yapay zekâ özet raporlarını içeren sürümün yayımlandığı günden itibaren</p>
-        <p>Yapay zekâ raporlarının metni cihazında saklanır. Sunucuda, kalite denetimi için rapor özetleri en fazla 90 gün saklanır ve hesabını sildiğinde kullanım kayıtlarıyla birlikte silinir.</p>
-        <h3>a. Yapay zekâ raporlarında neler silinir</h3>
-        <p>• Sunucuda kalan rapor kullanım kayıtları (hesap kimliği, dönem, kaç kez oluşturulduğu, jeton sayısı) — hesabınla birlikte silinir.</p>
-        <p>• Sunucuda saklanan rapor özetleri (en fazla 90 gün) — hesabınla birlikte silinir. Günlük metninin kendisi saklanmadığı için orada silinecek bir şey yoktur.</p>
-        <p>⚠ Rapor metni cihazında da saklandığından hesabını silsen bile cihazda kalır. Kaldırmak istersen uygulamadan raporları sil ya da uygulamayı sil.</p>
-        <p>• Yedeklemeyi açtıysan raporlar da şifrelenmiş olarak yedeğe dâhildir ve yedek silindiğinde birlikte silinir.</p>
-      </section>
+
     </article>
   <footer>
     휘성게임즈 (Vivace Games) · 손휘성<br>
