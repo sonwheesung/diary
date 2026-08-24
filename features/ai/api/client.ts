@@ -177,3 +177,47 @@ export async function requestReport(
     promptVer: typeof json.promptVer === 'number' ? json.promptVer : 0,
   };
 }
+
+/**
+ * 탈퇴할 때 서버의 AI 데이터를 지운다 (`docs/AI_REPORT_SYSTEM.md` §7.1).
+ *
+ * 🔴 **`deleteAccount()`가 common_server를 부르기 전에 불러야 한다.** 이 라우트는 subject
+ *   토큰으로 인가하는데, 계정이 사라지면 그 토큰의 주인이 없어진다 —
+ *   **지울 권한이 있는 사람이 없어진다.** 백업 파기가 앞에 오는 이유와 같다.
+ *
+ * ⚠ **서버가 없으면 성공으로 본다.** `EXPO_PUBLIC_BACKUP_SERVER_URL`이 안 박힌 빌드는
+ *   애초에 리포트를 만든 적이 없으므로 지울 것도 없다. 여기서 막으면 그 빌드에서
+ *   **탈퇴 자체가 불가능**해진다 — 지울 것도 없는데 계정을 못 지우는 것이 훨씬 나쁘다.
+ *
+ * ⚠ 멱등이다. 재시도해도 안전하다.
+ */
+export async function purgeAiData(): Promise<{ ok: true } | { ok: false; reason: AiFail }> {
+  if (BACKUP_SERVER_URL.length === 0) {
+    return { ok: true };
+  }
+  const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
+  if (token === null) {
+    return { ok: false, reason: 'unauthorized' };
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  let res: Response;
+  try {
+    res = await fetch(`${BACKUP_SERVER_URL}/api/v1/ai/purge`, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    });
+  } catch {
+    return { ok: false, reason: 'offline' };
+  } finally {
+    clearTimeout(timer);
+  }
+
+  if (!res.ok) {
+    return { ok: false, reason: mapStatus(res.status) };
+  }
+  return { ok: true };
+}

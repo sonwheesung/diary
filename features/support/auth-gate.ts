@@ -6,6 +6,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import { useCallback, useEffect, useState } from 'react';
 
+import { purgeAiData } from '@/features/ai/api/client';
 import { purgeBackup } from '@/features/backup/api/run-backup';
 import {
   forgetPurchaseIdentity,
@@ -280,6 +281,21 @@ export function useSupportAuth(): SupportAuth {
       const purged = await purgeBackup();
       if (!purged.ok) {
         return purged.reason === 'offline' ? 'offline' : 'error';
+      }
+
+      /*
+       * ⚠ **AI 데이터도 지운다** — 백업과 **같은 이유·같은 순서**다(2026-08-24).
+       *
+       * `DELETE_ACCOUNT` §3이 *"탈퇴하면 AI 리포트 요약문과 이용 기록이 파기된다"* 고
+       * 게시돼 있는데 그렇게 하는 코드가 없었다. 서버에 남는 것 중 **유일하게 사람이 읽을 수
+       * 있는 일기 파생물**이 리포트 요약문이다 — 백업은 암호문이라 우리도 못 읽는다.
+       *
+       * ⚠ 여기서 실패하면 탈퇴를 진행하지 않는다. 계정이 사라지면 그 subject 토큰으로만
+       *   인가되는 이 라우트를 **아무도 부를 수 없다.**
+       */
+      const aiPurged = await purgeAiData();
+      if (!aiPurged.ok) {
+        return aiPurged.reason === 'offline' ? 'offline' : 'error';
       }
 
       const result = await commonServer.deleteAccount();

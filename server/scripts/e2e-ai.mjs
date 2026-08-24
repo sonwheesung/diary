@@ -213,6 +213,77 @@ try {
     eq(r.json.reason, 'cooling-down', 'reason');
     assert(typeof r.json.retryAt === 'string', 'retryAt이 없다 — 앱이 언제 열리는지 못 알린다');
   });
+
+console.log('\n탈퇴 파기 — POST /api/v1/ai/purge');
+
+async function purge(token = TOKEN) {
+  const headers = {};
+  if (token !== null) headers.authorization = `Bearer ${token}`;
+  const res = await fetch(`${BASE}/api/v1/ai/purge`, { method: 'POST', headers });
+  return { status: res.status, json: await res.json() };
+}
+
+await check('토큰이 없으면 401 unauthorized — 남의 데이터를 지울 수 없다', async () => {
+  const r = await purge(null);
+  eq(r.status, 401, 'status');
+  eq(r.json.reason, 'unauthorized', 'reason');
+});
+
+await check('지울 것이 없어도 200 — 멱등이라 앱이 재시도할 수 있다', async () => {
+  const r = await purge();
+  eq(r.status, 200, 'status');
+  eq(r.json.ok, true, 'ok');
+});
+
+await check('🔴 심어둔 리포트·이용기록·잠금이 실제로 사라진다', async () => {
+  /*
+   * 🔴 이 검사가 이 라우트의 전부다. `DELETE_ACCOUNT` §3이 "탈퇴하면 파기된다"고 게시돼
+   *   있는데 그렇게 하는 코드가 **없었다**(2026-08-24). 지운다고 적어놓고 안 지우는 것이
+   *   정확히 그때 일어난 일이라, 여기서 행 수를 세지 않으면 같은 일이 다시 난다.
+   */
+  const id = `e2e-purge-${Date.now()}`;
+  await sql`
+    insert into ai_reports (id, subject_id, kind, period_key, lang, summary)
+    values (${id}, ${SUBJECT}, 'weekly', '2026-W09', 'ko', 'e2e 요약문')`;
+  await sql`
+    insert into ai_usage (id, subject_id, kind, period_key, day)
+    values (${id}, ${SUBJECT}, 'weekly', '2026-W09', '2026-02-23')`;
+  await sql`
+    insert into ai_cooldowns (subject_id, until, reason)
+    values (${SUBJECT}, now() + interval '1 hour', 'e2e')
+    on conflict (subject_id) do update set until = excluded.until`;
+
+  const before = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT}`;
+  assert(before[0].n > 0, '심기가 안 됐다 — 검사가 무의미해진다');
+
+  const r = await purge();
+  eq(r.status, 200, 'status');
+  assert(r.json.reports >= 1, `reports가 안 지워졌다: ${JSON.stringify(r.json)}`);
+  assert(r.json.usage >= 1, `usage가 안 지워졌다: ${JSON.stringify(r.json)}`);
+  assert(r.json.cooldowns >= 1, `cooldowns가 안 지워졌다: ${JSON.stringify(r.json)}`);
+
+  const reports = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT}`;
+  const usage = await sql`select count(*)::int as n from ai_usage where subject_id = ${SUBJECT}`;
+  const cools = await sql`select count(*)::int as n from ai_cooldowns where subject_id = ${SUBJECT}`;
+  eq(reports[0].n, 0, 'ai_reports 잔여');
+  eq(usage[0].n, 0, 'ai_usage 잔여');
+  eq(cools[0].n, 0, 'ai_cooldowns 잔여');
+});
+
+await check('묘비를 남기지 않는다 — 탈퇴는 앱 내 삭제와 다르다', async () => {
+  /*
+   * 앱 안에서 리포트를 지울 때는 `(kind, period_key)`를 남긴다(캡과 로컬이 갈라지는 것을
+   * 막으려고, CLAUDE.md §12 2026-08-18). **탈퇴는 그럴 이유가 없다** — 그 subject_id 로는
+   * 다시 못 들어오므로 지킬 캡이 없고, 남기면 죽은 식별자만 영영 남는다.
+   */
+  const id = `e2e-tomb-${Date.now()}`;
+  await sql`
+    insert into ai_reports (id, subject_id, kind, period_key, lang, summary)
+    values (${id}, ${SUBJECT}, 'weekly', '2026-W08', 'ko', '')`;
+  await purge();
+  const rows = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT}`;
+  eq(rows[0].n, 0, '본문만 비운 행이 남았다');
+});
 } finally {
   /*
    * ⚠ **반드시 치운다.** 잠금 행을 남기면 그 뒤 한 시간 동안 개발 중 생성이 전부 막히고,
