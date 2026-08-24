@@ -92,6 +92,8 @@
 
 ### 비공개 테스트 (2026-08-20 제출 · 검토 중)
 
+**v10 업로드 완료(2026-08-24)** — 본문 텍스트 서식 · 필수 env 3개 복구(v9는 백업·AI·결제가 전부 죽어 있었다). alpha 트랙에 `draft`로 들어갔고 테스터가 받던 v9는 그대로다. ⏭ 출시 노트 기입과 검토 전송은 사람이 한다. 업로드 권한은 켰다 껐다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1.4).
+
 운영 앱에서 **12명 · 14일** 요건을 채우는 중이다. versionCode 8 · 테스터 43명 · 대한민국.
 상세는 [`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1.9, 트랙별 국가는 `CLAUDE.md` §9.1.
 
