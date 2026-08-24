@@ -1,9 +1,10 @@
 import { Image } from 'expo-image';
 import Trash2 from 'lucide-react-native/icons/trash-2';
 import X from 'lucide-react-native/icons/x';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import type { TextInput } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import { resolveImageUri } from '@/features/diary/api/image-store';
@@ -25,9 +26,26 @@ interface BlockEditorProps {
    * 커서가 놓인 텍스트 블록과 그 안의 위치.
    * 사진을 **커서 자리에** 끼워 넣으려면 편집기 밖에서 이 값을 알아야 한다.
    */
-  onCaretChange?: (blockIndex: number, position: number) => void;
+  /**
+   * `reason`이 붙는 이유: **프로그램이 블록을 쪼개도 `selection`이 발화한다.**
+   * 사진·목록을 끼우면 원래 입력창의 `value`가 짧아지고 RN이 선택 변화를 보고하는데,
+   * 그건 사용자가 커서를 옮긴 것이 아니다. 바깥에서 둘을 구분해 걸러낸다.
+   */
+  onCaretChange?: (
+    blockIndex: number,
+    position: number,
+    reason: 'focus' | 'selection' | 'program',
+  ) => void;
   /** 첫 텍스트 블록에 바로 포커스를 준다(새 조각을 쓰러 들어온 경우) */
   autoFocus?: boolean;
+  /**
+   * 특정 블록으로 포커스를 옮겨 달라는 요청.
+   *
+   * 서식을 걸면 문단이 떨어져 나가 블록 인덱스가 밀리는데, **네이티브 포커스는 원래 입력창에
+   * 남는다.** 그대로 두면 시트를 닫고 이어 쓸 때 글이 엉뚱한 문단에 들어간다.
+   * `nonce`는 같은 블록으로 두 번 연달아 옮길 때도 효과가 다시 돌게 하는 값이다.
+   */
+  focusRequest?: { index: number; nonce: number } | null;
 }
 
 /*
@@ -59,6 +77,7 @@ export function BlockEditor({
   onChange,
   onCaretChange,
   autoFocus = false,
+  focusRequest = null,
 }: BlockEditorProps) {
   const { t } = useTranslation();
   const colors = useColors();
@@ -66,6 +85,16 @@ export function BlockEditor({
   // 남는 공간의 실제 높이. 레이아웃 전에는 0이라 첫 그림에만 대체값을 쓴다.
   const [areaHeight, setAreaHeight] = useState(0);
   const cap = areaHeight > 0 ? areaHeight : FALLBACK_HEIGHT;
+
+  /** 블록 인덱스 → 그 입력창. 포커스를 옮기려면 네이티브 노드가 필요하다 */
+  const inputs = useRef(new Map<number, TextInput>());
+
+  useEffect(() => {
+    if (focusRequest === null) {
+      return;
+    }
+    inputs.current.get(focusRequest.index)?.focus();
+  }, [focusRequest]);
 
   const firstTextIndex = blocks.findIndex((block) => block.type === 'text');
 
@@ -131,7 +160,8 @@ export function BlockEditor({
     // 블록이 빠지면 뒤 인덱스가 한 칸씩 당겨진다. 기억해 둔 커서를 그대로 두면
     // 다음 사진이 엉뚱한 문단에 들어간다 — 바로 앞 문단 끝으로 옮겨둔다.
     // Infinity는 slice가 '끝까지'로 받아준다.
-    onCaretChange?.(Math.max(0, index - 1), Number.POSITIVE_INFINITY);
+    // 'program' — 우리가 옮긴 것이니 믿되, 뒤따라올 selection 보고는 막아야 한다
+    onCaretChange?.(Math.max(0, index - 1), Number.POSITIVE_INFINITY, 'program');
   };
 
   return (
@@ -150,16 +180,23 @@ export function BlockEditor({
             return (
               <TextField
                 key={`text-${index}`}
+                ref={(node) => {
+                  if (node === null) {
+                    inputs.current.delete(index);
+                  } else {
+                    inputs.current.set(index, node);
+                  }
+                }}
                 value={block.value}
                 onChangeText={(value) => updateText(index, value)}
                 placeholder={index === firstTextIndex ? t('write.bodyPlaceholder') : ''}
                 multiline
                 textAlignVertical="top"
                 autoFocus={autoFocus && index === firstTextIndex}
-                onFocus={() => onCaretChange?.(index, block.value.length)}
+                onFocus={() => onCaretChange?.(index, block.value.length, 'focus')}
                 // 선택 영역이 곧 커서 위치다. 여기서 받아두지 않으면 사진이 항상 맨 끝에 붙는다.
                 onSelectionChange={(event) =>
-                  onCaretChange?.(index, event.nativeEvent.selection.start)
+                  onCaretChange?.(index, event.nativeEvent.selection.start, 'selection')
                 }
                 style={[
                   // 글쓴이가 건 서식. 읽기 화면과 **같은 함수**를 써야 쓸 때와 읽을 때가 안 갈린다

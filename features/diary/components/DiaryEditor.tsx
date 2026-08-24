@@ -87,6 +87,24 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
   const savedRef = useRef(false);
   // 커서가 어디 있었는지. 사진을 고르는 동안 입력창은 포커스를 잃으므로 마지막 위치를 들고 있어야 한다.
   const caretRef = useRef({ index: 0, position: 0 });
+  /**
+   * 🔴 **프로그램이 블록을 건드린 뒤로 사용자가 아직 아무 칸도 잡지 않았다.**
+   *
+   * 사진·목록·서식은 텍스트 블록을 쪼개고 커서를 **우리가 직접** 옮겨 놓는다. 그런데 그때
+   * 원래 입력창의 `value`가 짧아지면서 RN이 `onSelectionChange`를 쏘고, 그 값을 그대로 믿으면
+   * **방금 옮겨 둔 커서가 도로 앞 블록으로 끌려간다.**
+   *
+   * 에뮬레이터 실측(2026-08-24): `AAAAA BBBBB` 가운데에 목록을 끼운 뒤 서식을 걸면
+   * 뒤쪽 `BBBBB`가 아니라 **앞쪽 `AAAAA`** 에 걸렸다. 서식이 생기기 전부터 있던 버그이고,
+   * **사진을 연달아 두 장 넣을 때**도 두 번째가 엉뚱한 문단에 들어간다.
+   *
+   * ⚠ *"포커스를 가진 칸의 보고만 받는다"* 로 먼저 고쳤는데 **불충분했다** —
+   *   목록 항목이 포커스를 가져가도 그건 텍스트 블록이 아니라 추적값이 낡은 채 남았다.
+   *   기준은 포커스가 아니라 **`focus` 이벤트가 다시 왔는가**다.
+   */
+  const caretLockedRef = useRef(false);
+  /** 포커스 요청을 매번 새 값으로 만들기 위한 카운터 */
+  const focusNonceRef = useRef(0);
   /** 이번 편집에서 새로 넣은 이미지. 저장 없이 나가면 이것만 지운다(기존 사진은 건드리지 않는다) */
   const addedImageIdsRef = useRef<string[]>([]);
   /** 수정 전 상태. 바뀐 게 없으면 나갈 때 묻지 않는다 */
@@ -106,6 +124,8 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
    */
   const [entryDate, setEntryDate] = useState<string | null>(null);
   const [activeFormat, setActiveFormat] = useState<TextFormat>({});
+  /** 서식 시트를 닫을 때 커서를 되돌려 놓을 자리. `nonce`가 있어야 같은 블록도 다시 잡는다 */
+  const [focusRequest, setFocusRequest] = useState<{ index: number; nonce: number } | null>(null);
   const [openSheet, setOpenSheet] = useState<'date' | 'emotion' | 'tag' | 'format' | null>(
     null,
   );
@@ -291,6 +311,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       { type: 'text', value: target.value.slice(position), ...format },
     );
     setBlocks(next);
+    caretLockedRef.current = true;
 
     // 다음 사진은 방금 넣은 사진 아래로 들어가야 자연스럽다.
     caretRef.current = { index: index + 2, position: 0 };
@@ -320,6 +341,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       { type: 'text', value: target.value.slice(position), ...format },
     );
     setBlocks(next);
+    caretLockedRef.current = true;
     caretRef.current = { index: index + 2, position: 0 };
   };
 
@@ -346,6 +368,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
     next[split.index] = withFormat(target, merged);
     setBlocks(next);
     caretRef.current = { index: split.index, position: split.caret };
+    caretLockedRef.current = true;
     setActiveFormat(cleanFormat(merged));
   };
 
@@ -649,9 +672,40 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         blocks={blocks}
         images={images}
         onChange={setBlocks}
-        onCaretChange={(index, position) => {
+        onCaretChange={(index, position, reason) => {
+          /*
+           * 🔴 **서식 시트가 열려 있는 동안에는 커서 보고를 받지 않는다.**
+           *
+           * 서식을 걸면 문단이 떨어져 나가 블록이 1개 → 3개가 되는데, **네이티브 포커스는
+           * 여전히 0번 입력창에 남아 있다.** 그 입력창의 값이 `"가\n나\n다"` → `"가"`로 줄면서
+           * `onSelectionChange`가 발화하고, 그게 여기로 들어와 커서를 0번으로 덮어쓴다.
+           * 그러면 **두 번째로 고른 서식부터 첫 문단에 걸린다** — 에뮬레이터에서 실제로 겪었다
+           * (H2는 가운데 문단에, 정렬·색은 첫 문단에 갔다).
+           *
+           * 시트가 열려 있는 동안 사용자는 글을 만지지 않으므로 커서는 움직일 이유가 없다.
+           * 대상은 `applyFormat`이 스스로 갱신한다.
+           */
+          if (openSheet === 'format') {
+            return;
+          }
+          if (reason === 'focus') {
+            // 사용자가 칸을 직접 잡았다 — 여기서만 잠금이 풀린다
+            caretLockedRef.current = false;
+            caretRef.current = { index, position };
+            return;
+          }
+          if (reason === 'program') {
+            // 편집기가 스스로 옮긴 자리(이미지 삭제 등). 믿고 잠근다
+            caretRef.current = { index, position };
+            caretLockedRef.current = true;
+            return;
+          }
+          if (caretLockedRef.current) {
+            return;
+          }
           caretRef.current = { index, position };
         }}
+        focusRequest={focusRequest}
         // 새로 쓸 때만 커서를 넣는다. 읽으러 들어온 글을 수정할 땐 키보드가 먼저 뜨면 방해된다.
         autoFocus={editingId === null}
       />
@@ -722,7 +776,15 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
 
       <BottomSheet
         visible={openSheet === 'format'}
-        onClose={() => setOpenSheet(null)}
+        onClose={() => {
+          setOpenSheet(null);
+          /*
+           * 서식을 건 문단으로 커서를 되돌린다. 안 하면 네이티브 포커스가 분할 전 입력창에
+           * 남아 있어, 시트를 닫고 이어 쓰면 글이 **첫 문단에** 들어간다.
+           */
+          setFocusRequest({ index: caretRef.current.index, nonce: focusNonceRef.current + 1 });
+          focusNonceRef.current += 1;
+        }}
         title={t('write.formatSheet')}
       >
         <TextFormatSheet value={activeFormat} onChange={applyFormat} />
