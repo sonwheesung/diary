@@ -30,6 +30,7 @@ const COUNTED = [
   'check:i18n-roundtrip',
   'check:subscription',
   'check:notification',
+  'check:diary-format',
   'check:ai',
   'check:admin',
 ];

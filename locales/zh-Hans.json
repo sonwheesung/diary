@@ -137,7 +137,24 @@
     "loadFailed": "无法加载这片碎片。",
     "list": "列表",
     "listItemPlaceholder": "条目",
-    "removeListItem": "删除条目"
+    "removeListItem": "删除条目",
+    "format": "格式",
+    "formatSheet": "文字格式",
+    "alignLeft": "左对齐",
+    "alignCenter": "居中对齐",
+    "alignRight": "右对齐",
+    "bold": "加粗",
+    "sizeBody": "正文",
+    "ink": {
+      "default": "默认颜色",
+      "muted": "浅灰色",
+      "red": "红色",
+      "rose": "粉色",
+      "amber": "黄色",
+      "green": "绿色",
+      "blue": "蓝色",
+      "violet": "紫色"
+    }
   },
   "detail": {
     "deleteTitle": "要删除这片碎片吗?",

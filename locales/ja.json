@@ -137,7 +137,24 @@
     "loadFailed": "かけらを読み込めませんでした。",
     "list": "リスト",
     "listItemPlaceholder": "項目",
-    "removeListItem": "項目を削除"
+    "removeListItem": "項目を削除",
+    "format": "書式",
+    "formatSheet": "文字の書式",
+    "alignLeft": "左揃え",
+    "alignCenter": "中央揃え",
+    "alignRight": "右揃え",
+    "bold": "太字",
+    "sizeBody": "本文",
+    "ink": {
+      "default": "標準の色",
+      "muted": "薄いグレー",
+      "red": "赤",
+      "rose": "ピンク",
+      "amber": "黄色",
+      "green": "緑",
+      "blue": "青",
+      "violet": "紫"
+    }
   },
   "detail": {
     "deleteTitle": "このかけらを削除しますか?",

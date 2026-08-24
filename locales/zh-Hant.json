@@ -137,7 +137,24 @@
     "loadFailed": "無法載入這片碎片。",
     "list": "清單",
     "listItemPlaceholder": "項目",
-    "removeListItem": "刪除項目"
+    "removeListItem": "刪除項目",
+    "format": "格式",
+    "formatSheet": "文字格式",
+    "alignLeft": "靠左對齊",
+    "alignCenter": "置中對齊",
+    "alignRight": "靠右對齊",
+    "bold": "粗體",
+    "sizeBody": "內文",
+    "ink": {
+      "default": "預設顏色",
+      "muted": "淺灰色",
+      "red": "紅色",
+      "rose": "粉紅色",
+      "amber": "黃色",
+      "green": "綠色",
+      "blue": "藍色",
+      "violet": "紫色"
+    }
   },
   "detail": {
     "deleteTitle": "要刪除這片碎片嗎?",

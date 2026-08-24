@@ -137,7 +137,24 @@
     "loadFailed": "Tidak bisa memuat kepingan ini.",
     "list": "Daftar",
     "listItemPlaceholder": "Butir",
-    "removeListItem": "Hapus butir"
+    "removeListItem": "Hapus butir",
+    "format": "Format",
+    "formatSheet": "Format teks",
+    "alignLeft": "Rata kiri",
+    "alignCenter": "Rata tengah",
+    "alignRight": "Rata kanan",
+    "bold": "Tebal",
+    "sizeBody": "Teks",
+    "ink": {
+      "default": "Warna bawaan",
+      "muted": "Abu-abu muda",
+      "red": "Merah",
+      "rose": "Merah muda",
+      "amber": "Kuning",
+      "green": "Hijau",
+      "blue": "Biru",
+      "violet": "Ungu"
+    }
   },
   "detail": {
     "deleteTitle": "Hapus kepingan ini?",

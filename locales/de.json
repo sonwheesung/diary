@@ -137,7 +137,24 @@
     "loadFailed": "Dieses Stück konnte nicht geladen werden.",
     "list": "Liste",
     "listItemPlaceholder": "Eintrag",
-    "removeListItem": "Eintrag entfernen"
+    "removeListItem": "Eintrag entfernen",
+    "format": "Format",
+    "formatSheet": "Textformatierung",
+    "alignLeft": "Linksbündig",
+    "alignCenter": "Zentriert",
+    "alignRight": "Rechtsbündig",
+    "bold": "Fett",
+    "sizeBody": "Text",
+    "ink": {
+      "default": "Standardfarbe",
+      "muted": "Hellgrau",
+      "red": "Rot",
+      "rose": "Rosa",
+      "amber": "Gelb",
+      "green": "Grün",
+      "blue": "Blau",
+      "violet": "Violett"
+    }
   },
   "detail": {
     "deleteTitle": "Dieses Stück löschen?",

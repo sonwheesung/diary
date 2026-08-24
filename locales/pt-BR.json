@@ -137,7 +137,24 @@
     "loadFailed": "Não foi possível carregar este pedaço.",
     "list": "Lista",
     "listItemPlaceholder": "Item",
-    "removeListItem": "Remover item"
+    "removeListItem": "Remover item",
+    "format": "Formato",
+    "formatSheet": "Formato do texto",
+    "alignLeft": "Alinhar à esquerda",
+    "alignCenter": "Centralizar",
+    "alignRight": "Alinhar à direita",
+    "bold": "Negrito",
+    "sizeBody": "Texto",
+    "ink": {
+      "default": "Cor padrão",
+      "muted": "Cinza claro",
+      "red": "Vermelho",
+      "rose": "Rosa",
+      "amber": "Amarelo",
+      "green": "Verde",
+      "blue": "Azul",
+      "violet": "Roxo"
+    }
   },
   "detail": {
     "deleteTitle": "Excluir este pedaço?",

@@ -137,7 +137,24 @@
     "loadFailed": "Non è stato possibile caricare questo pezzo.",
     "list": "Elenco",
     "listItemPlaceholder": "Voce",
-    "removeListItem": "Rimuovi voce"
+    "removeListItem": "Rimuovi voce",
+    "format": "Formato",
+    "formatSheet": "Formattazione del testo",
+    "alignLeft": "Allinea a sinistra",
+    "alignCenter": "Centra",
+    "alignRight": "Allinea a destra",
+    "bold": "Grassetto",
+    "sizeBody": "Testo",
+    "ink": {
+      "default": "Colore predefinito",
+      "muted": "Grigio chiaro",
+      "red": "Rosso",
+      "rose": "Rosa",
+      "amber": "Giallo",
+      "green": "Verde",
+      "blue": "Blu",
+      "violet": "Viola"
+    }
   },
   "detail": {
     "deleteTitle": "Eliminare questo pezzo?",

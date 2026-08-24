@@ -137,7 +137,24 @@
     "loadFailed": "Не удалось загрузить эту запись.",
     "list": "Список",
     "listItemPlaceholder": "Пункт",
-    "removeListItem": "Удалить пункт"
+    "removeListItem": "Удалить пункт",
+    "format": "Формат",
+    "formatSheet": "Формат текста",
+    "alignLeft": "Выровнять по левому краю",
+    "alignCenter": "Выровнять по центру",
+    "alignRight": "Выровнять по правому краю",
+    "bold": "Полужирный",
+    "sizeBody": "Текст",
+    "ink": {
+      "default": "Цвет по умолчанию",
+      "muted": "Светло-серый",
+      "red": "Красный",
+      "rose": "Розовый",
+      "amber": "Жёлтый",
+      "green": "Зелёный",
+      "blue": "Синий",
+      "violet": "Фиолетовый"
+    }
   },
   "detail": {
     "deleteTitle": "Удалить эту запись?",

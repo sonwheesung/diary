@@ -21,6 +21,8 @@ import { deleteDiary, getDiaryById } from '@/features/diary/api/diary-repository
 import { getImagesForDiary, resolveImageUri } from '@/features/diary/api/image-store';
 import { DiaryEditor } from '@/features/diary/components/DiaryEditor';
 import { emotionLabel } from '@/features/diary/emotions';
+import { readFormat } from '@/features/diary/format';
+import { textStyleFor } from '@/features/diary/text-style';
 import type { Diary, DiaryImage } from '@/features/diary/types';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -205,7 +207,8 @@ export default function DiaryDetailScreen() {
             return null;
           }
           return (
-            <Text key={`text-${index}`} style={styles.body}>
+            // 편집기와 **같은 함수**로 서식을 푼다. 각자 조립하면 쓸 때와 읽을 때가 갈린다
+            <Text key={`text-${index}`} style={[styles.body, textStyleFor(readFormat(block), colors)]}>
               {block.value}
             </Text>
           );

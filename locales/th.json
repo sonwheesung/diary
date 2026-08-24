@@ -137,7 +137,24 @@
     "loadFailed": "โหลดชิ้นนี้ไม่สำเร็จ",
     "list": "รายการ",
     "listItemPlaceholder": "รายการย่อย",
-    "removeListItem": "ลบรายการย่อย"
+    "removeListItem": "ลบรายการย่อย",
+    "format": "รูปแบบ",
+    "formatSheet": "รูปแบบตัวอักษร",
+    "alignLeft": "จัดชิดซ้าย",
+    "alignCenter": "จัดกึ่งกลาง",
+    "alignRight": "จัดชิดขวา",
+    "bold": "ตัวหนา",
+    "sizeBody": "เนื้อความ",
+    "ink": {
+      "default": "สีเริ่มต้น",
+      "muted": "เทาอ่อน",
+      "red": "แดง",
+      "rose": "ชมพู",
+      "amber": "เหลือง",
+      "green": "เขียว",
+      "blue": "น้ำเงิน",
+      "violet": "ม่วง"
+    }
   },
   "detail": {
     "deleteTitle": "ลบชิ้นนี้ไหม?",

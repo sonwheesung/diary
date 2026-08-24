@@ -137,7 +137,24 @@
     "loadFailed": "조각을 불러오지 못했어요.",
     "list": "목록",
     "listItemPlaceholder": "항목",
-    "removeListItem": "항목 삭제"
+    "removeListItem": "항목 삭제",
+    "format": "서식",
+    "formatSheet": "글자 서식",
+    "alignLeft": "왼쪽 정렬",
+    "alignCenter": "가운데 정렬",
+    "alignRight": "오른쪽 정렬",
+    "bold": "굵게",
+    "sizeBody": "본문",
+    "ink": {
+      "default": "기본색",
+      "muted": "옅은 회색",
+      "red": "빨강",
+      "rose": "분홍",
+      "amber": "노랑",
+      "green": "초록",
+      "blue": "파랑",
+      "violet": "보라"
+    }
   },
   "detail": {
     "deleteTitle": "이 조각을 지울까요?",

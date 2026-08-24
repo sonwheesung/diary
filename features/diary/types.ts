@@ -1,12 +1,58 @@
 import type { EmotionCode } from './emotions';
 
 /**
+ * 글쓴이가 고를 수 있는 본문 글자색. **값이 아니라 역할 이름**이다.
+ *
+ * 🔴 목록이 `theme/`이 아니라 여기 있는 이유: **무엇을 고를 수 있는가는 도메인**이고,
+ *   그 이름이 어떤 픽셀이 되는가만 테마의 몫이다. `theme/palettes.ts`가 이 타입을 받아
+ *   팔레트마다 실제 색을 채운다 — 스킨이 늘어도 고를 수 있는 색 목록은 흔들리지 않는다.
+ *
+ * 8개로 묶어둔다. 참고한 일기장들은 9~12색을 늘어놓는데, 색이 많을수록 고르는 데 시간이 들고
+ * 기둥 2("화면이 조용해야 글이 보인다")에서 멀어진다.
+ * `default`는 **테마의 본문색 그대로**라는 뜻이고, 저장할 때는 필드를 아예 쓰지 않는다.
+ */
+export const INK_COLORS = [
+  'default',
+  'muted',
+  'red',
+  'rose',
+  'amber',
+  'green',
+  'blue',
+  'violet',
+] as const;
+
+export type InkColor = (typeof INK_COLORS)[number];
+
+/**
  * 본문은 평문이 아니라 **텍스트/이미지 블록의 순서 있는 배열**이다(DIARY_SYSTEM §1.1).
  * 마크다운·HTML이 아닌 이유: RN에서 인라인 리치 편집은 제약이 크고,
  * 블록이면 AI 요약에 텍스트만 뽑기 쉽고 백업 암호화도 단순해진다.
  */
+/** 문단 정렬. 없으면 `left`. */
+export type TextAlign = 'left' | 'center' | 'right';
+
+/** 문단 크기. 없으면 `body`. `theme/typography.ts`의 토큰으로 풀린다. */
+export type TextSize = 'h1' | 'h2' | 'h3' | 'h4' | 'body';
+
+/**
+ * 글쓴이가 문단에 건 서식 (DIARY_SYSTEM §1.1 텍스트 서식).
+ *
+ * 🔴 **전부 선택이고, 기본값이면 필드를 아예 쓰지 않는다.** 그래야 서식을 한 번도
+ *   건드리지 않은 조각의 JSON이 이 기능이 생기기 전과 **바이트 단위로 같다** —
+ *   옛 조각이 이유 없이 커지지 않고 백업 diff도 튀지 않는다.
+ *
+ * ⚠ `color`는 **hex가 아니라 코드**다. 이유는 `theme/palettes.ts`의 `ink` 주석.
+ */
+export interface TextFormat {
+  align?: TextAlign;
+  size?: TextSize;
+  bold?: boolean;
+  color?: InkColor;
+}
+
 export type DiaryBlock =
-  | { type: 'text'; value: string }
+  | ({ type: 'text'; value: string } & TextFormat)
   /**
    * 목록. 항목 문자열만 갖는다 — **불릿 모양은 저장하지 않는다.**
    * 모양은 표시 문제라 나중에 스킨(§9)에서 갈아끼울 수 있어야 하고, 저장해두면

@@ -137,7 +137,24 @@
     "loadFailed": "Không tải được mảnh này.",
     "list": "Danh sách",
     "listItemPlaceholder": "Mục",
-    "removeListItem": "Xóa mục"
+    "removeListItem": "Xóa mục",
+    "format": "Định dạng",
+    "formatSheet": "Định dạng chữ",
+    "alignLeft": "Căn trái",
+    "alignCenter": "Căn giữa",
+    "alignRight": "Căn phải",
+    "bold": "In đậm",
+    "sizeBody": "Nội dung",
+    "ink": {
+      "default": "Màu mặc định",
+      "muted": "Xám nhạt",
+      "red": "Đỏ",
+      "rose": "Hồng",
+      "amber": "Vàng",
+      "green": "Xanh lá",
+      "blue": "Xanh dương",
+      "violet": "Tím"
+    }
   },
   "detail": {
     "deleteTitle": "Xóa mảnh này?",

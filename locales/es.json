@@ -137,7 +137,24 @@
     "loadFailed": "No se pudo cargar esta pieza.",
     "list": "Lista",
     "listItemPlaceholder": "Elemento",
-    "removeListItem": "Quitar elemento"
+    "removeListItem": "Quitar elemento",
+    "format": "Formato",
+    "formatSheet": "Formato de texto",
+    "alignLeft": "Alinear a la izquierda",
+    "alignCenter": "Centrar",
+    "alignRight": "Alinear a la derecha",
+    "bold": "Negrita",
+    "sizeBody": "Texto",
+    "ink": {
+      "default": "Color predeterminado",
+      "muted": "Gris claro",
+      "red": "Rojo",
+      "rose": "Rosa",
+      "amber": "Amarillo",
+      "green": "Verde",
+      "blue": "Azul",
+      "violet": "Morado"
+    }
   },
   "detail": {
     "deleteTitle": "¿Eliminar esta pieza?",

@@ -1,4 +1,5 @@
-import type { DiaryBlock } from './types';
+import { cleanFormat, readFormat, sameFormat, withFormat } from './format.ts';
+import type { DiaryBlock } from './types.ts';
 
 /**
  * 본문 블록 직렬화와 평문 추출 (DIARY_SYSTEM §1.1).
@@ -78,7 +79,11 @@ export function parseBlocks(contentBlocks: string | null, plainText: string): Di
     if (blocks.length === 0 && parsed.length > 0) {
       return plainText.length > 0 ? [{ type: 'text', value: plainText }] : [];
     }
-    return blocks;
+    /*
+     * 서식은 여기서 한 번 씻는다 — 모르는 값(옛 백업·나중 버전·손상)이 화면 스타일까지
+     * 흘러가지 않게. `isDiaryBlock`이 아니라 여기서 하는 이유는 format.ts의 `cleanFormat` 주석.
+     */
+    return blocks.map((block) => (block.type === 'text' ? withFormat(block, block) : block));
   } catch {
     return plainText.length > 0 ? [{ type: 'text', value: plainText }] : [];
   }
@@ -97,7 +102,16 @@ export function hasContent(blocks: DiaryBlock[]): boolean {
   });
 }
 
-/** 빈 텍스트 블록을 제거하고 연속된 텍스트 블록을 합친다. 저장 직전에 한 번 돌린다. */
+/**
+ * 빈 텍스트 블록을 제거하고 연속된 텍스트 블록을 합친다. 저장 직전에 한 번 돌린다.
+ *
+ * 🔴 **합치는 조건에 "서식이 같다"가 들어간다**(2026-08-24). 없으면 서식이 다른 두 문단이
+ *   하나로 뭉개져 **저장하는 순간 서식이 전부 사라진다** — 화면에서는 멀쩡히 보이다가
+ *   저장하고 다시 열면 없어지는, 가장 알아채기 어려운 종류의 손실이다.
+ *
+ * 반대로 서식을 기본값으로 되돌리면 여기서 이웃과 **다시 합쳐진다.** 그래서 서식을
+ * 걸었다 푼 조각의 JSON이 한 번도 안 건드린 조각과 같아진다(`cleanFormat`과 한 쌍).
+ */
 export function normalizeBlocks(blocks: DiaryBlock[]): DiaryBlock[] {
   const result: DiaryBlock[] = [];
 
@@ -121,11 +135,20 @@ export function normalizeBlocks(blocks: DiaryBlock[]): DiaryBlock[] {
       continue;
     }
 
+    const format = cleanFormat(readFormat(block));
     const previous = result[result.length - 1];
-    if (previous !== undefined && previous.type === 'text') {
-      result[result.length - 1] = { type: 'text', value: `${previous.value}\n${value}` };
+    if (
+      previous !== undefined &&
+      previous.type === 'text' &&
+      sameFormat(readFormat(previous), format)
+    ) {
+      result[result.length - 1] = {
+        type: 'text',
+        value: `${previous.value}\n${value}`,
+        ...format,
+      };
     } else {
-      result.push({ type: 'text', value });
+      result.push({ type: 'text', value, ...format });
     }
   }
 

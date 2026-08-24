@@ -137,7 +137,24 @@
     "loadFailed": "Couldn't load this piece.",
     "list": "List",
     "listItemPlaceholder": "Item",
-    "removeListItem": "Remove item"
+    "removeListItem": "Remove item",
+    "format": "Format",
+    "formatSheet": "Text format",
+    "alignLeft": "Align left",
+    "alignCenter": "Align center",
+    "alignRight": "Align right",
+    "bold": "Bold",
+    "sizeBody": "Body",
+    "ink": {
+      "default": "Default",
+      "muted": "Light gray",
+      "red": "Red",
+      "rose": "Pink",
+      "amber": "Yellow",
+      "green": "Green",
+      "blue": "Blue",
+      "violet": "Purple"
+    }
   },
   "detail": {
     "deleteTitle": "Delete this piece?",

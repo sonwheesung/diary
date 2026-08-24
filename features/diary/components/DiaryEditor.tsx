@@ -5,6 +5,7 @@ import ImagePlus from 'lucide-react-native/icons/image-plus';
 import List from 'lucide-react-native/icons/list';
 import Smile from 'lucide-react-native/icons/face-slightly-smiling';
 import Tag from 'lucide-react-native/icons/tag';
+import Type from 'lucide-react-native/icons/type';
 import X from 'lucide-react-native/icons/x';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
@@ -32,14 +33,16 @@ import {
 import { prepareInterstitial, showInterstitialIfReady } from '@/features/ads/api/interstitial';
 import { listTagsByUsage } from '@/features/diary/api/tag-repository';
 import { hasContent, usedImageIds } from '@/features/diary/blocks';
+import { cleanFormat, readFormat, splitParagraph, withFormat } from '@/features/diary/format';
 import { BlockEditor } from '@/features/diary/components/BlockEditor';
 import { EmotionPicker } from '@/features/diary/components/EmotionPicker';
 import { TagInput } from '@/features/diary/components/TagInput';
+import { TextFormatSheet } from '@/features/diary/components/TextFormatSheet';
 import { withExcursion } from '@/features/lock/excursion';
 import { syncReminders } from '@/features/notification/api/reminder';
 import { emotionLabel } from '@/features/diary/emotions';
 import type { EmotionCode } from '@/features/diary/emotions';
-import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
+import type { DiaryBlock, DiaryImage, TextFormat } from '@/features/diary/types';
 import { monthRange, today } from '@/lib/date';
 import { formatDayNumber, formatMonthYearWeekday } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -102,7 +105,10 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
    * 오늘 조각이 이미 있으면 오늘로 시작할 수 없으므로 비워두고 고르게 한다(DIARY_SYSTEM §2).
    */
   const [entryDate, setEntryDate] = useState<string | null>(null);
-  const [openSheet, setOpenSheet] = useState<'date' | 'emotion' | 'tag' | null>(null);
+  const [activeFormat, setActiveFormat] = useState<TextFormat>({});
+  const [openSheet, setOpenSheet] = useState<'date' | 'emotion' | 'tag' | 'format' | null>(
+    null,
+  );
   const [takenDates, setTakenDates] = useState<ReadonlySet<string>>(new Set());
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -273,13 +279,16 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       return;
     }
 
+    // 쪼갠 앞뒤 조각은 **원래 문단의 서식을 그대로 물려받는다.** 안 넘기면 사진을 끼우는 순간
+    // 그 문단의 서식이 사라진다(`insertList`도 같다).
+    const format = cleanFormat(readFormat(target));
     const next = [...blocks];
     next.splice(
       index,
       1,
-      { type: 'text', value: target.value.slice(0, position) },
+      { type: 'text', value: target.value.slice(0, position), ...format },
       { type: 'image', imageId },
-      { type: 'text', value: target.value.slice(position) },
+      { type: 'text', value: target.value.slice(position), ...format },
     );
     setBlocks(next);
 
@@ -301,16 +310,50 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       return;
     }
 
+    const format = cleanFormat(readFormat(target));
     const next = [...blocks];
     next.splice(
       index,
       1,
-      { type: 'text', value: target.value.slice(0, position) },
+      { type: 'text', value: target.value.slice(0, position), ...format },
       { type: 'list', items: [''] },
-      { type: 'text', value: target.value.slice(position) },
+      { type: 'text', value: target.value.slice(position), ...format },
     );
     setBlocks(next);
     caretRef.current = { index: index + 2, position: 0 };
+  };
+
+  /**
+   * 커서가 놓인 **문단**에 서식을 건다 (DIARY_SYSTEM §1.1 텍스트 서식).
+   *
+   * 🔴 먼저 `splitParagraph`로 그 문단을 자기 블록으로 떼어낸다. RN `TextInput`은 한 입력창
+   *   안에서 문단마다 다른 크기를 못 그리므로, 떼어내지 않으면 **고른 서식이 문단 하나가
+   *   아니라 그 덩어리 전체에** 걸린다.
+   *
+   * 서식을 기본값으로 되돌리면 저장 시 `normalizeBlocks`가 이웃과 다시 합친다 —
+   * 여기서 되돌릴 필요가 없다.
+   */
+  const applyFormat = (patch: TextFormat) => {
+    const { index, position } = caretRef.current;
+    const split = splitParagraph(blocks, index, position);
+    const target = split.blocks[split.index];
+    if (target === undefined || target.type !== 'text') {
+      return;
+    }
+
+    const next = [...split.blocks];
+    const merged = { ...readFormat(target), ...patch };
+    next[split.index] = withFormat(target, merged);
+    setBlocks(next);
+    caretRef.current = { index: split.index, position: split.caret };
+    setActiveFormat(cleanFormat(merged));
+  };
+
+  /** 시트를 열 때 커서가 놓인 문단의 현재 서식을 읽어둔다 — 뭘 고른 상태인지 보여야 한다 */
+  const openFormatSheet = () => {
+    const target = blocks[caretRef.current.index];
+    setActiveFormat(target === undefined ? {} : cleanFormat(readFormat(target)));
+    setOpenSheet('format');
   };
 
   const addImage = async () => {
@@ -631,6 +674,9 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
         <ToolbarButton label={t('write.list')} onPress={insertList}>
           <List size={22} color={colors.text} />
         </ToolbarButton>
+        <ToolbarButton label={t('write.format')} onPress={openFormatSheet}>
+          <Type size={22} color={colors.text} />
+        </ToolbarButton>
         <ToolbarButton
           label={t('write.tag')}
           onPress={() => setOpenSheet('tag')}
@@ -672,6 +718,14 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
             }
           }}
         />
+      </BottomSheet>
+
+      <BottomSheet
+        visible={openSheet === 'format'}
+        onClose={() => setOpenSheet(null)}
+        title={t('write.formatSheet')}
+      >
+        <TextFormatSheet value={activeFormat} onChange={applyFormat} />
       </BottomSheet>
 
       <BottomSheet

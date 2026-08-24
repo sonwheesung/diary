@@ -8,6 +8,8 @@
  * 원칙: Glass 금지 · 과한 Gradient 금지 · Shadow 최소.
  */
 
+import type { InkColor } from '@/features/diary/types';
+
 export interface Palette {
   /** 화면 바탕 */
   background: string;
@@ -33,6 +35,18 @@ export interface Palette {
   paper: string;
 
   danger: string;
+
+  /**
+   * 본문 글자색 팔레트 (DIARY_SYSTEM §1.1 텍스트 서식).
+   *
+   * 🔴 **블록은 여기 키(`rose` 같은 이름)만 저장하고 hex는 저장하지 않는다.**
+   *   hex를 저장하면 라이트에서 고른 색이 다크에서 안 읽히고, 스킨을 갈아끼워도
+   *   옛 조각만 옛 색으로 남는다 — 감정을 코드로 저장한 것과 같은 이유(CLAUDE.md §9.1 규칙 2).
+   *
+   * ⚠ 스킨을 추가할 때 **이 그룹을 빠뜨리면 안 된다.** 없으면 이미 서식이 들어간
+   *   조각의 글자색을 그릴 수 없다. `Palette`의 필수 필드로 둔 이유다.
+   */
+  ink: Record<InkColor, string>;
 }
 
 /** 디자인 시안(2026-08-07 수령)의 팔레트가 정본이다 */
@@ -53,6 +67,21 @@ const light: Palette = {
   paper: '#EFE7DA',
 
   danger: '#C0564B',
+
+  /*
+   * 밝은 바탕(#F5F7FA) 위에서 읽히도록 **어둡고 채도를 눌러** 잡았다.
+   * 형광에 가까운 색을 넣지 않는 이유는 기둥 2다 — 일기는 읽는 물건이지 형광펜 자국이 아니다.
+   */
+  ink: {
+    default: '#1F2A44',
+    muted: '#7A8699',
+    red: '#B3382F',
+    rose: '#B4436C',
+    amber: '#8A6100',
+    green: '#2F7A54',
+    blue: '#2C4A7C',
+    violet: '#6B4BA8',
+  },
 };
 
 /**
@@ -79,6 +108,22 @@ const dark: Palette = {
   paper: '#3A3222',
 
   danger: '#E88A7D',
+
+  /*
+   * 어두운 바탕(#12161F) 위라 **라이트의 같은 이름보다 밝게** 잡는다.
+   * 🔴 라이트 값을 그대로 쓰면 진한 자주·남색이 배경에 잠겨 글자가 사라진다 —
+   *   hex를 저장하지 않고 코드를 저장하기로 한 이유가 정확히 이 표다.
+   */
+  ink: {
+    default: '#E8ECF4',
+    muted: '#8E9AB3',
+    red: '#F09287',
+    rose: '#F0A0BC',
+    amber: '#E3B562',
+    green: '#7FCFA3',
+    blue: '#8AB0E8',
+    violet: '#B79BEA',
+  },
 };
 
 export const PALETTES = { light, dark } as const;

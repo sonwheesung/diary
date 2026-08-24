@@ -7,6 +7,8 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import { resolveImageUri } from '@/features/diary/api/image-store';
+import { readFormat } from '@/features/diary/format';
+import { textStyleFor } from '@/features/diary/text-style';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
@@ -114,8 +116,13 @@ export function BlockEditor({
   const isSoleBlock = blocks.length === 1;
 
   const updateText = (index: number, value: string) => {
+    const target = blocks[index];
+    if (target === undefined || target.type !== 'text') {
+      return;
+    }
     const next = [...blocks];
-    next[index] = { type: 'text', value };
+    // ⚠ `{ type: 'text', value }`로 새로 만들면 **글자를 한 자 칠 때마다 서식이 지워진다.**
+    next[index] = { ...target, value };
     onChange(next);
   };
 
@@ -154,12 +161,14 @@ export function BlockEditor({
                 onSelectionChange={(event) =>
                   onCaretChange?.(index, event.nativeEvent.selection.start)
                 }
-                style={
+                style={[
+                  // 글쓴이가 건 서식. 읽기 화면과 **같은 함수**를 써야 쓸 때와 읽을 때가 안 갈린다
+                  textStyleFor(readFormat(block), colors),
                   // 본문 하나뿐이면 영역을 꽉 채운다 — 어디를 눌러도 글쓰기로 들어간다.
                   index === firstTextIndex && isSoleBlock
                     ? { height: cap }
-                    : { minHeight: FOLLOWING_MIN_HEIGHT, maxHeight: cap }
-                }
+                    : { minHeight: FOLLOWING_MIN_HEIGHT, maxHeight: cap },
+                ]}
               />
             );
           }

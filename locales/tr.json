@@ -137,7 +137,24 @@
     "loadFailed": "Bu parça yüklenemedi.",
     "list": "Liste",
     "listItemPlaceholder": "Madde",
-    "removeListItem": "Maddeyi kaldır"
+    "removeListItem": "Maddeyi kaldır",
+    "format": "Biçim",
+    "formatSheet": "Yazı biçimi",
+    "alignLeft": "Sola hizala",
+    "alignCenter": "Ortala",
+    "alignRight": "Sağa hizala",
+    "bold": "Kalın",
+    "sizeBody": "Metin",
+    "ink": {
+      "default": "Varsayılan renk",
+      "muted": "Açık gri",
+      "red": "Kırmızı",
+      "rose": "Pembe",
+      "amber": "Sarı",
+      "green": "Yeşil",
+      "blue": "Mavi",
+      "violet": "Mor"
+    }
   },
   "detail": {
     "deleteTitle": "Bu parça silinsin mi?",

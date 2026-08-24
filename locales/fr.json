@@ -137,7 +137,24 @@
     "loadFailed": "Impossible de charger ce fragment.",
     "list": "Liste",
     "listItemPlaceholder": "Élément",
-    "removeListItem": "Retirer l'élément"
+    "removeListItem": "Retirer l'élément",
+    "format": "Format",
+    "formatSheet": "Mise en forme du texte",
+    "alignLeft": "Aligner à gauche",
+    "alignCenter": "Centrer",
+    "alignRight": "Aligner à droite",
+    "bold": "Gras",
+    "sizeBody": "Texte",
+    "ink": {
+      "default": "Couleur par défaut",
+      "muted": "Gris clair",
+      "red": "Rouge",
+      "rose": "Rose",
+      "amber": "Jaune",
+      "green": "Vert",
+      "blue": "Bleu",
+      "violet": "Violet"
+    }
   },
   "detail": {
     "deleteTitle": "Supprimer ce fragment ?",
