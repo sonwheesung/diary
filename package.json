@@ -26,6 +26,7 @@
     "sync:shared": "node scripts/sync-shared.mjs",
     "check:shared": "node scripts/sync-shared.mjs --check",
     "check:release-env": "node scripts/check-release-env.mjs",
+    "release:env": "node scripts/release-env.mjs",
     "check:legal": "node --experimental-strip-types --no-warnings scripts/check-legal.mjs",
     "check:legal-one": "node --experimental-strip-types --no-warnings scripts/check-legal-one.mjs",
     "check:play-access": "node scripts/check-play-access.mjs",

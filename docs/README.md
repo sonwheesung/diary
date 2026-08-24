@@ -159,6 +159,12 @@ npm run check:diary-format     # 21개 — 저장 형태(기본값 미저장)·*
                                #   ⚠ 병합 검사가 핵심이다. 이게 없으면 화면에서는 멀쩡히 보이다가
                                #     저장하고 다시 열었을 때 서식이 사라진다
 
+# 릴리스 AAB를 굽기 전 (로컬·EAS 둘 다)
+eval "$(node scripts/release-env.mjs production)"   # 프로필 env를 셸로. 손으로 적지 않는다
+npm run check:release-env      # 금지 플래그 + **필수 값 4개** + eas.json store 프로필
+                               #   ⚠ v8·v9가 필수 값 3개를 빠뜨린 채 나갔다(MONETIZATION §6.1.4)
+                               #   광고는 막지 않고 어느 단위로 나가는지만 찍는다
+
 # 운영 콘솔을 건드렸으면
 npm run check:admin            # 23개 — **fail-closed** · 헤더 판정 · KST 집계 창 · 원가 추정
 

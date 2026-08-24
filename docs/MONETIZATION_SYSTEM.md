@@ -959,6 +959,46 @@ LinkMemo     com.vivacegames.linkmemo  카탈로그 ❌ 403   구매 검증 ❌ 
 → `npm run check:release-env`가 이걸 막는다(`scripts/check-release-env.mjs`).
 **AAB를 굽기 전에 반드시 돌린다.**
 
+#### 🔴 그런데 그 게이트가 **반쪽이었다** — v8·v9가 그대로 나갔다 (2026-08-24)
+
+`check:release-env`는 **금지 목록만** 갖고 있었다. *"개발용 값이 새어 들어가는가"* 는 봤는데
+*"있어야 할 값이 빠졌는가"* 는 아무도 안 봤다. 그리고 **`.env.local`을 옆으로 치우는 순간
+그 파일이 혼자 들고 있던 값도 같이 사라진다** — 게이트가 시킨 그 행동이 구멍을 만들었다.
+
+기기에 깔린 versionCode 9 APK를 뜯어 실측한 결과(번들 문자열 grep):
+
+| 값 | v9 번들 | 결과 |
+|---|---|---|
+| `EXPO_PUBLIC_BACKUP_SERVER_URL` | **없음** | 백업·**AI 리포트**가 `not-configured` |
+| `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | **없음**(`goog_` 0건) | `purchasesConfigured()` false — **결제 화면이 안 열린다** |
+| `EXPO_PUBLIC_ADS_REAL` | **없음** | 실제 단위 0건 · 구글 테스트 단위 6건 |
+
+즉 **조각 Pro의 세 기둥이 전부 죽은 빌드**가 클로즈드 테스트 43명에게 갔다.
+사려고 눌러도 화면이 안 열리고, 광고 수익은 0이었다.
+
+**왜 안 보였나** — 화면이 전부 *정상적인 미구현*처럼 생겼다. 백업은
+*"백업 서버가 설정되지 않았어요"*, 결제는 버튼이 조용히 안 열린다. 둘 다 "아직 안 만들었나 보다"로
+읽힌다. 그리고 이 절의 옛 주석은 *"값이 맞는지는 못 본다 … 그건 `eas.json` 프로필의 일이다"* 라고
+넘겼는데 — **넘긴 그쪽도 안 들고 있었다.** `production` 프로필에 `BACKUP_SERVER_URL`이 없었다.
+
+**고친 것 둘**
+
+| | |
+|---|---|
+| `check:release-env`에 **필수 목록** | `.env`+셸 **그리고** `eas.json`의 `distribution: 'store'` 프로필을 **둘 다** 본다. 어느 경로로 구워도 걸린다 |
+| `npm run release:env <profile>` | 프로필 env를 셸 export로 뽑는다. **손으로 넣지 않는다** — 손으로 한다는 건 언젠가 하나를 빠뜨린다는 뜻이고, 빠뜨려도 빌드는 조용히 성공한다 |
+
+⚠ **광고(`EXPO_PUBLIC_ADS_REAL`)는 막지 않고 보고만 한다**(2026-08-24 사용자 결정).
+이 앱은 AdMob에서 *"검토 필요 · 광고 게재가 제한됨"* 이라 실제 단위를 박아도 노출이 0이다 —
+없는 수익을 이유로 릴리스를 막으면 **가짜 블로커**가 된다. 대신 검사가 통과할 때마다
+어느 단위로 나가는지 한 줄로 찍는다.
+
+⚠ **`eas.json`의 `production`이 `jogak-stg.vercel.app`을 가리킨다.** 운영 Supabase가 아직
+없어서 그것 말고 넣을 값이 없다(`CLAUDE.md` §5). 백업이 아예 안 되는 것보다는 낫지만,
+**운영 프로젝트가 생기면 그때 옮기는 비용이 있다** — `vault_id`가 Storage 경로에 박혀 있어
+테스터가 만든 백업을 재업로드해야 한다(`BACKUP_SYSTEM.md` §5.5). 클로즈드 테스트 규모에서는
+감당되지만, **프로덕션 출시 전에는 반드시 운영 프로젝트로 옮긴다.**
+
 #### ⚠ `__DEV__` 가드로 풀려다 말았다 — 그게 답이 아니다
 
 `EXPO_PUBLIC_DEV_LOGIN`은 이미 `__DEV__ && …`로 접힌다(`features/support/dev-auth.ts`).
@@ -973,20 +1013,25 @@ LinkMemo     com.vivacegames.linkmemo  카탈로그 ❌ 403   구매 검증 ❌ 
 #### 절차
 
 ```bash
-# ① 릴리스에 섞이면 안 되는 것부터 치운다
-npm run check:release-env          # 통과할 때까지. mv .env.local .env.local.aside
+# ① 프로필 env 를 셸에 넣는다 — 손으로 적지 않는다 (2026-08-24)
+eval "$(node scripts/release-env.mjs production)"     # stg 빌드면 production 대신 stg
+source /c/project/secrets/jogak-prod-keystore.env     # JOGAK_UPLOAD_* 4개
 
-# ② stg 패키지로 네이티브를 다시 만든다 (⚠ android/ 를 통째로 지우고 새로 만든다)
-APP_VARIANT=stg npx expo prebuild --platform android --clean --no-install
+# ② 게이트. 통과할 때까지 (mv .env.local .env.local.aside)
+npm run check:release-env
+#    금지 플래그 · 로컬 env 파일 · **필수 값 4개** · eas.json store 프로필을 전부 본다
+#    광고는 막지 않고 어느 단위로 나가는지 한 줄로 찍는다
 
-# ③ 생성된 gradle 두 곳을 손본다 — CNG 산출물이라 ②를 돌릴 때마다 다시 해야 한다
-#    · android/app/build.gradle   versionCode 1 → 다음 번호
-#                                 release signingConfig: debug → upload
-#    · android/gradle.properties  JOGAK_UPLOAD_* 4개 (C:/project/secrets/jogak-keystore.env 에서)
+# ③ app.json 의 versionCode 를 올린다 — 로컬 빌드는 원격 카운터를 안 쓴다
 
-# ④ eas.json 의 stg 프로필 env 를 셸에 명시적으로 넣고 굽는다
-ANDROID_HOME=~/AppData/Local/Android/Sdk APP_VARIANT=stg \
-EXPO_PUBLIC_...=... ./gradlew bundleRelease --no-daemon
+# ④ 네이티브를 다시 만든다 (⚠ android/ 를 통째로 지우고 새로 만든다)
+#    stg 빌드면 앞에 APP_VARIANT=stg 를 붙인다
+npx expo prebuild --platform android --clean --no-install
+#    ⚠ 서명은 손으로 안 고친다 — plugins/with-upload-signing.js 가 넣는다(2026-08-21).
+#      prebuild 가 android/ 를 날려도 서명이 따라온다
+
+# ⑤ 굽는다
+cd android && ANDROID_HOME=~/AppData/Local/Android/Sdk ./gradlew bundleRelease --no-daemon
 #    → android/app/build/outputs/bundle/release/app-release.aab
 
 # ⑤ 🔴 서명 지문이 Play에 등록된 업로드 키와 같은지 **올리기 전에** 확인한다

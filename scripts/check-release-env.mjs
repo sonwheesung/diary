@@ -66,6 +66,63 @@ const FORBIDDEN = [
  */
 const LOCAL_ENV_FILES = ['.env.local', '.env.production.local', '.env.development.local'];
 
+/**
+ * 🔴 **없으면 기능이 통째로 죽는 값들** (2026-08-24 추가).
+ *
+ * ## 왜 늦게 생겼나 — v8·v9가 이 구멍으로 나갔다
+ *
+ * 이 파일은 원래 **금지 목록만** 갖고 있었다. "개발용 값이 새어 들어가는가"만 보고
+ * "있어야 할 값이 빠졌는가"는 아무도 안 봤다. 그 결과 클로즈드 테스트 43명이 받은
+ * versionCode 9 번들에서 **세 개가 통째로 빠졌다**(설치된 APK를 뜯어 실측):
+ *
+ * | 빠진 값 | 결과 |
+ * |---|---|
+ * | `EXPO_PUBLIC_BACKUP_SERVER_URL` | 백업·**AI 리포트**가 `not-configured`로 죽는다 |
+ * | `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | `purchasesConfigured()`가 false — **결제 화면이 안 열린다** |
+ * | `EXPO_PUBLIC_ADS_REAL` | 실제 단위 0건 · 구글 테스트 단위만 |
+ *
+ * 즉 **조각 Pro의 세 기둥이 전부 죽은 빌드**가 나갔다. 화면에는 정상적인 미구현처럼
+ * 보여서(*"백업 서버가 설정되지 않았어요"*, 버튼이 조용히 안 열림) 아무도 못 알아챘다.
+ *
+ * 두 갈래가 **같은 구멍**으로 빠진다:
+ *   ① 로컬 릴리스 — `.env.local`을 옆으로 치우면 그 파일이 혼자 들고 있던 값이 같이 사라진다
+ *   ② EAS `production` 프로필 — `eas.json`에 `BACKUP_SERVER_URL`이 아예 없었다
+ *
+ * 이 파일의 옛 주석은 *"값이 맞는지는 못 본다 … 그건 `eas.json` 프로필의 일이다"* 라고
+ * 넘겼는데, **넘긴 그쪽도 안 들고 있었다.** 그래서 여기서 둘 다 본다.
+ */
+const REQUIRED = [
+  ['EXPO_PUBLIC_SERVER_URL', '공지·문의·로그인·엔타이틀먼트가 전부 죽는다'],
+  ['EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID', 'idToken audience가 없어 로그인이 전부 unauthorized가 된다'],
+  ['EXPO_PUBLIC_BACKUP_SERVER_URL', '백업과 AI 리포트가 not-configured로 죽는다'],
+  ['EXPO_PUBLIC_REVENUECAT_ANDROID_KEY', 'purchasesConfigured()가 false — 결제 화면이 안 열린다'],
+];
+
+/**
+ * 광고는 **막지 않고 보고만 한다**(2026-08-24 사용자 결정).
+ *
+ * `EXPO_PUBLIC_ADS_REAL`이 없으면 구글 테스트 단위가 나간다. 그런데 이 앱은 AdMob에서
+ * **"검토 필요 · 광고 게재가 제한됨"** 상태라(CLAUDE.md §7) 실제 단위를 박아도 노출이 0이다.
+ * 없는 수익을 이유로 릴리스를 막으면 **가짜 블로커**가 된다 — 대신 어느 쪽으로 나가는지
+ * 매번 눈에 보이게 적는다.
+ */
+const REPORTED = [['EXPO_PUBLIC_ADS_REAL', '실제 AdMob 단위', '구글 테스트 단위']];
+
+/** `.env`를 Expo와 같은 방식으로 읽는다 — 로컬 릴리스가 실제로 보게 될 값이다 */
+function readEnvFile(file) {
+  const found = {};
+  if (!existsSync(file)) return found;
+  for (const raw of readFileSync(file, 'utf8').split('\n')) {
+    const line = raw.trim();
+    if (line.length === 0 || line.startsWith('#')) continue;
+    const eq = line.indexOf('=');
+    if (eq === -1) continue;
+    const value = line.slice(eq + 1).trim();
+    if (value.length > 0) found[line.slice(0, eq).trim()] = value;
+  }
+  return found;
+}
+
 const problems = [];
 
 for (const [name, value, why] of FORBIDDEN) {
@@ -93,6 +150,41 @@ for (const file of LOCAL_ENV_FILES) {
   }
 }
 
+/*
+ * ① 로컬 릴리스 경로 — `.env` + 셸. (`.env.local`은 위에서 이미 막았으므로 여기 없다)
+ */
+const localEnv = { ...readEnvFile('.env'), ...process.env };
+for (const [name, why] of REQUIRED) {
+  const value = localEnv[name];
+  if (value === undefined || value === '') {
+    problems.push(`${name} 이 없다 — ${why}
+      (.env 에도 셸에도 없다. 로컬 릴리스를 구우면 빈 문자열이 번들에 박힌다)`);
+  }
+}
+
+/*
+ * ② EAS 경로 — `distribution: 'store'` 프로필은 전부 REQUIRED를 선언해야 한다.
+ *   ⚠ 여기가 v9를 놓친 자리다. `production`에 `BACKUP_SERVER_URL`이 없었다.
+ */
+try {
+  const eas = JSON.parse(readFileSync('eas.json', 'utf8'));
+  for (const [profile, config] of Object.entries(eas.build ?? {})) {
+    if (config.distribution !== 'store') continue;
+    const declared = config.env ?? {};
+    const missing = REQUIRED.map(([name]) => name).filter(
+      (name) => declared[name] === undefined || declared[name] === '',
+    );
+    if (missing.length > 0) {
+      problems.push(
+        `eas.json 의 '${profile}' 프로필(store)에 ${missing.length}개가 없다 — 그 빌드에서 기능이 죽는다\n` +
+          `      ${missing.join(', ')}`,
+      );
+    }
+  }
+} catch (error) {
+  problems.push(`eas.json 을 읽지 못했다 — ${error instanceof Error ? error.message : error}`);
+}
+
 if (problems.length > 0) {
   console.error('\n🔴 릴리스 빌드를 하면 안 되는 상태다:\n');
   for (const p of problems) console.error(`  · ${p}`);
@@ -104,4 +196,9 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log('릴리스 환경 ok — 개발용 플래그도, 로컬 env 파일도 없다');
+console.log('릴리스 환경 ok — 개발용 플래그 없음 · 로컬 env 파일 없음 · 필수 값 전부 있음');
+for (const [name, onLabel, offLabel] of REPORTED) {
+  const on = localEnv[name] === '1';
+  console.log(`  광고 — ${on ? onLabel : offLabel} (${name}=${localEnv[name] ?? '없음'})`);
+}
+console.log('');

@@ -887,7 +887,7 @@ EEA +3  노르웨이 리히텐슈타인 아이슬란드
 ② **문서** — 설계 결정을 코드보다 **먼저** 문서에(`CLAUDE.md` 또는 `docs/<SYS>_SYSTEM.md` + `docs/README.md` 색인)
 ③ **개발**
 ④ **검증** — `npm run typecheck` · `npm run lint` · `npm run check:i18n` 통과 후 커밋
-  ⚠ **릴리스 AAB를 로컬에서 구울 때는 `npm run check:release-env`를 먼저 돌린다** —
+  ⚠ **릴리스 AAB를 로컬에서 구울 때는 `eval "$(npm run -s release:env <profile>)"` 로 프로필 env를 셸에 넣은 뒤 `npm run check:release-env`를 돌린다** —
   EAS는 깨끗한 컨테이너라 없던 문제인데, 로컬은 `.env.local`을 읽어 개발용 값이
   **번들에 문자열로 박힌다**(올린 뒤에는 못 고친다). `docs/MONETIZATION_SYSTEM.md` §6.1.4
   ⚠ `features/ai/{types,prompt,period}.ts`를 고쳤으면 **`npm run sync:shared`도 돌린다** —
