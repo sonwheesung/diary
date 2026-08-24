@@ -21,6 +21,20 @@
  * RevenueCat 팁 문구가 부르는 이름(*"View financial data, orders, and cancellation
  * survey response"*)이 정확히 **계정 권한** 라벨이다.
  *
+ * 🔴 **이 검사는 "출시 권한"을 못 본다 — 조각에서는 거짓 초록이 나온다**(2026-08-24).
+ *
+ *   여기서 보는 두 가지는 `앱 정보 보기`·`재무 데이터` 권한이다. **AAB 업로드에 필요한
+ *   `앱을 테스트 트랙으로 출시`는 별개**이고, 그게 꺼져 있어도 이 표는 전부 초록이다.
+ *
+ *   다른 앱(LinkMemo·아이디어 저장소)은 권한을 끄면 카탈로그가 403으로 떨어져 구분이 된다.
+ *   그런데 **조각의 이 서비스 계정은 RevenueCat용이라 읽기 권한이 상시로 켜져 있어서**
+ *   그 신호가 안 나온다 — 초록인데 `eas submit`은 실패한다.
+ *
+ *   ⚠ 실제로 속았다: `edits.insert` 200 · `tracks.get` 200 · `bundles.upload` 500(403이 아님)을
+ *   보고 "권한 있음"으로 단정했는데, **403이 아니라는 것은 권한이 있다는 증거가 아니다.**
+ *   업로드가 *"The service account is missing the necessary permissions"* 로 실패하면
+ *   이 표를 믿지 말고 `C:/project/common/PLAY_RELEASE_AUTOMATION.md` §4의 켰다 끄기를 한다.
+ *
  * ⚠ 키·토큰을 절대 출력하지 않는다. 인쇄하는 것은 HTTP 상태와 구글이 준 메시지뿐이다.
  * ⚠ 키 파일은 저장소 **밖**에 둔다(`C:\project\secrets\`). git에 들어가면 이 스크립트가
  *   편해지는 대신 폭발 반경이 저장소 전체가 된다.
@@ -129,3 +143,14 @@ if (denied > 0) {
   console.log('    · 구매 검증만 막힘 → 🔴 **계정 권한** 탭의 재무 데이터 + 주문 및 구독 관리');
   console.log('  ⚠ 권한 반영에 시간이 걸린다. 저장 직후 실패해도 잠시 뒤 다시 돌려본다.');
 }
+
+/*
+ * 실패했든 아니든 **항상** 찍는다. 이 경고는 "막힌 앱이 있을 때"의 문제가 아니라
+ * "전부 초록일 때" 속는 문제라, 초록인 실행에서 안 보이면 아무 값이 없다.
+ */
+console.log('\n🔴 이 표가 전부 초록이어도 AAB 업로드는 막힐 수 있다.');
+console.log('   `앱을 테스트 트랙으로 출시`는 여기서 안 보이는 **별개 권한**이다.');
+console.log('   조각의 이 계정은 RevenueCat용 읽기 권한이 상시라 그 신호가 안 나온다 —');
+console.log('   다른 앱은 권한을 끄면 카탈로그가 403으로 떨어지지만 조각은 200을 유지한다.');
+console.log("   업로드가 'missing the necessary permissions'로 실패하면 표를 믿지 말고");
+console.log('   C:/project/common/PLAY_RELEASE_AUTOMATION.md §4 (켰다 끄기)를 따른다.');
