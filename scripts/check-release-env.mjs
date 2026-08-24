@@ -108,6 +108,27 @@ const REQUIRED = [
  */
 const REPORTED = [['EXPO_PUBLIC_ADS_REAL', '실제 AdMob 단위', '구글 테스트 단위']];
 
+/**
+ * 🔴 **업로드 서명 키** — 없으면 `plugins/with-upload-signing.js`가 **디버그 키로 조용히 떨어진다**.
+ *
+ * 그 플러그인 주석이 *"릴리스는 반드시 `check:release-env`를 먼저 통과시킨다"* 고 넘기는데,
+ * **넘긴 이쪽이 안 보고 있었다**(2026-08-24 발견). 필수 env를 더하며 같이 잡았다 —
+ * `production` 프로필에 `BACKUP_SERVER_URL`이 없던 것과 **정확히 같은 종류**의 구멍이다.
+ *
+ * 디버그 키로 서명된 AAB는 Play가 받아주지 않고 **이유도 안 알려준다.**
+ * 20분을 태운 뒤에 업로드 단계에서야 드러난다.
+ *
+ * ⚠ 값은 절대 찍지 않는다 — 있는지만 본다.
+ * ⚠ 운영 키와 stg 키가 다르다(`B9:A7:29…` vs `3A:47:42…`). 어느 앱을 굽는지는 여기서
+ *   판정하지 못한다 — 그건 사람이 고르는 것이고, 서명 지문은 빌드 뒤에 대조한다.
+ */
+const SIGNING = [
+  'JOGAK_UPLOAD_STORE_FILE',
+  'JOGAK_UPLOAD_STORE_PASSWORD',
+  'JOGAK_UPLOAD_KEY_ALIAS',
+  'JOGAK_UPLOAD_KEY_PASSWORD',
+];
+
 /** `.env`를 Expo와 같은 방식으로 읽는다 — 로컬 릴리스가 실제로 보게 될 값이다 */
 function readEnvFile(file) {
   const found = {};
@@ -160,6 +181,29 @@ for (const [name, why] of REQUIRED) {
     problems.push(`${name} 이 없다 — ${why}
       (.env 에도 셸에도 없다. 로컬 릴리스를 구우면 빈 문자열이 번들에 박힌다)`);
   }
+}
+
+/*
+ * 서명 키 — 셸에만 있어야 한다(저장소에 두지 않는다). 하나라도 없으면 디버그 키로 떨어진다.
+ */
+const missingSigning = SIGNING.filter(
+  (name) => process.env[name] === undefined || process.env[name] === '',
+);
+if (missingSigning.length > 0) {
+  const all = missingSigning.length === SIGNING.length;
+  problems.push(
+    [
+      all
+        ? '업로드 서명 키가 하나도 없다 — AAB가 **디버그 키로 조용히 서명되고** Play가 이유 없이 거부한다'
+        : `업로드 서명 키가 ${missingSigning.length}개 비었다 — 일부만 있어도 디버그 키로 떨어진다`,
+      `      없는 것: ${missingSigning.join(', ')}`,
+      '      set -a; . /c/project/secrets/jogak-prod-keystore.env; set +a',
+      '      export JOGAK_UPLOAD_STORE_FILE="$KEYSTORE_PATH" \\',
+      '             JOGAK_UPLOAD_STORE_PASSWORD="$STORE_PASSWORD" \\',
+      '             JOGAK_UPLOAD_KEY_ALIAS="$KEY_ALIAS" \\',
+      '             JOGAK_UPLOAD_KEY_PASSWORD="$KEY_PASSWORD"',
+    ].join('\n'),
+  );
 }
 
 /*
