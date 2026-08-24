@@ -66,8 +66,24 @@ function patchBuildGradle(contents) {
   }
   let next = contents.replace(anchor, `$1${SIGNING_BLOCK}`);
 
-  // release가 debug 키로 서명되던 기본값을 upload로 바꾼다
-  const releaseSigning = /(release\s*\{\s*signingConfig\s+)signingConfigs\.debug/;
+  /*
+   * release가 debug 키로 서명되던 기본값을 upload로 바꾼다.
+   *
+   * ⚠ **`release\s*\{\s*signingConfig` 로 잡으면 안 된다**(2026-08-24에 깨졌다).
+   *   RN 템플릿이 `release {` 바로 뒤에 주석 두 줄을 넣는데 `\s*`가 그걸 못 넘는다:
+   *
+   *     release {
+   *         // Caution! In production, you need to generate your own keystore file.
+   *         // see https://reactnative.dev/docs/signed-apk-android.
+   *         signingConfig signingConfigs.debug
+   *
+   *   그래서 `buildTypes → release → 그 뒤 첫 signingConfig` 로 잡는다. 게으른 매칭이라
+   *   앞선 `debug { signingConfig … }` 를 건너뛰고 release 블록 안에서 멈춘다.
+   *
+   * ⚠ 앵커가 깨지면 **던진다.** 조용히 넘어가면 디버그 키로 서명된 AAB가 나오고,
+   *   Play는 이유를 안 알려준다 — 20분을 태운 뒤 업로드 단계에서야 드러난다.
+   */
+  const releaseSigning = /(buildTypes\s*\{[\s\S]*?release\s*\{[\s\S]*?signingConfig\s+)signingConfigs\.debug/;
   if (!releaseSigning.test(next)) {
     throw new Error(
       'with-upload-signing: release의 signingConfig를 못 찾았다. 서명이 안 바뀌면 ' +
