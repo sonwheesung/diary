@@ -474,7 +474,7 @@ AAAAA BBBBB          ← 한 문단
 | 캘린더 집계 | ✅ `getWrittenDates()` |
 | 홈 화면 | ✅ `app/(tabs)/index.tsx` |
 | 작성 화면 | ✅ `app/write.tsx` — 제목·본문·커서 위치 사진 삽입·태그·감정·날짜 변경 |
-| **본문 텍스트 서식** | ✅ 2026-08-24 — `features/diary/format.ts`(순수) + `text-style.ts`(스타일) + `components/TextFormatSheet.tsx`. `npm run check:diary-format` 21개. ⏭ 실기기 확인 남음 |
+| **본문 텍스트 서식** | ✅ 2026-08-24 — `features/diary/format.ts`(순수) + `text-style.ts`(스타일) + `components/TextFormatSheet.tsx`. `npm run check:diary-format` 21개 + **에뮬레이터 실동작 확인**. ⏭ **실기기는 v10부터** — dev 빌드를 폰에 넣을 수 없다(스토어 서명 충돌, CLAUDE.md §12 2026-08-24). 거기서만 알 수 있는 것은 **One UI 글꼴 크기**와 **실제 ARM의 Fabric 텍스트 측정**(§10 잘림 규칙)이다 |
 | ~~상세·캘린더·검색·설정 화면~~ | ✅ **정정(2026-08-24)** — 넷 다 오래전에 붙었는데 이 줄만 ❌로 남아 있었다. 현황 정본은 [`README.md`](./README.md) §2다 |
 
 > 실기기 스모크 테스트 통과(2026-08-07): v1→v2 `ALTER TABLE` 마이그레이션(기존 DB에서 `user_version` 2 확인)·
