@@ -566,7 +566,8 @@
     "metricsTitle": "Indikator",
     "topicsTitle": "Juga muncul",
     "days": "{{count}} hr",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Indikator · rata-rata dari {{count}}"
   },
   "aiConsent": {
     "title": "Persetujuan laporan AI",

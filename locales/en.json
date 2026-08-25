@@ -566,7 +566,8 @@
     "metricsTitle": "Metrics",
     "topicsTitle": "Also showed up",
     "days": "{{count}}d",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Metrics · averaged from {{count}}"
   },
   "aiConsent": {
     "title": "AI report consent",

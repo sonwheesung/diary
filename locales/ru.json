@@ -566,7 +566,8 @@
     "metricsTitle": "Показатели",
     "topicsTitle": "Также встречалось",
     "days": "{{count}}д",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Показатели · среднее из {{count}}"
   },
   "aiConsent": {
     "title": "Согласие на отчёты ИИ",

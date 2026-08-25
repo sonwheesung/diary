@@ -46,6 +46,12 @@ export interface Report {
 export interface ReportMetrics {
   metrics: MetricValue[];
   topics: TopicValue[];
+  /**
+   * 상위 리포트일 때 **몇 개의 하위에서 합산했나**(§8.4.1). 주간에는 없다.
+   *
+   * 🔴 **화면이 반드시 함께 보여준다.** 주간 2개만 만든 달의 "평균"은 그 달의 평균이 아니다.
+   */
+  from?: number;
 }
 
 interface Row {
@@ -75,6 +81,9 @@ function parseMetrics(raw: string | null): ReportMetrics | null {
     return {
       metrics: Array.isArray(box.metrics) ? (box.metrics as MetricValue[]) : [],
       topics: Array.isArray(box.topics) ? (box.topics as TopicValue[]) : [],
+      ...(typeof (box as { from?: unknown }).from === 'number'
+        ? { from: (box as { from: number }).from }
+        : {}),
     };
   } catch {
     return null;

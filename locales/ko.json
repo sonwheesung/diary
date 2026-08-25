@@ -566,7 +566,8 @@
     "metricsTitle": "이번 기간 지표",
     "topicsTitle": "그 밖에 나타난 것",
     "days": "{{count}}일",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "이번 기간 지표 · 하위 {{count}}개 평균"
   },
   "aiConsent": {
     "title": "AI 리포트 동의",

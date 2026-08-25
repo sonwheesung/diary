@@ -566,7 +566,8 @@
     "metricsTitle": "Indicatori",
     "topicsTitle": "È emerso anche",
     "days": "{{count}}g",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Indicatori · media di {{count}}"
   },
   "aiConsent": {
     "title": "Consenso ai resoconti IA",

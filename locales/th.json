@@ -566,7 +566,8 @@
     "metricsTitle": "ตัวชี้วัด",
     "topicsTitle": "ยังปรากฏอีก",
     "days": "{{count}} วัน",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "ตัวชี้วัด · เฉลี่ยจาก {{count}}"
   },
   "aiConsent": {
     "title": "ความยินยอมสำหรับรายงาน AI",

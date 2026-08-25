@@ -566,7 +566,8 @@
     "metricsTitle": "Kennzahlen",
     "topicsTitle": "Kam auch vor",
     "days": "{{count}}T",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Kennzahlen · Durchschnitt aus {{count}}"
   },
   "aiConsent": {
     "title": "Einwilligung für KI-Berichte",

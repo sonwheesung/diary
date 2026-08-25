@@ -566,7 +566,8 @@
     "metricsTitle": "Chỉ số",
     "topicsTitle": "Cũng xuất hiện",
     "days": "{{count}} ngày",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Chỉ số · trung bình của {{count}}"
   },
   "aiConsent": {
     "title": "Đồng ý cho báo cáo AI",

@@ -566,7 +566,8 @@
     "metricsTitle": "この期間の指標",
     "topicsTitle": "ほかに出てきたこと",
     "days": "{{count}}日",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "この期間の指標 · 下位{{count}}件の平均"
   },
   "aiConsent": {
     "title": "AIレポートの同意",

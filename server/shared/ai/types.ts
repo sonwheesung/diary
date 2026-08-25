@@ -171,6 +171,35 @@ export const REPORT_SCHEMA = {
 } as const;
 
 /**
+ * 🔴 **상위(월간·연간)는 모델에게 지표를 요구하지 않는다** (§8.4.1).
+ *
+ * 계층 요약은 하위 **요약문만** 받고, 그 요약문에는 숫자가 없다(프롬프트가 옮겨 적지 말라고 시킨다).
+ * 그래서 상위에서 모델이 매기는 지표는 **근거가 없다** — 실측으로 어긋나는 것을 확인했다
+ * (주간 `exercise` 날 수 합이 2일인데 월간이 1일이었다).
+ *
+ * → 상위 지표는 **앱이 하위에서 합산한다**(`rollupMetrics`). 모델은 글만 쓴다.
+ * ⚠ 덤으로 출력 토큰이 준다 — 상위 호출이 그만큼 싸진다.
+ */
+const { metrics: _m, topics: _t, ...SUMMARY_ONLY_PROPS } = REPORT_SCHEMA.properties;
+
+export const SUMMARY_ONLY_SCHEMA = {
+  type: 'object',
+  properties: SUMMARY_ONLY_PROPS,
+  required: ['summary', 'concern'],
+  additionalProperties: false,
+} as const;
+
+/**
+ * 종류에 맞는 구조화 출력 스키마. **주간만 지표를 낸다**.
+ *
+ * ⚠ 반환형이 `object`면 서버의 `generateReport`가 받는 `Record<string, unknown>`에 안 맞는다.
+ *   스키마는 어차피 JSON이라 그 모양으로 좁혀 준다 — 호출부가 캐스팅하게 두지 않는다.
+ */
+export function schemaFor(kind: ReportKind): Record<string, unknown> {
+  return kind === 'weekly' ? REPORT_SCHEMA : SUMMARY_ONLY_SCHEMA;
+}
+
+/**
  * 프롬프트 버전. 바꾸면 **결과가 바뀐다.**
  *
  * ⚠ 리포트와 함께 저장한다. 안 그러면 나중에 "왜 그때 리포트는 달랐지"에 답할 수 없다 —

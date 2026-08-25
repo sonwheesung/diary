@@ -566,7 +566,8 @@
     "metricsTitle": "本期指标",
     "topicsTitle": "还出现了",
     "days": "{{count}}天",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "本期指标 · {{count}} 份平均"
   },
   "aiConsent": {
     "title": "AI 报告同意",

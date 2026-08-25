@@ -6,6 +6,7 @@ import {
   listReports,
   listUsedPeriodKeys,
   saveReport,
+  type ReportMetrics,
 } from '@/features/ai/api/report-repository';
 import { requestReport, type AiFail } from '@/features/ai/api/client';
 import {
@@ -27,6 +28,7 @@ import {
   yearKeyRange,
 } from '@/features/ai/period';
 import { hasBody } from '@/features/ai/prompt';
+import { rollupMetrics } from '@/features/ai/rollup';
 import type { ReportKind } from '@/features/ai/types';
 import { SETTING_KEYS, getSetting } from '@/features/settings/api/settings-store';
 import { i18next } from '@/lib/i18n';
@@ -258,10 +260,10 @@ async function reportLanguage(): Promise<string> {
 }
 
 /** 그 달에 속하는 주간 리포트들. 주가 달을 넘으면 **월요일이 든 달**에 센다 */
-function weeksInMonth(
-  weekly: { periodKey: string; summary: string }[],
+function weeksInMonth<T extends { periodKey: string }>(
+  weekly: T[],
   monthKeyValue: string,
-): { periodKey: string; summary: string }[] {
+): T[] {
   return weekly.filter((report) => {
     const range = keyRange(report.periodKey);
     return range !== null && range.from.startsWith(monthKeyValue);
@@ -290,7 +292,11 @@ export async function createReport(
 
   const lang = await reportLanguage();
   let entries: { date: string; emotion: string | null; title: string | null; text: string }[] = [];
-  let subReports: { periodKey: string; summary: string }[] = [];
+  /*
+   * ⚠ `metrics`를 함께 들고 다닌다 — 상위 지표를 여기서 합산하기 때문이다(§8.4.1).
+   *   서버로 보낼 때는 `periodKey`·`summary`만 골라 보낸다(아래 `requestReport`).
+   */
+  let subReports: { periodKey: string; summary: string; metrics: ReportMetrics | null }[] = [];
 
   if (kind === 'weekly') {
     const range = keyRange(periodKey);
@@ -337,6 +343,16 @@ export async function createReport(
   }
 
   /*
+   * 🔴 **상위 지표의 재료**(§8.4.1). 모델에게 다시 묻지 않고 여기서 모은다 —
+   *   계층 요약은 하위 요약문만 받고 그 요약문에는 숫자가 없어서, 상위에서 모델이 매기는
+   *   지표는 근거가 없다.
+   *
+   * ⚠ 지표가 **없는 하위(v8 이전)는 자연히 빠진다.** 그러면 `from`이 실제 하위 수보다 작아지고,
+   *   화면이 *"주간 2개에서"* 라고 적는다 — 몇 개짜리인지 말하는 것이 유일하게 정직한 처리다.
+   */
+  const subReportMetrics = subReports.map((report) => report.metrics);
+
+  /*
    * 멱등 키를 **호출 전에** 만든다. 서버가 진행 중인 키를 기억해 **동시 중복 요청**을 막는다.
    *
    * ⚠ **재시도까지 막지는 못한다.** 이 함수가 불릴 때마다 새 UUID가 나오고 요청 전에
@@ -370,13 +386,22 @@ export async function createReport(
     // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다
     sourceCount: kind === 'weekly' ? entries.length : subReports.length,
     /*
-     * 지표·주제 (§8.4). **둘 다 오지 않으면 `null`** — 낡은 서버이거나 스키마가 어긋난 것이고,
-     * 그때 리포트는 지표 없이 저장된다. 본문은 온전하므로 실패로 만들지 않는다.
+     * 지표·주제 (§8.4).
+     *
+     * 🔴 **주간은 모델, 상위는 하위에서 합산**(§8.4.1). 상위에서 모델에게 다시 물으면
+     *   근거가 없다 — 계층 요약은 요약문만 받고 거기엔 숫자가 없다. 실측에서 실제로 어긋났다.
+     *
+     * ⚠ 주간에서 **둘 다 오지 않으면 `null`** — 낡은 서버이거나 스키마가 어긋난 것이고,
+     *   그때 리포트는 지표 없이 저장된다. 본문은 온전하므로 실패로 만들지 않는다.
      */
     metrics:
-      response.metrics === undefined && response.topics === undefined
-        ? null
-        : { metrics: response.metrics ?? [], topics: response.topics ?? [] },
+      kind === 'weekly'
+        ? response.metrics === undefined && response.topics === undefined
+          ? null
+          : { metrics: response.metrics ?? [], topics: response.topics ?? [] }
+        : rollupMetrics(
+            subReportMetrics.filter((m): m is NonNullable<typeof m> => m !== null),
+          ),
     model: response.model,
     promptVer: response.promptVer,
     createdAt: Date.now(),

@@ -44,7 +44,11 @@ export function ReportMetricsBlock({ data }: { data: ReportMetrics }) {
     <View style={styles.wrap}>
       {metrics.length > 0 && (
         <>
-          <Text style={styles.label}>{t('report.metricsTitle')}</Text>
+          <Text style={styles.label}>
+            {data.from === undefined
+              ? t('report.metricsTitle')
+              : t('report.metricsFrom', { count: String(data.from) })}
+          </Text>
           <View style={styles.list}>
             {metrics.map((m) => (
               <View key={m.code} style={styles.row}>

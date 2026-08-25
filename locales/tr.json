@@ -566,7 +566,8 @@
     "metricsTitle": "Göstergeler",
     "topicsTitle": "Ayrıca göründü",
     "days": "{{count}} gün",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Göstergeler · {{count}} rapor ortalaması"
   },
   "aiConsent": {
     "title": "Yapay zekâ raporu onayı",

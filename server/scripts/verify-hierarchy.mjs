@@ -125,8 +125,17 @@ async function step(label, body) {
   const metrics = r.json.metrics ?? [];
   const topics = r.json.topics ?? [];
   const codes = metrics.map((m) => m.code).join(',');
-  if (codes !== 'stress,happiness,exercise,growth') {
-    fail.push(`${label}: 지표 축이 어긋났다 — ${codes || '(없음)'}`);
+  /*
+   * 🔴 **상위는 지표가 없어야 정상이다** (§8.4.1). 계층 요약은 하위 요약문만 받고 거기엔
+   *   숫자가 없어서, 모델이 매기면 근거 없는 값이 저장되고 캡 때문에 영구히 굳는다.
+   *   상위 지표는 앱이 하위에서 합산한다(`rollupMetrics`, `check:ai`가 그 규칙을 지킨다).
+   */
+  if (body.kind === 'weekly') {
+    if (codes !== 'stress,happiness,exercise,growth') {
+      fail.push(`${label}: 지표 축이 어긋났다 — ${codes || '(없음)'}`);
+    }
+  } else if (metrics.length > 0 || topics.length > 0) {
+    fail.push(`${label}: 상위인데 모델이 지표를 냈다 — ${codes}`);
   }
   for (const m of metrics) {
     if ((m.code === 'stress' || m.code === 'happiness') && m.days !== null) {

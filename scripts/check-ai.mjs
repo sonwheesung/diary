@@ -38,7 +38,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
-import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES } from '../features/ai/types.ts';
+import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES, schemaFor } from '../features/ai/types.ts';
+import { rollupMetrics } from '../features/ai/rollup.ts';
 import { AI_VENDOR, vendorContactReady } from '../features/ai/vendor.ts';
 import {
   AI_CONSENT_VERSION,
@@ -731,6 +732,54 @@ check('🔴 프롬프트가 "평가하지 않는다"와 점수를 동시에 말�
   // 병명 금지는 **남아야 한다** — 지표와 무관하게 지킨다
   assert(sys.includes('병명'), '병명 금지가 사라졌다');
   assert(sys.includes('요약문에 옮겨 적지 않습니다'), '숫자를 글에 옮기지 말라는 지시가 없다');
+});
+
+/* ── 상위 지표는 하위에서 합산한다 (§8.4.1) ──────────────────── */
+
+const CHILD = (stress, exDays, growthDays, topicDays) => ({
+  metrics: [
+    { code: 'stress', value: stress, days: null, basis: '' },
+    { code: 'happiness', value: 50, days: null, basis: '' },
+    { code: 'exercise', value: 40, days: exDays, basis: '' },
+    { code: 'growth', value: 60, days: growthDays, basis: '' },
+  ],
+  topics: [{ code: 'work', days: topicDays, note: '' }],
+});
+
+check('🔴 날 수는 **합**이다 — 1일짜리 주가 넷이면 그 달은 4일이지 1일이 아니다', () => {
+  const up = rollupMetrics([CHILD(40, 0, 0, 1), CHILD(60, 1, 1, 2), CHILD(50, 1, 0, 1), CHILD(70, 0, 0, 1)]);
+  const ex = up.metrics.find((m) => m.code === 'exercise');
+  assert(ex.days === 2, `exercise 합이 2여야 하는데 ${ex.days}`);
+  const work = up.topics.find((t) => t.code === 'work');
+  assert(work.days === 5, `work 합이 5여야 하는데 ${work.days}`);
+});
+
+check('점수는 **평균**이다 — 날 수와 규칙이 다르다', () => {
+  const up = rollupMetrics([CHILD(40, 0, 0, 1), CHILD(60, 0, 0, 1)]);
+  assert(up.metrics.find((m) => m.code === 'stress').value === 50, '평균이 아니다');
+});
+
+check('🔴 셀 수 없는 지표는 합산 뒤에도 null 이다 — "행복한 날 3일"을 만들지 않는다', () => {
+  const up = rollupMetrics([CHILD(40, 1, 1, 1), CHILD(60, 2, 2, 1)]);
+  for (const code of ['stress', 'happiness']) {
+    assert(up.metrics.find((m) => m.code === code).days === null, `${code} 가 세어졌다`);
+  }
+});
+
+check('몇 개에서 나왔는지 남긴다 — 주간 2개짜리 달의 "평균"은 그 달의 평균이 아니다', () => {
+  assert(rollupMetrics([CHILD(40, 0, 0, 1), CHILD(60, 0, 0, 1)]).from === 2, 'from 이 없다');
+});
+
+check('하위가 하나도 없으면 null — 상위는 지표 없이 저장된다', () => {
+  assert(rollupMetrics([]) === null, '빈 입력에 null 이 아니다');
+});
+
+check('🔴 상위는 모델에게 지표를 요구하지 않는다 — 근거가 없기 때문이다', () => {
+  assert(!('metrics' in schemaFor('monthly').properties), '월간 스키마에 metrics 가 있다');
+  assert(!('metrics' in schemaFor('yearly').properties), '연간 스키마에 metrics 가 있다');
+  assert('metrics' in schemaFor('weekly').properties, '주간 스키마에 metrics 가 없다');
+  const sys = buildSystem({ kind: 'monthly', lang: 'ko', periodKey: '2026-07' });
+  assert(!sys.includes('stress(스트레스 관리)'), '월간 프롬프트에 지표 지시가 남아 있다');
 });
 
 /*

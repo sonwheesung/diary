@@ -566,7 +566,8 @@
     "metricsTitle": "Indicadores",
     "topicsTitle": "También apareció",
     "days": "{{count}}d",
-    "noDays": "—"
+    "noDays": "—",
+    "metricsFrom": "Indicadores · promedio de {{count}}"
   },
   "aiConsent": {
     "title": "Consentimiento para informes de IA",

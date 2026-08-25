@@ -222,6 +222,11 @@ export async function seedReports(range: SeedRange): Promise<number> {
           topics: (['sleep', 'work', 'relationship', 'rest', 'money', 'health'] as const)
             .filter((_, i) => rand(key, 67 + i * 3) < 0.7)
             .map((code, i) => ({ code, days: 1 + Math.floor(rand(key, 71 + i * 5) * 8), note: '개발용으로 심은 값입니다.' })),
+          /*
+           * ⚠ 상위 리포트의 지표는 **하위 평균**이라 `from`이 붙는다(§8.4.1). 시드도 그 모양을
+           *   흉내 내야 화면의 *"하위 N개 평균"* 라벨을 볼 수 있다.
+           */
+          from: kind === 'monthly' ? 4 : 12,
         });
         await db.runAsync(
           `INSERT OR REPLACE INTO ai_reports
@@ -230,7 +235,16 @@ export async function seedReports(range: SeedRange): Promise<number> {
           `${PREFIX}${kind}-${key}`,
           kind,
           key,
-          `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 아래 그림이 이 기간의 실제 조각에서 계산된 것인지만 보면 됩니다.`,
+          /*
+           * 🔴 **연간은 두 문단으로 심는다.** 2026-08-25 실호출에서 연간이 처음으로 두 문단을
+           *   냈는데, 그때까지 화면은 **한 문단만 그려본 적이 있었다.** 빈 줄이 뭉개지는지
+           *   문단 사이가 벌어지는지는 눈으로만 안다.
+           */
+          kind === 'yearly'
+            ? `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 첫 문단은 여기서 끝나고, 아래에 빈 줄을 하나 두었습니다.
+
+두 번째 문단입니다. 문단 사이가 벌어지는지, 빈 줄이 뭉개지지는 않는지를 봅니다. 실제 모델도 긴 기간에서는 이렇게 나눠 씁니다.`
+            : `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 아래 그림이 이 기간의 실제 조각에서 계산된 것인지만 보면 됩니다.`,
           kind === 'monthly' ? 4 : 12,
           metrics,
           at,

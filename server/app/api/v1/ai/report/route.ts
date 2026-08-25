@@ -15,7 +15,7 @@ import { and, eq, sql } from 'drizzle-orm';
  */
 import { isCreatablePeriod } from '@shared/ai/period';
 import { buildSystem, buildUser, isEmpty, withBody } from '@shared/ai/prompt';
-import { PROMPT_VERSION, REPORT_SCHEMA } from '@shared/ai/types';
+import { PROMPT_VERSION, schemaFor } from '@shared/ai/types';
 import type { BuildPromptArgs, ReportKind } from '@shared/ai/types';
 import { db } from '@/db';
 import { aiCooldowns, aiReports, aiUsage } from '@/db/schema';
@@ -238,7 +238,7 @@ export async function POST(req: Request): Promise<Response> {
   if (!claim(reportId)) return fail('in-progress');
 
   try {
-    const result = await generateReport({ system, user, schema: REPORT_SCHEMA });
+    const result = await generateReport({ system, user, schema: schemaFor(kind) });
 
     if (!result.ok) {
       /*
@@ -332,7 +332,14 @@ export async function POST(req: Request): Promise<Response> {
          * ⚠ **JSON 문자열로 넣는다.** 여기서 검색·집계할 일이 없다 — 월간 평균은 앱이
          *   로컬 리포트에서 낸다(서버는 90일치만 갖고 있어 애초에 못 낸다).
          */
-        metrics: JSON.stringify({ metrics: result.metrics, topics: result.topics }),
+        /*
+         * ⚠ **주간만 지표가 있다**(§8.4.1). 상위는 앱이 하위에서 합산하므로 서버가 저장할 것이 없다 —
+         *   빈 값을 넣으면 콘솔의 품질 탭에서 *"지표가 0인 리포트"* 로 오독된다.
+         */
+        metrics:
+          kind === 'weekly'
+            ? JSON.stringify({ metrics: result.metrics, topics: result.topics })
+            : null,
       });
     } catch (error) {
       reportError(error, 'ai.report-write');
