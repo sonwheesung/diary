@@ -556,7 +556,13 @@
     "detailTitle": "Báo cáo",
     "creatingNote": "Chỉ một lát thôi. Bạn giữ ứng dụng mở nhé.",
     "shapeTitle": "Hình dạng của giai đoạn",
-    "shapeSummary": "Ngày đã viết {{written}}/{{total}} · Mục {{count}}"
+    "shapeSummary": "Ngày đã viết {{written}}/{{total}} · Mục {{count}}",
+    "prevLabel": {
+      "weekly": "Tuần trước",
+      "monthly": "Tháng trước",
+      "yearly": "Năm trước"
+    },
+    "shapePrevious": "{{label}} · Ngày {{written}}/{{total}} · Mục {{count}}"
   },
   "aiConsent": {
     "title": "Đồng ý cho báo cáo AI",

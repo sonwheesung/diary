@@ -556,7 +556,13 @@
     "detailTitle": "Отчёт",
     "creatingNote": "Это займёт всего минуту. Не закрывайте приложение, пожалуйста.",
     "shapeTitle": "Форма периода",
-    "shapeSummary": "Дней с записями {{written}}/{{total}} · Записей {{count}}"
+    "shapeSummary": "Дней с записями {{written}}/{{total}} · Записей {{count}}",
+    "prevLabel": {
+      "weekly": "Прошлая неделя",
+      "monthly": "Прошлый месяц",
+      "yearly": "Прошлый год"
+    },
+    "shapePrevious": "{{label}} · Дней {{written}}/{{total}} · Записей {{count}}"
   },
   "aiConsent": {
     "title": "Согласие на отчёты ИИ",

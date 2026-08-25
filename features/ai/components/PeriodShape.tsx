@@ -25,7 +25,22 @@ type Kind = 'weekly' | 'monthly' | 'yearly';
  *
  * ⚠ **글 아래에 둔다.** 리포트 상세는 읽는 자리다 — 그림이 위로 올라오면 요약문이 밀린다.
  */
-export function PeriodShape({ shape, kind }: { shape: Shape; kind: Kind }) {
+export function PeriodShape({
+  shape,
+  prev,
+  kind,
+}: {
+  shape: Shape;
+  /**
+   * 바로 앞 기간. **없으면 비교를 안 그린다.**
+   *
+   * 🔴 **리포트가 아니라 조각이 있으면 된다.** 이 층은 모델과 무관해서, 지난 기간 리포트를
+   *   안 만들었어도 그때 쓴 조각만 있으면 비교가 선다 — 화면 시안에서는 이걸 *"지난주 리포트
+   *   없음"* 으로 잘못 적었었다(2026-08-25 정정).
+   */
+  prev: Shape | null;
+  kind: Kind;
+}) {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
@@ -44,11 +59,20 @@ export function PeriodShape({ shape, kind }: { shape: Shape; kind: Kind }) {
    * 막대 높이의 기준. **0으로 나누지 않는다** — 한 조각도 없는 기간에서도 화면은 그려져야 한다.
    * 그 기간의 최대값으로 정규화한다(고정 상한을 두면 조용한 주가 전부 납작해진다).
    */
+  /*
+   * 🔴 **지난 기간도 같은 축에 올린다.** 각자의 최대값으로 정규화하면 두 막대가 늘 비슷해 보여
+   *   비교가 거짓이 된다 — 절반만 쓴 주도 "비슷했다"로 읽힌다.
+   */
   const peak = Math.max(
     1,
     ...(shape.days ?? []).map((d) => d.chars),
     ...(shape.buckets ?? []).map((b) => b.chars),
+    ...(prev?.days ?? []).map((d) => d.chars),
+    ...(prev?.buckets ?? []).map((b) => b.chars),
   );
+
+  /* 주간만 요일이 정렬되므로 짝 막대를 그린다 — 월간·연간은 아래 요약 줄로만 비교한다 */
+  const prevDays = kind === 'weekly' ? (prev?.days ?? null) : null;
 
   return (
     <View style={styles.wrap}>
@@ -81,6 +105,11 @@ export function PeriodShape({ shape, kind }: { shape: Shape; kind: Kind }) {
                   day.written ? { backgroundColor: emotionColor(day.emotion) } : styles.dotEmpty,
                 ]}
               />
+              {/*
+                ⚠ 비교가 있으면 **같은 요일끼리 나란히** 둔다. 지난 줄은 더 옅게 —
+                  지금이 주인공이라는 것을 색으로 말한다. 🚫 화살표나 빨강·초록은 쓰지 않는다:
+                  점수가 내려간 주는 대개 **힘들었던 주**라 그 자리에서 성적표가 된다.
+              */}
               <View style={styles.barTrack}>
                 {day.chars > 0 && (
                   <View
@@ -89,6 +118,15 @@ export function PeriodShape({ shape, kind }: { shape: Shape; kind: Kind }) {
                       styles.barPlain,
                       // 최소 높이 — 한 글자만 쓴 날도 "썼다"는 것이 보여야 한다
                       { height: `${Math.max(4, (day.chars / peak) * 100)}%` },
+                    ]}
+                  />
+                )}
+                {prevDays !== null && (prevDays[day.weekday]?.chars ?? 0) > 0 && (
+                  <View
+                    style={[
+                      styles.bar,
+                      styles.barPast,
+                      { height: `${Math.max(4, ((prevDays[day.weekday]?.chars ?? 0) / peak) * 100)}%` },
                     ]}
                   />
                 )}
@@ -136,6 +174,21 @@ export function PeriodShape({ shape, kind }: { shape: Shape; kind: Kind }) {
           count: String(shape.count),
         })}
       </Text>
+
+      {/*
+        월간·연간은 **짝 막대를 안 그린다.** 칸 수가 달라(4주인 달과 5주인 달) W32와 W28을
+        나란히 놓는 것이 뜻이 없다. 총계만 한 줄로 비교한다.
+      */}
+      {prev !== null && prev.count > 0 && (
+        <Text style={styles.summaryPast}>
+          {t('report.shapePrevious', {
+            label: t(`report.prevLabel.${kind}`),
+            written: String(prev.writtenDays),
+            total: String(prev.totalDays),
+            count: String(prev.count),
+          })}
+        </Text>
+      )}
     </View>
   );
 }
@@ -246,10 +299,16 @@ const createStyles = (colors: Palette) =>
     barTrack: {
       height: 56,
       width: '100%',
-      justifyContent: 'flex-end',
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      gap: 1,
     },
     bar: {
-      width: '100%',
+      // 행 안에서 나눠 쓴다 — 비교가 없으면 혼자 전폭, 있으면 반씩
+      flexGrow: 1,
+      flexShrink: 1,
+      flexBasis: 0,
       // 토큰에 이만큼 작은 값이 없다. `.dot`의 3과 같은 규약으로 리터럴을 쓴다
       borderTopLeftRadius: 2,
       borderTopRightRadius: 2,
@@ -257,6 +316,17 @@ const createStyles = (colors: Palette) =>
     },
     barPlain: {
       backgroundColor: colors.accentMuted,
+    },
+    /** 지난 기간. 같은 폭이되 **더 옅다** — 지금이 주인공이라는 것을 색으로 말한다 */
+    barPast: {
+      backgroundColor: colors.border,
+    },
+    summaryPast: {
+      ...typography.caption,
+      color: colors.textMuted,
+      opacity: 0.75,
+      marginTop: -4,
+      flexShrink: 1,
     },
     legend: {
       flexDirection: 'row',

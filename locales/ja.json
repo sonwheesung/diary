@@ -556,7 +556,13 @@
     "detailTitle": "レポート",
     "creatingNote": "すぐに終わります。アプリは閉じずにお待ちください。",
     "shapeTitle": "この期間のかたち",
-    "shapeSummary": "書いた日 {{written}}/{{total}} · かけら {{count}}"
+    "shapeSummary": "書いた日 {{written}}/{{total}} · かけら {{count}}",
+    "prevLabel": {
+      "weekly": "先週",
+      "monthly": "先月",
+      "yearly": "昨年"
+    },
+    "shapePrevious": "{{label}} · 書いた日 {{written}}/{{total}} · かけら {{count}}"
   },
   "aiConsent": {
     "title": "AIレポートの同意",

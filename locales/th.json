@@ -556,7 +556,13 @@
     "detailTitle": "รายงาน",
     "creatingNote": "อีกสักครู่ก็เสร็จ กรุณาเปิดแอปทิ้งไว้ก่อน",
     "shapeTitle": "รูปร่างของช่วงเวลานี้",
-    "shapeSummary": "วันที่เขียน {{written}}/{{total}} · บันทึก {{count}}"
+    "shapeSummary": "วันที่เขียน {{written}}/{{total}} · บันทึก {{count}}",
+    "prevLabel": {
+      "weekly": "สัปดาห์ที่แล้ว",
+      "monthly": "เดือนที่แล้ว",
+      "yearly": "ปีที่แล้ว"
+    },
+    "shapePrevious": "{{label}} · วัน {{written}}/{{total}} · บันทึก {{count}}"
   },
   "aiConsent": {
     "title": "ความยินยอมสำหรับรายงาน AI",

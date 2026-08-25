@@ -556,7 +556,13 @@
     "detailTitle": "Relatório",
     "creatingNote": "Termina em instantes. Mantenha o aplicativo aberto.",
     "shapeTitle": "O formato do período",
-    "shapeSummary": "Dias escritos {{written}}/{{total}} · Registros {{count}}"
+    "shapeSummary": "Dias escritos {{written}}/{{total}} · Registros {{count}}",
+    "prevLabel": {
+      "weekly": "Semana passada",
+      "monthly": "Mês passado",
+      "yearly": "Ano passado"
+    },
+    "shapePrevious": "{{label}} · Dias {{written}}/{{total}} · Registros {{count}}"
   },
   "aiConsent": {
     "title": "Consentimento para relatórios de IA",

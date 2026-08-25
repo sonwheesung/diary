@@ -11,7 +11,7 @@ import { Screen } from '@/components/Screen';
 import { deleteReport, getReport, type Report } from '@/features/ai/api/report-repository';
 import { PeriodShape } from '@/features/ai/components/PeriodShape';
 import { keyRange } from '@/features/ai/period';
-import { periodShape, type Shape } from '@/features/ai/stats';
+import { periodShape, previousPeriodKey, type Shape } from '@/features/ai/stats';
 import { listDayFactsBetween } from '@/features/diary/api/diary-repository';
 import { periodLabel } from '@/features/ai/labels';
 import { formatDateTime, formatWeekNumber } from '@/lib/format';
@@ -38,6 +38,7 @@ export default function ReportDetailScreen() {
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
   const [shape, setShape] = useState<Shape | null>(null);
+  const [prevShape, setPrevShape] = useState<Shape | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -70,6 +71,21 @@ export default function ReportDetailScreen() {
     void listDayFactsBetween(range.from, range.to).then((facts) => {
       if (alive) setShape(periodShape(report.kind, report.periodKey, facts));
     });
+
+    /*
+     * 🔴 **비교는 리포트가 아니라 조각에 달렸다.** 이 층은 모델과 무관해서, 지난 기간
+     *   리포트를 안 만들었어도 그때 쓴 조각만 있으면 비교가 선다.
+     *
+     * ⚠ 지평(백필 하한)을 보지 않는다 — *"만들 수 있는 기간인가"* 와 *"그때 뭘 썼나"* 는
+     *   다른 질문이다. 조각이 없으면 `count === 0`이라 화면이 알아서 안 그린다.
+     */
+    const prevKey = previousPeriodKey(report.kind, report.periodKey);
+    const prevRange = prevKey === null ? null : keyRange(prevKey);
+    if (prevKey !== null && prevRange !== null) {
+      void listDayFactsBetween(prevRange.from, prevRange.to).then((facts) => {
+        if (alive) setPrevShape(periodShape(report.kind, prevKey, facts));
+      });
+    }
     return () => {
       alive = false;
     };
@@ -190,7 +206,7 @@ export default function ReportDetailScreen() {
         ⚠ **글 아래다.** 상세는 읽는 자리라 그림이 위로 올라오면 요약문이 밀린다(기둥 2).
         ⚠ 아직 안 셌으면 아무것도 그리지 않는다 — 빈 격자가 먼저 떴다 채워지면 화면이 튄다.
       */}
-      {shape !== null && <PeriodShape shape={shape} kind={report.kind} />}
+      {shape !== null && <PeriodShape shape={shape} prev={prevShape} kind={report.kind} />}
 
       <View style={styles.footer}>
         <Text style={styles.disclaimer}>{t('report.disclaimer')}</Text>

@@ -556,7 +556,13 @@
     "detailTitle": "Laporan",
     "creatingNote": "Sebentar saja. Jangan tutup aplikasi dulu, ya.",
     "shapeTitle": "Bentuk periode ini",
-    "shapeSummary": "Hari menulis {{written}}/{{total}} · Entri {{count}}"
+    "shapeSummary": "Hari menulis {{written}}/{{total}} · Entri {{count}}",
+    "prevLabel": {
+      "weekly": "Pekan lalu",
+      "monthly": "Bulan lalu",
+      "yearly": "Tahun lalu"
+    },
+    "shapePrevious": "{{label}} · Hari {{written}}/{{total}} · Entri {{count}}"
   },
   "aiConsent": {
     "title": "Persetujuan laporan AI",

@@ -556,7 +556,13 @@
     "detailTitle": "Informe",
     "creatingNote": "Termina enseguida. No cierres la aplicación, por favor.",
     "shapeTitle": "La forma del periodo",
-    "shapeSummary": "Días escritos {{written}}/{{total}} · Entradas {{count}}"
+    "shapeSummary": "Días escritos {{written}}/{{total}} · Entradas {{count}}",
+    "prevLabel": {
+      "weekly": "Semana anterior",
+      "monthly": "Mes anterior",
+      "yearly": "Año anterior"
+    },
+    "shapePrevious": "{{label}} · Días {{written}}/{{total}} · Entradas {{count}}"
   },
   "aiConsent": {
     "title": "Consentimiento para informes de IA",

@@ -556,7 +556,13 @@
     "detailTitle": "리포트",
     "creatingNote": "잠시면 끝나요. 앱을 닫지 말아 주세요.",
     "shapeTitle": "그 기간의 모양",
-    "shapeSummary": "쓴 날 {{written}}/{{total}} · 조각 {{count}}"
+    "shapeSummary": "쓴 날 {{written}}/{{total}} · 조각 {{count}}",
+    "prevLabel": {
+      "weekly": "지난주",
+      "monthly": "지난달",
+      "yearly": "작년"
+    },
+    "shapePrevious": "{{label}} · 쓴 날 {{written}}/{{total}} · 조각 {{count}}"
   },
   "aiConsent": {
     "title": "AI 리포트 동의",

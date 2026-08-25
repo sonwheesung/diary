@@ -556,7 +556,13 @@
     "detailTitle": "Bilan",
     "creatingNote": "C'est l'affaire d'un instant. Gardez l'application ouverte.",
     "shapeTitle": "La forme de la période",
-    "shapeSummary": "Jours écrits {{written}}/{{total}} · Entrées {{count}}"
+    "shapeSummary": "Jours écrits {{written}}/{{total}} · Entrées {{count}}",
+    "prevLabel": {
+      "weekly": "Semaine précédente",
+      "monthly": "Mois précédent",
+      "yearly": "Année précédente"
+    },
+    "shapePrevious": "{{label}} · Jours {{written}}/{{total}} · Entrées {{count}}"
   },
   "aiConsent": {
     "title": "Consentement aux bilans IA",

@@ -556,7 +556,13 @@
     "detailTitle": "Rapor",
     "creatingNote": "Birazdan biter. Uygulamayı açık tut.",
     "shapeTitle": "Bu dönemin şekli",
-    "shapeSummary": "Yazılan gün {{written}}/{{total}} · Kayıt {{count}}"
+    "shapeSummary": "Yazılan gün {{written}}/{{total}} · Kayıt {{count}}",
+    "prevLabel": {
+      "weekly": "Geçen hafta",
+      "monthly": "Geçen ay",
+      "yearly": "Geçen yıl"
+    },
+    "shapePrevious": "{{label}} · Gün {{written}}/{{total}} · Kayıt {{count}}"
   },
   "aiConsent": {
     "title": "Yapay zekâ raporu onayı",

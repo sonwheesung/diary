@@ -556,7 +556,13 @@
     "detailTitle": "Bericht",
     "creatingNote": "Dauert nur einen Moment. Lass die App bitte offen.",
     "shapeTitle": "Die Form des Zeitraums",
-    "shapeSummary": "Geschriebene Tage {{written}}/{{total}} · Einträge {{count}}"
+    "shapeSummary": "Geschriebene Tage {{written}}/{{total}} · Einträge {{count}}",
+    "prevLabel": {
+      "weekly": "Vorwoche",
+      "monthly": "Vormonat",
+      "yearly": "Vorjahr"
+    },
+    "shapePrevious": "{{label}} · Tage {{written}}/{{total}} · Einträge {{count}}"
   },
   "aiConsent": {
     "title": "Einwilligung für KI-Berichte",

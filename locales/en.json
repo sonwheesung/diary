@@ -556,7 +556,13 @@
     "detailTitle": "Report",
     "creatingNote": "It only takes a moment. Please keep the app open.",
     "shapeTitle": "The shape of it",
-    "shapeSummary": "Days written {{written}}/{{total}} · Entries {{count}}"
+    "shapeSummary": "Days written {{written}}/{{total}} · Entries {{count}}",
+    "prevLabel": {
+      "weekly": "Last week",
+      "monthly": "Last month",
+      "yearly": "Last year"
+    },
+    "shapePrevious": "{{label}} · Days {{written}}/{{total}} · Entries {{count}}"
   },
   "aiConsent": {
     "title": "AI report consent",

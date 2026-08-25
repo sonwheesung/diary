@@ -556,7 +556,13 @@
     "detailTitle": "Resoconto",
     "creatingNote": "Ci vuole solo un attimo. Tieni l'app aperta.",
     "shapeTitle": "La forma del periodo",
-    "shapeSummary": "Giorni scritti {{written}}/{{total}} · Voci {{count}}"
+    "shapeSummary": "Giorni scritti {{written}}/{{total}} · Voci {{count}}",
+    "prevLabel": {
+      "weekly": "Settimana scorsa",
+      "monthly": "Mese scorso",
+      "yearly": "Anno scorso"
+    },
+    "shapePrevious": "{{label}} · Giorni {{written}}/{{total}} · Voci {{count}}"
   },
   "aiConsent": {
     "title": "Consenso ai resoconti IA",
