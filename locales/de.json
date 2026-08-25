@@ -540,6 +540,7 @@
       "upstream": "Der Server hat Probleme. Bitte versuche es später noch einmal.",
       "error": "Etwas ist schiefgelaufen.",
       "too-early": "Ein Zeitraum ist noch nicht vorbei. Wenn du den Bericht danach erstellst, fehlt nichts.",
+      "too-large": "In diesem Zeitraum steht zu viel Text für eine Zusammenfassung auf einmal. Dieser Versuch wird nicht angerechnet.",
       "out-of-range": "Für diesen Zeitraum lässt sich kein Bericht erstellen."
     },
     "emptyWeekly": "Ist eine Woche vorbei, fassen wir ihre Einträge zu einem kurzen Rückblick zusammen.",

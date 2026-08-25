@@ -540,6 +540,7 @@
       "upstream": "The server is having trouble. Please try again shortly.",
       "error": "Something went wrong.",
       "too-early": "Some periods haven't ended yet. Create it after they end and nothing will be left out.",
+      "too-large": "There's too much writing in this period to summarize at once. This attempt doesn't count toward your limit.",
       "out-of-range": "That period can't be created."
     },
     "emptyWeekly": "Once a week has passed, we'll gather its entries into a short reflection.",

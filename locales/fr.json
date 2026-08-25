@@ -540,6 +540,7 @@
       "upstream": "Le serveur rencontre un problème. Réessayez bientôt.",
       "error": "Un problème est survenu.",
       "too-early": "Une période n'est pas encore terminée. En créant le bilan après sa fin, il ne manquera rien.",
+      "too-large": "Il y a trop de texte sur cette période pour le résumer d'un coup. Cette tentative n'est pas décomptée.",
       "out-of-range": "Cette période ne peut pas être créée."
     },
     "emptyWeekly": "Une fois la semaine écoulée, nous rassemblerons ses entrées en un court retour.",

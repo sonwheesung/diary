@@ -540,6 +540,7 @@
       "upstream": "Il server ha un problema. Riprova a breve.",
       "error": "Qualcosa è andato storto.",
       "too-early": "C'è un periodo non ancora concluso. Creandolo dopo la sua fine non manca nulla.",
+      "too-large": "In questo periodo c’è troppo testo per riassumerlo in una volta. Questo tentativo non viene conteggiato.",
       "out-of-range": "Non è un periodo per cui si possa creare un resoconto."
     },
     "emptyWeekly": "Passata una settimana, raccoglieremo le sue voci in una breve riflessione.",

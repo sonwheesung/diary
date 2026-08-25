@@ -540,6 +540,7 @@
       "upstream": "Server sedang bermasalah. Coba lagi nanti.",
       "error": "Terjadi kesalahan.",
       "too-early": "Ada periode yang belum berakhir. Jika dibuat setelah periode itu berakhir, tidak ada yang terlewat.",
+      "too-large": "Tulisan pada periode ini terlalu banyak untuk dirangkum sekaligus. Percobaan ini tidak dihitung dalam batas Anda.",
       "out-of-range": "Laporan tidak bisa dibuat untuk periode ini."
     },
     "emptyWeekly": "Setelah satu minggu berlalu, kami akan merangkum catatannya menjadi renungan singkat.",

@@ -540,6 +540,7 @@
       "upstream": "Máy chủ đang gặp sự cố. Vui lòng thử lại sau.",
       "error": "Đã xảy ra lỗi.",
       "too-early": "Có khoảng thời gian chưa kết thúc. Nếu tạo sau khi khoảng đó kết thúc thì sẽ không bỏ sót phần nào.",
+      "too-large": "Có quá nhiều nội dung trong khoảng thời gian này để tóm tắt cùng lúc. Lần thử này không tính vào giới hạn.",
       "out-of-range": "Đây không phải khoảng thời gian có thể tạo báo cáo."
     },
     "emptyWeekly": "Khi một tuần trôi qua, chúng tôi sẽ gộp các mảnh của tuần đó thành một bản nhìn lại ngắn.",

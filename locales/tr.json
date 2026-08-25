@@ -540,6 +540,7 @@
       "upstream": "Sunucuda bir sorun var. Kısa süre sonra tekrar dene.",
       "error": "Bir şeyler ters gitti.",
       "too-early": "Henüz bitmemiş bir dönem var. O dönem bittikten sonra oluşturursan hiçbir şey eksik kalmaz.",
+      "too-large": "Bu dönemde tek seferde özetlenemeyecek kadar çok yazı var. Bu deneme hakkınızdan düşülmez.",
       "out-of-range": "Bu, rapor oluşturulabilecek bir dönem değil."
     },
     "emptyWeekly": "Bir hafta tamamlandığında o haftanın kayıtlarını kısa bir geri bakışta toplarız.",

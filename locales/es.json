@@ -540,6 +540,7 @@
       "upstream": "El servidor tiene problemas. Inténtalo de nuevo en breve.",
       "error": "Algo salió mal.",
       "too-early": "Hay un periodo que aún no ha terminado. Si lo creas cuando termine, no faltará nada.",
+      "too-large": "Hay demasiado escrito en este periodo para resumirlo de una vez. Este intento no cuenta para tu límite.",
       "out-of-range": "No es un periodo que se pueda crear."
     },
     "emptyWeekly": "Cuando pase una semana, reuniremos sus entradas en una breve reflexión.",
