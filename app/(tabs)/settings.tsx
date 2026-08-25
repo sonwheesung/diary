@@ -4,6 +4,8 @@ import Bell from 'lucide-react-native/icons/bell';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
 import Clock from 'lucide-react-native/icons/clock';
 import CloudUpload from 'lucide-react-native/icons/cloud-upload';
+import DatabaseIcon from 'lucide-react-native/icons/database';
+import Eraser from 'lucide-react-native/icons/eraser';
 import Sparkles from 'lucide-react-native/icons/sparkles';
 import Globe from 'lucide-react-native/icons/globe';
 import Inbox from 'lucide-react-native/icons/inbox';
@@ -563,6 +565,71 @@ export default function SettingsScreen() {
             </View>
             <View style={styles.rowBody}>
               <Text style={styles.rowTitle}>백업 실기기 점검 (logcat)</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textMuted} />
+          </Pressable>
+
+          {/*
+            🔴 **리포트 시각화를 보려면 여러 달치 조각이 필요하다.** 손으로 넣으면 수백 번을
+              눌러야 한다. ~~백업 복원으로 넣는다~~ → 복원은 `diaries`·`ai_reports`를 전부
+              지우고 다시 넣고 SecureStore 비밀까지 덮어써서 **실기기에서는 위험하다**
+              (2026-08-25 조사, `features/dev/seed-diaries.ts` 머리말).
+
+            ⚠ 심기는 **이미 내 조각이 있는 날을 건너뛴다.** 지우기는 `seed-` 접두사만 지운다.
+              그래도 이 두 줄은 `__DEV__` 안에 있어 릴리스 번들에서 통째로 접힌다.
+          */}
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => {
+              void (async () => {
+                const m = await import('@/features/dev/seed-diaries');
+                const from = `${new Date().getFullYear() - 1}-01-01`;
+                const to = m.yesterday();
+                Alert.alert('일기 심기', `${from} ~ ${to}
+
+더미 조각을 만듭니다. 내 조각이 있는 날은 건너뜁니다.`, [
+                  { text: '취소', style: 'cancel' },
+                  {
+                    text: '심기',
+                    onPress: () => {
+                      void m.seedDiaries({ from, to }).then((r) => {
+                        Alert.alert(
+                          '심었습니다',
+                          `새로 ${r.inserted}개 · 건너뜀 ${r.skipped}일 · 빈 날 ${r.blank}일`,
+                        );
+                      });
+                    },
+                  },
+                ]);
+              })();
+            }}
+            style={styles.row}
+          >
+            <View style={styles.rowIcon}>
+              <DatabaseIcon size={18} color={colors.accent} />
+            </View>
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitle}>더미 일기 심기 (작년 1월 ~ 어제)</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textMuted} />
+          </Pressable>
+
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => {
+              void import('@/features/dev/seed-diaries').then((m) => {
+                void m.clearSeededDiaries().then((n) => {
+                  Alert.alert('지웠습니다', `심었던 조각 ${n}개를 지웠습니다.`);
+                });
+              });
+            }}
+            style={styles.row}
+          >
+            <View style={styles.rowIcon}>
+              <Eraser size={18} color={colors.danger} />
+            </View>
+            <View style={styles.rowBody}>
+              <Text style={styles.rowTitle}>심은 일기만 지우기</Text>
             </View>
             <ChevronRight size={18} color={colors.textMuted} />
           </Pressable>
