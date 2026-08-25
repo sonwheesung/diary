@@ -155,6 +155,8 @@ npm run check:subscription     # 31개 — 체험 기간 계산(§13⑥ 고지�
                                #   ⚠ 전이 검사는 2026-08-19에 생겼다. 그전엔 0개였다(MONETIZATION §6.1.7 #2)
 npm run check:ai               # 79개 — ISO 주차·주차↔날짜범위 왕복·프롬프트·인젝션 방어·스키마·동의
                                #   + 백필 지평·하위 완비(15개)
+                               #   ⚠ 순수 계층이다. 프롬프트가 **실제로 어떤 글을 쓰는지**는 못 본다
+                               #      → 그건 verify:hierarchy (아래, 돈이 나간다)
 
 # 알림을 건드렸으면
 npm run check:notification     # 12개 — 예약 날짜 계산(이미 쓴 날 제외·지난 시각 제외·달/해 경계)
@@ -177,6 +179,13 @@ npm run check:admin            # 23개 — **fail-closed** · 헤더 판정 · K
 
 # API 키가 있을 때만 (실제 과금이 발생한다)
 cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effort 스윕·refusal
+
+# 프롬프트를 고쳤으면 — 계층 요약 실호출 (6회 · 약 ₩6)
+#   AUTH_STUB=1 npm run dev 를 먼저 띄운다. AI_SPEND=1 없이는 돌지 않는다
+cd server && AI_SPEND=1 npm run verify:hierarchy
+#   주간 4(더미 일기) → 월간(그 4개의 진짜 요약문) → 연간(합성 월간 12).
+#   prompt_ver 기대값을 **소스에서 읽어** 대조하고, 끝나면 ai/purge 로 stg 를 치운다
+#   🔴 순수 계층 검사가 못 보는 것을 본다 — v6 이 "이번 주"·"올해"라고 쓰던 것을 여기서 잡았다
 
 # 검사를 늘렸으면 / 릴리스 전 (검사 6개를 실제로 돌려 2~3분)
 npm run check:doc-counts       # 문서에 박힌 "N개"가 실제와 같은가
