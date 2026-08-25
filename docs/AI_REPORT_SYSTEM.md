@@ -1675,7 +1675,7 @@ GET /api/v1/ai/periods  →  [{ kind, periodKey }, …]      ai_usage에서 SELE
 | **동의 2종 (§23 · §28-8)** | ✅ `app/ai-consent.tsx` — 체크박스 2개, **"모두 동의" 버튼 없음.** 게이트는 [만들기]에만 |
 | **P1 측정 스크립트 → OpenAI** | ✅ `count_tokens` 대응물이 없어 **실호출 usage로 잰다**(그게 더 정확하다) |
 | **AI 사업자 연락처** | ✅ ~~출시 차단~~ **해소**(2026-08-19) — `OpenAI OpCo, LLC` · `US` · `dpo@openai.com`(`features/ai/vendor.ts`). `check:ai` 통과. ⚠ 이 줄이 ❌로 며칠 더 남아 **없는 블로커를 크리티컬 패스에 올려놨었다** |
-| 월간 · 연간 | ⚠ **앱 쪽은 됐다**(세그먼트·계층 입력·안내). 서버 캡·프롬프트가 P4 |
+| 월간 · 연간 | ✅ ~~앱 쪽은 됐다. 서버 캡·프롬프트가 P4~~ → **실호출까지 됐다**(2026-08-25 · `verify:hierarchy` 6건). 주간 4 → 월간 → 연간. 상위 지표는 모델이 아니라 `rollupMetrics()`가 만든다(§8.4.1) |
 | 🔴 **기간 선택(백필) §6.4** | ✅ 2026-08-18 — `creatablePeriods`·`listPeriodOptions`·`PeriodSheet`. 지평은 **작년 1월 1일**. 서버도 `isCreatablePeriod`로 **같은 판정**을 본다 |
 | 🔴 **삭제는 묘비 §11.9** | ✅ 2026-08-18 — DB **v6**(`deleted_at`) · `summary`·`concern`을 함께 비운다 · `MANIFEST_FORMAT` **2 → 3**. `findByPeriod`만 묘비를 보고 나머지는 `ALIVE`를 본다 |
 | ⏭ `GET /api/v1/ai/periods` | ❌ 없다. **재설치·기기 2대**는 로컬에 흔적이 없어 묘비로도 못 고친다(§11.9) — 서버가 쓴 기간 목록을 알려주는 경로가 있어야 한다 |
