@@ -1065,6 +1065,99 @@ AI 파기(`ai/purge`)를 18:58 에 커밋했다. 그대로 게시했으면 `DELE
 사이에 바뀌어 좌표가 밀렸다. 확대 검증에서 잡아 되돌렸고 최종 `4` 를 리로드해 확인했다 —
 **저장 전에 체크박스를 확대해서 눈으로 보는 단계가 없으면 그대로 저장된다.**
 
+#### 🔴 `check:release-env`는 **자기가 도는 셸**만 본다 — v9 사고가 그대로 재현됐다 (2026-08-25)
+
+v12를 굽다가 이렇게 됐다:
+
+```
+셸 A   eval "$(node scripts/release-env.mjs production)"   →  check:release-env 통과 ✅
+셸 B   (키스토어만 다시 넣고) gradlew bundleRelease         →  EXPO_PUBLIC_* 이 하나도 없다
+```
+
+빌드가 오래 걸려 **백그라운드로 다시 돌리면서** 키스토어만 다시 넣고 프로필 env를 빠뜨렸다.
+결과물은 이랬다:
+
+| | |
+|---|---|
+| 서명 | ✅ `B9:A7:29…` 운영 업로드 키 — **맞았다** |
+| `EXPO_PUBLIC_BACKUP_SERVER_URL` | ❌ 없음 → 백업·AI가 죽는다 |
+| `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | ❌ 없음 → 결제가 죽는다 |
+| 광고 | ❌ **테스트 단위만** 들어갔다 |
+
+**v8·v9가 나간 것과 정확히 같은 사고**다(§6.1.4 위).
+
+##### 🔴 그리고 진짜 원인은 셸이 아니었다 — **gradle이 JS 번들을 다시 안 만든다**
+
+셸에 env를 넣고 다시 구웠는데 **또 실패했다.** 로그가 답을 갖고 있었다:
+
+```
+> Task :app:createBundleReleaseJsAndAssets UP-TO-DATE
+android/app/build/generated/assets/createBundleReleaseJsAndAssets/index.android.bundle   21:36
+```
+
+🔴 **`EXPO_PUBLIC_*`는 gradle의 입력 지문에 안 들어간다.** 소스가 그대로면 env를 바꿔도
+번들 태스크가 `UP-TO-DATE`로 건너뛴다 — 그래서 **처음 한 번 잘못 만들어진 번들이
+그 뒤 모든 빌드에 그대로 실려 나간다.** 서명·버전·패키징은 매번 다시 도는데 **JS만 안 돈다.**
+
+→ env를 바꿨으면 **번들을 지우고 굽는다.** 지울 것:
+
+```
+android/app/build/generated/assets/createBundleReleaseJsAndAssets
+android/app/build/intermediates/assets/release
+android/app/build/intermediates/intermediary_bundle      # 죽인 빌드가 남기는 것(아래)
+android/app/build/outputs/bundle/release/*.aab
+```
+
+⚠ **`prebuild`로는 안 지워진다.** `--clean`이 `android/`를 새로 만들지만, 그건 소스이지
+`build/` 산출물이 아니다 — 실제로 prebuild를 하고도 21:36 번들이 살아남았다.
+
+⚠ 내 첫 진단(*"셸이 달라서"*)은 **절반만 맞았다.** 셸도 틀렸지만, 그것만 고쳐서는 안 고쳐졌다.
+**로그의 `UP-TO-DATE` 한 줄이 답이었고, 파생 결과(번들에 값이 없다)만 보고 원인을 단정했다** —
+§6.1.8에서 웹훅 원문을 안 보고 오진한 것과 같은 종류다.
+
+게이트가 환경을 봐서 못 잡은 것도 사실이다 — 검사한 셸과 구운 셸이 같다는 보장이 없다.
+
+→ **`npm run check:release-bundle` 신설.** 환경이 아니라 **구운 AAB 안을 연다.**
+`eas.json` 프로필의 값이 번들에 문자열로 실제로 박혔는지 대조한다.
+**잘못된 AAB에서 실패하는 것을 먼저 확인**하고 만들었다.
+
+⚠ 두 검사는 **반대 방향**을 지킨다. 하나로 합치지 않는다:
+
+| | 무엇을 | 어디서 |
+|---|---|---|
+| `check:release-env` | **들어가면 안 되는 것** — `.env.local`·개발 플래그 | 셸 |
+| `check:release-bundle` | **들어가야 하는 것** — 프로필 값·실제 광고 단위 | AAB |
+
+⚠ 만들면서 **내 검사가 틀린 것도 둘 나왔다.** 기록해 둔다:
+- `dev-emulator` 토큰이 번들에 **있는 것이 정상**이다 — 상수라 항상 들어가고, 막는 것은
+  플래그이며 토큰은 fail-closed다(서버가 401). §12 2026-08-18이 적어둔 그 판단이다.
+- `EXPO_PUBLIC_SERVER_URL`은 **코드 기본값과 같은 문자열**이라 env가 없어도 통과한다 —
+  **거짓 초록**이다. 기본값이 다른 키가 진짜 신호다.
+
+#### 🔴 죽인 빌드가 **멀쩡해 보이는 AAB**를 남긴다 (2026-08-25)
+
+`bundleRelease`가 10분 제한에 걸려 죽었고, 다시 돌렸더니 이렇게 실패했다:
+
+```
+Execution failed for task ':app:packageReleaseBundle'.
+> java.nio.file.FileAlreadyExistsException:
+    android/app/build/intermediates/intermediary_bundle/release/packageReleaseBundle/intermediary-bundle.aab
+```
+
+🔴 **그런데 `app-release.aab`는 그 자리에 있었다.** 66MB에 서명 지문도 맞았다 —
+`keytool`만 봤으면 그대로 올렸을 것이다. 하지만 그건 **죽인 첫 실행이 남긴 것**이고,
+두 번째 실행은 포장 단계에 도달하지 못했으므로 **아무것도 새로 만들지 않았다.**
+
+⚠ **서명이 맞는다는 것은 완결됐다는 뜻이 아니다.** 서명 단계가 돌았다는 것만 말한다.
+
+→ 규약: **빌드가 실패했으면 산출물을 지우고 다시 굽는다.** 지울 것 둘이다 —
+`outputs/bundle/release/*.aab`와 `intermediates/intermediary_bundle` (후자가 다음 실행을 막는다).
+
+⚠ 전체 `clean`까지는 필요 없었다. 두 번째 실행이 *"449개 중 27개 실행 · 422개 최신"* 으로
+포장 직전까지 갔으므로 **상류 산출물은 이미 검증된 상태**다. 막힌 것은 마지막 파일 충돌뿐이다.
+
+⏭ 이 빌드는 10분을 넘긴다. **처음부터 백그라운드로 돌린다** — 앞에서 죽이면 이 상태가 만들어진다.
+
 #### 🔴 `eas submit` 은 출시 노트를 못 넣는다 — 거기서 멈추지 않는다 (2026-08-25)
 
 업로드가 끝나도 릴리스는 `draft` 다. **콘솔에서 두 걸음이 더 남는다.**
