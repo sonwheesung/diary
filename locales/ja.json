@@ -554,7 +554,9 @@
     "periodTooEarly": "まだ終わっていない期間があります",
     "tooEarlyAt": "まだ終わっていない期間があります。{{date}}以降に作成すれば漏れません。",
     "detailTitle": "レポート",
-    "creatingNote": "すぐに終わります。アプリは閉じずにお待ちください。"
+    "creatingNote": "すぐに終わります。アプリは閉じずにお待ちください。",
+    "shapeTitle": "この期間のかたち",
+    "shapeSummary": "書いた日 {{written}}/{{total}} · かけら {{count}}"
   },
   "aiConsent": {
     "title": "AIレポートの同意",

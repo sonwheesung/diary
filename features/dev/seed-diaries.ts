@@ -167,6 +167,65 @@ export async function seedDiaries(range: SeedRange): Promise<SeedResult> {
   return { inserted, skipped, blank };
 }
 
+/**
+ * 더미 리포트를 심는다 — **시각화를 화면에서 보려고** 있는 것이다.
+ *
+ * 🔴 진짜 리포트는 구독 + 서버 + 모델 호출이 있어야 만들어지고 **기간 캡이 평생 1번**이라,
+ *   화면을 손보는 동안 수십 번 만들어 볼 수가 없다. 그래서 로컬 행만 심는다.
+ *
+ * ⚠ **`ai_usage`(서버 캡)와는 무관하다.** 여기 심은 것은 기기 안에만 있으므로 진짜 리포트를
+ *   만들 몫을 축내지 않는다. 반대로 말하면 **서버는 이 기간을 아직 안 쓴 것으로 안다** —
+ *   같은 기간을 진짜로 만들려 하면 앱이 *"이미 있어요"* 로 막는다(로컬이 1차 방어).
+ *
+ * ⚠ 요약문은 더미다. 프롬프트 품질을 보려면 `verify:hierarchy`를 쓴다.
+ */
+export async function seedReports(range: SeedRange): Promise<number> {
+  if (!__DEV__) throw new Error('seedReports는 개발 빌드에서만 쓴다');
+  const db = await getDatabase();
+
+  const facts = await db.getAllAsync<{ entry_date: string }>(
+    `SELECT entry_date FROM diaries WHERE deleted_at IS NULL
+      AND entry_date >= ? AND entry_date <= ? ORDER BY entry_date`,
+    range.from,
+    range.to,
+  );
+  if (facts.length === 0) return 0;
+
+  /*
+   * 기간 키를 조각 날짜에서 뽑는다. 여기서 `period.ts`를 쓰지 않는 이유는 시드 파일 머리말과
+   * 같다 — 그 파일은 서버로 생성 복사되는 순수 계층이라 개발 전용 코드가 얽히면 안 된다.
+   * ⚠ 그래서 주차는 안 만든다(ISO 주차를 여기 다시 구현하면 두 벌이 된다).
+   *   **월간·연간만** 심고, 주간은 실제 생성 경로로 확인한다.
+   */
+  const months = [...new Set(facts.map((f) => f.entry_date.slice(0, 7)))];
+  const years = [...new Set(months.map((m) => m.slice(0, 4)))];
+
+  let n = 0;
+  await db.withTransactionAsync(async () => {
+    for (const [kind, keys] of [
+      ['monthly', months],
+      ['yearly', years],
+    ] as const) {
+      for (const key of keys) {
+        const at = Date.parse(`${range.to}T12:00:00Z`);
+        await db.runAsync(
+          `INSERT OR REPLACE INTO ai_reports
+             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at, deleted_at)
+           VALUES (?, ?, ?, 'ko', ?, 0, ?, 'seed', 0, ?, NULL)`,
+          `${PREFIX}${kind}-${key}`,
+          kind,
+          key,
+          `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 아래 그림이 이 기간의 실제 조각에서 계산된 것인지만 보면 됩니다.`,
+          kind === 'monthly' ? 4 : 12,
+          at,
+        );
+        n += 1;
+      }
+    }
+  });
+  return n;
+}
+
 /** 심은 것만 지운다. 내 조각은 `id`가 다르므로 안 지워진다 */
 export async function clearSeededDiaries(): Promise<number> {
   if (!__DEV__) throw new Error('clearSeededDiaries는 개발 빌드에서만 쓴다');
@@ -180,6 +239,7 @@ export async function clearSeededDiaries(): Promise<number> {
     );
     await db.runAsync(`DELETE FROM diary_images WHERE diary_id LIKE '${PREFIX}%'`);
     await db.runAsync(`DELETE FROM diaries WHERE id LIKE '${PREFIX}%'`);
+    await db.runAsync(`DELETE FROM ai_reports WHERE id LIKE '${PREFIX}%'`);
   });
   return before?.n ?? 0;
 }

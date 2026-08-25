@@ -554,7 +554,9 @@
     "periodTooEarly": "还有尚未结束的时间段",
     "tooEarlyAt": "还有尚未结束的时间段。{{date}} 之后生成就不会遗漏。",
     "detailTitle": "报告",
-    "creatingNote": "很快就好，请先不要关闭应用。"
+    "creatingNote": "很快就好，请先不要关闭应用。",
+    "shapeTitle": "这段时间的样子",
+    "shapeSummary": "记录天数 {{written}}/{{total}} · 碎片 {{count}}"
   },
   "aiConsent": {
     "title": "AI 报告同意",

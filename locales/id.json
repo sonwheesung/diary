@@ -554,7 +554,9 @@
     "periodTooEarly": "Ada periode yang belum berakhir",
     "tooEarlyAt": "Ada periode yang belum berakhir. Jika dibuat mulai {{date}}, tidak ada yang terlewat.",
     "detailTitle": "Laporan",
-    "creatingNote": "Sebentar saja. Jangan tutup aplikasi dulu, ya."
+    "creatingNote": "Sebentar saja. Jangan tutup aplikasi dulu, ya.",
+    "shapeTitle": "Bentuk periode ini",
+    "shapeSummary": "Hari menulis {{written}}/{{total}} · Entri {{count}}"
   },
   "aiConsent": {
     "title": "Persetujuan laporan AI",

@@ -9,6 +9,10 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 
 import { Screen } from '@/components/Screen';
 import { deleteReport, getReport, type Report } from '@/features/ai/api/report-repository';
+import { PeriodShape } from '@/features/ai/components/PeriodShape';
+import { keyRange } from '@/features/ai/period';
+import { periodShape, type Shape } from '@/features/ai/stats';
+import { listDayFactsBetween } from '@/features/diary/api/diary-repository';
 import { periodLabel } from '@/features/ai/labels';
 import { formatDateTime, formatWeekNumber } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
@@ -33,6 +37,7 @@ export default function ReportDetailScreen() {
   const styles = useStyles(createStyles);
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
+  const [shape, setShape] = useState<Shape | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -47,6 +52,28 @@ export default function ReportDetailScreen() {
       alive = false;
     };
   }, [id]);
+
+  /*
+   * "그 기간의 모양" — **화면이 그릴 때 로컬에서 센다**(`docs/AI_REPORT_SYSTEM.md` §8.3).
+   *
+   * 🔴 리포트에 저장하지 않는다. 조각을 나중에 고치면 저장해 둔 표가 낡고, 백업 용량도 는다.
+   *   그리고 이 블록은 모델과 무관해서 **지표가 없는 옛 리포트에도 붙는다.**
+   *
+   * ⚠ 돌아올 때마다 다시 읽지 않고 리포트가 정해진 뒤 한 번만 센다 — 상세는 읽는 화면이라
+   *   조각이 그 사이 바뀔 일이 드물고, 연간이면 400행을 훑는다.
+   */
+  useEffect(() => {
+    if (report === null) return;
+    let alive = true;
+    const range = keyRange(report.periodKey);
+    if (range === null) return;
+    void listDayFactsBetween(range.from, range.to).then((facts) => {
+      if (alive) setShape(periodShape(report.kind, report.periodKey, facts));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [report]);
 
   const onDelete = () => {
     Alert.alert(t('report.delete'), t('report.deleteConfirm'), [
@@ -158,6 +185,12 @@ export default function ReportDetailScreen() {
       </View>
 
       <Text style={styles.summary}>{report.summary}</Text>
+
+      {/*
+        ⚠ **글 아래다.** 상세는 읽는 자리라 그림이 위로 올라오면 요약문이 밀린다(기둥 2).
+        ⚠ 아직 안 셌으면 아무것도 그리지 않는다 — 빈 격자가 먼저 떴다 채워지면 화면이 튄다.
+      */}
+      {shape !== null && <PeriodShape shape={shape} kind={report.kind} />}
 
       <View style={styles.footer}>
         <Text style={styles.disclaimer}>{t('report.disclaimer')}</Text>

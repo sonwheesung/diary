@@ -592,10 +592,13 @@ export default function SettingsScreen() {
                   {
                     text: '심기',
                     onPress: () => {
-                      void m.seedDiaries({ from, to }).then((r) => {
+                      void m.seedDiaries({ from, to }).then(async (r) => {
+                        // 조각을 심고 나서 리포트를 심는다 — 리포트가 조각을 세어 만들어진다
+                        const reports = await m.seedReports({ from, to });
                         Alert.alert(
                           '심었습니다',
-                          `새로 ${r.inserted}개 · 건너뜀 ${r.skipped}일 · 빈 날 ${r.blank}일`,
+                          `조각 ${r.inserted}개 · 건너뜀 ${r.skipped}일 · 빈 날 ${r.blank}일
+리포트 ${reports}개(월간·연간)`,
                         );
                       });
                     },

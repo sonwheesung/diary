@@ -554,7 +554,9 @@
     "periodTooEarly": "C'è un periodo non ancora concluso",
     "tooEarlyAt": "C'è un periodo non ancora concluso. Creandolo dal {{date}} non manca nulla.",
     "detailTitle": "Resoconto",
-    "creatingNote": "Ci vuole solo un attimo. Tieni l'app aperta."
+    "creatingNote": "Ci vuole solo un attimo. Tieni l'app aperta.",
+    "shapeTitle": "La forma del periodo",
+    "shapeSummary": "Giorni scritti {{written}}/{{total}} · Voci {{count}}"
   },
   "aiConsent": {
     "title": "Consenso ai resoconti IA",

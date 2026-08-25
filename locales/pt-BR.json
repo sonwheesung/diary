@@ -554,7 +554,9 @@
     "periodTooEarly": "Há um período ainda em andamento",
     "tooEarlyAt": "Há um período ainda em andamento. Se criar a partir de {{date}}, nada fica de fora.",
     "detailTitle": "Relatório",
-    "creatingNote": "Termina em instantes. Mantenha o aplicativo aberto."
+    "creatingNote": "Termina em instantes. Mantenha o aplicativo aberto.",
+    "shapeTitle": "O formato do período",
+    "shapeSummary": "Dias escritos {{written}}/{{total}} · Registros {{count}}"
   },
   "aiConsent": {
     "title": "Consentimento para relatórios de IA",

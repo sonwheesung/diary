@@ -554,7 +554,9 @@
     "periodTooEarly": "還有尚未結束的期間",
     "tooEarlyAt": "還有尚未結束的期間。{{date}} 之後產生就不會遺漏。",
     "detailTitle": "報告",
-    "creatingNote": "很快就好，請先不要關閉應用程式。"
+    "creatingNote": "很快就好，請先不要關閉應用程式。",
+    "shapeTitle": "這段期間的樣子",
+    "shapeSummary": "記錄天數 {{written}}/{{total}} · 碎片 {{count}}"
   },
   "aiConsent": {
     "title": "AI 報告同意",

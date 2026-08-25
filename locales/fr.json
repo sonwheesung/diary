@@ -554,7 +554,9 @@
     "periodTooEarly": "Une période n'est pas terminée",
     "tooEarlyAt": "Une période n'est pas encore terminée. À partir du {{date}}, il ne manquera rien.",
     "detailTitle": "Bilan",
-    "creatingNote": "C'est l'affaire d'un instant. Gardez l'application ouverte."
+    "creatingNote": "C'est l'affaire d'un instant. Gardez l'application ouverte.",
+    "shapeTitle": "La forme de la période",
+    "shapeSummary": "Jours écrits {{written}}/{{total}} · Entrées {{count}}"
   },
   "aiConsent": {
     "title": "Consentement aux bilans IA",

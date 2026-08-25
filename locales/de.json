@@ -554,7 +554,9 @@
     "periodTooEarly": "Zeitraum noch nicht vorbei",
     "tooEarlyAt": "Ein Zeitraum ist noch nicht vorbei. Ab {{date}} fehlt nichts.",
     "detailTitle": "Bericht",
-    "creatingNote": "Dauert nur einen Moment. Lass die App bitte offen."
+    "creatingNote": "Dauert nur einen Moment. Lass die App bitte offen.",
+    "shapeTitle": "Die Form des Zeitraums",
+    "shapeSummary": "Geschriebene Tage {{written}}/{{total}} · Einträge {{count}}"
   },
   "aiConsent": {
     "title": "Einwilligung für KI-Berichte",

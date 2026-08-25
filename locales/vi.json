@@ -554,7 +554,9 @@
     "periodTooEarly": "Có khoảng thời gian chưa kết thúc",
     "tooEarlyAt": "Có khoảng thời gian chưa kết thúc. Nếu tạo từ {{date}} thì sẽ không bỏ sót phần nào.",
     "detailTitle": "Báo cáo",
-    "creatingNote": "Chỉ một lát thôi. Bạn giữ ứng dụng mở nhé."
+    "creatingNote": "Chỉ một lát thôi. Bạn giữ ứng dụng mở nhé.",
+    "shapeTitle": "Hình dạng của giai đoạn",
+    "shapeSummary": "Ngày đã viết {{written}}/{{total}} · Mục {{count}}"
   },
   "aiConsent": {
     "title": "Đồng ý cho báo cáo AI",

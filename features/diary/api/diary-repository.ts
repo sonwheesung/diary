@@ -240,6 +240,31 @@ export async function listDiariesBetween(fromDate: string, toDate: string): Prom
   return toDiaries(rows);
 }
 
+/**
+ * 리포트의 "그 기간의 모양"에 쓰는 **가벼운 질의** (`features/ai/stats.ts`).
+ *
+ * 🔴 **본문을 안 가져온다.** 연간이면 400행이 넘는데 거기까지 텍스트를 끌어오면
+ *   화면 하나 그리려고 수십만 자를 메모리에 올린다. 필요한 것은 **길이**뿐이다.
+ *   그리고 순수 계층에 평문을 안 들이는 규약과도 맞는다(`stats.ts` `DayFact` 주석).
+ *
+ * ⚠ 길이는 검색용 파생 평문(`content`)으로 센다. 블록 JSON이 아니라 사람이 쓴 글자 수다.
+ */
+export async function listDayFactsBetween(
+  fromDate: string,
+  toDate: string,
+): Promise<{ date: string; emotion: string | null; chars: number }[]> {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<{ entry_date: string; emotion: string | null; chars: number }>(
+    `SELECT entry_date, emotion, LENGTH(content) AS chars
+       FROM diaries
+      WHERE entry_date >= ? AND entry_date <= ? AND ${ALIVE}
+      ORDER BY entry_date ASC, created_at ASC`,
+    fromDate,
+    toDate,
+  );
+  return rows.map((r) => ({ date: r.entry_date, emotion: r.emotion, chars: r.chars ?? 0 }));
+}
+
 /** 특정 날짜의 조각들. 하루 여러 개가 가능하다(DIARY_SYSTEM §2). */
 export async function listDiariesByDate(entryDate: string): Promise<Diary[]> {
   const db = await getDatabase();

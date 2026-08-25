@@ -554,7 +554,9 @@
     "periodTooEarly": "Some periods haven't ended yet",
     "tooEarlyAt": "Some periods haven't ended yet. Create it from {{date}} and nothing will be left out.",
     "detailTitle": "Report",
-    "creatingNote": "It only takes a moment. Please keep the app open."
+    "creatingNote": "It only takes a moment. Please keep the app open.",
+    "shapeTitle": "The shape of it",
+    "shapeSummary": "Days written {{written}}/{{total}} · Entries {{count}}"
   },
   "aiConsent": {
     "title": "AI report consent",

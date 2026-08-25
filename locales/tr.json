@@ -554,7 +554,9 @@
     "periodTooEarly": "Henüz bitmemiş bir dönem var",
     "tooEarlyAt": "Henüz bitmemiş bir dönem var. {{date}} tarihinden itibaren oluşturursan hiçbir şey eksik kalmaz.",
     "detailTitle": "Rapor",
-    "creatingNote": "Birazdan biter. Uygulamayı açık tut."
+    "creatingNote": "Birazdan biter. Uygulamayı açık tut.",
+    "shapeTitle": "Bu dönemin şekli",
+    "shapeSummary": "Yazılan gün {{written}}/{{total}} · Kayıt {{count}}"
   },
   "aiConsent": {
     "title": "Yapay zekâ raporu onayı",
