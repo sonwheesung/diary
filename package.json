@@ -32,7 +32,8 @@
     "check:play-access": "node scripts/check-play-access.mjs",
     "legal:stamp": "node --experimental-strip-types --no-warnings scripts/legal-stamp.mjs",
     "check:admin": "node scripts/check-admin.mjs",
-    "check:doc-counts": "node scripts/check-doc-counts.mjs"
+    "check:doc-counts": "node scripts/check-doc-counts.mjs",
+    "check:timezone": "node --experimental-strip-types --no-warnings scripts/check-timezone.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.3.0",

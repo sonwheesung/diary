@@ -432,6 +432,54 @@ uq_ai_usage_period  UNIQUE (subject_id, kind, period_key)   -- server/db/schema.
 ⚠ **서버도 지평을 본다.** 앱만 막으면 낡은 버전과 직접 호출이 남는다 —
 라우트에 이미 있는 규약 그대로다(*"앱이 이미 막지만 서버도 본다"*).
 
+### 🔴 6.6 미주 사용자는 주간 리포트를 한 건도 못 만들었다 — 시간대 (2026-08-25)
+
+`stats.ts`를 쓰다가 `monthKey`가 **로컬 getter**로 읽는 것을 보고 확인했더니, 이 파일이
+두 규약을 섞어 쓰고 있었다.
+
+| | 읽는 방식 | 만드는 방식 |
+|---|---|---|
+| 공개 `weekKey`·`monthKey`·`yearKey` | **로컬**(`getFullYear()`) — 앱이 `new Date()`를 넘기니 맞다 | — |
+| 내부 계산 | — | `Date.UTC(...)` = **UTC 자정 Date** |
+
+UTC 자정을 로컬로 읽으면 UTC보다 뒤인 시간대에서 **하루 전**이 된다. 실측:
+
+```
+TZ=America/New_York
+  weekKeyRange('2026-W28')    →  null            ← 모든 주차가 null
+  keyRange('2026-W28')        →  null
+  weekKeysInMonth('2026-07')  →  W27 W28 W29 W30 ← 한 주 밀린다
+  creatableWeekKeys           →  전부 한 주 밀림
+```
+
+`createReport()`가 `keyRange(...) === null`에서 `reason: 'error'`를 돌려주므로
+**미주 사용자는 주간 리포트를 만들 수 없었고 화면에는 *"문제가 생겼어요"* 만 떴다.**
+월간은 더 나쁘다 — 밀린 주 목록으로 하위 완비를 판정하니 §6.5의 차단이 엉뚱한 주를 봤다.
+
+#### 왜 못 찾았나
+
+- **개발·검사·서버가 전부 UTC+9 이거나 UTC 다.** 한국에서는 이 버그가 **원리적으로 안 보인다.**
+  Vercel은 `TZ=UTC`라 서버 e2e도 통과했다.
+- `check:ai` 79개가 전부 **한 시간대에서만** 돌았다. 개수는 많았지만 **축이 하나였다.**
+- 비공개 테스트가 **한국만**이라(§9.1) 테스터가 밟을 수 없었다.
+
+→ `npm run check:timezone` 신설. 같은 단언을 **7개 지역에서 각각 자식 프로세스로** 돌린다
+(`TZ`는 프로세스 시작 시점에만 읽혀 한 프로세스 안에서 못 바꾼다). **고치기 전에 3개 지역에서
+실패하는 것을 확인**하고 고쳤다.
+
+#### 고친 방법
+
+**UTC 자정 Date를 그대로 읽는 내부 함수**(`weekKeyOfUtc`·`monthKeyOfUtc`)를 따로 두고
+내부 계산은 그것만 쓴다. 공개 함수는 로컬 → UTC 정규화를 한 번 거친 뒤 같은 코드를 탄다.
+고친 자리 넷: `weekKeyRange` 가드 · `weekKeysInMonth` · `creatableWeekKeys` · `lastMonthKey`.
+
+⚠ **형제 훑기**: `Date.UTC`를 쓰는 다른 파일 둘은 자기 일관적이라 무해했다 —
+`features/notification/reminder-schedule.ts`(UTC로 만들고 UTC로 읽는다, 주석이 이유를 적어놨다)와
+`server/lib/admin-window.ts`(KST 오프셋을 명시적으로 다룬다). 그래도 알림 쪽은
+같은 하네스에 묶어 뒀다 — 전제가 깨지는 순간 잡히게.
+
+---
+
 ### 🔴 6.5 상위를 만들기 전에 하위가 다 모였는지 본다
 
 **§6.4가 없을 때도 있던 버그이고, §6.4가 생기면 더 자주 걸린다.**

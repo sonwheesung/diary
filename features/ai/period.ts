@@ -12,19 +12,28 @@
 
 const DAY_MS = 86_400_000;
 
+/*
+ * 🔴 **두 규약이 섞이면 미주에서 전부 깨진다** (2026-08-25 발견 · `npm run check:timezone`).
+ *
+ * 공개 함수(`weekKey`·`monthKey`·`yearKey`)는 **로컬 달력일**을 받는다 — 앱이 넘기는 것이
+ * `new Date()`이기 때문이다. 반면 이 파일의 내부 계산은 `Date.UTC(...)`로 **UTC 자정 Date**를
+ * 만든다. 그 UTC 값을 공개 함수에 도로 넘기면 UTC보다 뒤인 시간대에서 **하루 전**으로 읽혀
+ * `weekKeyRange()`가 전부 `null`이 되고 `weekKeysInMonth()`·`creatableWeekKeys()`가 한 주 밀렸다.
+ * `createReport()`가 `keyRange(...) === null`에서 `reason: 'error'`를 돌려주므로
+ * **미주 사용자는 주간 리포트를 한 건도 못 만들었다.**
+ *
+ * → **UTC 자정 Date를 그대로 읽는 내부 함수를 따로 둔다.** 내부 계산은 이것만 쓴다.
+ *   공개 함수는 로컬 → UTC 정규화를 한 번 거친 뒤 같은 코드를 탄다.
+ */
+
 /** 로컬 달력일을 UTC 자정으로 정규화. 타임존이 섞이면 경계에서 하루가 밀린다 */
 function utcMidnight(d: Date): Date {
   return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
 }
 
-/**
- * ISO 8601 주차 키 — `2026-W33`.
- *
- * 규칙: 주는 월요일에 시작하고, **1주차는 그 해 첫 목요일이 든 주**다.
- * 그래서 1월 1일이 금·토·일이면 전년도 마지막 주에 속한다 — `isoYear`가 달력 연도와 다를 수 있다.
- */
-export function weekKey(d: Date): string {
-  const date = utcMidnight(d);
+/** **이미 UTC 자정인 Date**의 ISO 주차. 로컬 getter를 다시 타지 않는다 */
+function weekKeyOfUtc(utc: Date): string {
+  const date = new Date(utc.getTime());
   // getUTCDay(): 일=0 … 토=6 → ISO: 월=1 … 일=7
   const dayNum = date.getUTCDay() || 7;
   // 그 주의 목요일로 옮긴다. 목요일이 속한 해가 ISO 연도다
@@ -35,7 +44,24 @@ export function weekKey(d: Date): string {
   return `${isoYear}-W${String(week).padStart(2, '0')}`;
 }
 
-/** `2026-08` */
+/** **이미 UTC 자정인 Date**의 달 키 */
+function monthKeyOfUtc(utc: Date): string {
+  return `${utc.getUTCFullYear()}-${String(utc.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+/**
+ * ISO 8601 주차 키 — `2026-W33`.
+ *
+ * 규칙: 주는 월요일에 시작하고, **1주차는 그 해 첫 목요일이 든 주**다.
+ * 그래서 1월 1일이 금·토·일이면 전년도 마지막 주에 속한다 — `isoYear`가 달력 연도와 다를 수 있다.
+ *
+ * ⚠ **로컬 달력일**을 받는다. UTC로 만든 Date를 넘기지 마라 — 내부용은 `weekKeyOfUtc`다.
+ */
+export function weekKey(d: Date): string {
+  return weekKeyOfUtc(utcMidnight(d));
+}
+
+/** `2026-08`. ⚠ **로컬 달력일**을 받는다 — 내부용은 `monthKeyOfUtc`다 */
 export function monthKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
@@ -103,7 +129,7 @@ export function weekKeyRange(periodKey: string): { from: string; to: string } | 
   const week1Monday = new Date(jan4.getTime() - (jan4Day - 1) * DAY_MS);
   const monday = new Date(week1Monday.getTime() + (week - 1) * 7 * DAY_MS);
   // 53주가 없는 해에 53을 물으면 다음 해로 넘어간다 — 그건 그 키가 존재하지 않는다는 뜻이다
-  if (weekKey(monday) !== periodKey) return null;
+  if (weekKeyOfUtc(monday) !== periodKey) return null;
   return { from: ymd(monday), to: ymd(new Date(monday.getTime() + 6 * DAY_MS)) };
 }
 
@@ -142,7 +168,7 @@ export function missingDays(range: { from: string; to: string }, present: string
  */
 export function lastMonthKey(now: Date): string {
   const firstOfThisMonth = new Date(Date.UTC(now.getFullYear(), now.getMonth(), 1));
-  return monthKey(new Date(firstOfThisMonth.getTime() - DAY_MS));
+  return monthKeyOfUtc(new Date(firstOfThisMonth.getTime() - DAY_MS));
 }
 
 /** `2026-08` → 그 달의 1일과 말일 */
@@ -240,7 +266,7 @@ export function creatableWeekKeys(now: Date): string[] {
   while (keys.length < MAX_PERIODS) {
     const sunday = ymd(new Date(monday + 6 * DAY_MS));
     if (sunday < floor) break;
-    keys.push(weekKey(new Date(monday)));
+    keys.push(weekKeyOfUtc(new Date(monday)));
     monday -= 7 * DAY_MS;
   }
   return keys;
@@ -303,7 +329,7 @@ export function weekKeysInMonth(monthKeyValue: string): string[] {
   let monday = first + ((8 - firstDay) % 7) * DAY_MS;
   const keys: string[] = [];
   while (monday <= last && keys.length < MAX_PERIODS) {
-    keys.push(weekKey(new Date(monday)));
+    keys.push(weekKeyOfUtc(new Date(monday)));
     monday += 7 * DAY_MS;
   }
   return keys;

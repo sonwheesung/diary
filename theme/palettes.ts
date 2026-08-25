@@ -8,6 +8,7 @@
  * 원칙: Glass 금지 · 과한 Gradient 금지 · Shadow 최소.
  */
 
+import type { EmotionCode } from '@/features/diary/emotions';
 import type { InkColor } from '@/features/diary/types';
 
 export interface Palette {
@@ -35,6 +36,18 @@ export interface Palette {
   paper: string;
 
   danger: string;
+
+  /**
+   * 감정 색 (AI_REPORT_SYSTEM §8.3 — 리포트의 "그 기간의 모양").
+   *
+   * 🔴 `ink`와 **같은 규약**이다. 조각은 감정 **코드**만 저장하고(`joy`) 팔레트가 값을 준다 —
+   *   hex를 저장하면 라이트에서 고른 색이 다크에서 안 읽히고, 스킨을 갈아끼워도 옛 조각만
+   *   옛 색으로 남는다(`CLAUDE.md` §9.1 규칙 2).
+   *
+   * ⚠ 스킨을 추가할 때 **이 그룹을 빠뜨리면 안 된다.** 없으면 요일 격자의 감정 점을
+   *   그릴 수 없다. `ink`와 같은 이유로 `Palette`의 필수 필드다.
+   */
+  emotion: Record<EmotionCode, string>;
 
   /**
    * 본문 글자색 팔레트 (DIARY_SYSTEM §1.1 텍스트 서식).
@@ -72,6 +85,22 @@ const light: Palette = {
    * 밝은 바탕(#F5F7FA) 위에서 읽히도록 **어둡고 채도를 눌러** 잡았다.
    * 형광에 가까운 색을 넣지 않는 이유는 기둥 2다 — 일기는 읽는 물건이지 형광펜 자국이 아니다.
    */
+  /*
+   * 여덟 감정을 서로 구별되게 잡되 **형광을 쓰지 않는다** — `ink`와 같은 이유다(기둥 2).
+   * 값은 `ink` 계열에서 가져와 팔레트가 한 가족으로 남게 했다.
+   * ⚠ 감정에 좋고 나쁨의 색(초록=좋음·빨강=나쁨)을 매기지 않는다. 일기는 성적표가 아니다.
+   */
+  emotion: {
+    joy: '#8A6100',
+    excited: '#B4436C',
+    calm: '#2F7A54',
+    proud: '#6B4BA8',
+    neutral: '#7A8699',
+    tired: '#6B7A8F',
+    sad: '#2C4A7C',
+    angry: '#B3382F',
+  },
+
   ink: {
     default: '#1F2A44',
     muted: '#7A8699',
@@ -114,6 +143,18 @@ const dark: Palette = {
    * 🔴 라이트 값을 그대로 쓰면 진한 자주·남색이 배경에 잠겨 글자가 사라진다 —
    *   hex를 저장하지 않고 코드를 저장하기로 한 이유가 정확히 이 표다.
    */
+  /* 어두운 바탕에서 읽히게 라이트보다 밝게. 라이트 값을 그대로 쓰면 바탕에 잠긴다 */
+  emotion: {
+    joy: '#D9A441',
+    excited: '#F0A0BC',
+    calm: '#6FBE93',
+    proud: '#B79BEA',
+    neutral: '#8E9AB3',
+    tired: '#93A3BC',
+    sad: '#8AB0E8',
+    angry: '#F09287',
+  },
+
   ink: {
     default: '#E8ECF4',
     muted: '#8E9AB3',
