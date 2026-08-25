@@ -562,7 +562,11 @@
       "monthly": "Mese scorso",
       "yearly": "Anno scorso"
     },
-    "shapePrevious": "{{label}} · Giorni {{written}}/{{total}} · Voci {{count}}"
+    "shapePrevious": "{{label}} · Giorni {{written}}/{{total}} · Voci {{count}}",
+    "metricsTitle": "Indicatori",
+    "topicsTitle": "È emerso anche",
+    "days": "{{count}}g",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "Consenso ai resoconti IA",
@@ -586,5 +590,19 @@
     "koreanGoverns": "Questa è una traduzione di cortesia. In caso di difformità con l’originale coreano, prevale la versione coreana.",
     "pendingTitle": "Modifica in arrivo",
     "appliesFrom": "Si applica dal: {{when}}"
+  },
+  "metric": {
+    "stress": "Stress",
+    "happiness": "Felicità",
+    "exercise": "Movimento",
+    "growth": "Crescita"
+  },
+  "topic": {
+    "sleep": "Sonno",
+    "work": "Lavoro",
+    "relationship": "Persone",
+    "rest": "Riposo",
+    "money": "Denaro",
+    "health": "Corpo"
   }
 }

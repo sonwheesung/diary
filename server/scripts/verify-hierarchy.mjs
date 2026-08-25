@@ -116,7 +116,35 @@ async function step(label, body) {
     return null;
   }
   const summary = r.json.summary ?? '';
+  /*
+   * 🔴 **지표는 스키마가 강제하지만 규약까지 강제하지는 못한다**(§8.4).
+   *   `stress`·`happiness`는 날로 셀 수 없으므로 `days`가 `null`이어야 하고,
+   *   `topics`는 지표와 겹치면 안 되며, `days`는 조각 수를 넘으면 안 된다.
+   *   여기서 안 보면 화면에서 *"운동 25점 · 3일"* 같은 것이 조용히 나온다.
+   */
+  const metrics = r.json.metrics ?? [];
+  const topics = r.json.topics ?? [];
+  const codes = metrics.map((m) => m.code).join(',');
+  if (codes !== 'stress,happiness,exercise,growth') {
+    fail.push(`${label}: 지표 축이 어긋났다 — ${codes || '(없음)'}`);
+  }
+  for (const m of metrics) {
+    if ((m.code === 'stress' || m.code === 'happiness') && m.days !== null) {
+      fail.push(`${label}: ${m.code} 는 날로 셀 수 없는데 days=${m.days}`);
+    }
+    if (m.value < 0 || m.value > 100) fail.push(`${label}: ${m.code} value=${m.value}`);
+  }
+  const sources = (body.entries ?? body.subReports ?? []).length;
+  for (const tp of topics) {
+    if (['stress', 'happiness', 'exercise', 'growth'].includes(tp.code)) {
+      fail.push(`${label}: topics 가 지표와 겹친다 — ${tp.code}`);
+    }
+    if (tp.days > sources) fail.push(`${label}: ${tp.code} days=${tp.days} > 자료 ${sources}`);
+  }
+  const shown = metrics.map((m) => `${m.code} ${m.value}${m.days === null ? '' : `/${m.days}일`}`);
   console.log(`ok ${took}초 · ${summary.length}자 · concern=${r.json.concern}`);
+  console.log(`     ${shown.join(' · ')}`);
+  console.log(`     그 밖에: ${topics.map((tp) => `${tp.code} ${tp.days}일`).join(' · ') || '(없음)'}`);
   results.push({ label, periodKey: body.periodKey, kind: body.kind, summary, concern: r.json.concern, took });
   return summary;
 }

@@ -1,7 +1,7 @@
 import { DEV_SESSION_TOKEN } from '@/features/support/dev-auth';
 import { BACKUP_SERVER_URL } from '@/features/backup/api/client';
 import { readSessionToken } from '@/lib/common-server/client';
-import type { ReportKind } from '@/features/ai/types';
+import type { MetricValue, ReportKind, TopicValue } from '@/features/ai/types';
 
 /**
  * 조각 서버 AI 프록시 클라이언트.
@@ -65,6 +65,14 @@ export type AiFail =
 export interface AiReportResponse {
   summary: string;
   concern: boolean;
+  /**
+   * 지표 넷과 그 밖의 주제 (§8.4).
+   *
+   * ⚠ **없을 수 있다.** 낡은 서버가 안 내려주거나 스키마가 어긋나면 비어서 온다 —
+   *   그때는 지표 블록을 안 그린다. 리포트 본문은 그것과 무관하게 온전하다.
+   */
+  metrics?: MetricValue[];
+  topics?: TopicValue[];
   model: string;
   promptVer: number;
 }

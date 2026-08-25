@@ -285,6 +285,15 @@ export const aiReports = pgTable(
     model: text('model'),
     /** 어느 프롬프트 판이었나 — 프롬프트를 고친 뒤 품질이 나아졌는지 가르려면 필요하다 */
     promptVer: integer('prompt_ver'),
+    /*
+     * 지표·주제 (`docs/AI_REPORT_SYSTEM.md` §8.4). `{ metrics: [...], topics: [...] }`.
+     *
+     * ⚠ **여기서 집계하지 않는다.** 월간 평균은 앱이 로컬 리포트에서 낸다 — 서버는 90일만
+     *   갖고 있고(§5.2) 사용자의 리포트 전부를 갖고 있지 않아서 애초에 낼 수가 없다.
+     *   그래서 텍스트 한 칸이면 충분하고, 컬럼을 넷으로 쪼갤 이유가 없다.
+     * ⚠ **NULL이 정상값이다** — 프롬프트 v8 이전 리포트.
+     */
+    metrics: text('metrics'),
     /** 사용자가 [신고]를 눌렀나 — 우선해서 볼 것을 고르는 기준 */
     flagged: boolean('flagged').notNull().default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

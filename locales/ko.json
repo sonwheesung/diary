@@ -562,7 +562,11 @@
       "monthly": "지난달",
       "yearly": "작년"
     },
-    "shapePrevious": "{{label}} · 쓴 날 {{written}}/{{total}} · 조각 {{count}}"
+    "shapePrevious": "{{label}} · 쓴 날 {{written}}/{{total}} · 조각 {{count}}",
+    "metricsTitle": "이번 기간 지표",
+    "topicsTitle": "그 밖에 나타난 것",
+    "days": "{{count}}일",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "AI 리포트 동의",
@@ -586,5 +590,19 @@
     "koreanGoverns": "이 문서가 정본입니다. 다른 언어로 보이는 내용은 읽기 편하시라고 옮긴 것이며, 다를 경우 이 한국어본이 우선합니다.",
     "pendingTitle": "개정 예고",
     "appliesFrom": "적용 시점: {{when}}"
+  },
+  "metric": {
+    "stress": "스트레스 관리",
+    "happiness": "행복",
+    "exercise": "운동",
+    "growth": "자기개발"
+  },
+  "topic": {
+    "sleep": "잠",
+    "work": "일",
+    "relationship": "관계",
+    "rest": "쉼",
+    "money": "돈",
+    "health": "몸"
   }
 }

@@ -562,7 +562,11 @@
       "monthly": "เดือนที่แล้ว",
       "yearly": "ปีที่แล้ว"
     },
-    "shapePrevious": "{{label}} · วัน {{written}}/{{total}} · บันทึก {{count}}"
+    "shapePrevious": "{{label}} · วัน {{written}}/{{total}} · บันทึก {{count}}",
+    "metricsTitle": "ตัวชี้วัด",
+    "topicsTitle": "ยังปรากฏอีก",
+    "days": "{{count}} วัน",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "ความยินยอมสำหรับรายงาน AI",
@@ -586,5 +590,19 @@
     "koreanGoverns": "นี่คือคำแปลเพื่อความสะดวกในการอ่าน หากขัดแย้งกับต้นฉบับภาษาเกาหลี ให้ยึดฉบับภาษาเกาหลีเป็นหลัก",
     "pendingTitle": "การแก้ไขที่จะมีผล",
     "appliesFrom": "มีผลตั้งแต่: {{when}}"
+  },
+  "metric": {
+    "stress": "ความเครียด",
+    "happiness": "ความสุข",
+    "exercise": "การออกกำลังกาย",
+    "growth": "การพัฒนาตนเอง"
+  },
+  "topic": {
+    "sleep": "การนอน",
+    "work": "งาน",
+    "relationship": "ผู้คน",
+    "rest": "พักผ่อน",
+    "money": "เงิน",
+    "health": "ร่างกาย"
   }
 }

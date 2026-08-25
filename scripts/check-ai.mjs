@@ -34,8 +34,11 @@ import {
   monthKeysInYear,
   weekKeyForYmd,
 } from '../features/ai/period.ts';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
-import { REPORT_SCHEMA, PROMPT_VERSION } from '../features/ai/types.ts';
+import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES } from '../features/ai/types.ts';
 import { AI_VENDOR, vendorContactReady } from '../features/ai/vendor.ts';
 import {
   AI_CONSENT_VERSION,
@@ -666,6 +669,68 @@ check('사업자명·국가코드가 비어 있지 않다 (§28-8② 1·2호)', 
     /^[A-Z]{2}$/.test(AI_VENDOR.countryCode),
     `ISO 국가코드가 아니다: ${AI_VENDOR.countryCode}`,
   );
+});
+
+/* ── 지표 (§8.4) ─────────────────────────────────────────────── */
+
+check('지표는 넷이고 순서가 고정이다 — 월간 평균과 추이선이 이 축 위에 선다', () => {
+  assert(
+    METRIC_CODES.join(',') === 'stress,happiness,exercise,growth',
+    `순서가 바뀌었다: ${METRIC_CODES.join(',')}`,
+  );
+});
+
+check('주제는 지표와 겹치지 않는다 — 겹치면 "운동 25점"과 "운동 1일"이 따로 뜬다', () => {
+  const overlap = TOPIC_CODES.filter((c) => METRIC_CODES.includes(c));
+  assert(overlap.length === 0, `겹침: ${overlap.join(', ')}`);
+});
+
+check('스키마가 metrics·topics를 required 로 강제한다', () => {
+  assert(REPORT_SCHEMA.required.includes('metrics'), 'metrics 가 required 가 아니다');
+  assert(REPORT_SCHEMA.required.includes('topics'), 'topics 가 required 가 아니다');
+  assert(REPORT_SCHEMA.additionalProperties === false, 'additionalProperties 가 열려 있다');
+});
+
+check('🔴 days 는 셀 수 없을 때 null 을 허용한다 — stress·happiness 가 그 자리다', () => {
+  const days = REPORT_SCHEMA.properties.metrics.items.properties.days;
+  assert(
+    Array.isArray(days.type) && days.type.includes('null') && days.type.includes('integer'),
+    `days.type 이 ${JSON.stringify(days.type)} 다`,
+  );
+});
+
+check('지표·주제 코드가 15개 언어에 모두 있다 — 라벨은 코드로만 산다(§9.1 규칙 2)', () => {
+  /*
+   * 🔴 `check:i18n`이 이걸 못 잡는다 — 호출이 `t(`metric.${code}`)`라 **동적**이다.
+   *   `report.fail.too-large`가 15개 언어에 없어 화면에 키가 날것으로 떴던 것과 같은 계열이다.
+   */
+  const dir = join(import.meta.dirname, '..', 'locales');
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith('.json')) continue;
+    const dict = JSON.parse(readFileSync(join(dir, file), 'utf8'));
+    for (const code of METRIC_CODES) {
+      assert(dict.metric?.[code], `${file}: metric.${code} 없음`);
+    }
+    for (const code of TOPIC_CODES) {
+      assert(dict.topic?.[code], `${file}: topic.${code} 없음`);
+    }
+    for (const key of ['metricsTitle', 'topicsTitle', 'days', 'noDays']) {
+      assert(dict.report?.[key], `${file}: report.${key} 없음`);
+    }
+  }
+});
+
+check('🔴 프롬프트가 "평가하지 않는다"와 점수를 동시에 말하지 않는다 — 자기모순 방어', () => {
+  const sys = buildSystem({ kind: 'weekly', lang: 'ko', periodKey: '2026-W33' });
+  assert(sys.includes('stress'), '지표 지시문이 없다');
+  /*
+   * 무조건적 평가 금지는 **글에 한정**돼야 한다. 점수를 매기면서 그냥 두면 프롬프트가
+   * 자기모순이고, 모델이 지표를 뭉개거나 요약문에 점수 이야기를 옮겨 적는다.
+   */
+  assert(sys.includes('**글에서는**'), '평가 금지가 글에 한정되지 않았다');
+  // 병명 금지는 **남아야 한다** — 지표와 무관하게 지킨다
+  assert(sys.includes('병명'), '병명 금지가 사라졌다');
+  assert(sys.includes('요약문에 옮겨 적지 않습니다'), '숫자를 글에 옮기지 말라는 지시가 없다');
 });
 
 /*

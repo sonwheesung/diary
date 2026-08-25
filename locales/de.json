@@ -562,7 +562,11 @@
       "monthly": "Vormonat",
       "yearly": "Vorjahr"
     },
-    "shapePrevious": "{{label}} · Tage {{written}}/{{total}} · Einträge {{count}}"
+    "shapePrevious": "{{label}} · Tage {{written}}/{{total}} · Einträge {{count}}",
+    "metricsTitle": "Kennzahlen",
+    "topicsTitle": "Kam auch vor",
+    "days": "{{count}}T",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "Einwilligung für KI-Berichte",
@@ -586,5 +590,19 @@
     "koreanGoverns": "Dies ist eine Übersetzung zur besseren Lesbarkeit. Bei Abweichungen vom koreanischen Original gilt die koreanische Fassung.",
     "pendingTitle": "Angekündigte Änderung",
     "appliesFrom": "Gilt ab: {{when}}"
+  },
+  "metric": {
+    "stress": "Stress",
+    "happiness": "Zufriedenheit",
+    "exercise": "Bewegung",
+    "growth": "Entwicklung"
+  },
+  "topic": {
+    "sleep": "Schlaf",
+    "work": "Arbeit",
+    "relationship": "Menschen",
+    "rest": "Ruhe",
+    "money": "Geld",
+    "health": "Körper"
   }
 }

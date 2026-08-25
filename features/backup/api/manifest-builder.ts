@@ -62,7 +62,7 @@ export async function buildManifest(): Promise<Manifest> {
    */
   const reports = await db.getAllAsync<ReportRow>(
     `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver,
-            created_at, deleted_at
+            metrics, created_at, deleted_at
        FROM ai_reports
       ORDER BY created_at ASC`,
   );

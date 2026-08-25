@@ -208,15 +208,31 @@ export async function seedReports(range: SeedRange): Promise<number> {
     ] as const) {
       for (const key of keys) {
         const at = Date.parse(`${range.to}T12:00:00Z`);
+        /*
+         * 지표도 심는다(§8.4) — 안 심으면 그 블록을 화면에서 볼 수가 없다.
+         * ⚠ `stress`·`happiness`는 `days`가 **`null`이어야 한다.** 실제 모델이 그렇게 낸다.
+         */
+        const metrics = JSON.stringify({
+          metrics: [
+            { code: 'stress', value: 30 + Math.floor(rand(key, 41) * 45), days: null, basis: '개발용으로 심은 값입니다.' },
+            { code: 'happiness', value: 30 + Math.floor(rand(key, 43) * 45), days: null, basis: '개발용으로 심은 값입니다.' },
+            { code: 'exercise', value: 15 + Math.floor(rand(key, 47) * 55), days: Math.floor(rand(key, 53) * 6), basis: '개발용으로 심은 값입니다.' },
+            { code: 'growth', value: 25 + Math.floor(rand(key, 59) * 55), days: Math.floor(rand(key, 61) * 9), basis: '개발용으로 심은 값입니다.' },
+          ],
+          topics: (['sleep', 'work', 'relationship', 'rest', 'money', 'health'] as const)
+            .filter((_, i) => rand(key, 67 + i * 3) < 0.7)
+            .map((code, i) => ({ code, days: 1 + Math.floor(rand(key, 71 + i * 5) * 8), note: '개발용으로 심은 값입니다.' })),
+        });
         await db.runAsync(
           `INSERT OR REPLACE INTO ai_reports
-             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at, deleted_at)
-           VALUES (?, ?, ?, 'ko', ?, 0, ?, 'seed', 0, ?, NULL)`,
+             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at, deleted_at)
+           VALUES (?, ?, ?, 'ko', ?, 0, ?, 'seed', 0, ?, ?, NULL)`,
           `${PREFIX}${kind}-${key}`,
           kind,
           key,
           `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 아래 그림이 이 기간의 실제 조각에서 계산된 것인지만 보면 됩니다.`,
           kind === 'monthly' ? 4 : 12,
+          metrics,
           at,
         );
         n += 1;

@@ -157,6 +157,19 @@ const MIGRATIONS: readonly string[] = [
   ALTER TABLE ai_reports ADD COLUMN deleted_at INTEGER;
   CREATE INDEX IF NOT EXISTS idx_ai_reports_deleted_at ON ai_reports (deleted_at);
   `,
+
+  // v7 — 리포트 지표 (AI_REPORT_SYSTEM §8.4)
+  /*
+   * 🔴 **컬럼 하나에 JSON으로 담는다.** 지표는 넷으로 고정이지만 `topics`는 개수가 변하고,
+   *   둘을 정규화하면 테이블이 둘 더 생긴다 — 백업 매니페스트·복원·묘비까지 전부 두 벌이 된다.
+   *   여기서 검색하거나 집계할 일이 없다(월간 평균은 앱이 로컬에서 낸다).
+   *
+   * ⚠ **NULL이 정상값이다.** v8 이전에 만든 리포트에는 지표가 없고, 캡이 평생 1번이라
+   *   **영원히 안 생긴다.** 화면은 그때 지표 블록 자체를 안 그린다 — 빈 게이지는 고장으로 보인다.
+   */
+  `
+  ALTER TABLE ai_reports ADD COLUMN metrics TEXT;
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

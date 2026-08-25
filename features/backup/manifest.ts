@@ -23,6 +23,9 @@
  *
  * ~~1~~ → **2**(2026-08-12): `reports`를 추가했다.
  * **2 → 3**(2026-08-18): `reports.deleted_at`을 추가했다 — 리포트 삭제가 묘비가 됐다
+ * **3 → 4**(2026-08-25): `reports.metrics`를 추가했다 — 리포트에 지표가 붙었다(§8.4).
+ *   ⚠ 옛 백업에는 이 필드가 없고 `undefined`로 읽힌다. 지표 없는 리포트는 **정상**이다 —
+ *     캡이 평생 1번이라 소급이 애초에 불가능하다.
  *   (`docs/AI_REPORT_SYSTEM.md` §11.9). 묘비를 안 실으면 **복원한 기기에서 그 기간이
  *   되살아나** 다시 만들 수 있는 것처럼 보이고, 서버 캡이 막는다.
  *
@@ -30,7 +33,7 @@
  *   알려주므로 **조용한 손실이 아니다** — 매니페스트 규약이 그렇게 설계돼 있다.
  *   반대로 새 앱이 v1을 복원하면 `reports`가 없을 뿐이고, 그때는 빈 배열로 읽는다.
  */
-export const MANIFEST_FORMAT = 3;
+export const MANIFEST_FORMAT = 4;
 
 /** `diaries` 원본 행. 컬럼 이름을 그대로 쓴다 — 매핑 층을 하나 없앤다 */
 export interface DiaryRow {
@@ -102,6 +105,13 @@ export interface ReportRow {
   model: string | null;
   prompt_ver: number | null;
   created_at: number;
+  /**
+   * 지표·주제 JSON (`{ metrics, topics }`). **v3 이하 백업에는 없다** → `undefined`.
+   *
+   * ⚠ 묘비(`deleted_at !== null`)면 `summary`처럼 **비운다** — 지운 리포트의 지표를
+   *   남길 이유가 없고, 남기면 지웠는데 그림이 남는다.
+   */
+  metrics?: string | null;
   /**
    * 묘비. `null`이 아니면 사용자가 지운 리포트다 — `summary`는 비어 있다(§11.9).
    *

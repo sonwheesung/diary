@@ -10,6 +10,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 import { Screen } from '@/components/Screen';
 import { deleteReport, getReport, type Report } from '@/features/ai/api/report-repository';
 import { PeriodShape } from '@/features/ai/components/PeriodShape';
+import { ReportMetricsBlock } from '@/features/ai/components/ReportMetricsBlock';
 import { keyRange } from '@/features/ai/period';
 import { periodShape, previousPeriodKey, type Shape } from '@/features/ai/stats';
 import { listDayFactsBetween } from '@/features/diary/api/diary-repository';
@@ -206,6 +207,13 @@ export default function ReportDetailScreen() {
         ⚠ **글 아래다.** 상세는 읽는 자리라 그림이 위로 올라오면 요약문이 밀린다(기둥 2).
         ⚠ 아직 안 셌으면 아무것도 그리지 않는다 — 빈 격자가 먼저 떴다 채워지면 화면이 튄다.
       */}
+      {/*
+        순서는 **글 → 지표 → 그 밖에 → 그 기간의 모양**이다. 모델이 읽고 쓴 것이 먼저고,
+        앱이 센 것이 그다음이다. ⚠ 지표가 없는 리포트(v8 이전)는 블록 자체가 안 그려진다 —
+        캡이 평생 1번이라 **영원히 안 생기므로** 빈 자리를 남기지 않는다.
+      */}
+      {report.metrics !== null && <ReportMetricsBlock data={report.metrics} />}
+
       {shape !== null && <PeriodShape shape={shape} prev={prevShape} kind={report.kind} />}
 
       <View style={styles.footer}>

@@ -6,7 +6,7 @@
  *   (`docs/AI_REPORT_SYSTEM.md` §11.3). 저장소가 구독을 알면 그 규칙이 두 곳으로 갈라진다.
  */
 import { getDatabase } from '@/db/client';
-import type { ReportKind } from '@/features/ai/types';
+import type { MetricValue, ReportKind, TopicValue } from '@/features/ai/types';
 
 /**
  * 🔴 **묘비를 뺀다** (`docs/AI_REPORT_SYSTEM.md` §11.9). `diaries`의 `ALIVE`와 같은 규약.
@@ -34,7 +34,18 @@ export interface Report {
   sourceCount: number;
   model: string | null;
   promptVer: number | null;
+  /**
+   * 지표·주제. **`null`이 정상값이다** — 프롬프트 v8 이전 리포트에는 없고,
+   * 캡이 평생 1번이라 **영원히 안 생긴다**(§8.4). 화면은 그때 지표 블록을 안 그린다.
+   */
+  metrics: ReportMetrics | null;
   createdAt: number;
+}
+
+/** `ai_reports.metrics` 안의 모양. 컬럼 하나에 JSON으로 들어간다(DB v7) */
+export interface ReportMetrics {
+  metrics: MetricValue[];
+  topics: TopicValue[];
 }
 
 interface Row {
@@ -47,7 +58,27 @@ interface Row {
   source_count: number;
   model: string | null;
   prompt_ver: number | null;
+  metrics: string | null;
   created_at: number;
+}
+
+/**
+ * 지표 JSON을 읽는다. **깨져 있으면 `null`로 떨어진다** — 리포트 본문은 그것과 무관하게 온전하고,
+ * 화면은 지표 블록만 안 그린다. 지표 하나 때문에 리포트를 못 열게 만들지 않는다.
+ */
+function parseMetrics(raw: string | null): ReportMetrics | null {
+  if (raw === null || raw.length === 0) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== 'object' || parsed === null) return null;
+    const box = parsed as { metrics?: unknown; topics?: unknown };
+    return {
+      metrics: Array.isArray(box.metrics) ? (box.metrics as MetricValue[]) : [],
+      topics: Array.isArray(box.topics) ? (box.topics as TopicValue[]) : [],
+    };
+  } catch {
+    return null;
+  }
 }
 
 const toReport = (r: Row): Report => ({
@@ -61,6 +92,7 @@ const toReport = (r: Row): Report => ({
   sourceCount: r.source_count,
   model: r.model,
   promptVer: r.prompt_ver,
+  metrics: parseMetrics(r.metrics),
   createdAt: r.created_at,
 });
 
@@ -73,7 +105,7 @@ const toReport = (r: Row): Report => ({
 export async function listReports(kind: ReportKind): Promise<Report[]> {
   const db = await getDatabase();
   const rows = await db.getAllAsync<Row>(
-    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at
+    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports
       WHERE kind = ? AND ${ALIVE}
       ORDER BY period_key DESC`,
@@ -100,7 +132,7 @@ export async function listUsedPeriodKeys(kind: ReportKind): Promise<string[]> {
 export async function getReport(id: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at
+    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports WHERE id = ? AND ${ALIVE}`,
     id,
   );
@@ -116,7 +148,7 @@ export async function getReport(id: string): Promise<Report | null> {
 export async function findByPeriod(kind: ReportKind, periodKey: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at
+    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports WHERE kind = ? AND period_key = ?`,
     kind,
     periodKey,
@@ -137,8 +169,8 @@ export async function saveReport(report: Report): Promise<void> {
   const db = await getDatabase();
   await db.runAsync(
     `INSERT OR REPLACE INTO ai_reports
-       (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     report.id,
     report.kind,
     report.periodKey,
@@ -148,6 +180,8 @@ export async function saveReport(report: Report): Promise<void> {
     report.sourceCount,
     report.model,
     report.promptVer,
+    // 지표가 없는 리포트가 정상이다(v8 이전). 그때는 컬럼이 NULL로 남는다
+    report.metrics === null ? null : JSON.stringify(report.metrics),
     report.createdAt,
   );
 }
@@ -165,7 +199,11 @@ export async function saveReport(report: Report): Promise<void> {
 export async function deleteReport(id: string): Promise<void> {
   const db = await getDatabase();
   await db.runAsync(
-    `UPDATE ai_reports SET summary = '', concern = 0, deleted_at = ? WHERE id = ?`,
+    /*
+     * 🔴 `metrics`도 **함께 비운다.** `summary`만 지우면 지운 리포트의 지표 그림이 남는다 —
+     *   지표는 일기에서 뽑은 것이라 그것도 사용자가 지우려던 것이다(§8.4).
+     */
+    `UPDATE ai_reports SET summary = '', concern = 0, metrics = NULL, deleted_at = ? WHERE id = ?`,
     Date.now(),
     id,
   );

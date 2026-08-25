@@ -562,7 +562,11 @@
       "monthly": "Bulan lalu",
       "yearly": "Tahun lalu"
     },
-    "shapePrevious": "{{label}} · Hari {{written}}/{{total}} · Entri {{count}}"
+    "shapePrevious": "{{label}} · Hari {{written}}/{{total}} · Entri {{count}}",
+    "metricsTitle": "Indikator",
+    "topicsTitle": "Juga muncul",
+    "days": "{{count}} hr",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "Persetujuan laporan AI",
@@ -586,5 +590,19 @@
     "koreanGoverns": "Ini adalah terjemahan untuk memudahkan pembacaan. Jika berbeda dengan naskah asli bahasa Korea, versi Korea yang berlaku.",
     "pendingTitle": "Perubahan mendatang",
     "appliesFrom": "Berlaku sejak: {{when}}"
+  },
+  "metric": {
+    "stress": "Stres",
+    "happiness": "Kebahagiaan",
+    "exercise": "Olahraga",
+    "growth": "Pengembangan"
+  },
+  "topic": {
+    "sleep": "Tidur",
+    "work": "Kerja",
+    "relationship": "Orang",
+    "rest": "Istirahat",
+    "money": "Uang",
+    "health": "Tubuh"
   }
 }

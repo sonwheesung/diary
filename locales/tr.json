@@ -562,7 +562,11 @@
       "monthly": "Geçen ay",
       "yearly": "Geçen yıl"
     },
-    "shapePrevious": "{{label}} · Gün {{written}}/{{total}} · Kayıt {{count}}"
+    "shapePrevious": "{{label}} · Gün {{written}}/{{total}} · Kayıt {{count}}",
+    "metricsTitle": "Göstergeler",
+    "topicsTitle": "Ayrıca göründü",
+    "days": "{{count}} gün",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "Yapay zekâ raporu onayı",
@@ -586,5 +590,19 @@
     "koreanGoverns": "Bu, okuma kolaylığı için hazırlanmış bir çeviridir. Korece aslıyla çelişmesi hâlinde Korece sürüm geçerlidir.",
     "pendingTitle": "Yaklaşan değişiklik",
     "appliesFrom": "Şu tarihten itibaren geçerli: {{when}}"
+  },
+  "metric": {
+    "stress": "Stres",
+    "happiness": "Mutluluk",
+    "exercise": "Egzersiz",
+    "growth": "Gelişim"
+  },
+  "topic": {
+    "sleep": "Uyku",
+    "work": "İş",
+    "relationship": "İnsanlar",
+    "rest": "Dinlenme",
+    "money": "Para",
+    "health": "Beden"
   }
 }

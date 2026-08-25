@@ -1,5 +1,8 @@
 import OpenAI from 'openai';
 
+import { METRIC_CODES, TOPIC_CODES } from '@shared/ai/types';
+import type { MetricCode, MetricValue, TopicCode, TopicValue } from '@shared/ai/types';
+
 import { MAX_OUTPUT_TOKENS } from './ai-policy';
 import { reportError } from './observability';
 
@@ -50,6 +53,14 @@ export interface GenerateOk {
   ok: true;
   summary: string;
   concern: boolean;
+  /**
+   * 지표 넷과 그 밖의 주제 (§8.4).
+   *
+   * ⚠ **빈 배열일 수 있다.** 모델이 안 냈거나 코드가 우리가 아는 목록 밖이면 버린다 —
+   *   요약은 온전하므로 실패로 만들지 않는다. 캡이 평생 1번이라 재시도가 없어서다.
+   */
+  metrics: MetricValue[];
+  topics: TopicValue[];
   model: string;
   inputTokens: number;
   outputTokens: number;
@@ -82,8 +93,17 @@ function getClient(): OpenAI | null {
   return client;
 }
 
-/** 구조화 출력이 강제되므로 여기 오는 문자열은 스키마를 만족한다. 그래도 믿지 않고 확인한다 */
-function parseOutput(raw: string): { summary: string; concern: boolean } | null {
+/**
+ * 구조화 출력이 강제되므로 여기 오는 문자열은 스키마를 만족한다. 그래도 믿지 않고 확인한다.
+ *
+ * 🔴 **요약과 지표의 판정을 다르게 한다** (§8.4).
+ *   `summary`·`concern`이 없으면 리포트가 성립하지 않으니 `null`(실패)이다.
+ *   반면 `metrics`·`topics`가 없거나 깨져 있으면 **빈 배열로 떨어뜨린다** — 지표 하나 때문에
+ *   사용자가 그 기간을 영영 잃게 만들지 않는다(캡이 평생 1번이라 재시도가 없다).
+ */
+function parseOutput(
+  raw: string,
+): { summary: string; concern: boolean; metrics: MetricValue[]; topics: TopicValue[] } | null {
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
@@ -96,7 +116,64 @@ function parseOutput(raw: string): { summary: string; concern: boolean } | null 
   const concern = obj.concern;
   if (typeof summary !== 'string' || summary.trim().length === 0) return null;
   if (typeof concern !== 'boolean') return null;
-  return { summary, concern };
+  return {
+    summary,
+    concern,
+    metrics: pickMetrics(obj.metrics),
+    topics: pickTopics(obj.topics),
+  };
+}
+
+/** 아는 코드만, 순서를 고정해서. 모르는 코드는 조용히 버린다 — 화면이 그릴 수 없는 값이다 */
+function pickMetrics(value: unknown): MetricValue[] {
+  if (!Array.isArray(value)) return [];
+  const byCode = new Map<string, MetricValue>();
+  for (const item of value) {
+    if (typeof item !== 'object' || item === null) continue;
+    const row = item as Record<string, unknown>;
+    const code = row.code;
+    if (typeof code !== 'string' || !METRIC_CODES.includes(code as MetricCode)) continue;
+    if (typeof row.value !== 'number' || !Number.isFinite(row.value)) continue;
+    byCode.set(code, {
+      code: code as MetricCode,
+      value: Math.max(0, Math.min(100, Math.round(row.value))),
+      /*
+       * 🔴 `stress`·`happiness`는 **날로 셀 수 없다.** 모델이 숫자를 넣어 와도 버린다 —
+       *   화면이 `—`로 그려야 하는 자리이고, 안 버리면 *"행복한 날 3일"* 이 뜬다(§8.4).
+       */
+      days:
+        code === 'stress' || code === 'happiness'
+          ? null
+          : typeof row.days === 'number' && Number.isFinite(row.days)
+            ? Math.max(0, Math.round(row.days))
+            : null,
+      basis: typeof row.basis === 'string' ? row.basis : '',
+    });
+  }
+  return METRIC_CODES.map((code) => byCode.get(code)).filter(
+    (m): m is MetricValue => m !== undefined,
+  );
+}
+
+function pickTopics(value: unknown): TopicValue[] {
+  if (!Array.isArray(value)) return [];
+  const out: TopicValue[] = [];
+  const seen = new Set<string>();
+  for (const item of value) {
+    if (typeof item !== 'object' || item === null) continue;
+    const row = item as Record<string, unknown>;
+    const code = row.code;
+    if (typeof code !== 'string' || !TOPIC_CODES.includes(code as TopicCode)) continue;
+    if (seen.has(code)) continue;
+    if (typeof row.days !== 'number' || !Number.isFinite(row.days) || row.days <= 0) continue;
+    seen.add(code);
+    out.push({
+      code: code as TopicCode,
+      days: Math.round(row.days),
+      note: typeof row.note === 'string' ? row.note : '',
+    });
+  }
+  return out;
 }
 
 /**
@@ -181,6 +258,8 @@ export async function generateReport(args: GenerateArgs): Promise<GenerateResult
     ok: true,
     summary: parsed.summary,
     concern: parsed.concern,
+    metrics: parsed.metrics,
+    topics: parsed.topics,
     model: typeof response.model === 'string' ? response.model : model,
     inputTokens: response.usage?.input_tokens ?? 0,
     outputTokens: response.usage?.output_tokens ?? 0,

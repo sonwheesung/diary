@@ -369,6 +369,14 @@ export async function createReport(
     concern: response.concern,
     // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다
     sourceCount: kind === 'weekly' ? entries.length : subReports.length,
+    /*
+     * 지표·주제 (§8.4). **둘 다 오지 않으면 `null`** — 낡은 서버이거나 스키마가 어긋난 것이고,
+     * 그때 리포트는 지표 없이 저장된다. 본문은 온전하므로 실패로 만들지 않는다.
+     */
+    metrics:
+      response.metrics === undefined && response.topics === undefined
+        ? null
+        : { metrics: response.metrics ?? [], topics: response.topics ?? [] },
     model: response.model,
     promptVer: response.promptVer,
     createdAt: Date.now(),

@@ -65,6 +65,11 @@ const claimsCount = (line, script) =>
 /** ②에서 걸리지만 고칠 게 아닌 줄. 부분 문자열로 찾는다 — 줄이 옮겨져도 따라간다 */
 const ALLOW = [
   {
+    file: 'docs/AI_REPORT_SYSTEM.md',
+    contains: '`check:ai` 79개가 전부 **한 시간대에서만** 돌았다',
+    why: '과거 기록 — §6.6 "왜 못 찾았나"의 진단 시점 사실이다. 고치면 그 절이 거짓이 된다',
+  },
+  {
     file: 'docs/MONETIZATION_SYSTEM.md',
     contains: '`check:subscription` 14개는 전부 체험 기간 계산',
     why: '과거 기록 — §6.1.7 "왜 못 찾았나"의 진단 시점 사실이다. 고치면 그 절이 거짓이 된다',

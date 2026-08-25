@@ -328,6 +328,11 @@ export async function POST(req: Request): Promise<Response> {
         sourceCount: withBody(args.entries).length + (args.subReports?.length ?? 0),
         model: result.model,
         promptVer: PROMPT_VERSION,
+        /*
+         * ⚠ **JSON 문자열로 넣는다.** 여기서 검색·집계할 일이 없다 — 월간 평균은 앱이
+         *   로컬 리포트에서 낸다(서버는 90일치만 갖고 있어 애초에 못 낸다).
+         */
+        metrics: JSON.stringify({ metrics: result.metrics, topics: result.topics }),
       });
     } catch (error) {
       reportError(error, 'ai.report-write');
@@ -336,6 +341,8 @@ export async function POST(req: Request): Promise<Response> {
     return ok({
       summary: result.summary,
       concern: result.concern,
+      metrics: result.metrics,
+      topics: result.topics,
       model: result.model,
       promptVer: PROMPT_VERSION,
     });

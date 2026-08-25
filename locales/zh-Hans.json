@@ -562,7 +562,11 @@
       "monthly": "上月",
       "yearly": "去年"
     },
-    "shapePrevious": "{{label}} · 记录天数 {{written}}/{{total}} · 碎片 {{count}}"
+    "shapePrevious": "{{label}} · 记录天数 {{written}}/{{total}} · 碎片 {{count}}",
+    "metricsTitle": "本期指标",
+    "topicsTitle": "还出现了",
+    "days": "{{count}}天",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "AI 报告同意",
@@ -586,5 +590,19 @@
     "koreanGoverns": "本文为便于阅读的译文。如与韩文原文有出入，以韩文版为准。",
     "pendingTitle": "修订预告",
     "appliesFrom": "适用时间：{{when}}"
+  },
+  "metric": {
+    "stress": "压力管理",
+    "happiness": "幸福感",
+    "exercise": "运动",
+    "growth": "自我提升"
+  },
+  "topic": {
+    "sleep": "睡眠",
+    "work": "工作",
+    "relationship": "人际",
+    "rest": "休息",
+    "money": "金钱",
+    "health": "身体"
   }
 }

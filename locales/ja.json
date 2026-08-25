@@ -562,7 +562,11 @@
       "monthly": "先月",
       "yearly": "昨年"
     },
-    "shapePrevious": "{{label}} · 書いた日 {{written}}/{{total}} · かけら {{count}}"
+    "shapePrevious": "{{label}} · 書いた日 {{written}}/{{total}} · かけら {{count}}",
+    "metricsTitle": "この期間の指標",
+    "topicsTitle": "ほかに出てきたこと",
+    "days": "{{count}}日",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "AIレポートの同意",
@@ -586,5 +590,19 @@
     "koreanGoverns": "読みやすさのための翻訳です。韓国語の原文と異なる場合は、韓国語版が優先します。",
     "pendingTitle": "改定予告",
     "appliesFrom": "適用時期: {{when}}"
+  },
+  "metric": {
+    "stress": "ストレス管理",
+    "happiness": "幸福",
+    "exercise": "運動",
+    "growth": "自己成長"
+  },
+  "topic": {
+    "sleep": "睡眠",
+    "work": "仕事",
+    "relationship": "人間関係",
+    "rest": "休息",
+    "money": "お金",
+    "health": "体調"
   }
 }

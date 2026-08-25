@@ -562,7 +562,11 @@
       "monthly": "Last month",
       "yearly": "Last year"
     },
-    "shapePrevious": "{{label}} · Days {{written}}/{{total}} · Entries {{count}}"
+    "shapePrevious": "{{label}} · Days {{written}}/{{total}} · Entries {{count}}",
+    "metricsTitle": "Metrics",
+    "topicsTitle": "Also showed up",
+    "days": "{{count}}d",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "AI report consent",
@@ -586,5 +590,19 @@
     "koreanGoverns": "This is a translation for readability. Where it differs from the Korean original, the Korean version governs.",
     "pendingTitle": "Upcoming amendment",
     "appliesFrom": "Applies from: {{when}}"
+  },
+  "metric": {
+    "stress": "Stress",
+    "happiness": "Happiness",
+    "exercise": "Exercise",
+    "growth": "Growth"
+  },
+  "topic": {
+    "sleep": "Sleep",
+    "work": "Work",
+    "relationship": "People",
+    "rest": "Rest",
+    "money": "Money",
+    "health": "Body"
   }
 }

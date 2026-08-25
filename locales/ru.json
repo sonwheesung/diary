@@ -562,7 +562,11 @@
       "monthly": "Прошлый месяц",
       "yearly": "Прошлый год"
     },
-    "shapePrevious": "{{label}} · Дней {{written}}/{{total}} · Записей {{count}}"
+    "shapePrevious": "{{label}} · Дней {{written}}/{{total}} · Записей {{count}}",
+    "metricsTitle": "Показатели",
+    "topicsTitle": "Также встречалось",
+    "days": "{{count}}д",
+    "noDays": "—"
   },
   "aiConsent": {
     "title": "Согласие на отчёты ИИ",
@@ -586,5 +590,19 @@
     "koreanGoverns": "Это перевод для удобства чтения. При расхождении с корейским оригиналом преимущественную силу имеет корейская версия.",
     "pendingTitle": "Предстоящее изменение",
     "appliesFrom": "Применяется с: {{when}}"
+  },
+  "metric": {
+    "stress": "Стресс",
+    "happiness": "Радость",
+    "exercise": "Спорт",
+    "growth": "Развитие"
+  },
+  "topic": {
+    "sleep": "Сон",
+    "work": "Работа",
+    "relationship": "Люди",
+    "rest": "Отдых",
+    "money": "Деньги",
+    "health": "Тело"
   }
 }
