@@ -74,14 +74,14 @@
 | **AI 리포트 — 삭제는 묘비** | ✅ | 2026-08-18 — DB v6 · `MANIFEST_FORMAT` 3. 하드 삭제가 **로컬과 서버 캡(`uq_ai_usage_period`)을 갈라놔** 지운 기간이 되살아난 것처럼 보이고 서버가 막았다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §11.9). ⏭ 재설치·기기 2대는 서버 경로가 있어야 고쳐진다 |
 | **AI 리포트 — 하위 완비 확인** | ✅ | 2026-08-18 — 안 끝난 하위는 차단, 안 만든 하위는 확인. `canCreate`가 하위 **0개인지만** 봐서 2개짜리 월간이 영구히 굳던 버그(§6.5) |
 | 🔴 **AI 리포트 — 서버 배포** | ✅ | **2026-08-18에야 실제로 배포됐다.** 그전까지 `POST /api/v1/ai/report`가 배포본에서 **404** — `@shared/*`가 `../features/*`를 가리켰는데 Vercel CLI는 `server/`만 올린다. 순수 계층을 `server/shared/`로 생성 복사(`npm run sync:shared` · `check:shared`)해서 풀었다. ⚠ 그전의 "성공" 기록은 전부 **localhost** 기준이다 |
-| **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 7개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
+| **AI 리포트 — 서버** | ⏸ | 라우트·벤더 경계·캡·`ai_usage` 구현 완료(`e2e:ai` 15개). ✅ **모델 실호출 확인**(2026-08-13, `AI_EFFORT=medium` 확정 · 원가가 계획의 1/4). 🔴 **그런데 `/api/v1/ai/report`를 통과한 성공 경로는 0회** — 측정은 OpenAI를 직접 불렀다([`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §4.2.1) |
 | **AI — 탈퇴 시 파기** | ✅ | 2026-08-24 — `POST /api/v1/ai/purge`. `DELETE_ACCOUNT` §3이 *"탈퇴하면 요약문·이용기록이 파기된다"* 고 **게시돼 있었는데 그 코드가 없었다**(`purgeVault`가 AI 테이블을 import조차 안 했다). 서버에 남는 것 중 **유일하게 사람이 읽을 수 있는 일기 파생물**이라 문장이 아니라 코드를 고쳤다. 탈퇴 흐름에 백업 파기와 같은 **차단형**으로 — 계정이 사라지면 지울 권한이 있는 사람이 없어진다. `e2e:ai` 15개(파기 4개 신규) |
 | AI 리포트 — 동의 2종 | ✅ | §23 민감정보 · §28-8 국외이전. 체크박스 2개, 묶지 않는다 |
 | AI 사업자 **연락처** | ✅ | 2026-08-19 — `OpenAI OpCo, LLC` · `US` · `dpo@openai.com`(`features/ai/vendor.ts`). 처리방침 15개 언어 반영 · `check:ai` 통과. ~~출시 차단~~ 해제 |
 | AI 리포트 — 처리방침 | ✅ | 2026-08-13 — 리포트 90일 저장을 반영해 **15개 언어 재작성**(`check:legal` 378개). ⚠ 30일 시계는 **애초에 해당 없었다**(공개 사용자 0명, CLAUDE.md §12) |
 | **계정 삭제 안내 — 다국어** | ✅ | 2026-08-17 — 영어 하나였던 것을 **15개 언어**로. Play 데이터 보안 선언에 등록된 URL이라 심사자가 직접 연다 |
 | **Play 데이터 보안 선언** | 🔄 | 2026-08-24 — 값은 **확정**했다([`PLAY_DATA_SAFETY.md`](./PLAY_DATA_SAFETY.md) §3·§7): 2단계 `삭제 요청 = 예`로 변경 + 3단계 `사용자 ID`·`구매 내역`·`기타 사용자 제작 콘텐츠` **추가**. 기존 6개는 건드리지 않는다(과다 선언은 제재 대상이 아니다). 🚫 **사진은 선언하지 않는다** — Play의 E2EE 예외 원문(*"does not need to be disclosed"*)을 백업이 만족한다. ⏭ 남은 것은 **사용자가 콘솔에서 누르는 것뿐**이고, 처리방침이 먼저 맞아야 한다던 선행 조건은 아래 줄로 이미 해소됐다 |
-| 🔴 **탈퇴 ↔ AI 테이블 정합** | ❌ | 2026-08-24 발견 — 승격된 `PRIVACY §4`·`DELETE_ACCOUNT §3`이 *"탈퇴하면 AI 요약문과 이용 기록을 파기한다"* 고 적는데 **`deleteAccount()`가 `ai_reports`·`ai_usage`를 건드리지 않는다**(`purgeVault`는 import조차 안 한다). 요약문은 `subject_id`에 묶인 채 90일, `ai_usage`는 **영구**로 남는다. 백업 쪽은 *"계정보다 백업을 먼저"* 를 차단형으로까지 설계했는데 **AI 쪽에 그 대칭이 없다.** Play 배지 조건은 `or`이라 폼 블로커는 아니지만 **문안이 거짓**이다 — 프로덕션 전까지 닫는다([`PLAY_DATA_SAFETY.md`](./PLAY_DATA_SAFETY.md) §4.4) |
+| **탈퇴 ↔ AI 테이블 정합** | ✅ | 2026-08-24 발견 — 승격된 `PRIVACY §4`·`DELETE_ACCOUNT §3`이 *"탈퇴하면 AI 요약문과 이용 기록을 파기한다"* 고 적는데 **`deleteAccount()`가 `ai_reports`·`ai_usage`를 건드리지 않는다**(`purgeVault`는 import조차 안 한다). 요약문은 `subject_id`에 묶인 채 90일, `ai_usage`는 **영구**로 남는다. 백업 쪽은 *"계정보다 백업을 먼저"* 를 차단형으로까지 설계했는데 **AI 쪽에 그 대칭이 없다.** Play 배지 조건은 `or`이라 폼 블로커는 아니지만 **문안이 거짓**이었다. → **닫았다**(같은 날) — 위 `AI — 탈퇴 시 파기` 줄과 합쳐 읽는다([`PLAY_DATA_SAFETY.md`](./PLAY_DATA_SAFETY.md) §4.4) |
 | **처리방침 승격** | ✅ | 2026-08-23 — `pending`(개정 예고) 둘을 **본문으로** 옮겼다. v8·v9에 백업·AI가 들어 있는데 본문이 여전히 *"일기를 서버로 보내지 않으며"* 라 **배포본과 고지가 어긋나 있었다.** `PRIVACY` 13개 절에 엮고 `DELETE_ACCOUNT`는 5→**6개 절**(§5 제목까지 교체) · 15개 언어. ⚠ **Play 데이터 보안 폼보다 먼저**다 — 폼이 "수집함"인데 링크된 방침이 "수집 안 함"이면 그 자리에서 어긋난다 |
 | **이용약관** | ✅ | 2026-08-17 신규 — 한국어 정본 22조(`TERMS`) · 앱 화면 · `docs/terms.html` · 설정/구독 링크. ~~번역 14개 진행 중~~ → **완료**(2026-08-21 정정 — `check:legal` 378개가 *이용약관 14개 언어*를 세고 있었다. 이 줄만 🔄로 남아 **끝난 일이 남은 일로 보였다**). 근거는 전자상거래법 §13②([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §5.2) |
 | **§13③ 미성년자 고지** | ✅ | 구독 동의 화면에 상시 표시. 나이를 모르므로 모두에게 보여주는 것이 유일한 이행 방법 |
@@ -181,6 +181,8 @@ cd server && npm run measure:ai   # P1 — 한국어 토큰·모델 비교·effo
 # 검사를 늘렸으면 / 릴리스 전 (검사 6개를 실제로 돌려 2~3분)
 npm run check:doc-counts       # 문서에 박힌 "N개"가 실제와 같은가
                                #   ⚠ 개수가 스크립트와 문서 두 곳에 산다. 2026-08-20에 8군데가 낡아 있었다
+                               #   🔴 e2e·e2e:ai 는 DB·dev 서버가 필요해 못 돌린다 → **선언된 검사 수를 센다**
+                               #      (2026-08-24 추가). 안 보던 사이 e2e 9→32 · e2e:ai 7→15 로 낡아 있었다
 
 # 새 런타임 의존성이 들어가는 커밋 / AAB 굽기 직전에만 (콜드 수 분)
 npm run check:bundle           # 번들 상한. 기준선 3.67MB
@@ -195,8 +197,9 @@ cd server
 npx supabase start   # Postgres :54422 · Storage :54421 · Studio :54423 (전부 Docker)
 npm run db:push
 npm run dev          # :3200
-npm run e2e          # 9개 — reserve→서명 URL PUT→commit→latest→다운로드
-npm run e2e:ai       # 7개 — AI 게이트(인가·구독·빈입력·과대입력·캡). **모델을 부르지 않는다**
+npm run e2e          # 32개 — reserve→서명 URL PUT→commit→latest→다운로드
+npm run e2e:ai       # 15개 — AI 게이트(인가·구독·빈입력·과대입력·캡·지평) + **탈퇴 파기 4개**.
+                     #   모델을 부르지 않는다
 npm run measure:ai   # ⚠ 실제 과금. OPENAI_API_KEY 필요
 ```
 

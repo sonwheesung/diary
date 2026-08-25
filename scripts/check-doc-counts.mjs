@@ -35,6 +35,33 @@ const COUNTED = [
   'check:admin',
 ];
 
+/**
+ * 🔴 **돌려서 잴 수 없는 검사는 세어서 잰다** (2026-08-24).
+ *
+ * `e2e`·`e2e:ai`는 Docker Supabase와 dev 서버가 떠 있어야 돌아서 `COUNTED`에 못 넣는다.
+ * 그래서 **이 스크립트가 못 보는 사각**이었고, 실제로 셋이 한꺼번에 낡아 있었다:
+ * `e2e:ai` 문서 7개 ≠ 실제 15개(2026-08-24에 파기 검사 4개를 더했다),
+ * `e2e` 문서 9개 ≠ 실제 32개(**언제부터 틀렸는지 모른다**).
+ *
+ * 대신 **선언된 `await check(` 수를 센다.** 둘 다 조건·루프 안에 든 검사가 없어
+ * (전부 최상위이거나 `try` 블록 안이다) 정적 개수와 실행 개수가 같다.
+ * ⚠ 조건부 검사를 넣으면 이 전제가 깨진다 — 그때는 이 표에서 빼고 `COUNTED`로 옮긴다.
+ */
+const STATIC = [
+  { script: 'e2e', file: 'server/scripts/e2e.mjs' },
+  { script: 'e2e:ai', file: 'server/scripts/e2e-ai.mjs' },
+];
+
+/**
+ * ⚠ `e2e`는 **이름이 너무 짧아** 산문에도 나온다(*"로컬 빌드·e2e·typecheck가 통과"*).
+ * `check:*`처럼 line.includes로 잡으면 그 줄의 무관한 숫자를 개수 주장으로 오인한다.
+ * 그래서 STATIC 이름은 **`npm run <이름>` 또는 백틱으로 감싼 형태**일 때만 개수 주장으로 본다.
+ * `check:*`에는 이 조임을 적용하지 않는다 — 지금 잡히는 줄을 놓칠 수 있어서다.
+ */
+const STATIC_NAMES = new Set(STATIC.map((x) => x.script));
+const claimsCount = (line, script) =>
+  !STATIC_NAMES.has(script) || line.includes(`npm run ${script}`) || line.includes(`\`${script}\``);
+
 /** ②에서 걸리지만 고칠 게 아닌 줄. 부분 문자열로 찾는다 — 줄이 옮겨져도 따라간다 */
 const ALLOW = [
   {
@@ -80,6 +107,17 @@ for (const script of COUNTED) {
   console.log(`${n}개`);
 }
 
+for (const { script, file } of STATIC) {
+  const src = readFileSync(join(ROOT, file), 'utf8');
+  const n = [...src.matchAll(/await check\(/g)].length;
+  if (n === 0) {
+    fail.push(`${script}: ${file}에서 \`await check(\`를 못 찾았다. 검사 작성 방식을 바꿨다면 이 스크립트도 고친다`);
+    continue;
+  }
+  console.log(`  세는 중  ${script} … ${n}개 (정적)`);
+  actual.set(script, n);
+}
+
 /* ── ① 정본: docs/README.md §3 ───────────────────────────────── */
 
 const readme = readFileSync(join(ROOT, 'docs/README.md'), 'utf8');
@@ -97,6 +135,16 @@ for (const [script, n] of actual) {
 
 /* ── ② 중복: 다른 곳이 또 적은 숫자 ──────────────────────────── */
 
+/** `script`를 **그 이름으로** 언급한 줄인가. `e2e`가 `e2e:ai`·`check:i18n`이 `check:i18n-roundtrip`에 걸리는 것을 막는다 */
+const mentions = (line, script) => {
+  for (let from = 0; ; ) {
+    const i = line.indexOf(script, from);
+    if (i === -1) return false;
+    if (!/[\w:-]/.test(line[i + script.length] ?? '')) return true;
+    from = i + 1;
+  }
+};
+
 const allowed = (file, line) =>
   ALLOW.some((a) => a.file === file && line.includes(a.contains));
 
@@ -105,7 +153,9 @@ for (const file of DOCS) {
   const lines = readFileSync(join(ROOT, file), 'utf8').split(/\r?\n/);
   lines.forEach((line, i) => {
     for (const [script, n] of actual) {
-      if (!line.includes(script)) continue;
+      // 🔴 `e2e`가 `e2e:ai` 줄에 걸리면 안 된다 — 이름이 다른 이름의 접두사일 수 있다
+      if (!mentions(line, script)) continue;
+      if (!claimsCount(line, script)) continue;
       // 정본 블록은 ①이 이미 봤다
       if (file === 'docs/README.md' && /npm run \S+\s+#\s*\d+개/.test(line)) continue;
       // "15개 언어"는 검사 개수가 아니다. 예외로 하나씩 넣지 않고 규칙으로 뺀다

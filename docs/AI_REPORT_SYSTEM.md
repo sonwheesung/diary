@@ -1351,15 +1351,15 @@ GET /api/v1/ai/periods  →  [{ kind, periodKey }, …]      ai_usage에서 SELE
 | **신고 기능 (Play 정책)** | ⚠ **버튼은 있고 전송은 없다.** 본문을 서버로 다시 올리면 §5.1 무저장과 충돌해 문의로 안내한다 |
 | **`server/lib/ai.ts`** (벤더 경계) | ✅ OpenAI Responses API. `store: false` · 거부/절단 분기 · **본문 무로깅** |
 | **`server/lib/ai-policy.ts`** (캡 상수) | ✅ 기간 캡 · 일일 폭주 캡 · 입력 상한 · 멱등 TTL |
-| **`POST /api/v1/ai/report`** | ✅ `maxDuration = 300`(앱 310초와 **짝** — §7) · 게이트 5종 · 동시 중복 방어 · **성공에만 캡 +1**. `npm run e2e:ai` **7개 통과**(⚠ **localhost 기준**) |
+| **`POST /api/v1/ai/report`** | ✅ `maxDuration = 300`(앱 310초와 **짝** — §7) · 게이트 5종 · 동시 중복 방어 · **성공에만 캡 +1**. `npm run e2e:ai` **15개 통과**(⚠ **localhost 기준**) |
 | 🔴 **배포** | ✅ **2026-08-18에야 됐다.** 그전까지 배포본에서 `POST /api/v1/ai/report`가 **404**였다 — `@shared/*`가 `../features/*`를 가리켰는데 Vercel CLI는 `server/`만 올린다. 순수 계층을 `server/shared/`로 **생성 복사**(`sync:shared`·`check:shared`)해서 풀었다(`scripts/sync-shared.mjs`). 지금은 **401** |
 | Vercel 환경변수 | ✅ 2026-08-18 — `OPENAI_API_KEY`·`DISCORD_WEBHOOK_URL` 추가(둘 다 Sensitive). `AI_MODEL`·`AI_EFFORT`는 코드 기본값(`gpt-5.6-luna`·`medium`)이 확정값과 같아 **안 넣었다**. ⚠ 키는 **`jogak-dev` 프로젝트** 것이다 — 운영 서버에는 `jogak-prod` 키를 쓴다 |
-| **서버 지평 게이트 `out-of-range`** | ⚠ 코드·타입은 됐고 **e2e 2개는 아직 안 돌렸다**(DB·dev 서버 필요). `npm run e2e:ai`를 다음에 돌릴 때 9개가 되어야 한다 |
+| **서버 지평 게이트 `out-of-range`** | ✅ ~~e2e 2개를 아직 안 돌렸다~~ → **돌렸다**(2026-08-24). 지금 `e2e:ai`는 **15개**다(지평 2 + 탈퇴 파기 4) |
 | ⏭ `GET /api/v1/ai/report/:id` | ❌ 없다. 응답을 놓쳤을 때 회수하는 경로 — 데이터(`ai_reports` 90일)는 이미 있다(§7) |
 | **`ai_usage` 테이블** | ✅ 카운터·토큰만. **텍스트 컬럼이 하나도 없다** — 그게 무저장의 증거다 |
 | **동의 2종 (§23 · §28-8)** | ✅ `app/ai-consent.tsx` — 체크박스 2개, **"모두 동의" 버튼 없음.** 게이트는 [만들기]에만 |
 | **P1 측정 스크립트 → OpenAI** | ✅ `count_tokens` 대응물이 없어 **실호출 usage로 잰다**(그게 더 정확하다) |
-| 🔴 **AI 사업자 연락처** | ❌ **출시 차단.** §28-8② 3호. `features/ai/vendor.ts` — `check:ai`가 매번 경고한다 |
+| **AI 사업자 연락처** | ✅ ~~출시 차단~~ **해소**(2026-08-19) — `OpenAI OpCo, LLC` · `US` · `dpo@openai.com`(`features/ai/vendor.ts`). `check:ai` 통과. ⚠ 이 줄이 ❌로 며칠 더 남아 **없는 블로커를 크리티컬 패스에 올려놨었다** |
 | 월간 · 연간 | ⚠ **앱 쪽은 됐다**(세그먼트·계층 입력·안내). 서버 캡·프롬프트가 P4 |
 | 🔴 **기간 선택(백필) §6.4** | ✅ 2026-08-18 — `creatablePeriods`·`listPeriodOptions`·`PeriodSheet`. 지평은 **작년 1월 1일**. 서버도 `isCreatablePeriod`로 **같은 판정**을 본다 |
 | 🔴 **삭제는 묘비 §11.9** | ✅ 2026-08-18 — DB **v6**(`deleted_at`) · `summary`·`concern`을 함께 비운다 · `MANIFEST_FORMAT` **2 → 3**. `findByPeriod`만 묘비를 보고 나머지는 `ALIVE`를 본다 |
@@ -1396,7 +1396,7 @@ GET /api/v1/ai/periods  →  [{ kind, periodKey }, …]      ai_usage에서 SELE
 
 | | |
 |---|---|
-| ✅ 확인됨 | 게이트 9종(`e2e:ai`) · 순수 계층 79개(`check:ai`) · 화면 4개 언어 · Next 빌드 |
+| ✅ 확인됨 | 게이트·파기 **15개**(`e2e:ai`) · 순수 계층 79개(`check:ai`) · 화면 4개 언어 · Next 빌드 |
 | ✅ **모델 실호출** | 프롬프트 품질 · 원가 · 응답 시간 · `concern` 정확도 — 전부 §4.2.1에서 답했다 |
 | ✅ **라우트 전 구간** | `POST /api/v1/ai/report` 성공 경로가 **처음으로 실행됐다**(아래) |
 | ✅ **앱에서 [만들기]** | 동의 → 빠진 날 확인 → 생성 → 로컬 저장 → 상세 렌더까지 **에뮬레이터에서 확인**(아래) |

@@ -659,7 +659,7 @@ stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까�
 | `npm run check:backup-crypto` | **46개** — KAT 4 · 유도값 1 · 봉투 8 · 세대 4 · 복구 코드 10 · 매니페스트 **12** · 전체 경로 7 |
 | `npm run check:i18n-roundtrip` | **54개** — 25개 스크립트의 UTF-8·매니페스트 왕복 |
 | `npm run check:bundle` | 번들 상한 (기준선 3.67MB) |
-| `cd server && npm run e2e` | **21개** — reserve→PUT→commit→latest→다운로드 · 되찾기 인가 4종 · **삭제 5종** · 리퍼 2종 |
+| `cd server && npm run e2e` | **32개** — 세대 왕복 11종(reserve→서명 URL PUT→commit→latest→다운로드) · 되찾기 인가 4종 · **삭제 5종** · **사진 blob 10종** · 리퍼 2종 |
 
 ### ⚠ 외부 고정 벡터(KAT)가 왕복 테스트보다 먼저다
 
