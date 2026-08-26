@@ -250,6 +250,12 @@ Play가 표시하는 번호가 **대표자 개인 휴대폰**(`010-9926-0925`)�
 앱 화면     app/terms.tsx                 설정 → 이용약관 (처리방침 위)
                                           구독 동의 화면에도 링크 — §13②9호의 "확인 방법"
 게시        docs/terms.html               https://sonwheesung.github.io/diary/terms.html
+                                          🔴 **아직 실제로는 게시 안 됨(2026-08-26 실측 404)** — GitHub Pages 는
+                                             `main` 브랜치 `/docs` 를 서빙하는데 terms.html 은 `develop` 에만 있다.
+                                             (privacy.html·delete-account.html 은 main 에 있어 200.)
+                                             **출시 전에 main 으로 올려야 한다** — 비공개 테스트 중이라 지금은 급하지 않다.
+                                             참고: main 은 2026-08-14 에서 멈춰 develop 보다 66커밋 뒤처져 있어,
+                                             공개 법무 페이지 전체가 그 시점 내용이다(브랜드명 Vivace Games 등).
                                           ⚠ 약관 제4조가 이 주소를 본문에 적었다 — 파일명을 바꾸면
                                              약관이 자기 자신을 잘못 가리킨다
 번역        14개 언어                      처리방침보다 **급하다** — "내 돈을 어떻게 돌려받나"라서
