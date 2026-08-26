@@ -102,7 +102,7 @@ export const OPERATOR = {
   name: '휘성게임즈',
   nameEn: 'Hwiseong Games',
   /** 스토어·웹 노출명. 법적 상호와 분리 운영한다 */
-  brand: 'Vivace Games',
+  brand: 'Vivace Games Studio',
   representative: '손휘성',
   address: '울산광역시 중구 성안 5길 22, 2층 204호(성안동) (우) 44421',
   addressEn: '204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
@@ -465,7 +465,7 @@ export const TERMS: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    '이 약관은 휘성게임즈(브랜드명 Vivace Games, 이하 "회사")가 제공하는 모바일 애플리케이션 "조각"(이하 "서비스")의 이용에 관하여 회사와 이용자 사이의 권리·의무 및 책임사항을 정합니다. 서비스를 이용하시기 전에 읽어주시기 바랍니다.',
+    '이 약관은 휘성게임즈(브랜드명 Vivace Games Studio, 이하 "회사")가 제공하는 모바일 애플리케이션 "조각"(이하 "서비스")의 이용에 관하여 회사와 이용자 사이의 권리·의무 및 책임사항을 정합니다. 서비스를 이용하시기 전에 읽어주시기 바랍니다.',
   sections: [
     {
       h: '제1조 (목적과 적용 범위)',

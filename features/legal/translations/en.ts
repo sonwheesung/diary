@@ -20,7 +20,7 @@ export const PRIVACY_EN: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games ("the operator") complies with the Personal Information Protection Act and other applicable laws, and handles the personal data of users of "Jogak" ("the service") as set out below. As a matter of principle Jogak keeps the entries you write on your own device; entries are sent to a server only for the backup you turn on yourself and the AI summary reports you create yourself. Apart from that we collect only the minimum information necessary.',
+    'Vivace Games Studio ("the operator") complies with the Personal Information Protection Act and other applicable laws, and handles the personal data of users of "Jogak" ("the service") as set out below. As a matter of principle Jogak keeps the entries you write on your own device; entries are sent to a server only for the backup you turn on yourself and the AI summary reports you create yourself. Apart from that we collect only the minimum information necessary.',
   sections: [
     {
       h: '1. Where your entries are stored (stated first)',
@@ -326,7 +326,7 @@ export const TERMS_EN: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'These terms set out the rights, obligations and responsibilities between Hwiseong Games (brand: Vivace Games, "the operator") and users, in relation to the use of the mobile application "Jogak" ("the service") that the operator provides. Please read them before using the service.',
+    'These terms set out the rights, obligations and responsibilities between Hwiseong Games (brand: Vivace Games Studio, "the operator") and users, in relation to the use of the mobile application "Jogak" ("the service") that the operator provides. Please read them before using the service.',
   sections: [
     {
       h: 'Article 1 (Purpose and scope)',
@@ -339,7 +339,7 @@ export const TERMS_EN: LegalDoc = {
     {
       h: 'Article 2 (Operator information)',
       body: [
-        'Company name: Hwiseong Games (brand: Vivace Games)',
+        'Company name: Hwiseong Games (brand: Vivace Games Studio)',
         // ⚠ `PRIVACY_EN` §11이 이미 쓰는 표기다. 두 문서가 같은 사람을 다르게 부르면 안 된다
         'Representative: Son Hwi-seong',
         'Business address: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',

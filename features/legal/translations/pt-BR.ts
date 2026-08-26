@@ -20,7 +20,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'A Vivace Games (“a operadora”) cumpre a Lei de Proteção de Informações Pessoais e demais normas aplicáveis e trata os dados pessoais das pessoas usuárias do “Jogak” (“o serviço”) conforme descrito abaixo. Por princípio, o Jogak guarda no seu dispositivo os registros de diário que você escreve, e eles só são enviados a um servidor em dois casos: o backup que você mesmo ativar e os relatórios de resumo por IA que você mesmo criar. No mais, coletamos apenas as informações mínimas necessárias.',
+    'A Vivace Games Studio (“a operadora”) cumpre a Lei de Proteção de Informações Pessoais e demais normas aplicáveis e trata os dados pessoais das pessoas usuárias do “Jogak” (“o serviço”) conforme descrito abaixo. Por princípio, o Jogak guarda no seu dispositivo os registros de diário que você escreve, e eles só são enviados a um servidor em dois casos: o backup que você mesmo ativar e os relatórios de resumo por IA que você mesmo criar. No mais, coletamos apenas as informações mínimas necessárias.',
   sections: [
     {
       h: '1. Primeiro dizemos onde o seu diário fica guardado',
@@ -328,7 +328,7 @@ export const TERMS_PT_BR: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'Estes termos definem os direitos, as obrigações e as responsabilidades entre a Hwiseong Games (marca: Vivace Games, “a operadora”) e as pessoas usuárias, quanto ao uso do aplicativo móvel “Jogak” (“o serviço”) oferecido pela operadora. Leia-os antes de usar o serviço.',
+    'Estes termos definem os direitos, as obrigações e as responsabilidades entre a Hwiseong Games (marca: Vivace Games Studio, “a operadora”) e as pessoas usuárias, quanto ao uso do aplicativo móvel “Jogak” (“o serviço”) oferecido pela operadora. Leia-os antes de usar o serviço.',
   sections: [
     {
       h: 'Artigo 1 (Finalidade e âmbito de aplicação)',
@@ -341,7 +341,7 @@ export const TERMS_PT_BR: LegalDoc = {
     {
       h: 'Artigo 2 (Informações da operadora)',
       body: [
-        'Razão social: Hwiseong Games (marca: Vivace Games)',
+        'Razão social: Hwiseong Games (marca: Vivace Games Studio)',
         // ⚠ É a grafia que a `PRIVACY_PT_BR` §11 já usa. Dois documentos não podem chamar a mesma pessoa de formas diferentes
         'Representante: Son Hwi-seong',
         'Endereço comercial: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',

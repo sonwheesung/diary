@@ -25,7 +25,7 @@ export const PRIVACY_DE: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games („der Betreiber“) hält das Gesetz zum Schutz personenbezogener Daten und weitere einschlägige Vorschriften ein und verarbeitet die personenbezogenen Daten der Nutzerinnen und Nutzer von „Jogak“ („der Dienst“) wie nachstehend beschrieben. Jogak bewahrt die von dir geschriebenen Tagebucheinträge grundsätzlich auf deinem Gerät auf; an einen Server übermittelt werden sie ausschließlich beim Backup, das du selbst einschaltest, und bei den KI-Zusammenfassungsberichten, die du selbst erstellst. Im Übrigen erheben wir nur die notwendigen Mindestangaben.',
+    'Vivace Games Studio („der Betreiber“) hält das Gesetz zum Schutz personenbezogener Daten und weitere einschlägige Vorschriften ein und verarbeitet die personenbezogenen Daten der Nutzerinnen und Nutzer von „Jogak“ („der Dienst“) wie nachstehend beschrieben. Jogak bewahrt die von dir geschriebenen Tagebucheinträge grundsätzlich auf deinem Gerät auf; an einen Server übermittelt werden sie ausschließlich beim Backup, das du selbst einschaltest, und bei den KI-Zusammenfassungsberichten, die du selbst erstellst. Im Übrigen erheben wir nur die notwendigen Mindestangaben.',
   sections: [
     {
       h: '1. Wo deine Einträge liegen — das sagen wir vorab',
@@ -341,7 +341,7 @@ export const TERMS_DE: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'Diese Nutzungsbedingungen regeln die Rechte, Pflichten und Verantwortlichkeiten zwischen Hwiseong Games (Marke: Vivace Games, „der Betreiber“) und den Nutzerinnen und Nutzern in Bezug auf die Nutzung der mobilen Anwendung „Jogak“ („der Dienst“), die der Betreiber anbietet. Bitte lies sie, bevor du den Dienst nutzt.',
+    'Diese Nutzungsbedingungen regeln die Rechte, Pflichten und Verantwortlichkeiten zwischen Hwiseong Games (Marke: Vivace Games Studio, „der Betreiber“) und den Nutzerinnen und Nutzern in Bezug auf die Nutzung der mobilen Anwendung „Jogak“ („der Dienst“), die der Betreiber anbietet. Bitte lies sie, bevor du den Dienst nutzt.',
   sections: [
     {
       h: '§ 1 (Zweck und Anwendungsbereich)',
@@ -354,7 +354,7 @@ export const TERMS_DE: LegalDoc = {
     {
       h: '§ 2 (Angaben zum Betreiber)',
       body: [
-        'Firma: Hwiseong Games (Marke: Vivace Games)',
+        'Firma: Hwiseong Games (Marke: Vivace Games Studio)',
         // ⚠ Dieselbe Schreibweise wie in `PRIVACY_DE` Abschnitt 11. Zwei Dokumente dürfen
         //   dieselbe Person nicht unterschiedlich benennen.
         'Vertretungsberechtigter: Son Hwi-seong',

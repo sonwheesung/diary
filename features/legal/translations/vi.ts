@@ -14,7 +14,7 @@ export const PRIVACY_VI: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
+    'Vivace Games Studio (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
   sections: [
     {
       h: '1. Trước hết, xin nói rõ nhật ký của bạn được lưu ở đâu',
@@ -321,7 +321,7 @@ export const TERMS_VI: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'Bản điều khoản này quy định quyền, nghĩa vụ và trách nhiệm giữa Hwiseong Games (tên thương hiệu Vivace Games, sau đây gọi là “nhà vận hành”) và người dùng, liên quan đến việc sử dụng ứng dụng di động “Jogak” (sau đây gọi là “dịch vụ”) do nhà vận hành cung cấp. Xin bạn đọc trước khi sử dụng dịch vụ.',
+    'Bản điều khoản này quy định quyền, nghĩa vụ và trách nhiệm giữa Hwiseong Games (tên thương hiệu Vivace Games Studio, sau đây gọi là “nhà vận hành”) và người dùng, liên quan đến việc sử dụng ứng dụng di động “Jogak” (sau đây gọi là “dịch vụ”) do nhà vận hành cung cấp. Xin bạn đọc trước khi sử dụng dịch vụ.',
   sections: [
     {
       h: 'Điều 1 (Mục đích và phạm vi áp dụng)',
@@ -334,7 +334,7 @@ export const TERMS_VI: LegalDoc = {
     {
       h: 'Điều 2 (Thông tin nhà vận hành)',
       body: [
-        'Tên doanh nghiệp: Hwiseong Games (tên thương hiệu Vivace Games)',
+        'Tên doanh nghiệp: Hwiseong Games (tên thương hiệu Vivace Games Studio)',
         // ⚠ Đây là cách viết mà `PRIVACY_VI` mục 11 đang dùng. Hai tài liệu không được gọi cùng một người theo hai cách
         'Người đại diện: Son Hwi-seong',
         'Địa chỉ trụ sở kinh doanh: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',

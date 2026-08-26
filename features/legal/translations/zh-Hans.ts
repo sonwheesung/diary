@@ -12,7 +12,7 @@ export const PRIVACY_ZH_HANS: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games（以下称“运营者”）遵守《个人信息保护法》等相关法律，按下列方式处理“Jogak”（以下称“本服务”）用户的个人信息。Jogak 以将用户所写的日记保存在用户设备上为原则，仅在用户亲自开启的备份，以及用户亲自创建的 AI 摘要报告这两种情形下，日记才会发送到服务器。除此之外，我们只收集最少必要信息。',
+    'Vivace Games Studio（以下称“运营者”）遵守《个人信息保护法》等相关法律，按下列方式处理“Jogak”（以下称“本服务”）用户的个人信息。Jogak 以将用户所写的日记保存在用户设备上为原则，仅在用户亲自开启的备份，以及用户亲自创建的 AI 摘要报告这两种情形下，日记才会发送到服务器。除此之外，我们只收集最少必要信息。',
   sections: [
     {
       h: '1. 先说明日记保存在哪里',
@@ -315,7 +315,7 @@ export const TERMS_ZH_HANS: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    '本条款规定 Hwiseong Games（品牌名 Vivace Games，以下称“运营者”）所提供的移动应用程序“Jogak”（以下称“本服务”）的使用，以及运营者与用户之间的权利、义务与责任事项。请在使用本服务之前阅读。',
+    '本条款规定 Hwiseong Games（品牌名 Vivace Games Studio，以下称“运营者”）所提供的移动应用程序“Jogak”（以下称“本服务”）的使用，以及运营者与用户之间的权利、义务与责任事项。请在使用本服务之前阅读。',
   sections: [
     {
       h: '第1条（目的与适用范围）',
@@ -328,7 +328,7 @@ export const TERMS_ZH_HANS: LegalDoc = {
     {
       h: '第2条（运营者信息）',
       body: [
-        '商号：Hwiseong Games（品牌名 Vivace Games）',
+        '商号：Hwiseong Games（品牌名 Vivace Games Studio）',
         // ⚠ 与 `PRIVACY_ZH_HANS` 第11条的写法一致，并附上正式罗马字拼写
         '代表人：孙辉星（Son Hwi-seong）',
         '营业场所地址：204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',

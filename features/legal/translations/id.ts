@@ -14,7 +14,7 @@ export const PRIVACY_ID: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
+    'Vivace Games Studio (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
   sections: [
     {
       h: '1. Kami sampaikan lebih dulu: di mana catatanmu disimpan',
@@ -322,7 +322,7 @@ export const TERMS_ID: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'Ketentuan ini mengatur hak, kewajiban, dan tanggung jawab antara Hwiseong Games (nama merek Vivace Games, selanjutnya “operator”) dan pengguna, sehubungan dengan penggunaan aplikasi seluler “Jogak” (selanjutnya “layanan”) yang disediakan operator. Mohon dibaca sebelum kamu menggunakan layanan.',
+    'Ketentuan ini mengatur hak, kewajiban, dan tanggung jawab antara Hwiseong Games (nama merek Vivace Games Studio, selanjutnya “operator”) dan pengguna, sehubungan dengan penggunaan aplikasi seluler “Jogak” (selanjutnya “layanan”) yang disediakan operator. Mohon dibaca sebelum kamu menggunakan layanan.',
   sections: [
     {
       h: 'Pasal 1 (Tujuan dan ruang lingkup)',
@@ -335,7 +335,7 @@ export const TERMS_ID: LegalDoc = {
     {
       h: 'Pasal 2 (Informasi operator)',
       body: [
-        'Nama badan usaha: Hwiseong Games (nama merek Vivace Games)',
+        'Nama badan usaha: Hwiseong Games (nama merek Vivace Games Studio)',
         // ⚠ Ejaan yang sudah dipakai `PRIVACY_ID` bagian 11. Dua dokumen tidak boleh menyebut orang yang sama dengan cara berbeda
         'Perwakilan: Son Hwi-seong',
         'Alamat tempat usaha: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',

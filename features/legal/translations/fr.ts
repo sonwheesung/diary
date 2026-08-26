@@ -24,7 +24,7 @@ export const PRIVACY_FR: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Par principe, Jogak conserve sur votre appareil les entrées de journal que vous écrivez ; celles-ci ne sont transmises à un serveur que dans deux cas : la sauvegarde que vous activez vous-même et les rapports de synthèse par IA que vous créez vous-même. Pour le reste, nous ne recueillons que le minimum d’informations.',
+    'Vivace Games Studio (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Par principe, Jogak conserve sur votre appareil les entrées de journal que vous écrivez ; celles-ci ne sont transmises à un serveur que dans deux cas : la sauvegarde que vous activez vous-même et les rapports de synthèse par IA que vous créez vous-même. Pour le reste, nous ne recueillons que le minimum d’informations.',
   sections: [
     {
       h: '1. Nous vous disons d’abord où votre journal est conservé',
@@ -333,7 +333,7 @@ export const TERMS_FR: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'Les présentes conditions définissent les droits, obligations et responsabilités entre Hwiseong Games (marque : Vivace Games, « l’exploitant ») et les utilisateurs, concernant l’utilisation de l’application mobile « Jogak » (« le service ») fournie par l’exploitant. Merci de les lire avant d’utiliser le service.',
+    'Les présentes conditions définissent les droits, obligations et responsabilités entre Hwiseong Games (marque : Vivace Games Studio, « l’exploitant ») et les utilisateurs, concernant l’utilisation de l’application mobile « Jogak » (« le service ») fournie par l’exploitant. Merci de les lire avant d’utiliser le service.',
   sections: [
     {
       h: 'Article 1 (Objet et champ d’application)',
@@ -346,7 +346,7 @@ export const TERMS_FR: LegalDoc = {
     {
       h: 'Article 2 (Informations sur l’exploitant)',
       body: [
-        'Dénomination sociale : Hwiseong Games (marque : Vivace Games)',
+        'Dénomination sociale : Hwiseong Games (marque : Vivace Games Studio)',
         // ⚠ C’est la graphie qu’emploie déjà `PRIVACY_FR` §11. Deux documents ne peuvent pas nommer différemment la même personne
         'Représentant : Son Hwi-seong',
         'Adresse de l’établissement : 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',

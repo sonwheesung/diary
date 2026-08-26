@@ -14,7 +14,7 @@ export const PRIVACY_TR: LegalDoc = {
   effective: '2026-08-23',
   updated: '2026-08-23',
   intro:
-    'Vivace Games (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
+    'Vivace Games Studio (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
   sections: [
     {
       h: '1. Önce kayıtlarının nerede saklandığını söylüyoruz',
@@ -324,7 +324,7 @@ export const TERMS_TR: LegalDoc = {
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
-    'Bu koşullar, Hwiseong Games’in (marka: Vivace Games, “işletmeci”) sunduğu “Jogak” adlı mobil uygulamanın (“hizmet”) kullanımına ilişkin olarak işletmeci ile kullanıcı arasındaki hakları, yükümlülükleri ve sorumlulukları belirler. Hizmeti kullanmadan önce lütfen bunları oku.',
+    'Bu koşullar, Hwiseong Games’in (marka: Vivace Games Studio, “işletmeci”) sunduğu “Jogak” adlı mobil uygulamanın (“hizmet”) kullanımına ilişkin olarak işletmeci ile kullanıcı arasındaki hakları, yükümlülükleri ve sorumlulukları belirler. Hizmeti kullanmadan önce lütfen bunları oku.',
   sections: [
     {
       h: 'Madde 1 (Amaç ve kapsam)',
@@ -337,7 +337,7 @@ export const TERMS_TR: LegalDoc = {
     {
       h: 'Madde 2 (İşletmeci bilgileri)',
       body: [
-        'Unvan: Hwiseong Games (marka: Vivace Games)',
+        'Unvan: Hwiseong Games (marka: Vivace Games Studio)',
         // ⚠ `PRIVACY_TR` 11. bölümde kullanılan yazım. İki belge aynı kişiyi farklı adlandıramaz.
         'Temsilci: Son Hwi-seong',
         'İşyeri adresi: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
