@@ -12,7 +12,7 @@
 |---|---|---|
 | 구글 로그인 · 로그아웃 · 탈퇴 | ✅ | `features/support/auth-gate.ts` — 세션 판정과 SDK 호출이 이 **한 파일**에 있다 |
 | subject 토큰 · common_server 연동 | ✅ | Phase 7. `bootstrap?app=jogak` 200 |
-| **연령 게이트** | ✅ | 2026-08-27 — §1. `npm run check:age-gate` 100개(4,750조합 전수). ⏭ 화면 실동작은 실기기/에뮬레이터 확인이 남았다 |
+| **연령 게이트** | ✅ | 2026-08-27 — §1. `npm run check:age-gate` 100개(4,750조합 전수). 🔴 **화면 실동작은 아직 못 봤다** — `sadojeon` 에뮬레이터를 SnoreLess·Delvewarden 이 **동시에 쓰고 있어**(실측: 확인 중 포커스가 Delvewarden 으로 넘어갔다) 내 탭이 남의 앱에 들어간다. 조각에 배정된 AVD 가 없다(`common/DEV_ALLOCATION.md` §3). **순수 계층·타입·린트는 전부 통과** |
 
 ---
 
