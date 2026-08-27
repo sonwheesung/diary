@@ -126,7 +126,11 @@ export default function SupportScreen() {
    */
   const handleSignIn = async () => {
     const outcome: SignInOutcome = await signIn();
-    if (outcome === null || outcome === 'cancelled') {
+    /*
+     * `'age-blocked'`도 조용히 돌아간다 — **연령 게이트가 이미 그 자리에서 설명했다.**
+     * 여기서 또 알림을 띄우면 같은 말을 두 번 하고, 두 번째는 맥락이 없어 더 차갑게 읽힌다.
+     */
+    if (outcome === null || outcome === 'cancelled' || outcome === 'age-blocked') {
       return;
     }
     if (outcome === 'error' || outcome === 'unauthorized' || outcome === 'not-signed-in') {

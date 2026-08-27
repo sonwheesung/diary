@@ -303,6 +303,18 @@
       "trip": "你印象最深的旅行地是哪里?"
     }
   },
+  "ageGate": {
+    "title": "请选择你的出生年份",
+    "why": "登录需要确认年龄。写日记不需要。",
+    "notStored": "所选年份不会被保存，确认后即刻丢弃。",
+    "year": "{{year}}年",
+    "blockedTitle": "目前无法登录",
+    "blockedBody": "登录功能需年满 {{min}} 岁。",
+    "blockedKeepWriting": "写日记、应用锁和日历都可以照常使用。",
+    "contact": "联系方式：{{email}}",
+    "privacyLink": "查看隐私政策",
+    "backToDiary": "返回日记"
+  },
   "errors": {
     "emptyDiary": "内容为空的碎片无法保存。",
     "alreadyWritten": "那天已经有一片了。每天只能写一片。",

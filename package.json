@@ -22,6 +22,7 @@
     "check:subscription": "node --experimental-strip-types scripts/check-subscription.mjs",
     "check:notification": "node --experimental-strip-types scripts/check-notification.mjs",
     "check:diary-format": "node --experimental-strip-types --no-warnings scripts/check-diary-format.mjs",
+    "check:age-gate": "node --experimental-strip-types --no-warnings scripts/check-age-gate.mjs",
     "check:ai": "node scripts/check-ai.mjs",
     "sync:shared": "node scripts/sync-shared.mjs",
     "check:shared": "node scripts/sync-shared.mjs --check",

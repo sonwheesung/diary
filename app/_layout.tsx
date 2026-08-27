@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
 import { useEntitlementStore } from '@/features/entitlement/store';
+import { AgeGateScreen } from '@/features/auth/components/AgeGateScreen';
 import { LockGate } from '@/features/lock/components/LockGate';
 import { useNoticeStore } from '@/features/notice/store';
 import { syncReminders } from '@/features/notification/api/reminder';
@@ -171,6 +172,13 @@ function ThemedApp() {
           />
         </Stack>
       </LockGate>
+      {/*
+        연령 게이트는 `signIn()`이 여는 층이다 — 라우트가 아니다(docs/AUTH_SYSTEM.md §1.2).
+        🔴 **`LockGate` 밖에 둔다.** 안에 두면 잠금이 걸린 동안 게이트가 안 그려지는데,
+           게이트를 여는 것은 잠금을 통과한 뒤의 화면이라 그 조합은 안 나긴 해도,
+           "덮개 뒤에서 약속이 안 풀린다"는 실패는 조용해서 진단이 어렵다.
+      */}
+      <AgeGateScreen />
     </>
   );
 }

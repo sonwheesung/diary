@@ -21,6 +21,8 @@ import {
 } from '@/features/support/dev-auth';
 import { useInquiryStore } from '@/features/support/inquiry-store';
 import { useEntitlementStore } from '@/features/entitlement/store';
+import { ageAlreadyVerified } from '@/features/auth/api/age-store';
+import { requestAgeVerification } from '@/features/auth/gate-store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
 import type { FailReason, Subject } from '@/lib/common-server/types';
@@ -53,8 +55,14 @@ if (WEB_CLIENT_ID) {
   GoogleSignin.configure({ webClientId: WEB_CLIENT_ID });
 }
 
-/** 로그인 시도 결과. `null`이면 성공, `'cancelled'`면 사용자가 창을 닫은 것(오류 아님) */
-export type SignInOutcome = null | 'cancelled' | FailReason;
+/**
+ * 로그인 시도 결과. `null`이면 성공, `'cancelled'`면 사용자가 창을 닫은 것(오류 아님).
+ *
+ * `'age-blocked'` — 연령 게이트 미달. **오류가 아니고, 화면에 아무 말도 하지 않는다** —
+ * 게이트가 이미 그 자리에서 설명했다. `'cancelled'`와 합치지 않는 이유는 나중에
+ * 이 둘을 다르게 다뤄야 할 때 구분할 근거가 남아 있어야 하기 때문이다.
+ */
+export type SignInOutcome = null | 'cancelled' | 'age-blocked' | FailReason;
 
 /**
  * 마지막 구글 SDK 오류 코드 — **릴리스 빌드에서 원인을 보는 유일한 창.**
@@ -139,6 +147,23 @@ export function useSupportAuth(): SupportAuth {
   }, []);
 
   const signIn = useCallback(async (): Promise<SignInOutcome> => {
+    /*
+     * 🔴 **연령 게이트가 맨 앞이다** (docs/AUTH_SYSTEM.md §1.2).
+     *
+     * 호출처(`app/support.tsx`·`app/subscribe.tsx`)가 아니라 여기 두는 이유는,
+     * 세 번째 호출처가 생기는 날 그 사람은 게이트를 모르기 때문이다 —
+     * `adsEnabled()` 한 곳을 거치게 한 것과 같은 규약(CLAUDE.md §7).
+     *
+     * ⚠ **dev 로그인 분기보다도 앞이다.** 뒤에 두면 분기 하나가 게이트를 빠져나가고,
+     *   "어떤 경로로도 못 지나간다"를 더 이상 한 줄로 말할 수 없게 된다.
+     */
+    if (!(await ageAlreadyVerified())) {
+      const verified = await requestAgeVerification();
+      if (!verified) {
+        return 'age-blocked';
+      }
+    }
+
     /*
      * ⚠ 구글 창을 띄우기 **전에** 가른다. 개발 빌드에서 구글 로그인을 붙이려면
      *   SHA-1 등록과 dev build가 필요한데, 화면을 눌러보려는 목적에는 과하다.

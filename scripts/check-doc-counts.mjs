@@ -33,6 +33,7 @@ const COUNTED = [
   'check:diary-format',
   'check:ai',
   'check:admin',
+  'check:age-gate',
 ];
 
 /**

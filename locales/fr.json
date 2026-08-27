@@ -303,6 +303,18 @@
       "trip": "Quel voyage t'a le plus marqué ?"
     }
   },
+  "ageGate": {
+    "title": "Quelle est votre année de naissance ?",
+    "why": "Nous devons vérifier votre âge avant la connexion. Écrire dans votre journal ne l'exige jamais.",
+    "notStored": "L'année choisie n'est pas enregistrée. Nous la vérifions puis la supprimons.",
+    "year": "{{year}}",
+    "blockedTitle": "Connexion impossible pour le moment",
+    "blockedBody": "La connexion est accessible à partir de {{min}} ans.",
+    "blockedKeepWriting": "L'écriture, le verrouillage et le calendrier restent disponibles.",
+    "contact": "Contact : {{email}}",
+    "privacyLink": "Voir la politique de confidentialité",
+    "backToDiary": "Revenir au journal"
+  },
   "errors": {
     "emptyDiary": "Impossible d'enregistrer un fragment vide.",
     "alreadyWritten": "Tu as déjà un fragment pour ce jour-là. Un seul par jour.",

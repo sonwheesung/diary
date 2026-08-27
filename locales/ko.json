@@ -303,6 +303,18 @@
       "trip": "가장 기억에 남는 여행지는?"
     }
   },
+  "ageGate": {
+    "title": "태어난 해를 알려주세요",
+    "why": "로그인에는 나이 확인이 필요해요. 일기를 쓰는 데는 필요하지 않아요.",
+    "notStored": "고른 해는 저장하지 않아요. 확인만 하고 지웁니다.",
+    "year": "{{year}}년",
+    "blockedTitle": "지금은 로그인할 수 없어요",
+    "blockedBody": "만 {{min}}세부터 로그인 기능을 이용할 수 있어요.",
+    "blockedKeepWriting": "일기 쓰기·잠금·캘린더는 그대로 쓸 수 있어요.",
+    "contact": "문의: {{email}}",
+    "privacyLink": "개인정보 처리방침 보기",
+    "backToDiary": "일기로 돌아가기"
+  },
   "errors": {
     "emptyDiary": "내용이 비어 있는 조각은 저장할 수 없습니다.",
     "alreadyWritten": "그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.",

@@ -75,6 +75,17 @@ export const SETTING_KEYS = {
    * `'never'`는 만료 없음(서버가 `expiresAt: null`을 준 경우).
    */
   proUntil: 'pro_until',
+  /**
+   * 연령 게이트 통과 기록 — `{ passedAt, threshold, version }` JSON.
+   *
+   * 🔴 **생년은 들어 있지 않다.** 받아서 판정하고 버린다(`docs/AUTH_SYSTEM.md` §1.4).
+   *
+   * ⚠ **로그아웃·탈퇴로 지우지 않는다.** 연령은 사람의 속성이지 계정의 속성이 아니고,
+   *   지우면 **탈퇴가 게이트 재시도 경로**가 된다.
+   * ⚠ 반대로 **앱 초기화로는 지워진다**(`reset-app.ts`가 `app_settings`를 비운다) — 그게 맞다.
+   *   초기화는 재설치와 성격이 같고, 무엇보다 초기화 문구가 *"전부 지운다"* 고 약속했다.
+   */
+  agePass: 'age_pass',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

@@ -303,6 +303,18 @@
       "trip": "An welche Reise erinnerst du dich am meisten?"
     }
   },
+  "ageGate": {
+    "title": "In welchem Jahr wurdest du geboren?",
+    "why": "Vor der Anmeldung müssen wir dein Alter bestätigen. Zum Schreiben ist das nie nötig.",
+    "notStored": "Das gewählte Jahr wird nicht gespeichert. Wir prüfen es und verwerfen es.",
+    "year": "{{year}}",
+    "blockedTitle": "Anmeldung noch nicht möglich",
+    "blockedBody": "Die Anmeldung ist ab {{min}} Jahren möglich.",
+    "blockedKeepWriting": "Schreiben, App-Sperre und Kalender funktionieren weiterhin.",
+    "contact": "Kontakt: {{email}}",
+    "privacyLink": "Datenschutzerklärung ansehen",
+    "backToDiary": "Zurück zum Tagebuch"
+  },
   "errors": {
     "emptyDiary": "Ein leeres Stück kann nicht gespeichert werden.",
     "alreadyWritten": "Für diesen Tag gibt es schon ein Stück. Nur eines pro Tag.",

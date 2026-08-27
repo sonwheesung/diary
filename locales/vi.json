@@ -303,6 +303,18 @@
       "trip": "Chuyến đi nào bạn nhớ nhất?"
     }
   },
+  "ageGate": {
+    "title": "Bạn sinh năm nào?",
+    "why": "Chúng tôi cần xác nhận tuổi trước khi đăng nhập. Viết nhật ký thì không cần.",
+    "notStored": "Năm bạn chọn không được lưu. Chúng tôi kiểm tra rồi xoá ngay.",
+    "year": "{{year}}",
+    "blockedTitle": "Hiện chưa thể đăng nhập",
+    "blockedBody": "Tính năng đăng nhập dành cho người từ {{min}} tuổi.",
+    "blockedKeepWriting": "Viết nhật ký, khoá ứng dụng và lịch vẫn dùng được như thường.",
+    "contact": "Liên hệ: {{email}}",
+    "privacyLink": "Xem chính sách quyền riêng tư",
+    "backToDiary": "Quay lại nhật ký"
+  },
   "errors": {
     "emptyDiary": "Không thể lưu mảnh trống.",
     "alreadyWritten": "Ngày đó đã có một mảnh rồi. Mỗi ngày chỉ một mảnh.",

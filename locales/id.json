@@ -303,6 +303,18 @@
       "trip": "Perjalanan mana yang paling berkesan?"
     }
   },
+  "ageGate": {
+    "title": "Tahun berapa kamu lahir?",
+    "why": "Kami perlu memastikan usiamu sebelum masuk. Menulis diari tidak pernah memerlukannya.",
+    "notStored": "Tahun yang kamu pilih tidak disimpan. Kami memeriksanya lalu membuangnya.",
+    "year": "{{year}}",
+    "blockedTitle": "Kamu belum bisa masuk",
+    "blockedBody": "Fitur masuk tersedia mulai usia {{min}} tahun.",
+    "blockedKeepWriting": "Menulis, kunci aplikasi, dan kalender tetap bisa digunakan.",
+    "contact": "Kontak: {{email}}",
+    "privacyLink": "Lihat kebijakan privasi",
+    "backToDiary": "Kembali ke diari"
+  },
   "errors": {
     "emptyDiary": "Kepingan kosong tidak bisa disimpan.",
     "alreadyWritten": "Hari itu sudah ada kepingannya. Satu per hari saja.",

@@ -303,6 +303,18 @@
       "trip": "What trip do you remember most?"
     }
   },
+  "ageGate": {
+    "title": "What year were you born?",
+    "why": "We need to confirm your age before you sign in. Writing in your diary never requires it.",
+    "notStored": "The year you pick is not saved. We check it and discard it.",
+    "year": "{{year}}",
+    "blockedTitle": "You can't sign in yet",
+    "blockedBody": "Signing in is available from age {{min}}.",
+    "blockedKeepWriting": "Writing, the app lock, and the calendar all keep working.",
+    "contact": "Contact: {{email}}",
+    "privacyLink": "Read the privacy policy",
+    "backToDiary": "Back to my diary"
+  },
   "errors": {
     "emptyDiary": "An empty piece can't be saved.",
     "alreadyWritten": "You already have a piece for that day. One per day.",

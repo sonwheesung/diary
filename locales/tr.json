@@ -303,6 +303,18 @@
       "trip": "Aklında en çok kalan seyahat hangisi?"
     }
   },
+  "ageGate": {
+    "title": "Hangi yılda doğdun?",
+    "why": "Giriş yapmadan önce yaşını doğrulamamız gerekiyor. Günlük yazmak için bu asla gerekmez.",
+    "notStored": "Seçtiğin yıl kaydedilmez. Kontrol edip siliyoruz.",
+    "year": "{{year}}",
+    "blockedTitle": "Henüz giriş yapamazsın",
+    "blockedBody": "Giriş özelliği {{min}} yaşından itibaren kullanılabilir.",
+    "blockedKeepWriting": "Yazma, uygulama kilidi ve takvim çalışmaya devam eder.",
+    "contact": "İletişim: {{email}}",
+    "privacyLink": "Gizlilik politikasını görüntüle",
+    "backToDiary": "Günlüğe dön"
+  },
   "errors": {
     "emptyDiary": "İçeriği boş bir parça kaydedilemez.",
     "alreadyWritten": "O güne ait bir parçan zaten var. Günde bir tane.",

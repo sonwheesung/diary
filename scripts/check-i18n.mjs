@@ -178,6 +178,12 @@ const EXEMPT = new Map([
   ['lock.patternTooShort', '패턴 최소 4점'],
   ['lock.setup.patternNote', '패턴 최소 4점'],
   ['support.tooShort', '문의 최소 길이'],
+  [
+    'ageGate.blockedBody',
+    // thresholdFor()가 16·14·13 **만** 돌려준다 — 1이 될 수 있는 분기가 없다.
+    // 그 세 값을 check:age-gate가 지역 38종 × 출생연도 125년 전수로 확인한다.
+    '연령 기준은 16·14·13 뿐이다 (features/auth/age-gate.ts thresholdFor)',
+  ],
   /* ── 뒤 낱말이 수에 따라 변하지 않는다 ────────────────────────── */
   ['lock.blockedCountdown', '뒤가 단위 약어다 (s · с)'],
   ['backup.restoreLosingMore', '뒤가 불변화사다 (more · de plus · más · mais)'],

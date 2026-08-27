@@ -303,6 +303,18 @@
       "trip": "De qual viagem você mais lembra?"
     }
   },
+  "ageGate": {
+    "title": "Em que ano você nasceu?",
+    "why": "Precisamos confirmar sua idade antes de entrar. Escrever no diário nunca exige isso.",
+    "notStored": "O ano escolhido não é salvo. Nós verificamos e descartamos.",
+    "year": "{{year}}",
+    "blockedTitle": "Você ainda não pode entrar",
+    "blockedBody": "O login está disponível a partir dos {{min}} anos.",
+    "blockedKeepWriting": "Escrever, o bloqueio do app e o calendário continuam funcionando.",
+    "contact": "Contato: {{email}}",
+    "privacyLink": "Ver a política de privacidade",
+    "backToDiary": "Voltar ao diário"
+  },
   "errors": {
     "emptyDiary": "Não dá para salvar um pedaço vazio.",
     "alreadyWritten": "Você já tem um pedaço para esse dia. Só um por dia.",
