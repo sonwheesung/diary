@@ -311,7 +311,7 @@ export const DELETE_ACCOUNT_ZH_HANT: LegalDoc = {
  */
 export const TERMS_ZH_HANT: LegalDoc = {
   title: 'Jogak 使用條款',
-  sourceFingerprint: '898aa8d7',
+  sourceFingerprint: 'd18f02f7',
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:

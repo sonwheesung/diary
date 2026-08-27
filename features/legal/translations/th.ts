@@ -315,7 +315,7 @@ export const DELETE_ACCOUNT_TH: LegalDoc = {
  */
 export const TERMS_TH: LegalDoc = {
   title: 'ข้อกำหนดการใช้บริการ Jogak',
-  sourceFingerprint: '898aa8d7',
+  sourceFingerprint: 'd18f02f7',
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:

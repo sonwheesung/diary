@@ -60,6 +60,9 @@ const BANNER = (from) =>
     '',
   ].join('\n');
 
+/** 줄바꿈만 다른 것은 드리프트가 아니다 — 위 비교 주석 참조 */
+const eol = (t) => (t === null ? null : t.split('\r\n').join('\n'));
+
 const check = process.argv.includes('--check');
 const drifted = [];
 
@@ -71,7 +74,12 @@ for (const rel of FILES) {
   if (check) {
     // ⚠ 없는 것도 어긋난 것이다 — "파일이 없으면 통과"로 두면 검사가 무의미해진다
     const have = existsSync(to) ? readFileSync(to, 'utf8') : null;
-    if (have !== want) drifted.push(rel);
+    // 🔴 줄바꿈은 정규화하고 비교한다(2026-08-27).
+    //   BANNER는 LF로 잇는데 git이 체크아웃하며 디스크 파일을 CRLF로 바꾼다 →
+    //   내용이 바이트로 같아도 **브랜치를 바꾸거나 새로 클론한 직후 항상 실패**했다.
+    //   상시 빨간 가드는 진짜 드리프트와 구분이 안 되고, 그러면 결국 무시하게 된다.
+    //   이 가드가 지키려는 것은 **내용**이지 줄바꿈이 아니다.
+    if (eol(have) !== eol(want)) drifted.push(rel);
     continue;
   }
 

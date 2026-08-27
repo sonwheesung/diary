@@ -317,7 +317,7 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
  */
 export const TERMS_VI: LegalDoc = {
   title: 'Điều khoản sử dụng Jogak',
-  sourceFingerprint: '898aa8d7',
+  sourceFingerprint: 'd18f02f7',
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:

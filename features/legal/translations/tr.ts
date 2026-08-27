@@ -320,7 +320,7 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
  */
 export const TERMS_TR: LegalDoc = {
   title: 'Jogak Kullanım Koşulları',
-  sourceFingerprint: '898aa8d7',
+  sourceFingerprint: 'd18f02f7',
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:

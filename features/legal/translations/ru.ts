@@ -331,7 +331,7 @@ export const DELETE_ACCOUNT_RU: LegalDoc = {
  */
 export const TERMS_RU: LegalDoc = {
   title: 'Условия использования Jogak',
-  sourceFingerprint: '898aa8d7',
+  sourceFingerprint: 'd18f02f7',
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:

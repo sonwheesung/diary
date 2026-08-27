@@ -320,7 +320,7 @@ export const DELETE_ACCOUNT_JA: LegalDoc = {
  */
 export const TERMS_JA: LegalDoc = {
   title: 'Jogak 利用規約',
-  sourceFingerprint: '898aa8d7',
+  sourceFingerprint: 'd18f02f7',
   effective: '2026-08-17',
   updated: '2026-08-17',
   intro:
