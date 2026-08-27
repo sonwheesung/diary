@@ -14,6 +14,7 @@ import {
   isDefaultFormat,
   readFormat,
   sameFormat,
+  removeBlockAt,
   splitParagraph,
   withFormat,
 } from '../features/diary/format.ts';
@@ -21,6 +22,9 @@ import { normalizeBlocks, parseBlocks, serializeBlocks } from '../features/diary
 
 let passed = 0;
 const failures = [];
+
+/** 개행. 스크립트로 이 파일을 생성할 때 이스케이프가 반으로 줄어드는 사고를 피한다 */
+const NL = String.fromCharCode(10);
 
 function check(name, fn) {
   try {
@@ -209,6 +213,72 @@ check('withFormat은 값을 보존하고 서식만 갈아끼운다', () => {
   });
 });
 
+// ── removeBlockAt — 걷어낸 자리를 다시 붙인다 (DIARY_SYSTEM §1.1, 2026-08-27) ──
+//
+// 🔴 이 검사들이 막는 것: 목록·사진을 지운 뒤 **빈 텍스트 블록이 남아 지울 수 없게 되는 것**.
+//    저장 결과는 normalizeBlocks 가 어차피 정리하므로 여기서 재는 것은 **편집 중 상태**다.
+
+check('목록을 걷어내면 앞뒤 텍스트가 다시 한 문단이 된다', () => {
+  const before = [
+    { type: 'text', value: '본문' },
+    { type: 'list', items: ['가'] },
+    { type: 'text', value: '' },
+  ];
+  const r = removeBlockAt(before, 1);
+  eq(r.blocks, [{ type: 'text', value: '본문' }], '목록 제거 후');
+  eq(r.index, 0, '커서 블록');
+  eq(r.caret, 2, '커서 위치 — 붙인 자리');
+});
+
+check('한쪽이 비면 개행을 넣지 않는다 — 빈 줄을 문단 안으로 옮기지 않는다', () => {
+  const r = removeBlockAt(
+    [{ type: 'text', value: '본문' }, { type: 'image', imageId: 'x' }, { type: 'text', value: '' }],
+    1,
+  );
+  eq(r.blocks, [{ type: 'text', value: '본문' }], '개행 없이 붙는다');
+});
+
+check('둘 다 내용이 있으면 개행으로 잇는다', () => {
+  const r = removeBlockAt(
+    [{ type: 'text', value: '앞' }, { type: 'image', imageId: 'x' }, { type: 'text', value: '뒤' }],
+    1,
+  );
+  eq(r.blocks, [{ type: 'text', value: ['앞', '뒤'].join(NL) }], '개행으로 잇는다');
+  eq(r.caret, 1, '커서는 이음매');
+});
+
+check('서식이 다르면 붙이지 않는다 — 붙이면 한쪽 서식이 죽는다', () => {
+  const r = removeBlockAt(
+    [
+      { type: 'text', value: '앞', size: 'h1' },
+      { type: 'image', imageId: 'x' },
+      { type: 'text', value: '뒤' },
+    ],
+    1,
+  );
+  eq(r.blocks.length, 2, '두 블록으로 남는다');
+});
+
+check('마지막 블록이 사라져도 쓸 자리는 남는다', () => {
+  const r = removeBlockAt([{ type: 'image', imageId: 'x' }], 0);
+  eq(r.blocks, [{ type: 'text', value: '' }], '빈 텍스트 블록 하나');
+});
+
+check('범위 밖 인덱스는 아무것도 지우지 않는다', () => {
+  const before = [{ type: 'text', value: '가' }];
+  eq(removeBlockAt(before, 5).blocks, before, '그대로');
+});
+
+check('반복해도 빈 블록이 쌓이지 않는다 — 신고된 그 경로', () => {
+  // 목록을 넣었다 지우기를 두 번: 예전에는 여기서 빈 텍스트가 둘 남았다
+  let blocks = [{ type: 'text', value: '본문' }];
+  for (let i = 0; i < 2; i += 1) {
+    blocks = [...blocks, { type: 'list', items: [''] }, { type: 'text', value: '' }];
+    blocks = removeBlockAt(blocks, blocks.length - 2).blocks;
+  }
+  eq(blocks, [{ type: 'text', value: '본문' }], '빈 블록이 안 남는다');
+});
+
 // ── 결과 ─────────────────────────────────────────────────────────────────────
 
 if (failures.length > 0) {
@@ -217,4 +287,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 // ⚠ 문구를 바꾸지 마라 — `check:doc-counts`가 `N개 검사 통과`를 앵커로 개수를 읽는다.
-console.log(`\n서식 ${passed}개 검사 통과 (저장 형태 · 병합 규칙 · 문단 분할 · 읽기 세척)\n`);
+console.log(`\n서식 ${passed}개 검사 통과 (저장 형태 · 병합 규칙 · 문단 분할 · 읽기 세척 · 블록 제거)\n`);

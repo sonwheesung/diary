@@ -8,7 +8,7 @@ import type { TextInput } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import { resolveImageUri } from '@/features/diary/api/image-store';
-import { readFormat } from '@/features/diary/format';
+import { readFormat, removeBlockAt } from '@/features/diary/format';
 import { textStyleFor } from '@/features/diary/text-style';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
 import type { Palette } from '@/theme/palettes';
@@ -134,12 +134,19 @@ export function BlockEditor({
       return;
     }
     const items = target.items.filter((_, i) => i !== itemIndex);
-    const next = [...blocks];
     if (items.length === 0) {
-      next.splice(blockIndex, 1);
-    } else {
-      next[blockIndex] = { type: 'list', items };
+      /*
+       * 🔴 목록만 빼고 끝내면 **앞뒤 텍스트 사이에 빈 문단이 남고, 지울 손동작이 없다.**
+       *   빈 칸에서는 백스페이스를 눌러도 onChangeText 가 안 불리기 때문이다
+       *   (DIARY_SYSTEM §1.1 — 실기기 신고, 2026-08-27). 걷어내는 쪽이 뒷정리를 한다.
+       */
+      const healed = removeBlockAt(blocks, blockIndex);
+      onChange(healed.blocks);
+      onCaretChange?.(healed.index, healed.caret, 'program');
+      return;
     }
+    const next = [...blocks];
+    next[blockIndex] = { type: 'list', items };
     onChange(next);
   };
   const isSoleBlock = blocks.length === 1;
@@ -156,12 +163,14 @@ export function BlockEditor({
   };
 
   const removeBlock = (index: number) => {
-    onChange(blocks.filter((_, i) => i !== index));
-    // 블록이 빠지면 뒤 인덱스가 한 칸씩 당겨진다. 기억해 둔 커서를 그대로 두면
-    // 다음 사진이 엉뚱한 문단에 들어간다 — 바로 앞 문단 끝으로 옮겨둔다.
-    // Infinity는 slice가 '끝까지'로 받아준다.
-    // 'program' — 우리가 옮긴 것이니 믿되, 뒤따라올 selection 보고는 막아야 한다
-    onCaretChange?.(Math.max(0, index - 1), Number.POSITIVE_INFINITY, 'program');
+    /*
+     * 사진을 걷어내면 앞뒤 문단이 인접한 채 남는다 — 목록과 **같은 문제**이므로 같은 함수를 쓴다.
+     * `removeBlockAt`이 붙일 수 있으면 붙이고, 서식이 달라 못 붙이면 앞 블록 끝에 커서를 둔다.
+     * 'program' — 우리가 옮긴 것이니 믿되, 뒤따라올 selection 보고는 막아야 한다(§1.1 커서 잠금).
+     */
+    const healed = removeBlockAt(blocks, index);
+    onChange(healed.blocks);
+    onCaretChange?.(healed.index, healed.caret, 'program');
   };
 
   return (

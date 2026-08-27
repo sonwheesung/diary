@@ -178,3 +178,63 @@ export function splitParagraph(
   const local = Math.max(0, Math.min(caret - hitStart, (paragraphs[hit] ?? '').length));
   return { blocks: next, index, caret: local };
 }
+
+/**
+ * 블록 하나를 걷어내고 **앞뒤 텍스트를 다시 한 문단으로 붙인다** — `splitParagraph`의 짝.
+ *
+ * 🔴 왜 필요한가(DIARY_SYSTEM §1.1, 2026-08-27 실기기 신고):
+ *   목록이나 사진을 사이에 끼우면 뒤에 **빈 텍스트 블록**이 생긴다(이어 쓸 자리라 의도된 것이다).
+ *   그런데 그 목록·사진을 도로 지우면 빈 블록만 남고, **화면에서 지울 손동작이 없다** —
+ *   빈 칸에서는 백스페이스를 눌러도 `onChangeText`가 안 불리기 때문이다.
+ *   `normalizeBlocks`가 저장할 때 버리긴 하지만, 그때까지 **화면과 저장 결과가 갈린다.**
+ *   → 걷어내는 쪽이 그 자리에서 뒷정리를 한다.
+ *
+ * 붙이는 규칙은 `normalizeBlocks`와 **같다**: 서식이 다르면 붙이지 않는다(붙이면 한쪽 서식이 죽는다).
+ * ⚠ 다만 한쪽이 비어 있으면 `\n`으로 잇지 않고 **채워진 쪽만 남긴다** —
+ *   `"본문" + "" `을 `"본문\n"`으로 만들면 지우려던 그 빈 줄이 문단 안으로 옮겨갈 뿐이다.
+ *
+ * 커서는 **붙인 자리**에 둔다. 안 옮기면 다음 사진이 엉뚱한 문단에 들어간다(§1.1 커서 잠금).
+ */
+export function removeBlockAt(blocks: DiaryBlock[], removeIndex: number): SplitResult {
+  if (removeIndex < 0 || removeIndex >= blocks.length) {
+    return { blocks, index: Math.max(0, removeIndex - 1), caret: 0 };
+  }
+
+  const next = blocks.filter((_, i) => i !== removeIndex);
+
+  /*
+   * 전부 사라지면 빈 텍스트 블록 하나를 남긴다. 블록이 0개면 그릴 `TextInput`이 없어
+   * **글을 쓸 자리 자체가 없어진다** — 사진 하나만 있던 조각에서 그 사진을 지우면 바로 이 상태다.
+   */
+  if (next.length === 0) {
+    return { blocks: [{ type: 'text', value: '' }], index: 0, caret: 0 };
+  }
+
+  const left = next[removeIndex - 1];
+  const right = next[removeIndex];
+  if (
+    left === undefined ||
+    right === undefined ||
+    left.type !== 'text' ||
+    right.type !== 'text' ||
+    !sameFormat(readFormat(left), readFormat(right))
+  ) {
+    // 못 붙이는 경우엔 앞 블록 끝에 커서를 둔다 — 기존 `removeBlock`이 하던 그대로다.
+    const fallback = Math.max(0, removeIndex - 1);
+    const at = next[fallback];
+    return {
+      blocks: next,
+      index: fallback,
+      caret: at !== undefined && at.type === 'text' ? at.value.length : 0,
+    };
+  }
+
+  const format = cleanFormat(readFormat(left));
+  const joined =
+    left.value.length === 0 || right.value.length === 0
+      ? `${left.value}${right.value}`
+      : `${left.value}\n${right.value}`;
+
+  next.splice(removeIndex - 1, 2, { type: 'text', value: joined, ...format });
+  return { blocks: next, index: removeIndex - 1, caret: left.value.length };
+}
