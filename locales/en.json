@@ -120,6 +120,7 @@
     "mood": "Mood",
     "imageLoadFailed": "Couldn't load this photo",
     "removeImage": "Remove photo",
+    "removeEmptyParagraph": "Remove blank line",
     "photoPermissionTitle": "Photo access needed",
     "photoPermissionBody": "Allow photo access in Settings.",
     "photoFailedTitle": "Couldn't add the photo",
@@ -229,6 +230,7 @@
     "reminderMinute": "Min",
     "reminderDeniedTitle": "Notifications need permission",
     "reminderDeniedBody": "Turn on notifications for Jogak in your phone settings.",
+    "licenses": "Open source licenses",
     "version": "Version",
     "languageSheet": "Choose language",
     "sectionSupport": "Support",
@@ -617,5 +619,10 @@
     "rest": "Rest",
     "money": "Money",
     "health": "Body"
+  },
+  "licenses": {
+    "intro": "Jogak uses the open source fonts and libraries below. Copyright holders and licenses are shown in their original wording.",
+    "fonts": "Fonts",
+    "packages": "Libraries"
   }
 }

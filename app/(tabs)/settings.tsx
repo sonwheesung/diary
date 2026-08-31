@@ -585,25 +585,29 @@ export default function SettingsScreen() {
                 const m = await import('@/features/dev/seed-diaries');
                 const from = `${new Date().getFullYear() - 1}-01-01`;
                 const to = m.yesterday();
-                Alert.alert('일기 심기', `${from} ~ ${to}
+                Alert.alert(
+                  '일기 심기',
+                  `${from} ~ ${to}
 
-더미 조각을 만듭니다. 내 조각이 있는 날은 건너뜁니다.`, [
-                  { text: '취소', style: 'cancel' },
-                  {
-                    text: '심기',
-                    onPress: () => {
-                      void m.seedDiaries({ from, to }).then(async (r) => {
-                        // 조각을 심고 나서 리포트를 심는다 — 리포트가 조각을 세어 만들어진다
-                        const reports = await m.seedReports({ from, to });
-                        Alert.alert(
-                          '심었습니다',
-                          `조각 ${r.inserted}개 · 건너뜀 ${r.skipped}일 · 빈 날 ${r.blank}일
+더미 조각을 만듭니다. 내 조각이 있는 날은 건너뜁니다.`,
+                  [
+                    { text: '취소', style: 'cancel' },
+                    {
+                      text: '심기',
+                      onPress: () => {
+                        void m.seedDiaries({ from, to }).then(async (r) => {
+                          // 조각을 심고 나서 리포트를 심는다 — 리포트가 조각을 세어 만들어진다
+                          const reports = await m.seedReports({ from, to });
+                          Alert.alert(
+                            '심었습니다',
+                            `조각 ${r.inserted}개 · 건너뜀 ${r.skipped}일 · 빈 날 ${r.blank}일
 리포트 ${reports}개(월간·연간)`,
-                        );
-                      });
+                          );
+                        });
+                      },
                     },
-                  },
-                ]);
+                  ],
+                );
               })();
             }}
             style={styles.row}
@@ -645,7 +649,11 @@ export default function SettingsScreen() {
           🔴 **약관이 처리방침보다 위다.** 전자상거래법 §13②9호가 요구하는 "확인할 수 있는
             방법"이 이 줄이고, 결제 전에 찾아야 하는 문서라 먼저 눈에 들어와야 한다.
         */}
-        <Pressable accessibilityRole="button" onPress={() => router.push('/terms')} style={styles.row}>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/terms')}
+          style={styles.row}
+        >
           <View style={styles.rowBody}>
             <Text style={styles.rowTitle}>{t('settings.terms')}</Text>
           </View>
@@ -659,6 +667,22 @@ export default function SettingsScreen() {
         >
           <View style={styles.rowBody}>
             <Text style={styles.rowTitle}>{t('settings.privacy')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textMuted} />
+        </Pressable>
+
+        {/*
+          🔴 **고지는 이름 한 줄로 안 된다.** OFL 1.1 과 MIT 가 둘 다 "저작권 고지와 라이선스를
+            동봉하라"를 조건으로 단다 — 조각은 Pretendard OTF 3종과 런타임 패키지 36개를
+            번들에 싣는다(docs/OPEN_SOURCE_NOTICE.md).
+        */}
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/licenses')}
+          style={styles.row}
+        >
+          <View style={styles.rowBody}>
+            <Text style={styles.rowTitle}>{t('settings.licenses')}</Text>
           </View>
           <ChevronRight size={18} color={colors.textMuted} />
         </Pressable>

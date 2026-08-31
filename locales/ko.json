@@ -120,6 +120,7 @@
     "mood": "기분",
     "imageLoadFailed": "이미지를 불러오지 못했어요",
     "removeImage": "이미지 삭제",
+    "removeEmptyParagraph": "빈 줄 삭제",
     "photoPermissionTitle": "사진 접근 권한이 필요해요",
     "photoPermissionBody": "설정에서 사진 접근을 허용해 주세요.",
     "photoFailedTitle": "사진을 넣지 못했어요",
@@ -229,6 +230,7 @@
     "reminderMinute": "분",
     "reminderDeniedTitle": "알림 권한이 필요해요",
     "reminderDeniedBody": "휴대폰 설정에서 조각의 알림을 켜주세요.",
+    "licenses": "오픈소스 라이선스",
     "version": "버전",
     "languageSheet": "언어 선택",
     "sectionSupport": "지원",
@@ -617,5 +619,10 @@
     "rest": "쉼",
     "money": "돈",
     "health": "몸"
+  },
+  "licenses": {
+    "intro": "조각은 아래 오픈소스 글꼴과 라이브러리를 사용합니다. 저작권자와 라이선스를 원문 그대로 밝힙니다.",
+    "fonts": "글꼴",
+    "packages": "라이브러리"
   }
 }

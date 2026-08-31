@@ -120,6 +120,7 @@
     "mood": "心情",
     "imageLoadFailed": "无法加载这张照片",
     "removeImage": "删除照片",
+    "removeEmptyParagraph": "删除空行",
     "photoPermissionTitle": "需要访问照片",
     "photoPermissionBody": "请在系统设置中允许访问照片。",
     "photoFailedTitle": "无法添加照片",
@@ -230,6 +231,7 @@
     "reminderMinute": "分",
     "reminderDeniedTitle": "需要通知权限",
     "reminderDeniedBody": "请在手机设置中打开 Jogak 的通知。",
+    "licenses": "开源许可",
     "version": "版本",
     "sectionSupport": "支持",
     "notice": "公告",
@@ -617,5 +619,10 @@
     "rest": "休息",
     "money": "金钱",
     "health": "身体"
+  },
+  "licenses": {
+    "intro": "本应用使用以下开源字体和库。版权方与许可证按原文显示。",
+    "fonts": "字体",
+    "packages": "库"
   }
 }

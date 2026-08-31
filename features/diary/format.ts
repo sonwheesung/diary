@@ -180,6 +180,34 @@ export function splitParagraph(
 }
 
 /**
+ * 편집 중에 **지워도 되는 빈 문단**인가 — 화면의 `솔기 ×` 조건 (DIARY_SYSTEM §1.1).
+ *
+ * 빈 텍스트 블록은 뜻이 둘이고 **그중 하나만 지울 것**이다:
+ *   ① **솔기** — 두 문단 사이에 남은 경계. 서식으로 쪼갠 뒤 글자를 다 지우면 생긴다.
+ *      화면에는 "빈 줄"로만 보이고, 빈 칸이라 백스페이스도 안 먹는다(§1.1 규약 4).
+ *   ② **이어 쓸 자리** — 사진·목록 뒤에 우리가 일부러 붙여둔 칸(§1.2).
+ *      🚫 여기에 ×를 띄우면 안 된다. 지우는 순간 **사진 뒤에 글을 못 쓴다**.
+ *
+ * 가르는 것은 **이웃**이다. 앞뒤 중 하나라도 텍스트 블록이면 걷어냈을 때 두 문단이
+ * 한 덩어리로 돌아가므로 ①이고, 둘 다 아니면(사진·목록이거나 아예 없으면) ②다.
+ *
+ * ⚠ 포커스가 아니라 **배열만** 본다. "커서가 선 칸에만 보인다"로 만들면 버튼을 누를 때
+ *   `onBlur`가 먼저 돌아 버튼이 사라지고 터치가 땅에 떨어진다 — 그리고 타이밍 가드는
+ *   순수 계층이 못 잰다. 이웃은 잴 수 있다.
+ */
+export function isRemovableSeam(blocks: DiaryBlock[], index: number): boolean {
+  const block = blocks[index];
+  if (block === undefined || block.type !== 'text' || block.value.length > 0) {
+    return false;
+  }
+  // 하나뿐이면 그게 곧 쓸 자리다. 지우면 `TextInput`이 0개가 된다(`removeBlockAt` 참조).
+  if (blocks.length < 2) {
+    return false;
+  }
+  return blocks[index - 1]?.type === 'text' || blocks[index + 1]?.type === 'text';
+}
+
+/**
  * 블록 하나를 걷어내고 **앞뒤 텍스트를 다시 한 문단으로 붙인다** — `splitParagraph`의 짝.
  *
  * 🔴 왜 필요한가(DIARY_SYSTEM §1.1, 2026-08-27 실기기 신고):

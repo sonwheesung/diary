@@ -120,6 +120,7 @@
     "mood": "心情",
     "imageLoadFailed": "無法載入這張照片",
     "removeImage": "刪除照片",
+    "removeEmptyParagraph": "刪除空行",
     "photoPermissionTitle": "需要存取照片",
     "photoPermissionBody": "請在系統設定中允許存取照片。",
     "photoFailedTitle": "無法加入照片",
@@ -230,6 +231,7 @@
     "reminderMinute": "分",
     "reminderDeniedTitle": "需要通知權限",
     "reminderDeniedBody": "請在手機設定中開啟 Jogak 的通知。",
+    "licenses": "開源授權",
     "version": "版本",
     "sectionSupport": "支援",
     "notice": "公告",
@@ -617,5 +619,10 @@
     "rest": "休息",
     "money": "金錢",
     "health": "身體"
+  },
+  "licenses": {
+    "intro": "本應用程式使用以下開源字型與程式庫。著作權人與授權條款以原文顯示。",
+    "fonts": "字型",
+    "packages": "程式庫"
   }
 }

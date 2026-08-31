@@ -8,7 +8,7 @@ import type { TextInput } from 'react-native';
 
 import { TextField } from '@/components/TextField';
 import { resolveImageUri } from '@/features/diary/api/image-store';
-import { readFormat, removeBlockAt } from '@/features/diary/format';
+import { isRemovableSeam, readFormat, removeBlockAt } from '@/features/diary/format';
 import { textStyleFor } from '@/features/diary/text-style';
 import type { DiaryBlock, DiaryImage } from '@/features/diary/types';
 import type { Palette } from '@/theme/palettes';
@@ -186,36 +186,53 @@ export function BlockEditor({
       >
         {blocks.map((block, index) => {
           if (block.type === 'text') {
+            /*
+             * 지워도 되는 **솔기**인가(§1.1). 사진·목록 뒤의 "이어 쓸 자리"에는 뜨지 않는다 —
+             * 거기서 지우면 사진 뒤에 글을 못 쓴다. 판정은 순수 계층이 전수로 잰다.
+             */
+            const seam = isRemovableSeam(blocks, index);
             return (
-              <TextField
-                key={`text-${index}`}
-                ref={(node) => {
-                  if (node === null) {
-                    inputs.current.delete(index);
-                  } else {
-                    inputs.current.set(index, node);
+              <View key={`text-${index}`} style={styles.textBlock}>
+                <TextField
+                  ref={(node) => {
+                    if (node === null) {
+                      inputs.current.delete(index);
+                    } else {
+                      inputs.current.set(index, node);
+                    }
+                  }}
+                  value={block.value}
+                  onChangeText={(value) => updateText(index, value)}
+                  placeholder={index === firstTextIndex ? t('write.bodyPlaceholder') : ''}
+                  multiline
+                  textAlignVertical="top"
+                  autoFocus={autoFocus && index === firstTextIndex}
+                  onFocus={() => onCaretChange?.(index, block.value.length, 'focus')}
+                  // 선택 영역이 곧 커서 위치다. 여기서 받아두지 않으면 사진이 항상 맨 끝에 붙는다.
+                  onSelectionChange={(event) =>
+                    onCaretChange?.(index, event.nativeEvent.selection.start, 'selection')
                   }
-                }}
-                value={block.value}
-                onChangeText={(value) => updateText(index, value)}
-                placeholder={index === firstTextIndex ? t('write.bodyPlaceholder') : ''}
-                multiline
-                textAlignVertical="top"
-                autoFocus={autoFocus && index === firstTextIndex}
-                onFocus={() => onCaretChange?.(index, block.value.length, 'focus')}
-                // 선택 영역이 곧 커서 위치다. 여기서 받아두지 않으면 사진이 항상 맨 끝에 붙는다.
-                onSelectionChange={(event) =>
-                  onCaretChange?.(index, event.nativeEvent.selection.start, 'selection')
-                }
-                style={[
-                  // 글쓴이가 건 서식. 읽기 화면과 **같은 함수**를 써야 쓸 때와 읽을 때가 안 갈린다
-                  textStyleFor(readFormat(block), colors),
-                  // 본문 하나뿐이면 영역을 꽉 채운다 — 어디를 눌러도 글쓰기로 들어간다.
-                  index === firstTextIndex && isSoleBlock
-                    ? { height: cap }
-                    : { minHeight: FOLLOWING_MIN_HEIGHT, maxHeight: cap },
-                ]}
-              />
+                  style={[
+                    // 글쓴이가 건 서식. 읽기 화면과 **같은 함수**를 써야 쓸 때와 읽을 때가 안 갈린다
+                    textStyleFor(readFormat(block), colors),
+                    // 본문 하나뿐이면 영역을 꽉 채운다 — 어디를 눌러도 글쓰기로 들어간다.
+                    index === firstTextIndex && isSoleBlock
+                      ? { height: cap }
+                      : { minHeight: FOLLOWING_MIN_HEIGHT, maxHeight: cap },
+                  ]}
+                />
+                {seam ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={t('write.removeEmptyParagraph')}
+                    onPress={() => removeBlock(index)}
+                    hitSlop={12}
+                    style={styles.seamRemove}
+                  >
+                    <X size={14} color={colors.textMuted} />
+                  </Pressable>
+                ) : null}
+              </View>
             );
           }
 
@@ -303,6 +320,19 @@ const createStyles = (colors: Palette) =>
     },
     container: {
       gap: spacing.md,
+    },
+    textBlock: {
+      // 빈 줄 위에 ×를 겹쳐 놓기 위한 기준점. 글자가 없는 칸이라 겹쳐도 가릴 것이 없다.
+      position: 'relative',
+    },
+    seamRemove: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: 28,
+      height: 28,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     listBlock: {
       gap: spacing.xs,

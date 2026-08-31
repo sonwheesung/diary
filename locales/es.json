@@ -120,6 +120,7 @@
     "mood": "Ánimo",
     "imageLoadFailed": "No se pudo cargar esta foto",
     "removeImage": "Quitar foto",
+    "removeEmptyParagraph": "Quitar línea vacía",
     "photoPermissionTitle": "Se necesita acceso a fotos",
     "photoPermissionBody": "Permite el acceso a fotos en Ajustes.",
     "photoFailedTitle": "No se pudo añadir la foto",
@@ -230,6 +231,7 @@
     "reminderMinute": "Min",
     "reminderDeniedTitle": "Faltan permisos de notificación",
     "reminderDeniedBody": "Activa las notificaciones de Jogak en los ajustes del teléfono.",
+    "licenses": "Licencias de código abierto",
     "version": "Versión",
     "sectionSupport": "Ayuda",
     "notice": "Avisos",
@@ -617,5 +619,10 @@
     "rest": "Descanso",
     "money": "Dinero",
     "health": "Cuerpo"
+  },
+  "licenses": {
+    "intro": "Jogak utiliza las fuentes y bibliotecas de código abierto siguientes. Los titulares de derechos y las licencias se muestran en su redacción original.",
+    "fonts": "Fuentes",
+    "packages": "Bibliotecas"
   }
 }

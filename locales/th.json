@@ -120,6 +120,7 @@
     "mood": "อารมณ์",
     "imageLoadFailed": "โหลดรูปนี้ไม่สำเร็จ",
     "removeImage": "ลบรูป",
+    "removeEmptyParagraph": "ลบบรรทัดว่าง",
     "photoPermissionTitle": "ต้องขอสิทธิ์เข้าถึงรูปภาพ",
     "photoPermissionBody": "โปรดอนุญาตการเข้าถึงรูปภาพในการตั้งค่า",
     "photoFailedTitle": "เพิ่มรูปไม่สำเร็จ",
@@ -230,6 +231,7 @@
     "reminderMinute": "นาที",
     "reminderDeniedTitle": "ต้องขออนุญาตแจ้งเตือน",
     "reminderDeniedBody": "โปรดเปิดการแจ้งเตือนของ Jogak ในการตั้งค่าโทรศัพท์",
+    "licenses": "สัญญาอนุญาตโอเพนซอร์ส",
     "version": "เวอร์ชัน",
     "sectionSupport": "ความช่วยเหลือ",
     "notice": "ประกาศ",
@@ -617,5 +619,10 @@
     "rest": "พักผ่อน",
     "money": "เงิน",
     "health": "ร่างกาย"
+  },
+  "licenses": {
+    "intro": "Jogak ใช้ฟอนต์และไลบรารีโอเพนซอร์สต่อไปนี้ เจ้าของลิขสิทธิ์และสัญญาอนุญาตแสดงตามข้อความต้นฉบับ",
+    "fonts": "ฟอนต์",
+    "packages": "ไลบรารี"
   }
 }

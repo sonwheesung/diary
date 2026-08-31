@@ -120,6 +120,7 @@
     "mood": "気分",
     "imageLoadFailed": "画像を読み込めませんでした",
     "removeImage": "画像を削除",
+    "removeEmptyParagraph": "空行を削除",
     "photoPermissionTitle": "写真へのアクセスが必要です",
     "photoPermissionBody": "設定で写真へのアクセスを許可してください。",
     "photoFailedTitle": "写真を追加できませんでした",
@@ -230,6 +231,7 @@
     "reminderMinute": "分",
     "reminderDeniedTitle": "通知の許可が必要です",
     "reminderDeniedBody": "スマホの設定でJogakの通知をオンにしてください。",
+    "licenses": "オープンソースライセンス",
     "version": "バージョン",
     "sectionSupport": "サポート",
     "notice": "お知らせ",
@@ -617,5 +619,10 @@
     "rest": "休息",
     "money": "お金",
     "health": "体調"
+  },
+  "licenses": {
+    "intro": "このアプリは以下のオープンソースフォントとライブラリを使用しています。著作権者とライセンスは原文のまま表示します。",
+    "fonts": "フォント",
+    "packages": "ライブラリ"
   }
 }

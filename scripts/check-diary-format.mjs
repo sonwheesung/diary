@@ -14,6 +14,7 @@ import {
   isDefaultFormat,
   readFormat,
   sameFormat,
+  isRemovableSeam,
   removeBlockAt,
   splitParagraph,
   withFormat,
@@ -277,6 +278,105 @@ check('반복해도 빈 블록이 쌓이지 않는다 — 신고된 그 경로',
     blocks = removeBlockAt(blocks, blocks.length - 2).blocks;
   }
   eq(blocks, [{ type: 'text', value: '본문' }], '빈 블록이 안 남는다');
+});
+
+// ── 솔기 판정 (§1.1 솔기 ×) ──────────────────────────────────────────────────
+// 🔴 이 표가 화면의 유일한 근거다. 여기가 관대해지면 **사진 뒤 쓸 자리에 ×가 뜨고**,
+//    눌러 지우면 사진 뒤에 글을 못 쓰게 된다.
+
+check('솔기 — 텍스트 사이의 빈 문단에는 ×가 뜬다', () => {
+  const blocks = [
+    { type: 'text', value: '앞' },
+    { type: 'text', value: '', size: 'h1' },
+    { type: 'text', value: '뒤' },
+  ];
+  eq(isRemovableSeam(blocks, 1), true, '양쪽이 텍스트');
+});
+
+check('솔기 — 한쪽만 텍스트여도 솔기다', () => {
+  eq(
+    isRemovableSeam([{ type: 'text', value: '앞' }, { type: 'text', value: '' }], 1),
+    true,
+    '앞이 텍스트',
+  );
+  eq(
+    isRemovableSeam([{ type: 'text', value: '' }, { type: 'text', value: '뒤' }], 0),
+    true,
+    '뒤가 텍스트',
+  );
+});
+
+check('🔴 쓸 자리 — 사진 뒤 빈 칸에는 ×가 없다', () => {
+  const blocks = [
+    { type: 'text', value: '본문' },
+    { type: 'image', imageId: 'a' },
+    { type: 'text', value: '' },
+  ];
+  eq(isRemovableSeam(blocks, 2), false, '지우면 사진 뒤에 못 쓴다');
+});
+
+check('🔴 쓸 자리 — 목록 뒤 빈 칸에도 ×가 없다', () => {
+  const blocks = [
+    { type: 'list', items: ['하나'] },
+    { type: 'text', value: '' },
+  ];
+  eq(isRemovableSeam(blocks, 1), false, '목록만 남으면 쓸 자리가 없다');
+});
+
+check('🔴 쓸 자리 — 사진 사이에 낀 빈 칸도 쓸 자리다', () => {
+  const blocks = [
+    { type: 'image', imageId: 'a' },
+    { type: 'text', value: '' },
+    { type: 'image', imageId: 'b' },
+  ];
+  eq(isRemovableSeam(blocks, 1), false, '두 사진 사이에 글을 쓰는 칸');
+});
+
+check('글자가 있으면 솔기가 아니다', () => {
+  const blocks = [
+    { type: 'text', value: '앞' },
+    { type: 'text', value: ' ', size: 'h1' },
+    { type: 'text', value: '뒤' },
+  ];
+  eq(isRemovableSeam(blocks, 1), false, '공백 한 칸도 글자다');
+});
+
+check('블록이 하나뿐이면 솔기가 아니다 — 지우면 쓸 자리가 사라진다', () => {
+  eq(isRemovableSeam([{ type: 'text', value: '' }], 0), false, '새 조각의 첫 칸');
+});
+
+check('텍스트가 아닌 블록·범위 밖은 솔기가 아니다', () => {
+  const blocks = [
+    { type: 'text', value: '가' },
+    { type: 'image', imageId: 'a' },
+  ];
+  eq(isRemovableSeam(blocks, 1), false, '이미지');
+  eq(isRemovableSeam(blocks, 9), false, '범위 밖');
+  eq(isRemovableSeam(blocks, -1), false, '음수');
+});
+
+check('솔기를 걷어내면 두 문단이 한 덩어리로 돌아간다 — × 의 실제 동작', () => {
+  const blocks = [
+    { type: 'text', value: '앞' },
+    { type: 'text', value: '' },
+    { type: 'text', value: '뒤' },
+  ];
+  eq(isRemovableSeam(blocks, 1), true, '솔기다');
+  const r = removeBlockAt(blocks, 1);
+  eq(r.blocks, [{ type: 'text', value: `앞${NL}뒤` }], '한 문단으로');
+  eq(r.index, 0, '커서는 붙인 블록');
+  eq(r.caret, 1, '붙인 자리');
+});
+
+check('서식이 다른 이웃이면 붙이지 않고 지우기만 한다', () => {
+  const blocks = [
+    { type: 'text', value: '앞', size: 'h1' },
+    { type: 'text', value: '' },
+    { type: 'text', value: '뒤' },
+  ];
+  eq(isRemovableSeam(blocks, 1), true, '솔기이긴 하다');
+  const r = removeBlockAt(blocks, 1);
+  eq(r.blocks.length, 2, '두 블록으로 남는다 — 서식이 다르면 안 붙인다');
 });
 
 // ── 결과 ─────────────────────────────────────────────────────────────────────

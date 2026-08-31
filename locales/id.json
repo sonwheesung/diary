@@ -120,6 +120,7 @@
     "mood": "Suasana",
     "imageLoadFailed": "Tidak bisa memuat foto ini",
     "removeImage": "Hapus foto",
+    "removeEmptyParagraph": "Hapus baris kosong",
     "photoPermissionTitle": "Perlu akses ke foto",
     "photoPermissionBody": "Izinkan akses foto di Pengaturan.",
     "photoFailedTitle": "Tidak bisa menambahkan foto",
@@ -230,6 +231,7 @@
     "reminderMinute": "Mnt",
     "reminderDeniedTitle": "Butuh izin notifikasi",
     "reminderDeniedBody": "Aktifkan notifikasi Jogak di pengaturan ponsel.",
+    "licenses": "Lisensi sumber terbuka",
     "version": "Versi",
     "sectionSupport": "Bantuan",
     "notice": "Pengumuman",
@@ -617,5 +619,10 @@
     "rest": "Istirahat",
     "money": "Uang",
     "health": "Tubuh"
+  },
+  "licenses": {
+    "intro": "Jogak menggunakan font dan pustaka sumber terbuka berikut. Pemegang hak cipta dan lisensi ditampilkan sesuai teks aslinya.",
+    "fonts": "Font",
+    "packages": "Pustaka"
   }
 }

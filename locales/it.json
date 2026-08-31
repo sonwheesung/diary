@@ -120,6 +120,7 @@
     "mood": "Umore",
     "imageLoadFailed": "Non è stato possibile caricare questa foto",
     "removeImage": "Rimuovi foto",
+    "removeEmptyParagraph": "Rimuovi riga vuota",
     "photoPermissionTitle": "Serve l'accesso alle foto",
     "photoPermissionBody": "Consenti l'accesso alle foto nelle Impostazioni.",
     "photoFailedTitle": "Non è stato possibile aggiungere la foto",
@@ -230,6 +231,7 @@
     "reminderMinute": "Min",
     "reminderDeniedTitle": "Serve il permesso per le notifiche",
     "reminderDeniedBody": "Attiva le notifiche di Jogak nelle impostazioni del telefono.",
+    "licenses": "Licenze open source",
     "version": "Versione",
     "sectionSupport": "Assistenza",
     "notice": "Avvisi",
@@ -617,5 +619,10 @@
     "rest": "Riposo",
     "money": "Denaro",
     "health": "Corpo"
+  },
+  "licenses": {
+    "intro": "Jogak utilizza i caratteri e le librerie open source seguenti. Titolari dei diritti e licenze sono riportati nel testo originale.",
+    "fonts": "Caratteri",
+    "packages": "Librerie"
   }
 }
