@@ -86,6 +86,14 @@ export const SETTING_KEYS = {
    *   초기화는 재설치와 성격이 같고, 무엇보다 초기화 문구가 *"전부 지운다"* 고 약속했다.
    */
   agePass: 'age_pass',
+  /**
+   * 연령 미달 판정 기록 — **365일 유예**(`docs/AUTH_SYSTEM.md` §1.2).
+   *
+   * 🔴 통과 기록(`age_pass`)과 **다른 칸**이다. 한 칸에 두면 어느 쪽인지 파싱으로 갈라야 하고,
+   *   그 판정이 틀리는 날 증상이 "미달자가 통과한다"다.
+   * ⚠ 답하지 않고 **닫은 것은 여기 안 들어간다** — "모른다"를 "미달"로 굳히면 자격자를 1년 막는다.
+   */
+  ageBlock: 'age_block',
 } as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];

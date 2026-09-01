@@ -12,7 +12,7 @@ import { radius, spacing } from '@/theme/spacing';
 import { typography } from '@/theme/typography';
 
 import { birthYearRange, passes } from '../age-gate';
-import { saveAgePass } from '../api/age-store';
+import { saveAgeBlock, saveAgePass } from '../api/age-store';
 import { markAgeBlocked, settleAgeGate, useAgeGate } from '../gate-store';
 
 /**
@@ -44,7 +44,14 @@ export function AgeGateScreen() {
     setBusy(true);
     try {
       if (!passes(year, thisYear, threshold)) {
-        // 🔴 미달이면 아무것도 저장하지 않는다 — 출생연도도 포함이다.
+        /*
+         * 🔴 **출생연도는 저장하지 않는다.** 판정 결과만 남긴다(§1.4 · 공용 §3.3).
+         *
+         * 게이트가 부팅으로 올라가면서(2026-09-01) 판정 **결과**는 저장하게 됐다 —
+         * 안 남기면 미달자가 앱을 켤 때마다 나이를 묻힌다. 유예는 365일이고,
+         * 그 기간이 지나면 다시 묻는다(나이를 먹은 사람을 영영 막지 않는다).
+         */
+        await saveAgeBlock(threshold);
         markAgeBlocked();
         return;
       }

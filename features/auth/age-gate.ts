@@ -75,6 +75,83 @@ export function passes(birthYear: number, thisYear: number, threshold: number): 
   return thisYear - birthYear >= threshold + 1;
 }
 
+/**
+ * 미달 판정 유예 — 365일 (docs/AUTH_SYSTEM.md §1.2).
+ *
+ * 게이트가 부팅으로 올라가면서(2026-09-01) 미달자가 **매 실행마다** 나이를 묻히게 됐다.
+ * 그렇다고 영구히 저장하면 **나이를 먹어도 영영 막힌다.** 생년을 저장하는 것은 §1.4가 금지한다.
+ *
+ * → 판정 결과만 남기고 1년 뒤 다시 묻는다. 우리가 받은 것이 **연도**뿐이라 1년이 정확히
+ *   그 해상도다 — 그보다 자주 물으면 답이 같고, 늦게 물으면 자격을 얻은 사람을 그만큼 더 막는다.
+ */
+export const BLOCK_GRACE_DAYS = 365;
+
+/**
+ * 미달로 판정된 기록 — **생년은 없다.** 통과 기록과 같은 규율이다.
+ *
+ * ⚠ **닫은 것은 미달이 아니다.** 연도를 입력해 기준 미달로 판정됐을 때만 만든다.
+ *   답하지 않고 닫은 사람은 아무것도 저장하지 않고 다음 실행에 다시 묻는다 —
+ *   "모른다"를 "미달"로 굳히면 자격자를 1년간 막게 된다.
+ */
+export interface AgeBlockRecord {
+  /** 언제 미달로 판정됐는지 (epoch ms) */
+  blockedAt: number;
+  /** 어느 기준으로 막혔는지 — 기준이 바뀌면 유예와 무관하게 다시 묻는다 */
+  threshold: number;
+  /** 어느 규칙 버전으로 막혔는지 */
+  version: number;
+}
+
+/** 미달 기록 생성. 통과와 마찬가지로 **생년을 인자로도 받지 않는다.** */
+export function makeBlockRecord(threshold: number, now: number): AgeBlockRecord {
+  return { blockedAt: now, threshold, version: AGE_GATE_VERSION };
+}
+
+/**
+ * 이 미달 기록이 **지금도 유예 안에 있는가**.
+ *
+ * 규칙 버전이 올랐거나 기기 기준이 바뀌었으면 유예를 무시하고 다시 묻는다(§1.5와 같은 규약) —
+ * 다른 기준으로 막힌 기록은 지금 기준에 대해 아무것도 말해주지 않는다.
+ */
+export function blockActive(
+  rec: AgeBlockRecord | null | undefined,
+  threshold: number,
+  now: number,
+): boolean {
+  if (!rec || typeof rec !== 'object') return false;
+  if (!Number.isFinite(rec.blockedAt) || !Number.isFinite(rec.threshold)) return false;
+  if (rec.version !== AGE_GATE_VERSION) return false;
+  if (rec.threshold !== threshold) return false;
+  const elapsed = now - rec.blockedAt;
+  // 미래 시각(기기 시계를 되돌린 경우)은 유예로 치지 않는다 — 물어서 손해 볼 것이 없다.
+  if (!(elapsed >= 0)) return false;
+  return elapsed < BLOCK_GRACE_DAYS * 24 * 60 * 60 * 1000;
+}
+
+/**
+ * 부팅 게이트 판정 — 화면을 띄울지, 기기 세션을 발급할지 여기 하나로 정한다.
+ *
+ * `'verified'` 통과했다 → 기기 세션 발급 O · 로그인 O
+ * `'blocked'`  미달이고 유예 안 → **묻지 않는다** · 기기 세션 X · 로그인 X
+ * `'ask'`      기록이 없거나 유예가 끝났다 → 게이트를 띄운다
+ *
+ * 🔴 세 값 중 어느 것도 **일기를 막지 않는다.** 미달 판정이 하는 일은
+ *   `registerDevice()`를 안 부르는 것과 `signIn()`을 막는 것 둘뿐이다(§1.2).
+ */
+export type BootGateDecision = 'verified' | 'blocked' | 'ask';
+
+export function decideBootGate(
+  pass: AgePassRecord | null | undefined,
+  block: AgeBlockRecord | null | undefined,
+  threshold: number,
+  now: number,
+): BootGateDecision {
+  // 통과가 우선이다 — 옛 미달 기록이 남아 있어도 통과했으면 통과다.
+  if (recordValid(pass)) return 'verified';
+  if (blockActive(block, threshold, now)) return 'blocked';
+  return 'ask';
+}
+
 /** 저장되는 통과 기록 — **생년은 없다.** 받아서 판정하고 버린다. */
 export interface AgePassRecord {
   /** 언제 통과했는지 (epoch ms) */
@@ -118,6 +195,27 @@ export function parseRecord(raw: string | null | undefined): AgePassRecord | nul
     if (typeof o.threshold !== 'number') return null;
     if (typeof o.version !== 'number') return null;
     return { passedAt: o.passedAt, threshold: o.threshold, version: o.version };
+  } catch {
+    return null;
+  }
+}
+
+/** 미달 기록 직렬화. 통과 기록과 **다른 키에** 넣는다 — 한 칸에 두면 어느 쪽인지 파싱으로 갈라야 한다. */
+export function serializeBlockRecord(rec: AgeBlockRecord): string {
+  return JSON.stringify(rec);
+}
+
+/** 저장된 문자열 → 미달 기록. 파싱 실패·모양 불일치는 `null`(= 유예 없음 = 다시 묻는다). */
+export function parseBlockRecord(raw: string | null | undefined): AgeBlockRecord | null {
+  if (typeof raw !== 'string' || raw.length === 0) return null;
+  try {
+    const v: unknown = JSON.parse(raw);
+    if (typeof v !== 'object' || v === null) return null;
+    const o = v as Record<string, unknown>;
+    if (typeof o.blockedAt !== 'number') return null;
+    if (typeof o.threshold !== 'number') return null;
+    if (typeof o.version !== 'number') return null;
+    return { blockedAt: o.blockedAt, threshold: o.threshold, version: o.version };
   } catch {
     return null;
   }

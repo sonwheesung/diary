@@ -8,7 +8,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
 import { useEntitlementStore } from '@/features/entitlement/store';
+import { bootGateDecision } from '@/features/auth/api/age-store';
 import { AgeGateScreen } from '@/features/auth/components/AgeGateScreen';
+import { requestAgeVerification } from '@/features/auth/gate-store';
 import { LockGate } from '@/features/lock/components/LockGate';
 import { useNoticeStore } from '@/features/notice/store';
 import { syncReminders } from '@/features/notification/api/reminder';
@@ -131,6 +133,30 @@ export default function RootLayout() {
     if (ready) {
       SplashScreen.hideAsync().catch(() => {});
     }
+  }, [ready]);
+
+  /*
+   * 🔴 **연령 게이트 — 부팅에 선다** (`docs/AUTH_SYSTEM.md` §1.2, 2026-09-01).
+   *
+   * ~~로그인 지점(`signIn()` 안)~~에서 옮겨왔다. 옮긴 이유는 비로그인 활성 집계를 위해
+   * **부팅에 기기 UUID 를 발급**하게 되어, *"미달자의 식별자를 받기 전에 돌려보낸다"* 의
+   * **경계가 부팅으로 이동**했기 때문이다.
+   *
+   * 🔴 **벽이 아니다.** 게이트를 닫든 미달이든 **일기는 그대로 쓴다** — 미달 판정이 하는 일은
+   *   `registerDevice()` 를 안 부르는 것과 `signIn()` 을 막는 것 둘뿐이다. §4 가
+   *   *"미달자도 일기는 그대로 쓴다"* 를 15개 언어와 공개 웹에 내보냈고, 벽으로 만들면 그 문장이
+   *   거짓이 되며 서버에 아무것도 안 보내는 사람을 서버 지표 때문에 자기 일기에서 잠그게 된다.
+   *   그래서 결과를 **기다리지 않고** 아래 공지 조회도 그대로 돈다.
+   *
+   * ⚠ `ready`(폰트 로드) 뒤에 띄운다. 스플래시가 걸려 있는 동안 모달을 열면 그 위에 그려진다.
+   */
+  useEffect(() => {
+    if (!ready) return;
+    void (async () => {
+      const decision = await bootGateDecision();
+      // 'verified'(통과) · 'blocked'(미달 유예 안) 둘 다 묻지 않는다.
+      if (decision === 'ask') await requestAgeVerification();
+    })();
   }, [ready]);
 
   if (!ready) {

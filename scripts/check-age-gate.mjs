@@ -13,10 +13,15 @@ import {
   AGE_GATE_VERSION,
   FALLBACK_THRESHOLD,
   birthYearRange,
+  blockActive,
+  decideBootGate,
+  makeBlockRecord,
   makeRecord,
+  parseBlockRecord,
   parseRecord,
   passes,
   recordValid,
+  serializeBlockRecord,
   serializeRecord,
   thresholdFor,
 } from '../features/auth/age-gate.ts';
@@ -109,6 +114,46 @@ ok(recordValid(parseRecord(serializeRecord(rec))) === true, '왕복한 기록이
 for (const bad of [null, '', 'null', '{', '[]', '{"passedAt":1}', '"문자열"']) {
   ok(parseRecord(bad) === null, `쓰레기 입력(${JSON.stringify(bad)})이 기록으로 읽혔다`);
 }
+
+// ── ④ 미달 유예와 부팅 판정 (2026-09-01, 게이트가 부팅으로 올라가며 생김) ──────
+const DAY = 24 * 60 * 60 * 1000;
+const T0 = 1_700_000_000_000;
+const blk = makeBlockRecord(14, T0);
+
+ok(Object.keys(blk).sort().join(',') === 'blockedAt,threshold,version', `미달 기록 키가 셋이 아니다: ${Object.keys(blk)}`);
+// 🔴 통과 기록과 **같은 규율** — 미달 쪽으로 생년이 새는 경로를 따로 막는다
+ok(!('birthYear' in blk), '미달 기록에 birthYear 가 들어갔다');
+ok(!serializeBlockRecord(blk).includes('birth'), '미달 직렬화에 birth 가 보인다');
+ok(makeBlockRecord.length === 2, 'makeBlockRecord 도 인자를 둘만 받아야 한다');
+ok(parseBlockRecord(serializeBlockRecord(blk))?.threshold === 14, '미달 기록 왕복이 깨졌다');
+for (const bad of [null, '', 'null', '{', '{"blockedAt":1}', '{"passedAt":1,"threshold":1,"version":1}']) {
+  ok(parseBlockRecord(bad) === null, `쓰레기 입력(${JSON.stringify(bad)})이 미달 기록으로 읽혔다`);
+}
+
+// 유예 경계 — 365일 미만은 살아 있고, 딱 365일이면 다시 묻는다
+ok(blockActive(blk, 14, T0) === true, '방금 막힌 기록이 유예 밖으로 읽혔다');
+ok(blockActive(blk, 14, T0 + 364 * DAY) === true, '364일째는 유예 안이어야 한다');
+ok(blockActive(blk, 14, T0 + 365 * DAY - 1) === true, '365일 직전은 유예 안이어야 한다');
+ok(blockActive(blk, 14, T0 + 365 * DAY) === false, '365일이 되면 다시 물어야 한다');
+ok(blockActive(blk, 14, T0 + 800 * DAY) === false, '유예가 한참 지났는데 아직 막고 있다');
+// 🔴 기기 시계를 되돌려도 유예가 늘어나면 안 된다
+ok(blockActive(blk, 14, T0 - DAY) === false, '미래 시각 기록이 유예로 읽혔다');
+// 기준·버전이 다르면 유예를 무시한다 — 다른 기준으로 막힌 기록은 지금 기준에 대해 아무 말도 못 한다
+ok(blockActive(blk, 16, T0) === false, '기준이 달라졌는데 옛 유예가 살아 있다');
+ok(blockActive({ ...blk, version: AGE_GATE_VERSION + 1 }, 14, T0) === false, '규칙 버전이 올랐는데 유예가 살아 있다');
+for (const bad of [null, undefined, {}, { blockedAt: 'x', threshold: 14, version: AGE_GATE_VERSION }]) {
+  ok(blockActive(bad, 14, T0) === false, `깨진 미달 기록(${JSON.stringify(bad)})이 유예로 읽혔다`);
+}
+
+// 부팅 판정 — 세 값
+ok(decideBootGate(null, null, 14, T0) === 'ask', '기록이 없으면 물어야 한다');
+ok(decideBootGate(rec, null, 14, T0) === 'verified', '통과 기록이 있으면 통과다');
+ok(decideBootGate(null, blk, 14, T0) === 'blocked', '유예 안의 미달을 다시 묻고 있다');
+ok(decideBootGate(null, blk, 14, T0 + 365 * DAY) === 'ask', '유예가 끝났으면 다시 물어야 한다');
+// 🔴 통과가 미달보다 우선이다 — 옛 미달 기록이 남아 있어도 통과했으면 통과다
+ok(decideBootGate(rec, blk, 14, T0) === 'verified', '통과했는데 옛 미달 기록이 이겼다');
+// 깨진 통과 기록은 통과가 아니다(버전이 오른 경우 포함)
+ok(decideBootGate({ ...rec, version: AGE_GATE_VERSION + 1 }, null, 14, T0) === 'ask', '무효한 통과 기록이 통과로 읽혔다');
 
 // ── 결과 ────────────────────────────────────────────────────────────────────
 if (fails.length > 0) {

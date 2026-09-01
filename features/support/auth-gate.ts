@@ -21,7 +21,7 @@ import {
 } from '@/features/support/dev-auth';
 import { useInquiryStore } from '@/features/support/inquiry-store';
 import { useEntitlementStore } from '@/features/entitlement/store';
-import { ageAlreadyVerified } from '@/features/auth/api/age-store';
+import { bootGateDecision } from '@/features/auth/api/age-store';
 import { requestAgeVerification } from '@/features/auth/gate-store';
 import { withExcursion } from '@/features/lock/excursion';
 import { commonServer } from '@/lib/common-server/client';
@@ -157,7 +157,17 @@ export function useSupportAuth(): SupportAuth {
      * ⚠ **dev 로그인 분기보다도 앞이다.** 뒤에 두면 분기 하나가 게이트를 빠져나가고,
      *   "어떤 경로로도 못 지나간다"를 더 이상 한 줄로 말할 수 없게 된다.
      */
-    if (!(await ageAlreadyVerified())) {
+    /*
+     * ⚠ 게이트는 2026-09-01부터 **부팅에도** 선다(`docs/AUTH_SYSTEM.md` §1.2). 그래도 여기를
+     *   지우지 않는다 — 부팅 게이트는 사용자가 닫을 수 있고, 그때 로그인이 열리면 안 된다.
+     *   *"어떤 경로로도 못 지나간다"* 를 한 줄로 말할 수 있어야 한다.
+     */
+    const decision = await bootGateDecision();
+    if (decision === 'blocked') {
+      // 유예 안의 미달자다. 다시 묻지 않는다 — 물어도 답은 같고, 재입력은 우회 경로가 된다.
+      return 'age-blocked';
+    }
+    if (decision === 'ask') {
       const verified = await requestAgeVerification();
       if (!verified) {
         return 'age-blocked';

@@ -37,11 +37,14 @@ common_server 규약이다 — 앱 4~5개 규모에서 monorepo·npm 패키지 �
 보였고 실제 변경은 3곳이었다. 지금은 본문이 원본과 **바이트로 같아** 이렇게 확인한다:
 
 ```bash
-diff --strip-trailing-cr <(tail -n +12 lib/common-server/index.ts) \
-                         <(tail -n +3 ../common_server/client/index.ts)   # 헤더 11줄만 우리 것
-diff --strip-trailing-cr <(tail -n +6  lib/common-server/types.ts) \
-                         <(tail -n +3 ../common_server/client/types.ts)   # 헤더 5줄
+S=../common_server/client
+diff --strip-trailing-cr <(sed -n '/^import type/,$p'             lib/common-server/index.ts) <(sed -n '/^import type/,$p'             $S/index.ts)
+diff --strip-trailing-cr <(sed -n '/^export type SupportCategory/,$p' lib/common-server/types.ts) <(sed -n '/^export type SupportCategory/,$p' $S/types.ts)
 ```
+
+⚠ **줄 수(`tail -n +N`)로 자르지 않는다.** 2026-09-01 오전에 그렇게 적었다가 **같은 날 오후**
+재복사에서 헤더가 길어져 바로 틀렸다. 우리 헤더는 이유를 적는 자리라 재복사마다 자란다 —
+본문 첫 줄을 **앵커**로 잡으면 몇 줄이 되든 맞는다.
 
 ⚠ `--strip-trailing-cr`이 필요하다 — `core.autocrlf=true`라 체크아웃이 디스크 파일을 CRLF로
 바꾼다. 빼면 내용이 같아도 전부 다르게 나온다(`check:shared`가 2026-08-27에 같은 데 걸렸다).
