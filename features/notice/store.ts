@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 import { SETTING_KEYS, getSetting, setSetting } from '@/features/settings/api/settings-store';
-import { commonServer } from '@/lib/common-server/client';
+import { commonServer, deviceServer } from '@/lib/common-server/client';
 import type { AnnouncementItem, Bootstrap } from '@/lib/common-server/types';
 
 /**
@@ -82,8 +82,23 @@ export const useNoticeStore = create<NoticeState>((set, get) => ({
     if (get().loaded) {
       return; // 실행당 1회. 화면을 오갈 때마다 서버를 두드리지 않는다.
     }
+    /*
+     * 어느 인스턴스로 부를지 — **로그인했으면 구글 세션, 아니면 기기 세션**
+     * (`docs/SUPPORT_SYSTEM.md` §3.1).
+     *
+     * `fetchBootstrap()` 이 세션을 실어 보내고 서버가 그걸로 활성 일자를 기록한다. 조각은
+     * 로그인이 **선택**이라 구글 세션만 쓰면 비로그인 사용자가 한 명도 안 잡힌다 — 그래서
+     * 세션이 없을 때는 기기 인스턴스로 묻는다. 공지 응답은 어느 쪽이든 같다.
+     *
+     * ⚠ **`ensureDeviceSession()` 과 병렬이다.** 서버가 `devices` 와 `bootstrap` 양쪽에서
+     *   찍고 `(app, subject, day)` PK 가 멱등이라 순서를 맞춰 얻을 게 없고 부팅만 느려진다.
+     *   첫 실행엔 bootstrap 에 토큰이 없어도 `devices` 가 그날을 살린다.
+     */
+    const signedIn = await commonServer.isSignedIn();
+    const server = signedIn ? commonServer : deviceServer;
+
     // 저장소와 서버는 서로 기다릴 이유가 없다.
-    const [result, readIds] = await Promise.all([commonServer.fetchBootstrap(), loadReadIds()]);
+    const [result, readIds] = await Promise.all([server.fetchBootstrap(), loadReadIds()]);
     const announcements = result.ok ? result.data.announcements : [];
 
     set({

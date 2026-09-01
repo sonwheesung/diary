@@ -25,6 +25,11 @@ import {
   serializeRecord,
   thresholdFor,
 } from '../features/auth/age-gate.ts';
+import {
+  DEVICE_SESSION_PREFIX,
+  SESSION_PREFIX,
+  toDeviceSessionKey,
+} from '../lib/common-server/session-keys.ts';
 
 let pass = 0;
 const fails = [];
@@ -154,6 +159,32 @@ ok(decideBootGate(null, blk, 14, T0 + 365 * DAY) === 'ask', '유예가 끝났으
 ok(decideBootGate(rec, blk, 14, T0) === 'verified', '통과했는데 옛 미달 기록이 이겼다');
 // 깨진 통과 기록은 통과가 아니다(버전이 오른 경우 포함)
 ok(decideBootGate({ ...rec, version: AGE_GATE_VERSION + 1 }, null, 14, T0) === 'ask', '무효한 통과 기록이 통과로 읽혔다');
+
+// ── ⑤ 세션 칸 분리 — 게이트가 뚫리는 **다른 한 경로** ────────────────────────
+//
+// 여기 있는 이유: 이 매퍼가 틀리면 기기 토큰이 로그인 칸에 들어가고, 그러면 `/auth/me` 가
+// 200 을 주며 로그인으로 판정돼 **연령 게이트가 우회된다**. 즉 실패 증상이 위 ①~④ 와 같다.
+// (`lib/common-server/session-keys.ts` · docs/SUPPORT_SYSTEM.md §3.1)
+
+ok(toDeviceSessionKey('cs_session_jogak') === 'cs_devsession_jogak', '기기 칸으로 안 옮겨졌다');
+// 🔴 두 칸이 절대 같아지면 안 된다 — 같아지는 순간 신원이 하나로 합쳐진다
+ok(toDeviceSessionKey('cs_session_jogak') !== 'cs_session_jogak', '기기 키가 로그인 키와 같다');
+ok(SESSION_PREFIX !== DEVICE_SESSION_PREFIX, '두 접두사가 같다');
+ok(!DEVICE_SESSION_PREFIX.startsWith(SESSION_PREFIX), '기기 접두사가 로그인 접두사로 시작하면 두 번 매핑될 수 있다');
+
+// 접두사가 붙은 파생 키가 생겨도 **같이** 격리돼야 한다
+ok(toDeviceSessionKey('cs_session_meta_jogak') === 'cs_devsession_meta_jogak', '파생 키가 격리되지 않았다');
+
+// 🔴 접두사가 없는 키는 손대지 않는다 — 그런 키가 생기면 두 인스턴스가 조용히 공유하게 되므로
+//    "그대로 통과"가 맞는 동작이고, 공유가 문제라면 SDK 쪽에서 드러나야 한다
+for (const k of ['jogak_device_id', 'cs_expiry_jogak', '', 'session_jogak']) {
+  ok(toDeviceSessionKey(k) === k, `접두사 없는 키(${JSON.stringify(k)})를 건드렸다`);
+}
+// ⚠ `replace` 였다면 통과하지 못할 입력 — 접두사가 아닌 자리의 같은 문자열
+ok(toDeviceSessionKey('x_cs_session_jogak') === 'x_cs_session_jogak', '접두사가 아닌 자리를 바꿨다(replace 를 쓰고 있다)');
+
+// 멱등이 아니어야 한다 — 두 번 적용해도 로그인 칸으로 돌아오면 안 된다
+ok(toDeviceSessionKey(toDeviceSessionKey('cs_session_jogak')) === 'cs_devsession_jogak', '두 번 매핑하면 값이 달라진다');
 
 // ── 결과 ────────────────────────────────────────────────────────────────────
 if (fails.length > 0) {

@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initializeAds } from '@/features/ads/api/ads';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { bootGateDecision } from '@/features/auth/api/age-store';
+import { ensureDeviceSession } from '@/lib/common-server/client';
 import { AgeGateScreen } from '@/features/auth/components/AgeGateScreen';
 import { requestAgeVerification } from '@/features/auth/gate-store';
 import { LockGate } from '@/features/lock/components/LockGate';
@@ -155,7 +156,18 @@ export default function RootLayout() {
     void (async () => {
       const decision = await bootGateDecision();
       // 'verified'(통과) · 'blocked'(미달 유예 안) 둘 다 묻지 않는다.
-      if (decision === 'ask') await requestAgeVerification();
+      const verified =
+        decision === 'verified' ? true : decision === 'ask' ? await requestAgeVerification() : false;
+      /*
+       * 🔴 **통과했을 때만 기기 세션을 만든다.** 여기가 경계다 — 이 호출이 UUID 를 만들고
+       *   서버에 `subjects` 행을 남긴다. 미달이면 부르지 않고, 그래서 그 사람은 활성 지표에
+       *   잡히지 않는다. 지표보다 게이트가 먼저다.
+       *
+       * ⚠ 게이트를 **닫은** 사람도 여기 안 들어온다(`requestAgeVerification()` 이 false).
+       *   기록을 안 남기므로 다음 실행에 다시 묻고, 그때 통과하면 그날부터 잡힌다.
+       * ⚠ `void` 로 버린다 — 오프라인·서버 다운에서 실패해도 화면에 아무 일도 일어나면 안 된다.
+       */
+      if (verified) void ensureDeviceSession();
     })();
   }, [ready]);
 
