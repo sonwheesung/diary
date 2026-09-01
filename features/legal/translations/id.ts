@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
   sections: [

@@ -12,9 +12,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_JA: LegalDoc = {
   title: 'Jogak プライバシーポリシー',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio（以下「運営者」）は「個人情報保護法」等の関連法令を遵守し、「Jogak」（以下「本サービス」）利用者の個人情報を以下のとおり取り扱います。Jogak は利用者が書いた日記を利用者の端末に保管することを原則とし、利用者ご自身がオンにされたバックアップと、ご自身で作成されたAI要約レポートに限ってのみ日記がサーバーへ送信されます。それ以外は必要最小限の情報のみを収集します。',
   sections: [

@@ -16,9 +16,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_EN: LegalDoc = {
   title: 'Jogak Privacy Policy',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio ("the operator") complies with the Personal Information Protection Act and other applicable laws, and handles the personal data of users of "Jogak" ("the service") as set out below. As a matter of principle Jogak keeps the entries you write on your own device; entries are sent to a server only for the backup you turn on yourself and the AI summary reports you create yourself. Apart from that we collect only the minimum information necessary.',
   sections: [

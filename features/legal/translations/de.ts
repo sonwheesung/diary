@@ -21,9 +21,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_DE: LegalDoc = {
   title: 'Datenschutzerklärung für Jogak',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio („der Betreiber“) hält das Gesetz zum Schutz personenbezogener Daten und weitere einschlägige Vorschriften ein und verarbeitet die personenbezogenen Daten der Nutzerinnen und Nutzer von „Jogak“ („der Dienst“) wie nachstehend beschrieben. Jogak bewahrt die von dir geschriebenen Tagebucheinträge grundsätzlich auf deinem Gerät auf; an einen Server übermittelt werden sie ausschließlich beim Backup, das du selbst einschaltest, und bei den KI-Zusammenfassungsberichten, die du selbst erstellst. Im Übrigen erheben wir nur die notwendigen Mindestangaben.',
   sections: [

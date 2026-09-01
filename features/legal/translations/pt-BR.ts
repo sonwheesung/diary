@@ -16,9 +16,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_PT_BR: LegalDoc = {
   title: 'Política de Privacidade do Jogak',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'A Vivace Games Studio (“a operadora”) cumpre a Lei de Proteção de Informações Pessoais e demais normas aplicáveis e trata os dados pessoais das pessoas usuárias do “Jogak” (“o serviço”) conforme descrito abaixo. Por princípio, o Jogak guarda no seu dispositivo os registros de diário que você escreve, e eles só são enviados a um servidor em dois casos: o backup que você mesmo ativar e os relatórios de resumo por IA que você mesmo criar. No mais, coletamos apenas as informações mínimas necessárias.',
   sections: [

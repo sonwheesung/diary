@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
   sections: [

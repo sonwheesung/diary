@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
   sections: [

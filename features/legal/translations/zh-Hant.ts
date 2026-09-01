@@ -8,9 +8,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ZH_HANT: LegalDoc = {
   title: 'Jogak 隱私權政策',
-  sourceFingerprint: '4a69870e',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: '59d79fc8',
+  effective: '2026-09-01',
+  updated: '2026-09-01',
   intro:
     'Vivace Games Studio（以下稱「營運者」）遵守《個人資料保護法》等相關法令，依下列方式處理「Jogak」（以下稱「本服務」）使用者的個人資料。Jogak 以將使用者所寫的日記保存在使用者裝置上為原則，僅在使用者親自開啟的備份，以及使用者親自建立的 AI 摘要報告這兩種情形下，日記才會傳送至伺服器。除此之外，我們僅蒐集最少必要資訊。',
   sections: [
