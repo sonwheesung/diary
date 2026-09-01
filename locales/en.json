@@ -373,6 +373,7 @@
     "loadFailed": "Couldn't load your inquiries",
     "emptyBody": "Let us know if anything is unclear or isn't working.",
     "statusOpen": "Received",
+    "statusReviewing": "In review",
     "statusReplied": "Answered",
     "statusResolved": "Closed",
     "replyLabel": "Reply",

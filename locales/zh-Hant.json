@@ -373,6 +373,7 @@
     "loadFailed": "無法載入意見回饋紀錄",
     "emptyBody": "有疑問或遇到問題時請告訴我們。",
     "statusOpen": "已受理",
+    "statusReviewing": "確認中",
     "statusReplied": "已回覆",
     "statusResolved": "已處理",
     "replyLabel": "回覆",

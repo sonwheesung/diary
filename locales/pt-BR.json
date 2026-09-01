@@ -373,6 +373,7 @@
     "loadFailed": "Não foi possível carregar suas solicitações",
     "emptyBody": "Conte para nós se algo não estiver claro ou não funcionar.",
     "statusOpen": "Recebida",
+    "statusReviewing": "Em análise",
     "statusReplied": "Respondida",
     "statusResolved": "Encerrada",
     "replyLabel": "Resposta",

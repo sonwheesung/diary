@@ -37,8 +37,20 @@ const CATEGORY_ICONS: Record<SupportCategory, (color: string) => React.ReactNode
   etc: (c) => <MoreHorizontal size={14} color={c} />,
 };
 
-const STATUS_KEYS: Record<MyInquiry['status'], string> = {
+/**
+ * 상태 배지 라벨.
+ *
+ * ⚠ **`status`를 열거형으로 다루지 않는다.** 서버는 상태를 늘릴 수 있고 실제로 늘렸다 —
+ *   2026-09-01 SDK 재복사에 `reviewing`이 딸려 왔고, 그때까지 여기가
+ *   `Record<MyInquiry['status'], string>`이라 **SDK를 옮기자마자 컴파일이 막혔다.**
+ *   그건 서버 계약을 따라온 사람이 고칠 일이 아니다.
+ *
+ * 모르는 값이 오면 **배지를 그리지 않는다.** 카드에는 분류·날짜·본문·답변이 그대로 남아
+ *   빈 칩을 띄우는 것보다 조용하고, 아무 상태나 갖다 붙여 거짓을 말하지도 않는다.
+ */
+const STATUS_KEYS: Record<string, string | undefined> = {
   open: 'inquiries.statusOpen',
+  reviewing: 'inquiries.statusReviewing',
   replied: 'inquiries.statusReplied',
   resolved: 'inquiries.statusResolved',
 };
@@ -194,6 +206,8 @@ function InquiryCard({ item, isNew }: { item: MyInquiry; isNew: boolean }) {
    *   가능하다(운영자가 답변 없이 닫은 경우) — 상태에서 답변 유무를 추론하면 그 칸에서 깨진다.
    */
   const hasReply = item.reply !== null && item.reply.trim().length > 0;
+  // 모르는 상태면 undefined — 배지를 통째로 뺀다(위 STATUS_KEYS 주석).
+  const statusKey = STATUS_KEYS[item.status];
 
   return (
     <Card>
@@ -202,11 +216,13 @@ function InquiryCard({ item, isNew }: { item: MyInquiry; isNew: boolean }) {
           {CATEGORY_ICONS[item.category](colors.accent)}
           <Text style={styles.categoryLabel}>{t(CATEGORY_KEYS[item.category])}</Text>
         </View>
-        <View style={[styles.statusChip, hasReply && styles.statusChipDone]}>
-          <Text style={[styles.statusLabel, hasReply && styles.statusLabelDone]}>
-            {t(STATUS_KEYS[item.status])}
-          </Text>
-        </View>
+        {statusKey !== undefined && (
+          <View style={[styles.statusChip, hasReply && styles.statusChipDone]}>
+            <Text style={[styles.statusLabel, hasReply && styles.statusLabelDone]}>
+              {t(statusKey)}
+            </Text>
+          </View>
+        )}
         {/* 새 답변 표시. 'NEW' 글자를 쓰지 않는다 — 번역이 하나 늘고 언어마다 폭이 달라진다 */}
         {isNew && <View style={styles.newDot} />}
         <Text style={styles.date}>{formatListDate(item.createdAt.slice(0, 10))}</Text>

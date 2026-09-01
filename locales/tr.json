@@ -373,6 +373,7 @@
     "loadFailed": "Talepleriniz yüklenemedi",
     "emptyBody": "Anlaşılmayan veya çalışmayan bir şey varsa bize bildir.",
     "statusOpen": "Alındı",
+    "statusReviewing": "İnceleniyor",
     "statusReplied": "Yanıtlandı",
     "statusResolved": "Kapatıldı",
     "replyLabel": "Yanıt",

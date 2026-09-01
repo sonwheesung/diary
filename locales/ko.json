@@ -373,6 +373,7 @@
     "loadFailed": "문의 내역을 불러오지 못했어요",
     "emptyBody": "궁금한 점이나 불편한 점을 알려주세요.",
     "statusOpen": "접수됨",
+    "statusReviewing": "확인 중",
     "statusReplied": "답변 완료",
     "statusResolved": "처리 완료",
     "replyLabel": "답변",

@@ -373,6 +373,7 @@
     "loadFailed": "No se pudieron cargar tus consultas",
     "emptyBody": "Cuéntanos si algo no está claro o no funciona.",
     "statusOpen": "Recibida",
+    "statusReviewing": "En revisión",
     "statusReplied": "Respondida",
     "statusResolved": "Cerrada",
     "replyLabel": "Respuesta",

@@ -373,6 +373,7 @@
     "loadFailed": "Не удалось загрузить обращения",
     "emptyBody": "Расскажите, если что-то непонятно или не работает.",
     "statusOpen": "Принято",
+    "statusReviewing": "На рассмотрении",
     "statusReplied": "Отвечено",
     "statusResolved": "Закрыто",
     "replyLabel": "Ответ",

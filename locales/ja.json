@@ -373,6 +373,7 @@
     "loadFailed": "お問い合わせ履歴を読み込めませんでした",
     "emptyBody": "ご不明な点や不具合があればお知らせください。",
     "statusOpen": "受付済み",
+    "statusReviewing": "確認中",
     "statusReplied": "回答済み",
     "statusResolved": "対応完了",
     "replyLabel": "回答",

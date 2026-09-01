@@ -1,11 +1,13 @@
 // 공통 서버 클라이언트 SDK.
-// ⚠️ 원본: common_server/client/index.ts 에서 복사 (2026-08-19, `fetchEntitlements({fresh})` 추가본).
+// ⚠️ 원본: common_server/client/index.ts 에서 복사 (2026-09-01, 활성 지표(DAU/WAU/MAU) 추가본).
 //    이 파일은 손으로 고치지 말 것 — 서버 계약이 바뀌면 원본을 갱신하고 다시 복사한다.
 //    (앱 4~5개 규모에선 monorepo·npm 패키지 오버헤드가 이득보다 크다는 판단 — common_server 규약)
 //
-//    2026-08-19 재복사 사유: RC pull 폴백(웹훅 유실 복구). `fresh`는 **결제 직후·복원에서만**
-//    붙인다 — 포그라운드 복귀에 붙이면 서버 쿨다운(6시간)의 존재 이유가 사라진다.
-//    `registerDevice`(2026-08-14)도 함께 따라왔다. 조각은 안 쓰지만 사본은 통째로 맞춘다.
+//    2026-09-01 재복사 사유: `fetchBootstrap()`이 세션을 실어 보낸다 — 서버가 그걸로 활성 일자를
+//    기록한다(DAU). 조각은 부팅 조회가 이미 있고 SecureStore를 주입해 두어 **호출부는 안 건드린다.**
+//    ⚠ 조각은 로그인이 **선택**이라 여기서 잡히는 활성은 "로그인한 사용자" 뿐이다 —
+//      숫자를 전체 사용자로 읽지 않는다(`docs/SUPPORT_SYSTEM.md` §3.1).
+//    함께 따라온 것: `MyInquiry.status`에 `'reviewing'`(types.ts).
 //
 // 이 모듈은 **throw 하지 않는다**. 네트워크가 끊겨 있든 서버가 없든 화면은 조용히 안내만 하면 되므로,
 // 실패를 타입으로 돌려준다(호출부에서 try/catch를 강제하지 않는다).
@@ -26,7 +28,7 @@ import type {
 export type * from './types';
 
 /** 앱에 복사할 때 이 값을 복사본 주석에 남긴다 — 서버 계약이 바뀌었는지 판단하는 유일한 단서다. */
-export const SDK_VERSION = '2026-08-19'; // +fetchEntitlements({fresh}) (RC pull 폴백 — 웹훅 유실 복구)
+export const SDK_VERSION = '2026-09-01'; // fetchBootstrap이 세션을 실어 보낸다(활성 하트비트). 2026-08-24: +MyInquiry.status 'reviewing'
 
 const DEFAULT_TIMEOUT_MS = 10000;
 /** 서버가 요구하는 문의 최소 길이(라우트의 CONTENT_MIN과 같은 값). */
@@ -48,9 +50,7 @@ export function createCommonServer(cfg: CommonServerConfig) {
   async function req(path: string, init?: RequestInit, withAuth = false): Promise<Response | null> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
-    const headers: Record<string, string> = {
-      ...((init?.headers as Record<string, string>) ?? {}),
-    };
+    const headers: Record<string, string> = { ...((init?.headers as Record<string, string>) ?? {}) };
     // 토큰이 없으면 헤더를 붙이지 않는다. 서버는 **헤더가 있는데 무효면 401**이고 익명으로 강등하지 않는다
     // (강등하면 로그인 사용자의 문의가 귀속 없이 저장돼 답변을 영영 못 받는다).
     if (withAuth && token) headers.authorization = `Bearer ${token}`;
@@ -107,18 +107,20 @@ export function createCommonServer(cfg: CommonServerConfig) {
     /**
      * 부팅 조회: 점검 · 버전 게이트 · 활성 공지.
      * 실패해도 앱을 막지 말 것 — 서버가 죽었다고 사용자가 앱을 못 쓰면 안 된다(게이트는 성공했을 때만 적용).
+     *
+     * 세션이 있으면 실어 보낸다 — 서버가 그걸로 **활성 일자**를 기록한다(DAU).
+     * ⚠ 다른 라우트와 달리 여기서만 토큰은 **선택**이다. 서버는 무효한 헤더를 401로 돌려보내지 않고
+     *   조용히 무시한다 — 세션 만료가 진입 게이트(점검·강제업데이트) 판정을 막으면 안 되기 때문이다.
      */
     async fetchBootstrap(): Promise<Result<{ data: Bootstrap }>> {
       if (!baseUrl) return { ok: false, reason: 'not-configured' };
-      const res = await req(`/api/v1/bootstrap?app=${encodeURIComponent(cfg.appCode)}`);
+      await loadToken();
+      const res = await req(`/api/v1/bootstrap?app=${encodeURIComponent(cfg.appCode)}`, undefined, true);
       if (!res) return { ok: false, reason: 'offline' };
       if (!res.ok) return { ok: false, reason: mapFail(res.status) };
       try {
         const j = (await res.json()) as Bootstrap & { ok: boolean };
-        return {
-          ok: true,
-          data: { maintenance: j.maintenance, version: j.version, announcements: j.announcements },
-        };
+        return { ok: true, data: { maintenance: j.maintenance, version: j.version, announcements: j.announcements } };
       } catch {
         return { ok: false, reason: 'error' };
       }
@@ -319,15 +321,8 @@ export function createCommonServer(cfg: CommonServerConfig) {
       }
       if (!res.ok) return { ok: false, reason: mapFail(res.status) };
       try {
-        const j = (await res.json()) as {
-          entitlements?: Record<string, EntitlementView>;
-          checkedAt?: string;
-        };
-        return {
-          ok: true,
-          entitlements: j.entitlements ?? {},
-          checkedAt: j.checkedAt ?? new Date().toISOString(),
-        };
+        const j = (await res.json()) as { entitlements?: Record<string, EntitlementView>; checkedAt?: string };
+        return { ok: true, entitlements: j.entitlements ?? {}, checkedAt: j.checkedAt ?? new Date().toISOString() };
       } catch {
         return { ok: false, reason: 'error' };
       }

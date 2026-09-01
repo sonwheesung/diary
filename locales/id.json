@@ -373,6 +373,7 @@
     "loadFailed": "Tidak dapat memuat pertanyaan Anda",
     "emptyBody": "Beri tahu kami jika ada yang tidak jelas atau tidak berfungsi.",
     "statusOpen": "Diterima",
+    "statusReviewing": "Sedang ditinjau",
     "statusReplied": "Dijawab",
     "statusResolved": "Selesai",
     "replyLabel": "Jawaban",

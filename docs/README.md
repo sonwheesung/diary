@@ -147,7 +147,8 @@
 |---|---|---|
 | Metro `server/` blockList | ✅ | 선반영 완료 |
 | common_server `apps`에 `jogak` 등록 | ✅ | 2026-08-13 정정 — `bootstrap?app=jogak`이 **200**이다(2026-08-11 실측) |
-| common_server SDK 복사 | ✅ | 2026-08-13 정정 — `lib/common-server/{client,index,types}.ts` |
+| common_server SDK 복사 | ✅ | `lib/common-server/{client,index,types}.ts`. **원본 `2026-09-01`**(활성 지표). 이제 본문이 원본과 **바이트로 같다** — `.prettierignore`에 넣어 형식 diff를 없앴다([`SUPPORT_SYSTEM.md`](./SUPPORT_SYSTEM.md) §2에 대조 명령) |
+| **활성 지표(DAU/WAU/MAU)** | ⚠ | 2026-09-01 — `fetchBootstrap()`이 세션을 실어 보낸다. 호출부 변경 0. 🔴 **로그인이 선택이라 비로그인 사용자는 안 잡힌다** — 숫자를 "조각 전체 활성"으로 읽지 않는다([`SUPPORT_SYSTEM.md`](./SUPPORT_SYSTEM.md) §3.1) |
 | **common_server Phase 7**(subjects·토큰) | ✅ | 2026-08-13 정정 — 로그인·문의·탈퇴가 실제로 돈다 |
 | **common_server Phase 9**(RevenueCat) | ✅ | 2026-08-13 정정 — 2026-08-10 완료(결제 가드 37/37). ⏭ 남은 것은 RC 대시보드 상품 import·attach |
 | 조각 서버(Next.js) 생성 | ✅ | 2026-08-13 정정 — 배포됨. 백업 6 라우트 + `cron/reap` + `ai/report` |

@@ -13,3 +13,10 @@ package-lock.json
 # 원래 모양으로 돌아가 **없는 변경이 계속 잡힌다**(2026-08-13에 실제로 겪음).
 # 게시되는 법적 문서라 형식 diff로 내용 diff를 가리는 것도 위험하다.
 docs/*.html
+
+# 복사본이다 — common_server/client/ 에서 그대로 가져온다(SUPPORT_SYSTEM §2).
+# Prettier가 재정렬하면 원본과 `diff`가 통째로 어긋나 **실제 계약 변경이 형식 diff에 묻힌다**
+# (2026-09-01 재복사 때 겪음 — 364줄 전부가 바뀐 것처럼 보였고 실제 변경은 3곳이었다).
+# `eslint.config.js`가 같은 두 파일만 린트에서 빼는 것과 같은 이유다.
+lib/common-server/index.ts
+lib/common-server/types.ts

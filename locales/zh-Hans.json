@@ -373,6 +373,7 @@
     "loadFailed": "无法加载反馈记录",
     "emptyBody": "有疑问或遇到问题时请告诉我们。",
     "statusOpen": "已受理",
+    "statusReviewing": "确认中",
     "statusReplied": "已回复",
     "statusResolved": "已处理",
     "replyLabel": "回复",

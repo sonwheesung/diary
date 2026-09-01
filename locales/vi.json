@@ -373,6 +373,7 @@
     "loadFailed": "Không tải được yêu cầu của bạn",
     "emptyBody": "Hãy cho chúng tôi biết nếu có điều gì chưa rõ hoặc không hoạt động.",
     "statusOpen": "Đã tiếp nhận",
+    "statusReviewing": "Đang xem xét",
     "statusReplied": "Đã trả lời",
     "statusResolved": "Đã xử lý",
     "replyLabel": "Trả lời",

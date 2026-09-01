@@ -373,6 +373,7 @@
     "loadFailed": "Deine Anfragen konnten nicht geladen werden",
     "emptyBody": "Sag uns Bescheid, wenn etwas unklar ist oder nicht funktioniert.",
     "statusOpen": "Eingegangen",
+    "statusReviewing": "In Prüfung",
     "statusReplied": "Beantwortet",
     "statusResolved": "Abgeschlossen",
     "replyLabel": "Antwort",

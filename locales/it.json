@@ -373,6 +373,7 @@
     "loadFailed": "Impossibile caricare le tue richieste",
     "emptyBody": "Facci sapere se qualcosa non è chiaro o non funziona.",
     "statusOpen": "Ricevuta",
+    "statusReviewing": "In esame",
     "statusReplied": "Risposta inviata",
     "statusResolved": "Chiusa",
     "replyLabel": "Risposta",
