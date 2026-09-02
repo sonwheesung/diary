@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'Vivace Games Studio (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
   sections: [
@@ -65,12 +65,13 @@ export const PRIVACY_ID: LegalDoc = {
         '⚠ Ringkasan ditulis berdasarkan catatanmu, sehingga isi catatan itu dapat termuat di dalamnya.',
         '• Persetujuan terpisah untuk informasi sensitif: catatan harian dapat memuat informasi sensitif seperti kondisi kesehatan atau psikologis sebagaimana dimaksud Pasal 23 Undang-Undang Perlindungan Informasi Pribadi. Karena laporan ringkasan AI memproses isi tersebut tanpa enkripsi, kami meminta persetujuan terpisah untuk pemrosesan informasi sensitif saat kamu pertama kali menggunakan fitur ini. Persetujuan ini terpisah dari persetujuan transfer ke luar negeri pada bagian 6, dan kamu dapat memilih masing-masing secara sendiri-sendiri.',
         'Meski tidak menyetujuinya, semua fitur selain laporan AI tetap dapat kamu gunakan seperti biasa. Laporan hanya dibuat ketika kamu sendiri membuatnya dan tidak pernah dibuat secara otomatis.',
-        'f. Saat Anda membuka aplikasi (baik masuk maupun tidak)',
+        'f. Saat Anda membuka aplikasi atau kembali ke aplikasi (baik masuk maupun tidak)',
         '• Pengidentifikasi perangkat — nilai acak yang dibuat di perangkat Anda saat aplikasi pertama kali dijalankan. Ini bukan nomor seri perangkat maupun pengidentifikasi iklan, dan akan hilang bila aplikasi dihapus.',
         '  — Dasar pengumpulan: Pasal 15(1)6 Undang-Undang Perlindungan Data Pribadi (kepentingan sah untuk mengoperasikan dan meningkatkan layanan)',
         '  — Tujuan penggunaan: statistik penggunaan layanan (berapa banyak orang menggunakan aplikasi pada berapa hari)',
         '※ Nilai ini tidak dapat menunjukkan siapa Anda dan tidak dikaitkan dengan isi catatan Anda.',
         '※ Jika Anda belum memenuhi batas usia di atas, nilai ini tidak dibuat maupun dikirimkan.',
+        '※ Tanggal penggunaan dicatat saat Anda membuka aplikasi dan saat Anda kembali ke aplikasi (paling cepat setiap lima menit). Jika Anda masuk, pencatatan dilakukan pada akun Anda, bukan pada identifikasi perangkat ini, agar satu orang tidak terhitung dua kali.',
       ],
     },
     {
@@ -202,6 +203,7 @@ export const PRIVACY_ID: LegalDoc = {
         '• 2026-08-12 pengumuman perubahan mendatang — rencana penerapan laporan ringkasan AI (teks utama belum berubah)',
         '• 2026-08-23 revisi — kedua pengumuman di atas telah dimasukkan ke dalam teks utama. Pemrosesan yang berkaitan dengan langganan bulanan, pencadangan/pemulihan, dan laporan ringkasan AI ditambahkan ke bagian 1, 2, 3, 4, 6, 8, 9, dan 10.',
         '• 2026-09-01 perubahan — pengumpulan pengidentifikasi perangkat untuk statistik penggunaan layanan (penghitungan pengguna aktif) ditambahkan pada butir 2, 3, dan 4, serta pemberitahuan verifikasi usia pada butir 2 diperluas.',
+        '• 2026-09-02 perubahan — pada pasal 2 dijelaskan bahwa tanggal penggunaan dicatat tidak hanya saat aplikasi dibuka, tetapi juga saat Anda kembali ke aplikasi (paling cepat setiap lima menit), dan bahwa pencatatan dilakukan pada akun Anda, bukan identifikasi perangkat, jika Anda masuk.',
       ],
     },
   ],

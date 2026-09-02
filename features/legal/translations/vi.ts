@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'Vivace Games Studio (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
   sections: [
@@ -65,12 +65,13 @@ export const PRIVACY_VI: LegalDoc = {
         '⚠ Bản tóm tắt được viết dựa trên nhật ký của bạn nên có thể chứa nội dung nhật ký.',
         '• Đồng ý riêng đối với thông tin nhạy cảm: nhật ký có thể chứa thông tin nhạy cảm như tình trạng sức khoẻ hoặc tâm lý theo Điều 23 Luật Bảo vệ thông tin cá nhân. Vì báo cáo tóm tắt bằng AI xử lý nội dung đó ở dạng không mã hoá, chúng tôi lấy sự đồng ý riêng cho việc xử lý thông tin nhạy cảm khi bạn dùng tính năng lần đầu. Sự đồng ý này tách biệt với đồng ý chuyển ra nước ngoài ở mục 6, và bạn có thể chọn riêng từng mục.',
         'Dù không đồng ý, bạn vẫn dùng được đầy đủ mọi tính năng ngoài báo cáo AI. Báo cáo chỉ được tạo khi chính bạn tạo và không bao giờ được tạo tự động.',
-        'f. Khi bạn mở ứng dụng (dù có đăng nhập hay không)',
+        'f. Khi bạn mở ứng dụng hoặc quay lại ứng dụng (dù có đăng nhập hay không)',
         '• Mã định danh thiết bị — một giá trị ngẫu nhiên được tạo trên thiết bị của bạn khi ứng dụng chạy lần đầu. Đây không phải số sê-ri thiết bị hay mã định danh quảng cáo, và sẽ biến mất khi bạn gỡ ứng dụng.',
         '  — Căn cứ thu thập: Điều 15(1)6 Luật Bảo vệ Thông tin Cá nhân (lợi ích chính đáng trong việc vận hành và cải thiện dịch vụ)',
         '  — Mục đích sử dụng: thống kê sử dụng dịch vụ (bao nhiêu người dùng ứng dụng trong bao nhiêu ngày)',
         '※ Giá trị này không cho biết bạn là ai và không được liên kết với nội dung nhật ký của bạn.',
         '※ Nếu bạn chưa đạt ngưỡng tuổi nêu trên, giá trị này không được tạo ra và cũng không được truyền đi.',
+        '※ Ngày sử dụng được ghi nhận khi bạn mở ứng dụng và khi bạn quay lại ứng dụng (tối thiểu cách nhau năm phút). Nếu bạn đã đăng nhập, ngày sử dụng được ghi theo tài khoản của bạn thay vì mã nhận dạng thiết bị này, để một người không bị tính hai lần.',
       ],
     },
     {
@@ -202,6 +203,7 @@ export const PRIVACY_VI: LegalDoc = {
         '• 2026-08-12 đăng thông báo sửa đổi sắp áp dụng — dự kiến bổ sung tính năng báo cáo tóm tắt bằng AI (nội dung chính chưa thay đổi)',
         '• 2026-08-23 sửa đổi — hai thông báo trên đã được đưa vào nội dung chính. Việc xử lý liên quan đến gói đăng ký hằng tháng, sao lưu/khôi phục và báo cáo tóm tắt bằng AI được bổ sung vào các mục 1, 2, 3, 4, 6, 8, 9 và 10.',
         '• 2026-09-01 sửa đổi — đã bổ sung vào mục 2, 3 và 4 việc thu thập mã định danh thiết bị phục vụ thống kê sử dụng dịch vụ (đếm người dùng hoạt động), và mở rộng thông báo xác minh độ tuổi tại mục 2.',
+        '• 2026-09-02 sửa đổi — tại Điều 2 đã nêu rõ rằng ngày sử dụng được ghi nhận không chỉ khi mở ứng dụng mà còn khi bạn quay lại ứng dụng (tối thiểu cách nhau năm phút), và rằng nếu bạn đã đăng nhập thì ngày đó được ghi theo tài khoản thay vì mã nhận dạng thiết bị.',
       ],
     },
   ],

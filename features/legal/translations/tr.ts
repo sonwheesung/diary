@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'Vivace Games Studio (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
   sections: [
@@ -65,12 +65,13 @@ export const PRIVACY_TR: LegalDoc = {
         '⚠ Özet, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir.',
         '• Hassas bilgiler için ayrı rıza: bir günlük, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruhsal durum gibi hassas bilgiler içerebilir. Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında hassas bilgilerin işlenmesine ilişkin ayrı bir rıza alırız. Bu rıza, 6. bölümdeki yurt dışına aktarım rızasından ayrıdır ve her birini ayrı ayrı seçebilirsin.',
         'Rıza vermesen de yapay zekâ raporları dışındaki tüm özellikleri aynen kullanabilirsin. Raporlar yalnızca sen oluşturduğunda üretilir ve asla kendiliğinden oluşturulmaz.',
-        'f. Uygulamayı açtığınızda (oturum açmış olun ya da olmayın)',
+        'f. Uygulamayı açtığınızda veya uygulamaya geri döndüğünüzde (oturum açmış olun ya da olmayın)',
         '• Cihaz tanımlayıcısı — uygulama ilk çalıştığında cihazınızda rastgele oluşturulan bir değerdir. Cihaz seri numarası veya reklam tanımlayıcısı değildir ve uygulamayı kaldırdığınızda silinir.',
         '  — Toplama dayanağı: Kişisel Bilgilerin Korunması Kanunu 15(1)6. maddesi (hizmeti işletme ve iyileştirmedeki meşru menfaat)',
         '  — Kullanım amacı: hizmet kullanım istatistikleri (kaç kişinin uygulamayı kaç gün kullandığı)',
         '※ Bu değerden kim olduğunuz anlaşılamaz ve günlük içeriğinizle ilişkilendirilmez.',
         '※ Yukarıdaki yaş eşiğini karşılamıyorsanız bu değer ne oluşturulur ne de iletilir.',
+        '※ Kullanım tarihi, uygulamayı başlattığınızda ve uygulamaya geri döndüğünüzde (en fazla beş dakikada bir) kaydedilir. Oturum açmışsanız bu cihaz tanımlayıcısı yerine hesabınıza kaydedilir; böylece aynı kişi iki kez sayılmaz.',
       ],
     },
     {
@@ -202,6 +203,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• 2026-08-12 yaklaşan değişiklik yayımlandı — yapay zekâ özet raporu özelliğinin getirilmesi planlanıyor (ana metin henüz değişmedi)',
         '• 2026-08-23 değişiklik — yukarıdaki iki duyuru ana metne işlendi. Aylık abonelik, yedekleme/geri yükleme ve yapay zekâ özet raporlarına ilişkin işleme faaliyetleri 1, 2, 3, 4, 6, 8, 9 ve 10. bölümlere eklendi.',
         '• 2026-09-01 değişiklik — hizmet kullanım istatistikleri (etkin kullanıcı sayımı) için cihaz tanımlayıcısı toplanması 2., 3. ve 4. maddelere eklendi ve 2. maddedeki yaş doğrulama bildirimi genişletildi.',
+        '• 2026-09-02 değişiklik — 2. maddede, kullanım tarihinin yalnızca uygulama başlatıldığında değil, uygulamaya geri dönüldüğünde de (en fazla beş dakikada bir) kaydedildiği ve oturum açılmışsa cihaz tanımlayıcısı yerine hesaba kaydedildiği belirtilmiştir.',
       ],
     },
   ],

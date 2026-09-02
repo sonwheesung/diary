@@ -16,9 +16,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_PT_BR: LegalDoc = {
   title: 'Política de Privacidade do Jogak',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'A Vivace Games Studio (“a operadora”) cumpre a Lei de Proteção de Informações Pessoais e demais normas aplicáveis e trata os dados pessoais das pessoas usuárias do “Jogak” (“o serviço”) conforme descrito abaixo. Por princípio, o Jogak guarda no seu dispositivo os registros de diário que você escreve, e eles só são enviados a um servidor em dois casos: o backup que você mesmo ativar e os relatórios de resumo por IA que você mesmo criar. No mais, coletamos apenas as informações mínimas necessárias.',
   sections: [
@@ -71,12 +71,13 @@ export const PRIVACY_PT_BR: LegalDoc = {
         '⚠ O resumo é escrito a partir dos seus registros, portanto pode conter o conteúdo do seu diário.',
         '• Consentimento específico para informações sensíveis: um diário pode conter informações sensíveis, como estado de saúde ou psicológico, nos termos do art. 23 da Lei de Proteção de Informações Pessoais. Como os relatórios de resumo por IA tratam esse conteúdo sem criptografia, coletamos um consentimento específico para o tratamento de informações sensíveis na primeira vez que você usa o recurso. Esse consentimento é separado do consentimento de transferência internacional da seção 6, e você pode escolher cada um de forma independente.',
         'Mesmo que você não consinta, pode continuar usando normalmente todas as funções, exceto os relatórios por IA. Os relatórios só são gerados quando você mesmo os cria; nunca são gerados automaticamente.',
-        'f. Quando você abre o app (estando ou não com login)',
+        'f. Quando você abre o app ou volta para ele (estando ou não com login)',
         '• Identificador de dispositivo — um valor aleatório criado no seu aparelho na primeira execução do app. Não é número de série do aparelho nem identificador de publicidade, e desaparece quando o app é desinstalado.',
         '  — Base legal: artigo 15(1)6 da Lei de Proteção de Dados Pessoais (interesse legítimo em operar e aprimorar o serviço)',
         '  — Finalidade: estatísticas de uso do serviço (quantas pessoas usam o app em quantos dias)',
         '※ Esse valor não permite saber quem você é e não é vinculado ao conteúdo das suas entradas.',
         '※ Se você não atingir o limite de idade acima, esse valor não é criado nem transmitido.',
+        '※ A data de uso é registrada quando você abre o app e quando volta para ele (no máximo uma vez a cada cinco minutos). Se você estiver com login, ela é registrada na sua conta em vez desse identificador de dispositivo, para que a mesma pessoa não seja contada duas vezes.',
       ],
     },
     {
@@ -208,6 +209,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
         '• 2026-08-12 publicação de alteração prevista — previsão de introduzir os relatórios de resumo por IA (o texto principal ainda não mudou)',
         '• 2026-08-23 alteração — as duas alterações previstas acima foram incorporadas ao texto principal. O tratamento relativo à assinatura mensal, ao backup/restauração e aos relatórios de resumo por IA foi acrescentado às seções 1, 2, 3, 4, 6, 8, 9 e 10.',
         '• 2026-09-01 alteração — foi acrescentada aos itens 2, 3 e 4 a coleta de um identificador de dispositivo para estatísticas de uso do serviço (contagem de usuários ativos), e o aviso de verificação de idade do item 2 foi ampliado.',
+        '• 2026-09-02 alteração — no item 2 ficou esclarecido que a data de uso é registrada não só ao abrir o app, mas também ao voltar para ele (no máximo uma vez a cada cinco minutos), e que ela é registrada na sua conta em vez do identificador de dispositivo quando você está com login.',
       ],
     },
   ],

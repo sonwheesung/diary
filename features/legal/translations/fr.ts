@@ -20,9 +20,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_FR: LegalDoc = {
   title: 'Politique de confidentialité de Jogak',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'Vivace Games Studio (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Par principe, Jogak conserve sur votre appareil les entrées de journal que vous écrivez ; celles-ci ne sont transmises à un serveur que dans deux cas : la sauvegarde que vous activez vous-même et les rapports de synthèse par IA que vous créez vous-même. Pour le reste, nous ne recueillons que le minimum d’informations.',
   sections: [
@@ -75,12 +75,13 @@ export const PRIVACY_FR: LegalDoc = {
         '⚠ La synthèse est rédigée à partir de vos entrées ; elle peut donc contenir le contenu de votre journal.',
         '• Consentement distinct pour les informations sensibles : un journal peut contenir des informations sensibles, telles que l’état de santé ou psychologique, au sens de l’art. 23 de la loi sur la protection des informations personnelles. Les rapports de synthèse par IA traitant ce contenu non chiffré, nous recueillons un consentement distinct au traitement des informations sensibles lors de votre première utilisation de la fonctionnalité. Ce consentement est distinct du consentement au transfert hors du pays de la section 6, et vous pouvez choisir chacun séparément.',
         'Même si vous ne le donnez pas, vous pouvez continuer à utiliser normalement toutes les fonctionnalités autres que les rapports par IA. Les rapports ne sont générés que lorsque vous les créez vous-même ; ils ne le sont jamais automatiquement.',
-        'f. Lorsque vous lancez l’application (que vous soyez connecté ou non)',
+        'f. Lorsque vous lancez l’application ou y revenez (que vous soyez connecté ou non)',
         '• Identifiant d’appareil — une valeur aléatoire créée sur votre appareil au premier lancement de l’application. Ce n’est ni un numéro de série matériel ni un identifiant publicitaire, et il disparaît lorsque vous désinstallez l’application.',
         '  — Base légale : article 15(1)6 de la loi sur la protection des données personnelles (intérêt légitime à exploiter et améliorer le service)',
         '  — Finalité : statistiques d’utilisation du service (combien de personnes utilisent l’application et combien de jours)',
         '※ Cette valeur ne permet pas de savoir qui vous êtes et n’est pas reliée au contenu de vos entrées.',
         '※ Si vous n’atteignez pas le seuil d’âge ci-dessus, cette valeur n’est ni créée ni transmise.',
+        '※ La date d’utilisation est enregistrée au lancement de l’application et lorsque vous y revenez (au plus une fois toutes les cinq minutes). Si vous êtes connecté, elle est enregistrée sur votre compte plutôt que sur cet identifiant d’appareil, afin qu’une même personne ne soit pas comptée deux fois.',
       ],
     },
     {
@@ -212,6 +213,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• 2026-08-12 publication d’une modification à venir — introduction prévue des rapports de synthèse par IA (le texte principal n’a pas encore changé)',
         '• 2026-08-23 modification — les deux modifications annoncées ci-dessus ont été intégrées au texte principal. Le traitement relatif à l’abonnement mensuel, à la sauvegarde/restauration et aux rapports de synthèse par IA a été ajouté aux sections 1, 2, 3, 4, 6, 8, 9 et 10.',
         '• 2026-09-01 modification — la collecte d’un identifiant d’appareil à des fins de statistiques d’utilisation du service (comptage des utilisateurs actifs) a été ajoutée aux articles 2, 3 et 4, et l’avis de vérification de l’âge de l’article 2 a été élargi.',
+        '• 2026-09-02 modification — l’article 2 précise désormais que la date d’utilisation est enregistrée non seulement au lancement de l’application mais aussi lorsque vous y revenez (au plus une fois toutes les cinq minutes), et qu’elle est enregistrée sur votre compte plutôt que sur l’identifiant d’appareil lorsque vous êtes connecté.',
       ],
     },
   ],

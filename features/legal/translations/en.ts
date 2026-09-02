@@ -16,9 +16,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_EN: LegalDoc = {
   title: 'Jogak Privacy Policy',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'Vivace Games Studio ("the operator") complies with the Personal Information Protection Act and other applicable laws, and handles the personal data of users of "Jogak" ("the service") as set out below. As a matter of principle Jogak keeps the entries you write on your own device; entries are sent to a server only for the backup you turn on yourself and the AI summary reports you create yourself. Apart from that we collect only the minimum information necessary.',
   sections: [
@@ -71,12 +71,13 @@ export const PRIVACY_EN: LegalDoc = {
         '⚠ A summary is written on the basis of your entries, so diary content may appear within it.',
         '• Separate consent for sensitive information: entries may contain sensitive information such as health or psychological state, as defined in article 23 of the Personal Information Protection Act. Because AI summary reports process that content unencrypted, we take separate consent for the processing of sensitive information the first time you use the feature. This consent is separate from the consent to transfer abroad in section 6, and you may choose each independently.',
         'Even if you do not consent, every feature other than AI reports remains fully available. Reports are generated only when you create them yourself, never automatically.',
-        'f. When you launch the app (whether or not you are signed in)',
+        'f. When you launch the app or bring it back to the foreground (whether or not you are signed in)',
         '• Device identifier — a random value created on your device the first time the app runs. It is not a hardware serial number or an advertising identifier, and it disappears when you uninstall the app.',
         '  — Legal basis: Article 15(1)6 of the Personal Information Protection Act (legitimate interest in operating and improving the service)',
         '  — Purpose: service-usage statistics (how many people use the app on how many days)',
         '※ This value cannot tell who you are and is not linked to your entries.',
         '※ If you are below the age threshold above, this value is neither created nor transmitted.',
+        '※ The date of use is recorded when you launch the app and when you bring it back to the foreground (at most once every five minutes). If you are signed in, it is recorded against your account instead of this device identifier, so that one person is not counted twice.',
       ],
     },
     {
@@ -208,6 +209,7 @@ export const PRIVACY_EN: LegalDoc = {
         '• 2026-08-12 upcoming amendment posted — AI summary reports to be introduced (the main text has not changed yet)',
         '• 2026-08-23 amended — the two amendments above have been carried into the main text. Processing relating to the monthly subscription, backup/restore and AI summary reports has been added to sections 1, 2, 3, 4, 6, 8, 9 and 10.',
         '• 2026-09-01 amended — collection of a device identifier for service-usage statistics (active-user counts) was added to Sections 2, 3 and 4, and the age-verification notice in Section 2 was broadened.',
+        '• 2026-09-02 amendment — Article 2 now states that the date of use is recorded not only when the app is launched but also when it is brought back to the foreground (at most once every five minutes), and that it is recorded against your account instead of the device identifier while you are signed in.',
       ],
     },
   ],

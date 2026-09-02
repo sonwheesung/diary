@@ -21,9 +21,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_DE: LegalDoc = {
   title: 'Datenschutzerklärung für Jogak',
-  sourceFingerprint: '59d79fc8',
-  effective: '2026-09-01',
-  updated: '2026-09-01',
+  sourceFingerprint: '4afb6156',
+  effective: '2026-09-02',
+  updated: '2026-09-02',
   intro:
     'Vivace Games Studio („der Betreiber“) hält das Gesetz zum Schutz personenbezogener Daten und weitere einschlägige Vorschriften ein und verarbeitet die personenbezogenen Daten der Nutzerinnen und Nutzer von „Jogak“ („der Dienst“) wie nachstehend beschrieben. Jogak bewahrt die von dir geschriebenen Tagebucheinträge grundsätzlich auf deinem Gerät auf; an einen Server übermittelt werden sie ausschließlich beim Backup, das du selbst einschaltest, und bei den KI-Zusammenfassungsberichten, die du selbst erstellst. Im Übrigen erheben wir nur die notwendigen Mindestangaben.',
   sections: [
@@ -76,12 +76,13 @@ export const PRIVACY_DE: LegalDoc = {
         '⚠ Die Zusammenfassung wird auf Grundlage deines Tagebuchs verfasst und kann daher Tagebuchinhalte enthalten.',
         '• Gesonderte Einwilligung für sensible Daten: Ein Tagebuch kann sensible Daten wie Gesundheits- oder psychische Zustände im Sinne von Art. 23 des Gesetzes zum Schutz personenbezogener Daten enthalten. Da KI-Zusammenfassungsberichte diesen Inhalt unverschlüsselt verarbeiten, holen wir bei der ersten Nutzung der Funktion eine gesonderte Einwilligung zur Verarbeitung sensibler Daten ein. Diese Einwilligung ist von der Einwilligung zur Übermittlung ins Ausland nach Abschnitt 6 getrennt; du kannst beide unabhängig voneinander wählen.',
         'Auch ohne Einwilligung bleiben alle Funktionen außer den KI-Berichten vollständig nutzbar. Berichte entstehen nur, wenn du sie selbst erstellst; sie werden nie automatisch erzeugt.',
-        'f. Wenn du die App startest (angemeldet oder nicht)',
+        'f. Wenn du die App startest oder zu ihr zurückkehrst (angemeldet oder nicht)',
         '• Gerätekennung — ein Zufallswert, der beim ersten Start der App auf deinem Gerät erzeugt wird. Sie ist weder eine Hardware-Seriennummer noch eine Werbe-ID und verschwindet, wenn du die App deinstallierst.',
         '  — Rechtsgrundlage: Artikel 15 Abs. 1 Nr. 6 des Personal Information Protection Act (berechtigtes Interesse am Betrieb und an der Verbesserung des Dienstes)',
         '  — Zweck: Nutzungsstatistiken (wie viele Menschen die App an wie vielen Tagen nutzen)',
         '※ Aus diesem Wert lässt sich nicht ableiten, wer du bist; er wird nicht mit deinen Einträgen verknüpft.',
         '※ Liegst du unter der oben genannten Altersgrenze, wird dieser Wert weder erzeugt noch übermittelt.',
+        '※ Der Nutzungstag wird beim Start der App und bei der Rückkehr zur App erfasst (höchstens alle fünf Minuten). Wenn du angemeldet bist, wird er deinem Konto statt dieser Gerätekennung zugeordnet, damit eine Person nicht doppelt gezählt wird.',
       ],
     },
     {
@@ -213,6 +214,7 @@ export const PRIVACY_DE: LegalDoc = {
         '• 2026-08-12 Ankündigung einer Änderung veröffentlicht — geplante Einführung der KI-Zusammenfassungsberichte (der Haupttext ist noch unverändert)',
         '• 2026-08-23 Änderung — die beiden vorstehenden Ankündigungen wurden in den Haupttext übernommen. Die Verarbeitung zu Monatsabo, Backup/Wiederherstellung und KI-Zusammenfassungsberichten wurde in die Abschnitte 1, 2, 3, 4, 6, 8, 9 und 10 aufgenommen.',
         '• 2026-09-01 Änderung — die Erhebung einer Gerätekennung für Nutzungsstatistiken (Zählung aktiver Nutzer) wurde in Abschnitt 2, 3 und 4 aufgenommen, und der Hinweis zur Altersprüfung in Abschnitt 2 wurde erweitert.',
+        '• 2026-09-02 Änderung — In Abschnitt 2 wird nun klargestellt, dass der Nutzungstag nicht nur beim Start der App, sondern auch bei der Rückkehr zur App erfasst wird (höchstens alle fünf Minuten), und dass er bei angemeldeten Nutzern dem Konto statt der Gerätekennung zugeordnet wird.',
       ],
     },
   ],
