@@ -199,6 +199,11 @@ ok(toDeviceSessionKey(toDeviceSessionKey('cs_session_jogak')) === 'cs_devsession
 //
 // ⚠ 순수 계층이 아니라 **소스를 읽는다.** RN 런타임을 못 부르므로 이게 여기서 가능한 최선이고,
 //   실기기 확인으로 남는 것은 "리스너가 실제로 발사되는가" 하나다.
+//
+// ⚠ **파괴 테스트는 깨끗한 트리에서 한다.** 처음 떄모드 때 `git checkout -- <파일>` 로 되돌렸는데 그함께
+//   커밋 안 된 작업까지 날아가, 이후 입력이 전부 *"beat() 가 사라졌다"* 로 물려 **둘이 자기 단언으로
+//   실패하는지를 못 봤다**(`.catch()` · `activeServer()` 경유). 커밋 뒤 다시 재서 — 둘 다 정확히 물었다.
+//   🔴 교훈: **가드가 욬다는 것과 우리가 재려던 것 때문에 욬다는 것은 다르다.**
 
 const clientSrc = readFileSync(new URL('../lib/common-server/client.ts', import.meta.url), 'utf8');
 const beatAt = clientSrc.indexOf('export async function beat(');
