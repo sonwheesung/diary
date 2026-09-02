@@ -9,6 +9,8 @@
  *   ② 지역표에서 나라가 빠지는 것 — EEA 한 나라가 빠지면 그 나라만 16 대신 13이 된다.
  *      눈으로는 32개 문자열을 못 센다.
  */
+import { readFileSync } from 'node:fs';
+
 import {
   AGE_GATE_VERSION,
   FALLBACK_THRESHOLD,
@@ -185,6 +187,42 @@ ok(toDeviceSessionKey('x_cs_session_jogak') === 'x_cs_session_jogak', '접두사
 
 // 멱등이 아니어야 한다 — 두 번 적용해도 로그인 칸으로 돌아오면 안 된다
 ok(toDeviceSessionKey(toDeviceSessionKey('cs_session_jogak')) === 'cs_devsession_jogak', '두 번 매핑하면 값이 달라진다');
+
+// ── ⑥ 활성 하트비트가 게이트를 밟지 않는가 — **소스 검사** ────────────────────
+//
+// 여기 있는 이유 둘:
+//   ① `beat()` 가 세션을 만들면 미달자에게 UUID 가 발급된다 = **게이트 우회**. ①~⑤ 와 같은 증상이다.
+//   ② 하트비트 호출처가 둘이 되면 로그인한 사람이 하루에 subject 두 행을 찍는다.
+//      2026-09-02 에 common_server 쪽이 *"기기 세션으로 고정하라"* 고 권고했는데 그건
+//      **인스턴스가 하나인 형제 앱 전제**였다 — 조각에 그대로 적용하면 매일 2중 계상이다.
+//      한 번 실제로 들어온 권고라 문자열 검사만으로도 값을 한다(docs/SUPPORT_SYSTEM.md §3.1).
+//
+// ⚠ 순수 계층이 아니라 **소스를 읽는다.** RN 런타임을 못 부르므로 이게 여기서 가능한 최선이고,
+//   실기기 확인으로 남는 것은 "리스너가 실제로 발사되는가" 하나다.
+
+const clientSrc = readFileSync(new URL('../lib/common-server/client.ts', import.meta.url), 'utf8');
+const beatAt = clientSrc.indexOf('export async function beat(');
+ok(beatAt >= 0, 'beat() 가 사라졌다');
+const beatBody = clientSrc.slice(beatAt, clientSrc.indexOf('\n}', beatAt));
+
+ok(!beatBody.includes('ensureDeviceSession'), '🔴 beat() 가 세션을 만든다 — 미달자에게 식별자가 발급된다');
+ok(!beatBody.includes('registerDevice'), '🔴 beat() 가 기기를 등록한다 — 게이트 경계가 무너졌다');
+ok(beatBody.includes('activeServer'), 'beat() 가 activeServer() 를 안 거친다');
+
+// 인스턴스를 직접 지목한 하트비트가 있으면 안 된다 — 규칙은 activeServer() 한 곳에만 산다
+const appSrc = ['../app/_layout.tsx', '../features/notice/store.ts']
+  .map((f) => readFileSync(new URL(f, import.meta.url), 'utf8'))
+  .join('\n');
+const outsideBeat = clientSrc.slice(0, beatAt);
+ok(!/(commonServer|deviceServer)\s*\.\s*heartbeat/.test(appSrc + outsideBeat),
+  '🔴 인스턴스를 직접 지목한 heartbeat 호출이 있다 — activeServer() 를 거쳐야 한다');
+ok(!/deviceServer\s*\.\s*fetchBootstrap/.test(appSrc),
+  '🔴 부팅 조회가 기기 인스턴스로 고정됐다 — 로그인한 사람이 매일 2중 계상된다');
+// ⚠ `beat()` 는 주석에도 나온다(문서화된 계약이라 그래야 한다) — **호출 형태**로 좁힌다.
+//   단어 경계로 셈다가 주석 한 줄을 호출로 세어 실제로 한 번 잘못 실패했다.
+ok((appSrc.match(/void\s+beat\(\)/g) ?? []).length === 1, '하트비트 호출처가 하나가 아니다');
+ok(!/beat\(\)\s*\.\s*catch/.test(appSrc), 'beat() 에 .catch() 를 붙였다 — 계약상 던지지 않는다');
+
 
 // ── 결과 ────────────────────────────────────────────────────────────────────
 if (fails.length > 0) {

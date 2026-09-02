@@ -9,7 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initializeAds } from '@/features/ads/api/ads';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { bootGateDecision } from '@/features/auth/api/age-store';
-import { ensureDeviceSession } from '@/lib/common-server/client';
+import { beat, ensureDeviceSession } from '@/lib/common-server/client';
 import { AgeGateScreen } from '@/features/auth/components/AgeGateScreen';
 import { requestAgeVerification } from '@/features/auth/gate-store';
 import { LockGate } from '@/features/lock/components/LockGate';
@@ -87,6 +87,15 @@ export default function RootLayout() {
        * ⚠ 위 30초 스로틀 **안쪽**이다 — 앱 전환이 잦아도 재예약이 쏟아지지 않는다.
        */
       void syncReminders();
+      /*
+       * 활성 하트비트(`docs/SUPPORT_SYSTEM.md` §3.1 · SDK `2026-09-02`).
+       *
+       * 🔴 **리스너를 새로 만들지 않고 여기 얹는다.** 조각은 인스턴스가 둘이라(로그인 칸·기기 칸)
+       *   따로 붙이면 같은 사람이 두 번 세어지고, SDK 쿨다운은 **인스턴스별 클로저**라 서로를 못 막는다.
+       * ⚠ 위 30초 스로틀 안쪽이지만 손해가 없다 — 하트비트 쿨다운이 5분이라 더 촘촘하다.
+       * 🚫 `.catch()` 를 붙이지 않는다 — `beat()` 가 이미 계약상 던지지 않는다.
+       */
+      void beat();
     });
     return () => sub.remove();
   }, [refreshEntitlement]);

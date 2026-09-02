@@ -139,6 +139,49 @@ export const deviceServer = createCommonServer({
 });
 
 /**
+ * 활성 신호를 실을 인스턴스 — **로그인했으면 구글 세션, 아니면 기기 세션**.
+ *
+ * 부팅 조회(`features/notice/store.ts`)와 포그라운드 하트비트가 **같은 규칙을 쓴다.**
+ * 두 곳이 서로 다른 인스턴스를 고르면 로그인한 사람이 같은 날 **subject 두 행**을 찍는다 —
+ * `docs/SUPPORT_SYSTEM.md` §3.1 이 2중 계상을 감수한 근거가 *"사용자당 평생 1회"* 였는데
+ * 그게 **매일**이 되고, 그것도 가장 열심히 쓰는 사람에게 그렇게 된다.
+ * 그래서 규칙을 두 곳에 적지 않고 이 함수 하나로 둔다.
+ *
+ * ⚠ `isSignedIn()` 은 **로컬 판정**이다(SecureStore 읽기 + 토큰 payload 파싱). 네트워크를
+ *   안 타므로 포그라운드마다 불러도 된다.
+ */
+export async function activeServer(): Promise<ReturnType<typeof createCommonServer>> {
+  return (await commonServer.isSignedIn()) ? commonServer : deviceServer;
+}
+
+/**
+ * 웜 스타트 하트비트 — `AppState` 가 `active` 로 돌아올 때 부른다(SDK `2026-09-02`).
+ *
+ * 그전에는 활성 신호가 `fetchBootstrap()` 에만 얹혀 있었는데 그건 **JS 프로세스당 1회**다.
+ * 안드로이드는 홈 버튼으로 프로세스를 안 죽이므로 **앱을 안 죽이는(= 자주 쓰는) 사용자일수록
+ * 덜 잡히는**, 방향이 거꾸로인 오차였다.
+ *
+ * 🔴 **호출부는 `.catch()` 를 붙이지 않는다.** SDK 의 `heartbeat()` 는 계약상 절대 reject 하지
+ *   않는다(네트워크·타임아웃·세션 없음·쿨다운·파싱 실패를 전부 삼킨다). 아래 `try` 가 감싸는 것은
+ *   `heartbeat()` 가 아니라 **`activeServer()` 와 그 사이의 조립**이다 — 리스너 콜백은 동기라
+ *   여기서 샌 rejection 이 곧 오류 UI가 되고, 포그라운드 복귀는 부팅보다 훨씬 잦다.
+ *
+ * 🔴 **세션을 만들지 않는다.** 세션이 없으면(연령 미달·게이트를 닫음) 아무 일도 안 하고 끝난다 —
+ *   여기서 `ensureDeviceSession()` 을 부르면 *"미달자의 식별자를 받기 전에 돌려보낸다"* 의
+ *   경계가 무너진다(`docs/AUTH_SYSTEM.md` §1.2).
+ *
+ * ⏭ 쿨다운 5분은 **SDK 안**이다. 앱에서 다시 만들지 않는다.
+ */
+export async function beat(): Promise<void> {
+  try {
+    const server = await activeServer();
+    await server.heartbeat();
+  } catch {
+    // 관측이 사용자 눈에 보이면 설계가 틀린 것이다. 활성 지표는 조용히 실패한다.
+  }
+}
+
+/**
  * 기기 식별자 — **SDK 밖이다.** 어댑터를 지나지 않으므로 `cs_session_*` 계열에 얹지 않는다.
  *
  * 이 값이 곧 열쇠라(서버가 UUID 형식을 강제한다) 자격증명 급으로 SecureStore 에 둔다.
