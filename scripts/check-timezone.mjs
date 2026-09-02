@@ -46,6 +46,8 @@ if (process.env.JOGAK_TZ_CHILD === '1') {
   await runAssertions();
 } else {
   let failed = 0;
+  /** 지역별로 자식이 보고한 단언 수. 서로 다르거나 0이면 그 자체가 실패다. */
+  const ranPerZone = new Map();
   for (const tz of ZONES) {
     const res = spawnSync(
       process.execPath,
@@ -55,6 +57,8 @@ if (process.env.JOGAK_TZ_CHILD === '1') {
     const out = `${res.stdout ?? ''}${res.stderr ?? ''}`.trim();
     if (res.status === 0) {
       console.log(`  ok   ${tz.padEnd(22)} ${out}`);
+      const m = /\((\d+)개\)/.exec(out);
+      ranPerZone.set(tz, m === null ? 0 : Number(m[1]));
     } else {
       failed += 1;
       console.log(`  FAIL ${tz.padEnd(22)}`);
@@ -65,13 +69,30 @@ if (process.env.JOGAK_TZ_CHILD === '1') {
     console.log(`\n시간대 검사 실패 — ${failed}개 지역\n`);
     process.exit(1);
   }
-  console.log(`\n시간대 ok — ${ZONES.length}개 검사 통과\n`);
+
+  /*
+   * 🔴 **초록불이 "쟀다"는 뜻이 되게 한다.**
+   * 종전에는 `ZONES.length` 를 그대로 개수로 찍어서, 자식의 단언이 전부 사라져도
+   * "7개 검사 통과"가 똑같이 나왔다 — 세는 것이 지역 수이지 검사 수가 아니었다.
+   * 이제 자식이 자기 단언 수를 보고하고, 여기서 ① 0이 아닌지 ② 지역마다 같은지 본다.
+   *   ②가 필요한 이유: 시간대에 따라 분기하는 단언이 생기면 그건 이 가드가 잡으려는
+   *   **바로 그 병**(기기 시간대에 흔들리는 계산)이므로, 조용히 넘기면 안 된다.
+   */
+  const counts = [...new Set(ranPerZone.values())];
+  if (counts.length !== 1 || counts[0] === 0) {
+    console.log(`\n시간대 검사 실패 — 지역별 단언 수가 다르거나 0이다: ${JSON.stringify([...ranPerZone])}\n`);
+    process.exit(1);
+  }
+  const per = counts[0];
+  console.log(`\n시간대 ok — ${ZONES.length * per}개 검사 통과 (지역 ${ZONES.length} × 단언 ${per})\n`);
 }
 
 async function runAssertions() {
   const P = await import('../features/ai/period.ts');
   const fail = [];
+  let ran = 0;
   const eq = (actual, expected, what) => {
+    ran += 1;
     const a = JSON.stringify(actual);
     const e = JSON.stringify(expected);
     if (a !== e) fail.push(`${what}: 기대 ${e}, 실제 ${a}`);
@@ -163,5 +184,9 @@ async function runAssertions() {
     for (const f of fail) console.error(f);
     process.exit(1);
   }
-  process.stdout.write(`오프셋 ${-new Date(2026, 6, 1, 12).getTimezoneOffset() / 60}시간`);
+  // 🔴 **몇 개를 쟀는지 함께 찍는다.** 부모가 이 수를 대조한다 — 없으면 이 함수를 통째로
+  //    비워도 부모는 지역 수만 세어 "7개 검사 통과"를 그대로 찍는다(2026-09-02에 그 상태였다).
+  process.stdout.write(
+    `오프셋 ${-new Date(2026, 6, 1, 12).getTimezoneOffset() / 60}시간  (${ran}개)`,
+  );
 }

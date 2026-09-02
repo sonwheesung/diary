@@ -34,6 +34,7 @@ const COUNTED = [
   'check:ai',
   'check:admin',
   'check:age-gate',
+  'check:timezone',
   'check:licenses',
 ];
 
