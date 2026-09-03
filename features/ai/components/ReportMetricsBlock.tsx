@@ -22,7 +22,21 @@ import { typography } from '@/theme/typography';
  * 🚫 **화살표·빨강/초록을 쓰지 않는다.** 낮은 점수는 대개 **힘들었던 기간**에 나온다.
  *   그 자리에서 성적표가 되면 일기를 쓰는 일이 채점이 된다(기둥 2·§3).
  */
-export function ReportMetricsBlock({ data }: { data: ReportMetrics }) {
+export function ReportMetricsBlock({
+  data,
+  prev,
+}: {
+  data: ReportMetrics;
+  /**
+   * 지난 기간의 지표(§8.3.2). 게이지 위에 **옅은 눈금 하나**로만 얹는다.
+   *
+   * 🔴 `null`이 흔한 값이다 — 요일 격자는 조각만 있으면 비교가 섰지만(§8.3.1), 지표는
+   *   **지난 기간 리포트가 있고 거기 지표가 있어야** 한다. 모델이 만든 층이라 조각에서
+   *   유도할 수 없다. 없으면 눈금을 안 그리고 **안내도 띄우지 않는다** — 캡이 평생 1번이라
+   *   *"지난주 리포트를 만들어 보세요"* 가 못 만드는 것을 권하는 말이 될 수 있다.
+   */
+  prev?: ReportMetrics | null;
+}) {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
 
@@ -65,6 +79,19 @@ export function ReportMetricsBlock({ data }: { data: ReportMetrics }) {
                 </View>
                 <View style={styles.track}>
                   <View style={[styles.fill, { width: `${clamp(m.value)}%` }]} />
+                  {/*
+                    지난 기간의 자리(§8.3.2). **눈금 하나뿐이다.**
+
+                    🚫 화살표·증감 수치·"높은 편" 같은 판정을 붙이지 않는다 — §8.3.1이
+                      같은 화면의 같은 질문에 대해 이미 정했다. 낮은 점수는 대개 **힘들었던
+                      기간**에 나오고, 그 자리에서 성적표가 되면 일기를 쓰는 일이 채점이 된다.
+                    ⚠ 뺄셈은 **하고 싶은 사람만** 한다. 우리는 "거기 있었다"까지만 말한다.
+                  */}
+                  {prevOf(prev, m.code) !== null && (
+                    <View
+                      style={[styles.prevTick, { left: `${clamp(prevOf(prev, m.code) ?? 0)}%` }]}
+                    />
+                  )}
                 </View>
                 {m.basis.length > 0 && <Text style={styles.basis}>{m.basis}</Text>}
               </View>
@@ -88,6 +115,18 @@ export function ReportMetricsBlock({ data }: { data: ReportMetrics }) {
       )}
     </View>
   );
+}
+
+/**
+ * 지난 기간의 같은 지표 값. 없으면 `null`.
+ *
+ * ⚠ **코드로 찾는다.** 순서로 맞추면 지난 기간에 지표 하나가 빠졌을 때 **엉뚱한 지표와
+ *   비교**한다 — 그림은 그럴듯하고 뜻은 틀린다.
+ */
+function prevOf(prev: ReportMetrics | null | undefined, code: string): number | null {
+  if (prev === null || prev === undefined) return null;
+  const found = prev.metrics.find((m) => m.code === code);
+  return found === undefined ? null : found.value;
 }
 
 /**
@@ -145,12 +184,32 @@ const createStyles = (colors: Palette) =>
       height: 5,
       backgroundColor: colors.surfaceMuted,
       borderRadius: 999,
-      overflow: 'hidden',
+      /*
+       * ⚠ **`hidden`을 풀었다.** 지난 기간 눈금이 게이지보다 조금 높아 위아래로 삐져나온다 —
+       *   트랙 안에 가두면 5px 안에서 안 보인다. 대신 `fill`이 스스로 둥근 모서리를 갖는다.
+       */
+      position: 'relative',
     },
     fill: {
       height: '100%',
       borderRadius: 999,
       backgroundColor: colors.accent,
+    },
+    /*
+     * 지난 기간의 자리 — **눈금 하나**(§8.3.2).
+     *
+     * ⚠ `accentMuted`를 쓴다. 짝 막대의 옅은 쪽과 같은 색이라 화면 안에서 **같은 뜻으로 읽힌다** —
+     *   새 색을 쓰면 사용자가 그것이 무엇인지 따로 배워야 한다.
+     * ⚠ `marginLeft`로 제 폭의 절반을 당긴다. 안 하면 눈금이 값보다 오른쪽에 선다.
+     */
+    prevTick: {
+      position: 'absolute',
+      top: -2,
+      width: 2,
+      height: 9,
+      marginLeft: -1,
+      borderRadius: 1,
+      backgroundColor: colors.accentMuted,
     },
     basis: {
       ...typography.caption,

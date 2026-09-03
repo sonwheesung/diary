@@ -8,7 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
-import { deleteReport, getReport, type Report } from '@/features/ai/api/report-repository';
+import {
+  deleteReport,
+  findByPeriod,
+  getReport,
+  type Report,
+  type ReportMetrics,
+} from '@/features/ai/api/report-repository';
 import { PeriodShape } from '@/features/ai/components/PeriodShape';
 import { ReportMetricsBlock } from '@/features/ai/components/ReportMetricsBlock';
 import { keyRange } from '@/features/ai/period';
@@ -40,6 +46,8 @@ export default function ReportDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [shape, setShape] = useState<Shape | null>(null);
   const [prevShape, setPrevShape] = useState<Shape | null>(null);
+  /** 지난 기간 지표 — 게이지의 옅은 눈금(§8.3.2). `null`이 흔한 값이다 */
+  const [prevMetrics, setPrevMetrics] = useState<ReportMetrics | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -85,6 +93,17 @@ export default function ReportDetailScreen() {
     if (prevKey !== null && prevRange !== null) {
       void listDayFactsBetween(prevRange.from, prevRange.to).then((facts) => {
         if (alive) setPrevShape(periodShape(report.kind, prevKey, facts));
+      });
+      /*
+       * 지표 비교는 **조건이 한 칸 더 세다**(§8.3.2). 위의 짝 막대는 조각만 있으면 서지만,
+       * 지표는 **지난 기간 리포트가 있고 거기 지표가 있어야** 한다 — 모델이 만든 층이라
+       * 조각에서 유도할 수 없다.
+       *
+       * ⚠ `findByPeriod`는 묘비도 돌려준다(그게 그 함수의 계약이다). 묘비는 `metrics`가
+       *   `NULL`이라 여기서 자동으로 걸러진다 — 따로 분기하지 않는다.
+       */
+      void findByPeriod(report.kind, prevKey).then((row) => {
+        if (alive) setPrevMetrics(row?.metrics ?? null);
       });
     }
     return () => {
@@ -226,7 +245,9 @@ export default function ReportDetailScreen() {
         앱이 센 것이 그다음이다. ⚠ 지표가 없는 리포트(v8 이전)는 블록 자체가 안 그려진다 —
         캡이 평생 1번이라 **영원히 안 생기므로** 빈 자리를 남기지 않는다.
       */}
-      {report.metrics !== null && <ReportMetricsBlock data={report.metrics} />}
+      {report.metrics !== null && (
+        <ReportMetricsBlock data={report.metrics} prev={prevMetrics} />
+      )}
 
       {shape !== null && <PeriodShape shape={shape} prev={prevShape} kind={report.kind} />}
 
