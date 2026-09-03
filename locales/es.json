@@ -577,6 +577,7 @@
       "monthly": "Mes anterior",
       "yearly": "Año anterior"
     },
+    "prevTick": "Marca tenue = {{period}}",
     "shapePrevious": "{{label}} · Días {{written}}/{{total}} · Entradas {{count}}",
     "metricsTitle": "Indicadores",
     "topicsTitle": "También apareció",

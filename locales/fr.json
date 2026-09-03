@@ -577,6 +577,7 @@
       "monthly": "Mois précédent",
       "yearly": "Année précédente"
     },
+    "prevTick": "Repère clair = {{period}}",
     "shapePrevious": "{{label}} · Jours {{written}}/{{total}} · Entrées {{count}}",
     "metricsTitle": "Indicateurs",
     "topicsTitle": "Également présent",

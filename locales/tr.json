@@ -577,6 +577,7 @@
       "monthly": "Geçen ay",
       "yearly": "Geçen yıl"
     },
+    "prevTick": "Soluk çizgi = {{period}}",
     "shapePrevious": "{{label}} · Gün {{written}}/{{total}} · Kayıt {{count}}",
     "metricsTitle": "Göstergeler",
     "topicsTitle": "Ayrıca göründü",

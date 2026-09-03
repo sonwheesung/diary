@@ -577,6 +577,7 @@
       "monthly": "先月",
       "yearly": "昨年"
     },
+    "prevTick": "薄い目盛り = {{period}}",
     "shapePrevious": "{{label}} · 書いた日 {{written}}/{{total}} · かけら {{count}}",
     "metricsTitle": "この期間の指標",
     "topicsTitle": "ほかに出てきたこと",

@@ -577,6 +577,7 @@
       "monthly": "เดือนที่แล้ว",
       "yearly": "ปีที่แล้ว"
     },
+    "prevTick": "ขีดจาง = {{period}}",
     "shapePrevious": "{{label}} · วัน {{written}}/{{total}} · บันทึก {{count}}",
     "metricsTitle": "ตัวชี้วัด",
     "topicsTitle": "ยังปรากฏอีก",

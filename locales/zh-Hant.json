@@ -577,6 +577,7 @@
       "monthly": "上月",
       "yearly": "去年"
     },
+    "prevTick": "淺色刻度 = {{period}}",
     "shapePrevious": "{{label}} · 記錄天數 {{written}}/{{total}} · 碎片 {{count}}",
     "metricsTitle": "本期指標",
     "topicsTitle": "還出現了",

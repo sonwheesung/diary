@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import type { ReportMetrics } from '@/features/ai/api/report-repository';
 import { METRIC_CODES, TOPIC_CODES } from '@/features/ai/types';
-import type { MetricCode, TopicCode } from '@/features/ai/types';
+import type { MetricCode, ReportKind, TopicCode } from '@/features/ai/types';
 import type { Palette } from '@/theme/palettes';
 import { useStyles } from '@/theme/use-styles';
 import { spacing } from '@/theme/spacing';
@@ -25,6 +25,7 @@ import { typography } from '@/theme/typography';
 export function ReportMetricsBlock({
   data,
   prev,
+  kind,
 }: {
   data: ReportMetrics;
   /**
@@ -36,6 +37,8 @@ export function ReportMetricsBlock({
    *   *"지난주 리포트를 만들어 보세요"* 가 못 만드는 것을 권하는 말이 될 수 있다.
    */
   prev?: ReportMetrics | null;
+  /** 범례 문구가 `지난주`·`지난달`·`작년`으로 갈린다(`report.prevLabel`) */
+  kind: ReportKind;
 }) {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
@@ -58,11 +61,23 @@ export function ReportMetricsBlock({
     <View style={styles.wrap}>
       {metrics.length > 0 && (
         <>
-          <Text style={styles.label}>
-            {data.from === undefined
-              ? t('report.metricsTitle')
-              : t('report.metricsFrom', { count: String(data.from) })}
-          </Text>
+          <View style={styles.labelRow}>
+            <Text style={styles.label}>
+              {data.from === undefined
+                ? t('report.metricsTitle')
+                : t('report.metricsFrom', { count: String(data.from) })}
+            </Text>
+            {/*
+              🔴 **눈금을 실제로 그릴 때만 띄운다.** 없는 것을 설명하는 범례는 화면만 시끄럽게
+                하고, 지난 기간 리포트가 없는 사람에게 *"뭔가 빠졌나"* 를 만든다.
+              ⚠ 지표별로 붙이지 않고 **여기 한 번만**. 넷에 다 붙으면 근거 문장보다 시끄럽다.
+            */}
+            {metrics.some((m) => prevOf(prev, m.code) !== null) && (
+              <Text style={styles.legend}>
+                {t('report.prevTick', { period: t(`report.prevLabel.${kind}`) })}
+              </Text>
+            )}
+          </View>
           <View style={styles.list}>
             {metrics.map((m) => (
               <View key={m.code} style={styles.row}>
@@ -194,6 +209,22 @@ const createStyles = (colors: Palette) =>
       height: '100%',
       borderRadius: 999,
       backgroundColor: colors.accent,
+    },
+    labelRow: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      justifyContent: 'space-between',
+      gap: spacing.sm,
+    },
+    /*
+     * 범례. 제목보다 더 조용해야 한다 — 이건 읽는 것이 아니라 **한 번 보고 마는 것**이다.
+     * ⚠ 행 안의 `Text`라 `flexShrink: 1`을 준다(CLAUDE.md §10) — 없으면 독일어에서 마지막
+     *   단어가 안 그려진다.
+     */
+    legend: {
+      ...typography.caption,
+      color: colors.textMuted,
+      flexShrink: 1,
     },
     /*
      * 지난 기간의 자리 — **눈금 하나**(§8.3.2).

@@ -246,7 +246,7 @@ export default function ReportDetailScreen() {
         캡이 평생 1번이라 **영원히 안 생기므로** 빈 자리를 남기지 않는다.
       */}
       {report.metrics !== null && (
-        <ReportMetricsBlock data={report.metrics} prev={prevMetrics} />
+        <ReportMetricsBlock data={report.metrics} prev={prevMetrics} kind={report.kind} />
       )}
 
       {shape !== null && <PeriodShape shape={shape} prev={prevShape} kind={report.kind} />}

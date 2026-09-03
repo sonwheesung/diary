@@ -577,6 +577,7 @@
       "monthly": "Mese scorso",
       "yearly": "Anno scorso"
     },
+    "prevTick": "Tacca chiara = {{period}}",
     "shapePrevious": "{{label}} · Giorni {{written}}/{{total}} · Voci {{count}}",
     "metricsTitle": "Indicatori",
     "topicsTitle": "È emerso anche",

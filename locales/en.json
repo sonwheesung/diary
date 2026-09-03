@@ -577,6 +577,7 @@
       "monthly": "Last month",
       "yearly": "Last year"
     },
+    "prevTick": "Faint tick = {{period}}",
     "shapePrevious": "{{label}} · Days {{written}}/{{total}} · Entries {{count}}",
     "metricsTitle": "Metrics",
     "topicsTitle": "Also showed up",

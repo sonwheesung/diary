@@ -577,6 +577,7 @@
       "monthly": "Прошлый месяц",
       "yearly": "Прошлый год"
     },
+    "prevTick": "Светлая метка = {{period}}",
     "shapePrevious": "{{label}} · Дней {{written}}/{{total}} · Записей {{count}}",
     "metricsTitle": "Показатели",
     "topicsTitle": "Также встречалось",

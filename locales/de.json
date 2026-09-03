@@ -577,6 +577,7 @@
       "monthly": "Vormonat",
       "yearly": "Vorjahr"
     },
+    "prevTick": "Helle Markierung = {{period}}",
     "shapePrevious": "{{label}} · Tage {{written}}/{{total}} · Einträge {{count}}",
     "metricsTitle": "Kennzahlen",
     "topicsTitle": "Kam auch vor",

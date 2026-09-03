@@ -577,6 +577,7 @@
       "monthly": "Bulan lalu",
       "yearly": "Tahun lalu"
     },
+    "prevTick": "Tanda samar = {{period}}",
     "shapePrevious": "{{label}} · Hari {{written}}/{{total}} · Entri {{count}}",
     "metricsTitle": "Indikator",
     "topicsTitle": "Juga muncul",

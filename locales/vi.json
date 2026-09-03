@@ -577,6 +577,7 @@
       "monthly": "Tháng trước",
       "yearly": "Năm trước"
     },
+    "prevTick": "Vạch mờ = {{period}}",
     "shapePrevious": "{{label}} · Ngày {{written}}/{{total}} · Mục {{count}}",
     "metricsTitle": "Chỉ số",
     "topicsTitle": "Cũng xuất hiện",

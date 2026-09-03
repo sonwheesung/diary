@@ -577,6 +577,7 @@
       "monthly": "지난달",
       "yearly": "작년"
     },
+    "prevTick": "옅은 눈금 = {{period}}",
     "shapePrevious": "{{label}} · 쓴 날 {{written}}/{{total}} · 조각 {{count}}",
     "metricsTitle": "이번 기간 지표",
     "topicsTitle": "그 밖에 나타난 것",
