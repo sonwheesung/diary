@@ -201,6 +201,20 @@ export default function ReportDetailScreen() {
         )}
       </View>
 
+      {/*
+        핵심 한 줄(§8.2).
+
+        🔴 **라벨을 붙이지 않는다.** 화면이 조용해야 글이 보이고(기둥 2), *"AI가 발견한 것"*
+          이라 부르면 매주 발견을 내놓아야 한다 — 그런 주가 아닐 때 모델이 지어낸다.
+          이 상품은 발견이 아니라 **관찰**이다(§8.0). 활자 크기와 여백으로만 가른다.
+
+        ⚠ **`null`이 정상값이다.** 프롬프트 v12 이전 리포트에는 없고 캡이 평생 1번이라
+          영원히 안 생긴다 — 그때는 블록 자체를 안 그린다(`metrics`와 같은 규약).
+      */}
+      {report.headline !== null && report.headline.trim().length > 0 && (
+        <Text style={styles.headline}>{report.headline}</Text>
+      )}
+
       <Text style={styles.summary}>{report.summary}</Text>
 
       {/*
@@ -306,6 +320,20 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
       flexShrink: 1,
+    },
+    /*
+     * 핵심 한 줄 — 라벨 없이 **활자로만** 요약문과 가른다(§8.2).
+     *
+     * ⚠ `fontWeight` 대신 굵기별 `fontFamily`를 쓴다(CLAUDE.md §9). `typography.title`이
+     *   이미 SemiBold라 그것을 쓰고 크기만 본문 쪽으로 내린다 — 제목처럼 보이면 안 된다.
+     *   이건 제목이 아니라 **먼저 읽히는 문장**이다.
+     */
+    headline: {
+      ...typography.title,
+      fontSize: 19,
+      lineHeight: 30,
+      color: colors.text,
+      marginBottom: spacing.md,
     },
     summary: {
       ...typography.body,

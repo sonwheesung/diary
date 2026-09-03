@@ -319,6 +319,7 @@ export async function POST(req: Request): Promise<Response> {
         kind,
         periodKey,
         lang,
+        headline: result.headline ?? null,
         summary: result.summary,
         concern: result.concern,
         /*
@@ -346,6 +347,7 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     return ok({
+      headline: result.headline,
       summary: result.summary,
       concern: result.concern,
       metrics: result.metrics,

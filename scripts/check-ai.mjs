@@ -35,7 +35,7 @@ import {
   weekKeyForYmd,
 } from '../features/ai/period.ts';
 import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 
 import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
 import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES, schemaFor } from '../features/ai/types.ts';
@@ -47,6 +47,9 @@ import {
   parseConsent,
   serializeConsent,
 } from '../features/ai/consent-rules.ts';
+
+/** 소스 검사(§⑦)가 레포 파일을 읽는다. `import.meta.url`은 윈도우에서 `/C:/...` 로 온다 */
+const HERE = dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/, '$1');
 
 let passed = 0;
 const failures = [];
@@ -793,6 +796,53 @@ if (!vendorContactReady()) {
   console.log('  🔴 출시 차단: AI 사업자 **연락처**가 비어 있다 (features/ai/vendor.ts)');
   console.log('     「개인정보 보호법」 §28-8② 3호가 국외 이전 동의 전에 연락처 고지를 요구한다.');
   console.log('     채우면 동의 화면과 처리방침에 자동 반영된다.');
+}
+
+
+/* ── ⑦ 응답 필드가 앱까지 오는가 — **소스 검사** (2026-09-03) ──────────────
+ *
+ * 🔴 여기까지의 검사는 전부 **순수 계층**이라, 서버가 내려준 값을 앱이 읽는지는 아무도 안 봤다.
+ *   실제로 `client.ts`의 반환문이 `metrics`·`topics`를 빼먹어서 **앱에서 만든 리포트는
+ *   지표가 한 번도 저장된 적이 없었다.** 타입에는 선언돼 있었고 서버는 내려주고 있었다.
+ *
+ * ⚠ **왜 안 보였나**: 화면이 `metrics === null`이면 블록을 조용히 안 그린다(그게 설계다).
+ *   즉 **없는 것과 안 그리는 것이 같은 그림**이었다. 캡이 평생 1번이라 그 기간은 영구히 굳는다.
+ *
+ * → 서버 라우트의 성공 응답 키와 앱 파서가 읽는 키를 **문자열로 대조**한다.
+ *   순수 계층으로는 원리적으로 못 잡는 종류라 소스를 읽는다(`check:age-gate` §⑥과 같은 수법).
+ */
+{
+  /* ⚠ 줄바꿈을 정규화한다 — CRLF 면 정규식의 들여쓰기 계산이 어긋난다
+       (2026-08-27 `check:shared` 가 같은 이유로 항상 실패했다) */
+  const read = (rel) => readFileSync(join(HERE, rel), 'utf8').split('\r\n').join('\n');
+  const route = read('../server/app/api/v1/ai/report/route.ts');
+  const client = read('../features/ai/api/client.ts');
+
+  /** `return ok({ ... })` 블록 안의 최상위 키 */
+  const okStart = route.indexOf('return ok({');
+  const okBlock = route.slice(okStart, route.indexOf('});', okStart));
+  const sent = [...okBlock.matchAll(/\n +(\w+):/g)].map((m) => m[1]);
+
+  check('🔴 서버 성공 응답 키를 실제로 찾았다 — 대조군', () => {
+    /*
+     * 🔴 **반드시 있어야 할 것을 같은 방법으로 먼저 센다.** 이게 없으면 정규식이 낡은 날
+     *   `sent`가 빈 배열이 되고 아래 루프가 **0번 돌면서 초록으로 통과**한다.
+     *   2026-09-02 에 Hermes 번들을 UTF-8 로 세어 0을 얻고 *"번역이 안 실렸다"* 로
+     *   오독할 뻔한 것과 같은 계열이다 — 0이 나오면 대상이 아니라 **세는 방법**을 의심한다.
+     */
+    assert(sent.length >= 5, `응답 키를 ${sent.length}개만 찾았다 — 정규식이 낡았다`);
+    assert(sent.includes('summary'), 'summary 를 못 찾았다 — 파싱이 틀렸다');
+  });
+
+  for (const key of sent) {
+    check(`🔴 앱 파서가 \`${key}\` 를 읽는다`, () => {
+      assert(
+        new RegExp('json\\.' + key + '\\b').test(client),
+        `서버는 \`${key}\` 를 내려주는데 client.ts 가 \`json.${key}\` 를 안 읽는다 — ` +
+          `타입에만 선언돼 있으면 화면은 조용히 빈다`,
+      );
+    });
+  }
 }
 
 console.log('');

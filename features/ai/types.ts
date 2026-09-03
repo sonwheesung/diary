@@ -97,6 +97,14 @@ export interface TopicValue {
  *   사라지는 실패는 눈에 보이지 않는다.
  */
 export interface ReportOutput {
+  /**
+   * 이 기간에서 **가장 눈에 띈 것 한 문장**(§8.2).
+   *
+   * 🔴 **앱이 요약문의 첫 문장을 자르지 않는 이유가 이 칸이다.** v11 의 첫 문장이 하필
+   *   가장 약한 연대기 문장이었다 — 구조가 판정할 것을 문장에서 캐내면 조용히 틀린다
+   *   (`concern` 을 본문에서 문자열로 찾지 않는 것과 같은 규약).
+   */
+  headline: string;
   summary: string;
   /** 위기 신호가 보이는가. `true`면 상담 채널 배너를 얹는다(§3) */
   concern: boolean;
@@ -114,6 +122,12 @@ export interface ReportOutput {
 export const REPORT_SCHEMA = {
   type: 'object',
   properties: {
+    headline: {
+      type: 'string',
+      description:
+        '이 기간에서 가장 눈에 띈 것 한 문장. 요약문에서 고르거나 그 핵심을 한 문장으로 쓴다. ' +
+        '요청된 언어로 작성한다.',
+    },
     summary: {
       type: 'string',
       description: '이 기간을 돌아보는 요약. 요청된 언어로 작성한다.',
@@ -158,7 +172,7 @@ export const REPORT_SCHEMA = {
       },
     },
   },
-  required: ['summary', 'concern', 'metrics', 'topics'],
+  required: ['headline', 'summary', 'concern', 'metrics', 'topics'],
   additionalProperties: false,
 } as const;
 
@@ -177,7 +191,7 @@ const { metrics: _m, topics: _t, ...SUMMARY_ONLY_PROPS } = REPORT_SCHEMA.propert
 export const SUMMARY_ONLY_SCHEMA = {
   type: 'object',
   properties: SUMMARY_ONLY_PROPS,
-  required: ['summary', 'concern'],
+  required: ['headline', 'summary', 'concern'],
   additionalProperties: false,
 } as const;
 
@@ -197,4 +211,4 @@ export function schemaFor(kind: ReportKind): Record<string, unknown> {
  * ⚠ 리포트와 함께 저장한다. 안 그러면 나중에 "왜 그때 리포트는 달랐지"에 답할 수 없다 —
  *   모델 버전과 프롬프트 버전 둘 다 움직이면 원인을 분리하지 못한다.
  */
-export const PROMPT_VERSION = 11;
+export const PROMPT_VERSION = 12;

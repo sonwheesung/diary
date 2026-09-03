@@ -170,6 +170,19 @@ const MIGRATIONS: readonly string[] = [
   `
   ALTER TABLE ai_reports ADD COLUMN metrics TEXT;
   `,
+
+  // v8 — 핵심 한 줄 (AI_REPORT_SYSTEM §8.2)
+  /*
+   * 🔴 **`metrics` JSON 안에 넣지 않는다.** 지표가 아니고, 화면이 `metrics === null` 로
+   *   지표 블록을 그릴지 판정하는 것과 얽히면 안 된다 — 한 줄만 있고 지표는 없는 리포트가
+   *   실재한다(월간·연간은 모델이 지표를 안 낸다, §8.4.1).
+   *
+   * ⚠ **NULL 이 정상값이다.** 프롬프트 v12 이전 리포트에는 없고, 캡이 평생 1번이라
+   *   **영원히 안 생긴다.** 화면은 그때 이 블록 자체를 안 그린다(`metrics` 와 같은 규약).
+   */
+  `
+  ALTER TABLE ai_reports ADD COLUMN headline TEXT;
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

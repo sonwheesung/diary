@@ -278,6 +278,13 @@ export const aiReports = pgTable(
     /** 어떤 언어로 썼나 */
     lang: text('lang').notNull(),
     /** 🔴 모델이 쓴 요약문. **일기 원문이 아니다** */
+    /**
+     * 핵심 한 줄(`docs/AI_REPORT_SYSTEM.md` §8.2).
+     *
+     * ⚠ **nullable 이다.** 프롬프트 v12 이전 행에는 없고, 낡은 앱이 부르면 안 온다.
+     *   운영 콘솔의 품질 탭이 요약문과 함께 이걸 읽어 *"한 줄이 요약을 대표하는가"* 를 본다.
+     */
+    headline: text('headline'),
     summary: text('summary').notNull(),
     concern: boolean('concern').notNull().default(false),
     /** 몇 개를 보고 썼나. 품질 판단의 맥락이 된다 */

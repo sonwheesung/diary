@@ -51,6 +51,13 @@ export interface GenerateArgs {
 
 export interface GenerateOk {
   ok: true;
+  /**
+   * 핵심 한 줄(§8.2).
+   *
+   * 🔴 **`undefined`가 정상이다.** `summary`·`concern`과 판정을 다르게 하는 이유는
+   *   `metrics`와 같다 — 한 줄이 없다고 그 기간을 영영 잃게 만들지 않는다(캡이 평생 1번).
+   */
+  headline?: string;
   summary: string;
   concern: boolean;
   /**
@@ -103,7 +110,13 @@ function getClient(): OpenAI | null {
  */
 function parseOutput(
   raw: string,
-): { summary: string; concern: boolean; metrics: MetricValue[]; topics: TopicValue[] } | null {
+): {
+  headline?: string;
+  summary: string;
+  concern: boolean;
+  metrics: MetricValue[];
+  topics: TopicValue[];
+} | null {
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
@@ -116,7 +129,10 @@ function parseOutput(
   const concern = obj.concern;
   if (typeof summary !== 'string' || summary.trim().length === 0) return null;
   if (typeof concern !== 'boolean') return null;
+  /* ⚠ 없거나 빈 문자열이면 **없는 것으로** 떨어뜨린다 — 실패로 만들지 않는다(§8.2) */
+  const headline = obj.headline;
   return {
+    ...(typeof headline === 'string' && headline.trim().length > 0 ? { headline } : {}),
     summary,
     concern,
     metrics: pickMetrics(obj.metrics),
@@ -256,6 +272,7 @@ export async function generateReport(args: GenerateArgs): Promise<GenerateResult
 
   return {
     ok: true,
+    ...(parsed.headline === undefined ? {} : { headline: parsed.headline }),
     summary: parsed.summary,
     concern: parsed.concern,
     metrics: parsed.metrics,

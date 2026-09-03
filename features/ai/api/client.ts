@@ -63,6 +63,12 @@ export type AiFail =
   | 'error';
 
 export interface AiReportResponse {
+  /**
+   * 핵심 한 줄(§8.2).
+   *
+   * ⚠ **없을 수 있다** — 낡은 서버이거나 스키마가 어긋나면 안 온다. 그때는 블록을 안 그린다.
+   */
+  headline?: string;
   summary: string;
   concern: boolean;
   /**
@@ -188,10 +194,28 @@ export async function requestReport(
     return { ok: false, reason: 'refused' };
   }
 
+  /*
+   * 🔴 **`metrics`·`topics`를 여기서 읽지 않고 있었다**(2026-09-03 발견).
+   *   타입에는 선언돼 있고 서버는 내려주는데 이 반환문이 빼먹어서, `report-service`의
+   *   `response.metrics === undefined` 가 **항상 참**이었다 — 앱에서 만든 리포트는
+   *   지표가 한 번도 저장된 적이 없다. 캡이 평생 1번이라 **그 기간은 영원히 굳는다.**
+   *
+   * ⚠ 왜 안 보였나: 순수 계층 검사는 스키마와 합산만 보고, 화면은 `metrics === null`이면
+   *   블록을 조용히 안 그린다(그게 설계다). **없는 것과 안 그리는 것이 같은 그림**이었다.
+   *   에뮬레이터 확인도 시드로 넣은 행을 봐서 이 경로를 안 지났다.
+   */
+  const metrics = Array.isArray(json.metrics) ? (json.metrics as MetricValue[]) : undefined;
+  const topics = Array.isArray(json.topics) ? (json.topics as TopicValue[]) : undefined;
+
   return {
     ok: true,
+    ...(typeof json.headline === 'string' && json.headline.trim().length > 0
+      ? { headline: json.headline }
+      : {}),
     summary,
     concern: json.concern === true,
+    ...(metrics === undefined ? {} : { metrics }),
+    ...(topics === undefined ? {} : { topics }),
     model: typeof json.model === 'string' ? json.model : 'unknown',
     promptVer: typeof json.promptVer === 'number' ? json.promptVer : 0,
   };

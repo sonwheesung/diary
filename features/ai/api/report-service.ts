@@ -381,6 +381,11 @@ export async function createReport(
     kind,
     periodKey,
     lang,
+    /*
+     * 핵심 한 줄(§8.2). ⚠ **`null`이 정상값이다** — 낡은 서버이거나 프롬프트 v12 이전이면
+     *   안 온다. 화면은 그때 이 블록을 아예 안 그린다.
+     */
+    headline: response.headline ?? null,
     summary: response.summary,
     concern: response.concern,
     // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다

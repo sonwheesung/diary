@@ -264,13 +264,18 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
       for (const row of rows) {
         await db.runAsync(
           `INSERT OR REPLACE INTO ai_reports
-             (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver,
+             (id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver,
               metrics, created_at, deleted_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           row.id,
           row.kind,
           row.period_key,
           row.lang,
+          /*
+           * ⚠ **v4 이하 백업에는 없다** → `undefined`. `null`로 내린다 — 한 줄 없는 리포트가
+           *   정상이다(`metrics`와 같은 이유, §8.2).
+           */
+          row.headline ?? null,
           row.summary,
           row.concern,
           row.source_count,

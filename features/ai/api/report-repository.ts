@@ -27,6 +27,13 @@ export interface Report {
   /** `2026-W33` · `2026-08` · `2026`. 표기는 화면이 날짜 범위로 바꾼다 */
   periodKey: string;
   lang: string;
+  /**
+   * 이 기간에서 가장 눈에 띈 것 한 문장(§8.2).
+   *
+   * 🔴 **`null` 이 정상값이다** — 프롬프트 v12 이전 리포트에는 없고 캡이 평생 1번이라
+   *   **영원히 안 생긴다.** 화면은 그때 이 블록을 아예 안 그린다(`metrics` 와 같은 규약).
+   */
+  headline: string | null;
   summary: string;
   /** 위기 신호. 상세 상단 배너의 유일한 조건 */
   concern: boolean;
@@ -64,6 +71,7 @@ interface Row {
   source_count: number;
   model: string | null;
   prompt_ver: number | null;
+  headline: string | null;
   metrics: string | null;
   created_at: number;
 }
@@ -101,6 +109,7 @@ const toReport = (r: Row): Report => ({
   sourceCount: r.source_count,
   model: r.model,
   promptVer: r.prompt_ver,
+  headline: r.headline,
   metrics: parseMetrics(r.metrics),
   createdAt: r.created_at,
 });
@@ -114,7 +123,7 @@ const toReport = (r: Row): Report => ({
 export async function listReports(kind: ReportKind): Promise<Report[]> {
   const db = await getDatabase();
   const rows = await db.getAllAsync<Row>(
-    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports
       WHERE kind = ? AND ${ALIVE}
       ORDER BY period_key DESC`,
@@ -141,7 +150,7 @@ export async function listUsedPeriodKeys(kind: ReportKind): Promise<string[]> {
 export async function getReport(id: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports WHERE id = ? AND ${ALIVE}`,
     id,
   );
@@ -157,7 +166,7 @@ export async function getReport(id: string): Promise<Report | null> {
 export async function findByPeriod(kind: ReportKind, periodKey: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports WHERE kind = ? AND period_key = ?`,
     kind,
     periodKey,
@@ -178,12 +187,13 @@ export async function saveReport(report: Report): Promise<void> {
   const db = await getDatabase();
   await db.runAsync(
     `INSERT OR REPLACE INTO ai_reports
-       (id, kind, period_key, lang, summary, concern, source_count, model, prompt_ver, metrics, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     report.id,
     report.kind,
     report.periodKey,
     report.lang,
+    report.headline,
     report.summary,
     report.concern ? 1 : 0,
     report.sourceCount,
@@ -212,7 +222,7 @@ export async function deleteReport(id: string): Promise<void> {
      * 🔴 `metrics`도 **함께 비운다.** `summary`만 지우면 지운 리포트의 지표 그림이 남는다 —
      *   지표는 일기에서 뽑은 것이라 그것도 사용자가 지우려던 것이다(§8.4).
      */
-    `UPDATE ai_reports SET summary = '', concern = 0, metrics = NULL, deleted_at = ? WHERE id = ?`,
+    `UPDATE ai_reports SET summary = '', headline = NULL, concern = 0, metrics = NULL, deleted_at = ? WHERE id = ?`,
     Date.now(),
     id,
   );
