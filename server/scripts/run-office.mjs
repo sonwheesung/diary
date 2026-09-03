@@ -39,6 +39,19 @@ const HERE = dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/
 const CACHE = join(HERE, '.cache');
 const OUT = join(CACHE, 'office-2026.json');
 const DRY = process.argv.includes('--dry');
+/*
+ * 🔴 **"아직 안 끝난 주"와 "코퍼스가 끝난 것"은 다르다** (2026-09-03, 12월에서 잡았다).
+ *
+ * 2026-W53 은 12/28~2027-01-03 이다. 마지막 수집일이 2026-12-31 이므로 기본 규칙(범위가
+ * 마지막 수집일을 넘으면 건너뛴다)에 걸리는데, **2027년은 영원히 오지 않는다.**
+ * 그대로 두면 W53 → 2026-12 월간 → 2026 연간이 **줄줄이 영영 안 만들어진다.**
+ *
+ * `--final` 은 *"더 받을 달이 없다"* 는 선언이다. 그때는 넘치는 주도 가진 것으로 만든다 —
+ * 실제 앱에서도 그 주는 해가 바뀐 뒤에 만들어지고, 그때 있는 조각으로 만들어진다.
+ *
+ * ⚠ 기본값이 아니다. 중간에 붙이면 경계 주가 반쪽으로 굳는다 — 그게 이 가드의 존재 이유다.
+ */
+const FINAL = process.argv.includes('--final');
 
 if (!DRY && process.env.AI_SPEND !== '1') {
   console.error('\n이 스크립트는 실제로 모델을 부른다. 돌리려면 AI_SPEND=1 을 붙인다.');
@@ -135,7 +148,7 @@ const doneWeeks = new Set();
 for (const wk of weeksWithEntries) {
   const range = weekKeyRange(wk);
   if (range === null) continue;
-  if (range.to > lastDate) {
+  if (range.to > lastDate && !FINAL) {
     console.log(`  · ${wk}  ${range.from}~${range.to} — 아직 안 끝났다(마지막 ${lastDate}). 건너뛴다`);
     continue;
   }
