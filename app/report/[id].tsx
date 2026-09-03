@@ -19,9 +19,10 @@ import { PeriodShape } from '@/features/ai/components/PeriodShape';
 import { ReportMetricsBlock } from '@/features/ai/components/ReportMetricsBlock';
 import { keyRange } from '@/features/ai/period';
 import { periodShape, previousPeriodKey, type Shape } from '@/features/ai/stats';
-import { listDayFactsBetween } from '@/features/diary/api/diary-repository';
 import { periodLabel } from '@/features/ai/labels';
-import { formatDateTime, formatWeekNumber } from '@/lib/format';
+import type { ReportKind } from '@/features/ai/types';
+import { listDayFactsBetween, listDiariesByDate } from '@/features/diary/api/diary-repository';
+import { formatDateTime, formatShortDate, formatWeekNumber } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -110,6 +111,37 @@ export default function ReportDetailScreen() {
       alive = false;
     };
   }, [report]);
+
+  /**
+   * 칩 라벨(§8.2.1). 주간은 날짜, 상위는 하위 기간 이름.
+   *
+   * ⚠ 상위는 `periodLabel`을 **한 층 아래 종류로** 부른다 — 월간의 근거는 주간이다.
+   */
+  const sourceLabel = (kind: ReportKind, key: string): string =>
+    kind === 'weekly' ? formatShortDate(key) : periodLabel(kind === 'monthly' ? 'weekly' : 'monthly', key);
+
+  /**
+   * 근거로 내려간다 — 주간은 **그 날의 조각**, 상위는 **그 하위 리포트**.
+   *
+   * 🔴 **없으면 아무 데도 안 간다.** 지어낸 키는 서버가 걸렀지만, 그 뒤에 사용자가 그 조각을
+   *   지웠을 수 있다 — 빈 화면으로 보내는 것보다 안 움직이는 편이 낫다.
+   *   ⚠ 안내를 띄우지 않는다. 이 칩은 부가 경로이고, 못 간다고 리포트 읽기를 방해하면 안 된다.
+   */
+  const openSource = (kind: ReportKind, key: string) => {
+    void (async () => {
+      if (kind === 'weekly') {
+        const found = await listDiariesByDate(key);
+        if (found.length > 0) router.push(`/diary/${found[0].id}`);
+        return;
+      }
+      /*
+       * ⚠ `findByPeriod`는 **묘비도 돌려준다**(그게 그 함수의 계약이다). 묘비는 본문이 비어
+       *   있으니 거기로 보내면 빈 화면이다 — `summary`가 비었으면 안 움직인다.
+       */
+      const sub = await findByPeriod(kind === 'monthly' ? 'weekly' : 'monthly', key);
+      if (sub !== null && sub.summary.trim().length > 0) router.push(`/report/${sub.id}`);
+    })();
+  };
 
   const onDelete = () => {
     Alert.alert(t('report.delete'), t('report.deleteConfirm'), [
@@ -234,6 +266,31 @@ export default function ReportDetailScreen() {
         <Text style={styles.headline}>{report.headline}</Text>
       )}
 
+      {/*
+        한 줄이 기댄 자료로 내려가는 칩(§8.2.1).
+
+        🔴 이 화면의 정체성이 여기서 확인된다 — AI 가 삶을 대신 판단하는 것이 아니라,
+          **내가 쓴 것에서 새 연결을 찾아 다시 보여준다.** 눌러서 원문을 확인할 수 있어야
+          "진짜 내가 그렇게 썼나"에 답이 된다.
+
+        ⚠ 빈 배열이 흔한 값이다(v14 이전 · 모델이 지어낸 키가 전부 걸러진 경우).
+          그때는 아무것도 안 그린다 — 없는 것을 설명하지 않는다.
+      */}
+      {report.headlineFrom.length > 0 && (
+        <View style={styles.fromRow}>
+          {report.headlineFrom.map((key) => (
+            <Pressable
+              key={key}
+              accessibilityRole="button"
+              onPress={() => openSource(report.kind, key)}
+              style={({ pressed }) => [styles.fromChip, pressed && styles.fromChipPressed]}
+            >
+              <Text style={styles.fromLabel}>{sourceLabel(report.kind, key)}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
+
       <Text style={styles.summary}>{report.summary}</Text>
 
       {/*
@@ -355,6 +412,32 @@ const createStyles = (colors: Palette) =>
       lineHeight: 30,
       color: colors.text,
       marginBottom: spacing.md,
+    },
+    /* 한 줄 아래 칩 — 근거로 내려가는 문(§8.2.1). 조용해야 한다: 한 줄이 주인공이다 */
+    fromRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.xs,
+      marginTop: -spacing.xs,
+      marginBottom: spacing.md,
+    },
+    fromChip: {
+      paddingVertical: 4,
+      paddingHorizontal: 10,
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    fromChipPressed: {
+      backgroundColor: colors.surfaceMuted,
+      // 배경만 바꿀 때 반지름을 다시 적는다 — 안드로이드에서 네모로 그려진다(CLAUDE.md §10)
+      borderRadius: 999,
+    },
+    fromLabel: {
+      ...typography.caption,
+      color: colors.accent,
+      flexShrink: 1,
     },
     summary: {
       ...typography.body,

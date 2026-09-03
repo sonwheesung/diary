@@ -238,7 +238,18 @@ export async function POST(req: Request): Promise<Response> {
   if (!claim(reportId)) return fail('in-progress');
 
   try {
-    const result = await generateReport({ system, user, schema: schemaFor(kind) });
+    /*
+     * `headlineFrom` 검증에 쓸 **실제로 넣어준 자료의 키**(§8.2.1).
+     *
+     * 🔴 **`withBody`를 거친 것만 센다.** 본문이 빈 조각은 프롬프트에 안 들어가므로(§10.2)
+     *   그 날짜를 허용하면 모델이 **넣지도 않은 날**을 가리킬 수 있다.
+     */
+    const allowed =
+      kind === 'weekly'
+        ? withBody(args.entries).map((e) => e.date)
+        : (args.subReports ?? []).map((r) => r.periodKey);
+
+    const result = await generateReport({ system, user, schema: schemaFor(kind), allowed });
 
     if (!result.ok) {
       /*
@@ -320,6 +331,8 @@ export async function POST(req: Request): Promise<Response> {
         periodKey,
         lang,
         headline: result.headline ?? null,
+        headlineFrom:
+          result.headlineFrom === undefined ? null : JSON.stringify(result.headlineFrom),
         summary: result.summary,
         concern: result.concern,
         /*
@@ -348,6 +361,7 @@ export async function POST(req: Request): Promise<Response> {
 
     return ok({
       headline: result.headline,
+      headlineFrom: result.headlineFrom,
       summary: result.summary,
       concern: result.concern,
       metrics: result.metrics,

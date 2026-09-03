@@ -34,6 +34,13 @@ export interface Report {
    *   **영원히 안 생긴다.** 화면은 그때 이 블록을 아예 안 그린다(`metrics` 와 같은 규약).
    */
   headline: string | null;
+  /**
+   * 한 줄이 기댄 자료의 키(§8.2.1). 주간이면 날짜, 상위면 하위 기간 키.
+   *
+   * ⚠ **빈 배열이 정상값이다** — 모델이 안 줬거나 지어낸 키가 전부 걸러졌을 때.
+   *   v14 이전 리포트에는 컬럼이 `NULL` 이고 그때도 빈 배열로 읽는다.
+   */
+  headlineFrom: string[];
   summary: string;
   /** 위기 신호. 상세 상단 배너의 유일한 조건 */
   concern: boolean;
@@ -72,6 +79,7 @@ interface Row {
   model: string | null;
   prompt_ver: number | null;
   headline: string | null;
+  headline_from: string | null;
   metrics: string | null;
   created_at: number;
 }
@@ -110,6 +118,7 @@ const toReport = (r: Row): Report => ({
   model: r.model,
   promptVer: r.prompt_ver,
   headline: r.headline,
+  headlineFrom: parseFrom(r.headline_from),
   metrics: parseMetrics(r.metrics),
   createdAt: r.created_at,
 });
@@ -123,7 +132,7 @@ const toReport = (r: Row): Report => ({
 export async function listReports(kind: ReportKind): Promise<Report[]> {
   const db = await getDatabase();
   const rows = await db.getAllAsync<Row>(
-    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports
       WHERE kind = ? AND ${ALIVE}
       ORDER BY period_key DESC`,
@@ -150,7 +159,7 @@ export async function listUsedPeriodKeys(kind: ReportKind): Promise<string[]> {
 export async function getReport(id: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports WHERE id = ? AND ${ALIVE}`,
     id,
   );
@@ -166,7 +175,7 @@ export async function getReport(id: string): Promise<Report | null> {
 export async function findByPeriod(kind: ReportKind, periodKey: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at
        FROM ai_reports WHERE kind = ? AND period_key = ?`,
     kind,
     periodKey,
@@ -187,13 +196,14 @@ export async function saveReport(report: Report): Promise<void> {
   const db = await getDatabase();
   await db.runAsync(
     `INSERT OR REPLACE INTO ai_reports
-       (id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver, metrics, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     report.id,
     report.kind,
     report.periodKey,
     report.lang,
     report.headline,
+    report.headlineFrom.length === 0 ? null : JSON.stringify(report.headlineFrom),
     report.summary,
     report.concern ? 1 : 0,
     report.sourceCount,
@@ -222,8 +232,24 @@ export async function deleteReport(id: string): Promise<void> {
      * 🔴 `metrics`도 **함께 비운다.** `summary`만 지우면 지운 리포트의 지표 그림이 남는다 —
      *   지표는 일기에서 뽑은 것이라 그것도 사용자가 지우려던 것이다(§8.4).
      */
-    `UPDATE ai_reports SET summary = '', headline = NULL, concern = 0, metrics = NULL, deleted_at = ? WHERE id = ?`,
+    `UPDATE ai_reports SET summary = '', headline = NULL, headline_from = NULL, concern = 0, metrics = NULL, deleted_at = ? WHERE id = ?`,
     Date.now(),
     id,
   );
+}
+
+/**
+ * `headline_from` 컬럼(JSON 배열 문자열)을 읽는다.
+ *
+ * ⚠ 깨져 있어도 **빈 배열로 떨어뜨린다.** 칩 하나 때문에 리포트를 못 열게 하지 않는다 —
+ *   `parseMetrics` 와 같은 규약이다.
+ */
+function parseFrom(raw: string | null): string[] {
+  if (raw === null) return [];
+  try {
+    const v: unknown = JSON.parse(raw);
+    return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
+  } catch {
+    return [];
+  }
 }

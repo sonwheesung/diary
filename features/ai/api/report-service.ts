@@ -386,6 +386,8 @@ export async function createReport(
      *   안 온다. 화면은 그때 이 블록을 아예 안 그린다.
      */
     headline: response.headline ?? null,
+    /* ⚠ 빈 배열이 정상값이다 — 모델이 안 줬거나 서버가 지어낸 키를 다 걸렀을 때(§8.2.1) */
+    headlineFrom: response.headlineFrom ?? [],
     summary: response.summary,
     concern: response.concern,
     // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다

@@ -285,6 +285,8 @@ export const aiReports = pgTable(
      *   운영 콘솔의 품질 탭이 요약문과 함께 이걸 읽어 *"한 줄이 요약을 대표하는가"* 를 본다.
      */
     headline: text('headline'),
+    /** 한 줄이 기댄 자료의 키(JSON 배열 문자열, §8.2.1). nullable — v14 이전 행에는 없다 */
+    headlineFrom: text('headline_from'),
     summary: text('summary').notNull(),
     concern: boolean('concern').notNull().default(false),
     /** 몇 개를 보고 썼나. 품질 판단의 맥락이 된다 */

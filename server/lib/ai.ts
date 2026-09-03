@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-import { METRIC_CODES, TOPIC_CODES } from '@shared/ai/types';
+import { METRIC_CODES, TOPIC_CODES, pickHeadlineFrom } from '@shared/ai/types';
 import type { MetricCode, MetricValue, TopicCode, TopicValue } from '@shared/ai/types';
 
 import { MAX_OUTPUT_TOKENS } from './ai-policy';
@@ -47,6 +47,13 @@ export interface GenerateArgs {
   user: string;
   /** 앱의 `REPORT_SCHEMA`를 그대로 받는다 — 스키마가 두 벌이 되면 반드시 어긋난다 */
   schema: Record<string, unknown>;
+  /**
+   * 프롬프트에 **실제로 넣어준 자료의 키**(§8.2.1). 주간이면 날짜, 상위면 하위 기간 키.
+   *
+   * 🔴 `headlineFrom` 검증에만 쓴다. 라우트가 계산해 넘긴다 — 이 파일은 벤더 경계라
+   *   일기 구조를 몰라야 하고, 그래서 목록을 받아 대조만 한다.
+   */
+  allowed: readonly string[];
 }
 
 export interface GenerateOk {
@@ -58,6 +65,11 @@ export interface GenerateOk {
    *   `metrics`와 같다 — 한 줄이 없다고 그 기간을 영영 잃게 만들지 않는다(캡이 평생 1번).
    */
   headline?: string;
+  /**
+   * 한 줄이 기댄 자료의 키(§8.2.1). **여기서 이미 걸러진 것**이다 —
+   * 모델이 지어낸 키는 `pickHeadlineFrom`이 버린다. 앱은 그대로 쓴다.
+   */
+  headlineFrom?: string[];
   summary: string;
   concern: boolean;
   /**
@@ -110,8 +122,11 @@ function getClient(): OpenAI | null {
  */
 function parseOutput(
   raw: string,
+  /** 프롬프트에 실제로 넣어준 자료의 키. `headlineFrom` 검증에 쓴다(§8.2.1) */
+  allowed: readonly string[],
 ): {
   headline?: string;
+  headlineFrom?: string[];
   summary: string;
   concern: boolean;
   metrics: MetricValue[];
@@ -131,8 +146,14 @@ function parseOutput(
   if (typeof concern !== 'boolean') return null;
   /* ⚠ 없거나 빈 문자열이면 **없는 것으로** 떨어뜨린다 — 실패로 만들지 않는다(§8.2) */
   const headline = obj.headline;
+  /*
+   * 🔴 **모델이 지어낸 키를 여기서 버린다**(§8.2.1). 눌렀는데 아무것도 없으면
+   *   그 순간 *"AI가 아무 말이나 한다"* 가 되고, 이 기능이 만들려던 신뢰가 반대로 무너진다.
+   */
+  const from = pickHeadlineFrom(obj.headlineFrom, allowed);
   return {
     ...(typeof headline === 'string' && headline.trim().length > 0 ? { headline } : {}),
+    ...(from.length === 0 ? {} : { headlineFrom: from }),
     summary,
     concern,
     metrics: pickMetrics(obj.metrics),
@@ -261,7 +282,7 @@ export async function generateReport(args: GenerateArgs): Promise<GenerateResult
     return { ok: false, reason: 'upstream' };
   }
 
-  const parsed = parseOutput(response.output_text);
+  const parsed = parseOutput(response.output_text, args.allowed);
   if (parsed === null) {
     /*
      * 구조화 출력을 켰는데 여기 오면 스키마가 거절됐거나 모델이 빈 응답을 준 것이다.
@@ -273,6 +294,7 @@ export async function generateReport(args: GenerateArgs): Promise<GenerateResult
   return {
     ok: true,
     ...(parsed.headline === undefined ? {} : { headline: parsed.headline }),
+    ...(parsed.headlineFrom === undefined ? {} : { headlineFrom: parsed.headlineFrom }),
     summary: parsed.summary,
     concern: parsed.concern,
     metrics: parsed.metrics,

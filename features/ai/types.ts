@@ -105,6 +105,14 @@ export interface ReportOutput {
    *   (`concern` 을 본문에서 문자열로 찾지 않는 것과 같은 규약).
    */
   headline: string;
+  /**
+   * 핵심 한 줄이 기댄 자료의 키 **1~3개**(§8.2.1). 주간이면 날짜(`2026-05-07`),
+   * 월간이면 주 키(`2026-W19`), 연간이면 달 키(`2026-05`) — **한 층 아래를 가리킨다.**
+   *
+   * 🔴 **모델이 지어낸 키는 앱·서버가 버린다**(`pickHeadlineFrom`). 눌렀는데 아무것도 없으면
+   *   그 순간 *"AI가 아무 말이나 한다"* 가 되고, 이 기능이 만들려던 신뢰가 정확히 반대로 무너진다.
+   */
+  headlineFrom: string[];
   summary: string;
   /** 위기 신호가 보이는가. `true`면 상담 채널 배너를 얹는다(§3) */
   concern: boolean;
@@ -125,12 +133,19 @@ export const REPORT_SCHEMA = {
     headline: {
       type: 'string',
       description:
-        '이 기간에서 가장 눈에 띈 것 한 문장. 요약문에서 고르거나 그 핵심을 한 문장으로 쓴다. ' +
-        '요청된 언어로 작성한다.',
+        '이 기간에서 가장 눈에 띈 것 한 문장. **결론**이다 — summary 는 그 근거이므로 ' +
+        '둘이 같은 말을 하면 안 된다. 요청된 언어로 작성한다.',
+    },
+    headlineFrom: {
+      type: 'array',
+      description:
+        'headline 이 기댄 자료의 키 1~3개. 자료에 실제로 있던 키만 쓴다. ' +
+        '주간이면 날짜(2026-05-07), 월간이면 주 키(2026-W19), 연간이면 달 키(2026-05).',
+      items: { type: 'string' },
     },
     summary: {
       type: 'string',
-      description: '이 기간을 돌아보는 요약. 요청된 언어로 작성한다.',
+      description: '이 기간을 돌아보는 요약. headline 의 **근거**다 — 같은 말을 되풀이하지 않는다.',
     },
     concern: {
       type: 'boolean',
@@ -172,7 +187,7 @@ export const REPORT_SCHEMA = {
       },
     },
   },
-  required: ['headline', 'summary', 'concern', 'metrics', 'topics'],
+  required: ['headline', 'headlineFrom', 'summary', 'concern', 'metrics', 'topics'],
   additionalProperties: false,
 } as const;
 
@@ -191,7 +206,7 @@ const { metrics: _m, topics: _t, ...SUMMARY_ONLY_PROPS } = REPORT_SCHEMA.propert
 export const SUMMARY_ONLY_SCHEMA = {
   type: 'object',
   properties: SUMMARY_ONLY_PROPS,
-  required: ['headline', 'summary', 'concern'],
+  required: ['headline', 'headlineFrom', 'summary', 'concern'],
   additionalProperties: false,
 } as const;
 
@@ -211,4 +226,31 @@ export function schemaFor(kind: ReportKind): Record<string, unknown> {
  * ⚠ 리포트와 함께 저장한다. 안 그러면 나중에 "왜 그때 리포트는 달랐지"에 답할 수 없다 —
  *   모델 버전과 프롬프트 버전 둘 다 움직이면 원인을 분리하지 못한다.
  */
-export const PROMPT_VERSION = 12;
+export const PROMPT_VERSION = 14;
+
+/**
+ * 모델이 준 `headlineFrom` 중 **자료에 실제로 있던 키만** 남긴다 (§8.2.1).
+ *
+ * 🔴 **없는 날짜를 가리키면 이 기능이 반대로 작동한다** — 눌렀는데 아무것도 없으면
+ *   그 순간 *"AI가 아무 말이나 한다"* 가 되고, 만들려던 신뢰가 무너진다.
+ *   `pickMetrics` 가 모르는 코드를 버리는 것과 같은 규약이다.
+ *
+ * ⚠ 하나도 안 남으면 **빈 배열**이다. 실패로 만들지 않는다 — 칩 하나 때문에 그 기간을
+ *   잃게 하지 않는다(캡이 평생 1번).
+ * ⚠ 순서는 모델이 준 순서를 지키고, 중복은 지운다. 3개를 넘으면 자른다.
+ */
+export function pickHeadlineFrom(value: unknown, allowed: readonly string[]): string[] {
+  if (!Array.isArray(value)) return [];
+  const ok = new Set(allowed);
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const v of value) {
+    if (typeof v !== 'string') continue;
+    const key = v.trim();
+    if (!ok.has(key) || seen.has(key)) continue;
+    seen.add(key);
+    out.push(key);
+    if (out.length === 3) break;
+  }
+  return out;
+}

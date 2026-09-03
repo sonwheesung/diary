@@ -38,7 +38,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
-import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES, schemaFor } from '../features/ai/types.ts';
+import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES, schemaFor, pickHeadlineFrom } from '../features/ai/types.ts';
 import { rollupMetrics } from '../features/ai/rollup.ts';
 import { AI_VENDOR, vendorContactReady } from '../features/ai/vendor.ts';
 import {
@@ -843,6 +843,73 @@ if (!vendorContactReady()) {
       );
     });
   }
+}
+
+/* ── ⑧ headlineFrom — **지어낸 키를 버리는가** (§8.2.1, 2026-09-03) ──────────
+ *
+ * 🔴 이 기능의 실패 모양은 조용하다. 없는 날짜를 가리키면 눌렀을 때 아무 일도 안 일어나고,
+ *   사용자는 그 순간 *"AI가 아무 말이나 한다"* 로 읽는다 — 신뢰를 만들려던 기능이
+ *   정확히 반대로 작동한다. 그래서 걸러내는 쪽을 검사한다.
+ */
+{
+  const ALLOWED = ['2026-05-04', '2026-05-05', '2026-05-07'];
+
+  check('🔴 자료에 없는 키는 버린다 — 이 기능의 존재 이유', () => {
+    eq(
+      JSON.stringify(pickHeadlineFrom(['2026-05-07', '2026-05-09'], ALLOWED)),
+      JSON.stringify(['2026-05-07']),
+      '없는 날짜가 살아남았다',
+    );
+  });
+
+  check('전부 지어냈으면 빈 배열 — 실패로 만들지 않는다', () => {
+    eq(JSON.stringify(pickHeadlineFrom(['1999-01-01'], ALLOWED)), '[]', '빈 배열이 아니다');
+  });
+
+  check('모델이 준 순서를 지킨다 — 화면이 그 순서로 그린다', () => {
+    eq(
+      JSON.stringify(pickHeadlineFrom(['2026-05-07', '2026-05-04'], ALLOWED)),
+      JSON.stringify(['2026-05-07', '2026-05-04']),
+      '순서가 바뀌었다',
+    );
+  });
+
+  check('중복은 지운다', () => {
+    eq(
+      JSON.stringify(pickHeadlineFrom(['2026-05-04', '2026-05-04'], ALLOWED)),
+      JSON.stringify(['2026-05-04']),
+      '중복이 남았다',
+    );
+  });
+
+  check('3개를 넘으면 자른다 — 칩이 줄바꿈으로 번지지 않게', () => {
+    const many = ['2026-05-04', '2026-05-05', '2026-05-07'];
+    eq(pickHeadlineFrom([...many, ...many], many).length, 3, '개수');
+  });
+
+  check('배열이 아니거나 문자열이 아닌 것이 섞여도 던지지 않는다', () => {
+    eq(JSON.stringify(pickHeadlineFrom(null, ALLOWED)), '[]', 'null');
+    eq(JSON.stringify(pickHeadlineFrom('2026-05-04', ALLOWED)), '[]', '문자열 하나');
+    eq(JSON.stringify(pickHeadlineFrom([1, {}, '2026-05-04'], ALLOWED)), JSON.stringify(['2026-05-04']), '섞임');
+  });
+
+  check('🔴 상위는 기간 키를 그대로 다룬다 — 날짜 전용 로직이 아니다', () => {
+    eq(
+      JSON.stringify(pickHeadlineFrom(['2026-W19', '2026-W99'], ['2026-W18', '2026-W19'])),
+      JSON.stringify(['2026-W19']),
+      '주 키를 못 다룬다',
+    );
+  });
+
+  check('🔴 스키마가 headlineFrom 을 required 로 강제한다', () => {
+    for (const kind of ['weekly', 'monthly', 'yearly']) {
+      const s = schemaFor(kind);
+      assert(
+        Array.isArray(s.required) && s.required.includes('headlineFrom'),
+        `${kind} 스키마가 headlineFrom 을 요구하지 않는다 — 모델이 안 줘도 통과한다`,
+      );
+    }
+  });
 }
 
 console.log('');

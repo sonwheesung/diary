@@ -32,7 +32,7 @@ import {
   monthKeysInYear,
 } from '../../features/ai/period.ts';
 import { buildSystem, buildUser } from '../../features/ai/prompt.ts';
-import { PROMPT_VERSION, schemaFor } from '../../features/ai/types.ts';
+import { PROMPT_VERSION, schemaFor, pickHeadlineFrom } from '../../features/ai/types.ts';
 import { loadEntries } from './fixtures/office-2026/index.mjs';
 
 const HERE = dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/, '$1');
@@ -91,6 +91,20 @@ const client = DRY ? null : new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 let spend = 0;
 
+/**
+ * 🔴 **서버가 하는 검증을 여기서도 한다** (§8.2.1).
+ *
+ * 이 스크립트는 라우트를 안 거치므로 `pickHeadlineFrom` 이 안 걸린다. 그대로 두면
+ * 참조 코퍼스가 **앱이 실제로 만들 것과 달라진다** — 실제로 4개짜리가 하나 나왔고
+ * (상한은 3), 지어낸 키가 섞여도 몰랐을 것이다.
+ * ⚠ 발견 경위: 생성 결과의 개수 분포를 세다가 `{"4":1}` 이 보였다.
+ */
+function allowedKeys(kind, payload) {
+  return kind === 'weekly'
+    ? (payload.entries ?? []).map((e) => e.date)
+    : (payload.subReports ?? []).map((r) => r.periodKey);
+}
+
 async function make(kind, periodKey, payload) {
   if (store[periodKey] !== undefined) return store[periodKey];
   if (DRY) {
@@ -127,6 +141,7 @@ async function make(kind, periodKey, payload) {
   store[periodKey] = {
     kind,
     ...parsed,
+    headlineFrom: pickHeadlineFrom(parsed.headlineFrom, allowedKeys(kind, payload)),
     ms: Date.now() - started,
     usage: { in: u.input_tokens ?? 0, out: u.output_tokens ?? 0 },
     promptVersion: PROMPT_VERSION,

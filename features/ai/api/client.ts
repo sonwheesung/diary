@@ -69,6 +69,8 @@ export interface AiReportResponse {
    * ⚠ **없을 수 있다** — 낡은 서버이거나 스키마가 어긋나면 안 온다. 그때는 블록을 안 그린다.
    */
   headline?: string;
+  /** 한 줄이 기댄 자료의 키(§8.2.1). **서버가 이미 걸러서 준다** — 앱은 그대로 쓴다 */
+  headlineFrom?: string[];
   summary: string;
   concern: boolean;
   /**
@@ -211,6 +213,9 @@ export async function requestReport(
     ok: true,
     ...(typeof json.headline === 'string' && json.headline.trim().length > 0
       ? { headline: json.headline }
+      : {}),
+    ...(Array.isArray(json.headlineFrom)
+      ? { headlineFrom: (json.headlineFrom as unknown[]).filter((x): x is string => typeof x === 'string') }
       : {}),
     summary,
     concern: json.concern === true,

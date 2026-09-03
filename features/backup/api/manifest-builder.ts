@@ -61,7 +61,7 @@ export async function buildManifest(): Promise<Manifest> {
    * ⚠ 요약에는 일기 내용이 녹아 있으므로 당연히 암호화되어 나간다. 서버는 못 읽는다.
    */
   const reports = await db.getAllAsync<ReportRow>(
-    `SELECT id, kind, period_key, lang, headline, summary, concern, source_count, model, prompt_ver,
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver,
             metrics, created_at, deleted_at
        FROM ai_reports
       ORDER BY created_at ASC`,

@@ -183,6 +183,19 @@ const MIGRATIONS: readonly string[] = [
   `
   ALTER TABLE ai_reports ADD COLUMN headline TEXT;
   `,
+
+  // v9 — 한 줄이 기댄 자료 (AI_REPORT_SYSTEM §8.2.1)
+  /*
+   * 🔴 **JSON 배열 문자열이다.** 정규화하면 테이블이 하나 더 생기고 백업 매니페스트·복원·묘비가
+   *   전부 두 벌이 된다. 여기서 검색하거나 집계할 일이 없다 — 화면이 칩 세 개를 그릴 뿐이다.
+   *   (`metrics` 를 컬럼 하나에 담은 것과 같은 판단, DB v7)
+   *
+   * ⚠ **NULL 이 정상값이다.** 프롬프트 v14 이전 리포트에는 없고 캡이 평생 1번이라
+   *   영원히 안 생긴다. 화면은 그때 칩을 안 그린다.
+   */
+  `
+  ALTER TABLE ai_reports ADD COLUMN headline_from TEXT;
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;
