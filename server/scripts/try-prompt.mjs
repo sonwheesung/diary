@@ -19,7 +19,13 @@
  */
 import { buildSystem, buildUser } from '../../features/ai/prompt.ts';
 import { REPORT_SCHEMA, PROMPT_VERSION } from '../../features/ai/types.ts';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+
 import { PERSONAS, PERSONA_IDS, findPersona } from './fixtures/index.mjs';
+
+/** `.cache/` — 실행 결과 원문. 커밋한다(`.cache/README.md`) */
+const CACHE = join(dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Za-z]:)/, '$1'), '.cache');
 
 const arg = process.argv[2] ?? '--all';
 const targets = arg === '--all' ? PERSONAS : [findPersona(arg)].filter(Boolean);
@@ -95,6 +101,36 @@ for (const p of targets) {
   console.log('━'.repeat(74));
   console.log(parsed.summary);
   console.log(`\n[${(ms / 1000).toFixed(1)}초 · 입력 ${u.input_tokens ?? '?'} · 출력 ${u.output_tokens ?? '?'}]`);
+
+  /*
+   * 🔴 **모델이 만든 것을 통째로 남긴다.** 예전에는 `summary`만 찍고 `metrics`·`topics`를 버렸다.
+   *   그 둘은 앱 상세 화면이 그리는 값이라(§8.4) 화면을 볼 때마다 **다시 사야** 했고,
+   *   모델은 같은 답을 두 번 주지 않으므로 **다시 산 것은 방금 본 그 리포트가 아니다.**
+   *   `.cache/README.md`가 연간 결과를 커밋해 두는 이유와 같다.
+   */
+  const out = join(CACHE, `${p.id}.json`);
+  mkdirSync(CACHE, { recursive: true });
+  writeFileSync(
+    out,
+    JSON.stringify(
+      {
+        id: p.id,
+        kind: p.kind,
+        lang: p.lang,
+        periodKey: p.periodKey,
+        model,
+        effort,
+        promptVersion: PROMPT_VERSION,
+        ms,
+        usage: { in: u.input_tokens ?? null, out: u.output_tokens ?? null },
+        ranAt: new Date().toISOString(),
+        ...parsed,
+      },
+      null,
+      1,
+    ),
+  );
+  console.log(`저장: server/scripts/.cache/${p.id}.json`);
 }
 
 if (targets.length > 1) {

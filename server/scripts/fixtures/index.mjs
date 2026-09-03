@@ -15,9 +15,10 @@ import breakup from './breakup.mjs';
 import crisis from './crisis.mjs';
 import travel from './travel.mjs';
 import jobless from './jobless.mjs';
+import weekday from './weekday.mjs';
 
 /** 순서 = `--all` 실행 순서. 🔴 `crisis`를 맨 앞에 둔다 — 가장 먼저 확인해야 하는 것이다 */
-export const PERSONAS = [crisis, office, teen, univ, dating, crush, breakup, travel, jobless];
+export const PERSONAS = [crisis, office, teen, univ, dating, crush, breakup, travel, jobless, weekday];
 
 export function findPersona(id) {
   return PERSONAS.find((p) => p.id === id) ?? null;
