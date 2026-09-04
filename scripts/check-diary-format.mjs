@@ -20,6 +20,7 @@ import {
   withFormat,
 } from '../features/diary/format.ts';
 import { normalizeBlocks, parseBlocks, serializeBlocks } from '../features/diary/blocks.ts';
+import { readFileSync } from 'node:fs';
 
 let passed = 0;
 const failures = [];
@@ -377,6 +378,54 @@ check('서식이 다른 이웃이면 붙이지 않고 지우기만 한다', () =
   eq(isRemovableSeam(blocks, 1), true, '솔기이긴 하다');
   const r = removeBlockAt(blocks, 1);
   eq(r.blocks.length, 2, '두 블록으로 남는다 — 서식이 다르면 안 붙인다');
+});
+
+// ── ⑥ 커서와 포커스는 갈라지지 않는다 (2026-09-04, DIARY_SYSTEM §1.1) ─────────
+//
+// 🔴 실기기에서 잡았다: 목록을 **두 번째로** 끼우면 글이 앞 문단 한가운데에 들어갔다.
+//   `insertList`가 `caretRef`만 옮기고 네이티브 포커스는 `autoFocus`에 맡겼는데,
+//   그건 **마운트될 때만** 발화한다 — key 가 `list-<인덱스>`라 앞에 블록을 끼우면
+//   새 목록이 기존 목록과 같은 key 를 받아 React 가 인스턴스를 재사용한다.
+//
+// ⚠ **순수 계층으로는 못 잡는다** — RN 이벤트 타이밍이다. 그래서 소스를 읽는다.
+//   막는 것은 하나: *"커서를 옮기는 자리가 `moveCaret`을 안 지나가는 것"*.
+
+const EDITOR = readFileSync(new URL('../features/diary/components/DiaryEditor.tsx', import.meta.url), 'utf8');
+const BLOCKS = readFileSync(new URL('../features/diary/components/BlockEditor.tsx', import.meta.url), 'utf8');
+
+check('🔴 사진·목록 삽입이 caretRef 를 직접 쓰지 않는다 — moveCaret 을 지나간다', () => {
+  // 두 삽입 함수만 본다. 서식(applyFormat)은 시트를 닫을 때 따로 포커스를 되돌리고,
+  // onCaretChange 는 사용자가 옮긴 것을 **받아 적는** 자리라 여기 규칙이 아니다.
+  const inserts = EDITOR.slice(
+    EDITOR.indexOf('const insertImageAtCaret'),
+    EDITOR.indexOf('const applyFormat'),
+  );
+  const direct = inserts.split(NL).filter((line) => /caretRef\.current\s*=/.test(line));
+  eq(direct.length, 0, `직접 대입 ${direct.length}곳: ${direct.join(' / ')}`);
+  eq((inserts.match(/moveCaret\(/g) ?? []).length, 4, 'moveCaret 호출 4개(사진 2 · 목록 2)');
+});
+
+check('🔴 moveCaret 이 커서와 포커스를 함께 옮긴다', () => {
+  const fn = EDITOR.slice(EDITOR.indexOf('const moveCaret'), EDITOR.indexOf('const insertImageAtCaret'));
+  eq(/caretRef\.current = \{ index, position \}/.test(fn), true, '커서를 안 옮긴다');
+  eq(/setFocusRequest\(/.test(fn), true, '포커스를 안 옮긴다');
+  eq(/caretLockedRef\.current = true/.test(fn), true, '커서 잠금이 빠졌다');
+});
+
+check('🔴 목록을 끼우면 포커스가 그 항목으로 간다 (item: 0)', () => {
+  const fn = EDITOR.slice(EDITOR.indexOf('const insertList'), EDITOR.indexOf('const applyFormat'));
+  // 🔴 **두 곳이다** — 빈 편집기 폴백과 문단 사이 삽입. 하나만 세면 다른 하나가 회귀해도 초록이다
+  //   (실제로 이 검사를 그렇게 썼다가 파괴 테스트에서 안 빨개졌다).
+  eq(
+    (fn.match(/item: 0/g) ?? []).length,
+    2,
+    '목록 항목을 안 가리키는 경로가 있다 — autoFocus 만 믿으면 두 번째 목록에서 샌다',
+  );
+});
+
+check('🔴 BlockEditor 가 목록 항목 입력창을 주소로 들고 있다', () => {
+  eq(/listKey\(index, itemIndex\)/.test(BLOCKS), true, '목록 항목 ref 등록이 없다');
+  eq(/inputs = useRef\(new Map<string, TextInput>/.test(BLOCKS), true, '주소가 문자열이 아니다');
 });
 
 // ── 결과 ─────────────────────────────────────────────────────────────────────

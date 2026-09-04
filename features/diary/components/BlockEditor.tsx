@@ -44,8 +44,11 @@ interface BlockEditorProps {
    * 서식을 걸면 문단이 떨어져 나가 블록 인덱스가 밀리는데, **네이티브 포커스는 원래 입력창에
    * 남는다.** 그대로 두면 시트를 닫고 이어 쓸 때 글이 엉뚱한 문단에 들어간다.
    * `nonce`는 같은 블록으로 두 번 연달아 옮길 때도 효과가 다시 돌게 하는 값이다.
+   *
+   * 🔴 `item`이 붙으면 그 블록의 **목록 항목**을 가리킨다(2026-09-04). 목록 삽입이
+   *   `autoFocus`에만 기대고 있었는데 그건 **마운트될 때만** 발화한다 — 아래 key 주석 참고.
    */
-  focusRequest?: { index: number; nonce: number } | null;
+  focusRequest?: { index: number; item?: number; nonce: number } | null;
 }
 
 /*
@@ -57,6 +60,16 @@ interface BlockEditorProps {
  * 각 텍스트 칸은 영역 높이를 넘지 못한다(`maxHeight`). 그 지점부터는 **입력창이 자기 안에서**
  * 스크롤하므로 네이티브가 커서를 따라간다 — 바깥 스크롤뷰는 타이핑 중 커서를 따라오지 못한다.
  */
+/** 문단 입력창 주소 */
+function textKey(index: number): string {
+  return `t${index}`;
+}
+
+/** 목록 항목 입력창 주소 */
+function listKey(index: number, itemIndex: number): string {
+  return `l${index}:${itemIndex}`;
+}
+
 const FALLBACK_HEIGHT = 240;
 /** 사진 뒤에 이어 쓰는 칸의 최소 높이. 여기까지 크게 잡으면 사진 한 장에 빈 화면이 한 장 생긴다 */
 const FOLLOWING_MIN_HEIGHT = 44;
@@ -86,14 +99,23 @@ export function BlockEditor({
   const [areaHeight, setAreaHeight] = useState(0);
   const cap = areaHeight > 0 ? areaHeight : FALLBACK_HEIGHT;
 
-  /** 블록 인덱스 → 그 입력창. 포커스를 옮기려면 네이티브 노드가 필요하다 */
-  const inputs = useRef(new Map<number, TextInput>());
+  /**
+   * 입력창 주소 → 네이티브 노드. 포커스를 옮기려면 노드가 필요하다.
+   *
+   * 문단은 `t<블록>`, 목록 항목은 `l<블록>:<항목>`이다. 목록까지 담는 이유는 §1.1 —
+   * 목록을 끼운 직후 그 항목으로 포커스를 옮겨야 하는데 인덱스만으로는 항목을 못 가리킨다.
+   */
+  const inputs = useRef(new Map<string, TextInput>());
 
   useEffect(() => {
     if (focusRequest === null) {
       return;
     }
-    inputs.current.get(focusRequest.index)?.focus();
+    const address =
+      focusRequest.item === undefined
+        ? textKey(focusRequest.index)
+        : listKey(focusRequest.index, focusRequest.item);
+    inputs.current.get(address)?.focus();
   }, [focusRequest]);
 
   const firstTextIndex = blocks.findIndex((block) => block.type === 'text');
@@ -196,9 +218,9 @@ export function BlockEditor({
                 <TextField
                   ref={(node) => {
                     if (node === null) {
-                      inputs.current.delete(index);
+                      inputs.current.delete(textKey(index));
                     } else {
-                      inputs.current.set(index, node);
+                      inputs.current.set(textKey(index), node);
                     }
                   }}
                   value={block.value}
@@ -243,9 +265,24 @@ export function BlockEditor({
                   <View key={itemIndex} style={styles.listRow}>
                     <View style={styles.bullet} />
                     <TextField
+                      ref={(node) => {
+                        if (node === null) {
+                          inputs.current.delete(listKey(index, itemIndex));
+                        } else {
+                          inputs.current.set(listKey(index, itemIndex), node);
+                        }
+                      }}
                       value={item}
                       onChangeText={(value) => updateListItem(index, itemIndex, value)}
                       placeholder={t('write.listItemPlaceholder')}
+                      /*
+                       * 엔터로 만든 다음 항목은 이 `autoFocus`가 잡는다(그 행은 새로 마운트된다).
+                       * 🔴 그러나 **목록 블록 자체를 끼울 때는 이것만으로는 안 된다** —
+                       *   key가 `list-<인덱스>`라 앞에 블록을 끼우면 새 목록이 기존 목록과
+                       *   같은 key를 받고, React가 인스턴스를 재사용해 마운트가 일어나지 않는다.
+                       *   그러면 포커스가 앞 문단에 남아 **글이 그 문단에 들어간다**
+                       *   (2026-09-04 실기기 실측). 그래서 `focusRequest`로 따로 옮긴다.
+                       */
                       autoFocus={item.length === 0 && itemIndex === block.items.length - 1}
                       /*
                        * 엔터로 다음 항목을 만든다. 목록은 연달아 쓰는 물건이라 매번 +를 누르게 하면

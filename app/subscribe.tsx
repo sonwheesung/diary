@@ -264,7 +264,13 @@ export default function SubscribeScreen() {
           {/* ⚠ 로그인이 결제의 전제인 이유를 그 자리에 적는다 */}
           <Text style={styles.fine}>{t('subscribe.loginWhy')}</Text>
           <Button
-            label={t('support.loginButton')}
+            /*
+             * 🔴 `support.loginButton`을 빌려 쓰다가 **구독 화면이 "로그인하고 문의하기"라고
+             *   말했다**(2026-09-04 실기기 확인). 한국어·일본어는 그 키가 *문의*를 문장에 박아둔다
+             *   (나머지 13개 언어는 "Sign in and continue"류라 드러나지 않았을 뿐 같은 문제다).
+             *   화면이 다르면 문구도 다르다 — 키를 빌리면 언젠가 이렇게 갈라진다.
+             */
+            label={t('subscribe.loginButton')}
             onPress={() => void signIn()}
             loading={busy}
             disabled={busy}

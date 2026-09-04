@@ -495,6 +495,7 @@
     "failedBody": "Please try again shortly.",
     "failedTitle": "Purchase failed",
     "lead": "One subscription: no ads, and your entries kept safe.",
+    "loginButton": "Sign in to subscribe",
     "loginRequired": "Please sign in to subscribe.",
     "loginWhy": "Linking the subscription to your account is what lets it follow you to a new phone.",
     "managePlay": "Manage subscription on Play",

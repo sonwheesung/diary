@@ -78,6 +78,11 @@ const ALLOW = [
     why: '과거 기록 — 위와 같은 절의 "왜 이전 검증이 못 찾았나". 그때 돌던 개수를 적은 것이다',
   },
   {
+    file: 'docs/README.md',
+    contains: '`check:diary-format` 28→**38개**',
+    why: '과거 기록 — 2026-08-31 솔기 × 가 늘린 폭이다. 지금 값(42)으로 고치면 그날의 증분이 거짓이 된다',
+  },
+  {
     file: 'docs/AI_REPORT_SYSTEM.md',
     contains: '`check:ai` 79개가 전부 **한 시간대에서만** 돌았다',
     why: '과거 기록 — §6.6 "왜 못 찾았나"의 진단 시점 사실이다. 고치면 그 절이 거짓이 된다',

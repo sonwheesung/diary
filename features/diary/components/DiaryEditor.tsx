@@ -124,8 +124,14 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
    */
   const [entryDate, setEntryDate] = useState<string | null>(null);
   const [activeFormat, setActiveFormat] = useState<TextFormat>({});
-  /** 서식 시트를 닫을 때 커서를 되돌려 놓을 자리. `nonce`가 있어야 같은 블록도 다시 잡는다 */
-  const [focusRequest, setFocusRequest] = useState<{ index: number; nonce: number } | null>(null);
+  /** 커서를 되돌려 놓을 자리. `nonce`가 있어야 같은 블록도 다시 잡는다 */
+  const [focusRequest, setFocusRequest] = useState<{
+    index: number;
+    /** 있으면 그 블록의 목록 항목 */
+    item?: number;
+    nonce: number;
+  } | null>(null);
+
   const [openSheet, setOpenSheet] = useState<'date' | 'emotion' | 'tag' | 'format' | null>(
     null,
   );
@@ -287,6 +293,25 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
    * 그 자리에서 텍스트 블록을 앞뒤로 쪼개고 사이에 이미지 블록을 넣는다 —
    * 항상 맨 끝에 붙이면 "원하는 위치에 사진" 이라는 요구가 성립하지 않는다.
    */
+  /**
+   * 🔴 **커서를 옮겼으면 네이티브 포커스도 같이 옮긴다** (2026-09-04).
+   *
+   * `caretRef`만 옮기면 *다음 사진·목록이 들어갈 자리*는 맞는데 **키보드가 치는 곳은
+   * 그대로**다. 실기기에서 목록을 두 번째로 끼우자 글이 앞 문단 한가운데에 들어갔다 —
+   * 두 상태가 갈라져 있으면 언젠가 반드시 어긋난다. 한 함수를 지나가게 해서 묶는다.
+   */
+  const moveCaret = (
+    index: number,
+    position: number,
+    /** 키보드를 둘 곳. 커서 자리와 다를 수 있다 — 목록이 그렇다 */
+    focus: { index: number; item?: number } = { index },
+  ) => {
+    caretRef.current = { index, position };
+    caretLockedRef.current = true;
+    focusNonceRef.current += 1;
+    setFocusRequest({ index: focus.index, item: focus.item, nonce: focusNonceRef.current });
+  };
+
   const insertImageAtCaret = (imageId: string) => {
     const { index, position } = caretRef.current;
     const target = blocks[index];
@@ -295,7 +320,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       // 커서를 한 번도 두지 않았거나 그 블록이 사라진 경우엔 맨 끝에 붙인다.
       // 사진 뒤에 빈 텍스트 블록을 둔다 — 이어 쓸 자리가 없으면 글이 사진에서 끊긴다.
       setBlocks([...blocks, { type: 'image', imageId }, { type: 'text', value: '' }]);
-      caretRef.current = { index: blocks.length + 1, position: 0 };
+      moveCaret(blocks.length + 1, 0);
       return;
     }
 
@@ -311,10 +336,9 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       { type: 'text', value: target.value.slice(position), ...format },
     );
     setBlocks(next);
-    caretLockedRef.current = true;
 
-    // 다음 사진은 방금 넣은 사진 아래로 들어가야 자연스럽다.
-    caretRef.current = { index: index + 2, position: 0 };
+    // 다음 사진도, 이어 쓰는 글도 방금 넣은 사진 **아래로** 가야 자연스럽다.
+    moveCaret(index + 2, 0);
   };
 
   /**
@@ -327,7 +351,7 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
 
     if (target === undefined || target.type !== 'text') {
       setBlocks([...blocks, { type: 'list', items: [''] }, { type: 'text', value: '' }]);
-      caretRef.current = { index: blocks.length + 1, position: 0 };
+      moveCaret(blocks.length + 1, 0, { index: blocks.length, item: 0 });
       return;
     }
 
@@ -341,8 +365,12 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
       { type: 'text', value: target.value.slice(position), ...format },
     );
     setBlocks(next);
-    caretLockedRef.current = true;
-    caretRef.current = { index: index + 2, position: 0 };
+
+    /*
+     * 커서(다음 사진이 들어갈 자리)는 목록 **뒤 칸**이지만, 키보드는 방금 만든
+     * **목록 항목**에 있어야 한다 — 목록을 끼운 사람이 바로 치려는 것은 그 항목이다.
+     */
+    moveCaret(index + 2, 0, { index: index + 1, item: 0 });
   };
 
   /**
@@ -782,8 +810,8 @@ export function DiaryEditor({ diaryId, initialDate, onSaved, onCancel }: DiaryEd
            * 서식을 건 문단으로 커서를 되돌린다. 안 하면 네이티브 포커스가 분할 전 입력창에
            * 남아 있어, 시트를 닫고 이어 쓰면 글이 **첫 문단에** 들어간다.
            */
-          setFocusRequest({ index: caretRef.current.index, nonce: focusNonceRef.current + 1 });
           focusNonceRef.current += 1;
+          setFocusRequest({ index: caretRef.current.index, nonce: focusNonceRef.current });
         }}
         title={t('write.formatSheet')}
       >
