@@ -104,8 +104,9 @@ npm run scan:doc-refs
 #    ⚠ **깨짐 0이 목표가 아니다.** 기준선 27건과 대조해 **늘어난 것만** 본다.
 
 # ③ 문서가 적은 심볼이 코드에 실재하나
-grep -oE '`[A-Za-z_][A-Za-z0-9_]*`' docs/대상.md | tr -d '`' | sort -u | while read s; do
-  grep -rqs "$s" app features db lib store theme server/lib server/app scripts || echo "MISSING: $s"; done
+npm run scan:doc-symbols                 # 전체
+npm run scan:doc-symbols docs/DATABASE.md   # 한 문서만
+#    기준선(2026-09-04): 문서 17개 · **미존재 94건** — 아래 표의 5유형이면 정상이다
 
 # ⑥ 미완료로 보이는 것 전수 (위 §⑥ 참조)
 grep -rn "^\s*- \[ \]" docs/*.md CLAUDE.md
@@ -122,7 +123,7 @@ npm run check:doc-counts && npm run check:legal
 
 ## 기지(旣知) 오탐 — 다시 트리아지하지 말 것 (2026-09-04 전체 스캔)
 
-문서 36개 · 파일 인용 511건(고유 191) 스캔 시 **깨짐 27건**이 나오고 **전부 정당**하다.
+문서 36개 · 파일 인용 516건(고유 193) 스캔 시 **깨짐 27건**이 나오고 **전부 정당**하다.
 **진짜 드리프트는 0건이었다.**
 
 | 유형 | 예 |
@@ -135,6 +136,21 @@ npm run check:doc-counts && npm run check:legal
 | **레포 밖 비밀** | `secrets/jogak-prod-upload.jks` — `C:\project\secrets` |
 | **이전(移轉) 이력 인용** | `app/(tabs)/search.tsx` → `app/search.tsx`(2026-08-12 탭 강등). **화살표 왼쪽**이라 정당 |
 | **node_modules 경로** | `dist/purchases.d.ts`(react-native-purchases) |
+
+### ③ 심볼 인용 — 미존재 94건의 유형 (2026-09-04 실측)
+
+| 유형 | 예 | 정당한가 |
+|---|---|---|
+| **타 프로젝트·외부 심볼** | `purchase_events`·`entitlement_ids`·`graceUntil`·`revokedAt`·`PRODUCT_CHANGE`·`EXPIRATION`(common_server·RevenueCat) · `service_role`(Supabase) · `ageConfirmed`(배구명가) · `doply`·`delvewarden` | ✅ |
+| **안드로이드 매니페스트·Play 코드** | `POST_NOTIFICATIONS`·`RECORD_AUDIO`·`CAMERA`·`BIND_GET_INSTALL_REFERRER_SERVICE` · `PSL_USER_ACCOUNT`·`PSL_DATA_USAGE_EPHEMERAL` | ✅ |
+| 🔴 **문서가 부재를 명시한 것** | `generation_blobs`(*"만들지 않았다"*) · `onKeyPress`(안드로이드가 안 준다 → 되돌렸다) · `KeyboardAvoidingView`(*"쓰지 않는다"*) | ✅ **이게 정상 신호다** |
+| ⚠ **스캐너 한계 — 접두사** | `DEV_LOGIN` 은 코드에 `DEV_LOGIN_ENABLED` 로 있다. 토크나이저가 **온전한 식별자만** 잡는다 | 오탐 |
+| ⚠ **스캐너 한계 — 예시 문자열** | `Travel`·`cafe`(태그 대소문자 예시) · `c61fbc03`(Hermes 매직) · `_few`/`_many`(ICU 복수형) | 오탐 |
+
+🔴 **여기 5유형에 안 들어가면 진짜 드리프트다.** 첫 실행(2026-09-04)에서 `HINT_QUESTIONS` 가
+그렇게 잡혔다 — 실제 이름은 `HINT_QUESTION_IDS` 였고, **그 옆 문장까지 틀려 있었다**
+(*"저장은 문구 그대로"* ↔ §9.1 규칙 2 `highschool` ↔ 코드는 id 저장). 심볼 하나가
+**문서↔문서 모순 하나를 끌고 나왔다.**
 
 > 🔴 **새로 깨진 참조는 이 목록에 넣지 말고 고친다.** 이 목록은 *"의도적으로 실재하지 않는 대상"* 만이다.
 > 위 8유형에 안 들어가면 진짜 드리프트다.

@@ -1977,7 +1977,7 @@ GET /api/v1/ai/periods  →  [{ kind, periodKey }, …]      ai_usage에서 SELE
 | OpenAI 계정·키·예산 | ✅ 2026-08-13 — 크레딧 $10 · **auto-reload OFF** · 월 상한 **$30 하드 리밋** · `jogak-dev`/`jogak-prod` 프로젝트 분리 · 서비스 계정 키 |
 | **조직 로깅 Disabled** | ✅ 2026-08-13 — 일기 본문이 대시보드에 안 쌓인다(§9.2). `store: false` 한 줄에 걸려 있던 보장을 계정 설정으로 옮겼다 |
 | **DB v5 `ai_reports`** | ✅ `(kind, period_key)` UNIQUE |
-| **백업 매니페스트에 `reports`** | ✅ `MANIFEST_FORMAT = 2` · 복원의 교체 대상 · `check:backup-crypto` **46개 통과** |
+| **백업 매니페스트에 `reports`** | ✅ 2026-08-12 신설 시 `MANIFEST_FORMAT = 2`. **지금은 6**(§8.2.1까지 필드가 넷 더 붙었다 — 표는 [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §4). 복원의 교체 대상 · `check:backup-crypto` **46개 통과** |
 | **`features/ai/api/report-repository.ts`** | ✅ 구독을 보지 않는다(§11.3) |
 | **`features/ai/api/client.ts`** (AI 프록시 호출) | ✅ 실패를 타입으로 돌려준다 · **본문을 로깅하지 않는다** |
 | **`features/ai/api/report-service.ts`** | ✅ 기간·입력 수집·계층 요약 판정·저장 |

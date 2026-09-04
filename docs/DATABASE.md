@@ -218,6 +218,46 @@ CREATE INDEX IF NOT EXISTS idx_ai_reports_deleted_at ON ai_reports (deleted_at);
 
 ---
 
+### v7 — 리포트 지표 (2026-08-25)
+
+```sql
+ALTER TABLE ai_reports ADD COLUMN metrics TEXT;
+```
+
+`stress`·`happiness`·`exercise`·`growth` 네 지표와 그 밖의 주제를 **컬럼 하나에 JSON으로** 담는다.
+
+| 결정 | 이유 |
+|---|---|
+| 정규화하지 않는다 | 지표는 넷으로 고정이지만 `topics`는 개수가 변한다. 둘을 테이블로 빼면 **백업 매니페스트·복원·묘비까지 전부 두 벌**이 된다. 여기서 검색·집계할 일이 없다(월간 평균은 앱이 로컬에서 낸다) |
+| 🔴 **NULL이 정상값이다** | 프롬프트 v8 이전 리포트에는 지표가 없고, 캡이 **평생 1번**이라 영원히 안 생긴다. 화면은 그때 **지표 블록 자체를 안 그린다** — 빈 게이지는 고장으로 보인다 |
+
+### v8 — 핵심 한 줄 (2026-09-03)
+
+```sql
+ALTER TABLE ai_reports ADD COLUMN headline TEXT;
+```
+
+🔴 **`metrics` JSON 안에 넣지 않는다.** 지표가 아니고, 화면이 `metrics === null`로 지표 블록을
+그릴지 판정하는 것과 얽히면 안 된다 — **한 줄만 있고 지표는 없는 리포트가 실재한다**
+(월간·연간은 모델이 지표를 안 낸다, [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §8.4.1).
+
+⚠ 여기서도 **NULL이 정상값**이다(프롬프트 v12 이전). `metrics`와 같은 규약이다.
+
+### v9 — 한 줄이 기댄 자료 (2026-09-03)
+
+```sql
+ALTER TABLE ai_reports ADD COLUMN headline_from TEXT;
+```
+
+`headline`이 어느 날(주간) 또는 어느 하위 기간(월간·연간)에 기댔는지. JSON 배열 문자열이고
+화면은 그걸 **눌러서 그 일기·하위 리포트로 가는 칩**으로 그린다.
+
+🔴 **모델이 지어낸 키는 벤더 경계에서 버린다**(`pickHeadlineFrom`). 실재하지 않는 날짜를
+가리키면 눌러도 아무 일이 안 일어나고, 사용자는 그 순간 *"AI가 아무 말이나 한다"* 로 읽는다 —
+신뢰를 만들려던 기능이 정확히 반대로 작동한다. **빈 배열이 정상값**이다.
+
+---
+
 ## 5. 백업 대비 — ✅ 붙었다 (2026-08-11 · 2026-08-12)
 
 ~~"아직 구현 안 함"~~. 아래 항목은 전부 v4·v5에서 해소됐다.
@@ -229,7 +269,7 @@ CREATE INDEX IF NOT EXISTS idx_ai_reports_deleted_at ON ai_reports (deleted_at);
 | 삭제 전파(묘비) | ✅ `deleted_at` |
 | 마지막 백업 시각 | ✅ v4 `backup_state.last_backup_at` |
 | 암호화 메타(알고리즘·버전) | ✅ 봉투 헤더가 갖는다(`features/backup/envelope.ts`) — DB가 아니다 |
-| AI 리포트도 백업에 포함 | ✅ v5 + `MANIFEST_FORMAT = 3`의 `reports`(v6에서 `deleted_at`이 붙어 **2 → 3**) |
+| AI 리포트도 백업에 포함 | ✅ v5 `reports` + **현재 `MANIFEST_FORMAT = 6`**. 리포트에 필드가 붙을 때마다 함께 올랐다: 2(신설) → 3(`deleted_at`) → 4(`metrics`) → 5(`headline`) → 6(`headline_from`). 정본은 [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §4 |
 
 > 백업 단위는 **전체 스냅샷 + 차집합 경고**로 정해졌다(2026-08-11) —
 > [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md)가 정본이다.
@@ -242,6 +282,7 @@ CREATE INDEX IF NOT EXISTS idx_ai_reports_deleted_at ON ai_reports (deleted_at);
 |---|---|
 | 스키마 v1 결정 | ✅ 2026-08-07 |
 | `db/` 구현(연결·마이그레이션) | ✅ `db/client.ts`(단일 커넥션·WAL) · `db/migrations.ts`(user_version) |
-| **현재 user_version** | ✅ **6** (v4 백업 커서 · v5 AI 리포트 · v6 리포트 묘비) |
+| **현재 user_version** | ✅ **9** (v4 백업 커서 · v5 AI 리포트 · v6 리포트 묘비 · v7 지표 · v8 핵심 한 줄 · v9 한 줄의 근거) |
+| ⚠ 세는 법 | `LATEST_DB_VERSION = MIGRATIONS.length` — **이 표에 숫자를 손으로 적지 않는다.** 위 값이 어긋나면 마이그레이션을 더하고 문서를 안 고친 것이다(`npm run scan:doc-symbols` 로는 안 잡힌다) |
 | 쿼리 계층 | ✅ `features/diary/api/diary-repository.ts` · `features/ai/api/report-repository.ts` |
 | 조각 서버 DB | ✅ ~~월 결제 착수 시~~ → `jogak-stg`(서울) 생성·배포됨. ⚠ 운영 프로젝트는 아직 없다 |

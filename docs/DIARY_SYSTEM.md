@@ -613,7 +613,7 @@ AAAAA BBBBB          ← 한 문단
 | 필요한 것이 많다 | 로그인 세션 + 로컬 Supabase 스택 + 서버 기동 + 봉인 스크립트. ⚠ 구독 `pro`는 **불필요**하다(읽기는 구독을 안 본다) |
 | 얻는 것 | 사진 blob까지 포함한 실전 경로 검증 — **복원 자체를 시험하려는 게 아니면 값이 없다** |
 
-⚠ 매니페스트(`MANIFEST_FORMAT` 3)와 봉투(XChaCha20-Poly1305 + HKDF)는 **순수 계층이라
+⚠ 매니페스트(`MANIFEST_FORMAT`)와 봉투(XChaCha20-Poly1305 + HKDF)는 **순수 계층이라
 Node에서 만들 수 있다**(`check:backup-crypto`가 이미 그렇게 돈다). 막는 것은 암호가 아니라
 **전체 교체라는 성질**이다.
 
