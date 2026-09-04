@@ -15,6 +15,41 @@
 /** 웹훅이 설정되지 않았으면 조용히 아무것도 하지 않는다 — 로컬 개발에서 소음이 되면 안 된다 */
 const WEBHOOK = process.env.DISCORD_WEBHOOK_URL ?? '';
 
+/**
+ * 공통 전송 — **embed 로 보낸다**(2026-09-04).
+ *
+ * 🔴 형제 앱(common_server `lib/notify.ts`)이 `{ username, embeds: [...] }` 규약을 쓴다.
+ *   조각만 평문 `content` 로 보내서 **같은 채널에서 혼자 다르게 보였다** — 색 띠도 없고
+ *   필드 정렬도 안 돼 스캔이 안 된다. 채널을 공유하는 이상 형식도 공유하는 것이 맞다.
+ *
+ * ⚠ **embed 가 규율에도 낫다.** 필드가 `name`/`value` 쌍으로 고정돼 있어, 호출부가
+ *   자유 문장을 끼워 넣을 자리가 애초에 없다 — 이 파일의 목적(*"실수로 본문을 넘길 자리를
+ *   아예 만들지 않는다"*)을 형식이 대신 지켜준다.
+ *
+ * ⚠ **4초 타임아웃.** Discord 가 느리다고 서버리스 함수가 물려 있으면 안 된다(형제와 같은 값).
+ * ⚠ fire-and-forget · throw-none.
+ */
+function post(username: string, embed: Record<string, unknown>): void {
+  if (WEBHOOK.length === 0) {
+    return;
+  }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 4000);
+  void fetch(WEBHOOK, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ username, embeds: [embed] }),
+    signal: ctrl.signal,
+  })
+    .catch(() => {
+      /*
+       * 삼킨다. 알림이 안 갔다고 사용자 요청을 실패시키지 않는다.
+       * ⚠ 여기서 reportError를 부르지 않는다 — 웹훅이 죽었을 때 로그가 폭주한다.
+       */
+    })
+    .finally(() => clearTimeout(timer));
+}
+
 export interface AiFailureNotice {
   /** `refused` · `upstream` · `not-configured` 등. **자유 문자열이 아니라 코드다** */
   reason: string;
@@ -37,29 +72,26 @@ export interface AiFailureNotice {
  * ⚠ 여기서 던지면 라우트의 catch가 삼켜 500이 될 수 있다 — 그래서 내부에서 전부 잡는다.
  */
 export function notifyAiFailure(notice: AiFailureNotice): void {
-  if (WEBHOOK.length === 0) {
-    return;
-  }
   /*
-   * 문자열을 **여기서 조립한다.** 호출부가 메시지를 만들어 넘기게 하면
+   * 값을 **여기서 필드에 넣는다.** 호출부가 메시지를 만들어 넘기게 하면
    * 언젠가 누군가 거기에 일기 한 줄을 붙인다.
    */
-  const lines = [
-    `🔴 **조각 AI 리포트 실패** — \`${notice.reason}\``,
-    `· 종류: \`${notice.kind}\` · 기간: \`${notice.periodKey}\``,
-    `· subject: \`${notice.subjectRef}\``,
-    notice.cooled ? '· ⏸ 1시간 잠금이 걸렸습니다' : '· 잠금 없음 (모델을 부르지 않은 실패)',
-  ];
-
-  void fetch(WEBHOOK, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ content: lines.join('\n') }),
-  }).catch(() => {
-    /*
-     * 삼킨다. 알림이 안 갔다고 사용자 요청을 실패시키지 않는다.
-     * ⚠ 여기서 reportError를 부르지 않는다 — 웹훅이 죽었을 때 로그가 폭주한다.
-     */
+  post('조각 AI', {
+    title: '🔴 AI 리포트 실패',
+    color: 0xe74c3c,
+    fields: [
+      { name: '사유', value: `\`${notice.reason}\``, inline: true },
+      { name: '종류', value: `\`${notice.kind}\``, inline: true },
+      { name: '기간', value: `\`${notice.periodKey}\``, inline: true },
+      {
+        name: '잠금',
+        value: notice.cooled ? '⏸ 1시간 잠금' : '없음 (모델을 부르지 않은 실패)',
+        inline: false,
+      },
+    ],
+    /* 신원이 아니라 **해시 앞 8자**다 — "같은 사람이 반복 실패하는가"만 알 수 있다 */
+    footer: { text: `subject ${notice.subjectRef}` },
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -87,19 +119,14 @@ export interface OpsAlert {
 }
 
 export function notifyOps(alert: OpsAlert): void {
-  if (WEBHOOK.length === 0) {
-    return;
-  }
-  const lines = [
-    `🔴 **조각 서버 이상** — \`${alert.reason}\``,
-    `· 위치: \`${alert.where}\``,
-    ...(alert.hint === undefined ? [] : [`· ${alert.hint}`]),
-  ];
-  void fetch(WEBHOOK, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ content: lines.join('\n') }),
-  }).catch(() => {
-    /* 삼킨다 — 알림 실패가 크론을 실패시키지 않는다 */
+  post('조각 서버', {
+    title: '🔴 서버 이상',
+    color: 0xe74c3c,
+    fields: [
+      { name: '사유', value: `\`${alert.reason}\``, inline: true },
+      { name: '위치', value: `\`${alert.where}\``, inline: true },
+      ...(alert.hint === undefined ? [] : [{ name: '할 일', value: alert.hint, inline: false }]),
+    ],
+    timestamp: new Date().toISOString(),
   });
 }
