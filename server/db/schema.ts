@@ -220,6 +220,28 @@ export const aiUsage = pgTable(
     outputTokens: integer('output_tokens').notNull().default(0),
     /** 원가를 나중에 되짚으려면 어떤 모델이었는지가 필요하다 */
     model: text('model'),
+    /**
+     * 🔴 **운영자가 이 기간을 한 번 더 열어줬는가**(2026-09-04 사용자 결정).
+     *
+     * *"리포트가 별로예요"* 문의가 오면 프롬프트를 고친 뒤 이 값을 켜고 답변한다.
+     * 사용자가 다시 만들면 **이 행이 갱신되면서 플래그가 소모된다**(1회용).
+     *
+     * 🔴 **행을 하나 더 넣지 않는 것이 핵심이다.** 그래서 아래 `uq_ai_usage_period`를
+     *   건드릴 필요가 없다 — 기간당 행은 여전히 하나이고, *"이 기간은 이미 만들었다"* 의
+     *   진실도 그대로다. 인덱스를 넓히는 설계와 비교해 마이그레이션 위험이 거의 없다.
+     *
+     * ⚠ **소모는 조건부 UPDATE로 한다**(`… WHERE regenerate = true` 의 rowCount).
+     *   읽고→쓰면 동시 요청 둘이 **모델을 두 번 부른다**(돈이 두 번 나간다).
+     * ⚠ **모델 호출 전에 소모하되, 실패하면 되돌린다.** `ai-policy.ts`의
+     *   *"실패는 캡을 소모하지 않는다"* 를 여기서도 지킨다 — 우리 잘못으로 사용자가
+     *   받은 재시도권을 잃게 두지 않는다.
+     */
+    regenerate: boolean('regenerate').notNull().default(false),
+    /**
+     * 왜 열어줬나. **없어도 동작하지만 없으면 나중에 답할 수 없다** —
+     * *"이건 왜 열려 있지"* 가 반드시 생긴다. 예: `문의 #123 · 프롬프트 v15로 고침`.
+     */
+    regenerateNote: text('regenerate_note'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -305,6 +327,22 @@ export const aiReports = pgTable(
     metrics: text('metrics'),
     /** 사용자가 [신고]를 눌렀나 — 우선해서 볼 것을 고르는 기준 */
     flagged: boolean('flagged').notNull().default(false),
+    /**
+     * 몇 번째로 만든 것인가(1부터). 재생성하면 2, 3 … 으로 쌓인다.
+     *
+     * 🔴 **서버는 전부 남기고 사용자는 최종본만 본다**(2026-09-04 사용자 결정).
+     *   `(subject, kind, period_key)`에 UNIQUE가 없어서 리비전이 그냥 쌓이고,
+     *   `prompt_ver`가 함께 있으므로 **"v14는 이랬고 v15는 이렇다"를 같은 사람의
+     *   같은 주로** 비교할 수 있다 — 프롬프트를 고칠 때 가장 직접적인 근거다.
+     *
+     * ⚠ 앱은 반대로 **옛 것을 교체한다.** 목록에 같은 주가 두 번 뜨면 고장으로 보이고,
+     *   불만족해서 다시 만든 것이라 옛 것을 붙들 이유가 없다.
+     * ⚠ 리비전끼리 묶는 키는 `(subject_id, kind, period_key)`다. 별도 그룹 id를 두지
+     *   않는다 — 이미 있는 세 값으로 충분하고, 하나 더 두면 어긋날 자리가 하나 더 는다.
+     * ⚠ **보관은 리비전마다 따로 센다**(생성일 + 90일). 60일 뒤에 재생성하면 옛 것이
+     *   먼저 사라져 비교 창이 그만큼 짧다 — 그건 감수한다.
+     */
+    revision: integer('revision').notNull().default(1),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

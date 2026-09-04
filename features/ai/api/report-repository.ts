@@ -192,6 +192,27 @@ export async function hasAnyReport(): Promise<boolean> {
   return (row?.n ?? 0) > 0;
 }
 
+/**
+ * 🔴 **재생성 전용 — 그 기간의 옛 리포트를 완전히 지운다**(`AI_REPORT_SYSTEM` §6.6).
+ *
+ * 재생성은 새 `reportId`로 오므로 그냥 저장하면 **같은 주가 목록에 두 번** 뜬다.
+ * 사용자에게는 그게 고장으로 보이고, 어느 쪽이 진짜인지도 알 수 없다.
+ *
+ * ⚠ **묘비를 남기지 않는다**(§11.9의 예외다). 묘비의 목적은 *"이 기간을 썼다"* 를
+ *   서버 캡과 맞추는 것인데, **바로 뒤에 같은 기간의 새 행이 들어오므로** 그 사실은
+ *   그대로 유지된다. 묘비를 남기면 오히려 한 기간에 두 행이 남는다.
+ *
+ * ⚠ **서버는 반대다** — 리비전을 전부 쌓는다. *"v14는 이랬고 v15는 이렇다"* 를 볼 수
+ *   있어야 프롬프트를 고칠 수 있어서다. **사용자는 최종본만, 우리는 전부.**
+ */
+export async function dropPeriodForRegenerate(
+  kind: ReportKind,
+  periodKey: string,
+): Promise<void> {
+  const db = await getDatabase();
+  await db.runAsync('DELETE FROM ai_reports WHERE kind = ? AND period_key = ?', kind, periodKey);
+}
+
 export async function saveReport(report: Report): Promise<void> {
   const db = await getDatabase();
   await db.runAsync(

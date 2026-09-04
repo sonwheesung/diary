@@ -74,6 +74,8 @@ export async function GET(req: Request): Promise<Response> {
         model: aiReports.model,
         promptVer: aiReports.promptVer,
         flagged: aiReports.flagged,
+        /* 몇 번째 판인가 — 프롬프트를 고친 뒤 나아졌는지 가르는 축이다(§6.6) */
+        revision: aiReports.revision,
         createdAt: aiReports.createdAt,
         // 🔴 subjectId를 여기 넣지 않는다 — 위 주석 참조
       })

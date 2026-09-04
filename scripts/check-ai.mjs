@@ -913,6 +913,99 @@ if (!vendorContactReady()) {
 }
 
 console.log('');
+/* ── ⑨ 재생성 — **열어준 만큼만, 한 번만** (2026-09-04) ────────────────────────
+ *
+ * 🔴 소스를 읽는다. 여기서 지키는 것이 계산 결과가 아니라 **순서와 조건**이라서다 —
+ *   "모델을 부르기 전에 소모했는가", "실패하면 돌려주는가", "UNIQUE 를 안 건드렸는가"는
+ *   순수 함수로 만들 수 없고, 그런데 하나라도 어긋나면 돈이 두 번 나가거나
+ *   사용자가 받은 재시도권을 잃는다.
+ */
+{
+  const ROUTE = readFileSync(
+    new URL('../server/app/api/v1/ai/report/route.ts', import.meta.url),
+    'utf8',
+  );
+  const SCHEMA = readFileSync(new URL('../server/db/schema.ts', import.meta.url), 'utf8');
+  const SERVICE = readFileSync(
+    new URL('../features/ai/api/report-service.ts', import.meta.url),
+    'utf8',
+  );
+
+  check('🔴 기간 캡은 재생성이 열렸을 때만 열린다 — 조건이 사라지면 평생 1회가 무너진다', () => {
+    assert(
+      /periodUsed >= PERIOD_CAP\[kind\] && !regenerateAllowed/.test(ROUTE),
+      '캡 판정에서 regenerateAllowed 조건이 사라졌다',
+    );
+  });
+
+  check('🔴 일일 캡은 재생성에도 그대로 적용된다 — 여기까지 열면 폭주 방어가 없어진다', () => {
+    assert(
+      /if \(dayUsed >= DAILY_CALL_CAP\) return fail\('rate-limited'\);/.test(ROUTE),
+      '일일 캡에 예외가 생겼다',
+    );
+  });
+
+  check('🔴 재생성권은 **모델을 부르기 전에** 소모한다 — 뒤로 가면 돈이 두 번 나간다', () => {
+    const consume = ROUTE.indexOf('consumedRegenerate = done.length === 1');
+    const model = ROUTE.indexOf('await generateReport(');
+    assert(consume > 0, '소모 코드가 없다');
+    assert(model > 0, 'generateReport 호출을 못 찾았다');
+    assert(consume < model, '소모가 모델 호출보다 뒤에 있다 — 동시 요청이 둘 다 모델을 부른다');
+  });
+
+  check('🔴 소모는 조건부 UPDATE 다 — 읽고→쓰면 경쟁에서 둘 다 통과한다', () => {
+    assert(
+      /eq\(aiUsage\.regenerate, true\)/.test(ROUTE),
+      'WHERE 에 regenerate = true 가 없다 — Postgres 가 직렬화해 주지 못한다',
+    );
+    assert(/\.returning\(\{ id: aiUsage\.id \}\)/.test(ROUTE), '바뀐 행을 세지 않는다');
+  });
+
+  check('🔴 실패하면 재생성권을 돌려준다 — 우리 잘못으로 재시도권을 잃게 두지 않는다', () => {
+    assert(
+      /if \(consumedRegenerate\) \{[\s\S]{0,400}?\.set\(\{ regenerate: true \}\)/.test(ROUTE),
+      '실패 경로에서 regenerate 를 복구하지 않는다',
+    );
+  });
+
+  check('🔴 재생성은 ai_usage 에 행을 더 넣지 않는다 — UNIQUE 를 안 건드리는 근거다', () => {
+    assert(
+      /if \(consumedRegenerate\) \{[\s\S]{0,200}?db\s*\.update\(aiUsage\)/.test(ROUTE),
+      '재생성이 UPDATE 가 아니라 INSERT 로 간다 — uq_ai_usage_period 가 거부한다',
+    );
+    assert(
+      /uniqueIndex\('uq_ai_usage_period'\)\.on\(table\.subjectId, table\.kind, table\.periodKey\)/.test(
+        SCHEMA,
+      ),
+      'uq_ai_usage_period 가 바뀌었다 — 기간당 1행이 곧 "이미 만들었다"의 진실이다',
+    );
+  });
+
+  check('재생성해도 그날 몫을 먹는다 — day 를 갱신하지 않으면 일일 캡이 새다', () => {
+    assert(
+      /db\s*\.update\(aiUsage\)[\s\S]{0,300}?day: utcDay\(\)/.test(ROUTE),
+      'UPDATE 에서 day 를 갱신하지 않는다',
+    );
+  });
+
+  check('🔴 앱은 옛 리포트를 교체한다 — 같은 기간이 목록에 두 번 뜨면 고장으로 보인다', () => {
+    const drop = SERVICE.indexOf('dropPeriodForRegenerate(kind, periodKey)');
+    const save = SERVICE.indexOf('await saveReport({');
+    assert(drop > 0, '재생성 시 옛 리포트를 치우지 않는다');
+    assert(drop < save, '치우는 것이 저장보다 뒤에 있다');
+  });
+
+  check('🔴 서버는 리비전을 쌓는다 — 사용자는 최종본만, 우리는 전부', () => {
+    assert(/revision: periodUsed \+ 1/.test(ROUTE), '리비전 번호를 안 매긴다');
+    assert(
+      !/uniqueIndex\([^)]*\)\.on\(table\.subjectId, table\.kind, table\.periodKey\)[\s\S]{0,200}aiReports/.test(
+        SCHEMA,
+      ),
+      'ai_reports 에 기간 UNIQUE 가 생기면 리비전이 안 쌓인다',
+    );
+  });
+}
+
 if (failures.length > 0) {
   console.error(`AI 순수 계층 — ${failures.length}개 실패\n`);
   for (const f of failures) console.error(`  · ${f}`);

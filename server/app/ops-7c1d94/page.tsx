@@ -301,6 +301,39 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
     setBusy(false);
   }, [token, granularity, reportFilter, subjectApplied]);
 
+  /**
+   * 🔴 **콘솔의 첫 쓰기**(`ADMIN_SYSTEM` §3.6·§4). *"리포트가 별로예요"* 문의에
+   * 프롬프트를 고친 뒤 이 기간을 한 번 더 열고, 답변에 *"다시 만들어 보세요"* 라고 쓴다.
+   *
+   * ⚠ 메모를 **반드시 받는다.** 없으면 나중에 *"이건 왜 열려 있지"* 에 답할 수 없다.
+   *   비우면 그냥 취소한다 — 강제로 빈 값을 넣게 하지 않는다.
+   */
+  const openRegenerate = useCallback(
+    (kind: string, periodKey: string) => {
+      const note = window.prompt(
+        `${periodKey} (${kind}) 재생성을 엽니다.\n무엇 때문인지 적어주세요 — 예: "문의 #123 · 프롬프트 v15로 고침"`,
+        '',
+      );
+      if (note === null || note.trim().length === 0) return;
+      void (async () => {
+        const res = await fetch('/api/admin/regenerate', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
+          body: JSON.stringify({ subject: subjectApplied, kind, periodKey, note: note.trim() }),
+        }).catch(() => null);
+        const body = res === null ? null : ((await res.json().catch(() => null)) as Json | null);
+        if (body?.ok !== true) {
+          setErr('재생성을 열지 못했습니다.');
+          return;
+        }
+        // 0건 = 그런 기간이 없다. 조용히 성공으로 보이면 답변만 보내고 아무 일도 안 일어난다
+        setErr(num(body.changed) === 0 ? '그 기간의 사용 기록이 없습니다 — 값을 확인하세요.' : '');
+        await load();
+      })();
+    },
+    [token, subjectApplied, load],
+  );
+
   // granularity가 바뀌면 다시 부른다. 최초 1회도 여기서 걸린다.
   const first = useRef(true);
   useEffect(() => {
@@ -367,6 +400,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
                 subject={subject}
                 onSubject={setSubject}
                 onLookup={() => setSubjectApplied(subject.trim())}
+                onOpenRegenerate={openRegenerate}
               />
             )}
             {tab === 'vaults' && <VaultsTab data={vaults} />}
@@ -619,6 +653,7 @@ function ReportsTab({
   subject,
   onSubject,
   onLookup,
+  onOpenRegenerate,
 }: {
   data: Json | null;
   filter: 'all' | 'flagged' | 'concern';
@@ -626,6 +661,7 @@ function ReportsTab({
   subject: string;
   onSubject: (v: string) => void;
   onLookup: () => void;
+  onOpenRegenerate: (kind: string, periodKey: string) => void;
 }) {
   if (data === null) {
     return <div className="oc-empty">불러오지 못했습니다.</div>;
@@ -714,6 +750,21 @@ function ReportsTab({
               <span className="oc-tag">{String(r.kind)}</span>
               <span className="oc-tag">{String(r.periodKey)}</span>
               <span className="oc-tag">{String(r.lang)}</span>
+              {num(r.revision) > 1 ? (
+                <span className="oc-tag">리비전 {fmt(r.revision)}</span>
+              ) : null}
+              {/*
+                🔴 **subject 로 좁혀 봤을 때만 뜬다.** 익명 목록에서는 누구 것인지 모르므로
+                  열어줄 대상을 특정할 수 없다 — 버튼이 있으면 오히려 헷갈린다.
+              */}
+              {data.scoped === true ? (
+                <button
+                  className="oc-btn sm ghost"
+                  onClick={() => onOpenRegenerate(String(r.kind), String(r.periodKey))}
+                >
+                  재생성 열기
+                </button>
+              ) : null}
               <span className="oc-crumb" style={{ marginLeft: 'auto' }}>
                 {String(r.model ?? '—')} · p{fmt(r.promptVer)} · 조각 {fmt(r.sourceCount)}개 ·{' '}
                 {String(r.createdAt ?? '').slice(0, 10)}

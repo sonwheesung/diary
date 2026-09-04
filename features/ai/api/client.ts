@@ -269,3 +269,57 @@ export async function purgeAiData(): Promise<{ ok: true } | { ok: false; reason:
   }
   return { ok: true };
 }
+
+/**
+ * **운영자가 다시 열어준 기간들**(`docs/AI_REPORT_SYSTEM.md` §6.6).
+ *
+ * 기간 시트가 이미 만든 기간을 잠그기 때문에, 서버가 열어줘도 앱이 모르면 못 고른다.
+ *
+ * 🔴 **실패는 조용히 빈 배열이다.** 이건 *"평소에는 없는 것"* 을 여는 부가 정보라,
+ *   못 물어봤다고 화면을 막거나 오류를 띄우면 **평소의 화면이 서버 상태에 묶인다.**
+ *   못 받으면 예전과 똑같이 동작할 뿐이다.
+ */
+export async function fetchRegenerablePeriods(): Promise<{ kind: ReportKind; periodKey: string }[]> {
+  if (BACKUP_SERVER_URL.length === 0) {
+    return [];
+  }
+  const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
+  if (token === null) {
+    return [];
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  let res: Response;
+  try {
+    res = await fetch(`${BACKUP_SERVER_URL}/api/v1/ai/regenerable`, {
+      headers: { authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    });
+  } catch {
+    return [];
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!res.ok) {
+    return [];
+  }
+
+  let json: { periods?: unknown };
+  try {
+    json = (await res.json()) as { periods?: unknown };
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(json.periods)) {
+    return [];
+  }
+  /* 모르는 모양은 버린다 — 여기서 던지면 기간 시트가 통째로 안 뜬다 */
+  return json.periods.flatMap((raw) => {
+    const item = raw as { kind?: unknown; periodKey?: unknown };
+    if (typeof item.kind !== 'string' || typeof item.periodKey !== 'string') return [];
+    if (item.kind !== 'weekly' && item.kind !== 'monthly' && item.kind !== 'yearly') return [];
+    return [{ kind: item.kind, periodKey: item.periodKey }];
+  });
+}

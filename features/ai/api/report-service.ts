@@ -2,13 +2,14 @@ import * as Crypto from 'expo-crypto';
 
 import { listDiariesBetween, listEntryTexts } from '@/features/diary/api/diary-repository';
 import {
+  dropPeriodForRegenerate,
   findByPeriod,
   listReports,
   listUsedPeriodKeys,
   saveReport,
   type ReportMetrics,
 } from '@/features/ai/api/report-repository';
-import { requestReport, type AiFail } from '@/features/ai/api/client';
+import { fetchRegenerablePeriods, requestReport, type AiFail } from '@/features/ai/api/client';
 import {
   creatableMonthKeys,
   creatableWeekKeys,
@@ -190,6 +191,21 @@ export async function listPeriodOptions(
    *   다시 고를 수 있게 보이고, 눌러야 서버가 `cap-exceeded`로 막는다.
    */
   const made = new Set(await listUsedPeriodKeys(kind));
+  /*
+   * 🔴 **운영자가 다시 열어준 기간은 잠금에서 뺀다**(§6.6). *"리포트가 별로예요"* 문의에
+   *   프롬프트를 고치고 답하는 경로가 여기서 끝난다 — 열어줘도 시트가 안 보여주면
+   *   답변이 *"다시 만들어 보세요"* 라고 해놓고 만들 수가 없다.
+   *
+   * ⚠ 서버를 못 물어봐도 **평소대로 동작한다**(빈 배열). 부가 정보 하나 때문에
+   *   기간 시트 전체가 서버 상태에 묶이면 안 된다.
+   */
+  const reopened = new Set(
+    (await fetchRegenerablePeriods())
+      .filter((period) => period.kind === kind)
+      .map((period) => period.periodKey),
+  );
+  /** 이미 만들었지만 **다시 만들 수 있는가** */
+  const locked = (key: string): boolean => made.has(key) && !reopened.has(key);
 
   if (kind === 'weekly') {
     /*
@@ -213,7 +229,7 @@ export async function listPeriodOptions(
         key,
         count,
         total: 0,
-        blocked: made.has(key) ? 'exists' : count === 0 ? 'empty' : null,
+        blocked: locked(key) ? 'exists' : count === 0 ? 'empty' : null,
       };
     });
   }
@@ -237,7 +253,8 @@ export async function listPeriodOptions(
       key,
       count: have,
       total: subs.length,
-      blocked: made.has(key)
+      // 상위도 같은 규칙 — 열어준 기간은 잠금에서 뺀다(§6.6)
+      blocked: locked(key)
         ? 'exists'
         : have === 0
           ? needFail
@@ -375,6 +392,12 @@ export async function createReport(
     // `retryAt`은 `cooling-down`에만 실려 온다. 그대로 흘려보낸다 — 화면이 시각을 말한다
     return { ok: false, reason: response.reason, ...(response.retryAt !== undefined && { retryAt: response.retryAt }) };
   }
+
+  /*
+   * 🔴 **재생성이면 옛 것을 먼저 치운다**(§6.6). 새 `reportId`로 오기 때문에 그냥 넣으면
+   *   같은 기간이 목록에 두 번 뜬다. 처음 만드는 기간이면 지울 것이 없어 무해하다.
+   */
+  await dropPeriodForRegenerate(kind, periodKey);
 
   await saveReport({
     id: reportId,

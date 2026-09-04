@@ -186,9 +186,20 @@ export async function POST(req: Request): Promise<Response> {
    */
   let periodUsed: number;
   let dayUsed: number;
+  /**
+   * 🔴 운영자가 이 기간을 한 번 더 열어줬는가(`ADMIN_SYSTEM` §3.6).
+   *
+   * *"리포트가 별로예요"* 문의 → 프롬프트 수정 → 이 값을 켜고 답변 → 사용자가 다시 만든다.
+   * 아래에서 **모델을 부르기 전에 조건부 UPDATE로 소모**한다.
+   */
+  let regenerateAllowed = false;
   try {
     const [periodRow] = await db
-      .select({ n: sql<number>`count(*)::int` })
+      .select({
+        n: sql<number>`count(*)::int`,
+        /* 기간당 행이 하나이므로 bool_or 는 그 행의 값과 같다. 행이 없으면 null → false */
+        regen: sql<boolean | null>`bool_or(${aiUsage.regenerate})`,
+      })
       .from(aiUsage)
       .where(
         and(
@@ -203,12 +214,17 @@ export async function POST(req: Request): Promise<Response> {
       .where(and(eq(aiUsage.subjectId, id.subjectId), eq(aiUsage.day, utcDay())));
     periodUsed = periodRow?.n ?? 0;
     dayUsed = dayRow?.n ?? 0;
+    regenerateAllowed = periodRow?.regen === true;
   } catch (error) {
     reportError(error, 'ai.cap-read');
     return fail('error');
   }
 
-  if (periodUsed >= PERIOD_CAP[kind]) return fail('cap-exceeded');
+  /*
+   * ⚠ **일일 캡은 재생성에도 그대로 적용된다.** 기간 캡은 "같은 주를 두 번 만들지 마라"이고
+   *   일일 캡은 "버그로 하루에 수백 번 부르지 마라"라서, 뒤쪽까지 열면 방어가 사라진다.
+   */
+  if (periodUsed >= PERIOD_CAP[kind] && !regenerateAllowed) return fail('cap-exceeded');
   if (dayUsed >= DAILY_CALL_CAP) return fail('rate-limited');
 
   /*
@@ -236,6 +252,46 @@ export async function POST(req: Request): Promise<Response> {
 
   // 멱등 키. 앱이 응답을 놓치고 재시도해도 두 번 부르지 않는다
   if (!claim(reportId)) return fail('in-progress');
+
+  /*
+   * 🔴 **재생성권을 모델 호출 *전에* 소모한다** — 조건부 UPDATE의 `rowCount`로.
+   *
+   *   읽고→쓰면 동시 요청 둘이 각각 `regenerate = true`를 보고 **모델을 두 번 부른다**
+   *   (돈이 두 번 나가고 한 쪽은 기록도 못 남긴다). `WHERE … AND regenerate = true`는
+   *   Postgres가 직렬화해 주므로 **이긴 쪽만 1을 받는다.**
+   *
+   * ⚠ 실패하면 아래에서 **되돌린다**(`ai-policy.ts`의 *"실패는 캡을 소모하지 않는다"*).
+   *   우리 잘못으로 사용자가 받은 재시도권을 잃게 두지 않는다.
+   */
+  let consumedRegenerate = false;
+  if (regenerateAllowed) {
+    try {
+      const done = await db
+        .update(aiUsage)
+        .set({ regenerate: false })
+        .where(
+          and(
+            eq(aiUsage.subjectId, id.subjectId),
+            eq(aiUsage.kind, kind),
+            eq(aiUsage.periodKey, periodKey),
+            eq(aiUsage.regenerate, true),
+          ),
+        )
+        /* 드라이버마다 rowCount 모양이 달라 **돌려받은 행을 센다** — 어디서든 같다 */
+        .returning({ id: aiUsage.id });
+      consumedRegenerate = done.length === 1;
+    } catch (error) {
+      reportError(error, 'ai.regenerate-consume');
+    }
+    /*
+     * 못 가져갔다 = 그 사이 다른 요청이 썼다. **모델을 부르지 않는다** —
+     * 여기서 통과시키면 조건부 UPDATE를 쓴 의미가 없어진다.
+     */
+    if (!consumedRegenerate) {
+      inFlight.delete(reportId);
+      return fail('cap-exceeded');
+    }
+  }
 
   try {
     /*
@@ -287,6 +343,29 @@ export async function POST(req: Request): Promise<Response> {
         cooled: calledModel,
       });
 
+      /*
+       * 🔴 **재생성권을 돌려준다.** `ai-policy.ts`의 *"실패는 캡을 소모하지 않는다"* 를
+       *   여기서도 지킨다 — 운영자가 문의에 답하며 열어준 한 번을 **우리 잘못으로**
+       *   잃게 두면, 사용자는 다시 문의를 보내야 하고 그 사이 답변은 거짓이 된다.
+       *
+       * ⚠ 완전히 원자적이지는 않다(여기서 죽으면 못 돌려준다). 그건 감수하되
+       *   **안전한 쪽으로 기운다** — 실패했는데 권한이 남는 것이, 성공했는데 또 열리는
+       *   것보다 낫다.
+       */
+      if (consumedRegenerate) {
+        await db
+          .update(aiUsage)
+          .set({ regenerate: true })
+          .where(
+            and(
+              eq(aiUsage.subjectId, id.subjectId),
+              eq(aiUsage.kind, kind),
+              eq(aiUsage.periodKey, periodKey),
+            ),
+          )
+          .catch((e: unknown) => reportError(e, 'ai.regenerate-restore'));
+      }
+
       if (result.reason === 'not-configured') return fail('not-configured');
       if (result.reason === 'refused' || result.reason === 'malformed') return fail('refused');
       if (result.reason === 'truncated') return fail('error');
@@ -300,16 +379,44 @@ export async function POST(req: Request): Promise<Response> {
      *   이유는 아니다. 최악이라도 그 기간을 한 번 더 만들 수 있게 되는 것뿐이다.
      */
     try {
-      await db.insert(aiUsage).values({
-        id: reportId,
-        subjectId: id.subjectId,
-        kind,
-        periodKey,
-        day: utcDay(),
-        inputTokens: result.inputTokens,
-        outputTokens: result.outputTokens,
-        model: result.model,
-      });
+      if (consumedRegenerate) {
+        /*
+         * 🔴 **행을 하나 더 넣지 않는다.** `uq_ai_usage_period`가 기간당 하나를 강제하고,
+         *   그 UNIQUE 가 곧 *"이 기간은 이미 만들었다"* 의 진실이다(§schema).
+         *   재생성은 **그 행을 갱신**하는 것이라 인덱스를 건드릴 필요가 없다 —
+         *   이 설계를 고른 이유가 정확히 이것이다.
+         *
+         * ⚠ `day` 도 함께 갱신한다. 일일 캡이 이 컬럼을 세므로 옛 날짜로 두면
+         *   재생성이 그날의 몫을 안 먹는다.
+         */
+        await db
+          .update(aiUsage)
+          .set({
+            id: reportId,
+            day: utcDay(),
+            inputTokens: result.inputTokens,
+            outputTokens: result.outputTokens,
+            model: result.model,
+          })
+          .where(
+            and(
+              eq(aiUsage.subjectId, id.subjectId),
+              eq(aiUsage.kind, kind),
+              eq(aiUsage.periodKey, periodKey),
+            ),
+          );
+      } else {
+        await db.insert(aiUsage).values({
+          id: reportId,
+          subjectId: id.subjectId,
+          kind,
+          periodKey,
+          day: utcDay(),
+          inputTokens: result.inputTokens,
+          outputTokens: result.outputTokens,
+          model: result.model,
+        });
+      }
     } catch (error) {
       reportError(error, 'ai.usage-write');
     }
@@ -342,6 +449,15 @@ export async function POST(req: Request): Promise<Response> {
         sourceCount: withBody(args.entries).length + (args.subReports?.length ?? 0),
         model: result.model,
         promptVer: PROMPT_VERSION,
+        /*
+         * 🔴 몇 번째로 만든 것인가. `periodUsed` 는 **이 요청 전까지의 개수**라
+         *   +1 이 이번 리비전이다(첫 생성이면 1).
+         *
+         * ⚠ 리포트 행은 **지우지 않고 쌓인다** — `(subject, kind, period_key)` 에
+         *   UNIQUE 가 없다. 그래서 콘솔에서 *"v14 는 이랬고 v15 는 이렇다"* 를
+         *   같은 사람의 같은 주로 비교할 수 있다. **사용자는 최종본만 본다**(앱이 교체한다).
+         */
+        revision: periodUsed + 1,
         /*
          * ⚠ **JSON 문자열로 넣는다.** 여기서 검색·집계할 일이 없다 — 월간 평균은 앱이
          *   로컬 리포트에서 낸다(서버는 90일치만 갖고 있어 애초에 못 낸다).
