@@ -11,6 +11,7 @@
     "setup:storage": "node --env-file=.env.local scripts/setup-storage.mjs",
     "measure:ai": "node --env-file=.env.local scripts/measure-ai.mjs",
     "e2e:ai": "node --env-file=.env.local scripts/e2e-ai.mjs",
+    "verify:regenerate": "node --env-file=.env.local scripts/verify-regenerate.mjs",
     "verify:hierarchy": "node --env-file=.env.local scripts/verify-hierarchy.mjs",
     "run:office": "node --experimental-strip-types scripts/run-office.mjs"
   },
