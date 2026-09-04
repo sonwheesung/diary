@@ -8,6 +8,7 @@
  * 화면에서 바꿀 수 있게 하면 앱 문구("주에 한 번")와의 짝이 **배포 없이 깨진다.**
  */
 import { gte, sql } from 'drizzle-orm';
+import { DEFAULT_EFFORT, DEFAULT_MODEL } from '@/lib/ai-policy';
 
 import { db } from '../../../../db';
 import { aiUsage, vaults } from '../../../../db/schema';
@@ -81,8 +82,14 @@ export async function GET(req: Request): Promise<Response> {
         maxInputChars: MAX_INPUT_CHARS,
         keepGenerations: KEEP_GENERATIONS,
         graceDays: GRACE_MS / 86_400_000,
-        aiModel: process.env.AI_MODEL ?? 'gpt-5.6-luna',
-        aiEffort: process.env.AI_EFFORT ?? 'low',
+        /*
+         * 🔴 **기본값을 여기 적지 않는다**(2026-09-04). 전에는 콘솔이 따로 적어놨고
+         *   `aiEffort` 쪽만 `low` 로 낡아 있었다 — 실제로는 `medium` 으로 도는데
+         *   **화면이 low 라고 말했다.** 그걸 믿고 `AI_EFFORT=low` 를 넣었으면 품질을
+         *   진짜로 떨어뜨렸을 것이다(`ADMIN_SYSTEM` §5).
+         */
+        aiModel: process.env.AI_MODEL ?? DEFAULT_MODEL,
+        aiEffort: process.env.AI_EFFORT ?? DEFAULT_EFFORT,
         /*
          * ⚠ 키 **값**이 아니라 설정 여부만 내린다. 콘솔이 토큰을 들고 있어도
          *   그게 API 키를 볼 권한은 아니다.

@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { DEFAULT_EFFORT, DEFAULT_MODEL } from '@/lib/ai-policy';
 
 import { METRIC_CODES, TOPIC_CODES, pickHeadlineFrom } from '@shared/ai/types';
 import type { MetricCode, MetricValue, TopicCode, TopicValue } from '@shared/ai/types';
@@ -22,25 +23,10 @@ import { reportError } from './observability';
  *   본문이 섞여 들어가는 것이 가장 흔한 유출 경로다(§5.1-5).
  */
 
-/**
- * 채택 모델 — **GPT-5.6 Luna**(2026-08-12 사용자 결정).
- *
- * ⚠ 이 id는 추측이 아니라 설치된 SDK의 `ChatModel` 유니온에서 확인했다
- *   (`openai@7.4.0` → `resources/shared.d.ts`). 모델 id를 기억으로 적으면 400을 받는다.
+/*
+ * 🔴 모델·effort 기본값은 **`ai-policy.ts`가 유일한 집**이다(2026-09-04).
+ *   전에는 여기와 운영 콘솔이 각자 적어놨고 콘솔 쪽이 `low`로 낡아 있었다.
  */
-const DEFAULT_MODEL = 'gpt-5.6-luna';
-
-/**
- * 추론 강도 — **P1 실측으로 `medium` 확정**(2026-08-13, `docs/AI_REPORT_SYSTEM.md` §4).
- *
- * ~~실측 전까지 `low`~~ → 원가를 **4배 높게 추정**하고 있었기 때문에 내린 잠정값이었다.
- * 실측하니 리포트 1건이 ₩3.3이 아니라 **₩0.9**였고, low↔medium 차이는 **₩0.16**이다.
- *
- * 품질은 눈에 띄게 갈렸다. medium부터 *"한 달에 몇 번씩 있다고 적었다"* 처럼
- * **여러 날에 걸친 패턴**을 잡아낸다 — 그게 "내 일기를 읽었구나"를 만드는 종류의 관찰이고
- * low는 놓쳤다. high는 medium 대비 나아진 것이 없이 토큰만 더 썼다.
- */
-const DEFAULT_EFFORT = 'medium';
 
 export interface GenerateArgs {
   system: string;

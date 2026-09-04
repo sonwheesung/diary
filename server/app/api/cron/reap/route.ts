@@ -3,6 +3,7 @@ import { and, eq, lt, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { aiCooldowns, aiReports, generationParts, generations, vaultBlobs, vaults } from '@/db/schema';
 import { COOLDOWN_TTL_MS, REPORT_RETENTION_MS } from '@/lib/ai-policy';
+import { notifyOps } from '@/lib/notify';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 import { removeObjects, storageConfigured } from '@/lib/storage';
@@ -38,7 +39,37 @@ export async function POST(req: Request) {
     return fail('unauthorized');
   }
   if (!storageConfigured()) {
+    /*
+     * 🔴 **조용히 실패하지 않는다**(2026-09-04). 크론은 사람이 안 보는 자리라
+     *   여기서 그냥 돌아가면 **리퍼가 며칠씩 안 도는 것을 아무도 모른다.**
+     */
+    notifyOps({
+      reason: 'storage-unset',
+      where: 'cron/reap',
+      hint: 'SUPABASE_URL·SUPABASE_SERVICE_ROLE_KEY 를 확인하세요',
+    });
     return fail('upstream', { detail: 'storage-unset' });
+  }
+
+  /*
+   * 🔴 **매일 도는 김에 DB 를 확인한다**(2026-09-04).
+   *
+   *   2026-08-28 ~ 09-02 에 백업·AI 가 5일간 죽어 있었는데 **아무도 몰랐다** —
+   *   `/api/health` 는 물어보면 답했지만 아무도 안 물어봤다. 크론은 이미 매일 도니
+   *   여기에 한 줄을 얹는 것이 가장 싼 관측이다.
+   *
+   * ⚠ 나쁠 때만 알린다. 매일 "정상"이 오면 사람이 곧 안 읽는다.
+   */
+  try {
+    await db.execute(sql`select 1`);
+  } catch (error) {
+    reportError(error, 'cron/reap health');
+    notifyOps({
+      reason: 'db-down',
+      where: 'cron/reap',
+      hint: 'Supabase 프로젝트가 정지됐는지 확인하세요 — 백업·AI 가 전부 실패합니다',
+    });
+    return fail('upstream', { detail: 'db-down' });
   }
 
   try {

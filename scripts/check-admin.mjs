@@ -242,10 +242,42 @@ check('토큰이 0이면 원가도 0 (null이 아니다)', () => {
   });
 }
 
+/* ── ⑥ 정책 상수는 한 집에만 산다 (2026-09-04, ADMIN_SYSTEM §5) ──────────────
+ *
+ * 🔴 콘솔이 `aiEffort` 기본값을 따로 `'low'` 로 적어놨고 실제 코드는 `'medium'` 이었다.
+ *   **화면이 설정을 거짓으로 말했다** — 그걸 믿고 `AI_EFFORT=low` 를 넣었으면 품질을
+ *   진짜로 떨어뜨렸을 것이다. 값이 두 곳에 살면 반드시 한쪽이 낡는다.
+ */
+{
+  const OVERVIEW = readFileSync(
+    new URL('../server/app/api/admin/overview/route.ts', import.meta.url),
+    'utf8',
+  );
+  const AI = readFileSync(new URL('../server/lib/ai.ts', import.meta.url), 'utf8');
+
+  check('🔴 콘솔이 모델·effort 기본값을 리터럴로 적지 않는다', () => {
+    assert(
+      !/process\.env\.AI_(MODEL|EFFORT)\s*\?\?\s*'/.test(OVERVIEW),
+      '기본값 리터럴이 콘솔에 다시 생겼다 — ai-policy 의 상수를 쓴다',
+    );
+    assert(
+      /DEFAULT_MODEL/.test(OVERVIEW) && /DEFAULT_EFFORT/.test(OVERVIEW),
+      '상수를 안 쓴다',
+    );
+  });
+
+  check('🔴 벤더 경계도 같은 집에서 읽는다 — 두 곳에 적히면 또 갈라진다', () => {
+    assert(
+      !/const DEFAULT_(MODEL|EFFORT)\s*=/.test(AI),
+      'ai.ts 가 기본값을 자기 안에 다시 적는다',
+    );
+  });
+}
+
 // ── 결과 ─────────────────────────────────────────────────────────────────────
 if (failures.length > 0) {
   console.error(`\n관리자 콘솔 FAIL — ${failures.length}개\n`);
   for (const f of failures) console.error(`  ${f}`);
   process.exit(1);
 }
-console.log(`\n관리자 콘솔 ok — ${passed}개 검사 통과 (fail-closed 4 + 헤더 7 + 집계 창 8 + 원가 4 + subject 경계 5)`);
+console.log(`\n관리자 콘솔 ok — ${passed}개 검사 통과 (fail-closed 4 + 헤더 7 + 집계 창 8 + 원가 4 + subject 경계 5 + 상수 단일화 2)`);

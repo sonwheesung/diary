@@ -62,3 +62,44 @@ export function notifyAiFailure(notice: AiFailureNotice): void {
      */
   });
 }
+
+/**
+ * 🔴 **서버가 아픈 것을 사람에게 알린다** (2026-09-04).
+ *
+ * 이게 없어서 **2026-08-28 ~ 09-02, 백업·AI 가 5일간 죽어 있는데 아무도 몰랐다.**
+ * `/api/health` 는 물어보면 답했지만 **아무도 안 물어봤고**, `reportError` 는
+ * `console.error` 뿐이라 Vercel 로그에만 쌓였다. 사용자가 *"리포트 결과 좀 보자"* 고
+ * 물어서야 드러났다 — 안 물어봤으면 더 갔다.
+ *
+ * → 크론이 매일 도는 김에 **상태를 보고 나쁠 때만** 부른다.
+ *
+ * ⚠ **나쁠 때만 보낸다.** 매일 "정상입니다"가 오면 사람이 곧 안 읽고, 그러면
+ *   진짜 알림도 같이 안 읽힌다. 조용한 것이 정상 신호다.
+ * ⚠ 본문·식별자를 보내지 않는다 — 위 `notifyAiFailure` 와 같은 규약이다.
+ */
+export interface OpsAlert {
+  /** `db-down` · `storage-unset` 등. **자유 문장이 아니라 코드다** */
+  reason: string;
+  /** 어디서 났나 — `cron/reap` 처럼 경로만 */
+  where: string;
+  /** 사람이 바로 할 일 한 줄. 코드가 정한 문구만 쓴다 */
+  hint?: string;
+}
+
+export function notifyOps(alert: OpsAlert): void {
+  if (WEBHOOK.length === 0) {
+    return;
+  }
+  const lines = [
+    `🔴 **조각 서버 이상** — \`${alert.reason}\``,
+    `· 위치: \`${alert.where}\``,
+    ...(alert.hint === undefined ? [] : [`· ${alert.hint}`]),
+  ];
+  void fetch(WEBHOOK, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ content: lines.join('\n') }),
+  }).catch(() => {
+    /* 삼킨다 — 알림 실패가 크론을 실패시키지 않는다 */
+  });
+}
