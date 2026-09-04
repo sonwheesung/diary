@@ -41,12 +41,13 @@ export default function BackupScreen() {
   const colors = useColors();
   const styles = useStyles(createStyles);
   const pro = useEntitlementStore((s) => s.pro);
-  const proUntil = useEntitlementStore((s) => s.proUntil);
+  // 구독 중에는 `proUntil`, 끝난 뒤에는 `proExpiredAt`이 남는다(GraceBanner와 같은 이유)
+  const proExpiredAt = useEntitlementStore((s) => s.proExpiredAt);
   /*
    * 구독이 끊긴 뒤 파기까지 남은 시간. **만료는 이벤트로 오지 않으므로**
    * 캐시된 만료 시각에서 앱이 직접 센다(`features/backup/policy.ts`).
    */
-  const purgeAt = pro ? null : purgeAtFrom(proUntil);
+  const purgeAt = pro ? null : purgeAtFrom(proExpiredAt);
 
   const [state, setState] = useState<BackupState | null>(null);
   const [code, setCode] = useState<string | null>(null);

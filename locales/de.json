@@ -187,7 +187,8 @@
     "noTags": "Vergib Tags, dann findest du sie hier sofort.",
     "emptyTitle": "Nichts gefunden",
     "emptyBody": "Versuch es mit anderen Wörtern.",
-    "resultCount": "Stücke: {{total}}"
+    "resultCount": "Stücke: {{total}}",
+    "failed": "Suche fehlgeschlagen. Bitte versuche es erneut."
   },
   "tags": {
     "add": "Tag hinzufügen",
@@ -464,7 +465,8 @@
     "title": "Sicherung",
     "turnOn": "Sicherung einschalten",
     "viewCode": "Wiederherstellungscode ansehen",
-    "noticeIncludes": "Einträge (Titel, Text, Fotos), Tags und KI-Berichte werden zusammen gesichert."
+    "noticeIncludes": "Einträge (Titel, Text, Fotos), Tags und KI-Berichte werden zusammen gesichert.",
+    "restorePhotosFailed": "Fotos konnten nicht geladen werden. Alle Einträge wurden wiederhergestellt — starte die Wiederherstellung erneut, um die Fotos zu holen."
   },
   "subscribe": {
     "alreadyActive": "Du hast Jogak Pro",

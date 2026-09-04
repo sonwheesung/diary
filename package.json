@@ -36,6 +36,7 @@
     "check:doc-counts": "node scripts/check-doc-counts.mjs",
     "scan:doc-refs": "node scripts/scan-doc-refs.mjs",
     "scan:doc-symbols": "node scripts/scan-doc-symbols.mjs",
+    "scan:silent": "node scripts/scan-silent-failures.mjs",
     "check:timezone": "node --experimental-strip-types --no-warnings scripts/check-timezone.mjs",
     "check:release-bundle": "node scripts/check-release-bundle.mjs",
     "licenses:build": "node scripts/make-licenses.mjs",

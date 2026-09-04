@@ -40,11 +40,16 @@ export function initializePurchases(): void {
   if (configured || !purchasesConfigured()) {
     return;
   }
-  configured = true;
   if (__DEV__) {
     Purchases.setLogLevel(LOG_LEVEL.WARN);
   }
+  /*
+   * ⚠ 플래그를 **`configure()` 뒤에** 세운다. 앞에 세우면 configure가 던졌을 때
+   *   SDK는 미설정인데 이후 호출이 전부 조기 반환해서 **앱을 껐다 켜기 전까지 결제가 죽는다.**
+   *   던지면 플래그가 안 서므로 다음 호출이 다시 시도한다.
+   */
   Purchases.configure({ apiKey: API_KEY });
+  configured = true;
   /*
    * 🔴 서버가 "구독 없음"이라 답할 때 되물을 곳을 심는다(§6.1.7 A1 완화).
    *   웹훅이 유실되면 우리 서버는 영영 모르는데, 스토어는 알고 있다.
@@ -199,7 +204,13 @@ async function confirmWithServer(): Promise<void> {
      * ⚠ 서버 쿨다운이 60초라 8회를 다 붙여도 실제 RC 호출은 2~3회로 수렴한다.
      */
     await store.refresh({ fresh: true }).catch(() => undefined);
-    // 서버가 확정하면 `refresh`가 낙관 구간을 닫는다 — 그게 멈출 신호다
+    /*
+     * 낙관 구간이 닫히면 멈춘다. **닫는 쪽이 셋이다** — 서버 확정(`grant`) ·
+     * RC 되물음 성공(`probe`) · 최종 회수(`revoke`). 즉 *"답이 정해졌다"* 가 신호다.
+     *
+     * ⚠ 예전에는 `probe` 성공이 이 값을 안 닫아서, RC가 대신 답해준 경우에도
+     *   루프가 25분을 끝까지 돌았다(2026-09-04에 고쳤다).
+     */
     if (useEntitlementStore.getState().optimisticUntil === null) return;
   }
 }

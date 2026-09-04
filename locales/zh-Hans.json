@@ -187,7 +187,8 @@
     "noTags": "加上标签，就能在这里直接找到。",
     "emptyTitle": "没有找到",
     "emptyBody": "换个词试试看。",
-    "resultCount": "{{total}} 片碎片"
+    "resultCount": "{{total}} 片碎片",
+    "failed": "搜索失败，请重试。"
   },
   "tags": {
     "add": "添加标签",
@@ -464,7 +465,8 @@
     "title": "备份",
     "turnOn": "开启备份",
     "viewCode": "查看恢复码",
-    "noticeIncludes": "碎片（标题、正文、照片）、标签和 AI 报告会一起上传。"
+    "noticeIncludes": "碎片（标题、正文、照片）、标签和 AI 报告会一起上传。",
+    "restorePhotosFailed": "照片未能下载。日记已全部恢复，再次恢复即可取回照片。"
   },
   "subscribe": {
     "alreadyActive": "你正在使用 Jogak Pro",

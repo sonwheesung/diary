@@ -187,7 +187,8 @@
     "noTags": "加上標籤，就能在這裡直接找到。",
     "emptyTitle": "沒有找到",
     "emptyBody": "換個字詞試試看。",
-    "resultCount": "{{total}} 片碎片"
+    "resultCount": "{{total}} 片碎片",
+    "failed": "搜尋失敗，請重試。"
   },
   "tags": {
     "add": "新增標籤",
@@ -464,7 +465,8 @@
     "title": "備份",
     "turnOn": "開啟備份",
     "viewCode": "查看復原碼",
-    "noticeIncludes": "碎片（標題、內文、照片）、標籤與 AI 報告會一起上傳。"
+    "noticeIncludes": "碎片（標題、內文、照片）、標籤與 AI 報告會一起上傳。",
+    "restorePhotosFailed": "照片未能下載。日記已全部還原，再次還原即可取回照片。"
   },
   "subscribe": {
     "alreadyActive": "你正在使用 Jogak Pro",

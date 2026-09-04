@@ -187,7 +187,8 @@
     "noTags": "태그를 붙이면 여기서 바로 찾을 수 있어요.",
     "emptyTitle": "찾는 조각이 없어요",
     "emptyBody": "다른 말로 찾아보세요.",
-    "resultCount": "{{total}}개의 조각"
+    "resultCount": "{{total}}개의 조각",
+    "failed": "검색하지 못했어요. 다시 시도해 주세요."
   },
   "tags": {
     "add": "태그 추가",
@@ -464,7 +465,8 @@
     "title": "백업",
     "turnOn": "백업 켜기",
     "viewCode": "복구 코드 보기",
-    "noticeIncludes": "조각(제목·본문·사진)·태그·AI 리포트가 함께 올라가요."
+    "noticeIncludes": "조각(제목·본문·사진)·태그·AI 리포트가 함께 올라가요.",
+    "restorePhotosFailed": "사진은 받지 못했어요. 조각은 모두 복원됐고, 복원을 다시 하면 사진도 받아올 수 있어요."
   },
   "subscribe": {
     "alreadyActive": "조각 Pro를 이용 중이에요",

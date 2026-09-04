@@ -187,7 +187,8 @@
     "noTags": "タグを付けるとここからすぐ探せます。",
     "emptyTitle": "見つかりませんでした",
     "emptyBody": "別の言葉で探してみてください。",
-    "resultCount": "{{total}}件のかけら"
+    "resultCount": "{{total}}件のかけら",
+    "failed": "検索できませんでした。もう一度お試しください。"
   },
   "tags": {
     "add": "タグを追加",
@@ -464,7 +465,8 @@
     "title": "バックアップ",
     "turnOn": "バックアップをオンにする",
     "viewCode": "復旧コードを見る",
-    "noticeIncludes": "かけら（タイトル・本文・写真）・タグ・AIレポートが一緒に保存されます。"
+    "noticeIncludes": "かけら（タイトル・本文・写真）・タグ・AIレポートが一緒に保存されます。",
+    "restorePhotosFailed": "写真は取得できませんでした。日記はすべて復元されています。もう一度復元すると写真も取得できます。"
   },
   "subscribe": {
     "alreadyActive": "Jogak Proをご利用中です",

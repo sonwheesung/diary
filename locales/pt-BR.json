@@ -187,7 +187,8 @@
     "noTags": "Adicione tags e encontre tudo por aqui.",
     "emptyTitle": "Nenhum resultado",
     "emptyBody": "Tente outras palavras.",
-    "resultCount": "Pedaços: {{total}}"
+    "resultCount": "Pedaços: {{total}}",
+    "failed": "Não foi possível pesquisar. Tente novamente."
   },
   "tags": {
     "add": "Adicionar tag",
@@ -464,7 +465,8 @@
     "title": "Backup",
     "turnOn": "Ativar o backup",
     "viewCode": "Ver o código de recuperação",
-    "noticeIncludes": "Sobem juntos os registros (título, texto, fotos), as tags e os relatórios de IA."
+    "noticeIncludes": "Sobem juntos os registros (título, texto, fotos), as tags e os relatórios de IA.",
+    "restorePhotosFailed": "Não foi possível baixar as fotos. Todos os registros foram restaurados — restaure novamente para recuperar as fotos."
   },
   "subscribe": {
     "alreadyActive": "Você tem o Jogak Pro",

@@ -19,8 +19,15 @@
 export type ServerAnswer =
   /** 못 물어봤다 — 네트워크·서버 장애. **모름이지 없음이 아니다** */
   | { kind: 'unreachable' }
-  /** 구독 없음 */
-  | { kind: 'none' }
+  /**
+   * 구독 없음.
+   *
+   * 🔴 **`expiredAt`을 함께 받는다** — 서버는 `active: false`일 때도 `expiresAt`을 준다.
+   *   이 값이 **백업 파기 예정일의 유일한 근거**다(만료 + 90일). 버리면 유예 배너가
+   *   영영 안 뜨고, 그게 우리가 가진 **유일한 통지 채널**이다(`CLAUDE.md` §7.2).
+   *   `null`은 한 번도 구독한 적이 없거나 서버가 시각을 모르는 경우다.
+   */
+  | { kind: 'none'; expiredAt: string | null }
   /** 구독 있음. `expiresAt`이 `null`이면 기한 없음 */
   | { kind: 'active'; expiresAt: string | null; inGracePeriod: boolean };
 
@@ -40,10 +47,19 @@ export type EntitlementDecision =
   | { kind: 'grant'; until: string; inGracePeriod: boolean }
   /** 낙관 구간이라 되돌리지 않는다. **캐시도 건드리지 않는다** */
   | { kind: 'hold' }
-  /** RC에 되묻는다. 결과에 따라 `probeGranted`/`revoke`로 간다 */
-  | { kind: 'probe' }
-  /** 캐시를 지우고 끈다 */
-  | { kind: 'revoke' };
+  /**
+   * RC에 되묻는다. 결과에 따라 `probeGranted`/`revoke`로 간다.
+   *
+   * ⚠ 되물음이 실패하면 곧장 `revoke`와 같은 자리로 가므로 `expiredAt`을 들고 다닌다.
+   */
+  | { kind: 'probe'; expiredAt: string | null }
+  /**
+   * 캐시를 지우고 끈다.
+   *
+   * 🔴 `expiredAt`은 **살아 있는 캐시와 다른 칸에** 적는다. 같은 칸에 두면 지난 시각이
+   *   남아 다음 `hydrate()`가 그걸 캐시로 읽고, 만료 판정이 흔들린다.
+   */
+  | { kind: 'revoke'; expiredAt: string | null };
 
 /** 기한 없음을 뜻하는 캐시 값 */
 export const NEVER = 'never';
@@ -81,9 +97,9 @@ export function decideEntitlement(
     return { kind: 'hold' };
   }
   if (ctx.canProbe) {
-    return { kind: 'probe' };
+    return { kind: 'probe', expiredAt: answer.expiredAt };
   }
-  return { kind: 'revoke' };
+  return { kind: 'revoke', expiredAt: answer.expiredAt };
 }
 
 /**

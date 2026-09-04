@@ -36,10 +36,19 @@ interface EntitlementState {
   /** 결제 실패 유예 중. 활성이지만 곧 끊긴다는 안내를 띄울 수 있다 */
   inGracePeriod: boolean;
   /**
-   * 캐시된 만료 시각(ISO 또는 `'never'`). **백업 파기 예정일의 유일한 근거다** —
-   * 만료는 이벤트로 오지 않으므로 이 값에서 앱이 직접 센다.
+   * 캐시된 만료 시각(ISO 또는 `'never'`). **구독 중일 때만 값이 있다** —
+   * 끊기면 지워진다(지난 시각을 캐시로 두면 만료 판정이 흔들린다).
    */
   proUntil: string | null;
+  /**
+   * 🔴 **마지막으로 알던 만료 시각.** 구독이 끝난 뒤에도 남는다 —
+   * **백업 파기 예정일(만료 + 90일)의 유일한 근거**다.
+   *
+   * 예전에는 `proUntil` 하나로 겸했는데, `revoke`가 그걸 지우면서 **유예 배너가
+   * 첫 `refresh()` 한 번에 사라졌다.** 콜드 스타트와 서버 응답 사이의 몇 백 ms 동안만
+   * 보이고 그 뒤로 영영 안 떴다 — 만료·환불 양쪽에서 **우리가 가진 유일한 통지 채널**인데도.
+   */
+  proExpiredAt: string | null;
   /**
    * 결제 직후 낙관 구간의 끝(epoch ms). `null`이면 낙관 구간이 아니다.
    *
@@ -122,18 +131,58 @@ export function setEntitlementProbe(probe: () => Promise<boolean>): void {
   proProbe = probe;
 }
 
+/**
+ * 권한을 끄되 **마지막으로 알던 만료 시각은 남긴다.**
+ *
+ * 🔴 `revoke`와 `probe` 실패가 **글자까지 같은 일**을 해서 한 곳으로 모았다.
+ *   전에는 두 벌이었고, 그래서 한쪽만 고치면 조용히 갈라졌다.
+ *
+ * ⚠ 살아 있는 캐시(`pro_until`)는 **비우고** 파기 예정일(`pro_expired_at`)만 적는다.
+ *   같은 칸에 두면 지난 시각이 캐시로 읽혀 만료 판정이 흔들린다.
+ * ⚠ `expiredAt`이 `null`이면(한 번도 구독 안 함) 아무것도 적지 않는다 —
+ *   그 사람에게 삭제 예정일을 보여줄 이유가 없다.
+ */
+async function revokeLocally(
+  set: (partial: Partial<EntitlementState>) => void,
+  expiredAt: string | null,
+): Promise<void> {
+  await setSetting(SETTING_KEYS.proUntil, '');
+  if (expiredAt !== null) {
+    await setSetting(SETTING_KEYS.proExpiredAt, expiredAt);
+  }
+  set({
+    pro: false,
+    inGracePeriod: false,
+    proUntil: null,
+    // 서버가 시각을 안 주면 **이미 알던 값을 지우지 않는다** — 그게 유일한 근거다
+    ...(expiredAt === null ? {} : { proExpiredAt: expiredAt }),
+    optimisticUntil: null,
+    hydrated: true,
+  });
+}
+
 export const useEntitlementStore = create<EntitlementState>((set, get) => ({
   pro: false,
   hydrated: false,
   inGracePeriod: false,
   proUntil: null,
+  proExpiredAt: null,
   optimisticUntil: null,
   purchasePendingUntil: null,
 
   hydrate: async () => {
     try {
-      const until = await getSetting(SETTING_KEYS.proUntil);
-      set({ pro: cacheStillValid(until, Date.now()), proUntil: until, hydrated: true });
+      const [until, expired] = await Promise.all([
+        getSetting(SETTING_KEYS.proUntil),
+        getSetting(SETTING_KEYS.proExpiredAt),
+      ]);
+      set({
+        pro: cacheStillValid(until, Date.now()),
+        proUntil: until,
+        // 빈 문자열은 "없음"이다 — `setSetting(_, '')`이 지우는 방식이라서다
+        proExpiredAt: expired === null || expired.length === 0 ? null : expired,
+        hydrated: true,
+      });
     } catch {
       // 캐시를 못 읽으면 무료로 본다. 곧 이어지는 refresh가 바로잡는다.
       set({ hydrated: true });
@@ -153,7 +202,11 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
     const answer: ServerAnswer = !result.ok
       ? { kind: 'unreachable' }
       : pro === undefined || !pro.active
-        ? { kind: 'none' }
+        ? /*
+           * ⚠ **`expiresAt`을 버리지 않는다.** 서버는 `active: false`일 때도 이 값을 준다.
+           *   백업 파기 예정일이 여기서만 나온다(`decide.ts`의 `none` 주석).
+           */
+          { kind: 'none', expiredAt: pro?.expiresAt ?? null }
         : { kind: 'active', expiresAt: pro.expiresAt ?? null, inGracePeriod: pro.inGracePeriod };
 
     const decision = decideEntitlement(
@@ -169,11 +222,17 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
 
       case 'grant':
         await setSetting(SETTING_KEYS.proUntil, decision.until);
+        /*
+         * ⚠ 파기 예정일을 **지운다.** 구독이 다시 살아났으면 셀 것이 없다 —
+         *   안 지우면 재구독한 사람에게 삭제 경고가 남는다.
+         */
+        await setSetting(SETTING_KEYS.proExpiredAt, '');
         // 서버가 확정했다 — 낙관 구간은 역할을 다했다
         set({
           pro: true,
           inGracePeriod: decision.inGracePeriod,
           proUntil: decision.until,
+          proExpiredAt: null,
           optimisticUntil: null,
           hydrated: true,
         });
@@ -194,28 +253,19 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
        */
       case 'probe':
         if (proProbe !== null && (await proProbe().catch(() => false))) {
-          set({ pro: true, inGracePeriod: false, hydrated: true });
+          /*
+           * 🔴 `optimisticUntil`을 **함께 닫는다.** 답이 정해졌으므로 낙관에 기댈 이유가
+           *   없고, 무엇보다 `confirmWithServer()`의 탈출 조건이 이 값이다 —
+           *   안 닫으면 결제 뒤 재조회 루프가 25분을 끝까지 돈다.
+           */
+          set({ pro: true, inGracePeriod: false, optimisticUntil: null, hydrated: true });
           return;
         }
-        await setSetting(SETTING_KEYS.proUntil, '');
-        set({
-          pro: false,
-          inGracePeriod: false,
-          proUntil: null,
-          optimisticUntil: null,
-          hydrated: true,
-        });
+        await revokeLocally(set, decision.expiredAt);
         return;
 
       case 'revoke':
-        await setSetting(SETTING_KEYS.proUntil, '');
-        set({
-          pro: false,
-          inGracePeriod: false,
-          proUntil: null,
-          optimisticUntil: null,
-          hydrated: true,
-        });
+        await revokeLocally(set, decision.expiredAt);
         return;
     }
   },
@@ -232,10 +282,16 @@ export const useEntitlementStore = create<EntitlementState>((set, get) => ({
 
   clear: async () => {
     await setSetting(SETTING_KEYS.proUntil, '').catch(() => undefined);
+    /*
+     * ⚠ 파기 예정일도 **함께** 비운다. 권한은 계정에 붙어 있고, 다음 사람에게
+     *   앞사람의 삭제 예정일이 보이면 안 된다.
+     */
+    await setSetting(SETTING_KEYS.proExpiredAt, '').catch(() => undefined);
     set({
       pro: false,
       inGracePeriod: false,
       proUntil: null,
+      proExpiredAt: null,
       optimisticUntil: null,
       purchasePendingUntil: null,
       hydrated: true,

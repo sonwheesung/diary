@@ -187,7 +187,8 @@
     "noTags": "Añade etiquetas y podrás encontrarlas aquí.",
     "emptyTitle": "Sin resultados",
     "emptyBody": "Prueba con otras palabras.",
-    "resultCount": "Piezas: {{total}}"
+    "resultCount": "Piezas: {{total}}",
+    "failed": "No se pudo buscar. Inténtalo de nuevo."
   },
   "tags": {
     "add": "Añadir etiqueta",
@@ -464,7 +465,8 @@
     "title": "Copia de seguridad",
     "turnOn": "Activar la copia de seguridad",
     "viewCode": "Ver el código de recuperación",
-    "noticeIncludes": "Se suben juntas las entradas (título, texto, fotos), las etiquetas y los informes de IA."
+    "noticeIncludes": "Se suben juntas las entradas (título, texto, fotos), las etiquetas y los informes de IA.",
+    "restorePhotosFailed": "No se pudieron descargar las fotos. Todas las entradas se restauraron: vuelve a restaurar para recuperar las fotos."
   },
   "subscribe": {
     "alreadyActive": "Tienes Jogak Pro",

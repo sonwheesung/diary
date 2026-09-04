@@ -187,7 +187,8 @@
     "noTags": "Gắn thẻ để tìm lại ngay tại đây.",
     "emptyTitle": "Không tìm thấy",
     "emptyBody": "Thử từ khác xem sao.",
-    "resultCount": "{{total}} mảnh"
+    "resultCount": "{{total}} mảnh",
+    "failed": "Không tìm kiếm được. Vui lòng thử lại."
   },
   "tags": {
     "add": "Thêm thẻ",
@@ -464,7 +465,8 @@
     "title": "Sao lưu",
     "turnOn": "Bật sao lưu",
     "viewCode": "Xem mã khôi phục",
-    "noticeIncludes": "Các mảnh (tiêu đề, nội dung, ảnh), thẻ và báo cáo AI được sao lưu cùng nhau."
+    "noticeIncludes": "Các mảnh (tiêu đề, nội dung, ảnh), thẻ và báo cáo AI được sao lưu cùng nhau.",
+    "restorePhotosFailed": "Không tải được ảnh. Tất cả nhật ký đã được khôi phục — hãy khôi phục lại để lấy ảnh."
   },
   "subscribe": {
     "alreadyActive": "Bạn đang dùng Jogak Pro",

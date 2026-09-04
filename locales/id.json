@@ -187,7 +187,8 @@
     "noTags": "Beri tag, nanti bisa langsung dicari dari sini.",
     "emptyTitle": "Tidak ada yang cocok",
     "emptyBody": "Coba kata lain.",
-    "resultCount": "{{total}} kepingan"
+    "resultCount": "{{total}} kepingan",
+    "failed": "Pencarian gagal. Silakan coba lagi."
   },
   "tags": {
     "add": "Tambah tag",
@@ -464,7 +465,8 @@
     "title": "Pencadangan",
     "turnOn": "Aktifkan pencadangan",
     "viewCode": "Lihat kode pemulihan",
-    "noticeIncludes": "Catatan (judul, isi, foto), tag, dan laporan AI diunggah bersama."
+    "noticeIncludes": "Catatan (judul, isi, foto), tag, dan laporan AI diunggah bersama.",
+    "restorePhotosFailed": "Foto tidak dapat diunduh. Semua catatan sudah dipulihkan — jalankan pemulihan lagi untuk mengambil foto."
   },
   "subscribe": {
     "alreadyActive": "Kamu punya Jogak Pro",

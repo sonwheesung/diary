@@ -134,18 +134,29 @@ export default function BackupRestoreScreen() {
     setStep({ kind: 'photos' });
     setRatio(0);
     let absent = 0;
+    /*
+     * 🔴 **"서버에 없는 사진 N장"과 "사진을 아예 못 받았다"는 다른 말이다.**
+     *   전에는 둘을 구분하지 않아, 사진 내려받기가 통째로 실패해도 `absent`가 0인 채로
+     *   그냥 *"복원 완료"* 만 떴다 — 사용자는 조각을 열어보고서야 사진이 없는 걸 알고,
+     *   왜 없는지는 끝내 모른다.
+     * ⚠ 그렇다고 **자동 재시도를 약속하지 않는다.** `downloadPhotos()` 호출처가 이 화면
+     *   하나뿐이라 재시도 경로가 실제로 없다 — 없는 것을 문구로 만들지 않는다.
+     */
+    let photosFailed = false;
     try {
       const photos = await downloadPhotos(current.keys, ({ done, total }) =>
         setRatio(total === 0 ? 1 : done / total),
       );
       if (photos.ok) {
         absent = photos.absent;
+      } else {
+        photosFailed = true;
       }
     } catch {
-      // 사진은 다시 받을 수 있다. 조각을 되찾은 것이 이 화면의 목적이다.
+      photosFailed = true;
     }
 
-    Alert.alert(t('backup.restoreDoneTitle'), restoreDoneBody(absent), [
+    Alert.alert(t('backup.restoreDoneTitle'), restoreDoneBody(absent, photosFailed), [
       // ⚠ 홈으로 되돌린다. 잠금은 백업 대상이 아니라 복원 후 꺼져 있고,
       //   화면들은 포커스를 잃은 적이 없어 스스로 다시 읽지 않는다.
       { text: t('common.confirm'), onPress: () => router.replace('/') },
@@ -167,12 +178,17 @@ export default function BackupRestoreScreen() {
   );
 
   /** 사진이 서버에도 없으면 **그 사실을 말한다.** 조용히 넘기면 "복원이 반쯤 됐나"로 읽힌다 */
-  const restoreDoneBody = (absent: number) =>
-    absent > 0
-      ? `${t('backup.restoreDoneBody')}
+  const restoreDoneBody = (absent: number, photosFailed: boolean) => {
+    const done = t('backup.restoreDoneBody');
+    // 실패가 먼저다 — "서버에 없다"보다 "못 받았다"가 사용자가 할 일을 정한다
+    if (photosFailed) return `${done}
 
-${t('backup.restorePhotosAbsent', { count: absent })}`
-      : t('backup.restoreDoneBody');
+${t('backup.restorePhotosFailed')}`;
+    if (absent > 0) return `${done}
+
+${t('backup.restorePhotosAbsent', { count: absent })}`;
+    return done;
+  };
 
   if (step.kind === 'loading' || step.kind === 'applying' || step.kind === 'photos') {
     return (

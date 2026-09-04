@@ -176,7 +176,7 @@ check('유예 중이라는 사실이 그대로 전달된다', () => {
 check('🔴 결제 직후 낙관 구간에는 서버의 "없음"으로 되돌리지 않는다 (§6.1.6)', () => {
   // 이 한 줄이 없어서 "구독이 시작됐어요" 직후 화면이 `이용 안 함`으로 돌아갔다.
   const d = decideEntitlement(
-    { kind: 'none' },
+    { kind: 'none', expiredAt: null },
     { optimisticUntil: NOW + 60_000, canProbe: false },
     NOW,
   );
@@ -184,13 +184,13 @@ check('🔴 결제 직후 낙관 구간에는 서버의 "없음"으로 되돌리
 });
 
 check('🔴 낙관 구간은 반드시 닫힌다 — 무한 낙관은 거짓말의 다른 형태다', () => {
-  const d = decideEntitlement({ kind: 'none' }, { optimisticUntil: NOW - 1, canProbe: false }, NOW);
+  const d = decideEntitlement({ kind: 'none', expiredAt: null }, { optimisticUntil: NOW - 1, canProbe: false }, NOW);
   assert(d.kind === 'revoke', `창이 지났으면 revoke여야 하는데 ${d.kind}`);
 });
 
 check('🔴 낙관 구간이 되묻기보다 먼저다 — 더 강한 근거가 있으니 왕복을 아낀다', () => {
   const d = decideEntitlement(
-    { kind: 'none' },
+    { kind: 'none', expiredAt: null },
     { optimisticUntil: NOW + 60_000, canProbe: true },
     NOW,
   );
@@ -199,12 +199,12 @@ check('🔴 낙관 구간이 되묻기보다 먼저다 — 더 강한 근거가 
 
 check('🔴 서버가 "없다"고 해도 되물을 수단이 있으면 되묻는다 (§6.1.7 A1 완화)', () => {
   // 웹훅은 유실될 수 있다(5회 재시도 후 포기). 그때 돈 낸 사람에게 광고가 나온다.
-  const d = decideEntitlement({ kind: 'none' }, { optimisticUntil: null, canProbe: true }, NOW);
+  const d = decideEntitlement({ kind: 'none', expiredAt: null }, { optimisticUntil: null, canProbe: true }, NOW);
   assert(d.kind === 'probe', `probe여야 하는데 ${d.kind}`);
 });
 
 check('되물을 수단이 없으면 끈다 — 근거가 하나도 없으면 fail-closed다', () => {
-  const d = decideEntitlement({ kind: 'none' }, NO_WINDOW, NOW);
+  const d = decideEntitlement({ kind: 'none', expiredAt: null }, NO_WINDOW, NOW);
   assert(d.kind === 'revoke', `revoke여야 하는데 ${d.kind}`);
 });
 
@@ -251,7 +251,7 @@ check('🔴 그 17분 동안 권한은 주지 않는다 — 근거가 없다', (
   // 낙관 구간(3분)은 이미 닫혔고 되물을 수단도 없다 → 정직하게 끈다.
   const optimisticUntil = NOW + 3 * 60 * 1000;
   const at = NOW + 17 * 60 * 1000;
-  const d = decideEntitlement({ kind: 'none' }, { optimisticUntil, canProbe: false }, at);
+  const d = decideEntitlement({ kind: 'none', expiredAt: null }, { optimisticUntil, canProbe: false }, at);
   assert(d.kind === 'revoke', `revoke여야 하는데 ${d.kind}`);
 });
 
@@ -261,6 +261,55 @@ check('🔴 안내 창이 권한 창보다 길다 — 같아지면 둘 중 하�
   assert(PENDING > OPTIMISTIC, `안내(${PENDING}) > 권한(${OPTIMISTIC}) 이어야 한다`);
   // Play 확정 실측치(17분)를 안내 창이 덮어야 한다
   assert(PENDING >= 17 * 60 * 1000, '안내 창이 Play 확정 지연 실측치를 못 덮는다');
+});
+
+/* ── 유예 배너의 근거를 들고 다니는가 (2026-09-04) ────────────────────────────
+ *
+ * 🔴 이 다섯은 **실제로 새어 있던 구멍**을 막는다. `revoke`가 만료 시각까지 지워서
+ *   *"백업이 N일 뒤 지워집니다"* 배너가 콜드 스타트 직후 한 번 뜨고 **영영 사라졌다.**
+ *   그게 만료·환불 양쪽에서 우리가 가진 **유일한 통지 채널**이다(`CLAUDE.md` §7.2).
+ */
+check('🔴 서버가 "없다"고 할 때 만료 시각을 버리지 않는다 — 파기 예정일의 유일한 근거', () => {
+  const d = decideEntitlement(
+    { kind: 'none', expiredAt: '2026-09-01T00:00:00.000Z' },
+    NO_WINDOW,
+    NOW,
+  );
+  assert(d.kind === 'revoke', `revoke여야 하는데 ${d.kind}`);
+  assert(
+    d.expiredAt === '2026-09-01T00:00:00.000Z',
+    `만료 시각이 사라졌다 — 유예 배너가 영영 안 뜬다 (${String(d.expiredAt)})`,
+  );
+});
+
+check('🔴 되묻기로 가는 길에서도 만료 시각을 들고 간다 — 되물음이 실패하면 곧장 회수다', () => {
+  const d = decideEntitlement(
+    { kind: 'none', expiredAt: '2026-09-01T00:00:00.000Z' },
+    { optimisticUntil: null, canProbe: true },
+    NOW,
+  );
+  assert(d.kind === 'probe', `probe여야 하는데 ${d.kind}`);
+  assert(d.expiredAt === '2026-09-01T00:00:00.000Z', '되묻기 경로에서 만료 시각이 사라졌다');
+});
+
+check('한 번도 구독한 적 없으면 만료 시각이 없다 — 삭제 예정일을 보여줄 이유가 없다', () => {
+  const d = decideEntitlement({ kind: 'none', expiredAt: null }, NO_WINDOW, NOW);
+  assert(d.kind === 'revoke' && d.expiredAt === null, '없는 만료를 지어냈다');
+});
+
+check('🔴 파기 예정일은 만료 + 90일이고, 앱과 서버의 90일이 같아야 한다', () => {
+  const expired = Date.parse('2026-09-01T00:00:00.000Z');
+  const purgeAt = purgeAtFrom('2026-09-01T00:00:00.000Z');
+  assert(purgeAt !== null, '파기 예정일을 못 냈다');
+  assert(purgeAt - expired === GRACE_MS, '유예가 90일이 아니다');
+  assert(GRACE_MS === 90 * 24 * 60 * 60 * 1000, '앱 상수가 90일이 아니다');
+});
+
+check('🔴 빈 값·null 로는 파기 예정일을 만들지 않는다 — 없는 날짜를 세지 않는다', () => {
+  assert(purgeAtFrom(null) === null, 'null');
+  assert(purgeAtFrom('') === null, '빈 문자열');
+  assert(purgeAtFrom('never') === null, 'never(기한 없음)는 파기 대상이 아니다');
+  assert(purgeAtFrom('말도 안 되는 값') === null, '파싱 불가');
 });
 
 console.log(

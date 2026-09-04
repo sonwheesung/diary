@@ -44,6 +44,11 @@ export default function SearchScreen() {
   const [thumbnails, setThumbnails] = useState<Map<string, DiaryImage>>(new Map());
   const [tags, setTags] = useState<string[]>([]);
   const [searching, setSearching] = useState(false);
+  /**
+   * 검색이 **던졌는가**. `results.length === 0`과 다른 상태다 —
+   * 전에는 둘을 같은 칸으로 다뤄서 실패가 *"찾는 조각이 없어요"* 로 보였다.
+   */
+  const [failed, setFailed] = useState(false);
 
   const trimmed = keyword.trim();
 
@@ -82,9 +87,17 @@ export default function SearchScreen() {
           }
           setResults(found);
           setThumbnails(firstImages);
+          setFailed(false);
         } catch {
+          /*
+           * 🔴 **실패를 "결과 없음"으로 보여주지 않는다.** 전에는 여기서 결과만 비워서,
+           *   DB가 던져도 화면이 *"찾는 조각이 없어요"* 를 띄웠다 — 사용자는 **자기 일기가
+           *   사라졌다고 읽는다.** 0이 나오면 대상이 아니라 세는 방법을 의심해야 하는데,
+           *   그 판단을 사용자에게 시키고 있었다.
+           */
           if (alive) {
             setResults([]);
+            setFailed(true);
           }
         } finally {
           if (alive) {
@@ -158,6 +171,11 @@ export default function SearchScreen() {
         </>
       ) : searching ? (
         <ActivityIndicator color={colors.accentMuted} style={styles.loading} />
+      ) : failed ? (
+        // 🔴 실패를 "없음"으로 말하지 않는다 — 사용자가 자기 일기가 사라졌다고 읽는다
+        <Card>
+          <Text style={styles.emptyTitle}>{t('search.failed')}</Text>
+        </Card>
       ) : results.length === 0 ? (
         <Card>
           <Text style={styles.emptyTitle}>{t('search.emptyTitle')}</Text>

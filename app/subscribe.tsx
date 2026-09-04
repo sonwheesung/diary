@@ -127,6 +127,16 @@ export default function SubscribeScreen() {
   };
 
   const doRestore = async () => {
+    /*
+     * 🔴 `buy()`와 **같은 게이트**를 건다. `Purchases.logIn(subject)`이 실패한 상태에서
+     *   복원하면 익명 appUserID로 복원되고, 웹훅 이력에 `anonymous-app-user-id`가 찍힌다
+     *   (§7.2 함정 #1의 그 증상). RC가 다음 로그인에서 이전해 주기는 하지만,
+     *   **그 기기에서 다시 로그인하지 않으면 우리 서버는 영영 모른다.**
+     */
+    if (!identified) {
+      Alert.alert(t('subscribe.notReadyTitle'), t('subscribe.notReadyBody'));
+      return;
+    }
     setWorking(true);
     const result = await restore();
     setWorking(false);
@@ -436,10 +446,16 @@ const createStyles = (colors: Palette) =>
       backgroundColor: colors.surface,
     },
     planDisabled: { opacity: 0.5 },
-    planBody: { gap: spacing.xs },
-    planLabel: { ...typography.label, color: colors.text },
-    planBadge: { ...typography.caption, color: colors.accent },
-    planPrice: { ...typography.title, color: colors.accent, flexShrink: 1 },
+    /*
+     * 🔴 **줄어드는 쪽은 라벨이지 가격이 아니다.** RN의 기본 `flexShrink`는 0이라,
+     *   전에는 `flexShrink: 1`이 붙은 `planPrice` 혼자 줄었다 — 넘칠 때 **가격이 잘리는**
+     *   배치였다. 러시아어 뱃지(`2 месяца бесплатно`)에 큰 글꼴 배율이 겹치는 자리다.
+     */
+    planBody: { gap: spacing.xs, flexShrink: 1 },
+    // §10 — 행 안의 Text에는 flexShrink를 준다(Fabric이 마지막 단어를 안 그린다)
+    planLabel: { ...typography.label, color: colors.text, flexShrink: 1 },
+    planBadge: { ...typography.caption, color: colors.accent, flexShrink: 1 },
+    planPrice: { ...typography.title, color: colors.accent, flexShrink: 0 },
     activeBox: {
       gap: spacing.sm,
       padding: spacing.lg,

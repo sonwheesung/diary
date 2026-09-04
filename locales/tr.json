@@ -187,7 +187,8 @@
     "noTags": "Etiket eklersen buradan hemen bulabilirsin.",
     "emptyTitle": "Sonuç yok",
     "emptyBody": "Başka kelimelerle dene.",
-    "resultCount": "{{total}} parça"
+    "resultCount": "{{total}} parça",
+    "failed": "Arama yapılamadı. Lütfen tekrar deneyin."
   },
   "tags": {
     "add": "Etiket ekle",
@@ -464,7 +465,8 @@
     "title": "Yedekleme",
     "turnOn": "Yedeklemeyi aç",
     "viewCode": "Kurtarma kodunu gör",
-    "noticeIncludes": "Kayıtlar (başlık, metin, fotoğraflar), etiketler ve yapay zekâ raporları birlikte yüklenir."
+    "noticeIncludes": "Kayıtlar (başlık, metin, fotoğraflar), etiketler ve yapay zekâ raporları birlikte yüklenir.",
+    "restorePhotosFailed": "Fotoğraflar indirilemedi. Tüm kayıtlar geri yüklendi — fotoğrafları almak için geri yüklemeyi tekrar çalıştırın."
   },
   "subscribe": {
     "alreadyActive": "Jogak Pro'ya sahipsin",

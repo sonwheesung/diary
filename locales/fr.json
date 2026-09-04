@@ -187,7 +187,8 @@
     "noTags": "Ajoute des tags pour les retrouver ici.",
     "emptyTitle": "Aucun résultat",
     "emptyBody": "Essaie d'autres mots.",
-    "resultCount": "Fragments : {{total}}"
+    "resultCount": "Fragments : {{total}}",
+    "failed": "La recherche a échoué. Veuillez réessayer."
   },
   "tags": {
     "add": "Ajouter un tag",
@@ -464,7 +465,8 @@
     "title": "Sauvegarde",
     "turnOn": "Activer la sauvegarde",
     "viewCode": "Voir le code de récupération",
-    "noticeIncludes": "Les entrées (titre, texte, photos), les tags et les bilans IA partent ensemble."
+    "noticeIncludes": "Les entrées (titre, texte, photos), les tags et les bilans IA partent ensemble.",
+    "restorePhotosFailed": "Les photos n'ont pas pu être téléchargées. Toutes les entrées ont été restaurées — relancez la restauration pour récupérer les photos."
   },
   "subscribe": {
     "alreadyActive": "Vous avez Jogak Pro",

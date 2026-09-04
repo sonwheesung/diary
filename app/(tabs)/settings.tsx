@@ -212,9 +212,15 @@ export default function SettingsScreen() {
   };
 
   const chooseReminderTime = (next: ReminderTime) => {
+    const previous = reminderTimeValue;
     setReminderTimeState(next);
     setReminderSheetOpen(false);
-    void setReminderTime(next).catch(() => undefined);
+    /*
+     * ⚠ 실패하면 **되돌린다.** 안 되돌리면 화면은 새 시각을 보여주는데 알림은 옛 시각에
+     *   오고, 사용자는 어긋난 줄 모른다. 바로 위 `chooseReportLanguage`가 이미 쓰는 규약인데
+     *   여기만 빠져 있었다 — 같은 화면 안에서 규약이 갈리면 나중에 어느 쪽이 맞는지 모른다.
+     */
+    void setReminderTime(next).catch(() => setReminderTimeState(previous));
   };
 
   const version = Constants.expoConfig?.version ?? '—';

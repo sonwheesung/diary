@@ -187,7 +187,8 @@
     "noTags": "Add tags and you can find them here.",
     "emptyTitle": "No matches",
     "emptyBody": "Try different words.",
-    "resultCount": "Pieces: {{total}}"
+    "resultCount": "Pieces: {{total}}",
+    "failed": "Couldn't search. Please try again."
   },
   "tags": {
     "add": "Add a tag",
@@ -464,7 +465,8 @@
     "title": "Backup",
     "turnOn": "Turn on backup",
     "viewCode": "View recovery code",
-    "noticeIncludes": "Entries (title, text, photos), tags and AI reports all go up together."
+    "noticeIncludes": "Entries (title, text, photos), tags and AI reports all go up together.",
+    "restorePhotosFailed": "Photos couldn't be downloaded. All entries were restored — run restore again to get the photos."
   },
   "subscribe": {
     "alreadyActive": "You have Jogak Pro",

@@ -32,7 +32,11 @@ export function GraceBanner() {
   const styles = useStyles(createStyles);
   const pro = useEntitlementStore((s) => s.pro);
   const hydrated = useEntitlementStore((s) => s.hydrated);
-  const proUntil = useEntitlementStore((s) => s.proUntil);
+  /*
+     * 🔴 `proUntil`이 아니라 `proExpiredAt`을 읽는다. 구독이 끝나면 `proUntil`은
+     *   **지워지므로**, 그걸 보면 배너가 첫 `refresh()` 한 번에 사라진다(2026-09-04에 고쳤다).
+     */
+  const proExpiredAt = useEntitlementStore((s) => s.proExpiredAt);
   const [enabled, setEnabled] = useState<boolean | null>(null);
 
   /*
@@ -55,7 +59,7 @@ export function GraceBanner() {
   if (!hydrated || pro || enabled !== true) {
     return null;
   }
-  const purgeAt = purgeAtFrom(proUntil);
+  const purgeAt = purgeAtFrom(proExpiredAt);
   if (purgeAt === null) {
     return null;
   }
