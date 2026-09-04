@@ -1338,9 +1338,16 @@ sandboxGrantEnabled = () => (process.env.RC_SANDBOX_GRANT ?? '') === 'all'
 
 ### ⚠ 출시 체크리스트에 넣을 것 (§7.2 함정 3개)
 
-- [ ] 웹훅 이력에 `anonymous-app-user-id`가 없는가 → `logIn()`을 안 불렀다는 뜻
-- [ ] `entitlement_ids`가 빈 배열이 아닌가 → RC에서 **상품 attach를 빠뜨렸다**
-- [ ] ~~`RC_SANDBOX_GRANT`를 껐는가~~ → 🔴 **애초에 켜지 않는다**(§6.3). 켤 이유가 없어졌다
+- [x] 웹훅 이력에 `anonymous-app-user-id`가 없는가 → `logIn()`을 안 불렀다는 뜻
+      → **운영 앱은 확인됐다**(2026-08-19 첫 실결제, §6.1.8). 웹훅이 **실제 subject** 로 도착해
+        `purchase_events`·`entitlements` 두 행이 그 subject 에 붙었다 — 익명이었으면 매칭이 안 됐다
+- [x] `entitlement_ids`가 빈 배열이 아닌가 → RC에서 **상품 attach를 빠뜨렸다**
+      → **같은 결제에서 확인됐다.** 웹훅 원문의 `entitlements.pro.expires_date` 를 읽어 만료를
+        판정했으므로 `pro` 가 실려 있었다는 뜻이다. ⚠ 2026-08-17 에 **운영 앱조차 Test Store
+        상품만 물고 있던 것**을 고친 뒤라 이 확인이 값을 했다(§6.1.3)
+      🔴 **둘 다 운영 앱 기준이다.** stg 앱은 RC 배선만 끝났고 **실결제가 0건**이라
+        같은 두 줄을 stg 에서 다시 봐야 한다 — 앱이 다르면 웹훅도 다르다
+- [x] ~~`RC_SANDBOX_GRANT`를 껐는가~~ → 🔴 **애초에 켜지 않는다**(§6.3). 켤 이유가 없어졌다
 
 ---
 
