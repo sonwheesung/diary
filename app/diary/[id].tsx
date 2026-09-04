@@ -18,6 +18,7 @@ import {
 import { ImageViewer } from '@/components/ImageViewer';
 import { Screen } from '@/components/Screen';
 import { deleteDiary, getDiaryById } from '@/features/diary/api/diary-repository';
+import { syncReminders } from '@/features/notification/api/reminder';
 import { getImagesForDiary, resolveImageUri } from '@/features/diary/api/image-store';
 import { DiaryEditor } from '@/features/diary/components/DiaryEditor';
 import { emotionLabel } from '@/features/diary/emotions';
@@ -93,7 +94,20 @@ export default function DiaryDetailScreen() {
         style: 'destructive',
         onPress: () => {
           void deleteDiary(id)
-            .then(() => router.back())
+            .then(() => {
+              /*
+               * 🔴 **지웠으면 리마인더도 다시 맞춘다** (2026-09-04 실기기).
+               *
+               * 저장할 때는 그날 예약을 지우는데(`DiaryEditor`), 지울 때는 아무도 안 되돌려서
+               * **오늘 쓴 조각을 지운 사람에게 오늘 알림이 영영 안 왔다.** 다음에 앱을 열 때까지
+               * 그대로다 — 그런데 알림을 기다리는 사람은 앱을 안 연다(그게 리마인더의 전제다).
+               *
+               * 방향만 반대일 뿐 저장과 같은 규약이다: **조건이 확정되는 자리에서 다시 맞춘다.**
+               * ⚠ `await`하지 않는다 — 화면 전환을 알림이 붙잡으면 안 된다(저장 쪽과 같다).
+               */
+              void syncReminders();
+              router.back();
+            })
             .catch((caught: unknown) =>
               Alert.alert(
                 t('detail.deleteFailed'),

@@ -209,7 +209,7 @@ export default function ReportScreen() {
         <ActivityIndicator color={colors.accentMuted} style={styles.loading} />
       ) : reports.length === 0 && !pro ? (
         // 하나도 없는 무료 사용자에게만 예시를 보인다. 하나라도 있으면 그건 그의 목록이다
-        <LockedPreview />
+        <LockedPreview kind={kind} />
       ) : (
         <>
           {reports.length === 0 ? (
@@ -379,7 +379,7 @@ function ReportRow({ report }: { report: Report }) {
  * ⚠ **"예시" 배지를 뗄 수 없게 붙인다.** 생성된 것처럼 보이는 텍스트를 자기 일기의 요약으로
  *   오해하면, 그건 우리가 읽지도 않은 내용을 읽은 척한 것이 된다.
  */
-function LockedPreview() {
+function LockedPreview({ kind }: { kind: ReportKind }) {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
   // 예시에도 실제 형식의 날짜를 쓴다 — 언어마다 다른 표기를 여기서 한 번 보여주는 값도 있다
@@ -387,18 +387,34 @@ function LockedPreview() {
 
   return (
     <>
-      <Text style={styles.lockedTitle}>{t('report.lockedTitle')}</Text>
-      <Text style={styles.lockedBody}>{t('report.lockedBody')}</Text>
+      {/*
+        🔴 **고른 탭을 따라간다** (2026-09-04 실기기). 전에는 `'weekly'`가 박혀 있어
+          **연간 탭에서 "매주 돌아보는 시간 / 8월 24일–30일"** 이 떴다 — 탭은 눌리는데
+          내용이 안 따라오면 그건 고장이 아니라 **거짓말**이다.
 
-      <Card>
-        <View style={styles.rowMeta}>
-          <View style={styles.sampleBadge}>
-            <Text style={styles.sampleBadgeText}>{t('report.sampleBadge')}</Text>
+        ⚠ 같은 규약이 **바로 아래 구독자 빈 화면에 이미 적혀 있었다**(`report.empty<종류>`).
+          "월간 탭에서 '한 주가 지나면…'을 보여주면 틀리게 알려주는 것"이라고 써 놓고,
+          정작 **무료 사용자에게는** 그러고 있었다. 새로 만든 규칙이 아니다.
+      */}
+      <Text style={styles.lockedTitle}>{t(`report.lockedTitle${capitalize(kind)}`)}</Text>
+      <Text style={styles.lockedBody}>{t(`report.empty${capitalize(kind)}`)}</Text>
+
+      {/*
+        🚫 **예시 카드는 주간에만 둔다.** 문장이 요일을 말하는데("월요일에는…") 그걸
+          연간 아래에 놓으면 다시 같은 거짓말이 된다. 종류마다 예시를 쓰는 것도 가능하지만,
+          **보여줄 수 없는 것을 안 보여주는 쪽**이 정직하고 번역도 늘지 않는다.
+      */}
+      {kind === 'weekly' && (
+        <Card>
+          <View style={styles.rowMeta}>
+            <View style={styles.sampleBadge}>
+              <Text style={styles.sampleBadgeText}>{t('report.sampleBadge')}</Text>
+            </View>
+            <Text style={styles.rowPeriod}>{label}</Text>
           </View>
-          <Text style={styles.rowPeriod}>{label}</Text>
-        </View>
-        <Text style={styles.rowSummary}>{t('report.sampleBody')}</Text>
-      </Card>
+          <Text style={styles.rowSummary}>{t('report.sampleBody')}</Text>
+        </Card>
+      )}
 
       <Button
         label={t('report.seeSubscription')}
