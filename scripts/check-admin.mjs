@@ -11,6 +11,8 @@
  *
  * `scripts/check-ai.mjs`와 같은 규약.
  */
+import { readFileSync } from 'node:fs';
+
 import { isAdmin } from '../server/lib/admin.ts';
 import { windowStart, windowLabel } from '../server/lib/admin-window.ts';
 import { estimateUsd, priceOf } from '../server/lib/admin-pricing.ts';
@@ -187,10 +189,63 @@ check('토큰이 0이면 원가도 0 (null이 아니다)', () => {
   eq(estimateUsd('gpt-5.6-luna', 0, 0), 0, '0 토큰');
 });
 
+/* ── ⑤ subject 는 **입력으로만** 쓴다 (2026-09-04, ADMIN_SYSTEM §3) ───────────
+ *
+ * 🔴 이 다섯은 **소스를 읽는다.** 여기서 지키려는 것이 런타임 값이 아니라 *"응답에 무엇이
+ *   들어 있는가"* 라서다 — subject_id 가 응답에 한 번 실리면 화면이 목록을 만들 수 있고,
+ *   그 목록을 common_server 의 이메일과 맞추면 §3 이 막으려던 것이 그대로 생긴다.
+ *
+ * ⚠ *"리포트가 별로예요"* 문의를 여는 것은 막지 않는다. 그건 문의가 입구이고
+ *   그 사람이 스스로 연 문이다. 막는 것은 **훑어보기**뿐이다.
+ */
+{
+  const ROUTE = readFileSync(
+    new URL('../server/app/api/admin/reports/route.ts', import.meta.url),
+    'utf8',
+  );
+  const CONSOLE = readFileSync(
+    new URL('../server/app/ops-7c1d94/page.tsx', import.meta.url),
+    'utf8',
+  );
+
+  check('🔴 응답 select 에 subjectId 가 없다 — 있으면 화면이 목록을 만들 수 있다', () => {
+    const select = ROUTE.slice(ROUTE.indexOf('.select({'), ROUTE.indexOf('.from(aiReports)'));
+    assert(
+      !/subjectId\s*:/.test(select),
+      'select 에 subjectId 가 들어갔다 — 훑어보기가 가능해진다(ADMIN_SYSTEM §3)',
+    );
+  });
+
+  check('🔴 subject 는 조회 조건으로는 쓴다 — 문의로 찾아온 사람을 못 열면 CS 가 막힌다', () => {
+    assert(/params\.get\('subject'\)/.test(ROUTE), 'subject 파라미터를 읽지 않는다');
+    assert(/eq\(aiReports\.subjectId,\s*subject\)/.test(ROUTE), 'subject 로 좁히지 않는다');
+  });
+
+  check('🔴 빈 subject 는 안 준 것과 같다 — `?subject=` 로 전체가 열리면 안 된다', () => {
+    assert(
+      /subject\.length > 0 \? eq\(/.test(ROUTE),
+      '빈 문자열을 걸러내지 않는다 — 실수로 비면 조건이 어떻게 되는지 불명확해진다',
+    );
+  });
+
+  check('집계도 같은 subject 범위로 좁힌다 — 두 숫자가 다른 것을 세면 안 된다', () => {
+    const tail = ROUTE.slice(ROUTE.indexOf('const [counts]'));
+    assert(/\.where\(bySubject\)/.test(tail), 'counts 가 전체를 센다');
+  });
+
+  check('🔴 화면은 좁혀졌다는 사실만 안다 — id 를 되돌려받지 않는다', () => {
+    assert(/scoped:\s*bySubject !== undefined/.test(ROUTE), 'scoped 불리언이 없다');
+    assert(
+      !/data\.subjectId|r\.subjectId|\.subject_id/.test(CONSOLE),
+      '콘솔이 응답에서 subject 를 읽으려 한다 — 라우트가 안 주므로 undefined 를 그린다',
+    );
+  });
+}
+
 // ── 결과 ─────────────────────────────────────────────────────────────────────
 if (failures.length > 0) {
   console.error(`\n관리자 콘솔 FAIL — ${failures.length}개\n`);
   for (const f of failures) console.error(`  ${f}`);
   process.exit(1);
 }
-console.log(`\n관리자 콘솔 ok — ${passed}개 검사 통과 (fail-closed 4 + 헤더 7 + 집계 창 8 + 원가 4)`);
+console.log(`\n관리자 콘솔 ok — ${passed}개 검사 통과 (fail-closed 4 + 헤더 7 + 집계 창 8 + 원가 4 + subject 경계 5)`);

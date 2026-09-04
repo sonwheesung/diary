@@ -265,14 +265,27 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
   const [ai, setAi] = useState<Json | null>(null);
   const [reports, setReports] = useState<Json | null>(null);
   const [reportFilter, setReportFilter] = useState<'all' | 'flagged' | 'concern'>('all');
+  /**
+   * 🔴 **문의를 보낸 사람의 subject_id.** *"리포트가 별로예요"* 문의가 오면
+   * common_server 콘솔에서 그 값을 얻어 여기 붙여넣는다.
+   *
+   * ⚠ **입력 전용이다.** 응답에는 subject_id가 없고 목록·자동완성도 없다 —
+   *   §3이 막으려는 것은 훑어보기이지, 문의를 보낸 사람을 돕는 것이 아니다.
+   */
+  const [subject, setSubject] = useState('');
+  /** 입력할 때마다 서버를 때리지 않는다. [조회]를 눌러야 반영된다 */
+  const [subjectApplied, setSubjectApplied] = useState('');
   const [vaults, setVaults] = useState<Json | null>(null);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(true);
 
   const load = useCallback(async () => {
     setBusy(true);
-    const query =
-      reportFilter === 'all' ? '' : reportFilter === 'flagged' ? '?flagged=1' : '?concern=1';
+    const parts: string[] = [];
+    if (reportFilter === 'flagged') parts.push('flagged=1');
+    else if (reportFilter === 'concern') parts.push('concern=1');
+    if (subjectApplied.length > 0) parts.push(`subject=${encodeURIComponent(subjectApplied)}`);
+    const query = parts.length === 0 ? '' : `?${parts.join('&')}`;
     const [o, a, r, v] = await Promise.all([
       apiCall('/api/admin/overview', token),
       apiCall(`/api/admin/ai?window=${granularity}`, token),
@@ -286,7 +299,7 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
     setReports(r.body.ok ? r.body : null);
     setVaults(v.body.ok ? v.body : null);
     setBusy(false);
-  }, [token, granularity, reportFilter]);
+  }, [token, granularity, reportFilter, subjectApplied]);
 
   // granularity가 바뀌면 다시 부른다. 최초 1회도 여기서 걸린다.
   const first = useRef(true);
@@ -347,7 +360,14 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
               <AiTab data={ai} granularity={granularity} onGranularity={setGranularity} />
             )}
             {tab === 'reports' && (
-              <ReportsTab data={reports} filter={reportFilter} onFilter={setReportFilter} />
+              <ReportsTab
+                data={reports}
+                filter={reportFilter}
+                onFilter={setReportFilter}
+                subject={subject}
+                onSubject={setSubject}
+                onLookup={() => setSubjectApplied(subject.trim())}
+              />
             )}
             {tab === 'vaults' && <VaultsTab data={vaults} />}
             {tab === 'reap' && <ReapTab data={vaults} />}
@@ -596,10 +616,16 @@ function ReportsTab({
   data,
   filter,
   onFilter,
+  subject,
+  onSubject,
+  onLookup,
 }: {
   data: Json | null;
   filter: 'all' | 'flagged' | 'concern';
   onFilter: (f: 'all' | 'flagged' | 'concern') => void;
+  subject: string;
+  onSubject: (v: string) => void;
+  onLookup: () => void;
 }) {
   if (data === null) {
     return <div className="oc-empty">불러오지 못했습니다.</div>;
@@ -631,8 +657,54 @@ function ReportsTab({
         </div>
       </div>
 
+      {/*
+        🔴 **문의로 찾아온 한 사람을 여는 자리.** *"리포트가 별로예요"* 문의가 오면
+          common_server 콘솔에서 그 문의의 subject_id 를 복사해 여기 넣는다.
+
+        ⚠ **목록도 자동완성도 없다.** 이미 아는 값을 넣어야만 열린다 — 그게
+          ADMIN_SYSTEM §3 이 막으려던 *훑어보기* 와 이 기능을 가르는 선이다.
+        ⚠ 응답에는 subject_id 가 없다. 화면은 "좁혀져 있다"만 안다(`scoped`).
+      */}
+      <div className="oc-card" style={{ padding: '14px 16px', marginBottom: 14 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <input
+            className="oc-input"
+            style={{ flex: 1, minWidth: 220 }}
+            placeholder="문의한 사용자의 subject_id (common_server 콘솔에서 복사)"
+            value={subject}
+            onChange={(e) => onSubject(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') onLookup();
+            }}
+          />
+          <button className="oc-btn sm" onClick={onLookup}>
+            조회
+          </button>
+          {subject.length > 0 ? (
+            <button
+              className="oc-btn sm ghost"
+              onClick={() => {
+                onSubject('');
+                onLookup();
+              }}
+            >
+              해제
+            </button>
+          ) : null}
+        </div>
+        {data.scoped === true ? (
+          <div className="oc-note" style={{ marginTop: 10 }}>
+            한 사용자로 좁혀 보는 중입니다 — 아래 목록과 개수가 모두 그 사람의 것입니다.
+          </div>
+        ) : null}
+      </div>
+
       {rows.length === 0 ? (
-        <div className="oc-empty">아직 리포트가 없습니다.</div>
+        <div className="oc-empty">
+          {data.scoped === true
+            ? '이 사용자의 리포트가 없습니다 — id가 맞는지, 90일이 지나지 않았는지 확인하세요.'
+            : '아직 리포트가 없습니다.'}
+        </div>
       ) : (
         rows.map((r) => (
           <div className="oc-card" key={String(r.id)}>
