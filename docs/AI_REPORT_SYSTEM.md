@@ -663,7 +663,23 @@ FAIL 🔴 경로 간 대조 — 라우트 1/0/0  vs  원장 2/3000/300
 
 옛 코드는 호출 2회·3,300토큰을 **1회·0토큰**으로 본다. 이 한 줄이 이 결함의 전부다.
 
-⏭ **남은 배포 단계**: 운영 DB에 `db:push`(테이블 추가 — Expand-only라 안전) + 서버 배포.
+✅ **배포 완료 (2026-09-07 12:07 KST · 사용자 승인)**
+
+| | |
+|---|---|
+| 운영 DB | `ALLOW_REMOTE_DB=1 npx drizzle-kit push --verbose`. **적용 전에 계획을 읽었다** — `CREATE TABLE ai_calls` + 인덱스 2개, **DROP·ALTER 0건**(순수 추가). `--force`를 쓰지 않은 이유가 이것이다 |
+| 적용 후 | 테이블 8 → **9**. `ai_calls` 컬럼 10 · 인덱스 3. 🔴 **`uq_ai_usage_period`가 그대로 있다** — 캡의 근거를 안 건드리는 것이 ㉢을 고른 이유였고, 운영 DB에서 확인했다 |
+| 서버 | `npx vercel --prod`. 별칭 `jogak-stg.vercel.app` → 새 배포로 이동 확인(`vercel inspect`). 🔴 `Redeploy`가 아니라 **실제 업로드**다(§6.5.1의 함정) |
+| 확인 | `/api/admin/overview`·`/api/admin/ai` **200**(원장을 질의한다 — 테이블이 없으면 500이다) · 토큰 없이 **401**(fail-closed 유지) |
+
+⚠ **아직 원장에 행이 0이다.** 둘 다 0을 돌려주므로 이 응답만으로는 옛 코드와 새 코드가 구분되지 않는다 —
+구분되는 첫 순간은 **구독자가 리포트를 하나 만들 때**다. 그때 이 한 줄로 확인한다:
+
+```sql
+select id, kind, period_key, day, input_tokens, output_tokens, regenerate from ai_calls order by created_at desc limit 5;
+```
+
+🟢 그때까지도 **사용자에게는 아무 위험이 없다** — 원장 기록 실패는 리포트를 막지 않는다(`ai.calls-write`).
 
 
 ⚠ ㉢을 고르면 **리퍼 대상이 하나 는다.** `ai_calls`에는 본문이 없지만 `subject_id`가 있으므로
