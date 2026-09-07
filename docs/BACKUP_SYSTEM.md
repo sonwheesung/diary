@@ -581,7 +581,7 @@ stg     Vivace Staging(Free) 조직       $0     ← 클로즈드 테스트까�
 | **버킷은 deny-all RLS** | 서비스롤이 우회하므로 격리는 `blobPath()`/`manifestPath()`가 하지만, 사고 등급을 한 단계 낮춘다 |
 | `SUPABASE_PUBLIC_URL`은 **비워둔다** | 로컬 에뮬레이터 전용이다. 클라우드에서는 서명 URL 호스트가 그대로 맞다 |
 | ⚠ `AUTH_STUB`을 **넣지 않는다** | 켜두면 아무 Bearer나 통과한다. 로컬 전용이다 |
-| ⚠ `RC_SANDBOX_GRANT` | common_server 쪽 스위치지만 출시 체크리스트에 함께 둔다 |
+| ~~⚠ `RC_SANDBOX_GRANT`~~ | ✅ **해당 없음**(2026-09-07) — 한 번도 켜지 않는다. common_server **전역** 스위치라 앱별로 못 가르고, 그래서 검증을 실제 결제로 한다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.3) |
 
 ### stg에서 반드시 확인할 것 (로컬에서 안 드러나는 것)
 
