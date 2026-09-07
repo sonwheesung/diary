@@ -14,6 +14,9 @@
  *       npm 스크립트가 `--env-file=.env.local`로 넘긴다.
  */
 import postgres from 'postgres';
+import { assertDbTarget } from './_db-target.mjs';
+
+assertDbTarget('e2e:ai');
 
 const BASE = process.env.SERVER_URL ?? 'http://127.0.0.1:3200';
 const TOKEN = process.env.TEST_TOKEN ?? 'stub-token';

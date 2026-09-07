@@ -9,6 +9,9 @@
  *   ⚠ 서버가 `AUTH_STUB=1` 로 떠 있어야 하고, **키가 없어야** 마지막 검사가 성립한다.
  */
 import postgres from 'postgres';
+import { assertDbTarget } from './_db-target.mjs';
+
+assertDbTarget('verify:regenerate');
 
 const BASE = process.env.E2E_BASE ?? 'http://127.0.0.1:3200';
 const TOKEN = `regen-${Date.now()}`;

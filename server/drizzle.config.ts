@@ -17,6 +17,20 @@ const url = process.env.DATABASE_URL ?? '';
 if (url.length === 0) {
   throw new Error('DATABASE_URL이 없다 — server/.env.local을 확인한다.');
 }
+/*
+ * 🔴 **운영 스키마를 실수로 바꾸지 않는다**(2026-09-07). `.env.local` 이 운영 DB를 가리키고
+ *   있어서 `npm run db:push` 한 번이면 사용자가 쓰는 스키마가 바뀐다.
+ *   `scripts/_db-target.mjs` 와 같은 규율 — 되돌릴 수 없는 일에 손을 한 번 더 쓰게 한다.
+ */
+const host = new URL(url).hostname;
+const isLocal = host === '127.0.0.1' || host === 'localhost' || host === '::1';
+if (!isLocal && process.env.ALLOW_REMOTE_DB !== '1') {
+  throw new Error(
+    `db:push 가 원격 DB를 향한다 — ${host}
+     로컬로 :    DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:54422/postgres" npm run db:push
+     정말 원격 : ALLOW_REMOTE_DB=1 npm run db:push`,
+  );
+}
 if (url.includes('[YOUR-PASSWORD]')) {
   throw new Error('DATABASE_URL에 자리표시자가 남아 있다 — 비밀번호를 채운다.');
 }

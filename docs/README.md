@@ -366,6 +366,32 @@ npm run e2e:ai       # 15개 — AI 게이트(인가·구독·빈입력·과대�
 npm run measure:ai   # ⚠ 실제 과금. OPENAI_API_KEY 필요
 ```
 
+#### 🔴 `.env.local` 이 **운영 DB** 를 가리킨다 — 가드를 세웠다 (2026-09-07)
+
+위 절차는 **로컬 도커 스택**을 전제로 적혀 있는데, `server/.env.local` 의 `DATABASE_URL` 은
+2026-09-04 운영 프로젝트 신설 검증 때 그쪽을 향해 두고 **안 되돌렸다.** 그래서 그때까지
+`npm run db:push` 한 번이면 **사용자가 쓰는 스키마가 바뀌고**, `e2e:ai`·`verify:*` 가 운영 DB에 썼다.
+
+⚠ **아는 사람이 있었는데 막지는 않고 있었다** — `verify-hierarchy.mjs` 주석이
+*"`DATABASE_URL` 이 원격을 가리켜서 이 스크립트가 만든 행은 **테스터가 쓰는 DB** 에 남는다"* 고
+경고만 했다. **주석은 다음 사람을 막지 못한다.**
+
+```bash
+# 원격을 향하면 넷 다 죽는다 — db:push · e2e:ai · verify:regenerate · verify:hierarchy
+npm run db:push
+#   db:push 가 원격 DB를 향한다 — aws-0-ap-northeast-2.pooler…
+
+# 평소 (로컬)
+DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:54422/postgres" npm run db:push
+
+# 정말 운영에 해야 할 때만 — 배포 시 스키마 적용 등
+ALLOW_REMOTE_DB=1 npm run db:push
+```
+
+🚫 **로컬로 폴백하지 않는다.** `drizzle.config.ts` 가 남긴 교훈이다 — 엉뚱한 DB를 보고
+*"변경 없음"* 이라고 말하는 것이 가장 나쁜 실패다. 원격이면 **소리 내어 죽고** 손을 한 번 더 쓰게 한다.
+⚠ 가드는 `.env.local` 을 **안 고친다** — 그 파일이 무엇을 가리켜야 하는지는 별개의 결정이다.
+
 ⚠ 기본 포트(5432x)를 다른 프로젝트의 Supabase 스택이 쓰고 있어 **544xx로 옮겼다.**
 자세한 것은 [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §7.
 

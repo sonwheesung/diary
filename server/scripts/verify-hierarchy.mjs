@@ -34,6 +34,9 @@
  */
 import { readFileSync } from 'node:fs';
 import postgres from 'postgres';
+import { assertDbTarget } from './_db-target.mjs';
+
+assertDbTarget('verify:hierarchy');
 
 const BASE = process.env.SERVER_URL ?? 'http://127.0.0.1:3200';
 /** e2e의 `stub-token`과 **다른 값**이어야 한다 — 섞이면 파기가 남의 행까지 지운다 */
