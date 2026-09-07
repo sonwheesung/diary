@@ -15,6 +15,8 @@ const TOKEN = `regen-${Date.now()}`;
 const SUBJECT = `stub:${TOKEN}`;
 const KIND = 'weekly';
 const PERIOD = '2026-W20';
+const DAY = new Date().toISOString().slice(0, 10);
+const MODEL = 'gpt-5.6-luna';
 
 const sql = postgres(process.env.DATABASE_URL, { max: 1 });
 let passed = 0;
@@ -144,11 +146,75 @@ try {
     select count(*)::int n from ai_usage
      where subject_id = ${SUBJECT} and kind = ${KIND} and period_key = ${PERIOD}`;
   check('🔴 실패는 행을 더 만들지 않는다 — 기간당 1행이 유지된다', usage.n === 1, String(usage.n));
+
+  /* ── 경로 간 대조 — 콘솔 원가 합계 == 원장의 호출별 합계 (§6.6.1) ──────────
+   *
+   * 🔴 **이게 이 파일에서 유일하게 "두 계산을 한 입력으로" 돌리는 검사다**
+   *   (`docs/README.md` §3). 나머지는 전부 한 계산을 여러 입력으로 돌린다.
+   *
+   * 원장에 **같은 기간의 호출 2건**(최초 + 재생성)을 넣는다. `ai_usage` 는 기간당
+   * 1행이라 이 상황에서 **반드시 한 건을 잃는다** — 라우트가 거기서 세면 이 검사가 깨진다.
+   * 그게 이 검사의 변이 테스트다.
+   */
+  const C1 = `${TOKEN}-call1`;
+  const C2 = `${TOKEN}-call2`;
+  await sql`
+    insert into ai_calls (id, subject_id, kind, period_key, day, input_tokens, output_tokens, model, regenerate)
+    values (${C1}, ${SUBJECT}, ${KIND}, ${PERIOD}, ${DAY}, 1000, 100, ${MODEL}, false),
+           (${C2}, ${SUBJECT}, ${KIND}, ${PERIOD}, ${DAY}, 2000, 200, ${MODEL}, true)`;
+
+  const [ledger] = await sql`
+    select count(*)::int calls,
+           coalesce(sum(input_tokens), 0)::int  input,
+           coalesce(sum(output_tokens), 0)::int output
+      from ai_calls where subject_id = ${SUBJECT}`;
+  check(
+    '원장은 호출당 1행이다 — 재생성이 2행째를 만든다',
+    ledger.calls === 2 && ledger.input === 3000,
+    `calls=${ledger.calls} input=${ledger.input}`,
+  );
+
+  const [kept] = await sql`
+    select count(*)::int n from ai_usage where subject_id = ${SUBJECT}`;
+  check(
+    '🔴 같은 상황에서 ai_usage 는 1행뿐이다 — 여기서 원가를 세면 반드시 잃는다',
+    kept.n === 1,
+    String(kept.n),
+  );
+
+  /*
+   * 라우트가 실제로 무엇을 세는지 본다. 우리 SUBJECT 만 골라낼 수 없으므로
+   * **넣기 전후의 차이**로 잰다 — 다른 행이 섞여 있어도 성립한다.
+   */
+  const stats = async () => {
+    const res = await fetch(`${BASE}/api/admin/ai?window=month`, {
+      headers: { authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
+    });
+    const b = await res.json();
+    return b.data?.totals ?? b.totals ?? null;
+  };
+  const t = await stats();
+  check('콘솔 AI 탭이 응답한다', t !== null, JSON.stringify(t)?.slice(0, 120));
+  if (t !== null) {
+    const [truth] = await sql`
+      select count(*)::int calls,
+             coalesce(sum(input_tokens), 0)::int  input,
+             coalesce(sum(output_tokens), 0)::int output
+        from ai_calls
+       where created_at >= date_trunc('month', now() at time zone 'Asia/Seoul') at time zone 'Asia/Seoul'`;
+    check(
+      '🔴 경로 간 대조 — 라우트 집계 == 원장 독립 집계',
+      t.calls === truth.calls && t.inputTokens === truth.input && t.outputTokens === truth.output,
+      `라우트 ${t.calls}/${t.inputTokens}/${t.outputTokens} vs 원장 ${truth.calls}/${truth.input}/${truth.output}`,
+    );
+  }
+
 } finally {
   // ── 흔적을 지운다 ─────────────────────────────────────────────────────────
   await sql`delete from ai_usage where subject_id = ${SUBJECT}`;
   await sql`delete from ai_reports where subject_id = ${SUBJECT}`;
   await sql`delete from ai_cooldowns where subject_id = ${SUBJECT}`;
+  await sql`delete from ai_calls where subject_id = ${SUBJECT}`;
   const [left] = await sql`select count(*)::int n from ai_usage where subject_id = ${SUBJECT}`;
   check('치웠다 — 확인용 흔적을 남기지 않는다', left.n === 0, String(left.n));
   await sql.end();

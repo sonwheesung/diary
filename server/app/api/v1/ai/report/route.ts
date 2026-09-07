@@ -18,7 +18,7 @@ import { buildSystem, buildUser, isEmpty, withBody } from '@shared/ai/prompt';
 import { PROMPT_VERSION, schemaFor } from '@shared/ai/types';
 import type { BuildPromptArgs, ReportKind } from '@shared/ai/types';
 import { db } from '@/db';
-import { aiCooldowns, aiReports, aiUsage } from '@/db/schema';
+import { aiCalls, aiCooldowns, aiReports, aiUsage } from '@/db/schema';
 import { generateReport } from '@/lib/ai';
 import {
   DAILY_CALL_CAP,
@@ -420,6 +420,35 @@ export async function POST(req: Request): Promise<Response> {
     } catch (error) {
       reportError(error, 'ai.usage-write');
     }
+
+    /*
+     * 🔴 **원가 원장 — 호출마다 한 행**(§6.6.1). `if/else` **밖**이라는 것이 이 코드의 전부다.
+     *
+     * 위 `ai_usage` 는 재생성일 때 행을 **덮어쓴다**(기간당 1행이 캡의 근거라 그래야 한다).
+     * 그래서 그 표만 보면 **두 번 부른 것이 한 번으로 보이고 첫 호출의 토큰이 사라진다** —
+     * 2026-09-07 까지 실제로 그랬다. 원가는 단위가 달라서 자기 표를 갖는다.
+     *
+     * ⚠ **분기 안으로 옮기지 마라.** 한쪽에만 있으면 그 순간 다시 같은 버그다.
+     *   `check:admin` 이 소스를 읽어 이걸 막고, `verify:regenerate` 가 DB 로 대조한다.
+     * ⚠ 실패해도 리포트는 돌려준다 — 위 카운터와 같은 이유다(원가 기록을 못 남긴 것이
+     *   사용자가 결과를 잃을 이유는 아니다). 대신 **조용히 넘어가지 않는다.**
+     */
+    try {
+      await db.insert(aiCalls).values({
+        id: reportId,
+        subjectId: id.subjectId,
+        kind,
+        periodKey,
+        day: utcDay(),
+        inputTokens: result.inputTokens,
+        outputTokens: result.outputTokens,
+        model: result.model,
+        regenerate: consumedRegenerate,
+      });
+    } catch (error) {
+      reportError(error, 'ai.calls-write');
+    }
+
 
     /*
      * 🔴 **리포트 본문을 저장한다** (2026-08-13 사용자 결정, §5.2).

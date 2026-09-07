@@ -204,6 +204,61 @@ export const vaultBlobs = pgTable(
  * ⚠ 기간 캡(`periodKey`)과 일일 폭주 방어(`day`)는 **다른 문제**라 한 행에 둘 다 있다:
  *   전자는 "같은 주를 두 번 만들지 마라", 후자는 "버그로 하루에 수백 번 부르지 마라".
  */
+/**
+ * 🔴 **원가의 진실 — 모델 호출 하나에 행 하나**(`docs/AI_REPORT_SYSTEM.md` §6.6.1, 2026-09-07).
+ *
+ * ## 왜 `ai_usage` 로는 안 되나 — 단위가 둘인데 테이블이 하나였다
+ *
+ * `ai_usage` 는 **기간당 1행**이다. 그게 `uq_ai_usage_period`(= *"이 기간은 이미 만들었다"*)의
+ * 근거이고 캡의 진실이라 바꿀 수 없다. 그런데 **원가는 호출당 1건**이다.
+ * 재생성이 그 행을 덮어쓰면서 원가·호출 수·일별 추이가 **첫 호출분을 통째로 잃고 있었다** —
+ * 하필 재생성은 *"리포트가 별로예요"* 문의에 답하며 여는 것이라 **가장 비싼 호출**에 몰린다.
+ *
+ * → 두 단위에 각자 테이블을 준다. `ai_usage` = 캡, `ai_calls` = 원가. 서로 안 건드린다.
+ *
+ * ⚠ 공통서버가 같은 모양을 먼저 겪었다 — `lastSeenAt`(주체당 한 칸·지금)과 활성 일자
+ *   (덮어써지지 않는 과거)를 **일부러 다른 테이블로** 나눴고, 나누기 전에는 과거 DAU 를
+ *   복원할 수 없었다. 여기도 첫 재생성 뒤에는 잃은 호출을 되살릴 방법이 없다(로그가 없다).
+ *
+ * ## 규율
+ *
+ * - **append-only 다.** 어떤 경로도 이 표의 행을 UPDATE 하지 않는다 — 그게 이 표의 전부다.
+ * - **`day` 를 옮기지 않는다.** 그 호출이 실제로 일어난 날이고, 30일 추이가 이걸 읽는다.
+ * - **본문이 없다.** 토큰 수·모델·기간 키뿐이다(§5.1 무저장).
+ * - 🔴 **`subject_id` 가 있으므로 탈퇴 파기(`POST /api/v1/ai/purge`)에 반드시 함께 넣는다.**
+ *   §7.1 이 닫은 거짓(*"탈퇴하면 이용 기록을 파기한다"*)을 다시 열지 않는다.
+ */
+export const aiCalls = pgTable(
+  'ai_calls',
+  {
+    /**
+     * `reportId`. 호출마다 새 값이다 — 앱이 `createReport()` 마다 UUID 를 새로 만들어서
+     * 재시도 멱등이 애초에 성립하지 않는다(route 주석 §멱등). 그래서 PK 로 쓸 수 있고,
+     * 덤으로 **`ai_reports.id` 와 같은 값**이라 원장과 본문이 바로 짝지어진다(90일 안에는).
+     */
+    id: text('id').primaryKey(),
+    /** common_server의 subject. **FK 없다** — 다른 DB다 */
+    subjectId: text('subject_id').notNull(),
+    kind: text('kind').notNull(),
+    periodKey: text('period_key').notNull(),
+    /** `YYYY-MM-DD`(UTC). **그 호출이 일어난 날.** 나중에 옮기지 않는다 */
+    day: text('day').notNull(),
+    inputTokens: integer('input_tokens').notNull().default(0),
+    outputTokens: integer('output_tokens').notNull().default(0),
+    model: text('model'),
+    /** 이 호출이 재생성이었나. 원가에서 재생성 몫을 따로 볼 수 있어야 한다 */
+    regenerate: boolean('regenerate').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    /** 집계 창(이번 달·30일 추이)이 읽는 축 */
+    index('idx_ai_calls_created').on(table.createdAt),
+    /** 탈퇴 파기 */
+    index('idx_ai_calls_subject').on(table.subjectId),
+  ],
+);
+
+
 export const aiUsage = pgTable(
   'ai_usage',
   {

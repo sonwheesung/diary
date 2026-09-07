@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { aiCooldowns, aiReports, aiUsage } from '@/db/schema';
+import { aiCalls, aiCooldowns, aiReports, aiUsage } from '@/db/schema';
 import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 
   try {
     /*
-     * 세 테이블을 한 트랜잭션으로 묶는다. 일부만 지워진 채 앱이 "성공"으로 알고 탈퇴를
+     * 네 테이블을 한 트랜잭션으로 묶는다. 일부만 지워진 채 앱이 "성공"으로 알고 탈퇴를
      * 진행하면, 남은 행을 지울 권한이 있는 사람이 사라진다 — 부분 성공이 가장 나쁘다.
      */
     const counts = await db.transaction(async (tx) => {
@@ -65,7 +65,23 @@ export async function POST(req: Request) {
         .where(eq(aiCooldowns.subjectId, subjectId))
         .returning({ subjectId: aiCooldowns.subjectId });
 
-      return { reports: reports.length, usage: usage.length, cooldowns: cooldowns.length };
+      /*
+       * 🔴 **원가 원장도 지운다**(§6.6.1, 2026-09-07). 본문은 없지만 `subject_id`가 있다 —
+       *   `DELETE_ACCOUNT` §3이 *"리포트 이용 기록을 파기한다"* 고 게시했고, 원장은
+       *   그 *이용 기록* 그 자체다. 표를 하나 늘리면서 여기를 안 늘리면 §7.1이 닫은
+       *   거짓이 **그날로 다시 열린다.**
+       */
+      const calls = await tx
+        .delete(aiCalls)
+        .where(eq(aiCalls.subjectId, subjectId))
+        .returning({ id: aiCalls.id });
+
+      return {
+        reports: reports.length,
+        usage: usage.length,
+        cooldowns: cooldowns.length,
+        calls: calls.length,
+      };
     });
 
     return ok(counts);

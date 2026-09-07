@@ -1,6 +1,14 @@
 /**
  * GET /api/admin/ai — AI 사용량·추정 원가 (`docs/ADMIN_SYSTEM.md` §2).
  *
+ * 🔴 **`ai_calls`(원장)를 읽는다 — `ai_usage`가 아니다**(`AI_REPORT_SYSTEM` §6.6.1, 2026-09-07).
+ *   `ai_usage`는 **기간당 1행**이고 재생성이 그 행을 덮어쓴다. 그 표로 세면 호출 2회가
+ *   1회로 보이고, 토큰은 두 번째 것만 남고, `day`까지 갱신돼 **지난 30일 그래프가 조용히
+ *   바뀐다.** 원가는 *호출당 1건*이라 자기 표를 갖는다.
+ *
+ * ⚠ 되돌리지 마라. `check:admin`이 소스를 읽어 막고, `verify:regenerate`가 이 라우트의
+ *   합계를 **독립 SQL 합계와 대조**한다(경로 간 대조, `README.md` §3).
+ *
  * `CLAUDE.md` §7.2가 *"AI는 원가 실측 전까지 월간·연간으로 확대하지 않는다"* 라고 해놨는데
  * **실측할 화면이 없었다.** 이 라우트가 그 화면의 재료다.
  *
@@ -11,7 +19,7 @@
 import { and, gte, sql } from 'drizzle-orm';
 
 import { db } from '../../../../db';
-import { aiUsage } from '../../../../db/schema';
+import { aiCalls } from '../../../../db/schema';
 import { isAdmin } from '../../../../lib/admin';
 import { USD_TO_KRW, estimateUsd } from '../../../../lib/admin-pricing';
 import { kstDayKeys, windowLabel, windowStart } from '../../../../lib/admin-window';
@@ -42,33 +50,33 @@ export async function GET(req: Request): Promise<Response> {
      */
     const byModel = await db
       .select({
-        model: aiUsage.model,
+        model: aiCalls.model,
         calls: sql<number>`count(*)::int`,
-        inputTokens: sql<number>`coalesce(sum(${aiUsage.inputTokens}), 0)::int`,
-        outputTokens: sql<number>`coalesce(sum(${aiUsage.outputTokens}), 0)::int`,
+        inputTokens: sql<number>`coalesce(sum(${aiCalls.inputTokens}), 0)::int`,
+        outputTokens: sql<number>`coalesce(sum(${aiCalls.outputTokens}), 0)::int`,
       })
-      .from(aiUsage)
-      .where(gte(aiUsage.createdAt, start))
-      .groupBy(aiUsage.model);
+      .from(aiCalls)
+      .where(gte(aiCalls.createdAt, start))
+      .groupBy(aiCalls.model);
 
     /* 리포트 종류별 — 주간이 대부분이어야 정상이다(월간·연간은 기간당 1회다). */
     const byKind = await db
       .select({
-        kind: aiUsage.kind,
+        kind: aiCalls.kind,
         calls: sql<number>`count(*)::int`,
       })
-      .from(aiUsage)
-      .where(gte(aiUsage.createdAt, start))
-      .groupBy(aiUsage.kind);
+      .from(aiCalls)
+      .where(gte(aiCalls.createdAt, start))
+      .groupBy(aiCalls.kind);
 
     /*
      * 창 안에서 **AI를 쓴 사람 수**. 개별 id가 아니라 distinct 개수만 센다 —
      * 1인당 평균 호출을 보려면 이 숫자 하나면 충분하다(§3).
      */
     const [reach] = await db
-      .select({ users: sql<number>`count(distinct ${aiUsage.subjectId})::int` })
-      .from(aiUsage)
-      .where(gte(aiUsage.createdAt, start));
+      .select({ users: sql<number>`count(distinct ${aiCalls.subjectId})::int` })
+      .from(aiCalls)
+      .where(gte(aiCalls.createdAt, start));
 
     /*
      * 30일 일별 추이. **KST 날짜로 묶는다** — UTC로 묶으면 한국 시간 오전 9시가 경계가 되어
@@ -77,15 +85,15 @@ export async function GET(req: Request): Promise<Response> {
     const trendFrom = new Date(Date.now() - TREND_DAYS * 86_400_000);
     const trendRows = await db
       .select({
-        day: sql<string>`to_char((${aiUsage.createdAt} at time zone 'Asia/Seoul')::date, 'YYYY-MM-DD')`,
+        day: sql<string>`to_char((${aiCalls.createdAt} at time zone 'Asia/Seoul')::date, 'YYYY-MM-DD')`,
         calls: sql<number>`count(*)::int`,
-        inputTokens: sql<number>`coalesce(sum(${aiUsage.inputTokens}), 0)::int`,
-        outputTokens: sql<number>`coalesce(sum(${aiUsage.outputTokens}), 0)::int`,
+        inputTokens: sql<number>`coalesce(sum(${aiCalls.inputTokens}), 0)::int`,
+        outputTokens: sql<number>`coalesce(sum(${aiCalls.outputTokens}), 0)::int`,
       })
-      .from(aiUsage)
-      .where(and(gte(aiUsage.createdAt, trendFrom)))
-      .groupBy(sql`(${aiUsage.createdAt} at time zone 'Asia/Seoul')::date`)
-      .orderBy(sql`(${aiUsage.createdAt} at time zone 'Asia/Seoul')::date`);
+      .from(aiCalls)
+      .where(and(gte(aiCalls.createdAt, trendFrom)))
+      .groupBy(sql`(${aiCalls.createdAt} at time zone 'Asia/Seoul')::date`)
+      .orderBy(sql`(${aiCalls.createdAt} at time zone 'Asia/Seoul')::date`);
 
     /*
      * 🔴 **빈 날을 0으로 채운다.** DB는 호출이 있는 날만 준다 — 그대로 그리면

@@ -68,6 +68,16 @@ const claimsCount = (line, script) =>
 /** ②에서 걸리지만 고칠 게 아닌 줄. 부분 문자열로 찾는다 — 줄이 옮겨져도 따라간다 */
 const ALLOW = [
   {
+    file: 'docs/AI_REPORT_SYSTEM.md',
+    contains: '`check:admin` 30개도 인가·집계 창',
+    why: '과거 기록 — §6.6.1 "왜 못 찾았나"의 진단 시점 사실이다. 그때 30개였고 그중 경로 간 대조가 0이었다는 것이 그 절의 요지다',
+  },
+  {
+    file: 'docs/README.md',
+    contains: '`check:admin` 30개를 **둘 다 통과한 채로**',
+    why: '과거 기록 — §3 "경로 간 대조가 0개였다"의 진단 시점 사실이다. 지금 값으로 고치면 그 문단이 거짓이 된다',
+  },
+  {
     file: 'docs/DIARY_SYSTEM.md',
     contains: '`npm run check:diary-format` 28개가 **전부 통과**했다',
     why: '과거 기록 — §1.1 "왜 검사가 못 잡았나"(커서 잠금)의 진단 시점 사실이다. 고치면 그 절이 거짓이 된다',

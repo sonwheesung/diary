@@ -274,10 +274,76 @@ check('토큰이 0이면 원가도 0 (null이 아니다)', () => {
   });
 }
 
+/* ── ⑦ 원가는 원장에서 센다 — 캡의 표에서 세지 않는다 (2026-09-07, §6.6.1) ──────
+ *
+ * 🔴 `ai_usage` 는 **기간당 1행**이고 재생성이 그 행을 덮어쓴다. 거기서 원가를 세면
+ *   호출 2회가 1회로 보이고 첫 호출의 토큰이 사라진다 — 그리고 재생성은 *"리포트가
+ *   별로예요"* 문의에 답하며 여는 것이라 **가장 비싼 호출**에 몰린다.
+ *
+ * ⚠ 이건 **경로 간 대조**의 소스 쪽 절반이다(`docs/README.md` §3). DB 쪽 절반은
+ *   `verify:regenerate` 가 라우트 합계와 독립 SQL 합계를 맞춰 본다.
+ */
+{
+  const REPORT = readFileSync(
+    new URL('../server/app/api/v1/ai/report/route.ts', import.meta.url),
+    'utf8',
+  );
+  const AI_TAB = readFileSync(
+    new URL('../server/app/api/admin/ai/route.ts', import.meta.url),
+    'utf8',
+  );
+  const OVERVIEW2 = readFileSync(
+    new URL('../server/app/api/admin/overview/route.ts', import.meta.url),
+    'utf8',
+  );
+  const PURGE = readFileSync(
+    new URL('../server/app/api/v1/ai/purge/route.ts', import.meta.url),
+    'utf8',
+  );
+
+  check('🔴 두 집계 라우트가 ai_usage 를 안 읽는다 — 원가는 ai_calls 다', () => {
+    assert(!/aiUsage/.test(AI_TAB), 'AI 탭이 ai_usage 를 읽는다 — 재생성분이 사라진다');
+    assert(!/aiUsage/.test(OVERVIEW2), '대시보드가 ai_usage 를 읽는다 — 재생성분이 사라진다');
+    assert(/aiCalls/.test(AI_TAB) && /aiCalls/.test(OVERVIEW2), '원장을 안 읽는다');
+  });
+
+  check('🔴 원장 기록이 재생성 분기 **밖**에 있다 — 한쪽에만 있으면 같은 버그다', () => {
+    const inserts = REPORT.match(/db\.insert\(aiCalls\)/g) ?? [];
+    assert(inserts.length === 1, `insert(aiCalls) 가 ${inserts.length}개다 — 정확히 1개여야 한다`);
+
+    /*
+     * 분기 밖인지: `consumedRegenerate` 로 갈리는 if/else 블록이 끝난 뒤에 있어야 한다.
+     * `ai.usage-write` catch 가 그 블록의 끝이므로 그 뒤 위치를 본다.
+     */
+    const branchEnd = REPORT.indexOf("reportError(error, 'ai.usage-write')");
+    const ledger = REPORT.indexOf('db.insert(aiCalls)');
+    assert(branchEnd > 0 && ledger > branchEnd, '원장 기록이 재생성 분기 안으로 들어갔다');
+  });
+
+  check('🔴 원장은 append-only 다 — 어디서도 UPDATE 하지 않는다', () => {
+    for (const [name, src] of [
+      ['report', REPORT],
+      ['admin/ai', AI_TAB],
+      ['overview', OVERVIEW2],
+    ]) {
+      assert(!/update\(aiCalls\)/.test(src), `${name} 이 원장을 갱신한다 — append-only 가 깨진다`);
+    }
+  });
+
+  check('🔴 탈퇴 파기가 원장도 지운다 — 안 하면 §7.1 이 닫은 거짓이 다시 열린다', () => {
+    assert(/delete\(aiCalls\)/.test(PURGE), 'purge 가 ai_calls 를 안 지운다');
+    assert(
+      PURGE.indexOf('delete(aiCalls)') < PURGE.indexOf('db.transaction') ||
+        /transaction[\s\S]*delete\(aiCalls\)/.test(PURGE),
+      '원장 삭제가 트랜잭션 밖이다 — 부분 성공이 남는다',
+    );
+  });
+}
+
 // ── 결과 ─────────────────────────────────────────────────────────────────────
 if (failures.length > 0) {
   console.error(`\n관리자 콘솔 FAIL — ${failures.length}개\n`);
   for (const f of failures) console.error(`  ${f}`);
   process.exit(1);
 }
-console.log(`\n관리자 콘솔 ok — ${passed}개 검사 통과 (fail-closed 4 + 헤더 7 + 집계 창 8 + 원가 4 + subject 경계 5 + 상수 단일화 2)`);
+console.log(`\n관리자 콘솔 ok — ${passed}개 검사 통과 (fail-closed 4 + 헤더 7 + 집계 창 8 + 원가 4 + subject 경계 5 + 상수 단일화 2 + 원가 원장 4)`);

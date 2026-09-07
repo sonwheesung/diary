@@ -11,7 +11,7 @@ import { gte, sql } from 'drizzle-orm';
 import { DEFAULT_EFFORT, DEFAULT_MODEL } from '@/lib/ai-policy';
 
 import { db } from '../../../../db';
-import { aiUsage, vaults } from '../../../../db/schema';
+import { aiCalls, vaults } from '../../../../db/schema';
 import { isAdmin } from '../../../../lib/admin';
 import { USD_TO_KRW, estimateUsd } from '../../../../lib/admin-pricing';
 import { windowStart } from '../../../../lib/admin-window';
@@ -42,17 +42,23 @@ export async function GET(req: Request): Promise<Response> {
       })
       .from(vaults);
 
-    /* 이번 달 AI — 모델별로 쪼개야 원가가 맞는다(모델마다 단가가 다르다) */
+    /*
+     * 이번 달 AI — 모델별로 쪼개야 원가가 맞는다(모델마다 단가가 다르다).
+     *
+     * 🔴 **`ai_calls`(원장)를 읽는다. `ai_usage`가 아니다**(§6.6.1, 2026-09-07).
+     *   `ai_usage`는 기간당 1행이라 재생성이 행을 덮어쓴다 — 그 표로 원가를 세면
+     *   **첫 호출분이 통째로 사라지고**, 하필 재생성은 가장 비싼 호출에 몰린다.
+     */
     const monthByModel = await db
       .select({
-        model: aiUsage.model,
+        model: aiCalls.model,
         calls: sql<number>`count(*)::int`,
-        inputTokens: sql<number>`coalesce(sum(${aiUsage.inputTokens}), 0)::int`,
-        outputTokens: sql<number>`coalesce(sum(${aiUsage.outputTokens}), 0)::int`,
+        inputTokens: sql<number>`coalesce(sum(${aiCalls.inputTokens}), 0)::int`,
+        outputTokens: sql<number>`coalesce(sum(${aiCalls.outputTokens}), 0)::int`,
       })
-      .from(aiUsage)
-      .where(gte(aiUsage.createdAt, monthStart))
-      .groupBy(aiUsage.model);
+      .from(aiCalls)
+      .where(gte(aiCalls.createdAt, monthStart))
+      .groupBy(aiCalls.model);
 
     let usd = 0;
     let unpricedCalls = 0;
