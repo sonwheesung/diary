@@ -22,48 +22,139 @@
  *   그래서 `Math.random()`을 쓰지 않고 날짜에서 값을 유도한다.
  * - **더미다.** 실제 사용자의 일기를 넣지 않는다.
  */
+import i18next from 'i18next';
+
 import { getDatabase } from '@/db/client';
 import { EMOTION_CODES_ORDER } from '@/features/diary/emotions';
 import type { DiaryBlock } from '@/features/diary/types';
 
 const PREFIX = 'seed-';
 
-/** 날짜 문자열에서 유도하는 결정적 난수(0~1). LCG 한 줄이면 충분하다 */
+/**
+ * 날짜 문자열에서 유도하는 결정적 난수(0~1).
+ *
+ * ⚠ **섞기가 약하면 인접한 날이 같은 문장을 뽑는다.** 2026-09-07 실측: 9/4·9/5·9/6 이
+ *   제목·본문이 **전부 같게** 나왔다 — 스토어 스크린샷에서 카드 세 장이 복사본처럼 보였다.
+ *   `h*31 + c` 한 번으로는 하루 차이가 하위 비트에만 남고, LCG 한 번은 그걸 못 흩는다.
+ *   → 문자마다 xorshift 를 섞고 마지막에 한 번 더 흩어서 **상위 비트까지** 퍼지게 한다.
+ */
 function rand(date: string, salt: number): number {
-  let h = salt;
-  for (let i = 0; i < date.length; i += 1) h = (h * 31 + date.charCodeAt(i)) >>> 0;
-  h = (h * 1664525 + 1013904223) >>> 0;
-  return h / 4294967296;
+  let h = (salt * 2654435761) >>> 0;
+  for (let i = 0; i < date.length; i += 1) {
+    h = (h ^ date.charCodeAt(i)) >>> 0;
+    h = Math.imul(h, 16777619) >>> 0;
+    h = (h ^ (h >>> 13)) >>> 0;
+  }
+  h = Math.imul(h ^ (h >>> 16), 2246822507) >>> 0;
+  h = Math.imul(h ^ (h >>> 13), 3266489909) >>> 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
-const OPENERS = [
-  '아침에 눈을 뜨자마자 창을 열었다.',
-  '알람을 두 번 껐다.',
-  '출근길 지하철이 유난히 붐볐다.',
-  '오늘은 아무 일도 없었다.',
-  '점심을 혼자 먹었다.',
-  '비가 올 것 같아 우산을 챙겼다.',
-  '어제 늦게 자서 하루 종일 멍했다.',
-];
-const MIDDLES = [
-  '회의가 길어져 오후가 통째로 사라졌다.',
-  '오랜만에 친구에게 연락이 왔다.',
-  '점심에 회사 근처를 한 바퀴 걸었다.',
-  '읽던 책을 절반쯤 넘겼다.',
-  '저녁에 어머니한테 전화가 왔다. 별일 없냐고 물었다.',
-  '퇴근하고 바로 누웠다. 아무것도 하기 싫었다.',
-  '새로 생긴 카페에 들렀는데 자리가 없어서 그냥 나왔다.',
-  '운동을 가려다 말았다. 내일은 가야지.',
-  '오래된 사진을 정리하다가 한참 앉아 있었다.',
-];
-const CLOSERS = [
-  '내일은 조금 일찍 자야겠다.',
-  '별것 아닌데 기분이 오래 남았다.',
-  '그냥 그런 하루였다.',
-  '이런 날도 있는 거지.',
-  '쓰고 나니 조금 정리됐다.',
-];
-const TITLES = [null, null, null, '보통날', '오랜만에', '정리', '비', '조용한 하루'];
+/*
+ * 🔴 **문구는 앱 언어를 따른다**(2026-09-07). 그전에는 한국어 하드코딩이라
+ *   **영어 UI 로 스토어 스크린샷을 찍으면 본문만 한국어**로 나왔다 — 화면은 영어인데
+ *   일기가 한국어면 그 스크린샷은 쓸 수 없다.
+ * ⚠ 한국어 외에는 영어로 떨어진다. 15개 언어를 다 쓰지 않는 이유는 이게 **개발용 시드**이고,
+ *   스크린샷에 필요한 것은 *"읽을 수 있는 문장"* 이지 번역 품질이 아니기 때문이다.
+ */
+const TEXT = {
+  ko: {
+    openers: [
+      '아침에 눈을 뜨자마자 창을 열었다.',
+      '알람을 두 번 껐다.',
+      '출근길 지하철이 유난히 붐볐다.',
+      '오늘은 아무 일도 없었다.',
+      '점심을 혼자 먹었다.',
+      '비가 올 것 같아 우산을 챙겼다.',
+      '어제 늦게 자서 하루 종일 멍했다.',
+    ],
+    middles: [
+      '회의가 길어져 오후가 통째로 사라졌다.',
+      '오랜만에 친구에게 연락이 왔다.',
+      '점심에 회사 근처를 한 바퀴 걸었다.',
+      '읽던 책을 절반쯤 넘겼다.',
+      '저녁에 어머니한테 전화가 왔다. 별일 없냐고 물었다.',
+      '퇴근하고 바로 누웠다. 아무것도 하기 싫었다.',
+      '새로 생긴 카페에 들렀는데 자리가 없어서 그냥 나왔다.',
+      '운동을 가려다 말았다. 내일은 가야지.',
+      '오래된 사진을 정리하다가 한참 앉아 있었다.',
+    ],
+    closers: [
+      '내일은 조금 일찍 자야겠다.',
+      '별것 아닌데 기분이 오래 남았다.',
+      '그냥 그런 하루였다.',
+      '이런 날도 있는 거지.',
+      '쓰고 나니 조금 정리됐다.',
+    ],
+    titles: [null, null, null, '보통날', '오랜만에', '정리', '비', '조용한 하루'],
+  },
+  en: {
+    openers: [
+      'I opened the window the moment I woke up.',
+      'I snoozed the alarm twice.',
+      'The train was unusually crowded this morning.',
+      'Nothing much happened today.',
+      'I had lunch on my own.',
+      'It looked like rain, so I packed an umbrella.',
+      'I slept late last night and felt hazy all day.',
+    ],
+    middles: [
+      'A meeting ran long and swallowed the whole afternoon.',
+      'An old friend got in touch out of nowhere.',
+      'I walked a loop around the office at lunch.',
+      'I got about halfway through the book I am reading.',
+      'Mom called in the evening, just to ask if I was doing okay.',
+      'I lay down the second I got home. I did not want to do anything.',
+      'I stopped by the new cafe, but there were no seats, so I left.',
+      'I almost went to the gym and then did not. Tomorrow.',
+      'I sat for a long while sorting through old photos.',
+    ],
+    closers: [
+      'I should go to bed a little earlier tomorrow.',
+      'It was a small thing, but the feeling stayed with me.',
+      'It was just one of those days.',
+      'Some days are like this.',
+      'Writing it down sorted me out a little.',
+    ],
+    titles: [null, null, null, 'An ordinary day', 'After a while', 'Sorting things out', 'Rain', 'A quiet day'],
+  },
+} as const;
+
+/**
+ * 심은 리포트의 요약문. 문구도 **앱 언어를 따른다**(2026-09-07) — 화면은 영어인데
+ * 요약만 한국어면 스토어 스크린샷에 쓸 수 없다.
+ *
+ * 🔴 **연간은 두 문단이다.** 2026-08-25 실호출에서 연간이 처음 두 문단을 냈는데 그때까지
+ *   화면은 한 문단만 그려본 적이 있었다 — 빈 줄이 뭉개지는지는 눈으로만 안다.
+ * ⚠ 이것이 **모델이 쓴 글이 아니라는 것**을 문구 자체에 남긴다. 지우면 개발용 시드가
+ *   진짜 리포트처럼 보인다.
+ */
+function summaryText(key: string, twoParagraphs: boolean): string {
+  const ko = (k: string) =>
+    `${k} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다.`;
+  const en = (k: string) =>
+    `Placeholder summary for ${k}. This text was seeded for development - it was not written by the model, so the wording means nothing.`;
+  const head = (i18next.language ?? '').startsWith('ko') ? ko(key) : en(key);
+  if (!twoParagraphs) {
+    return `${head} ${(i18next.language ?? '').startsWith('ko') ? '아래 그림이 이 기간의 실제 조각에서 계산된 것인지만 보면 됩니다.' : 'What matters is whether the charts below are computed from the real entries in this period.'}`;
+  }
+  const second = (i18next.language ?? '').startsWith('ko')
+    ? '두 번째 문단입니다. 문단 사이가 벌어지는지, 빈 줄이 뭉개지지는 않는지를 봅니다. 실제 모델도 긴 기간에서는 이렇게 나눠 씁니다.'
+    : 'This is the second paragraph. We check whether the gap between paragraphs holds and the blank line is not collapsed. The real model also splits long periods like this.';
+  return `${head}
+
+${second}`;
+}
+
+/** 지금 앱 언어의 문구 묶음. 한국어가 아니면 영어로 떨어진다 */
+function texts() {
+  return (i18next.language ?? '').startsWith('ko') ? TEXT.ko : TEXT.en;
+}
+
+/*
+ * ⚠ **모듈 로드 시점이 아니라 심는 시점에 읽는다.** 상수로 굳히면 앱을 켠 뒤 언어를 바꿔도
+ *   옛 언어로 심긴다 — 스크린샷을 찍으려고 언어를 바꾸는 것이 정확히 그 순서다.
+ */
 
 export interface SeedRange {
   /** `YYYY-MM-DD` */
@@ -119,7 +210,7 @@ export async function seedDiaries(range: SeedRange): Promise<SeedResult> {
       }
 
       const emotion = EMOTION_CODES_ORDER[Math.floor(rand(date, 11) * EMOTION_CODES_ORDER.length)];
-      const title = TITLES[Math.floor(rand(date, 13) * TITLES.length)] ?? null;
+      const title = texts().titles[Math.floor(rand(date, 13) * texts().titles.length)] ?? null;
 
       /*
        * 길이를 크게 흔든다. **짧은 주와 긴 주가 섞여야** 글자 수 막대가 의미를 갖고,
@@ -127,11 +218,11 @@ export async function seedDiaries(range: SeedRange): Promise<SeedResult> {
        */
       const bulk = rand(date, 17);
       const lines = bulk < 0.25 ? 1 : bulk < 0.75 ? 3 : 6;
-      const parts: string[] = [OPENERS[Math.floor(rand(date, 19) * OPENERS.length)] ?? ''];
+      const parts: string[] = [texts().openers[Math.floor(rand(date, 19) * texts().openers.length)] ?? ''];
       for (let i = 1; i < lines - 1; i += 1) {
-        parts.push(MIDDLES[Math.floor(rand(date, 23 + i * 7) * MIDDLES.length)] ?? '');
+        parts.push(texts().middles[Math.floor(rand(date, 23 + i * 7) * texts().middles.length)] ?? '');
       }
-      if (lines > 1) parts.push(CLOSERS[Math.floor(rand(date, 29) * CLOSERS.length)] ?? '');
+      if (lines > 1) parts.push(texts().closers[Math.floor(rand(date, 29) * texts().closers.length)] ?? '');
       const text = parts.filter(Boolean).join(' ');
 
       /*
@@ -240,11 +331,7 @@ export async function seedReports(range: SeedRange): Promise<number> {
            *   냈는데, 그때까지 화면은 **한 문단만 그려본 적이 있었다.** 빈 줄이 뭉개지는지
            *   문단 사이가 벌어지는지는 눈으로만 안다.
            */
-          kind === 'yearly'
-            ? `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 첫 문단은 여기서 끝나고, 아래에 빈 줄을 하나 두었습니다.
-
-두 번째 문단입니다. 문단 사이가 벌어지는지, 빈 줄이 뭉개지지는 않는지를 봅니다. 실제 모델도 긴 기간에서는 이렇게 나눠 씁니다.`
-            : `${key} 더미 요약입니다. 이 글은 모델이 쓴 것이 아니라 개발용으로 심은 문장이라 내용에 뜻이 없습니다. 아래 그림이 이 기간의 실제 조각에서 계산된 것인지만 보면 됩니다.`,
+          kind === 'yearly' ? summaryText(key, true) : summaryText(key, false),
           kind === 'monthly' ? 4 : 12,
           metrics,
           at,
