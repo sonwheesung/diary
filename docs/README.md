@@ -74,6 +74,7 @@
 | 🔴 **유예 배너 — 근거가 지워지고 있었다** | ✅ | 2026-09-04 결제 전수 검수. 구독이 끝나면 `revoke`가 `pro_until`을 비우는데 **파기 예정일의 유일한 근거가 그 값**이라, 배너가 콜드 스타트 직후 몇 백 ms만 보이고 **영영 사라졌다.** §7.2가 *"반드시 알린다"* 를 내려놓고 대신 약속한 *"상시 표시"* 가 코드에 없던 것이고, **환불이 만료보다 아프다**(더 갑작스럽고 CS 직행). → `ServerAnswer.none`이 `expiredAt`을 싣고 **별도 칸 `pro_expired_at`** 에 적는다. `check:subscription` 31 → **36개** |
 | **침묵 실패 셋** | ✅ | 2026-09-04 — 🔴 검색 실패가 *"찾는 조각이 없어요"* 로 보였다(사용자는 **일기가 사라졌다고** 읽는다) · 🔴 사진을 하나도 못 받아도 *"복원 완료"* 만 떴다(⚠ 재시도 경로가 실제로 없어 **자동 재시도를 약속하지 않았다**) · 🟡 리마인더 시각 저장 실패가 안 되돌아왔다(형제 `chooseReportLanguage`는 되돌리고 있었다). `search.failed`·`backup.restorePhotosFailed` **15개 언어** |
 | **백업/복원 — 앱 쪽** | ✅ | 암호 계층·매니페스트·클라이언트·화면. [`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) |
+| 🔴 **켜기 버튼이 백업을 켜지 않았다** | ✅ | **2026-09-08 실기기 발견 · 같은 날 고침.** `app/backup.tsx` 의 `enable()` 이 비밀만 만들고 **`enableBackup()` 을 안 불러** `backup_enabled` 가 영영 0 이었다 — 켜기를 눌러도 화면이 *"아직 백업을 켜지 않았어요"* 로 돌아오고 `지금 백업` 버튼에 **도달할 수 없다.** `backup_enabled = 1` 을 쓰는 곳이 `restore.ts`(복원)와 `device-check.ts`(개발 점검)뿐이었으므로 **백업이 이미 있는 사람만** 켤 수 있는 순환이었다. 🔴 **vc19(0.2.6) 로 143개국에 나간 상태** — 유료 혜택 셋 중 하나가 처음부터 닿지 않았다. 순수 계층 46개·서버 e2e 32개·에뮬레이터 측정이 **전부 이 한 줄을 비껴간다**(경로 미주행) → 소스를 읽는 **배선 가드 7개** 신설([`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §4.5) |
 | **백업/복원 — 기기 검증** | ✅ | 2026-08-11 에뮬레이터 15/18. 5MB PUT 바이트 일치 · `backupDatabaseAsync` 9ms. ⏭ 남은 3은 **암호 처리량**이고 "순수 JS 유지"로 결론냈다 — 실기기(ARM) 재측정만 남음([`BACKUP_SYSTEM.md`](./BACKUP_SYSTEM.md) §8) |
 | 사진 백업(2차) | ✅ | 이미지 하나 = blob 하나. 증분(`plan`) · 복원 후 못 받은 사진만 `'missing'` |
 | 월 구독(RevenueCat) | ✅ | ~~Phase 9 대기~~ → ~~RC 상품 import·attach 남음~~ → **배선 완료**(2026-08-17). 운영·stg 두 앱 · Products → `pro` attach → 오퍼링 연결. 🔴 그 과정에서 **운영 앱도 Test Store 상품만 물고 있던 것**을 발견해 함께 고쳤다 — 결제해도 `pro`가 안 붙는 상태였다. 남은 것은 **실결제 확인**뿐([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1.3) |
@@ -394,7 +395,7 @@ npm run check:legal            # 378개 — 절·줄 수 + **정본 지문**(문
 npm run legal:stamp --check    # 지금 어긋난 언어만 본다. <lang>을 주면 다시 읽은 뒤 도장을 찍는다
 
 # 백업을 건드렸으면
-npm run check:backup-crypto    # 46개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로
+npm run check:backup-crypto    # 53개 — KAT(RFC 5869·XChaCha) + 봉투·매니페스트·전체 경로 + 배선(소스)
 npm run check:i18n-roundtrip   # 54개 — 25개 스크립트의 UTF-8·매니페스트 왕복
 
 # 구독·AI를 건드렸으면

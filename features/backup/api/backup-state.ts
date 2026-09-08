@@ -72,8 +72,17 @@ export async function getBackupState(currentVaultId?: string): Promise<BackupSta
     'UPDATE backup_state SET vault_id = ?, seq = 0, last_backup_at = NULL WHERE id = 1',
     currentVaultId,
   );
-  // 코드 확인 여부와 켬/끔은 금고가 바뀌어도 사용자의 선택이라 유지한다.
-  return { ...state, vaultId: currentVaultId, seq: 0, lastBackupAt: null };
+  /*
+   * 🔴 **코드 확인 여부는 함께 지운다**(2026-09-08 정정).
+   *   ~~"코드 확인 여부와 켬/끔은 금고가 바뀌어도 사용자의 선택이라 유지한다"~~ —
+   *   켬/끔은 선택이 맞지만 **코드 확인은 선택이 아니라 특정 코드에 대한 사실**이다.
+   *   금고가 바뀌었다는 것은 복구 코드가 바뀌었다는 뜻이라, 옛 확인을 남기면
+   *   *"복구 코드를 아직 확인하지 않았어요"* 경고와 설정 배지가 **새 코드에 대해 안 뜬다** —
+   *   사용자는 이미 적어뒀다고 믿는데 그 종이는 없어진 금고를 가리킨다.
+   *   파기(`purgeBackup`) 후 다시 켜는 경로가 정확히 여기다.
+   */
+  await resetCodeConfirmation();
+  return { ...state, vaultId: currentVaultId, seq: 0, lastBackupAt: null, codeConfirmedAt: null };
 }
 
 /** 백업을 켠다. `vaultId`는 비밀에서 유도한 값 */
@@ -127,7 +136,12 @@ export async function markCodeConfirmed(at: number): Promise<void> {
   await db.runAsync('UPDATE backup_state SET code_confirmed_at = ? WHERE id = 1', at);
 }
 
-/** 비밀을 새로 만들면 확인 상태도 리셋된다 — 옛 코드를 확인한 사실은 새 코드와 무관하다 */
+/**
+ * 비밀을 새로 만들면 확인 상태도 리셋된다 — 옛 코드를 확인한 사실은 새 코드와 무관하다.
+ *
+ * ⚠ 호출처는 `getBackupState()` 의 **금고 교체 분기 하나**다. 화면이 따로 부르지 않는다 —
+ *   판정이 두 곳에 있으면 한쪽만 고쳐진다(2026-09-08 에 이 함수는 **호출처가 0** 이었다).
+ */
 export async function resetCodeConfirmation(): Promise<void> {
   const db = await getDatabase();
   await db.runAsync('UPDATE backup_state SET code_confirmed_at = NULL WHERE id = 1');

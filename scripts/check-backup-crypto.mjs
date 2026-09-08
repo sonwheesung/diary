@@ -14,6 +14,7 @@
  * (`scripts/make-legal-html.mjs`가 먼저 쓴 방식이다).
  */
 import { randomBytes } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 import { hkdf } from '@noble/hashes/hkdf.js';
 import { sha256 } from '@noble/hashes/sha2.js';
@@ -607,6 +608,74 @@ check('전체 경로 · countParts가 실제 파트 수와 일치한다', () => 
   }
 });
 
+// ── 배선 (소스 검사) — 화면이 실제로 백업을 켜는가 ────────────────────────────
+//
+// 🔴 여기 있는 이유: **`백업 켜기` 버튼이 백업을 켜지 않은 채 vc19 로 나갔다.**
+//   `app/backup.tsx` 의 `enable()` 이 비밀만 만들고 `enableBackup()` 을 안 불러
+//   `backup_enabled` 가 영영 0 이었고, 화면은 늘 *"아직 백업을 켜지 않았어요"* 였다.
+//   구독자가 백업을 **한 번도 켤 수 없었다** — 유료 혜택 셋 중 하나가 통째로 죽어 있었다.
+//
+// ⚠ 위의 46개(순수 계층)도, 서버 e2e 32개도, 에뮬레이터 측정도 이 한 줄을 비껴간다.
+//   순수 계층은 DB 를 안 만지고, 서버는 멀쩡했고, `device-check.ts` 는 **자기가**
+//   `enableBackup()` 을 부른다. 남는 유일한 계측점이 **소스를 읽는 것**이다
+//   (`check:age-gate` §⑥ · `check:diary-format` 이 쓰는 그 수법).
+//
+// ⚠ 이건 "그 함수가 불린다"까지만 잰다. 실제 상태 전이는 실기기 확인으로 남는다.
+//   억지 가드를 만들지 않고 그 경계를 여기 적어 둔다.
+
+const backupScreen = readFileSync(new URL('../app/backup.tsx', import.meta.url), 'utf8');
+const enableAt = backupScreen.indexOf('const enable = async () =>');
+check('배선 · app/backup.tsx 에 enable() 이 있다', () => {
+  eq(enableAt >= 0, true, 'enable() 이 사라졌다 — 켜기 경로의 이름이 바뀌었으면 이 검사도 고친다');
+});
+const enableBody = backupScreen.slice(enableAt, backupScreen.indexOf('\n  };', enableAt));
+
+check('배선 · 🔴 켜기 버튼이 enableBackup() 을 부른다', () => {
+  eq(
+    /\benableBackup\(/.test(enableBody),
+    true,
+    'enable() 이 enableBackup() 을 안 부른다 — 버튼을 눌러도 backup_enabled 가 0 이라 영영 안 켜진다',
+  );
+});
+
+check('배선 · 켜기가 getBackupState() 를 enableBackup() 보다 먼저 부른다', () => {
+  const g = enableBody.indexOf('getBackupState(');
+  const e = enableBody.indexOf('enableBackup(');
+  eq(g >= 0 && e >= 0 && g < e, true,
+    '순서가 뒤집혔다 — enableBackup() 이 vault_id 를 먼저 덮으면 getBackupState() 가 금고 교체를 못 알아채고 옛 seq 를 이어 쓴다 (BACKUP_SYSTEM §4.5)');
+});
+
+check('배선 · enableBackup() 은 켜기와 복원 밖에서 불리지 않는다', () => {
+  const callers = ['../app/backup.tsx', '../features/backup/api/restore.ts', '../features/backup/api/device-check.ts']
+    .filter((f) => /\benableBackup\(/.test(readFileSync(new URL(f, import.meta.url), 'utf8')));
+  eq(callers.includes('../app/backup.tsx'), true, '켜기 화면이 호출처에서 빠졌다');
+});
+
+check('배선 · 켜기 버튼이 실제로 enable() 에 걸려 있다', () => {
+  eq(/backup\.turnOn'\)\}[\s\S]{0,120}?void enable\(\)/.test(backupScreen), true,
+    'turnOn 버튼의 onPress 가 enable() 이 아니다');
+});
+
+
+// 🔴 형제 버그: `resetCodeConfirmation()` 도 **호출처가 0** 이었다(2026-09-08).
+//   금고가 바뀌면 복구 코드도 바뀌는데 옛 확인 시각이 남아, *"복구 코드를 아직 확인하지
+//   않았어요"* 경고와 설정 배지가 **새 코드에 대해 안 뜬다.** 파기 후 다시 켜는 경로가 거기다.
+//   같은 클래스(= 쓰라고 만든 함수를 아무도 안 부른다)라 같은 자리에서 잰다.
+
+const stateSrc = readFileSync(new URL('../features/backup/api/backup-state.ts', import.meta.url), 'utf8');
+const getAt = stateSrc.indexOf('export async function getBackupState(');
+const getBody = stateSrc.slice(getAt, stateSrc.indexOf('\n}', getAt));
+
+check('배선 · 금고가 바뀌면 코드 확인도 지운다', () => {
+  eq(/resetCodeConfirmation\(\)/.test(getBody), true,
+    '금고 교체 분기가 code_confirmed_at 를 안 지운다 — 없어진 금고의 코드를 확인했다고 남아 경고가 안 뜬다 (BACKUP_SYSTEM §4.5)');
+});
+
+check('배선 · 금고 교체가 돌려주는 상태에도 codeConfirmedAt 이 비어 있다', () => {
+  eq(/codeConfirmedAt:\s*null/.test(getBody), true,
+    'DB 만 지우고 돌려주는 값은 옛 시각 그대로다 — 그 화면은 다시 읽기 전까지 거짓을 그린다');
+});
+
 // ── 결과 ──────────────────────────────────────────────────────────────────────
 
 if (failures.length > 0) {
@@ -617,5 +686,5 @@ if (failures.length > 0) {
 // ⚠ 이 내역은 손으로 유지한다 — 검사를 더하면 여기도 고친다.
 //   2026-08-12에 합계와 3개 어긋나 있는 것을 발견하고 다시 셌다.
 console.log(
-  `백업 암호 ok — ${passed}개 검사 통과 (KAT 4 + 유도값 1 + 봉투 8 + 세대 4 + 복구 코드 10 + 매니페스트 12 + 전체 경로 7)`,
+  `백업 암호 ok — ${passed}개 검사 통과 (KAT 4 + 유도값 1 + 봉투 8 + 세대 4 + 복구 코드 10 + 매니페스트 12 + 전체 경로 7 + 배선 7)`,
 );

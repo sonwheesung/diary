@@ -10,7 +10,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
 import { isReleaseEnvelopeVersion } from '@/features/backup/api/package';
-import { getBackupState, markCodeConfirmed } from '@/features/backup/api/backup-state';
+import { enableBackup, getBackupState, markCodeConfirmed } from '@/features/backup/api/backup-state';
 import type { BackupState } from '@/features/backup/api/backup-state';
 import {
   createBackupSecret,
@@ -64,11 +64,22 @@ export default function BackupScreen() {
     }, [load]),
   );
 
-  /** 백업을 처음 켠다 — 비밀을 만들고 코드를 보여준다 */
+  /**
+   * 백업을 처음 켠다 — 비밀을 만들고, 켜고, 코드를 보여준다.
+   *
+   * 🔴 **순서가 규율이다**(BACKUP_SYSTEM §4.5). `getBackupState()` 가 먼저 금고 교체를
+   *   알아채고 `seq` 를 되돌린 **뒤에** 켠다 — `enableBackup()` 이 `vault_id` 를 먼저
+   *   덮으면 그 판정이 *"금고가 안 바뀌었다"* 가 되어 옛 세대를 새 금고에 이어 쓴다.
+   *
+   * ⚠ 코드 확인은 **다음 단계**다. `enabled = true` + `codeConfirmedAt = null` 은 정상
+   *   상태이고, 켜진 화면이 그 경고를 계속 띄운다. 코드를 확인해야만 켜지게 만들면
+   *   [나중에 하기] 가 켜기를 취소하는 버튼이 되는데 라벨은 그렇게 안 읽힌다.
+   */
   const enable = async () => {
     const keys = await createBackupSecret();
-    setCode(await readRecoveryCode());
     await getBackupState(keys.vaultId);
+    await enableBackup(keys.vaultId);
+    setCode(await readRecoveryCode());
   };
 
   const backupNow = async () => {
