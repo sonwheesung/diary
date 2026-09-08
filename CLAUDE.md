@@ -51,8 +51,8 @@ AI 리포트는 앱이 로컬 평문을 서버 프록시로 흘려보내 만들�
 | 10 | 구글 로그인 | common_server | **선택적** — 안 해도 일기는 쓴다 |
 | 11 | 광고 | AdMob | 저장 완료 후 전면광고 + 빈도 캡 |
 | 12 | 월 구독 | common_server + 스토어 | **단일 구독 `조각 Pro`** — 광고 제거 + 백업/복원 + AI 리포트(§7.2) |
-| 13 | 백업/복원 | 조각 서버 | 구독자 전용. **클라이언트 암호화(E2EE)** — 텍스트 1차 ✅ / 사진 2차 ❌ ([`docs/BACKUP_SYSTEM.md`](./docs/BACKUP_SYSTEM.md)) |
-| 14 | AI 요약 리포트 | 조각 서버(프록시) | 구독자 전용. **주간 먼저**, 단가 보고 월간 → 연간. **앱 화면 ✅ / 서버 ❌** ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md)) |
+| 13 | 백업/복원 | 조각 서버 | 구독자 전용. **클라이언트 암호화(E2EE)** — ~~텍스트 1차 ✅ / 사진 2차 ❌~~ → **둘 다 ✅**(2026-09-07 정정 — 사진 2차는 2026-08-13에 끝났다) ([`docs/BACKUP_SYSTEM.md`](./docs/BACKUP_SYSTEM.md)) |
+| 14 | AI 요약 리포트 | 조각 서버(프록시) | 구독자 전용. 주간·월간·연간 전부. ~~**앱 화면 ✅ / 서버 ❌**~~ → **둘 다 ✅**(2026-09-07 정정 — 서버 라우트는 2026-08-18 배포, 계층 요약 실호출은 08-25) ([`docs/AI_REPORT_SYSTEM.md`](./docs/AI_REPORT_SYSTEM.md)) |
 
 **범위 밖**: 기기간 실시간 동기화(양방향 머지)는 백업/복원과 다른 문제다 — MVP는 **백업/복원까지만** 한다.
 
@@ -191,6 +191,23 @@ Delvewarden 운영 DB에 무료 슬롯을 내주려고 사용자 지시로 정�
 (`try-prompt.mjs` · `run-office.mjs`), 화면 확인은 에뮬레이터 SQLite 에 시드해서 본다.
 실제로 2026-09-03 의 작업(프롬프트 v9~v12 · 핵심 한 줄 · 1년 계층 66건)이 **전부 서버 없이** 됐다.
 
+##### 🟢 2026-09-08 실측 — **서버가 살아 있다. 위 서술이 낡았다**
+
+```
+GET https://jogak-stg.vercel.app/api/health
+{"ok":true,"db":"up","storage":"configured"}      ← 2회 연속
+```
+
+그리고 같은 날 그 DB 에 **직접 쿼리도 됐다**(`vaults` 0 · `ai_reports` 0 · `ai_usage` 0 —
+`docs/README.md` §2 의 유입 조사). 즉 **언젠가 재개됐고 아무 문서도 그걸 몰랐다** —
+9/4 출시 때와 **같은 종류의 사각**이다(콘솔·대시보드에서 일어난 일이 세션에 전달되지 않는다).
+
+⚠ **여기까지가 실측이다.** 확인한 것은 *"배포본이 DB·Storage 에 닿는다"* 이지
+**백업 왕복(업로드 → 복원)이나 AI 실호출이 아니다.** 아래 두 줄은 그 검증이 끝나기 전까지
+*"실패한다"* 가 아니라 **"미검증"** 으로 읽는다.
+
+🔴 **그래도 아래 두 줄이 사라지는 것은 아니다** — 실기기 검증이 남았고, 그게 끝나야 닫힌다:
+
 🔴 **그러나 두 가지는 그대로 남는다.** 결정을 기록하되 사실을 지우지 않는다:
 
 | | |
@@ -297,17 +314,17 @@ AI 리포트: 앱(로컬 평문) ─────────▶ 조각 서버(�
 | ~~생체인증~~ | ~~expo-local-authentication~~ | 🚫 **제거(2026-08-10 결정 §7.1). 패키지도 미설치** — 이 줄이 "✅ 설치"로 남아 있었다(2026-08-11 정정) |
 | 광고 | react-native-google-mobile-ads (AdMob) | ✅ 설치 — **네이티브 모듈이라 Expo Go 불가**. 이것 때문에 dev build로 전환(2026-08-09) |
 | 개발 실행 | ~~Expo Go~~ → **dev build** (`npx expo run:android`) | 2026-08-09 전환. `android/`는 CNG 산출물이라 커밋 안 함 |
-| 구독 | react-native-purchases (RevenueCat) | ❌ 미설치. common_server PLAN Phase 9와 짝 |
+| 구독 | react-native-purchases (RevenueCat) | ✅ **10.7.0 설치·배선 완료**(2026-09-07 정정 — 이 줄이 ❌로 남아 있었다). 실결제까지 확인 |
 | 로그인 | @react-native-google-signin/google-signin | ✅ 16.1.4 — 문의하기에 연결(2026-08-09) |
 | Server State | TanStack Query | ❌ 미설치 |
 | 폼 | React Hook Form + Zod | ❌ 미설치 |
 | 애니메이션 | Reanimated + Moti | ❌ 미설치 — SDK 54는 Reanimated 4 + worklets 설정 동반 |
 | 날짜 | dayjs | ✅ 설치 |
 | 다국어 | i18next · react-i18next · expo-localization | ✅ 적용 — **15개 언어** (§9.1) |
-| 아이콘 | Lucide | ❌ 미설치 |
+| 아이콘 | Lucide | ✅ `lucide-react-native` 1.30.0 설치(2026-09-07 정정 — ❌로 남아 있었다) |
 | 폰트 | Pretendard | ✅ 적용 — 정적 OTF 3종(Regular·Medium·SemiBold, 각 1.5MB) |
-| 조각 서버 | Next.js(App Router) + Drizzle + Supabase Postgres · Vercel | ❌ **월 결제 착수 시 생성**(2026-08-07 결정) |
-| 배포 | Expo EAS(앱) · Vercel(서버) · Supabase(DB) | ❌ 미설정 |
+| 조각 서버 | Next.js(App Router) + Drizzle + Supabase Postgres · Vercel | ✅ **생성·배포 완료**(2026-09-07 정정 — `server/`에 Next 15.5.4 + Drizzle 0.44.6, 백업·AI 라우트가 돈다). 🟢 **2026-09-08 실측: `GET /api/health` → `{ok:true, db:"up", storage:"configured"}`**(§5 의 *"정지 중"* 서술은 낡았다) |
+| 배포 | Expo EAS(앱) · Vercel(서버) · Supabase(DB) | ✅ **셋 다 설정 완료**(2026-09-07 정정) — `eas.json`(internal·production) · Vercel 배포 · Supabase 프로젝트. 프로덕션 출시까지 나갔다(§14) |
 
 ---
 
@@ -569,8 +586,8 @@ PIN·패턴은 **UI 게이트**일 뿐이다. 로컬 SQLite 파일 자체는 평
 ```
 조각 Pro
   ├─ 광고 제거      (구현됨 — adsEnabled() 한 곳)
-  ├─ 백업/복원      (미구현 · 조각 서버 필요)
-  └─ AI 요약 리포트  (미구현 · 조각 서버 프록시 필요)
+  ├─ 백업/복원      (구현됨 · 조각 서버)
+  └─ AI 요약 리포트  (구현됨 · 조각 서버 프록시)
 ```
 
 | 항목 | 값 |
