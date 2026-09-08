@@ -582,11 +582,31 @@ debug 서명 빌드는 설치가 거부된다(`CLAUDE.md` §12 2026-08-24). 그�
 → **에뮬레이터에 넣을 때는 대상을 손으로 고정한다**(2026-09-08 이 절차로 검증했다):
 
 ```bash
-adb -s emulator-5580 install -r android/app/build/outputs/apk/debug/app-debug.apk
-adb -s emulator-5580 reverse tcp:8081 tcp:8081
-EXPO_OFFLINE=1 CI=1 npx expo start --port 8081      # --android 를 붙이지 않는다
-adb -s emulator-5580 shell monkey -p com.son0925.jogak -c android.intent.category.LAUNCHER 1
+S=emulator-5568                                      # 조각 고정 포트(아래 참조)
+adb -s $S install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb -s $S reverse tcp:8081 tcp:8081
+EXPO_OFFLINE=1 CI=1 npx expo start --port 8081       # --android 를 붙이지 않는다
+adb -s $S shell monkey -p com.son0925.jogak -c android.intent.category.LAUNCHER 1
 ```
+
+🔴 **에뮬레이터 정책이 2026-09-08 에 또 바뀌었다 — 정본은
+[`common/EMULATOR_POOL.md`](file:///C:/project/common/EMULATOR_POOL.md) 이고 여기에 베끼지 않는다.**
+
+```
+~~프로젝트별 AVD~~ → ~~공용 2대(common_1·common_2) + 클레임~~ → 프로젝트별 AVD(외장 D:)
+   ~8/27              8/27 ~ 9/8                                 9/8 ~
+```
+
+| 조각 몫 | 값 |
+|---|---|
+| AVD | **`diary`** (2026-09-03 에 지웠으므로 **다시 만들어야 한다**) |
+| 포트 | **5568** → serial `emulator-5568` (`DEV_ALLOCATION.md` §3) |
+| 저장 위치 | `D:\emulators\diary` — `ANDROID_AVD_HOME` 로 지정한다 |
+
+⚠ **외장은 7.8배 느리다**(콜드 부팅 259초 · 실측). 화면을 4~5번 확인하는 작업이면
+**에뮬을 켜 둔 채 Metro 만 재시작**한다 — 2분짜리가 20분이 된다.
+⚠ 이 절의 절차는 2026-09-08 에 **공용 `common_1`(5580)** 에서 돌린 것이다. 명령 자체는 같고
+**serial 만 바뀐다.**
 
 ⚠ `EXPO_OFFLINE=1` 이 없으면 `expo start` 가 **원격 버전 조회 `fetch failed`** 로 죽는다(실측).
 ⚠ Git Bash 는 `/sdcard/...` 를 Windows 경로로 바꾼다 — `adb push`·`shell` 에는 `MSYS_NO_PATHCONV=1`.
