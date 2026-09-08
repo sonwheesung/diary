@@ -570,6 +570,27 @@ npm start                          # 이후에는 Metro만 (앱은 설치된 dev
   JS만 고쳤으면 Metro 리로드로 충분하다.
 - 빌드 환경: `JAVA_HOME`은 JDK 21, `ANDROID_HOME`은 `%LOCALAPPDATA%\Android\Sdk`.
 
+🔴 **실기기가 붙어 있으면 `expo run:android`·`expo start --android` 를 쓰지 않는다** (2026-09-08,
+volleyball 세션이 `EMULATOR_POOL.md` §2.1 에 남긴 실측). **Expo CLI 가 대상을 알아서 고르는데
+실기기를 우선할 수 있고, `ANDROID_SERIAL` 을 줘도 무시한다.** 조각은 무선 디버깅으로 실기기를
+붙여 두는 일이 잦아 그대로 물리는 자리다.
+
+⚠ 조각에는 **우연한 안전망이 하나 있다** — 실기기의 `com.son0925.jogak` 은 **Play 서명**이라
+debug 서명 빌드는 설치가 거부된다(`CLAUDE.md` §12 2026-08-24). 그래서 조용히 남의 폰에 깔리지는
+않는다. 🔴 **그러나 그건 실패할 뿐이고, 실패 원인을 서명이 아니라 빌드 문제로 오해하기 쉽다.**
+
+→ **에뮬레이터에 넣을 때는 대상을 손으로 고정한다**(2026-09-08 이 절차로 검증했다):
+
+```bash
+adb -s emulator-5580 install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb -s emulator-5580 reverse tcp:8081 tcp:8081
+EXPO_OFFLINE=1 CI=1 npx expo start --port 8081      # --android 를 붙이지 않는다
+adb -s emulator-5580 shell monkey -p com.son0925.jogak -c android.intent.category.LAUNCHER 1
+```
+
+⚠ `EXPO_OFFLINE=1` 이 없으면 `expo start` 가 **원격 버전 조회 `fetch failed`** 로 죽는다(실측).
+⚠ Git Bash 는 `/sdcard/...` 를 Windows 경로로 바꾼다 — `adb push`·`shell` 에는 `MSYS_NO_PATHCONV=1`.
+
 > ⚠ **Kotlin 메타데이터 충돌**(2026-08-09 겪음): `react-native-google-mobile-ads` 16.4.0이 끌어오는
 > `play-services-ads 25.4.0`은 Kotlin 2.3.0으로 컴파일돼 있고 Expo SDK 54는 2.1.20을 쓴다 →
 > `compileDebugKotlin` 실패. **16.0.0으로 고정**(ads sdk 24.6.0)해서 해결했다.
