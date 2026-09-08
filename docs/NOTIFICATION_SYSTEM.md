@@ -217,7 +217,8 @@ grep -o 'android:name="[A-Za-z0-9._]*permission[^"]*"'   app/build/intermediates
 | 재부팅 후 예약 생존 | ⏳ 실기기 |
 | 권한 **거부** 경로 | ⏳ 실기기 — "다시 묻지 않음" 상태를 만들어야 확인된다 |
 
-⚠ 위는 **에뮬레이터(API 35 · `sadojeon`)** 실측이다. 시각 표기(`오후 9:00`)와 시트 초기 스크롤
+⚠ 위는 **에뮬레이터(API 35 · `sadojeon`)** 실측이다. ⚠ `sadojeon` 은 더 이상 조각 것이 아니다 —
+지금 조각 몫은 AVD `diary` · 포트 5568([`common/EMULATOR_POOL.md`](file:///C:/project/common/EMULATOR_POOL.md)). 이 줄은 **측정 조건의 기록**이다. 시각 표기(`오후 9:00`)와 시트 초기 스크롤
 (21시가 보이는 위치)도 화면으로 확인했다 — 후자는 `contentOffset`이 iOS 전용이라 `scrollTo`로
 고친 부분이다.
 
