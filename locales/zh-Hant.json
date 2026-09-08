@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "內容空白的碎片無法儲存。",
-    "alreadyWritten": "那天已經有一片了。每天只能寫一片。",
+    "alreadyWritten": "那天已經有一片了，一天只能寫一片 — 打開它修改吧。",
     "savedButUnreadable": "碎片已儲存，但無法重新讀取。"
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "謝謝你寶貴的意見。",
     "sentTitle": "已收到你的回報",
     "signOut": "登出",
-    "signOutBody": "日記會保留在本機。",
+    "signOutBody": "日記留在這台裝置上。備份和 AI 報告需要重新登入才能用。",
     "signOutTitle": "要登出嗎？",
     "signedIn": "已登入",
     "submit": "傳送",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "立即備份",
-    "codeBody": "只有這組復原碼能在其他裝置上開啟備份。請現在就抄寫到安全的地方。",
+    "codeBody": "換裝置時只有這串代碼能打開你的備份。不用背下來 — 現在把它抄在安全的地方，之後也能在「設定 › 備份 › 查看復原代碼」再看一次。",
     "codeLater": "稍後再說",
     "codeSaved": "我已保存",
     "codeTitle": "復原碼",
@@ -490,7 +490,7 @@
     "consentTitle": "開始免費試用之前",
     "consentWhen": "{{days}} 天後，自 {{date}} 起",
     "consentWhenLabel": "何時開始扣款",
-    "doneBody": "廣告已移除，現在可以使用備份了。",
+    "doneBody": "廣告已移除，備份和 AI 報告也可以用了。",
     "doneTitle": "訂閱已開始",
     "failedBody": "請稍後再試。",
     "failedTitle": "付款失敗",

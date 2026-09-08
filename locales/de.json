@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "Ein leeres Stück kann nicht gespeichert werden.",
-    "alreadyWritten": "Für diesen Tag gibt es schon ein Stück. Nur eines pro Tag.",
+    "alreadyWritten": "Für diesen Tag gibt es schon ein Stück — eines pro Tag. Öffne es, um es zu ändern.",
     "savedButUnreadable": "Das Stück wurde gespeichert, konnte aber nicht wieder gelesen werden."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Danke, dass du dir die Zeit genommen hast.",
     "sentTitle": "Nachricht angekommen",
     "signOut": "Abmelden",
-    "signOutBody": "Dein Tagebuch bleibt auf diesem Gerät.",
+    "signOutBody": "Dein Tagebuch bleibt auf diesem Gerät. Für Backup und KI-Berichte musst du dich wieder anmelden.",
     "signOutTitle": "Abmelden?",
     "signedIn": "Angemeldet",
     "submit": "Senden",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Jetzt sichern",
-    "codeBody": "Nur mit diesem Code lässt sich deine Sicherung auf einem anderen Gerät öffnen. Bewahre ihn jetzt sicher auf.",
+    "codeBody": "Dieser Code ist der einzige Weg, dein Backup auf einem anderen Gerät zu öffnen. Du musst ihn nicht auswendig lernen — notiere ihn jetzt sicher, du kannst ihn später unter Einstellungen › Backup › Wiederherstellungscode anzeigen erneut sehen.",
     "codeLater": "Später",
     "codeSaved": "Habe ich gespeichert",
     "codeTitle": "Wiederherstellungscode",
@@ -490,7 +490,7 @@
     "consentTitle": "Bevor deine kostenlose Testphase beginnt",
     "consentWhen": "In {{days}} Tagen, am {{date}}",
     "consentWhenLabel": "Wann abgebucht wird",
-    "doneBody": "Die Werbung ist weg und die Sicherung steht bereit.",
+    "doneBody": "Werbung ist weg, und Backup sowie KI-Berichte stehen dir zur Verfügung.",
     "doneTitle": "Abo gestartet",
     "failedBody": "Bitte versuche es gleich noch einmal.",
     "failedTitle": "Kauf fehlgeschlagen",

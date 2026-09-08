@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "Impossible d'enregistrer un fragment vide.",
-    "alreadyWritten": "Tu as déjà un fragment pour ce jour-là. Un seul par jour.",
+    "alreadyWritten": "Vous avez déjà un morceau pour ce jour ; un seul par jour. Ouvrez-le pour le modifier.",
     "savedButUnreadable": "Le fragment a été enregistré mais n'a pas pu être relu."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Merci d'avoir pris le temps.",
     "sentTitle": "Message bien reçu",
     "signOut": "Se déconnecter",
-    "signOutBody": "Votre journal reste sur cet appareil.",
+    "signOutBody": "Votre journal reste sur cet appareil. La sauvegarde et les rapports IA nécessitent de vous reconnecter.",
     "signOutTitle": "Se déconnecter ?",
     "signedIn": "Connecté",
     "submit": "Envoyer",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Sauvegarder maintenant",
-    "codeBody": "Ce code est le seul moyen d'ouvrir votre sauvegarde sur un autre appareil. Notez-le dès maintenant en lieu sûr.",
+    "codeBody": "Ce code est le seul moyen d'ouvrir votre sauvegarde sur un autre appareil. Inutile de le retenir : notez-le maintenant en lieu sûr, vous pourrez le revoir dans Réglages › Sauvegarde › Voir le code de récupération.",
     "codeLater": "Plus tard",
     "codeSaved": "C'est noté",
     "codeTitle": "Code de récupération",
@@ -490,7 +490,7 @@
     "consentTitle": "Avant de commencer votre essai gratuit",
     "consentWhen": "Dans {{days}} jours, le {{date}}",
     "consentWhenLabel": "Date du premier débit",
-    "doneBody": "Les publicités ont disparu et la sauvegarde est disponible.",
+    "doneBody": "Les publicités ont disparu, et la sauvegarde et les rapports IA sont disponibles.",
     "doneTitle": "Abonnement activé",
     "failedBody": "Réessayez dans un instant.",
     "failedTitle": "Échec de l'achat",

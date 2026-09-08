@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "No se puede guardar una pieza vacía.",
-    "alreadyWritten": "Ya tienes una pieza para ese día. Solo una al día.",
+    "alreadyWritten": "Ya tienes un trozo de ese día; solo uno por día. Ábrelo para editarlo.",
     "savedButUnreadable": "La pieza se guardó pero no se pudo volver a leer."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Gracias por escribirnos.",
     "sentTitle": "Mensaje recibido",
     "signOut": "Cerrar sesión",
-    "signOutBody": "Tu diario permanece en este dispositivo.",
+    "signOutBody": "Tu diario permanece en este dispositivo. Para la copia de seguridad y los informes con IA tendrás que iniciar sesión otra vez.",
     "signOutTitle": "¿Cerrar sesión?",
     "signedIn": "Sesión iniciada",
     "submit": "Enviar",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Hacer copia ahora",
-    "codeBody": "Este código es la única forma de abrir tu copia en otro dispositivo. Guárdalo ahora en un lugar seguro.",
+    "codeBody": "Este código es la única forma de abrir tu copia en otro dispositivo. No hace falta memorizarlo: guárdalo ahora en un lugar seguro y podrás verlo de nuevo en Ajustes › Copia de seguridad › Ver código de recuperación.",
     "codeLater": "Más tarde",
     "codeSaved": "Ya lo he guardado",
     "codeTitle": "Código de recuperación",
@@ -490,7 +490,7 @@
     "consentTitle": "Antes de empezar tu prueba gratuita",
     "consentWhen": "Dentro de {{days}} días, el {{date}}",
     "consentWhenLabel": "Cuándo se te cobrará",
-    "doneBody": "Los anuncios han desaparecido y ya puedes usar la copia de seguridad.",
+    "doneBody": "Los anuncios desaparecieron, y ya puedes usar la copia de seguridad y los informes con IA.",
     "doneTitle": "Suscripción iniciada",
     "failedBody": "Inténtalo de nuevo en un momento.",
     "failedTitle": "No se pudo completar la compra",

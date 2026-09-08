@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "Kepingan kosong tidak bisa disimpan.",
-    "alreadyWritten": "Hari itu sudah ada kepingannya. Satu per hari saja.",
+    "alreadyWritten": "Sudah ada keping untuk hari itu; satu per hari. Buka untuk mengubahnya.",
     "savedButUnreadable": "Kepingan tersimpan tapi tidak bisa dibaca ulang."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Terima kasih sudah menulis.",
     "sentTitle": "Pesan diterima",
     "signOut": "Keluar",
-    "signOutBody": "Buku harian tetap ada di perangkat ini.",
+    "signOutBody": "Buku harian tetap di perangkat ini. Cadangan dan laporan AI perlu Anda masuk lagi.",
     "signOutTitle": "Keluar dari akun?",
     "signedIn": "Sudah masuk",
     "submit": "Kirim",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Cadangkan sekarang",
-    "codeBody": "Kode ini satu-satunya cara membuka cadangan di perangkat lain. Simpan sekarang di tempat yang aman.",
+    "codeBody": "Kode ini satu-satunya cara membuka cadangan di perangkat lain. Tidak perlu dihafal — simpan di tempat aman sekarang, dan Anda bisa melihatnya lagi di Pengaturan › Cadangan › Lihat kode pemulihan.",
     "codeLater": "Nanti saja",
     "codeSaved": "Sudah saya simpan",
     "codeTitle": "Kode pemulihan",
@@ -490,7 +490,7 @@
     "consentTitle": "Sebelum uji coba gratismu dimulai",
     "consentWhen": "{{days}} hari lagi, pada {{date}}",
     "consentWhenLabel": "Kapan kamu ditagih",
-    "doneBody": "Iklan sudah hilang dan pencadangan bisa dipakai.",
+    "doneBody": "Iklan sudah hilang, dan cadangan serta laporan AI siap dipakai.",
     "doneTitle": "Langganan dimulai",
     "failedBody": "Coba lagi sebentar lagi.",
     "failedTitle": "Pembelian gagal",

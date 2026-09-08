@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "Não dá para salvar um pedaço vazio.",
-    "alreadyWritten": "Você já tem um pedaço para esse dia. Só um por dia.",
+    "alreadyWritten": "Você já tem um pedaço desse dia; só um por dia. Abra para editar.",
     "savedButUnreadable": "O pedaço foi salvo, mas não foi possível relê-lo."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Obrigado por escrever.",
     "sentTitle": "Mensagem recebida",
     "signOut": "Sair",
-    "signOutBody": "Seu diário continua neste dispositivo.",
+    "signOutBody": "Seu diário fica neste aparelho. Backup e relatórios com IA exigem entrar na conta de novo.",
     "signOutTitle": "Sair da conta?",
     "signedIn": "Conectado",
     "submit": "Enviar",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Fazer backup agora",
-    "codeBody": "Este código é a única forma de abrir seu backup em outro aparelho. Guarde-o agora em um lugar seguro.",
+    "codeBody": "Este código é a única forma de abrir seu backup em outro aparelho. Não precisa decorar: guarde em um lugar seguro agora e você poderá vê-lo de novo em Configurações › Backup › Ver código de recuperação.",
     "codeLater": "Depois",
     "codeSaved": "Já guardei",
     "codeTitle": "Código de recuperação",
@@ -490,7 +490,7 @@
     "consentTitle": "Antes de começar seu teste grátis",
     "consentWhen": "Daqui a {{days}} dias, em {{date}}",
     "consentWhenLabel": "Quando você será cobrado",
-    "doneBody": "Os anúncios sumiram e o backup já está disponível.",
+    "doneBody": "Os anúncios sumiram, e o backup e os relatórios com IA já estão disponíveis.",
     "doneTitle": "Assinatura iniciada",
     "failedBody": "Tente de novo daqui a pouco.",
     "failedTitle": "A compra não foi concluída",

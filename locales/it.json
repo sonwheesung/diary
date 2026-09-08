@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "Non si può salvare un pezzo vuoto.",
-    "alreadyWritten": "Hai già un pezzo per quel giorno. Solo uno al giorno.",
+    "alreadyWritten": "Hai già un pezzo per quel giorno; uno al giorno. Aprilo per modificarlo.",
     "savedButUnreadable": "Il pezzo è stato salvato ma non è stato possibile rileggerlo."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Grazie per averci scritto.",
     "sentTitle": "Messaggio ricevuto",
     "signOut": "Esci",
-    "signOutBody": "Il tuo diario resta su questo dispositivo.",
+    "signOutBody": "Il tuo diario resta su questo dispositivo. Per backup e report con IA dovrai accedere di nuovo.",
     "signOutTitle": "Vuoi uscire?",
     "signedIn": "Accesso effettuato",
     "submit": "Invia",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Fai il backup ora",
-    "codeBody": "Questo codice è l'unico modo per aprire il tuo backup su un altro dispositivo. Salvalo subito in un posto sicuro.",
+    "codeBody": "Questo codice è l’unico modo per aprire il backup su un altro dispositivo. Non serve impararlo a memoria: salvalo ora in un posto sicuro, potrai rivederlo in Impostazioni › Backup › Mostra codice di ripristino.",
     "codeLater": "Più tardi",
     "codeSaved": "L'ho salvato",
     "codeTitle": "Codice di recupero",
@@ -490,7 +490,7 @@
     "consentTitle": "Prima che inizi la prova gratuita",
     "consentWhen": "Tra {{days}} giorni, il {{date}}",
     "consentWhenLabel": "Quando verrà addebitato",
-    "doneBody": "La pubblicità è sparita e il backup è disponibile.",
+    "doneBody": "Niente più pubblicità, e ora puoi usare il backup e i report con IA.",
     "doneTitle": "Abbonamento attivato",
     "failedBody": "Riprova tra poco.",
     "failedTitle": "Acquisto non riuscito",

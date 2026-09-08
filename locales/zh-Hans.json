@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "内容为空的碎片无法保存。",
-    "alreadyWritten": "那天已经有一片了。每天只能写一片。",
+    "alreadyWritten": "那天已经有一片了，一天只能写一片 — 打开它修改吧。",
     "savedButUnreadable": "碎片已保存，但无法重新读取。"
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "谢谢你的宝贵意见。",
     "sentTitle": "已收到你的反馈",
     "signOut": "退出登录",
-    "signOutBody": "日记会保留在本机。",
+    "signOutBody": "日记留在这台设备上。备份和 AI 报告需要重新登录才能用。",
     "signOutTitle": "要退出登录吗？",
     "signedIn": "已登录",
     "submit": "发送",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "立即备份",
-    "codeBody": "只有这个恢复码能在别的设备上打开备份。请现在就抄写到安全的地方。",
+    "codeBody": "换设备时只有这串代码能打开你的备份。不用背下来 — 现在把它抄在安全的地方，之后也能在「设置 › 备份 › 查看恢复代码」里再看一次。",
     "codeLater": "稍后再说",
     "codeSaved": "我已保存",
     "codeTitle": "恢复码",
@@ -490,7 +490,7 @@
     "consentTitle": "开始免费试用之前",
     "consentWhen": "{{days}} 天后，从 {{date}} 起",
     "consentWhenLabel": "何时开始扣款",
-    "doneBody": "广告已移除，现在可以使用备份了。",
+    "doneBody": "广告已移除，备份和 AI 报告也可以用了。",
     "doneTitle": "订阅已开始",
     "failedBody": "请稍后再试。",
     "failedTitle": "支付失败",

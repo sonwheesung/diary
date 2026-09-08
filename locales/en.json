@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "An empty piece can't be saved.",
-    "alreadyWritten": "You already have a piece for that day. One per day.",
+    "alreadyWritten": "You already have a piece for that day — one per day. Open it to make changes.",
     "savedButUnreadable": "The piece was saved but couldn't be read back."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Thanks for taking the time.",
     "sentTitle": "Message received",
     "signOut": "Sign out",
-    "signOutBody": "Your diary stays on this device.",
+    "signOutBody": "Your diary stays on this device. Backup and AI reports need you to sign in again.",
     "signOutTitle": "Sign out?",
     "signedIn": "Signed in",
     "submit": "Send",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Back up now",
-    "codeBody": "This code is the only way to open your backup on another device. Save it somewhere safe now.",
+    "codeBody": "This code is the only way to open your backup on another device. You do not need to memorize it — save it somewhere safe now, and you can see it again later in Settings › Backup › View recovery code.",
     "codeLater": "Later",
     "codeSaved": "I've saved it",
     "codeTitle": "Recovery code",
@@ -490,7 +490,7 @@
     "consentTitle": "Before your free trial starts",
     "consentWhen": "In {{days}} days, on {{date}}",
     "consentWhenLabel": "When you will be charged",
-    "doneBody": "Ads are gone and backup is available.",
+    "doneBody": "Ads are gone, and backup and AI reports are ready to use.",
     "doneTitle": "Subscription started",
     "failedBody": "Please try again shortly.",
     "failedTitle": "Purchase failed",

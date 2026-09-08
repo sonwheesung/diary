@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "Không thể lưu mảnh trống.",
-    "alreadyWritten": "Ngày đó đã có một mảnh rồi. Mỗi ngày chỉ một mảnh.",
+    "alreadyWritten": "Ngày đó đã có một mảnh rồi; mỗi ngày một mảnh. Mở ra để sửa nhé.",
     "savedButUnreadable": "Đã lưu mảnh nhưng không đọc lại được."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Cảm ơn bạn đã dành thời gian.",
     "sentTitle": "Đã nhận phản hồi",
     "signOut": "Đăng xuất",
-    "signOutBody": "Nhật ký vẫn ở trên thiết bị này.",
+    "signOutBody": "Nhật ký vẫn ở trên thiết bị này. Sao lưu và báo cáo AI cần bạn đăng nhập lại.",
     "signOutTitle": "Đăng xuất?",
     "signedIn": "Đã đăng nhập",
     "submit": "Gửi",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Sao lưu ngay",
-    "codeBody": "Mã này là cách duy nhất để mở bản sao lưu trên thiết bị khác. Hãy lưu ngay ở nơi an toàn.",
+    "codeBody": "Mã này là cách duy nhất để mở bản sao lưu trên thiết bị khác. Bạn không cần nhớ — hãy lưu ở nơi an toàn ngay bây giờ, và có thể xem lại trong Cài đặt › Sao lưu › Xem mã khôi phục.",
     "codeLater": "Để sau",
     "codeSaved": "Tôi đã lưu",
     "codeTitle": "Mã khôi phục",
@@ -490,7 +490,7 @@
     "consentTitle": "Trước khi bắt đầu dùng thử miễn phí",
     "consentWhen": "Sau {{days}} ngày, vào {{date}}",
     "consentWhenLabel": "Khi nào bị tính phí",
-    "doneBody": "Quảng cáo đã biến mất và bạn có thể dùng sao lưu.",
+    "doneBody": "Quảng cáo đã tắt, và bạn có thể dùng sao lưu cùng báo cáo AI.",
     "doneTitle": "Đã bắt đầu thuê bao",
     "failedBody": "Vui lòng thử lại sau giây lát.",
     "failedTitle": "Thanh toán không thành công",

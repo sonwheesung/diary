@@ -158,7 +158,7 @@
     }
   },
   "detail": {
-    "deleteTitle": "이 조각을 삭제할까요?",
+    "deleteTitle": "이 조각을 지울까요?",
     "deleteBody": "지운 조각은 목록과 검색에서 사라져요.",
     "deleteConfirm": "지우기",
     "deleteFailed": "지우지 못했어요",
@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "내용이 없는 조각은 저장할 수 없어요.",
-    "alreadyWritten": "그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요.",
+    "alreadyWritten": "그날의 조각이 이미 있어요. 하루에 하나만 쓸 수 있어요 — 그 조각을 열어 고쳐 보세요.",
     "savedButUnreadable": "조각을 저장했지만 다시 불러오지 못했어요."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "소중한 의견을 보내주셔서 감사해요.",
     "sentTitle": "문의가 접수됐어요",
     "signOut": "로그아웃",
-    "signOutBody": "일기는 기기에 그대로 남아요.",
+    "signOutBody": "일기는 기기에 그대로 남아요. 다만 백업과 AI 리포트는 다시 로그인해야 쓸 수 있어요.",
     "signOutTitle": "로그아웃할까요?",
     "signedIn": "로그인됨",
     "submit": "보내기",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "지금 백업",
-    "codeBody": "기기를 잃어버렸을 때 이 코드로만 백업을 되돌릴 수 있어요. 지금 안전한 곳에 적어 두세요.",
+    "codeBody": "기기를 잃어버렸을 때 이 코드로만 백업을 되돌릴 수 있어요. 외우지 않아도 돼요 — 지금 안전한 곳에 적어 두시고, 나중에 설정 › 백업 › 복구 코드 보기에서 다시 확인할 수 있어요.",
     "codeLater": "나중에 하기",
     "codeSaved": "적어 뒀어요",
     "codeTitle": "복구 코드",
@@ -490,7 +490,7 @@
     "consentTitle": "무료 체험을 시작하기 전에 확인해 주세요",
     "consentWhen": "{{days}}일 뒤 {{date}}부터",
     "consentWhenLabel": "언제부터 결제되나요",
-    "doneBody": "광고 없이 쓸 수 있고 백업도 쓸 수 있어요.",
+    "doneBody": "이제 광고 없이 쓰고, 백업과 AI 리포트도 쓸 수 있어요.",
     "doneTitle": "구독이 시작됐어요",
     "failedBody": "잠시 뒤 다시 시도해 주세요.",
     "failedTitle": "결제하지 못했어요",

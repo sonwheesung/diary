@@ -320,7 +320,7 @@
   },
   "errors": {
     "emptyDiary": "İçeriği boş bir parça kaydedilemez.",
-    "alreadyWritten": "O güne ait bir parçan zaten var. Günde bir tane.",
+    "alreadyWritten": "O gün için zaten bir parça var; günde bir tane. Değiştirmek için açın.",
     "savedButUnreadable": "Parça kaydedildi ama geri okunamadı."
   },
   "notice": {
@@ -361,7 +361,7 @@
     "sentBody": "Yazdığın için teşekkürler.",
     "sentTitle": "Mesaj alındı",
     "signOut": "Çıkış yap",
-    "signOutBody": "Günlüğünüz bu cihazda kalır.",
+    "signOutBody": "Günlüğünüz bu cihazda kalır. Yedekleme ve yapay zeka raporları için tekrar giriş yapmanız gerekir.",
     "signOutTitle": "Çıkış yapılsın mı?",
     "signedIn": "Oturum açık",
     "submit": "Gönder",
@@ -382,7 +382,7 @@
   },
   "backup": {
     "backupNow": "Şimdi yedekle",
-    "codeBody": "Yedeğini başka bir cihazda açmanın tek yolu bu koddur. Şimdi güvenli bir yere kaydet.",
+    "codeBody": "Bu kod, yedeğinizi başka bir cihazda açmanın tek yolu. Ezberlemenize gerek yok — şimdi güvenli bir yere not edin, sonra Ayarlar › Yedekleme › Kurtarma kodunu göster bölümünden yeniden görebilirsiniz.",
     "codeLater": "Sonra",
     "codeSaved": "Kaydettim",
     "codeTitle": "Kurtarma kodu",
@@ -490,7 +490,7 @@
     "consentTitle": "Ücretsiz denemen başlamadan önce",
     "consentWhen": "{{days}} gün sonra, {{date}} tarihinde",
     "consentWhenLabel": "Ne zaman ücretlendirilirsin",
-    "doneBody": "Reklamlar kalktı ve yedekleme kullanılabilir.",
+    "doneBody": "Reklamlar kalktı; yedekleme ve yapay zeka raporları da kullanıma hazır.",
     "doneTitle": "Abonelik başladı",
     "failedBody": "Birazdan tekrar dene.",
     "failedTitle": "Satın alma başarısız",
