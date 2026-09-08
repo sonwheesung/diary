@@ -124,6 +124,9 @@
 | `versionCode` | **20** (19 → 20) |
 | `versionName` | **1.0.0** |
 | 담는 것 | 🔴 **백업 켜기 결함**(§4.5) · `resetCodeConfirmation` 배선 · 한국어 문구 159개 정돈 + 내용 결함 5건 × 15언어 |
+| AAB | ✅ **구웠다**(2026-09-08 23:07 · 로컬 `bundleRelease` 4분 31초 · 63MB) |
+| 서명 | ✅ `B9:A7:29:0A:FF:E8:…` — 운영 업로드 키와 일치(`MONETIZATION_SYSTEM.md` §6.1.4) |
+| 게이트 | ✅ `check:release-env`(셸) · ✅ `check:release-bundle` 7개(**AAB 안**) — 둘은 반대 방향이라 합치지 않는다 |
 
 ⚠ **semver 를 versionCode 와 같이 올린다**(`CLAUDE.md` §12 2026-08-31). vc9~vc13 이 전부
 `0.2.0` 이라 구·신 빌드를 구분할 수 없던 전례가 있고, 소프트 업데이트 게이트를 붙이는 날
