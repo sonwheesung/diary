@@ -54,6 +54,16 @@
     },
     "plugins": [
       "./plugins/with-upload-signing",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "# R8 keep 최소 세트 — 정본 common/R8_OBFUSCATION.md §3 (My Word 2026-09-02 릴리스 E2E 통과)\n# 🚫 com.facebook.react.** 통짜 keep 금지 — 난독화율이 바닥이 되어 경고가 안 꺼진다\n-keepattributes *Annotation*, Signature, InnerClasses, EnclosingMethod\n-keep class expo.modules.** { *; }\n-keep interface expo.modules.** { *; }\n-keep class com.facebook.jni.** { *; }"
+          }
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
