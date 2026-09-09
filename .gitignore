@@ -50,3 +50,12 @@ dist-builds/
 
 # EAS 빌드 산출물(AAB/APK). 용량이 크고 재생성 가능하다
 /build
+
+# 공개 저장소라 막는 쪽으로 넓힌다 (2026-09-09)
+# 새는 것은 0건이었고, 없는 것은 가드였다
+secrets/
+*service-account*.json
+*.pem
+id_rsa*
+*.aab
+*.apk
