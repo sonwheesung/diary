@@ -112,7 +112,7 @@
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
-### ⏭ `21 (1.0.1)` — OTA + R8 (2026-09-09)
+### 🟢 `21 (1.0.1)` 승인 — OTA + R8 (2026-09-09)
 
 | | |
 |---|---|
@@ -122,7 +122,8 @@
 | 🔴 OTA E2E | **통과**(AVD `diary` · R8 켜진 릴리스 APK): `dev.expo.EASSharedPreferences.xml` 생성 · 업데이트 요청이 **네트워크까지 도달**(`Remote update request not successful` = 아직 발행된 업데이트가 없어서다) · **오프라인 부팅 오류 0건** · `expo-sqlite`·`SecureStore`·AdMob·연령 게이트 정상 · 앱 크래시 0.<br>🟢 스택트레이스에 `expo.modules.updates.*` 가 **난독화되지 않은 채** 찍혔다 — keep 이 먹은 증거다(옆의 `g9.b0`·`n9.i` 는 난독화됨) |
 | ⏭ 다음 릴리스로 | 🔴 **`proguard-android-optimize.txt` 미적용.** 콘솔은 빌드 실물을 읽고 **줄 단위로** 판정한다 — 형제 실측(2026-09-09)에서 그걸 적용한 앱은 *"최적화가 사용 설정되지 않음"* 줄이 **안 떴다**. `expo-build-properties` 로는 못 바꾸므로 빌드 스크립트에서 `prebuild` 직후 `build.gradle` 을 패치해야 한다. **기한 없는 `권장` 등급이라 이것만으로 심사를 다시 타지 않는다**(정본 [`R8_OBFUSCATION.md`](file:///C:/project/common/R8_OBFUSCATION.md) §6.1) |
 | ⚠ 크기 | AAB **66.09 → 66.59MB (+503KB)** — 🔴 **줄지 않고 늘었다.** 같은 릴리스에 OTA 가 함께 들어가서라고 **추정**하지만 분리 측정을 안 해 단정할 수 없다. 형제의 −2.2MB(AAB)·−9.8MB(설치)와 **단위가 달라 나란히 놓으면 안 된다** |
-| ⏭ 미검증 | **실제 OTA 발행→적용 왕복**. 발행은 게시 뒤에 한 번 해 본다 — OTA 는 그 빌드를 받은 기기부터 유효하다 |
+| 🟢 승인 | **2026-09-09 오후** — ⚠ 출처는 **사용자 확인**이고 세션 실측이 아니다. 관리형 게시 OFF 라 통과가 곧 게시다 |
+| ⏭ 미검증 | 🔴 **실제 OTA 발행→적용 왕복.** 이제 **가능해졌다** — 이 빌드가 나갔으므로 OTA 를 받을 기기가 세상에 처음 생겼다.<br>⚠ 첫 발행은 **같은 커밋에서** 한다(내용이 같아 사용자에게 아무 변화가 없다). 파이프라인만 증명하고 위험은 0 이다 |
 
 ---
 
