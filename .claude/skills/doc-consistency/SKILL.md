@@ -165,4 +165,4 @@ npm run check:doc-counts && npm run check:legal
 ④ 폐기 미정리 ⑤ **과장된 ✅** ⑥ **끝난 일이 남은 일로 남은 것**.
 
 정본이 갈리는 것만 사용자 평결로 올리고, 나머지는 **문서를 실측에 맞춰** 고친 뒤 커밋한다
-(커밋 형식은 `CLAUDE.md` §11 — `YYMMDD :: [문서] 한국어 요약`).
+(커밋 규약은 `CLAUDE.md` §11 이 가리키는 [`common/COMMIT_CONVENTION.md`](file:///C:/project/common/COMMIT_CONVENTION.md) — 여기 값을 베끼지 않는다).
