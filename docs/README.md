@@ -123,7 +123,7 @@
 | ⏭ 다음 릴리스로 | 🔴 **`proguard-android-optimize.txt` 미적용.** 콘솔은 빌드 실물을 읽고 **줄 단위로** 판정한다 — 형제 실측(2026-09-09)에서 그걸 적용한 앱은 *"최적화가 사용 설정되지 않음"* 줄이 **안 떴다**. `expo-build-properties` 로는 못 바꾸므로 빌드 스크립트에서 `prebuild` 직후 `build.gradle` 을 패치해야 한다. **기한 없는 `권장` 등급이라 이것만으로 심사를 다시 타지 않는다**(정본 [`R8_OBFUSCATION.md`](file:///C:/project/common/R8_OBFUSCATION.md) §6.1) |
 | ⚠ 크기 | AAB **66.09 → 66.59MB (+503KB)** — 🔴 **줄지 않고 늘었다.** 같은 릴리스에 OTA 가 함께 들어가서라고 **추정**하지만 분리 측정을 안 해 단정할 수 없다. 형제의 −2.2MB(AAB)·−9.8MB(설치)와 **단위가 달라 나란히 놓으면 안 된다** |
 | 🟢 승인 | **2026-09-09 오후** — ⚠ 출처는 **사용자 확인**이고 세션 실측이 아니다. 관리형 게시 OFF 라 통과가 곧 게시다 |
-| ⏭ 미검증 | 🔴 **실제 OTA 발행→적용 왕복.** 이제 **가능해졌다** — 이 빌드가 나갔으므로 OTA 를 받을 기기가 세상에 처음 생겼다.<br>⚠ 첫 발행은 **같은 커밋에서** 한다(내용이 같아 사용자에게 아무 변화가 없다). 파이프라인만 증명하고 위험은 0 이다 |
+| 🟢 **OTA 왕복 검증 완료** | **2026-09-09 · AVD `diary` · R8 켜진 릴리스 APK.** 같은 커밋(`825026d`)에서 발행해 내용이 배포본과 동일하다 — 빌드 이후 바뀐 파일이 문서 넷뿐이고 **앱 번들에 들어가는 것은 0개**임을 먼저 확인했다.<br>`1회차` **받는다**: `NEW_UPDATE_LOADED` · `Update available` · 번들 4.9MB 가 `files/.expo-internal/` 에 실재<br>`2회차` **적용됐다**: `No update available`(더 받을 게 없다)<br>🔴 **결정적 증거는 로그가 아니라 DB 다** — `databases/updates.db` 의 `updates` 행이 `01a084a3bb737ec1b833151b900c91a3` · `status=1`(READY) · `successful_launch_count=1` 이고, 이것이 **발행 결과의 `Android update ID` 와 정확히 일치한다.**<br>⚠ `expo-updates.db`(`files/`)가 아니라 **`databases/updates.db`** 다. 앞엣것은 빈 파일이라 *"테이블이 없다"* 로 오독하기 쉽다 |
 
 ---
 
@@ -531,7 +531,14 @@ bash scripts/release/build-release-aab.sh    # AAB. E2E 용 APK 는 assembleRele
 #      ⚠ 콜드 부팅 실측 **425초**. 재시작이 잦으면 켜 두고 진행한다(common/EMULATOR_POOL.md §1)
 
 # OTA(expo-updates)를 발행하려면 — 🔴 규칙 둘을 먼저 읽는다
-eas update --branch production --message "<무엇을 고쳤나>"
+eas update --branch production --platform android --message "<무엇을 고쳤나>"
+#   🔴 **`--platform android` 를 반드시 준다.** 기본값이 `all` 이라 **web 번들링에서 죽는다** —
+#      react-native-google-mobile-ads 가 네이티브 전용 모듈을 import 해서다(2026-09-09 실측).
+#      조각은 Android 전용이라 web 을 만들 이유가 없다.
+#   🔴 **브랜치와 채널은 다르다. 브랜치만 만들면 앱에 안 닿는다.**
+#      앱은 `expo-channel-name: production` 으로 요청하는데 `eas update` 는 **브랜치만** 만든다.
+#      `eas channel:create production` 을 한 번 해서 채널→브랜치를 이어야 받는다(2026-09-09 실측:
+#      채널 0개인 상태에서 앱 로그가 `Remote update request not successful` 이었다).
 #   🔴 ① **DB 마이그레이션을 OTA 로 보내지 않는다.** `migrate()` 는 `current >= LATEST` 면
 #      조용히 통과한다 — 롤백하면 JS 만 되돌아가고 `user_version` 은 앞선 채 남고,
 #      `manifest-builder.ts` 가 원본 행을 직접 읽으므로 **백업에서 그 컬럼이 조용히 빠진다**
