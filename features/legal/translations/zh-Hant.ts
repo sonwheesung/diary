@@ -328,8 +328,8 @@ export const DELETE_ACCOUNT_ZH_HANT: LegalDoc = {
  */
 export const TERMS_ZH_HANT: LegalDoc = {
   title: 'Jogak 使用條款',
-  sourceFingerprint: '7f77bfce',
-  effective: '2026-09-16',
+  sourceFingerprint: 'f4233a8a',
+  effective: '2026-09-09',
   updated: '2026-09-09',
   intro:
     '本條款規定 Hwiseong Games（品牌名 Vivace Games Studio，以下稱「營運者」）所提供的行動應用程式「Jogak」（以下稱「本服務」）的使用，以及營運者與使用者之間的權利、義務與責任事項。請於使用本服務之前閱讀。',

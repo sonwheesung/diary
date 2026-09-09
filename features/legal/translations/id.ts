@@ -335,8 +335,8 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
  */
 export const TERMS_ID: LegalDoc = {
   title: 'Ketentuan Penggunaan Jogak',
-  sourceFingerprint: '7f77bfce',
-  effective: '2026-09-16',
+  sourceFingerprint: 'f4233a8a',
+  effective: '2026-09-09',
   updated: '2026-09-09',
   intro:
     'Ketentuan ini mengatur hak, kewajiban, dan tanggung jawab antara Hwiseong Games (nama merek Vivace Games Studio, selanjutnya “operator”) dan pengguna, sehubungan dengan penggunaan aplikasi seluler “Jogak” (selanjutnya “layanan”) yang disediakan operator. Mohon dibaca sebelum kamu menggunakan layanan.',

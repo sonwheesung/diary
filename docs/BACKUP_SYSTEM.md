@@ -149,6 +149,16 @@ magic "JGKB" 4 | version 1 | suite 1 | flags 1 | kid 4 | type 1 | ctxLen 1 | con
 `reports`가 추가되면서 형식을 올렸다. `dbVersion`(스키마)과 **다른 축**이다 —
 매니페스트 자체의 모양이 바뀌었는지를 말한다.
 
+#### 🚫 OTA 로 `MANIFEST_FORMAT` 을 올리지 않는다 (2026-09-09, OTA 도입과 함께)
+
+OTA 는 기기마다 적용 시점이 갈리므로 **같은 사용자의 두 기기가 다른 형식을 들 수 있다.**
+🟢 조용한 절단은 없다 — `readManifest()` 가 `formatSeen > MANIFEST_FORMAT` 이면 던져
+**fail-closed** 다(`manifest.ts`). 옛 기기는 새 백업을 **못 열 뿐**이고 그건 명시적 오류다.
+그래도 *"복원이 안 된다"* 를 OTA 적용 시차 때문에 만들 이유가 없다 —
+**형식 상승은 스토어 릴리스로만 간다.** 같은 이유로 **DB 마이그레이션도 OTA 로 안 보낸다**
+(`CLAUDE.md` §12 2026-09-09 — 롤백하면 `user_version` 만 앞서 남고
+`manifest-builder.ts` 가 원본 행을 직접 읽어 **그 컬럼이 백업에서 조용히 빠진다**).
+
 🔴 **판정을 하마터면 틀릴 뻔했다.** 검증이 `format !== MANIFEST_FORMAT`이면 거부하는 모양이었고,
 그대로 2로 올렸으면 **기존 v1 백업이 전부 복원 불가**가 됐다. 지금은 `format > MANIFEST_FORMAT` —
 *더 새 것만* 거부한다. 옛 형식은 언제까지나 읽는다(Expand-only와 같은 규율).

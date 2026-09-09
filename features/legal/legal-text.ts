@@ -479,7 +479,7 @@ export const DELETE_ACCOUNT: LegalDoc = {
  */
 export const TERMS: LegalDoc = {
   title: '조각 이용약관',
-  effective: '2026-09-16',
+  effective: '2026-09-09',
   updated: '2026-09-09',
   intro:
     '이 약관은 휘성게임즈(브랜드명 Vivace Games Studio, 이하 "회사")가 제공하는 모바일 애플리케이션 "조각"(이하 "서비스")의 이용에 관하여 회사와 이용자 사이의 권리·의무 및 책임사항을 정합니다. 서비스를 이용하시기 전에 읽어주시기 바랍니다.',

@@ -339,8 +339,8 @@ export const DELETE_ACCOUNT_EN: LegalDoc = {
  */
 export const TERMS_EN: LegalDoc = {
   title: 'Jogak Terms of Service',
-  sourceFingerprint: '7f77bfce',
-  effective: '2026-09-16',
+  sourceFingerprint: 'f4233a8a',
+  effective: '2026-09-09',
   updated: '2026-09-09',
   intro:
     'These terms set out the rights, obligations and responsibilities between Hwiseong Games (brand: Vivace Games Studio, "the operator") and users, in relation to the use of the mobile application "Jogak" ("the service") that the operator provides. Please read them before using the service.',

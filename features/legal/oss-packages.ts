@@ -40,6 +40,7 @@ export const OSS_PACKAGES: readonly OssPackage[] = [
   { name: "expo-sqlite", version: "16.0.10", license: "MIT", copyright: "" },
   { name: "expo-status-bar", version: "3.0.9", license: "MIT", copyright: "" },
   { name: "expo-system-ui", version: "6.0.9", license: "MIT", copyright: "" },
+  { name: "expo-updates", version: "29.0.20", license: "MIT", copyright: "" },
   { name: "i18next", version: "26.3.6", license: "MIT", copyright: "Copyright (c) 2011-present i18next" },
   { name: "lucide-react-native", version: "1.30.0", license: "ISC", copyright: "Copyright (c) 2026 Lucide Icons and Contributors" },
   { name: "react", version: "19.1.0", license: "MIT", copyright: "Copyright (c) Meta Platforms, Inc. and affiliates." },

@@ -354,8 +354,8 @@ export const DELETE_ACCOUNT_DE: LegalDoc = {
  */
 export const TERMS_DE: LegalDoc = {
   title: 'Jogak Nutzungsbedingungen',
-  sourceFingerprint: '7f77bfce',
-  effective: '2026-09-16',
+  sourceFingerprint: 'f4233a8a',
+  effective: '2026-09-09',
   updated: '2026-09-09',
   intro:
     'Diese Nutzungsbedingungen regeln die Rechte, Pflichten und Verantwortlichkeiten zwischen Hwiseong Games (Marke: Vivace Games Studio, „der Betreiber“) und den Nutzerinnen und Nutzern in Bezug auf die Nutzung der mobilen Anwendung „Jogak“ („der Dienst“), die der Betreiber anbietet. Bitte lies sie, bevor du den Dienst nutzt.',

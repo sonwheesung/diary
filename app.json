@@ -6,6 +6,14 @@
     "orientation": "portrait",
     "scheme": "jogak",
     "userInterfaceStyle": "automatic",
+    "updates": {
+      "url": "https://u.expo.dev/cb72932c-858b-4725-bde8-97bd9e36b718",
+      "checkAutomatically": "ON_LOAD",
+      "requestHeaders": {
+        "expo-channel-name": "production"
+      }
+    },
+    "runtimeVersion": "1.0.0",
     "backgroundColor": "#F5F7FA",
     "ios": {
       "supportsTablet": true,

@@ -57,7 +57,7 @@
 | 🔴 **목록·사진 삽입의 포커스** | ✅ | 2026-09-04 **실기기 신고**(Galaxy S24 · vc18) — 목록이 **이미 있는** 조각에 목록을 하나 더 끼우면 글이 **앞 문단 한가운데**에 들어갔다. `key={`list-<인덱스>`}`가 배열 인덱스라 새 목록이 기존 목록과 같은 key를 받고, React가 인스턴스를 재사용해 포커스를 옮기는 유일한 장치인 `autoFocus`(마운트 때만)가 **안 돈다**. 🔴 `insertList`가 옮긴 것은 `caretRef` 하나뿐이라 *다음 사진이 들어갈 자리*는 맞고 **키보드가 치는 곳만 틀렸다** — 그래서 재현이 어려웠다. ⚠ **사진도 같은 병이었다**(사진 뒤에 이어 쓰면 사진 **위** 문단에 들어간다) — 신고는 목록으로 왔지만 형제를 함께 고쳤다. → 커서·잠금·포커스를 `moveCaret` 한 함수로 묶고, `focusRequest`에 목록 **항목**(`item`)을 더했다. 🚫 key를 고치지 않은 이유는 블록에 안정 id가 없어 **저장 형식이 바뀌기** 때문이다. `check:diary-format` 38→**42개**(소스 검사 4개 신설 · 3가지를 일부러 망가뜨려 확인 — 그중 하나가 처음엔 **안 빨개져서** 개수를 세도록 고쳤다) ([`DIARY_SYSTEM.md`](./DIARY_SYSTEM.md) §1.1) |
 | **리포트 탭이 고른 종류를 안 따라갔다** | ✅ | 2026-09-04 실기기 — 비구독자 화면(`LockedPreview`)이 `'weekly'`를 박아둬 **연간 탭에서 *"매주 돌아보는 시간 · 8월 24일–30일"*** 이 떴다. 탭은 눌리는데 내용이 안 따라오면 고장이 아니라 **거짓말**이다. ⚠ 같은 규약이 **바로 아래 구독자 빈 화면에 이미 적혀 있었다**(`report.empty<종류>` — *"월간 탭에서 '한 주가 지나면…'을 보여주면 틀리게 알려주는 것"*) — **새 규칙이 아니라 무료 사용자에게만 안 지킨 것**이다. → `lockedTitle`을 종류별 3개로 쪼개고 본문은 `empty<종류>`를 그대로 쓴다. 🚫 **예시 카드는 주간에만** 둔다 — 문장이 요일을 말해서(*"월요일에는…"*) 연간 아래 놓으면 같은 거짓말이 된다. 보여줄 수 없는 것은 **안 보여주는 쪽**이 정직하고 번역도 안 는다 |
 | **오늘 조각을 지우면 오늘 리마인더가 안 돌아왔다** | ✅ | 2026-09-04 실기기(`dumpsys alarm` 실측) — 저장할 때는 그날 예약을 지우는데 (`DiaryEditor`) **지울 때는 아무도 안 되돌렸다.** 다음에 앱을 열 때까지 그대로인데, **알림을 기다리는 사람은 앱을 안 연다**(그게 리마인더의 전제다). → 삭제 성공 뒤 `syncReminders()`. 방향만 반대일 뿐 저장과 같은 규약이다 — **조건이 확정되는 자리에서 다시 맞춘다** ([`NOTIFICATION_SYSTEM.md`](./NOTIFICATION_SYSTEM.md) §1) |
-| **오픈소스 고지** | ✅ | 2026-08-31 — 설정 → 정보 → **오픈소스 라이선스**(`app/licenses.tsx`). 🔴 **앱 어디에도 고지가 한 줄도 없었다** — Pretendard OTF 3종(4.6MB)과 런타임 패키지 **37개**를 번들에 싣는데 OFL §2·MIT가 둘 다 *"저작권 고지와 라이선스를 동봉하라"* 를 조건으로 단다. 공용 [`GAME_ASSET_SOURCING.md`](file:///C:/project/common/GAME_ASSET_SOURCING.md) §3.1이 배구명가에서 같은 결함을 닫으며 *"다른 프로젝트도 같은 검사를 돌릴 것"* 이라 적었는데 **조각은 안 돌렸다**. 🔴 그리고 **베꼈으면 틀렸다** — 배구명가는 `Pretendard JP`(저작권자 4인)이고 조각은 plain Pretendard라 **1인**이다(OTF `name` 테이블 + 저장소 LICENSE `v1.3.9` 둘 다 실측). 패키지 목록은 **생성**한다(`licenses:build`) — 손으로 적으면 의존성 하나 늘린 날 조용히 거짓이 된다. `npm run check:licenses` **40개**(패키지 37), **4가지를 일부러 망가뜨려 전부 잡히는 것까지** 확인. 🟢 **그 가드가 실제로 값을 했다**(2026-09-09): R8 을 켜며 `expo-build-properties` 를 넣자 *"고지 목록에 없다"* 로 즉시 빨개졌다 — 고지의 유일한 실패 방식인 **조용히 낡는 것**을 그 자리에서 막았다 ([`OPEN_SOURCE_NOTICE.md`](./OPEN_SOURCE_NOTICE.md)) |
+| **오픈소스 고지** | ✅ | 2026-08-31 — 설정 → 정보 → **오픈소스 라이선스**(`app/licenses.tsx`). 🔴 **앱 어디에도 고지가 한 줄도 없었다** — Pretendard OTF 3종(4.6MB)과 런타임 패키지 **38개**를 번들에 싣는데 OFL §2·MIT가 둘 다 *"저작권 고지와 라이선스를 동봉하라"* 를 조건으로 단다. 공용 [`GAME_ASSET_SOURCING.md`](file:///C:/project/common/GAME_ASSET_SOURCING.md) §3.1이 배구명가에서 같은 결함을 닫으며 *"다른 프로젝트도 같은 검사를 돌릴 것"* 이라 적었는데 **조각은 안 돌렸다**. 🔴 그리고 **베꼈으면 틀렸다** — 배구명가는 `Pretendard JP`(저작권자 4인)이고 조각은 plain Pretendard라 **1인**이다(OTF `name` 테이블 + 저장소 LICENSE `v1.3.9` 둘 다 실측). 패키지 목록은 **생성**한다(`licenses:build`) — 손으로 적으면 의존성 하나 늘린 날 조용히 거짓이 된다. `npm run check:licenses` **41개**(패키지 38), **4가지를 일부러 망가뜨려 전부 잡히는 것까지** 확인. 🟢 **그 가드가 실제로 값을 했다**(2026-09-09): R8 을 켜며 `expo-build-properties` 를 넣자 *"고지 목록에 없다"* 로 즉시 빨개졌다 — 고지의 유일한 실패 방식인 **조용히 낡는 것**을 그 자리에서 막았다 ([`OPEN_SOURCE_NOTICE.md`](./OPEN_SOURCE_NOTICE.md)) |
 | Detail | ✅ | `app/diary/[id].tsx` — 조회·수정·삭제. 돌아올 때마다 다시 읽는다 |
 | Calendar | ✅ | 월 격자(쓴 날 점 표시)·날짜 선택·그날 조각 카드·빈 날엔 그 날짜로 쓰기 |
 | Search | ✅ | `app/search.tsx` — **탭이 아니다.** 홈·모든 조각의 돋보기가 입구. 250ms 디바운스, 빈 검색어면 자주 쓴 태그 |
@@ -483,7 +483,7 @@ npm run check:notification     # 12개 — 예약 날짜 계산(이미 쓴 날 �
 
 # 의존성이나 폰트를 바꿨으면
 npm run licenses:build         # 고지 목록 재생성 (dependencies 를 더했으면)
-npm run check:licenses         # 40개 — 패키지 37 · 폰트 · 화면 · 설정 입구
+npm run check:licenses         # 41개 — 패키지 38 · 폰트 · 화면 · 설정 입구
                                #   🔴 고지의 유일한 실패 방식은 **조용히 낡는 것**이다
                                #      화면은 멀쩡히 뜨는데 목록만 빠지고, 그게 라이선스 위반이다
 
@@ -514,6 +514,20 @@ bash scripts/release/build-release-aab.sh    # AAB. E2E 용 APK 는 assembleRele
 #      (틀리면 심사 40분으로도 못 되돌린다 — 사용자 데이터다)
 #   에뮬: AVD `diary` · 포트 **5568** · D:\emulators\diary (common/DEV_ALLOCATION.md §3)
 #      ⚠ 콜드 부팅 실측 **425초**. 재시작이 잦으면 켜 두고 진행한다(common/EMULATOR_POOL.md §1)
+
+# OTA(expo-updates)를 발행하려면 — 🔴 규칙 둘을 먼저 읽는다
+eas update --branch production --message "<무엇을 고쳤나>"
+#   🔴 ① **DB 마이그레이션을 OTA 로 보내지 않는다.** `migrate()` 는 `current >= LATEST` 면
+#      조용히 통과한다 — 롤백하면 JS 만 되돌아가고 `user_version` 은 앞선 채 남고,
+#      `manifest-builder.ts` 가 원본 행을 직접 읽으므로 **백업에서 그 컬럼이 조용히 빠진다**
+#      (db/migrations.ts 상단 주석이 경고하는 그 유실). 스키마 변경은 **스토어 릴리스로만**
+#   🔴 ② **서버를 먼저 배포하고 그다음 OTA.** features/ai/{types,prompt,period}.ts 는
+#      server/shared/ 로 복사돼 서버가 쓴다 — 순서가 뒤집히면 앱이 서버가 모르는
+#      PROMPT_VERSION 을 보낸다
+#   ⚠ 법무 문안(features/legal/legal-text.ts)도 JS 라 OTA 로 바뀐다 — **릴리스급으로 다룬다**
+#   ⚠ 적용은 **다음 실행부터**다(LAUNCH_WAIT_MS=0). 1회차는 내장 번들이 돈다
+#   ⚠ 채널: 프로덕션은 로컬 빌드라 app.json 의 requestHeaders 가 유일한 경로다.
+#      eas build 로 굽는 internal·stg 는 eas.json 의 channel 이 덮는다(⏭ 우선순위 미확인)
 
 # 운영 콘솔을 건드렸으면
 npm run check:admin            # 34개 — **fail-closed** · 헤더 판정 · KST 집계 창 · 원가 추정
