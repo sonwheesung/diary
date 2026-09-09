@@ -1017,6 +1017,10 @@ EEA +3  노르웨이 리히텐슈타인 아이슬란드
   ⚠ **검사를 늘렸으면 `npm run check:doc-counts`** — 문서에 박힌 "N개"가 같이 늙는다.
   낡은 숫자는 *"이만큼 검사한다"* 는 거짓 안심을 준다(2026-08-20에 8군데가 어긋나 있었다)
 
+- 한국어 문장 규칙의 정본은 [`C:\project\common\KOREAN_WRITING.md`](file:///C:/project/common/KOREAN_WRITING.md) 다.
+  🚫 **여기에 규칙을 베껴 적지 않는다.**
+  ⚠ 프로덕션에 나가 있는 화면 문구는 **인지만 하고 고치지 않는다.** 그 화면을 어차피 건드릴 때
+  함께 정리한다(그 문서 §3).
 - 커밋 규약의 정본은 [`C:\project\common\COMMIT_CONVENTION.md`](file:///C:/project/common/COMMIT_CONVENTION.md) 다.
   🚫 **여기에 형식을 베껴 적지 않는다** — 원본이 바뀌어도 안 따라온다. 그 문서 서문이 지목한 것이
   정확히 *"각 `CLAUDE.md`에 한 줄씩만 적혀 있어서 무엇을 뜻하는지는 어디에도 없던"* 이 상태다.
