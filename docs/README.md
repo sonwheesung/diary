@@ -476,8 +476,18 @@ bash scripts/release/build-release-aab.sh    # AAB. E2E 용 APK 는 assembleRele
 #   에뮬: AVD `diary` · 포트 **5568** · D:\emulators\diary (common/DEV_ALLOCATION.md §3)
 #      ⚠ 콜드 부팅 실측 **425초**. 재시작이 잦으면 켜 두고 진행한다(common/EMULATOR_POOL.md §1)
 
-# OTA(expo-updates)를 발행하려면 — 🔴 규칙 둘을 먼저 읽는다
-eas update --branch production --platform android --message "<무엇을 고쳤나>"
+# OTA(expo-updates)를 발행하려면 — 🔴 손으로 `eas update` 를 치지 않는다
+bash scripts/release/publish-ota.sh "<무엇을 고쳤나>"
+#   🔴 **`eas update` 는 `.env.local` 을 치우지 않는다.** 릴리스 AAB 스크립트와 다른 점이고,
+#      2026-09-09 첫 발행 번들에 `http://10.0.2.2:3200`(개발 백업 서버)이 박힌 채 나갔다.
+#      프로덕션 주소는 **0건**이었다. 발행 자체는 성공한다 — 조용한 실패다.
+#      그 업데이트는 `eas update:delete` 로 지우고 이 스크립트를 만들었다.
+#   스크립트가 하는 것: .env.local 치움 → 프로필 env → check:release-env →
+#      변환 캐시 제거(파일만 치우면 캐시가 옛 값을 들고 있다) → 발행 → check:ota-bundle
+npm run check:ota-bundle
+#   🔴 **구운 번들 안을 연다.** `check:release-bundle` 은 AAB 를 보므로 OTA 를 못 본다.
+#   🔴 Hermes 번들에 `strings` 를 쓰지 않는다 — 문자열 테이블을 못 읽어 **대조군까지 0** 이 나온다.
+#      2026-09-09 에 실제로 그렇게 읽고 "깨끗하다"고 오판했다. 바이트로 찾고 UTF-16LE 도 함께 본다.
 #   🔴 **`--platform android` 를 반드시 준다.** 기본값이 `all` 이라 **web 번들링에서 죽는다** —
 #      react-native-google-mobile-ads 가 네이티브 전용 모듈을 import 해서다(2026-09-09 실측).
 #      조각은 Android 전용이라 web 을 만들 이유가 없다.

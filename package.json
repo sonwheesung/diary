@@ -40,7 +40,8 @@
     "check:timezone": "node --experimental-strip-types --no-warnings scripts/check-timezone.mjs",
     "check:release-bundle": "node scripts/check-release-bundle.mjs",
     "licenses:build": "node scripts/make-licenses.mjs",
-    "check:licenses": "node scripts/check-licenses.mjs"
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "check:ota-bundle": "node scripts/check-ota-bundle.mjs"
   },
   "dependencies": {
     "@noble/ciphers": "^2.3.0",
