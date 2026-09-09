@@ -17,9 +17,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ES: LegalDoc = {
   title: 'Política de privacidad de Jogak',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio (en adelante, «el operador») cumple la Ley de Protección de Información Personal y demás normativa aplicable, y trata los datos personales de las personas usuarias de «Jogak» (en adelante, «el servicio») como se indica a continuación. Por principio, Jogak guarda en tu dispositivo las entradas de diario que escribes, y estas solo se transmiten a un servidor en dos casos: la copia de seguridad que actives tú y los informes de resumen con IA que crees tú. Por lo demás, recogemos únicamente la información mínima necesaria.',
   sections: [
@@ -79,6 +79,9 @@ export const PRIVACY_ES: LegalDoc = {
         '※ Este valor no permite saber quién eres y no se vincula al contenido de tus entradas.',
         '※ Si no alcanzas el umbral de edad anterior, este valor no se crea ni se transmite.',
         '※ La fecha de uso se registra al abrir la app y al volver a ella (como máximo una vez cada cinco minutos). Si has iniciado sesión, se registra en tu cuenta en lugar de en este identificador de dispositivo, para que una misma persona no se cuente dos veces.',
+        "• Comprobación de actualizaciones — al abrir la app, se envían el sistema operativo de tu dispositivo y un token aleatorio al servicio de distribución de la app (650 Industries, Inc.) para comprobar si hay una versión nueva.",
+        "  — Base de la recogida: artículo 15(1)4 de la Ley de Protección de Datos Personales (cumplimiento del contrato, es decir, ofrecer la app actualizada)",
+        "※ El contenido del diario no se transmite. Esta comprobación se realiza automáticamente en el momento en que abres la app y no puede desactivarse dentro de la app: consulta el apartado 6 para más detalles.",
       ],
     },
     {
@@ -127,10 +130,12 @@ export const PRIVACY_ES: LegalDoc = {
         '• Google LLC — País: Estados Unidos. Contacto: https://support.google.com/policies/contact/general_privacy_form. Finalidad: mostrar y medir anuncios (AdMob), inicio de sesión con cuenta de Google, y procesamiento y verificación de los pagos de la suscripción. Datos: identificador publicitario, información del dispositivo y de la red, al iniciar sesión la dirección de correo y el identificador de la cuenta, e información de transacción de la tienda. Cuándo y cómo: se transmiten por la red al solicitar un anuncio, al iniciar sesión y al pagar. Conservación: conforme a la política de privacidad de Google',
         '• Supabase Inc. — País: Estados Unidos (domicilio social). Contacto: privacy@supabase.com. Finalidad: almacenar en base de datos la información de consultas y cuentas, y guardar la copia de seguridad cifrada y el estado de la suscripción. Datos: los de los apartados 2(a), 2(c) y 2(d). Cuándo y cómo: se transmiten por la red al enviar una consulta y al hacer una copia de seguridad. Conservación: los plazos del apartado 4. ※ La ubicación física de almacenamiento es la República de Corea (región de Seúl), pero lo comunicamos como transferencia internacional porque la sociedad operadora está fuera de Corea.',
         '• Vercel Inc. — País: Estados Unidos. Contacto: privacy@vercel.com. Finalidad: operar el servidor que recibe las consultas y los servidores de copia de seguridad y de IA. Datos: los del apartado 2(a). Cuándo y cómo: se transmiten por la red al enviar una consulta. Conservación: hasta la finalización del contrato de encargo. ※ La copia de seguridad cifrada se envía directamente al almacenamiento sin pasar por este servidor.',
+        "• 650 Industries, Inc. (nombre del servicio: Expo) — País: Estados Unidos (624 University Ave FL1, Palo Alto, CA 94301, USA). Contacto: https://expo.dev/contact. Finalidad: distribución de actualizaciones de la app (EAS Update). Datos: sistema operativo del dispositivo, un token aleatorio que sirve para saber si se ha descargado una actualización, dirección IP, versión de la app y del entorno de ejecución. Cuándo y cómo: se transmiten por la red al abrir la app. Conservación: según la política de privacidad del destinatario. ※ El contenido del diario no se transmite.",
         '• RevenueCat, Inc. — País: Estados Unidos. Contacto: compliance@revenuecat.com. Finalidad: verificar los pagos de la suscripción y comprobar su estado. Datos: identificador de cuenta, identificadores de transacción y de producto de la tienda, información del dispositivo y de la aplicación. Cuándo y cómo: se transmiten por la red al abrir la pantalla de suscripción y al pagar. Conservación: hasta la finalización del contrato de encargo',
         '• OpenAI OpCo, LLC — País: Estados Unidos (1455 Third Street, San Francisco, California 94158, USA). Contacto: dpo@openai.com. Finalidad: generar informes de resumen. Datos: el título, el texto, la emoción y la fecha de las entradas del periodo para el que solicitaste un informe. Cuándo y cómo: se transmiten por la red en el momento en que pulsas Crear informe. Conservación: el servidor del operador no almacena el contenido del diario; solo lo mantiene en memoria mientras se elabora el resumen y lo descarta de inmediato. El proveedor de IA lo conserva un máximo de 30 días para vigilar el uso indebido y después lo elimina, y ni siquiera durante ese periodo lo usa para entrenar modelos.',
         '⚠ La transferencia internacional para los informes con IA es objeto de un consentimiento específico. La primera vez que usas la función te mostramos en la aplicación la información anterior y recabamos tu consentimiento; este consentimiento es independiente del consentimiento para información sensible del apartado 2(e).',
         'Puedes oponerte a la transferencia internacional de tus datos personales. Para oponerte a las transferencias relacionadas con la publicidad, desactiva los anuncios personalizados según el apartado 7; las relacionadas con las consultas no se producen si no usas «Contacto». Si no activas la copia de seguridad, no te suscribes y no creas informes, tampoco se producen las transferencias correspondientes, y todas las demás funciones, incluida la escritura de entradas, siguen disponibles.',
+        "⚠ La comprobación de actualizaciones es la única excepción. Ocurre cada vez que abres la app, con independencia de que inicies sesión o te suscribas, y no puede desactivarse dentro de la app. Se envían el sistema operativo del dispositivo y un token aleatorio, y no se incluye contenido del diario, pero dejamos claro que la frase del párrafo anterior («si no las usas, esas transferencias no se producen») no se aplica a este caso.",
       ],
     },
     {
@@ -211,6 +216,7 @@ export const PRIVACY_ES: LegalDoc = {
         '• 2026-08-23 modificación — las dos modificaciones previstas anteriores se han incorporado al texto principal. El tratamiento relativo a la suscripción mensual, la copia de seguridad/restauración y los informes de resumen con IA se ha añadido a los apartados 1, 2, 3, 4, 6, 8, 9 y 10.',
         '• 2026-09-01 modificación — se añadió a los apartados 2, 3 y 4 la recogida de un identificador de dispositivo para estadísticas de uso del servicio (recuento de usuarios activos) y se amplió el aviso de verificación de edad del apartado 2.',
         '• 2026-09-02 modificación — en el apartado 2 se aclara que la fecha de uso se registra no solo al abrir la app, sino también al volver a ella (como máximo una vez cada cinco minutos), y que se registra en tu cuenta en lugar del identificador de dispositivo cuando has iniciado sesión.',
+        "• 2026-09-09 modificación — se indica en el apartado 2 la comprobación de actualizaciones que se realiza al abrir la app (envío del sistema operativo del dispositivo y de un token aleatorio) y se añade 650 Industries, Inc. a los destinatarios del apartado 6.",
       ],
     },
   ],
@@ -336,9 +342,9 @@ export const DELETE_ACCOUNT_ES: LegalDoc = {
  */
 export const TERMS_ES: LegalDoc = {
   title: 'Condiciones de uso de Jogak',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'Estas condiciones regulan los derechos, las obligaciones y las responsabilidades entre Hwiseong Games (marca: Vivace Games Studio, en adelante «el operador») y las personas usuarias, en relación con el uso de la aplicación móvil «Jogak» (en adelante, «el servicio») que el operador presta. Léelas antes de usar el servicio.',
   sections: [
@@ -435,6 +441,7 @@ export const TERMS_ES: LegalDoc = {
         'Las funciones básicas, como escribir, consultar y buscar entradas, pueden usarse sin conexión a internet.',
         'La lectura de avisos, «Contacto», el inicio de sesión, el pago, la copia de seguridad y restauración y los informes de resumen con IA requieren conexión a internet.',
         'Si tu dispositivo tiene poco espacio de almacenamiento o su sistema operativo queda fuera del rango admitido, algunas funciones pueden no funcionar correctamente.',
+        "Al abrirse, la app comprueba automáticamente si hay una versión nueva y, si la hay, la descarga y la aplica a partir del siguiente inicio. Aunque la comprobación falle o no haya conexión a internet, la app funciona igualmente y las funciones básicas, como escribir entradas, no se ven afectadas.",
       ],
     },
     {
@@ -550,6 +557,7 @@ export const TERMS_ES: LegalDoc = {
         'Las acciones judiciales relativas a los conflictos surgidos entre el operador y una persona usuaria se someten, conforme al art. 36 de la Ley de Protección del Consumidor en el Comercio Electrónico, al fuero exclusivo del juzgado de primera instancia del domicilio de la persona usuaria en el momento de la interposición de la demanda. Si no tiene domicilio, al fuero exclusivo del juzgado de su residencia; y si en ese momento su domicilio o su residencia no constan con claridad, el juzgado competente se determina conforme a la Ley de Procedimiento Civil.',
         'La versión coreana de estas condiciones es la versión auténtica. En caso de discrepancia de significado con una traducción a otro idioma, prevalece la versión coreana.',
         'Disposición final: estas condiciones entran en vigor el 17 de agosto de 2026.',
+        "Disposición adicional: estas condiciones entran en vigor el 9 de septiembre de 2026. (Se añadió al artículo 10 la información sobre la comprobación automática de actualizaciones.)",
       ],
     },
   ],

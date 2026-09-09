@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
   sections: [
@@ -72,6 +72,9 @@ export const PRIVACY_TR: LegalDoc = {
         '※ Bu değerden kim olduğunuz anlaşılamaz ve günlük içeriğinizle ilişkilendirilmez.',
         '※ Yukarıdaki yaş eşiğini karşılamıyorsanız bu değer ne oluşturulur ne de iletilir.',
         '※ Kullanım tarihi, uygulamayı başlattığınızda ve uygulamaya geri döndüğünüzde (en fazla beş dakikada bir) kaydedilir. Oturum açmışsanız bu cihaz tanımlayıcısı yerine hesabınıza kaydedilir; böylece aynı kişi iki kez sayılmaz.',
+        "• Uygulama güncelleme denetimi — uygulamayı açtığınızda, yeni bir sürüm olup olmadığını anlamak için cihazınızın işletim sistemi ve rastgele bir belirteç uygulama dağıtım hizmetine (650 Industries, Inc.) gönderilir.",
+        "  — Toplama dayanağı: Kişisel Verilerin Korunması Kanunu’nun 15(1)4 maddesi (sözleşmenin ifası, yani uygulamanın güncel durumda sunulması)",
+        "※ Günlük içeriği gönderilmez. Bu denetim uygulamayı açtığınız anda otomatik olarak yapılır ve uygulama içinden ayrıca kapatılamaz — ayrıntılar için 6. bölüme bakın.",
       ],
     },
     {
@@ -120,10 +123,12 @@ export const PRIVACY_TR: LegalDoc = {
         '• Google LLC — Ülke: ABD. İletişim: https://support.google.com/policies/contact/general_privacy_form. Amaç: reklam gösterimi ve ölçümü (AdMob), Google hesabıyla giriş, abonelik ödemelerinin işlenmesi ve doğrulanması. Veriler: reklam kimliği, cihaz ve ağ bilgileri, girişte e-posta adresi ile hesap kimliği, mağaza işlem bilgileri. Ne zaman ve nasıl: reklam istendiğinde, giriş yapıldığında ve ödeme yapıldığında ağ üzerinden iletilir. Saklama: Google’ın gizlilik politikasına göre',
         '• Supabase Inc. — Ülke: ABD (tüzel kişiliğin bulunduğu yer). İletişim: privacy@supabase.com. Amaç: başvuru ve hesap bilgilerini veritabanında saklamak, şifrelenmiş yedek kopyasını ve abonelik durumunu saklamak. Veriler: 2(a), 2(c) ve 2(d) bentlerindeki bilgiler. Ne zaman ve nasıl: başvuru gönderildiğinde ve yedekleme yapıldığında ağ üzerinden iletilir. Saklama: 4. bölümdeki sürelerin sonuna kadar. ※ Fiziksel saklama yeri Kore Cumhuriyeti’dir (Seul bölgesi); ancak işleten şirket Kore dışında bulunduğundan yurt dışına aktarım olarak bildiriyoruz.',
         '• Vercel Inc. — Ülke: ABD. İletişim: privacy@vercel.com. Amaç: başvuruları alan sunucu ile yedekleme ve yapay zekâ sunucularını işletmek. Veriler: 2(a) bölümündeki bilgiler. Ne zaman ve nasıl: başvuru gönderildiğinde ağ üzerinden iletilir. Saklama: hizmet sözleşmesi sona erene kadar. ※ Şifrelenmiş yedek kopyası bu sunucudan geçmeden doğrudan depolamaya gönderilir.',
+        "• 650 Industries, Inc. (hizmet adı Expo) — Ülke: Amerika Birleşik Devletleri (624 University Ave FL1, Palo Alto, CA 94301, USA). İletişim: https://expo.dev/contact. Amaç: uygulama güncellemelerinin dağıtımı (EAS Update). Aktarılan veriler: cihazın işletim sistemi, bir güncellemenin indirilip indirilmediğini belirlemekte kullanılan rastgele belirteç, IP adresi, uygulama ve çalışma zamanı sürümü. Ne zaman ve nasıl: uygulamayı açtığınızda ağ üzerinden gönderilir. Saklama: alıcının gizlilik politikasına göre. ※ Günlük içeriği gönderilmez.",
         '• RevenueCat, Inc. — Ülke: ABD. İletişim: compliance@revenuecat.com. Amaç: abonelik ödemelerini doğrulamak ve abonelik durumunu denetlemek. Veriler: hesap kimliği, mağaza işlem ve ürün kimlikleri, cihaz ve uygulama bilgileri. Ne zaman ve nasıl: abonelik ekranına girildiğinde ve ödeme yapıldığında ağ üzerinden iletilir. Saklama: hizmet sözleşmesi sona erene kadar',
         '• OpenAI OpCo, LLC — Ülke: ABD (1455 Third Street, San Francisco, California 94158, USA). İletişim: dpo@openai.com. Amaç: özet raporu oluşturmak. Veriler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi. Ne zaman ve nasıl: rapor oluştur düğmesine bastığın anda ağ üzerinden aktarılır. Saklama: işletmecinin sunucusu günlük içeriğini saklamaz — içerik yalnızca özet oluşturulurken bellekte tutulur ve hemen ardından atılır. Yapay zekâ sağlayıcısı bunları kötüye kullanım denetimi için en fazla 30 gün saklar ve sonra siler; bu süre boyunca da model eğitiminde kullanmaz.',
         '⚠ Yapay zekâ raporları için yapılan yurt dışına aktarım ayrı bir rızaya tabidir. Özelliği ilk kez kullandığında yukarıdaki bilgileri uygulama içinde sana gösterir ve rızanı alırız; bu rıza, 2(e) bendindeki hassas bilgi rızasından ayrıdır.',
         'Kişisel verilerinin yurt dışına aktarılmasını reddedebilirsin. Reklamla ilgili aktarımı reddetmek için 7. bölümdeki yöntemle kişiselleştirilmiş reklamları kapat; başvuruyla ilgili aktarım ise “İletişim” özelliğini kullanmazsan hiç doğmaz. Yedeklemeyi açmaz, abone olmaz ve rapor oluşturmazsan bunlara bağlı aktarımlar gerçekleşmez; kayıt yazma dâhil diğer tüm özellikleri aynen kullanabilirsin.',
+        "⚠ Uygulama güncelleme denetimi tek istisnadır. Oturum açsanız da açmasanız da, abone olsanız da olmasanız da uygulamayı her açışınızda gerçekleşir ve uygulama içinden kapatılamaz. Gönderilen şey cihazın işletim sistemi ile rastgele bir belirteçtir; günlük içeriği yer almaz — ancak yukarıdaki paragrafta geçen “kullanmazsanız ilgili aktarımlar gerçekleşmez” ifadesinin bu madde için geçerli olmadığını açıkça belirtiriz.",
       ],
     },
     {
@@ -204,6 +209,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• 2026-08-23 değişiklik — yukarıdaki iki duyuru ana metne işlendi. Aylık abonelik, yedekleme/geri yükleme ve yapay zekâ özet raporlarına ilişkin işleme faaliyetleri 1, 2, 3, 4, 6, 8, 9 ve 10. bölümlere eklendi.',
         '• 2026-09-01 değişiklik — hizmet kullanım istatistikleri (etkin kullanıcı sayımı) için cihaz tanımlayıcısı toplanması 2., 3. ve 4. maddelere eklendi ve 2. maddedeki yaş doğrulama bildirimi genişletildi.',
         '• 2026-09-02 değişiklik — 2. maddede, kullanım tarihinin yalnızca uygulama başlatıldığında değil, uygulamaya geri dönüldüğünde de (en fazla beş dakikada bir) kaydedildiği ve oturum açılmışsa cihaz tanımlayıcısı yerine hesaba kaydedildiği belirtilmiştir.',
+        "• 2026-09-09 değişiklik — uygulama açılırken yapılan güncelleme denetimi (cihaz işletim sistemi ve rastgele belirtecin gönderilmesi) 2. bölümde açıklandı ve 6. bölümdeki alıcılara 650 Industries, Inc. eklendi.",
       ],
     },
   ],
@@ -331,9 +337,9 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
  */
 export const TERMS_TR: LegalDoc = {
   title: 'Jogak Kullanım Koşulları',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'Bu koşullar, Hwiseong Games’in (marka: Vivace Games Studio, “işletmeci”) sunduğu “Jogak” adlı mobil uygulamanın (“hizmet”) kullanımına ilişkin olarak işletmeci ile kullanıcı arasındaki hakları, yükümlülükleri ve sorumlulukları belirler. Hizmeti kullanmadan önce lütfen bunları oku.',
   sections: [
@@ -430,6 +436,7 @@ export const TERMS_TR: LegalDoc = {
         'Günlük yazma, görüntüleme ve arama gibi temel özellikler internet bağlantısı olmadan kullanılabilir.',
         'Duyuruların okunması, iletişim, giriş, ödeme, yedekleme ve geri yükleme ile yapay zekâ özet raporları internet bağlantısı gerektirir.',
         'Cihazının depolama alanı yetersizse veya işletim sistemi desteklenen aralığın dışındaysa bazı özellikler düzgün çalışmayabilir.',
+        "Uygulama açılırken yeni bir sürüm olup olmadığını otomatik olarak denetler ve varsa indirip bir sonraki açılıştan itibaren uygular. Denetim başarısız olsa veya internete bağlı olmasanız bile uygulama çalışmaya devam eder ve günlük yazma gibi temel işlevler etkilenmez.",
       ],
     },
     {
@@ -545,6 +552,7 @@ export const TERMS_TR: LegalDoc = {
         'İşletmeci ile kullanıcı arasında doğan uyuşmazlıklara ilişkin davalarda, Elektronik Ticarette Tüketicinin Korunması Kanunu’nun 36. maddesi uyarınca, dava açıldığı tarihteki kullanıcı adresinin bağlı olduğu bölge mahkemesi kesin yetkilidir. Adres yoksa oturma yerinin bağlı olduğu bölge mahkemesi kesin yetkilidir; dava açıldığı tarihte kullanıcının adresi veya oturma yeri belirlenemiyorsa yetkili mahkeme Medeni Usul Kanunu’na göre belirlenir.',
         'Bu koşulların Korece metni esastır. Başka bir dile yapılan çeviri anlam bakımından farklılık gösterirse Korece metin üstün tutulur.',
         'Ek hüküm: Bu koşullar 17 Ağustos 2026 tarihinde yürürlüğe girer.',
+        "Son hüküm: bu koşullar 9 Eylül 2026 tarihinde yürürlüğe girer. (10. maddeye uygulamanın otomatik güncelleme denetimine ilişkin açıklama eklenmiştir.)",
       ],
     },
   ],

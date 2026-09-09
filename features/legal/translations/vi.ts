@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
   sections: [
@@ -72,6 +72,9 @@ export const PRIVACY_VI: LegalDoc = {
         '※ Giá trị này không cho biết bạn là ai và không được liên kết với nội dung nhật ký của bạn.',
         '※ Nếu bạn chưa đạt ngưỡng tuổi nêu trên, giá trị này không được tạo ra và cũng không được truyền đi.',
         '※ Ngày sử dụng được ghi nhận khi bạn mở ứng dụng và khi bạn quay lại ứng dụng (tối thiểu cách nhau năm phút). Nếu bạn đã đăng nhập, ngày sử dụng được ghi theo tài khoản của bạn thay vì mã nhận dạng thiết bị này, để một người không bị tính hai lần.',
+        "• Kiểm tra cập nhật ứng dụng — khi bạn mở ứng dụng, hệ điều hành của thiết bị và một mã thông báo ngẫu nhiên được gửi tới dịch vụ phân phối ứng dụng (650 Industries, Inc.) để kiểm tra xem có phiên bản mới hay không.",
+        "  — Căn cứ thu thập: Điều 15(1)4 Luật Bảo vệ dữ liệu cá nhân (thực hiện hợp đồng, tức cung cấp ứng dụng ở trạng thái mới nhất)",
+        "※ Nội dung nhật ký không được gửi đi. Việc kiểm tra này diễn ra tự động ngay khi bạn mở ứng dụng và không thể tắt riêng trong ứng dụng — xem mục 6 để biết chi tiết.",
       ],
     },
     {
@@ -120,10 +123,12 @@ export const PRIVACY_VI: LegalDoc = {
         '• Google LLC — Quốc gia: Hoa Kỳ. Liên hệ: https://support.google.com/policies/contact/general_privacy_form. Mục đích: hiển thị và đo lường quảng cáo (AdMob), đăng nhập bằng tài khoản Google, xử lý và xác minh thanh toán gói đăng ký. Dữ liệu: mã quảng cáo, thông tin thiết bị và mạng, email cùng mã định danh tài khoản khi đăng nhập, thông tin giao dịch của cửa hàng. Khi nào và bằng cách nào: truyền qua mạng khi yêu cầu quảng cáo, khi đăng nhập và khi thanh toán. Lưu giữ: theo chính sách quyền riêng tư của Google',
         '• Supabase Inc. — Quốc gia: Hoa Kỳ (nơi đặt pháp nhân). Liên hệ: privacy@supabase.com. Mục đích: lưu thông tin liên hệ và tài khoản trong cơ sở dữ liệu, lưu bản sao lưu đã mã hoá và trạng thái đăng ký. Dữ liệu: thông tin ở mục 2(a), 2(c) và 2(d). Khi nào và bằng cách nào: truyền qua mạng khi bạn gửi liên hệ và khi sao lưu. Lưu giữ: đến hết thời hạn ở mục 4. ※ Vị trí lưu trữ vật lý là Hàn Quốc (vùng Seoul), nhưng chúng tôi công bố là chuyển ra nước ngoài vì pháp nhân vận hành đặt ngoài Hàn Quốc.',
         '• Vercel Inc. — Quốc gia: Hoa Kỳ. Liên hệ: privacy@vercel.com. Mục đích: vận hành máy chủ tiếp nhận liên hệ cùng máy chủ sao lưu và AI. Dữ liệu: thông tin ở mục 2(a). Khi nào và bằng cách nào: truyền qua mạng khi bạn gửi liên hệ. Lưu giữ: cho đến khi hợp đồng uỷ thác kết thúc. ※ Bản sao lưu đã mã hoá được gửi thẳng tới kho lưu trữ mà không đi qua máy chủ này.',
+        "• 650 Industries, Inc. (tên dịch vụ Expo) — Quốc gia: Hoa Kỳ (624 University Ave FL1, Palo Alto, CA 94301, USA). Liên hệ: https://expo.dev/contact. Mục đích: phân phối bản cập nhật ứng dụng (EAS Update). Dữ liệu: hệ điều hành thiết bị, mã thông báo ngẫu nhiên dùng để xác định đã tải bản cập nhật hay chưa, địa chỉ IP, phiên bản ứng dụng và môi trường chạy. Thời điểm và cách thức: gửi qua mạng khi bạn mở ứng dụng. Thời gian lưu: theo chính sách quyền riêng tư của bên nhận. ※ Nội dung nhật ký không được gửi đi.",
         '• RevenueCat, Inc. — Quốc gia: Hoa Kỳ. Liên hệ: compliance@revenuecat.com. Mục đích: xác minh thanh toán đăng ký và kiểm tra trạng thái đăng ký. Dữ liệu: mã định danh tài khoản, mã giao dịch và mã sản phẩm của cửa hàng, thông tin thiết bị và ứng dụng. Khi nào và bằng cách nào: truyền qua mạng khi mở màn hình đăng ký và khi thanh toán. Lưu giữ: cho đến khi hợp đồng uỷ thác kết thúc',
         '• OpenAI OpCo, LLC — Quốc gia: Hoa Kỳ (1455 Third Street, San Francisco, California 94158, USA). Liên hệ: dpo@openai.com. Mục đích: tạo báo cáo tóm tắt. Dữ liệu: tiêu đề, nội dung, cảm xúc và ngày viết của các mảnh trong kỳ bạn yêu cầu báo cáo. Khi nào và bằng cách nào: truyền qua mạng vào lúc bạn nhấn nút tạo báo cáo. Lưu giữ: máy chủ của nhà vận hành không lưu nội dung nhật ký — nội dung chỉ nằm trong bộ nhớ trong lúc bản tóm tắt đang được tạo rồi bị huỷ ngay. Nhà cung cấp AI lưu tối đa 30 ngày nhằm giám sát lạm dụng rồi xoá, và ngay cả trong thời gian đó cũng không dùng để huấn luyện mô hình.',
         '⚠ Việc chuyển ra nước ngoài phục vụ báo cáo AI là một sự đồng ý riêng. Khi bạn dùng tính năng lần đầu, chúng tôi hiển thị nội dung như trên ngay trong ứng dụng rồi xin sự đồng ý của bạn; sự đồng ý này tách biệt với đồng ý về thông tin nhạy cảm ở mục 2(e).',
         'Bạn có thể từ chối việc chuyển dữ liệu ra nước ngoài. Để từ chối phần liên quan đến quảng cáo, hãy tắt quảng cáo cá nhân hoá theo mục 7; phần liên quan đến liên hệ sẽ không phát sinh nếu bạn không dùng tính năng “Liên hệ”. Nếu bạn không bật sao lưu, không đăng ký và không tạo báo cáo thì những lần chuyển liên quan sẽ không xảy ra, và mọi tính năng khác kể cả viết mảnh vẫn dùng được bình thường.',
+        "⚠ Việc kiểm tra cập nhật là ngoại lệ duy nhất. Nó diễn ra mỗi lần bạn mở ứng dụng, bất kể bạn có đăng nhập hay đăng ký hay không, và không thể tắt trong ứng dụng. Thứ được gửi là hệ điều hành thiết bị và một mã thông báo ngẫu nhiên, không bao gồm nội dung nhật ký — nhưng chúng tôi nói rõ rằng câu ở đoạn trên (“nếu bạn không dùng thì việc chuyển đó không xảy ra”) không áp dụng cho mục này.",
       ],
     },
     {
@@ -204,6 +209,7 @@ export const PRIVACY_VI: LegalDoc = {
         '• 2026-08-23 sửa đổi — hai thông báo trên đã được đưa vào nội dung chính. Việc xử lý liên quan đến gói đăng ký hằng tháng, sao lưu/khôi phục và báo cáo tóm tắt bằng AI được bổ sung vào các mục 1, 2, 3, 4, 6, 8, 9 và 10.',
         '• 2026-09-01 sửa đổi — đã bổ sung vào mục 2, 3 và 4 việc thu thập mã định danh thiết bị phục vụ thống kê sử dụng dịch vụ (đếm người dùng hoạt động), và mở rộng thông báo xác minh độ tuổi tại mục 2.',
         '• 2026-09-02 sửa đổi — tại Điều 2 đã nêu rõ rằng ngày sử dụng được ghi nhận không chỉ khi mở ứng dụng mà còn khi bạn quay lại ứng dụng (tối thiểu cách nhau năm phút), và rằng nếu bạn đã đăng nhập thì ngày đó được ghi theo tài khoản thay vì mã nhận dạng thiết bị.',
+        "• 2026-09-09 sửa đổi — nêu rõ tại mục 2 việc kiểm tra cập nhật diễn ra khi mở ứng dụng (gửi hệ điều hành thiết bị và mã thông báo ngẫu nhiên), và bổ sung 650 Industries, Inc. vào bên nhận tại mục 6.",
       ],
     },
   ],
@@ -328,9 +334,9 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
  */
 export const TERMS_VI: LegalDoc = {
   title: 'Điều khoản sử dụng Jogak',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'Bản điều khoản này quy định quyền, nghĩa vụ và trách nhiệm giữa Hwiseong Games (tên thương hiệu Vivace Games Studio, sau đây gọi là “nhà vận hành”) và người dùng, liên quan đến việc sử dụng ứng dụng di động “Jogak” (sau đây gọi là “dịch vụ”) do nhà vận hành cung cấp. Xin bạn đọc trước khi sử dụng dịch vụ.',
   sections: [
@@ -427,6 +433,7 @@ export const TERMS_VI: LegalDoc = {
         'Các tính năng cơ bản như viết, xem và tìm kiếm mảnh nhật ký có thể dùng mà không cần kết nối internet.',
         'Xem thông báo, Liên hệ, đăng nhập, thanh toán, sao lưu và khôi phục, cùng báo cáo tóm tắt bằng AI đều cần kết nối internet.',
         'Nếu thiết bị của người dùng thiếu dung lượng lưu trữ hoặc hệ điều hành nằm ngoài phạm vi được hỗ trợ, một số tính năng có thể không hoạt động bình thường.',
+        "Khi mở, ứng dụng tự động kiểm tra xem có phiên bản mới không và nếu có thì tải về và áp dụng từ lần mở tiếp theo. Ngay cả khi việc kiểm tra thất bại hoặc bạn không có kết nối internet, ứng dụng vẫn chạy bình thường và các chức năng cơ bản như viết nhật ký không bị ảnh hưởng.",
       ],
     },
     {
@@ -542,6 +549,7 @@ export const TERMS_VI: LegalDoc = {
         'Vụ kiện về tranh chấp phát sinh giữa nhà vận hành và người dùng thuộc thẩm quyền riêng biệt của toà án cấp quận nơi có địa chỉ của người dùng tại thời điểm khởi kiện, theo Điều 36 Luật Bảo vệ người tiêu dùng trong thương mại điện tử. Nếu không có địa chỉ thì thuộc thẩm quyền riêng biệt của toà án cấp quận nơi người dùng cư trú; và nếu tại thời điểm khởi kiện không rõ địa chỉ hay nơi cư trú của người dùng thì toà án có thẩm quyền được xác định theo Luật Tố tụng dân sự.',
         'Bản tiếng Hàn của bản điều khoản này là bản chính thức. Nếu bản dịch sang ngôn ngữ khác có nghĩa khác biệt thì bản tiếng Hàn được ưu tiên áp dụng.',
         'Điều khoản thi hành: Bản điều khoản này có hiệu lực từ ngày 17 tháng 8 năm 2026.',
+        "Điều khoản thi hành: các điều khoản này có hiệu lực từ ngày 9 tháng 9 năm 2026. (Đã bổ sung vào Điều 10 hướng dẫn về việc kiểm tra cập nhật tự động của ứng dụng.)",
       ],
     },
   ],

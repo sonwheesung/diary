@@ -16,9 +16,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_EN: LegalDoc = {
   title: 'Jogak Privacy Policy',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio ("the operator") complies with the Personal Information Protection Act and other applicable laws, and handles the personal data of users of "Jogak" ("the service") as set out below. As a matter of principle Jogak keeps the entries you write on your own device; entries are sent to a server only for the backup you turn on yourself and the AI summary reports you create yourself. Apart from that we collect only the minimum information necessary.',
   sections: [
@@ -78,6 +78,9 @@ export const PRIVACY_EN: LegalDoc = {
         '※ This value cannot tell who you are and is not linked to your entries.',
         '※ If you are below the age threshold above, this value is neither created nor transmitted.',
         '※ The date of use is recorded when you launch the app and when you bring it back to the foreground (at most once every five minutes). If you are signed in, it is recorded against your account instead of this device identifier, so that one person is not counted twice.',
+        "• App update check — when you launch the app, your device operating system and a randomised token are sent to the app distribution service (650 Industries, Inc.) to check whether a new version is available.",
+        "  — Legal basis: Article 15(1)4 of the Personal Information Protection Act (performance of the contract — providing the app in an up-to-date state)",
+        "※ Diary content is not transmitted. This check happens automatically the moment you open the app and cannot be turned off inside the app — see section 6 for details.",
       ],
     },
     {
@@ -126,10 +129,12 @@ export const PRIVACY_EN: LegalDoc = {
         '• Google LLC — Country: United States. Contact: https://support.google.com/policies/contact/general_privacy_form. Purpose: serving and measuring ads (AdMob), Google account sign-in, processing and verifying subscription payments. Items: advertising identifier, device and network information, on sign-in the email address and account identifier, and store transaction information. When and how: transmitted over the network when an ad is requested, when you sign in, and when you pay. Retention: as per Google’s privacy policy',
         '• Supabase Inc. — Country: United States (place of incorporation). Contact: privacy@supabase.com. Purpose: storing enquiry and account information in a database, and storing the encrypted backup copy and subscription status. Items: the information in sections 2(a), 2(c) and 2(d). When and how: transmitted over the network when you send an enquiry and when you back up. Retention: the periods in section 4. ※ The physical storage location is the Republic of Korea (Seoul region), but we disclose it as a transfer abroad because the operating company is located outside Korea.',
         '• Vercel Inc. — Country: United States. Contact: privacy@vercel.com. Purpose: running the server that receives enquiries and the backup and AI servers. Items: the information in section 2(a). When and how: transmitted over the network when you send an enquiry. Retention: until the outsourcing contract ends. ※ The encrypted backup copy is sent directly to storage without passing through this server.',
+        "• 650 Industries, Inc. (service name Expo) — Country: United States (624 University Ave FL1, Palo Alto, CA 94301, USA). Contact: https://expo.dev/contact. Purpose: distributing app updates (EAS Update). Items: device operating system, a randomised token used to determine whether an update has been downloaded, IP address, app and runtime version. When and how: transmitted over the network when you launch the app. Retention: as per the recipient’s privacy policy. ※ Diary content is not transmitted.",
         '• RevenueCat, Inc. — Country: United States. Contact: compliance@revenuecat.com. Purpose: verifying subscription payments and checking subscription status. Items: account identifier, store transaction and product identifiers, device and app information. When and how: transmitted over the network when you open the subscription screen and when you pay. Retention: until the outsourcing contract ends',
         '• OpenAI OpCo, LLC — Country: United States (1455 Third Street, San Francisco, California 94158, USA). Contact: dpo@openai.com. Purpose: generating summary reports. Items: the title, text, emotion and date of the entries in the period you requested a report for. When and how: transmitted over the network when you press Create report. Retention: the operator’s server does not store the diary content — it is held in memory only while the summary is being made and then discarded at once. The AI provider keeps it for up to 30 days for abuse monitoring and then deletes it, and even during that period does not use it for model training.',
         '⚠ Transfer abroad for AI reports is a matter of separate consent. The first time you use the feature we show you the same information inside the app and take your consent; this consent is separate from the consent for sensitive information in section 2(e).',
         'You may refuse the transfer of your personal data abroad. To refuse ad-related transfers, turn off personalised ads using the method in section 7; enquiry-related transfers do not occur if you do not use Contact us. If you do not turn backup on, do not subscribe, and do not create reports, none of the related transfers occur, and all other features including writing entries remain fully available.',
+        "⚠ The app update check is the one exception. It happens every time you launch the app regardless of whether you sign in or subscribe, and it cannot be turned off inside the app. What is sent is the device operating system and a randomised token, and no diary content is included — but we state plainly that “none of the related transfers occur if you do not use them” in the paragraph above does not apply to this item.",
       ],
     },
     {
@@ -210,6 +215,7 @@ export const PRIVACY_EN: LegalDoc = {
         '• 2026-08-23 amended — the two amendments above have been carried into the main text. Processing relating to the monthly subscription, backup/restore and AI summary reports has been added to sections 1, 2, 3, 4, 6, 8, 9 and 10.',
         '• 2026-09-01 amended — collection of a device identifier for service-usage statistics (active-user counts) was added to Sections 2, 3 and 4, and the age-verification notice in Section 2 was broadened.',
         '• 2026-09-02 amendment — Article 2 now states that the date of use is recorded not only when the app is launched but also when it is brought back to the foreground (at most once every five minutes), and that it is recorded against your account instead of the device identifier while you are signed in.',
+        "• 2026-09-09 amended — disclosed in section 2 the update check that happens when the app launches (transmission of device operating system and a randomised token), and added 650 Industries, Inc. to the recipients in section 6.",
       ],
     },
   ],
@@ -333,9 +339,9 @@ export const DELETE_ACCOUNT_EN: LegalDoc = {
  */
 export const TERMS_EN: LegalDoc = {
   title: 'Jogak Terms of Service',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'These terms set out the rights, obligations and responsibilities between Hwiseong Games (brand: Vivace Games Studio, "the operator") and users, in relation to the use of the mobile application "Jogak" ("the service") that the operator provides. Please read them before using the service.',
   sections: [
@@ -432,6 +438,7 @@ export const TERMS_EN: LegalDoc = {
         'Basic features such as writing, viewing and searching entries can be used without an internet connection.',
         'Reading announcements, Contact us, signing in, payment, backup and restore, and AI summary reports require an internet connection.',
         'Where the user’s device is short of storage space or its operating system falls outside the supported range, some features may not work properly.',
+        "When the app launches it automatically checks whether a new version is available, and if there is one it downloads it and applies it from the next launch. Even if the check fails or you are not connected to the internet the app still runs, and basic features such as writing entries are unaffected.",
       ],
     },
     {
@@ -547,6 +554,7 @@ export const TERMS_EN: LegalDoc = {
         'An action concerning a dispute arising between the operator and a user is subject to the exclusive jurisdiction of the district court having jurisdiction over the user’s address at the time the action is filed, in accordance with article 36 of the Act on Consumer Protection in Electronic Commerce. Where there is no address, it is subject to the exclusive jurisdiction of the district court having jurisdiction over the user’s place of residence; and where the user’s address or place of residence is unclear at the time the action is filed, the competent court is determined in accordance with the Civil Procedure Act.',
         'The Korean version of these terms is the authoritative version. Where a translation into another language differs in meaning, the Korean version prevails.',
         'Addendum: These terms take effect on 17 August 2026.',
+        "Addendum: These terms take effect on 9 September 2026. (Guidance on the app’s automatic update check was added to Article 10.)",
       ],
     },
   ],

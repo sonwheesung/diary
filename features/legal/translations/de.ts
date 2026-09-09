@@ -21,9 +21,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_DE: LegalDoc = {
   title: 'Datenschutzerklärung für Jogak',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio („der Betreiber“) hält das Gesetz zum Schutz personenbezogener Daten und weitere einschlägige Vorschriften ein und verarbeitet die personenbezogenen Daten der Nutzerinnen und Nutzer von „Jogak“ („der Dienst“) wie nachstehend beschrieben. Jogak bewahrt die von dir geschriebenen Tagebucheinträge grundsätzlich auf deinem Gerät auf; an einen Server übermittelt werden sie ausschließlich beim Backup, das du selbst einschaltest, und bei den KI-Zusammenfassungsberichten, die du selbst erstellst. Im Übrigen erheben wir nur die notwendigen Mindestangaben.',
   sections: [
@@ -83,6 +83,9 @@ export const PRIVACY_DE: LegalDoc = {
         '※ Aus diesem Wert lässt sich nicht ableiten, wer du bist; er wird nicht mit deinen Einträgen verknüpft.',
         '※ Liegst du unter der oben genannten Altersgrenze, wird dieser Wert weder erzeugt noch übermittelt.',
         '※ Der Nutzungstag wird beim Start der App und bei der Rückkehr zur App erfasst (höchstens alle fünf Minuten). Wenn du angemeldet bist, wird er deinem Konto statt dieser Gerätekennung zugeordnet, damit eine Person nicht doppelt gezählt wird.',
+        "• Update-Prüfung — beim Start der App werden das Betriebssystem deines Geräts und ein zufälliger Token an den App-Auslieferungsdienst (650 Industries, Inc.) gesendet, um zu prüfen, ob eine neue Version vorliegt.",
+        "  — Rechtsgrundlage der Erhebung: Artikel 15(1)4 des Gesetzes zum Schutz personenbezogener Daten (Erfüllung des Vertrags, d. h. Bereitstellung der App auf aktuellem Stand)",
+        "※ Tagebuchinhalte werden nicht übertragen. Diese Prüfung erfolgt automatisch in dem Moment, in dem du die App öffnest, und lässt sich in der App nicht abschalten — Einzelheiten in Abschnitt 6.",
       ],
     },
     {
@@ -131,10 +134,12 @@ export const PRIVACY_DE: LegalDoc = {
         '• Google LLC — Land: USA. Kontakt: https://support.google.com/policies/contact/general_privacy_form. Zweck: Auslieferung und Messung von Werbung (AdMob), Anmeldung mit Google-Konto, Abwicklung und Prüfung der Abozahlungen. Daten: Werbe-ID, Geräte- und Netzwerkinformationen, bei der Anmeldung E-Mail-Adresse und Kontokennung sowie Store-Transaktionsdaten. Wann und wie: Übermittlung über das Netz bei Werbeanfragen, bei der Anmeldung und beim Bezahlen. Speicherdauer: gemäß der Datenschutzerklärung von Google',
         '• Supabase Inc. — Land: USA (Sitz der Gesellschaft). Kontakt: privacy@supabase.com. Zweck: Speicherung der Anfrage- und Kontoinformationen in einer Datenbank sowie der verschlüsselten Backup-Kopie und des Abostatus. Daten: die Angaben aus Abschnitt 2(a), 2(c) und 2(d). Wann und wie: Übermittlung über das Netz beim Senden einer Anfrage und beim Backup. Speicherdauer: die Fristen aus Abschnitt 4. ※ Der physische Speicherort ist die Republik Korea (Region Seoul); da die betreibende Gesellschaft jedoch im Ausland sitzt, weisen wir dies als Übermittlung ins Ausland aus.',
         '• Vercel Inc. — Land: USA. Kontakt: privacy@vercel.com. Zweck: Betrieb des Servers, der Anfragen entgegennimmt, sowie des Backup- und des KI-Servers. Daten: die Angaben aus Abschnitt 2(a). Wann und wie: Übermittlung über das Netz beim Senden einer Anfrage. Speicherdauer: bis zum Ende des Auftragsverhältnisses. ※ Die verschlüsselte Backup-Kopie geht direkt an den Speicher, ohne diesen Server zu passieren.',
+        "• 650 Industries, Inc. (Dienstname Expo) — Land: Vereinigte Staaten (624 University Ave FL1, Palo Alto, CA 94301, USA). Kontakt: https://expo.dev/contact. Zweck: Auslieferung von App-Updates (EAS Update). Daten: Betriebssystem des Geräts, ein zufälliger Token zur Feststellung, ob ein Update heruntergeladen wurde, IP-Adresse, App- und Laufzeitversion. Wann und wie: Übertragung über das Netz beim Start der App. Speicherdauer: gemäß der Datenschutzerklärung des Empfängers. ※ Tagebuchinhalte werden nicht übertragen.",
         '• RevenueCat, Inc. — Land: USA. Kontakt: compliance@revenuecat.com. Zweck: Prüfung der Abozahlungen und des Abostatus. Daten: Kontokennung, Transaktions- und Produktkennungen des Stores, Geräte- und App-Informationen. Wann und wie: Übermittlung über das Netz beim Öffnen des Abo-Bildschirms und beim Bezahlen. Speicherdauer: bis zum Ende des Auftragsverhältnisses',
         '• OpenAI OpCo, LLC — Land: USA (1455 Third Street, San Francisco, California 94158, USA). Kontakt: dpo@openai.com. Zweck: Erstellung eines Zusammenfassungsberichts. Daten: Titel, Text, Gefühl und Datum der Einträge aus dem Zeitraum, für den du einen Bericht angefordert hast. Wann und wie: Übertragung über das Netz in dem Moment, in dem du auf Bericht erstellen tippst. Speicherdauer: Der Server des Betreibers speichert die Tagebuchinhalte nicht — sie werden nur während der Erstellung der Zusammenfassung im Arbeitsspeicher gehalten und sofort danach verworfen. Der KI-Anbieter bewahrt sie zur Missbrauchsüberwachung höchstens 30 Tage auf und löscht sie danach; auch in diesem Zeitraum verwendet er sie nicht für das Modelltraining.',
         '⚠ Die Übermittlung ins Ausland für KI-Berichte bedarf einer gesonderten Einwilligung. Bei der ersten Nutzung der Funktion zeigen wir dir dieselben Angaben in der App und holen deine Einwilligung ein; diese Einwilligung ist von der Einwilligung zu sensiblen Daten nach Abschnitt 2(e) getrennt.',
         'Du kannst der Übermittlung deiner Daten ins Ausland widersprechen. Für werbebezogene Übermittlungen deaktiviere personalisierte Werbung nach Abschnitt 7; anfragebezogene Übermittlungen finden nicht statt, wenn du „Kontakt“ nicht nutzt. Schaltest du das Backup nicht ein, schließt du kein Abo ab und erstellst du keine Berichte, finden die damit verbundenen Übermittlungen nicht statt, und alle übrigen Funktionen, auch das Schreiben von Einträgen, bleiben vollständig nutzbar.',
+        "⚠ Die Update-Prüfung ist die einzige Ausnahme. Sie erfolgt bei jedem Start der App, unabhängig davon, ob du dich anmeldest oder abonnierst, und lässt sich in der App nicht abschalten. Gesendet werden das Betriebssystem des Geräts und ein zufälliger Token, Tagebuchinhalte sind nicht enthalten — wir stellen jedoch klar, dass der Satz im vorigen Absatz („wenn du sie nicht nutzt, finden diese Übermittlungen nicht statt“) für diesen Punkt nicht gilt.",
       ],
     },
     {
@@ -215,6 +220,7 @@ export const PRIVACY_DE: LegalDoc = {
         '• 2026-08-23 Änderung — die beiden vorstehenden Ankündigungen wurden in den Haupttext übernommen. Die Verarbeitung zu Monatsabo, Backup/Wiederherstellung und KI-Zusammenfassungsberichten wurde in die Abschnitte 1, 2, 3, 4, 6, 8, 9 und 10 aufgenommen.',
         '• 2026-09-01 Änderung — die Erhebung einer Gerätekennung für Nutzungsstatistiken (Zählung aktiver Nutzer) wurde in Abschnitt 2, 3 und 4 aufgenommen, und der Hinweis zur Altersprüfung in Abschnitt 2 wurde erweitert.',
         '• 2026-09-02 Änderung — In Abschnitt 2 wird nun klargestellt, dass der Nutzungstag nicht nur beim Start der App, sondern auch bei der Rückkehr zur App erfasst wird (höchstens alle fünf Minuten), und dass er bei angemeldeten Nutzern dem Konto statt der Gerätekennung zugeordnet wird.',
+        "• 2026-09-09 geändert — die beim App-Start erfolgende Update-Prüfung (Übertragung von Geräte-Betriebssystem und zufälligem Token) wurde in Abschnitt 2 offengelegt und 650 Industries, Inc. den Empfängern in Abschnitt 6 hinzugefügt.",
       ],
     },
   ],
@@ -348,9 +354,9 @@ export const DELETE_ACCOUNT_DE: LegalDoc = {
  */
 export const TERMS_DE: LegalDoc = {
   title: 'Jogak Nutzungsbedingungen',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'Diese Nutzungsbedingungen regeln die Rechte, Pflichten und Verantwortlichkeiten zwischen Hwiseong Games (Marke: Vivace Games Studio, „der Betreiber“) und den Nutzerinnen und Nutzern in Bezug auf die Nutzung der mobilen Anwendung „Jogak“ („der Dienst“), die der Betreiber anbietet. Bitte lies sie, bevor du den Dienst nutzt.',
   sections: [
@@ -448,6 +454,7 @@ export const TERMS_DE: LegalDoc = {
         'Grundfunktionen wie das Schreiben, Ansehen und Durchsuchen von Einträgen können ohne Internetverbindung genutzt werden.',
         'Mitteilungen lesen, Kontakt, Anmeldung, Bezahlung, Backup und Wiederherstellung sowie KI-Zusammenfassungsberichte setzen eine Internetverbindung voraus.',
         'Ist der Speicherplatz deines Geräts knapp oder liegt dessen Betriebssystem außerhalb des unterstützten Bereichs, können einzelne Funktionen nicht ordnungsgemäß arbeiten.',
+        "Beim Start prüft die App automatisch, ob eine neue Version vorliegt, und lädt sie gegebenenfalls herunter und wendet sie ab dem nächsten Start an. Auch wenn die Prüfung fehlschlägt oder keine Internetverbindung besteht, läuft die App weiterhin, und Grundfunktionen wie das Schreiben von Einträgen sind nicht betroffen.",
       ],
     },
     {
@@ -563,6 +570,7 @@ export const TERMS_DE: LegalDoc = {
         'Für Klagen aus Streitigkeiten zwischen dem Betreiber und einer Nutzerin bzw. einem Nutzer ist nach Art. 36 des Gesetzes zum Verbraucherschutz im elektronischen Handel ausschließlich das Bezirksgericht zuständig, in dessen Bezirk die Nutzerin bzw. der Nutzer zum Zeitpunkt der Klageerhebung ihren bzw. seinen Wohnsitz hat. Besteht kein Wohnsitz, ist ausschließlich das Bezirksgericht des Aufenthaltsorts zuständig; sind Wohnsitz oder Aufenthaltsort zum Zeitpunkt der Klageerhebung nicht feststellbar, bestimmt sich das zuständige Gericht nach dem Zivilprozessgesetz.',
         'Maßgeblich ist die koreanische Fassung dieser Nutzungsbedingungen. Weicht eine Übersetzung in eine andere Sprache im Sinngehalt ab, geht die koreanische Fassung vor.',
         'Schlussbestimmung: Diese Nutzungsbedingungen treten am 17. August 2026 in Kraft.',
+        "Schlussbestimmung: Diese Bedingungen treten am 9. September 2026 in Kraft. (In Artikel 10 wurde ein Hinweis zur automatischen Update-Prüfung der App ergänzt.)",
       ],
     },
   ],

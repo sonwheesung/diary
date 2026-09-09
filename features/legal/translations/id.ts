@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
   sections: [
@@ -72,6 +72,9 @@ export const PRIVACY_ID: LegalDoc = {
         '※ Nilai ini tidak dapat menunjukkan siapa Anda dan tidak dikaitkan dengan isi catatan Anda.',
         '※ Jika Anda belum memenuhi batas usia di atas, nilai ini tidak dibuat maupun dikirimkan.',
         '※ Tanggal penggunaan dicatat saat Anda membuka aplikasi dan saat Anda kembali ke aplikasi (paling cepat setiap lima menit). Jika Anda masuk, pencatatan dilakukan pada akun Anda, bukan pada identifikasi perangkat ini, agar satu orang tidak terhitung dua kali.',
+        "• Pemeriksaan pembaruan aplikasi — saat aplikasi dibuka, sistem operasi perangkat Anda dan sebuah token acak dikirim ke layanan distribusi aplikasi (650 Industries, Inc.) untuk memeriksa apakah ada versi baru.",
+        "  — Dasar pengumpulan: Pasal 15(1)4 Undang-Undang Perlindungan Data Pribadi (pelaksanaan perjanjian, yaitu menyediakan aplikasi dalam keadaan terbaru)",
+        "※ Isi buku harian tidak dikirim. Pemeriksaan ini berlangsung otomatis saat Anda membuka aplikasi dan tidak dapat dimatikan di dalam aplikasi — lihat bagian 6 untuk rinciannya.",
       ],
     },
     {
@@ -120,10 +123,12 @@ export const PRIVACY_ID: LegalDoc = {
         '• Google LLC — Negara: Amerika Serikat. Kontak: https://support.google.com/policies/contact/general_privacy_form. Tujuan: menayangkan dan mengukur iklan (AdMob), masuk dengan akun Google, serta memproses dan memverifikasi pembayaran langganan. Data: pengenal iklan, informasi perangkat dan jaringan, alamat email dan pengenal akun saat masuk, serta informasi transaksi toko. Kapan dan bagaimana: dikirim melalui jaringan saat iklan diminta, saat masuk, dan saat membayar. Penyimpanan: sesuai kebijakan privasi Google',
         '• Supabase Inc. — Negara: Amerika Serikat (tempat pendirian badan hukum). Kontak: privacy@supabase.com. Tujuan: menyimpan informasi pertanyaan dan akun dalam basis data serta menyimpan salinan cadangan terenkripsi dan status langganan. Data: informasi pada bagian 2(a), 2(c), dan 2(d). Kapan dan bagaimana: dikirim melalui jaringan saat kamu mengirim pertanyaan dan saat mencadangkan. Penyimpanan: sampai berakhirnya jangka waktu pada bagian 4. ※ Lokasi fisik penyimpanan adalah Republik Korea (region Seoul), tetapi kami menyebutnya transfer ke luar negeri karena badan hukum yang mengoperasikan berada di luar Korea.',
         '• Vercel Inc. — Negara: Amerika Serikat. Kontak: privacy@vercel.com. Tujuan: mengoperasikan server penerima pertanyaan serta server pencadangan dan AI. Data: informasi pada bagian 2(a). Kapan dan bagaimana: dikirim melalui jaringan saat kamu mengirim pertanyaan. Penyimpanan: sampai kontrak pengalihdayaan berakhir. ※ Salinan cadangan yang terenkripsi dikirim langsung ke penyimpanan tanpa melewati server ini.',
+        "• 650 Industries, Inc. (nama layanan Expo) — Negara: Amerika Serikat (624 University Ave FL1, Palo Alto, CA 94301, USA). Kontak: https://expo.dev/contact. Tujuan: mendistribusikan pembaruan aplikasi (EAS Update). Data: sistem operasi perangkat, token acak untuk menentukan apakah pembaruan sudah diunduh, alamat IP, versi aplikasi dan runtime. Kapan dan bagaimana: dikirim melalui jaringan saat Anda membuka aplikasi. Penyimpanan: sesuai kebijakan privasi penerima. ※ Isi buku harian tidak dikirim.",
         '• RevenueCat, Inc. — Negara: Amerika Serikat. Kontak: compliance@revenuecat.com. Tujuan: memverifikasi pembayaran langganan dan memeriksa status langganan. Data: pengenal akun, pengenal transaksi dan produk dari toko, informasi perangkat dan aplikasi. Kapan dan bagaimana: dikirim melalui jaringan saat membuka layar langganan dan saat membayar. Penyimpanan: sampai kontrak pengalihdayaan berakhir',
         '• OpenAI OpCo, LLC — Negara: Amerika Serikat (1455 Third Street, San Francisco, California 94158, USA). Kontak: dpo@openai.com. Tujuan: membuat laporan ringkasan. Data: judul, isi, emosi, dan tanggal catatan pada periode yang kamu mintakan laporannya. Kapan dan bagaimana: dikirim melalui jaringan pada saat kamu menekan tombol buat laporan. Penyimpanan: server operator tidak menyimpan isi catatan — isinya hanya ditahan di memori selama ringkasan dibuat lalu langsung dibuang. Penyedia AI menyimpannya paling lama 30 hari untuk pemantauan penyalahgunaan lalu menghapusnya, dan bahkan selama periode itu tidak menggunakannya untuk melatih model.',
         '⚠ Transfer ke luar negeri untuk laporan AI merupakan persetujuan tersendiri. Saat kamu pertama kali menggunakan fitur ini, kami menampilkan keterangan di atas di dalam aplikasi lalu meminta persetujuanmu; persetujuan ini terpisah dari persetujuan informasi sensitif pada bagian 2(e).',
         'Kamu dapat menolak transfer data pribadimu ke luar negeri. Untuk menolak transfer terkait iklan, matikan iklan yang dipersonalisasi sesuai bagian 7; transfer terkait pertanyaan tidak terjadi bila kamu tidak menggunakan “Hubungi kami”. Bila kamu tidak mengaktifkan pencadangan, tidak berlangganan, dan tidak membuat laporan, transfer yang berkaitan dengannya tidak terjadi, dan semua fitur lain termasuk menulis catatan tetap dapat kamu gunakan seperti biasa.',
+        "⚠ Pemeriksaan pembaruan adalah satu-satunya pengecualian. Ini terjadi setiap kali Anda membuka aplikasi, terlepas dari apakah Anda masuk atau berlangganan, dan tidak dapat dimatikan di dalam aplikasi. Yang dikirim adalah sistem operasi perangkat dan token acak, tanpa isi buku harian — tetapi kami nyatakan dengan jelas bahwa kalimat pada paragraf di atas (“jika Anda tidak menggunakannya, transfer terkait tidak terjadi”) tidak berlaku untuk butir ini.",
       ],
     },
     {
@@ -204,6 +209,7 @@ export const PRIVACY_ID: LegalDoc = {
         '• 2026-08-23 revisi — kedua pengumuman di atas telah dimasukkan ke dalam teks utama. Pemrosesan yang berkaitan dengan langganan bulanan, pencadangan/pemulihan, dan laporan ringkasan AI ditambahkan ke bagian 1, 2, 3, 4, 6, 8, 9, dan 10.',
         '• 2026-09-01 perubahan — pengumpulan pengidentifikasi perangkat untuk statistik penggunaan layanan (penghitungan pengguna aktif) ditambahkan pada butir 2, 3, dan 4, serta pemberitahuan verifikasi usia pada butir 2 diperluas.',
         '• 2026-09-02 perubahan — pada pasal 2 dijelaskan bahwa tanggal penggunaan dicatat tidak hanya saat aplikasi dibuka, tetapi juga saat Anda kembali ke aplikasi (paling cepat setiap lima menit), dan bahwa pencatatan dilakukan pada akun Anda, bukan identifikasi perangkat, jika Anda masuk.',
+        "• 2026-09-09 perubahan — mengungkapkan pada bagian 2 pemeriksaan pembaruan yang terjadi saat aplikasi dibuka (pengiriman sistem operasi perangkat dan token acak), dan menambahkan 650 Industries, Inc. ke penerima pada bagian 6.",
       ],
     },
   ],
@@ -329,9 +335,9 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
  */
 export const TERMS_ID: LegalDoc = {
   title: 'Ketentuan Penggunaan Jogak',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'Ketentuan ini mengatur hak, kewajiban, dan tanggung jawab antara Hwiseong Games (nama merek Vivace Games Studio, selanjutnya “operator”) dan pengguna, sehubungan dengan penggunaan aplikasi seluler “Jogak” (selanjutnya “layanan”) yang disediakan operator. Mohon dibaca sebelum kamu menggunakan layanan.',
   sections: [
@@ -428,6 +434,7 @@ export const TERMS_ID: LegalDoc = {
         'Fitur dasar seperti menulis, melihat, dan mencari catatan dapat digunakan tanpa koneksi internet.',
         'Membaca pengumuman, Hubungi kami, masuk, pembayaran, pencadangan dan pemulihan, serta laporan ringkasan AI memerlukan koneksi internet.',
         'Bila ruang penyimpanan perangkat pengguna tidak mencukupi atau sistem operasinya berada di luar rentang yang didukung, sebagian fitur dapat tidak berfungsi sebagaimana mestinya.',
+        "Saat dibuka, aplikasi otomatis memeriksa apakah ada versi baru dan, jika ada, mengunduhnya lalu menerapkannya mulai pembukaan berikutnya. Meski pemeriksaan gagal atau Anda tidak terhubung ke internet, aplikasi tetap berjalan dan fungsi dasar seperti menulis buku harian tidak terpengaruh.",
       ],
     },
     {
@@ -543,6 +550,7 @@ export const TERMS_ID: LegalDoc = {
         'Gugatan mengenai sengketa yang timbul antara operator dan pengguna tunduk pada yurisdiksi eksklusif pengadilan distrik yang wilayah hukumnya meliputi alamat pengguna pada saat gugatan diajukan, sesuai Pasal 36 Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik. Bila tidak ada alamat, gugatan tunduk pada yurisdiksi eksklusif pengadilan distrik yang wilayah hukumnya meliputi tempat tinggal pengguna; dan bila alamat atau tempat tinggal pengguna tidak jelas pada saat gugatan diajukan, pengadilan yang berwenang ditentukan sesuai Undang-Undang Hukum Acara Perdata.',
         'Versi bahasa Korea dari ketentuan ini adalah versi yang mengikat. Bila terjemahan dalam bahasa lain berbeda maknanya, versi bahasa Korea yang berlaku.',
         'Ketentuan penutup: Ketentuan ini mulai berlaku pada 17 Agustus 2026.',
+        "Ketentuan penutup: syarat dan ketentuan ini berlaku mulai 9 September 2026. (Penjelasan mengenai pemeriksaan pembaruan otomatis ditambahkan pada Pasal 10.)",
       ],
     },
   ],

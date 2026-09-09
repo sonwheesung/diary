@@ -20,9 +20,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_FR: LegalDoc = {
   title: 'Politique de confidentialité de Jogak',
-  sourceFingerprint: '4afb6156',
-  effective: '2026-09-02',
-  updated: '2026-09-02',
+  sourceFingerprint: '135c6fcd',
+  effective: '2026-09-09',
+  updated: '2026-09-09',
   intro:
     'Vivace Games Studio (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Par principe, Jogak conserve sur votre appareil les entrées de journal que vous écrivez ; celles-ci ne sont transmises à un serveur que dans deux cas : la sauvegarde que vous activez vous-même et les rapports de synthèse par IA que vous créez vous-même. Pour le reste, nous ne recueillons que le minimum d’informations.',
   sections: [
@@ -82,6 +82,9 @@ export const PRIVACY_FR: LegalDoc = {
         '※ Cette valeur ne permet pas de savoir qui vous êtes et n’est pas reliée au contenu de vos entrées.',
         '※ Si vous n’atteignez pas le seuil d’âge ci-dessus, cette valeur n’est ni créée ni transmise.',
         '※ La date d’utilisation est enregistrée au lancement de l’application et lorsque vous y revenez (au plus une fois toutes les cinq minutes). Si vous êtes connecté, elle est enregistrée sur votre compte plutôt que sur cet identifiant d’appareil, afin qu’une même personne ne soit pas comptée deux fois.',
+        "• Vérification des mises à jour — au lancement de l’application, le système d’exploitation de votre appareil et un jeton aléatoire sont envoyés au service de distribution de l’application (650 Industries, Inc.) afin de vérifier si une nouvelle version est disponible.",
+        "  — Base de la collecte : article 15(1)4 de la loi sur la protection des données personnelles (exécution du contrat, c’est-à-dire fournir l’application à jour)",
+        "※ Le contenu du journal n’est pas transmis. Cette vérification a lieu automatiquement dès l’ouverture de l’application et ne peut pas être désactivée depuis celle-ci — voir la section 6 pour le détail.",
       ],
     },
     {
@@ -130,10 +133,12 @@ export const PRIVACY_FR: LegalDoc = {
         '• Google LLC — Pays : États-Unis. Contact : https://support.google.com/policies/contact/general_privacy_form. Finalité : diffusion et mesure des publicités (AdMob), connexion au compte Google, traitement et vérification des paiements d’abonnement. Données : identifiant publicitaire, informations sur l’appareil et le réseau, lors de la connexion l’adresse e-mail et l’identifiant du compte, et informations de transaction de la boutique. Quand et comment : transmises par le réseau lors d’une demande de publicité, lors de la connexion et lors du paiement. Conservation : selon la politique de confidentialité de Google',
         '• Supabase Inc. — Pays : États-Unis (siège social). Contact : privacy@supabase.com. Finalité : stocker en base de données les informations de demandes et de comptes, et conserver la copie de sauvegarde chiffrée et l’état de l’abonnement. Données : celles des sections 2(a), 2(c) et 2(d). Quand et comment : transmises par le réseau lors de l’envoi d’une demande et lors d’une sauvegarde. Conservation : les durées de la section 4. ※ Le lieu physique de stockage est la République de Corée (région de Séoul), mais nous l’indiquons comme transfert hors du pays car la société exploitante est située hors de Corée.',
         '• Vercel Inc. — Pays : États-Unis. Contact : privacy@vercel.com. Finalité : exploiter le serveur qui reçoit les demandes ainsi que les serveurs de sauvegarde et d’IA. Données : celles de la section 2(a). Quand et comment : transmises par le réseau lors de l’envoi d’une demande. Conservation : jusqu’à la fin du contrat de sous-traitance. ※ La copie de sauvegarde chiffrée est envoyée directement au stockage sans passer par ce serveur.',
+        "• 650 Industries, Inc. (nom du service : Expo) — Pays : États-Unis (624 University Ave FL1, Palo Alto, CA 94301, USA). Contact : https://expo.dev/contact. Finalité : diffusion des mises à jour de l’application (EAS Update). Éléments : système d’exploitation de l’appareil, jeton aléatoire permettant de savoir si une mise à jour a été téléchargée, adresse IP, versions de l’application et de l’environnement d’exécution. Quand et comment : transmis par le réseau au lancement de l’application. Conservation : selon la politique de confidentialité du destinataire. ※ Le contenu du journal n’est pas transmis.",
         '• RevenueCat, Inc. — Pays : États-Unis. Contact : compliance@revenuecat.com. Finalité : vérifier les paiements d’abonnement et contrôler son état. Données : identifiant de compte, identifiants de transaction et de produit de la boutique, informations sur l’appareil et l’application. Quand et comment : transmises par le réseau à l’ouverture de l’écran d’abonnement et lors du paiement. Conservation : jusqu’à la fin du contrat de sous-traitance',
         '• OpenAI OpCo, LLC — Pays : États-Unis (1455 Third Street, San Francisco, California 94158, USA). Contact : dpo@openai.com. Finalité : générer des rapports de synthèse. Données : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport. Quand et comment : transmises par le réseau au moment où vous appuyez sur Créer un rapport. Conservation : le serveur de l’exploitant ne conserve pas le contenu du journal — il ne le garde en mémoire que le temps de produire la synthèse, puis le supprime aussitôt. Le fournisseur d’IA le conserve au maximum 30 jours à des fins de surveillance des abus puis le supprime, et même pendant cette période ne l’utilise pas pour entraîner ses modèles.',
         '⚠ Le transfert hors du pays pour les rapports par IA fait l’objet d’un consentement distinct. Lors de votre première utilisation de la fonctionnalité, nous vous présentons les informations ci-dessus dans l’application et recueillons votre consentement ; ce consentement est distinct du consentement relatif aux informations sensibles de la section 2(e).',
         'Vous pouvez refuser le transfert de vos données personnelles hors du pays. Pour refuser les transferts liés à la publicité, désactivez les publicités personnalisées selon la section 7 ; ceux liés aux demandes n’ont pas lieu si vous n’utilisez pas « Nous contacter ». Si vous n’activez pas la sauvegarde, ne vous abonnez pas et ne créez pas de rapport, les transferts correspondants n’ont pas lieu non plus, et toutes les autres fonctions, dont l’écriture d’entrées, restent disponibles.',
+        "⚠ La vérification des mises à jour est la seule exception. Elle a lieu à chaque lancement de l’application, que vous soyez connecté ou abonné ou non, et ne peut pas être désactivée depuis l’application. Sont envoyés le système d’exploitation de l’appareil et un jeton aléatoire, sans aucun contenu du journal — mais nous précisons clairement que la phrase du paragraphe précédent (« si vous ne les utilisez pas, ces transferts n’ont pas lieu ») ne s’applique pas à ce point.",
       ],
     },
     {
@@ -214,6 +219,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• 2026-08-23 modification — les deux modifications annoncées ci-dessus ont été intégrées au texte principal. Le traitement relatif à l’abonnement mensuel, à la sauvegarde/restauration et aux rapports de synthèse par IA a été ajouté aux sections 1, 2, 3, 4, 6, 8, 9 et 10.',
         '• 2026-09-01 modification — la collecte d’un identifiant d’appareil à des fins de statistiques d’utilisation du service (comptage des utilisateurs actifs) a été ajoutée aux articles 2, 3 et 4, et l’avis de vérification de l’âge de l’article 2 a été élargi.',
         '• 2026-09-02 modification — l’article 2 précise désormais que la date d’utilisation est enregistrée non seulement au lancement de l’application mais aussi lorsque vous y revenez (au plus une fois toutes les cinq minutes), et qu’elle est enregistrée sur votre compte plutôt que sur l’identifiant d’appareil lorsque vous êtes connecté.',
+        "• 2026-09-09 modification — la vérification des mises à jour effectuée au lancement de l’application (envoi du système d’exploitation de l’appareil et d’un jeton aléatoire) est indiquée à la section 2, et 650 Industries, Inc. est ajoutée aux destinataires de la section 6.",
       ],
     },
   ],
@@ -340,9 +346,9 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
  */
 export const TERMS_FR: LegalDoc = {
   title: 'Conditions d’utilisation de Jogak',
-  sourceFingerprint: 'd18f02f7',
-  effective: '2026-08-17',
-  updated: '2026-08-17',
+  sourceFingerprint: '7f77bfce',
+  effective: '2026-09-16',
+  updated: '2026-09-09',
   intro:
     'Les présentes conditions définissent les droits, obligations et responsabilités entre Hwiseong Games (marque : Vivace Games Studio, « l’exploitant ») et les utilisateurs, concernant l’utilisation de l’application mobile « Jogak » (« le service ») fournie par l’exploitant. Merci de les lire avant d’utiliser le service.',
   sections: [
@@ -439,6 +445,7 @@ export const TERMS_FR: LegalDoc = {
         'Les fonctionnalités de base, comme écrire, consulter et rechercher des entrées, s’utilisent sans connexion internet.',
         'La lecture des annonces, « Nous contacter », la connexion, le paiement, la sauvegarde et la restauration ainsi que les rapports de synthèse par IA nécessitent une connexion internet.',
         'Si l’espace de stockage de votre appareil est insuffisant ou si son système d’exploitation sort de la plage prise en charge, certaines fonctionnalités peuvent ne pas fonctionner correctement.',
+        "Au lancement, l’application vérifie automatiquement si une nouvelle version est disponible et, le cas échéant, la télécharge et l’applique à partir du lancement suivant. Même si la vérification échoue ou si vous n’êtes pas connecté à internet, l’application fonctionne normalement et les fonctions de base, comme l’écriture, ne sont pas affectées.",
       ],
     },
     {
@@ -554,6 +561,7 @@ export const TERMS_FR: LegalDoc = {
         'L’action relative à un litige survenu entre l’exploitant et un utilisateur relève, conformément à l’art. 36 de la loi sur la protection des consommateurs dans le commerce électronique, de la compétence exclusive du tribunal de district du domicile de l’utilisateur au moment de l’introduction de l’action. À défaut de domicile, elle relève de la compétence exclusive du tribunal de district de sa résidence ; et si, au moment de l’introduction de l’action, le domicile ou la résidence de l’utilisateur n’est pas clairement établi, la juridiction compétente est déterminée conformément à la loi sur la procédure civile.',
         'La version coréenne des présentes conditions fait foi. En cas de divergence de sens avec une traduction dans une autre langue, la version coréenne prévaut.',
         'Disposition finale : les présentes conditions entrent en vigueur le 17 août 2026.',
+        "Disposition finale : les présentes conditions entrent en vigueur le 9 septembre 2026. (Une information sur la vérification automatique des mises à jour a été ajoutée à l’article 10.)",
       ],
     },
   ],
