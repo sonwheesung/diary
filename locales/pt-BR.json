@@ -530,6 +530,7 @@
     "needMonthly": "Primeiro são necessários os relatórios mensais de {{period}}",
     "noEntries": "Nenhum registro com texto neste período",
     "gapConfirm": "Sem registros: {{days}}. Criar o relatório mesmo assim?",
+    "needEntry": "Você não tem nenhum registro nesta semana. Escreva ao menos um pedaço para criar o relatório.",
     "subGapConfirm": "{{period}} · Relatórios: {{count}}/{{total}}\n\nSe criar agora, o restante não será incluído e este relatório não pode ser criado de novo. Criar mesmo assim?",
     "disclaimer": "Escrito por IA. Pode conter erros e não é um diagnóstico nem um conselho.",
     "reportIssue": "Denunciar",

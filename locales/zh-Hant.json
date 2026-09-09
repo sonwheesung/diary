@@ -530,6 +530,7 @@
     "needMonthly": "需要先有 {{period}} 的每月報告",
     "noEntries": "這段期間沒有寫下內容的碎片",
     "gapConfirm": "{{days}}沒有碎片。仍要產生報告嗎？",
+    "needEntry": "這一週還沒有任何碎片。至少寫一片才能產生報告。",
     "subGapConfirm": "{{period}} · 報告 {{count}}/{{total}}\n\n現在產生的話，其餘的不會計入，而且這份報告無法重新產生。仍要產生嗎？",
     "disclaimer": "由 AI 撰寫的摘要。內容可能有誤，也不構成診斷或建議。",
     "reportIssue": "檢舉",

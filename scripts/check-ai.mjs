@@ -340,6 +340,33 @@ check('🔴 일요일만 쓰면 월~토 6일이 빠진다', () => {
   eq(gaps[5], '2026-08-08', '마지막 빠진 날은 토요일');
 });
 
+check('🔴 한 날도 안 쓰면 빠진 날 = 기간 전체 — 묻지 말고 막아야 하는 경우', () => {
+  const gaps = missingDays(WEEK, []);
+  eq(gaps.length, eachDay(WEEK).length, '빠진 날이 기간 전체와 같다');
+  /*
+   * 🔴 화면은 이 등호로 *"묻는다"* 와 *"막는다"* 를 가른다(`app/(tabs)/report.tsx`).
+   *   2026-09-09 이전에는 7일이 다 비어도 "그래도 만들까요?" 를 물었고, 누르면 서버가
+   *   `empty` 로 실패해 **묻고 나서 실패**했다. 요약할 것이 없는데 만들지 묻는 것은
+   *   선택지가 아니다. 사용자가 화면에서 잡았다.
+   */
+});
+
+check('🔴 gapConfirm 이 {{days}} 뒤에 날짜 단위를 붙이지 않는다', () => {
+  const ko = JSON.parse(readFileSync(new URL('../locales/ko.json', import.meta.url), 'utf8'));
+  /*
+   * 🔴 `formatWeekdayList()` 는 **긴 요일 이름**("일요일")을 넣는다. 템플릿이 `{{days}}일` 이면
+   *   *"일요일일에는"* 이 된다. 실제로 그렇게 나갔고 사용자가 화면에서 잡았다(2026-09-09).
+   *   ⚠ 짧은 이름을 쓰지 않는 이유는 `lib/format.ts` 주석에 있다 — *"수에 남긴 조각이 없어요"* 가 된다.
+   */
+  /*
+   * ⚠ **`에는` 같은 조사는 정상이다.** 처음엔 `[가-힣]` 로 넓게 잡았다가 멀쩡한 문장을
+   *   빨갛게 만들었다. 결함은 **날짜 단위**(`일`·`월`)를 붙인 것 하나였다 — 자리표시자가
+   *   숫자라고 가정한 흔적이고, 지금은 요일 이름이 들어간다.
+   */
+  eq(/\{\{days\}\}[일월]/.test(ko.report.gapConfirm), false, '{{days}} 바로 뒤에 날짜 단위가 붙어 있다');
+  eq(typeof ko.report.needEntry === 'string' && ko.report.needEntry.length > 0, true, 'needEntry 문자열');
+});
+
 check('🔴 수요일만 빠지면 하루만 나온다', () => {
   const written = eachDay(WEEK).filter((day) => day !== '2026-08-05');
   eq(missingDays(WEEK, written).length, 1, '빠진 날 수');

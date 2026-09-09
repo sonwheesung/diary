@@ -530,6 +530,7 @@
     "needMonthly": "需要先有 {{period}} 的每月报告",
     "noEntries": "这段时间没有写下内容的碎片",
     "gapConfirm": "{{days}}没有碎片。仍要生成报告吗？",
+    "needEntry": "这一周还没有任何碎片。至少写一片才能生成报告。",
     "subGapConfirm": "{{period}} · 报告 {{count}}/{{total}}\n\n现在生成的话，其余的不会计入，而且这份报告无法重新生成。仍要生成吗？",
     "disclaimer": "由 AI 撰写的摘要。内容可能有误，也不构成诊断或建议。",
     "reportIssue": "举报",

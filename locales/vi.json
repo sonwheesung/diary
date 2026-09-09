@@ -530,6 +530,7 @@
     "needMonthly": "Cần có báo cáo tháng của {{period}} trước",
     "noEntries": "Không có mảnh nào có nội dung trong khoảng thời gian này",
     "gapConfirm": "Không có mảnh nào: {{days}}. Vẫn tạo báo cáo chứ?",
+    "needEntry": "Tuần này bạn chưa có mảnh nào. Hãy viết ít nhất một mảnh để tạo báo cáo.",
     "subGapConfirm": "{{period}} · Báo cáo thành phần {{count}}/{{total}}\n\nNếu tạo bây giờ, những phần còn lại sẽ không được đưa vào, và bạn cũng không thể tạo lại báo cáo này. Vẫn tạo chứ?",
     "disclaimer": "Do AI viết. Nội dung có thể không chính xác và không phải là chẩn đoán hay lời khuyên.",
     "reportIssue": "Báo cáo vi phạm",

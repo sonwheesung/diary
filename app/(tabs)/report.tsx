@@ -137,8 +137,19 @@ export default function ReportScreen() {
      * ⚠ 주간에만. 월간·연간은 하위 리포트가 입력이라 "빠진 날"이 없다.
      */
     if (kind === 'weekly') {
-      const gaps = await weeklyGaps(periodKey).catch(() => [] as string[]);
-      if (gaps.length > 0 && !(await confirmGaps(gaps, t))) {
+      const gaps = await weeklyGaps(periodKey).catch(() => ({ missing: [] as string[], total: 0 }));
+      /*
+       * 🔴 **한 날도 안 썼으면 묻지 않고 막는다**(2026-09-09 사용자 지적).
+       *   그전엔 7일이 다 비어도 *"그래도 만들까요?"* 를 물었고, [만들기]를 누르면 서버가
+       *   `empty`로 실패해 *"그 기간에는 쓴 조각이 없어요"* 가 그때서야 떴다.
+       *   **묻고 나서 실패하는 것**이라, 무엇을 해야 하는지도 안 알려준다.
+       *   요약할 것이 없는데 만들지 묻는 것은 선택지를 주는 것이 아니다.
+       */
+      if (gaps.total > 0 && gaps.missing.length === gaps.total) {
+        Alert.alert(t('report.title'), t('report.needEntry'));
+        return;
+      }
+      if (gaps.missing.length > 0 && !(await confirmGaps(gaps.missing, t))) {
         return;
       }
     } else {

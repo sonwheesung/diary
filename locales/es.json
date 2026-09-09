@@ -530,6 +530,7 @@
     "needMonthly": "Primero hacen falta los informes mensuales de {{period}}",
     "noEntries": "No hay entradas con texto en este periodo",
     "gapConfirm": "Sin entradas: {{days}}. ¿Crear el informe de todos modos?",
+    "needEntry": "No tienes ninguna entrada esta semana. Escribe al menos un trozo para crear el informe.",
     "subGapConfirm": "{{period}} · Informes: {{count}}/{{total}}\n\nSi lo creas ahora, el resto no se incluirá y este informe no se puede volver a crear. ¿Crearlo de todos modos?",
     "disclaimer": "Escrito por IA. Puede contener errores y no es un diagnóstico ni un consejo.",
     "reportIssue": "Denunciar",

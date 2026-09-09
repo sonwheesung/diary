@@ -19,6 +19,7 @@ import {
   keyRange,
   lastMonthKey,
   lastWeekKey,
+  eachDay,
   lastYearKey,
   missingDays,
   monthKeyRange,
@@ -495,21 +496,26 @@ export async function canCreate(
  * ⚠ **주간에만 쓴다.** 월간·연간은 하위 리포트를 입력으로 받으므로 "빠진 날"이라는 개념이
  *   없고, 빠진 입력은 `need-weekly`·`need-monthly`가 이미 막는다.
  *
- * ⚠ 빈 배열은 두 가지 뜻이다 — 7일 다 썼거나, 키가 깨졌거나. 후자는 `canCreate`가
+ * ⚠ `missing`이 비면 두 가지 뜻이다. 7일 다 썼거나, 키가 깨졌거나. 후자는 `canCreate`가
  *   `error`로 이미 막으므로 여기서는 "묻지 않는다"로 수렴해도 안전하다.
+ *
+ * 🔴 **`total`을 함께 돌려준다**(2026-09-09). 부르는 쪽이 *"한 날도 안 썼는가"* 를 알아야 하는데
+ *   `missing.length === 7`로 세면 기간 길이를 두 곳에서 가정하게 된다. `subGaps()`와 같은 모양이라
+ *   부르는 쪽의 분기도 한 벌로 읽힌다.
  */
 export async function weeklyGaps(
   chosenPeriodKey?: string,
   now: Date = new Date(),
-): Promise<string[]> {
+): Promise<{ missing: string[]; total: number }> {
   const range = keyRange(chosenPeriodKey ?? targetPeriodKey('weekly', now));
-  if (range === null) return [];
+  if (range === null) return { missing: [], total: 0 };
   const diaries = await listDiariesBetween(range.from, range.to);
   // ⚠ **본문이 있는 날만 "쓴 날"이다**(§10.2). 사진만·제목만 있는 날은 빠진 날에 들어간다
-  return missingDays(
+  const missing = missingDays(
     range,
     diaries.filter((diary) => hasBody(diary.plainText)).map((diary) => diary.entryDate),
   );
+  return { missing, total: eachDay(range).length };
 }
 
 /** 기간 키를 화면이 쓸 범위로. 세 종류를 한 곳에서 편다 */

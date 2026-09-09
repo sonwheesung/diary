@@ -530,6 +530,7 @@
     "needMonthly": "Monthly reports for {{period}} are needed first",
     "noEntries": "No written entries in this period",
     "gapConfirm": "No entries on {{days}}. Create the report anyway?",
+    "needEntry": "You have no entries this week. Write at least one piece to create a report.",
     "subGapConfirm": "{{period}} · Reports: {{count}}/{{total}}\n\nIf you create it now, the rest won't be included, and this report can't be created again. Create it anyway?",
     "disclaimer": "Written by AI. It may be inaccurate, and it is not a diagnosis or advice.",
     "reportIssue": "Report an issue",

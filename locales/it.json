@@ -530,6 +530,7 @@
     "needMonthly": "Servono prima i resoconti mensili di {{period}}",
     "noEntries": "Nessuna voce con testo in questo periodo",
     "gapConfirm": "Nessuna voce: {{days}}. Creare comunque il resoconto?",
+    "needEntry": "Non hai nessuna voce questa settimana. Scrivi almeno un pezzo per creare il resoconto.",
     "subGapConfirm": "{{period}} · Resoconti raccolti: {{count}}/{{total}}\n\nCreandolo ora, gli altri non verranno inclusi e questo resoconto non si potrà rifare. Crearlo comunque?",
     "disclaimer": "Scritto da un'IA. Può contenere errori e non è una diagnosi né un consiglio.",
     "reportIssue": "Segnala",

@@ -530,6 +530,7 @@
     "needMonthly": "Önce {{period}} aylık raporları gerekiyor",
     "noEntries": "Bu dönemde metin içeren kayıt yok",
     "gapConfirm": "Kayıt yok: {{days}}. Rapor yine de oluşturulsun mu?",
+    "needEntry": "Bu hafta hiç kaydınız yok. Rapor oluşturmak için en az bir parça yazın.",
     "subGapConfirm": "{{period}} · Alt rapor {{count}}/{{total}}\n\nŞimdi oluşturursan kalanlar bu rapora yansımaz ve bu rapor bir daha oluşturulamaz. Yine de oluşturulsun mu?",
     "disclaimer": "Bir yapay zekâ tarafından yazıldı. Yanlış olabilir; teşhis ya da tavsiye değildir.",
     "reportIssue": "Bildir",

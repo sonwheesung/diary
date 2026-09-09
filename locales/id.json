@@ -530,6 +530,7 @@
     "needMonthly": "Perlu laporan bulanan {{period}} terlebih dahulu",
     "noEntries": "Tidak ada catatan berisi teks pada periode ini",
     "gapConfirm": "Tidak ada catatan: {{days}}. Tetap buat laporan?",
+    "needEntry": "Anda belum punya catatan minggu ini. Tulis setidaknya satu keping untuk membuat laporan.",
     "subGapConfirm": "{{period}} · Laporan terkumpul: {{count}}/{{total}}\n\nJika dibuat sekarang, sisanya tidak akan ikut dan laporan ini tidak bisa dibuat ulang. Tetap buat?",
     "disclaimer": "Ditulis oleh AI. Bisa saja keliru, dan ini bukan diagnosis atau saran.",
     "reportIssue": "Laporkan masalah",

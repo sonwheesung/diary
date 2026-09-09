@@ -530,6 +530,7 @@
     "needMonthly": "Les bilans mensuels de {{period}} sont nécessaires d'abord",
     "noEntries": "Aucune entrée avec du texte sur cette période",
     "gapConfirm": "Aucune entrée : {{days}}. Créer quand même le bilan ?",
+    "needEntry": "Vous n'avez aucune entrée cette semaine. Écrivez au moins un morceau pour créer le bilan.",
     "subGapConfirm": "{{period}} · Bilans : {{count}}/{{total}}\n\nSi vous le créez maintenant, le reste ne sera pas pris en compte, et ce bilan ne pourra pas être recréé. Le créer quand même ?",
     "disclaimer": "Rédigé par une IA. Le texte peut être inexact et ne constitue ni un diagnostic ni un conseil.",
     "reportIssue": "Signaler",

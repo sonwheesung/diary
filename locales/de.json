@@ -530,6 +530,7 @@
     "needMonthly": "Dafür braucht es zuerst die Monatsberichte von {{period}}",
     "noEntries": "In diesem Zeitraum gibt es keine Einträge mit Text",
     "gapConfirm": "Keine Einträge: {{days}}. Bericht trotzdem erstellen?",
+    "needEntry": "Du hast diese Woche keine Einträge. Schreibe mindestens ein Stück, um einen Bericht zu erstellen.",
     "subGapConfirm": "{{period}} · Berichte: {{count}}/{{total}}\n\nWenn du ihn jetzt erstellst, fließt der Rest nicht ein, und dieser Bericht lässt sich nicht noch einmal erstellen. Trotzdem erstellen?",
     "disclaimer": "Von einer KI verfasst. Der Text kann falsch sein und ist weder Diagnose noch Ratschlag.",
     "reportIssue": "Melden",
