@@ -230,7 +230,7 @@ export default function SubscribeScreen() {
           hitSlop={8}
           style={styles.consentBack}
         >
-          <Text style={styles.link}>{t('subscribe.consentTerms')}</Text>
+          <Text style={styles.linkCenter}>{t('subscribe.consentTerms')}</Text>
         </Pressable>
 
         <Button
@@ -247,7 +247,7 @@ export default function SubscribeScreen() {
           hitSlop={8}
           style={styles.consentBack}
         >
-          <Text style={styles.link}>{t('common.cancel')}</Text>
+          <Text style={styles.linkCenter}>{t('common.cancel')}</Text>
         </Pressable>
       </Screen>
     );
@@ -306,6 +306,8 @@ export default function SubscribeScreen() {
             accessibilityRole="link"
             onPress={() => void Linking.openURL(PLAY_SUBSCRIPTIONS)}
             hitSlop={8}
+            /* 상자 폭 전체가 눌리면 글자에서 먼 곳을 눌러도 Play 가 열린다 */
+            style={styles.activeManage}
           >
             <Text style={styles.link}>{t('subscribe.managePlay')}</Text>
           </Pressable>
@@ -358,7 +360,7 @@ export default function SubscribeScreen() {
       </View>
 
       <Pressable accessibilityRole="button" onPress={() => void doRestore()} hitSlop={8}>
-        <Text style={styles.link}>{t('subscribe.restore')}</Text>
+        <Text style={styles.linkCenter}>{t('subscribe.restore')}</Text>
       </Pressable>
     </Screen>
   );
@@ -469,6 +471,7 @@ const createStyles = (colors: Palette) =>
       backgroundColor: colors.accentSoft,
     },
     activeTitle: { ...typography.label, color: colors.accent },
+    activeManage: { alignSelf: 'flex-start' },
     consentTitle: { ...typography.title, color: colors.text, marginBottom: spacing.lg },
     consentBox: {
       backgroundColor: colors.surface,
@@ -512,5 +515,11 @@ const createStyles = (colors: Palette) =>
     legal: { gap: spacing.xs, marginTop: spacing.md },
     fine: { ...typography.caption, color: colors.textMuted, lineHeight: 18 },
     subtle: { ...typography.caption, color: colors.textMuted, lineHeight: 19 },
-    link: { ...typography.caption, color: colors.accent, textAlign: 'center' },
+    /*
+     * 🔴 **정렬은 스타일이 아니라 배치의 성질이다.** 정렬을 공유 스타일에 넣으면 다른 배치에
+     *   재사용하는 순간 어긋난다 — 2026-09-10 에 `이용 중` 카드가 그렇게 어긋났다(제목은 왼쪽,
+     *   링크만 가운데). 그래서 이름에 정렬을 적는다: 폭 전체를 쓰는 단독 링크만 `linkCenter` 다.
+     */
+    linkCenter: { ...typography.caption, color: colors.accent, textAlign: 'center' },
+    link: { ...typography.caption, color: colors.accent },
   });
