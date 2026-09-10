@@ -9,6 +9,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
+import { useOnce } from '@/hooks/use-once';
 import { isReleaseEnvelopeVersion } from '@/features/backup/api/package';
 import { enableBackup, getBackupState, markCodeConfirmed } from '@/features/backup/api/backup-state';
 import type { BackupState } from '@/features/backup/api/backup-state';
@@ -75,14 +76,14 @@ export default function BackupScreen() {
    *   상태이고, 켜진 화면이 그 경고를 계속 띄운다. 코드를 확인해야만 켜지게 만들면
    *   [나중에 하기] 가 켜기를 취소하는 버튼이 되는데 라벨은 그렇게 안 읽힌다.
    */
-  const enable = async () => {
+  const enable = useOnce(async () => {
     const keys = await createBackupSecret();
     await getBackupState(keys.vaultId);
     await enableBackup(keys.vaultId);
     setCode(await readRecoveryCode());
-  };
+  });
 
-  const backupNow = async () => {
+  const backupNow = useOnce(async () => {
     setProgress({ ratio: 0, phase: 'building' });
     const result = await runBackup(setProgress);
     setProgress(null);
@@ -100,7 +101,7 @@ export default function BackupScreen() {
     }
     await load();
     Alert.alert(t('backup.doneTitle'), t('backup.doneBody', { count: result.partCount }));
-  };
+  });
 
   const header = (
     <View style={styles.header}>

@@ -15,6 +15,7 @@ import {
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
+import { useOnce } from '@/hooks/use-once';
 import { adoptBackupSecret, loadBackupKeys } from '@/features/backup/api/key-store';
 import type { BackupKeys } from '@/features/backup/api/key-store';
 import { diaryDatesFor } from '@/features/backup/api/manifest-builder';
@@ -66,16 +67,16 @@ export default function BackupRestoreScreen() {
   const [ratio, setRatio] = useState(0);
 
   /** 이 기기에 이미 비밀이 있으면 코드를 다시 묻지 않는다 */
-  const restoreFromThisDevice = async () => {
+  const restoreFromThisDevice = useOnce(async () => {
     const keys = await loadBackupKeys();
     if (keys === null) {
       setCodeError(t('backup.restoreNoLocalKey'));
       return;
     }
     await load(keys);
-  };
+  });
 
-  const submitCode = async () => {
+  const submitCode = useOnce(async () => {
     let keys: BackupKeys;
     try {
       keys = await adoptBackupSecret(decodeRecoveryCode(input));
@@ -86,7 +87,7 @@ export default function BackupRestoreScreen() {
       return;
     }
     await load(keys);
-  };
+  });
 
   const load = async (keys: BackupKeys) => {
     setStep({ kind: 'loading' });
@@ -102,7 +103,7 @@ export default function BackupRestoreScreen() {
     setStep({ kind: 'confirm', keys, manifest: result.manifest, seq: result.seq, diff, dates });
   };
 
-  const apply = async (current: Extract<Step, { kind: 'confirm' }>) => {
+  const apply = useOnce(async (current: Extract<Step, { kind: 'confirm' }>) => {
     setStep({ kind: 'applying' });
     try {
       await applyRestore(current.manifest, current.keys.vaultId, current.seq);
@@ -161,7 +162,7 @@ export default function BackupRestoreScreen() {
       //   화면들은 포커스를 잃은 적이 없어 스스로 다시 읽지 않는다.
       { text: t('common.confirm'), onPress: () => router.replace('/') },
     ]);
-  };
+  });
 
   const header = (
     <View style={styles.header}>

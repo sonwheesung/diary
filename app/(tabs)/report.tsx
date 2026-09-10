@@ -8,6 +8,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
+import { useOnce } from '@/hooks/use-once';
 import { AdBanner } from '@/features/ads/components/AdBanner';
 import { CreatingOverlay } from '@/features/ai/components/CreatingOverlay';
 import { listReports, type Report } from '@/features/ai/api/report-repository';
@@ -114,7 +115,13 @@ export default function ReportScreen() {
     }, [kind, load]),
   );
 
-  const onCreate = async () => {
+  /*
+   * 🔴 **연타를 여기서 막는다**(`hooks/use-once.ts`). 아래 첫 줄이 `await hasAiConsent()` 라
+   *   `setCreating(true)` 까지 **버튼이 살아 있다** — 그 창에 두 번 누르면 요청이 둘 나가고,
+   *   서버는 캡을 *읽고 나서* 모델을 부르므로 **둘 다 통과해 돈이 두 번** 나간다
+   *   (`docs/AI_REPORT_SYSTEM.md` §5.4). `disabled={creating}` 은 그 창을 못 덮는다.
+   */
+  const onCreate = useOnce(async () => {
     /*
      * 🔴 **동의를 서버가 아니라 여기서 막는다.** 서버가 막으려면 동의 사실을 서버가
      *   알아야 하고, 그러면 "누가 언제 무엇에 동의했는지"가 서버에 하나 더 쌓인다.
@@ -187,7 +194,7 @@ export default function ReportScreen() {
     } finally {
       setCreating(false);
     }
-  };
+  });
 
   const header = (
     <View style={styles.header}>

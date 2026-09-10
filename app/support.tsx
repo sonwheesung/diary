@@ -12,6 +12,7 @@ import { ActivityIndicator, Alert, Linking, Pressable, StyleSheet, Text, View } 
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
+import { useOnce } from '@/hooks/use-once';
 import { TextField } from '@/components/TextField';
 import { getLastSignInErrorCode, useSupportAuth } from '@/features/support/auth-gate';
 import type { SignInOutcome } from '@/features/support/auth-gate';
@@ -88,7 +89,7 @@ export default function SupportScreen() {
   const trimmedLength = content.trim().length;
   const canSubmit = trimmedLength >= CONTENT_MIN && !sending;
 
-  const submit = async () => {
+  const submit = useOnce(async () => {
     if (!canSubmit) {
       return;
     }
@@ -112,7 +113,7 @@ export default function SupportScreen() {
     } finally {
       setSending(false);
     }
-  };
+  });
 
   /**
    * 로그인 결과 안내.
@@ -124,7 +125,7 @@ export default function SupportScreen() {
    * "보내지 못했어요"가 뜬다 — 아무것도 보낸 적 없는 사용자에게는 무슨 말인지 알 수 없다.
    * 보낼 것이 없는 사유(error·unauthorized)는 로그인 문구로 바꿔 말한다.
    */
-  const handleSignIn = async () => {
+  const handleSignIn = useOnce(async () => {
     const outcome: SignInOutcome = await signIn();
     /*
      * `'age-blocked'`도 조용히 돌아간다 — **연령 게이트가 이미 그 자리에서 설명했다.**
@@ -147,7 +148,7 @@ export default function SupportScreen() {
       return;
     }
     Alert.alert(t(FAIL_KEYS[outcome], { min: CONTENT_MIN }));
-  };
+  });
 
   const confirmSignOut = () => {
     Alert.alert(t('support.signOutTitle'), t('support.signOutBody'), [

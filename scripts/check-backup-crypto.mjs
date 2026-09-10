@@ -624,11 +624,22 @@ check('전체 경로 · countParts가 실제 파트 수와 일치한다', () => 
 //   억지 가드를 만들지 않고 그 경계를 여기 적어 둔다.
 
 const backupScreen = readFileSync(new URL('../app/backup.tsx', import.meta.url), 'utf8');
-const enableAt = backupScreen.indexOf('const enable = async () =>');
+/*
+ * ⚠ **`useOnce(` 로 감싸도 찾아야 한다**(2026-09-10). 연타 가드가 들어오며
+ *   `const enable = async () =>` 가 `const enable = useOnce(async () =>` 로 바뀌었고,
+ *   글자로 고정돼 있던 앵커가 못 찾아 **배선 검사 셋이 한꺼번에 빨개졌다.**
+ *   🔴 소스를 읽는 가드는 **읽는 모양이 바뀌는 날** 이렇게 깨진다 — 고칠 곳은 코드가 아니라 앵커다.
+ */
+const ENABLE_HEADS = ['const enable = useOnce(async () =>', 'const enable = async () =>'];
+const enableAt = ENABLE_HEADS.map((h) => backupScreen.indexOf(h)).find((at) => at >= 0) ?? -1;
 check('배선 · app/backup.tsx 에 enable() 이 있다', () => {
   eq(enableAt >= 0, true, 'enable() 이 사라졌다 — 켜기 경로의 이름이 바뀌었으면 이 검사도 고친다');
 });
-const enableBody = backupScreen.slice(enableAt, backupScreen.indexOf('\n  };', enableAt));
+/* 감싸개가 있으면 닫는 모양이 `};` 가 아니라 `});` 다. 먼저 오는 쪽까지 자른다 */
+const enableEnds = ['\n  };', '\n  });']
+  .map((tail) => backupScreen.indexOf(tail, enableAt))
+  .filter((at) => at >= 0);
+const enableBody = backupScreen.slice(enableAt, Math.min(...enableEnds));
 
 check('배선 · 🔴 켜기 버튼이 enableBackup() 을 부른다', () => {
   eq(

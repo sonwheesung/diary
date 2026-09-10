@@ -8,6 +8,7 @@ import type { PurchasesPackage } from 'react-native-purchases';
 
 import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
+import { useOnce } from '@/hooks/use-once';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import {
   fetchPlans,
@@ -98,7 +99,7 @@ export default function SubscribeScreen() {
     setConsent({ pkg, terms });
   };
 
-  const buy = async (pkg: PurchasesPackage) => {
+  const buy = useOnce(async (pkg: PurchasesPackage) => {
     setConsent(null);
     if (!identified) {
       // 여기 오면 안 되지만, 오면 결제를 막는다 — 익명 결제는 되돌릴 수 없다.
@@ -124,9 +125,9 @@ export default function SubscribeScreen() {
     Alert.alert(t('subscribe.doneTitle'), t('subscribe.doneBody'), [
       { text: t('common.confirm'), onPress: () => router.back() },
     ]);
-  };
+  });
 
-  const doRestore = async () => {
+  const doRestore = useOnce(async () => {
     /*
      * 🔴 `buy()`와 **같은 게이트**를 건다. `Purchases.logIn(subject)`이 실패한 상태에서
      *   복원하면 익명 appUserID로 복원되고, 웹훅 이력에 `anonymous-app-user-id`가 찍힌다
@@ -144,7 +145,7 @@ export default function SubscribeScreen() {
       result.kind === 'ok' ? t('subscribe.restoredTitle') : t('subscribe.restoreNoneTitle'),
       result.kind === 'ok' ? t('subscribe.restoredBody') : t('subscribe.restoreNoneBody'),
     );
-  };
+  });
 
   const header = (
     <View style={styles.header}>
