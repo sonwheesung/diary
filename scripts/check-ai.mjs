@@ -846,9 +846,59 @@ if (!vendorContactReady()) {
   const client = read('../features/ai/api/client.ts');
 
   /** `return ok({ ... })` 블록 안의 최상위 키 */
-  const okStart = route.indexOf('return ok({');
-  const okBlock = route.slice(okStart, route.indexOf('});', okStart));
-  const sent = [...okBlock.matchAll(/\n +(\w+):/g)].map((m) => m[1]);
+  /*
+   * 🔴 **첫 블록만 보지 않는다**(2026-09-10 정정). 되찾기 `GET` 이 생기면서 이 파일의
+   *   성공 응답이 **둘**이 됐는데, `indexOf` 하나만 보던 옛 코드는 앞쪽 블록만 읽는다 —
+   *   그러면 뒤쪽의 키는 아무도 안 본다. 게다가 새 블록이 축약 표기(`metrics,`)를 쓰면
+   *   그 키의 검사가 **조용히 사라진다** — 실제로 119 → 116 이 됐다.
+   *   ⚠ 대조군(`>= 5`)이 **딱 하나 차이로 살아남아** 그 사라짐을 못 막았다.
+   *     대조군은 *"세는 방법이 통째로 죽었나"* 는 잡지만 *"몇 개가 빠졌나"* 는 못 잡는다.
+   */
+  /*
+   * 🔴 **문장으로 시작하는 블록만 센다.** 이 파일은 자기 자신을 설명하는 주석에도
+   *   같은 문자열을 적어서, 단순 `indexOf` 로 세면 **주석이 블록으로 잡힌다**
+   *   (2026-09-10 에 실제로 3개로 세어 이 대조군이 빨개졌다). 줄머리로 앵커를 건다.
+   */
+  const starts = [...route.matchAll(/^ *return ok\(\{/gm)].map((m) => m.index);
+
+  check('🔴 성공 응답 블록이 둘 다 있다 — 대조군', () => {
+    /* POST(생성) · GET(되찾기). 하나로 줄면 구조가 바뀐 것이니 이 가드를 다시 본다 */
+    assert(starts.length === 2, `성공 응답 블록이 ${starts.length}개다 — 2개(POST·GET)를 기대했다`);
+  });
+
+  /*
+   * 🔴 **두 블록의 키 집합이 같아야 한다.** 위 루프가 둘을 합쳐 보기 때문에, 한쪽에서만
+   *   키가 빠지면 합집합은 그대로라 **아무도 안 운다** — 2026-09-10 변이 테스트에서
+   *   `GET` 의 `metrics`·`topics` 를 지웠는데 개수가 안 줄어 그 구멍이 드러났다.
+   *   라우트 주석이 *'POST 와 키가 같아야 한다'* 고 약속했으니 그 약속을 여기서 잰다.
+   */
+  check('🔴 되찾기 GET 과 생성 POST 의 응답 키가 같다', () => {
+    const keysOf = (at) => {
+      const block = route.slice(at, route.indexOf('});', at));
+      return [...block.matchAll(/^ +(\w+):/gm)].map((m) => m[1]).sort().join(',');
+    };
+    const [first, second] = starts.map(keysOf);
+    assert(
+      first === second,
+      `응답 키가 갈렸다 — 앞 블록 [${first}] · 뒤 블록 [${second}]. ` +
+        '앱은 한 파서로 둘을 읽으므로 한쪽만 늘거나 줄면 그 필드가 조용히 빈다',
+    );
+  });
+
+  /*
+   * 🔴 **첫 블록만 보지 않는다**(2026-09-10 정정). 되찾기 `GET` 이 생기며 성공 응답이 둘이 됐는데,
+   *   옛 코드는 앞쪽 하나만 읽어 뒤쪽 키를 아무도 안 봤다. 게다가 새 블록이 축약 표기(`metrics,`)를
+   *   쓰는 순간 그 키의 검사가 **조용히 사라진다** — 실제로 119 → 116 이 됐다.
+   *   ⚠ 대조군(`>= 5`)이 **딱 하나 차이로 살아남아** 그 사라짐을 못 막았다. 대조군은
+   *     *'세는 방법이 통째로 죽었나'* 는 잡지만 *'몇 개가 빠졌나'* 는 못 잡는다.
+   */
+  const sent = [];
+  for (const at of starts) {
+    const block = route.slice(at, route.indexOf('});', at));
+    for (const m of block.matchAll(/^ +(\w+):/gm)) {
+      if (!sent.includes(m[1])) sent.push(m[1]);
+    }
+  }
 
   check('🔴 서버 성공 응답 키를 실제로 찾았다 — 대조군', () => {
     /*

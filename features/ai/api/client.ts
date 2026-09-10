@@ -190,6 +190,17 @@ export async function requestReport(
     };
   }
 
+  return parseReportPayload(json);
+}
+
+/**
+ * 성공 응답(JSON)을 리포트로 읽는다.
+ *
+ * 🔴 **`POST` 와 `GET` 이 같은 함수를 쓴다.** 되찾기 라우트(2026-09-10)가 생기면서 읽는 곳이
+ *   둘이 됐는데, 각자 파싱하면 언젠가 한쪽만 새 필드를 읽는다 — 아래 `metrics` 주석이
+ *   정확히 그 사고를 적어놨다(선언은 있고 읽는 줄이 없어 지표가 영영 저장되지 않았다).
+ */
+function parseReportPayload(json: Record<string, unknown>): AiResult<AiReportResponse> {
   const summary = typeof json.summary === 'string' ? json.summary : null;
   if (summary === null || summary.trim().length === 0) {
     // 200인데 본문이 비어 오는 것은 거부의 전형적인 모양이다. 캡을 소모한 것으로 보지 않는다.
@@ -224,6 +235,68 @@ export async function requestReport(
     model: typeof json.model === 'string' ? json.model : 'unknown',
     promptVer: typeof json.promptVer === 'number' ? json.promptVer : 0,
   };
+}
+
+/**
+ * 서버 왕복이지만 **모델을 안 부른다.** DB 한 줄을 읽는 것이라 생성 타임아웃(310초)과
+ * 같은 값을 쓸 이유가 없다 — 회수가 오래 끌면 사용자는 그냥 실패로 읽는다.
+ */
+const FETCH_TIMEOUT_MS = 15_000;
+
+/**
+ * **이미 만든 리포트를 서버에서 되찾는다** (`docs/AI_REPORT_SYSTEM.md` §5.3).
+ *
+ * 🔴 생성은 동기 왕복이고 저장은 **응답을 받은 뒤** 앱이 한다. 그 사이에 앱이 죽으면
+ *   캡은 소모됐는데 로컬에 아무것도 없다 — 캡이 평생 1회라 **그 기간을 영영 잃었다.**
+ *   서버에는 90일 남아 있었고 **가져올 길만 없었다.**
+ *
+ * 🟢 **모델을 안 부른다.** 캡도 잠금도 안 건드리고 원가가 0이다.
+ *
+ * ⚠ **실패를 사유로 돌려주지 않고 `null` 로 삼킨다.** 이건 사용자가 시킨 일이 아니라
+ *   우리가 대신 시도하는 회수라, 여기서 새 실패 문구를 만들면 화면이 *"되찾기 실패"* 라는
+ *   **사용자가 시작한 적 없는 실패**를 말하게 된다. 못 찾으면 원래 하려던 말을 하면 된다.
+ */
+export async function fetchStoredReport(
+  kind: ReportKind,
+  periodKey: string,
+): Promise<AiReportResponse | null> {
+  if (BACKUP_SERVER_URL.length === 0) {
+    return null;
+  }
+  const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
+  if (token === null) {
+    return null;
+  }
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  let res: Response;
+  try {
+    const query = `kind=${encodeURIComponent(kind)}&periodKey=${encodeURIComponent(periodKey)}`;
+    res = await fetch(`${BACKUP_SERVER_URL}/api/v1/ai/report?${query}`, {
+      method: 'GET',
+      headers: { authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    });
+  } catch {
+    // 🔴 여기서도 에러 객체를 로깅하지 않는다(CLAUDE.md §5.1-5)
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+
+  if (!res.ok) {
+    // 404(`not-found`)가 정상 경로다 — 90일이 지났거나 애초에 저장에 닿기 전에 끊겼다
+    return null;
+  }
+  let json: Record<string, unknown>;
+  try {
+    json = (await res.json()) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const parsed = parseReportPayload(json);
+  return parsed.ok ? parsed : null;
 }
 
 /**

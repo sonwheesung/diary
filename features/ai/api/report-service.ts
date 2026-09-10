@@ -9,7 +9,13 @@ import {
   saveReport,
   type ReportMetrics,
 } from '@/features/ai/api/report-repository';
-import { fetchRegenerablePeriods, requestReport, type AiFail } from '@/features/ai/api/client';
+import {
+  fetchRegenerablePeriods,
+  fetchStoredReport,
+  requestReport,
+  type AiFail,
+  type AiReportResponse,
+} from '@/features/ai/api/client';
 import {
   creatableMonthKeys,
   creatableWeekKeys,
@@ -61,7 +67,14 @@ export type CreateFail =
   | 'too-early';
 
 export type CreateResult =
-  | { ok: true; reportId: string }
+  /**
+   * `recovered` — 모델을 부른 것이 아니라 **서버에 있던 것을 되찾았다**(§5.3, 2026-09-10).
+   *
+   * ⚠ 화면은 지금 이 값을 **안 쓴다.** 사용자에게는 리포트가 생긴 것이 전부이고,
+   *   *"복구했어요"* 는 우리 사정이다 — 되찾기가 정상 경로가 되면 안 된다.
+   *   진단과 검사가 성공 두 가지를 가를 수 있게 남겨 둔다.
+   */
+  | { ok: true; reportId: string; recovered?: boolean }
   | { ok: false; reason: CreateFail; retryAt?: number };
 
 /**
@@ -376,8 +389,10 @@ export async function createReport(
    * ⚠ **재시도까지 막지는 못한다.** 이 함수가 불릴 때마다 새 UUID가 나오고 요청 전에
    *   저장하지 않으므로, 같은 키가 두 번 가는 일이 없다 — 한때 주석이 그렇게 주장했는데
    *   사실이 아니었다(2026-08-17 정정).
-   * ⏭ 진짜 재시도 멱등·응답 회수를 하려면 **여기서 키를 먼저 로컬에 남겨야** 한다.
-   *   서버는 이미 `ai_reports`에 90일 보관하므로 남은 것은 앱의 pending 저장과 조회 라우트다.
+   * ⏭ 진짜 재시도 **멱등**을 하려면 여기서 키를 먼저 로컬에 남겨야 한다.
+   *   ~~그리고 조회 라우트가 없다~~ → ✅ **조회는 열렸다**(2026-09-10, `fetchStoredReport`).
+   *   그래서 **응답 회수는 키 없이도 된다** — 아래 `cap-exceeded` 분기가 `(kind, periodKey)`로
+   *   되찾는다. 남은 것은 멱등뿐이고 그건 중복 과금 문제이지 유실 문제가 아니다.
    */
   const reportId = Crypto.randomUUID();
   const response = await requestReport({
@@ -389,55 +404,81 @@ export async function createReport(
     subReports: subReports.map((r) => ({ periodKey: r.periodKey, summary: r.summary })),
   });
 
+  /*
+   * 🔴 **저장은 한 곳에서 한다.** 아래 되찾기 경로와 성공 경로가 같은 행을 만들어야 한다 —
+   *   각자 저장하면 언젠가 한쪽만 새 필드를 채운다(`client.ts` 의 `metrics` 사고가 그 모양이다).
+   */
+  const persist = async (payload: AiReportResponse, id: string): Promise<void> => {
+    /*
+     * 🔴 **재생성이면 옛 것을 먼저 치운다**(§6.6). 새 `reportId`로 오기 때문에 그냥 넣으면
+     *   같은 기간이 목록에 두 번 뜬다. 처음 만드는 기간이면 지울 것이 없어 무해하다.
+     */
+    await dropPeriodForRegenerate(kind, periodKey);
+    await saveReport({
+      id,
+      kind,
+      periodKey,
+      lang,
+      /*
+       * 핵심 한 줄(§8.2). ⚠ **`null`이 정상값이다** — 낡은 서버이거나 프롬프트 v12 이전이면
+       *   안 온다. 화면은 그때 이 블록을 아예 안 그린다.
+       */
+      headline: payload.headline ?? null,
+      /* ⚠ 빈 배열이 정상값이다 — 모델이 안 줬거나 서버가 지어낸 키를 다 걸렀을 때(§8.2.1) */
+      headlineFrom: payload.headlineFrom ?? [],
+      summary: payload.summary,
+      concern: payload.concern,
+      // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다
+      sourceCount: kind === 'weekly' ? entries.length : subReports.length,
+      /*
+       * 지표·주제 (§8.4).
+       *
+       * 🔴 **주간은 모델, 상위는 하위에서 합산**(§8.4.1). 상위에서 모델에게 다시 물으면
+       *   근거가 없다 — 계층 요약은 요약문만 받고 거기엔 숫자가 없다. 실측에서 실제로 어긋났다.
+       *
+       * ⚠ 주간에서 **둘 다 오지 않으면 `null`** — 낡은 서버이거나 스키마가 어긋난 것이고,
+       *   그때 리포트는 지표 없이 저장된다. 본문은 온전하므로 실패로 만들지 않는다.
+       * ⚠ 되찾기로 온 것도 같은 규칙이다 — 서버가 그때 저장한 값을 그대로 돌려주므로
+       *   주간이면 지표가 실려 오고, 상위면 여기서 다시 합산한다(원래 저장과 같은 결과다).
+       */
+      metrics:
+        kind === 'weekly'
+          ? payload.metrics === undefined && payload.topics === undefined
+            ? null
+            : { metrics: payload.metrics ?? [], topics: payload.topics ?? [] }
+          : rollupMetrics(
+              subReportMetrics.filter((m): m is NonNullable<typeof m> => m !== null),
+            ),
+      model: payload.model,
+      promptVer: payload.promptVer,
+      createdAt: Date.now(),
+    });
+  };
+
   if (!response.ok) {
+    /*
+     * 🔴 **캡이 찼다면 이미 만든 것이 서버에 있을 수 있다**(§5.3, 2026-09-10).
+     *
+     * 생성은 동기 왕복이고 저장은 응답을 받은 뒤다. 그 사이에 앱이 죽으면 — 사용자가 끄거나
+     * OS 가 죽이거나 — **캡은 나갔는데 로컬에 아무것도 없다.** 그러면 다음에 눌렀을 때
+     * 서버가 `cap-exceeded` 로 막는데, 그 순간 사용자가 보는 것은 *"이미 만들었어요"* 이고
+     * **정작 만든 것은 어디에도 없다.** 캡이 평생 1회라 그 기간을 영영 잃던 자리다.
+     *
+     * 🟢 되찾기는 **모델을 안 부른다** — 캡도 잠금도 안 건드리고 원가가 0이다.
+     * ⚠ 못 찾으면 **원래 하려던 말을 그대로 한다.** 여기서 새 실패를 만들지 않는다.
+     */
+    if (response.reason === 'cap-exceeded') {
+      const stored = await fetchStoredReport(kind, periodKey);
+      if (stored !== null) {
+        await persist(stored, Crypto.randomUUID());
+        return { ok: true, reportId, recovered: true };
+      }
+    }
     // `retryAt`은 `cooling-down`에만 실려 온다. 그대로 흘려보낸다 — 화면이 시각을 말한다
     return { ok: false, reason: response.reason, ...(response.retryAt !== undefined && { retryAt: response.retryAt }) };
   }
 
-  /*
-   * 🔴 **재생성이면 옛 것을 먼저 치운다**(§6.6). 새 `reportId`로 오기 때문에 그냥 넣으면
-   *   같은 기간이 목록에 두 번 뜬다. 처음 만드는 기간이면 지울 것이 없어 무해하다.
-   */
-  await dropPeriodForRegenerate(kind, periodKey);
-
-  await saveReport({
-    id: reportId,
-    kind,
-    periodKey,
-    lang,
-    /*
-     * 핵심 한 줄(§8.2). ⚠ **`null`이 정상값이다** — 낡은 서버이거나 프롬프트 v12 이전이면
-     *   안 온다. 화면은 그때 이 블록을 아예 안 그린다.
-     */
-    headline: response.headline ?? null,
-    /* ⚠ 빈 배열이 정상값이다 — 모델이 안 줬거나 서버가 지어낸 키를 다 걸렀을 때(§8.2.1) */
-    headlineFrom: response.headlineFrom ?? [],
-    summary: response.summary,
-    concern: response.concern,
-    // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다
-    sourceCount: kind === 'weekly' ? entries.length : subReports.length,
-    /*
-     * 지표·주제 (§8.4).
-     *
-     * 🔴 **주간은 모델, 상위는 하위에서 합산**(§8.4.1). 상위에서 모델에게 다시 물으면
-     *   근거가 없다 — 계층 요약은 요약문만 받고 거기엔 숫자가 없다. 실측에서 실제로 어긋났다.
-     *
-     * ⚠ 주간에서 **둘 다 오지 않으면 `null`** — 낡은 서버이거나 스키마가 어긋난 것이고,
-     *   그때 리포트는 지표 없이 저장된다. 본문은 온전하므로 실패로 만들지 않는다.
-     */
-    metrics:
-      kind === 'weekly'
-        ? response.metrics === undefined && response.topics === undefined
-          ? null
-          : { metrics: response.metrics ?? [], topics: response.topics ?? [] }
-        : rollupMetrics(
-            subReportMetrics.filter((m): m is NonNullable<typeof m> => m !== null),
-          ),
-    model: response.model,
-    promptVer: response.promptVer,
-    createdAt: Date.now(),
-  });
-
+  await persist(response, reportId);
   return { ok: true, reportId };
 }
 

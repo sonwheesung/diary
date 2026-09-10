@@ -25,9 +25,18 @@ export type FailCode =
   | 'out-of-range'      // 422 — 백필 지평 밖이거나 아직 안 끝난 기간이다(§6.4)
   | 'in-progress'       // 409 — 같은 멱등 키가 처리 중이다
   | 'cooling-down'      // 429 — 직전 호출이 모델을 부르고 실패했다. 1시간 뒤 다시(§5.1)
-  | 'not-configured';   // 503 — API 키가 없다. 배포 문제이지 사용자 문제가 아니다
+  | 'not-configured'    // 503 — API 키가 없다. 배포 문제이지 사용자 문제가 아니다
+  /**
+   * 404 — 그 기간의 저장본이 없다 (`GET /api/v1/ai/report`).
+   *
+   * 🚫 `no-vault` 를 재사용하지 않는다. 그건 *"금고가 없다"* 이고 이건 *"90일 안에 만든
+   *   리포트가 없다"* 다 — 뜻이 다른 것을 한 코드로 묶으면 화면이 갈라 말할 수 없다.
+   * ⚠ **실패가 아니다.** 회수를 시도했는데 없을 뿐이라 앱은 이걸 조용히 삼킨다.
+   */
+  | 'not-found';
 
 const STATUS: Record<FailCode, number> = {
+  'not-found': 404,
   unauthorized: 401,
   'not-subscribed': 403,
   'no-grant': 403,

@@ -84,8 +84,11 @@ const PERIOD_CAP: Record<ReportKind, number> = {
  * 진행 중인 멱등 키.
  *
  * ⚠ **결과를 담지 않는다.** 키와 시각만 있다. ~~그래서 놓친 응답을 다시 줄 수 없다~~ →
- *   **낡았다**: 2026-08-13 결정(§5.2)으로 `ai_reports`에 `id = reportId`로 본문을
- *   90일 보관한다. 데이터는 있고 **조회 라우트만 없다**(⏭ `GET /api/v1/ai/report/:id`).
+ *   **낡았다**: 2026-08-13 결정(§5.2)으로 `ai_reports`에 본문을 90일 보관한다.
+ *   ~~데이터는 있고 조회 라우트만 없다(⏭ 조회 라우트)~~ → ✅ **열었다**(2026-09-10, 이 파일의 `GET`).
+ *   🔴 다만 **`reportId` 로는 못 만든다** — 앱이 `createReport()` 마다 새 UUID 를 만들고
+ *   **요청 전에 저장하지 않아서** 앱이 죽고 나면 그 id 를 아무도 모른다.
+ *   그래서 키는 **`(kind, periodKey)`** 다.
  *
  * 🔴 **재시도 멱등은 성립한 적이 없다.** 앱이 `createReport()`마다 새 UUID를 만들고
  *   요청 전에 저장하지 않기 때문이다(`features/ai/api/report-service.ts`).
@@ -108,6 +111,120 @@ function claim(reportId: string): boolean {
   if (inFlight.has(reportId)) return false;
   inFlight.set(reportId, now);
   return true;
+}
+
+export const dynamic = 'force-dynamic';
+
+/**
+ * `GET /api/v1/ai/report?kind=&periodKey=` — **이미 만든 리포트를 되찾는다**
+ * (`docs/AI_REPORT_SYSTEM.md` §5.3).
+ *
+ * 🔴 **왜 필요한가**: 생성은 동기 왕복이고 저장은 **앱이 응답을 받은 뒤**에 한다
+ *   (`features/ai/api/report-service.ts`). 그 사이에 앱이 죽으면 — 사용자가 끄거나
+ *   OS 가 메모리 때문에 죽이거나 — **캡은 소모됐는데 리포트가 없다.**
+ *   캡이 `uq_ai_usage_period` 라 평생 1회여서 그 기간을 **영원히** 잃었다.
+ *   글은 내내 여기 있었고 **가져올 길만 없었다.**
+ *
+ * 🟢 **모델을 부르지 않는다.** 캡도, 일일 호출 수도, 잠금도 건드리지 않는다 —
+ *   이미 계산이 끝나 저장된 글을 읽어 돌려줄 뿐이라 **원가가 0이다.**
+ *   운영자의 재생성(§6.6)과 다르다: 그쪽은 다시 쓰고 이쪽은 되찾는다.
+ *
+ * 🔴 **구독 게이트를 걸지 않는다.** `regenerable` 과 같은 판단이다 — 이미 자기가 만든
+ *   자기 글이고, 구독이 끊겼다고 만들어둔 것을 못 받게 하면 `CLAUDE.md` §12(2026-08-12)
+ *   *"구독이 끝나도 발행된 리포트는 계속 본다"* 와 정면으로 어긋난다.
+ *
+ * ⚠ **최신 리비전만 준다.** 서버는 재생성 이력을 전부 갖지만 사용자는 최종본만 본다.
+ * ⚠ 90일이 지나면 리퍼가 지운다 — 그때는 `not-found` 이고 그게 정상이다.
+ */
+export async function GET(req: Request): Promise<Response> {
+  const id = await identify(req);
+  if (id === 'unauthenticated') return fail('unauthorized');
+  if (id === 'upstream') return fail('upstream');
+
+  const url = new URL(req.url);
+  const kind = url.searchParams.get('kind');
+  const periodKey = url.searchParams.get('periodKey');
+  if (kind === null || !KINDS.includes(kind as ReportKind)) return fail('error');
+  // 길이만 본다. 형식이 틀리면 아래 조회가 못 찾고, 그건 `not-found` 가 맞다
+  if (periodKey === null || periodKey.length === 0 || periodKey.length > 32) return fail('error');
+
+  try {
+    /*
+     * ⚠ `(subject_id, kind, period_key)` 인덱스가 없다. 이 테이블은 90일치라 작고
+     *   조회도 드물어(회수는 사고 뒤에만 일어난다) 지금은 스캔이 싸다.
+     *   ⏭ `ai_reports` 가 수만 행이 되거나 이 조회가 느려지면 그때 인덱스를 넣는다.
+     */
+    const rows = await db
+      .select({
+        headline: aiReports.headline,
+        headlineFrom: aiReports.headlineFrom,
+        summary: aiReports.summary,
+        concern: aiReports.concern,
+        metrics: aiReports.metrics,
+        model: aiReports.model,
+        promptVer: aiReports.promptVer,
+        revision: aiReports.revision,
+      })
+      .from(aiReports)
+      .where(
+        and(
+          eq(aiReports.subjectId, id.subjectId),
+          eq(aiReports.kind, kind),
+          eq(aiReports.periodKey, periodKey),
+        ),
+      );
+
+    if (rows.length === 0) return fail('not-found');
+
+    // 최종본 = 가장 큰 리비전. 행이 보통 1개라 정렬 비용이 없다
+    const latest = rows.reduce((best, row) => (row.revision > best.revision ? row : best));
+
+    /*
+     * ⚠ 저장은 JSON **문자열**이다(스키마 주석). 깨져 있으면 지표만 버리고 본문은 준다 —
+     *   되찾기의 목적은 글이지 지표가 아니다.
+     */
+    let parsedMetrics: unknown;
+    let parsedTopics: unknown;
+    if (latest.metrics !== null) {
+      try {
+        const parsed = JSON.parse(latest.metrics) as { metrics?: unknown; topics?: unknown };
+        parsedMetrics = parsed.metrics;
+        parsedTopics = parsed.topics;
+      } catch {
+        // 지표 없이 간다. 여기서 실패로 만들면 되찾을 수 있는 글을 못 돌려준다
+      }
+    }
+    let parsedHeadlineFrom: unknown;
+    if (latest.headlineFrom !== null) {
+      try {
+        parsedHeadlineFrom = JSON.parse(latest.headlineFrom);
+      } catch {
+        // 근거 키가 없으면 화면이 그 블록을 안 그린다. 본문은 온전하다
+      }
+    }
+
+    /*
+     * 🔴 `POST` 의 성공 응답과 **키가 같아야 한다** — 앱이 한 파서·한 저장 경로를 공유한다.
+     *   `check:ai` §⑦ 이 두 블록의 키 집합을 대조해 이 약속을 지킨다.
+     *
+     * 🔴 **키를 축약해서 쓰지 않는다**(`metrics,` 가 아니라 `metrics: …`). 그 검사가
+     *   `^ +(\w+):` 로 키를 뽑기 때문에 축약하면 그 키의 검사가 **조용히 사라진다** —
+     *   2026-09-10 에 실제로 그렇게 써서 119 → 116 이 됐다.
+     */
+    return ok({
+      headline: latest.headline ?? undefined,
+      headlineFrom: parsedHeadlineFrom,
+      summary: latest.summary,
+      concern: latest.concern,
+      metrics: parsedMetrics,
+      topics: parsedTopics,
+      model: latest.model ?? '',
+      promptVer: latest.promptVer ?? 0,
+    });
+  } catch (error) {
+    reportError(error, 'ai.report-get');
+    return fail('error');
+  }
 }
 
 interface Body {
