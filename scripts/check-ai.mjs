@@ -1014,12 +1014,19 @@ console.log('');
       '캡 판정에서 regenerateAllowed 조건이 사라졌다',
     );
   });
-
+  /*
+   * ⚠ **모양이 아니라 뜻을 잰다**(2026-09-10 정정). 옛 코드는 한 줄짜리 `if (…) return fail(…)` 을
+   *   **글자 그대로** 고정했는데, 일일 캡에 `retryAt` 을 실으려고 블록으로 바꾸자 앵커를 잃고
+   *   빨개졌다. 이 검사가 지키려는 것은 줄 모양이 아니라 **재생성 예외가 없다**는 사실이다.
+   *   🔴 오늘만 세 번째다(`check:backup-crypto` 배선 · `check:ai` §⑦ · 여기).
+   *     소스를 읽는 가드는 **읽는 모양을 고정할수록** 정상 변경에 자주 깨진다.
+   */
   check('🔴 일일 캡은 재생성에도 그대로 적용된다 — 여기까지 열면 폭주 방어가 없어진다', () => {
-    assert(
-      /if \(dayUsed >= DAILY_CALL_CAP\) return fail\('rate-limited'\);/.test(ROUTE),
-      '일일 캡에 예외가 생겼다',
-    );
+    const at = ROUTE.indexOf('dayUsed >= DAILY_CALL_CAP');
+    assert(at >= 0, '일일 캡 판정이 사라졌다');
+    const stmt = ROUTE.slice(at, at + 600);
+    assert(/fail\('rate-limited'/.test(stmt), '일일 캡이 rate-limited 를 안 돌려준다');
+    assert(!/regenerate/i.test(stmt), '일일 캡에 재생성 예외가 생겼다');
   });
 
   check('🔴 재생성권은 **모델을 부르기 전에** 소모한다 — 뒤로 가면 돈이 두 번 나간다', () => {

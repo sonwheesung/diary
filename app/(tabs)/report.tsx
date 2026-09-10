@@ -477,6 +477,18 @@ function failMessage(
       return retryAt === undefined
         ? t('report.fail.cooling-down')
         : t('report.fail.coolingDownAt', { time: formatDateTime(retryAt) });
+    /*
+     * 🔴 **하루 캡이다. *"잠시 뒤"* 가 아니다**(2026-09-10 사용자 지적).
+     *   그 문구가 오래 살아 있었던 이유는 캡이 30 이라 **아무도 못 채웠기 때문**이다 —
+     *   10 으로 낮추면서 비로소 보이는 문구가 됐다.
+     *
+     * ⚠ **"내일" 이라고도 못 쓴다.** 기준이 UTC 날짜라 한국은 오전 9시, 미주는 같은 날
+     *   오후에 풀린다. 서버가 다음 UTC 자정을 주고 여기서 **기기 시간대로** 그린다.
+     */
+    case 'rate-limited':
+      return retryAt === undefined
+        ? t('report.fail.rate-limited')
+        : t('report.fail.rateLimitedAt', { time: formatDateTime(retryAt) });
     // ⚠ "주에 한 번"으로 뭉치지 않는다 — 월간 탭에서 그 문장은 거짓이다.
     //   무엇이 이미 있는지를 기간으로 말해야 다음에 할 일이 분명해진다
     case 'exists':

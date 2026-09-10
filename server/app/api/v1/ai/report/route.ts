@@ -342,7 +342,20 @@ export async function POST(req: Request): Promise<Response> {
    *   일일 캡은 "버그로 하루에 수백 번 부르지 마라"라서, 뒤쪽까지 열면 방어가 사라진다.
    */
   if (periodUsed >= PERIOD_CAP[kind] && !regenerateAllowed) return fail('cap-exceeded');
-  if (dayUsed >= DAILY_CALL_CAP) return fail('rate-limited');
+  if (dayUsed >= DAILY_CALL_CAP) {
+    /*
+     * 🔴 **언제 풀리는지 함께 준다.** 앱 문구가 *"잠시 뒤 다시 시도해 주세요"* 였는데
+     *   이건 하루 캡이라 **거짓이었다**(2026-09-10). 그동안 안 드러난 이유는 캡이 30 이라
+     *   아무도 못 채웠기 때문이다 — 10 으로 낮추는 순간 그 문구가 실제로 보이기 시작한다.
+     *
+     * ⚠ **"내일" 이라고 말할 수 없다.** 기준이 UTC 날짜라 한국은 오전 9시에 풀리고
+     *   미주는 **같은 날 오후**에 풀린다. 그래서 시각을 주고 앱이 기기 시간대로 그린다
+     *   (`cooling-down` 이 이미 쓰는 규약과 같다).
+     */
+    const nextUtcMidnight = new Date();
+    nextUtcMidnight.setUTCHours(24, 0, 0, 0);
+    return fail('rate-limited', { retryAt: nextUtcMidnight.toISOString() });
+  }
 
   /*
    * 🔴 **실패 잠금** (§5.1). 위의 일일 캡은 `ai_usage` 행을 세는데 그 행은 **성공에만** 쓰인다 —
