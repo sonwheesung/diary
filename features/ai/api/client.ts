@@ -299,6 +299,99 @@ export async function fetchStoredReport(
   return parsed.ok ? parsed : null;
 }
 
+/** 서버가 갖고 있는 리포트 하나 + 오늘 한도 (`docs/AI_REPORT_SYSTEM.md` §5.6) */
+export interface ServerReport extends AiReportResponse {
+  kind: ReportKind;
+  periodKey: string;
+  lang: string;
+  sourceCount: number;
+  /** 서버가 만든 시각(ISO). 되살릴 때 로컬 `createdAt` 으로 쓴다 */
+  createdAt: string;
+}
+
+export interface ServerReportList {
+  reports: ServerReport[];
+  dailyUsed: number;
+  dailyCap: number;
+}
+
+/**
+ * **서버가 갖고 있는 내 리포트 목록**을 받아온다 (`docs/AI_REPORT_SYSTEM.md` §5.6).
+ *
+ * 🔴 로컬이 리포트의 진실이지만 **로컬이 없어지는 경로가 셋** 있다 —
+ *   생성 중 앱이 죽거나, 재설치하거나, 기기를 바꾸거나. 캡은 평생 1회라 다시 못 만드는데
+ *   글은 서버에 90일 남아 있다. 이 경로가 그것을 되살린다.
+ *
+ * 🟢 **모델을 안 부른다.** 캡도 잠금도 안 건드린다.
+ * ⚠ 실패는 `null` 로 삼킨다 — 사용자가 시킨 일이 아니라 화면이 열릴 때 조용히 도는 일이다.
+ *   못 받으면 **로컬만 보여준다**. 그건 지금까지의 동작이고 고장이 아니다.
+ */
+export async function fetchServerReports(): Promise<ServerReportList | null> {
+  if (BACKUP_SERVER_URL.length === 0) {
+    return null;
+  }
+  const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
+  if (token === null) {
+    return null;
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  let res: Response;
+  try {
+    res = await fetch(`${BACKUP_SERVER_URL}/api/v1/ai/reports`, {
+      method: 'GET',
+      headers: { authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    });
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!res.ok) {
+    return null;
+  }
+  let json: Record<string, unknown>;
+  try {
+    json = (await res.json()) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(json.reports)) {
+    return null;
+  }
+  const reports: ServerReport[] = [];
+  for (const raw of json.reports as Record<string, unknown>[]) {
+    const parsed = parseReportPayload(raw);
+    if (!parsed.ok) {
+      // 본문이 빈 행은 되살릴 것이 없다. 그 하나만 건너뛴다
+      continue;
+    }
+    const { kind, periodKey, lang, createdAt } = raw;
+    if (
+      (kind !== 'weekly' && kind !== 'monthly' && kind !== 'yearly') ||
+      typeof periodKey !== 'string' ||
+      typeof createdAt !== 'string'
+    ) {
+      continue;
+    }
+    const { ok: _ok, ...payload } = parsed;
+    reports.push({
+      ...payload,
+      kind,
+      periodKey,
+      lang: typeof lang === 'string' ? lang : 'ko',
+      sourceCount: typeof raw.sourceCount === 'number' ? raw.sourceCount : 0,
+      createdAt,
+    });
+  }
+  return {
+    reports,
+    dailyUsed: typeof json.dailyUsed === 'number' ? json.dailyUsed : 0,
+    dailyCap: typeof json.dailyCap === 'number' ? json.dailyCap : 0,
+  };
+}
+
 /**
  * 탈퇴할 때 서버의 AI 데이터를 지운다 (`docs/AI_REPORT_SYSTEM.md` §7.1).
  *

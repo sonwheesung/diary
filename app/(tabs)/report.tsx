@@ -18,6 +18,7 @@ import {
   listPeriodOptions,
   subGaps,
   subPeriodsOpenOn,
+  syncReportsFromServer,
   targetPeriodKey,
   weeklyGaps,
   type CreateFail,
@@ -56,6 +57,11 @@ export default function ReportScreen() {
   const [blocked, setBlocked] = useState<CreateFail | null>(null);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  /*
+   * 오늘 몇 개 더 만들 수 있나. **서버가 진실**이라 못 받으면 `null` 이고, 그때는
+   * 아무 말도 하지 않는다 — 짐작한 숫자를 보여주는 것이 안 보여주는 것보다 나쁘다.
+   */
+  const [dailyLeft, setDailyLeft] = useState<number | null>(null);
   /*
    * 고른 기간(§6.4). 종류를 바꾸면 그 종류의 **기본값**으로 되돌아간다 —
    * 주간에서 고른 `2026-W20`을 월간 탭이 들고 있으면 아무 뜻도 없는 키가 된다.
@@ -113,6 +119,40 @@ export default function ReportScreen() {
         alive = false;
       };
     }, [kind, load]),
+  );
+
+  /*
+   * 🔴 **서버에 있는데 로컬에 없는 리포트를 되살린다**(§5.6). 로컬이 없어지는 경로가 셋이다 —
+   *   생성 중 앱이 죽거나, 재설치하거나, 기기를 바꾸거나. 캡이 평생 1회라 다시 못 만드는데
+   *   글은 서버에 90일 남아 있다. **묘비는 되살리지 않는다** — 지운 것은 지운 것이다(§11.9).
+   *
+   * ⚠ **구독자에게만 부른다.** 비구독자 화면은 잠금 미리보기라 되살릴 것도 한도도 없다.
+   * ⚠ 실패는 조용하다. 못 받으면 로컬만 보여주고 한도 문구를 안 그린다.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      if (!pro) {
+        return;
+      }
+      let alive = true;
+      void syncReportsFromServer()
+        .then((result) => {
+          if (!alive || result === null) {
+            return;
+          }
+          setDailyLeft(Math.max(0, result.dailyCap - result.dailyUsed));
+          // 되살린 게 있을 때만 다시 읽는다 — 없는데 읽으면 화면이 헛되이 깜빡인다
+          if (result.restored > 0) {
+            void load(kind);
+          }
+        })
+        .catch(() => {
+          /* 조용히 넘어간다 */
+        });
+      return () => {
+        alive = false;
+      };
+    }, [pro, kind, load]),
   );
 
   /*
@@ -269,6 +309,16 @@ export default function ReportScreen() {
             {/* 주 1회 캡은 **주간에만** 해당한다. 월간·연간에 붙이면 거짓말이다 */}
             {blocked === null && kind === 'weekly' && (
               <Text style={styles.createNote}>{t('report.onceAWeek')}</Text>
+            )}
+            {/*
+              🔴 **누르기 전에 말한다**(§6.3). 하루 한도에 걸리고 나서야 알게 하지 않는다 —
+                백필하는 사람은 연달아 누르고, 그때 처음 막히면 무엇이 막았는지 모른다.
+              ⚠ 서버에서 못 받았으면(`null`) 아무 말도 안 한다. 짐작한 숫자는 안 보여준다.
+            */}
+            {dailyLeft !== null && (
+              <Text style={styles.createNote}>
+                {t('report.dailyLeft', { count: String(dailyLeft) })}
+              </Text>
             )}
             <Button
               label={creating ? t('report.creating') : t('report.create')}

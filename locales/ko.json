@@ -528,6 +528,7 @@
     "create": "리포트 만들기",
     "creating": "리포트를 만들고 있어요",
     "onceAWeek": "리포트는 일주일에 한 번 만들 수 있어요.",
+    "dailyLeft": "오늘 만들 수 있는 리포트: {{count}}개",
     "needWeekly": "{{period}} 주간 리포트가 먼저 필요해요.",
     "needMonthly": "{{period}} 월간 리포트가 먼저 필요해요.",
     "noEntries": "그 기간에는 쓴 조각이 없어요.",

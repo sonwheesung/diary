@@ -1090,6 +1090,34 @@ console.log('');
   });
 }
 
+/* ── ⑩ 서버 동기화가 **묘비를 존중하는가** (§5.6, 2026-09-10) ─────────────
+ *
+ * 🔴 서버에 있는 리포트를 되살릴 때 **사용자가 지운 것까지 되살리면** 삭제가 무의미해진다.
+ *   `findByPeriod()` 가 묘비도 참으로 돌려주므로(§11.9) 그것만 먼저 보면 자동으로 걸러지는데,
+ *   그 순서가 사라지면 **지운 리포트가 조용히 되살아난다** — 화면에는 정상으로 보인다.
+ * ⚠ 순수 계층으로는 못 잡는다(로컬 DB 상태다). 소스를 읽는다.
+ */
+{
+  const service = readFileSync(
+    new URL('../features/ai/api/report-service.ts', import.meta.url),
+    'utf8',
+  ).replaceAll(String.fromCharCode(13), '');
+  const at = service.indexOf('export async function syncReportsFromServer');
+
+  check('🔴 대조군 — 서버 동기화 함수가 있다', () => {
+    assert(at >= 0, 'syncReportsFromServer 가 없다 — 이름이 바뀌었으면 이 검사도 고친다');
+  });
+
+  check('🔴 동기화가 묘비를 먼저 본다 — 지운 리포트를 되살리지 않는다', () => {
+    const body = service.slice(at, at + 2400);
+    const guard = body.indexOf('findByPeriod');
+    const write = body.indexOf('saveReport');
+    assert(guard >= 0, '동기화가 findByPeriod 를 안 본다 — 지운 것까지 되살린다(§11.9)');
+    assert(write >= 0, '동기화가 saveReport 를 안 부른다 — 되살리는 코드가 없다');
+    assert(guard < write, '묘비 확인이 저장보다 뒤다 — 순서가 곧 규약이다');
+  });
+}
+
 if (failures.length > 0) {
   console.error(`AI 순수 계층 — ${failures.length}개 실패\n`);
   for (const f of failures) console.error(`  · ${f}`);

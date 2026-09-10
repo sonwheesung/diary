@@ -528,6 +528,7 @@
     "create": "Create report",
     "creating": "Writing your report",
     "onceAWeek": "You can create one report per week",
+    "dailyLeft": "Reports you can create today: {{count}}",
     "needWeekly": "Weekly reports for {{period}} are needed first",
     "needMonthly": "Monthly reports for {{period}} are needed first",
     "noEntries": "No written entries in this period",

@@ -528,6 +528,7 @@
     "create": "レポートを作る",
     "creating": "レポートを作成しています",
     "onceAWeek": "レポートは週に1回作成できます",
+    "dailyLeft": "今日作成できるレポート: {{count}}",
     "needWeekly": "先に{{period}}の週間レポートが必要です",
     "needMonthly": "先に{{period}}の月間レポートが必要です",
     "noEntries": "この期間に本文のあるかけらがありません",

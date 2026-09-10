@@ -528,6 +528,7 @@
     "create": "Criar relatório",
     "creating": "Escrevendo seu relatório",
     "onceAWeek": "Você pode criar um relatório por semana",
+    "dailyLeft": "Relatórios que você pode criar hoje: {{count}}",
     "needWeekly": "Primeiro são necessários os relatórios semanais de {{period}}",
     "needMonthly": "Primeiro são necessários os relatórios mensais de {{period}}",
     "noEntries": "Nenhum registro com texto neste período",

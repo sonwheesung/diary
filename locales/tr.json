@@ -528,6 +528,7 @@
     "create": "Rapor oluştur",
     "creating": "Raporun yazılıyor",
     "onceAWeek": "Haftada bir rapor oluşturabilirsin",
+    "dailyLeft": "Bugün oluşturabileceğiniz rapor: {{count}}",
     "needWeekly": "Önce {{period}} haftalık raporları gerekiyor",
     "needMonthly": "Önce {{period}} aylık raporları gerekiyor",
     "noEntries": "Bu dönemde metin içeren kayıt yok",

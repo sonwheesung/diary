@@ -528,6 +528,7 @@
     "create": "Créer un bilan",
     "creating": "Rédaction de votre bilan",
     "onceAWeek": "Vous pouvez créer un bilan par semaine",
+    "dailyLeft": "Rapports que vous pouvez créer aujourd'hui : {{count}}",
     "needWeekly": "Les bilans hebdomadaires de {{period}} sont nécessaires d'abord",
     "needMonthly": "Les bilans mensuels de {{period}} sont nécessaires d'abord",
     "noEntries": "Aucune entrée avec du texte sur cette période",

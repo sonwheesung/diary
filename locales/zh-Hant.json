@@ -528,6 +528,7 @@
     "create": "產生報告",
     "creating": "正在產生報告",
     "onceAWeek": "報告每週可以產生一次",
+    "dailyLeft": "今天可建立的報告：{{count}}",
     "needWeekly": "需要先有 {{period}} 的每週報告",
     "needMonthly": "需要先有 {{period}} 的每月報告",
     "noEntries": "這段期間沒有寫下內容的碎片",

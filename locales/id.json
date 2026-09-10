@@ -528,6 +528,7 @@
     "create": "Buat laporan",
     "creating": "Sedang menulis laporan",
     "onceAWeek": "Laporan dapat dibuat sekali seminggu",
+    "dailyLeft": "Laporan yang bisa dibuat hari ini: {{count}}",
     "needWeekly": "Perlu laporan mingguan {{period}} terlebih dahulu",
     "needMonthly": "Perlu laporan bulanan {{period}} terlebih dahulu",
     "noEntries": "Tidak ada catatan berisi teks pada periode ini",

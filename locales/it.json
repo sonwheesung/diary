@@ -528,6 +528,7 @@
     "create": "Crea resoconto",
     "creating": "Stiamo scrivendo il resoconto",
     "onceAWeek": "Puoi creare un resoconto a settimana",
+    "dailyLeft": "Report che puoi creare oggi: {{count}}",
     "needWeekly": "Servono prima i resoconti settimanali di {{period}}",
     "needMonthly": "Servono prima i resoconti mensili di {{period}}",
     "noEntries": "Nessuna voce con testo in questo periodo",

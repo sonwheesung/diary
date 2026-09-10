@@ -528,6 +528,7 @@
     "create": "Crear informe",
     "creating": "Escribiendo tu informe",
     "onceAWeek": "Puedes crear un informe por semana",
+    "dailyLeft": "Informes que puedes crear hoy: {{count}}",
     "needWeekly": "Primero hacen falta los informes semanales de {{period}}",
     "needMonthly": "Primero hacen falta los informes mensuales de {{period}}",
     "noEntries": "No hay entradas con texto en este periodo",

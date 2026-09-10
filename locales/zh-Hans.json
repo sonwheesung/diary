@@ -528,6 +528,7 @@
     "create": "生成报告",
     "creating": "正在生成报告",
     "onceAWeek": "报告每周可以生成一次",
+    "dailyLeft": "今天可创建的报告：{{count}}",
     "needWeekly": "需要先有 {{period}} 的每周报告",
     "needMonthly": "需要先有 {{period}} 的每月报告",
     "noEntries": "这段时间没有写下内容的碎片",

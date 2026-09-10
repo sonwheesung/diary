@@ -528,6 +528,7 @@
     "create": "Bericht erstellen",
     "creating": "Bericht wird geschrieben",
     "onceAWeek": "Du kannst einen Bericht pro Woche erstellen",
+    "dailyLeft": "Heute erstellbare Berichte: {{count}}",
     "needWeekly": "Dafür braucht es zuerst die Wochenberichte von {{period}}",
     "needMonthly": "Dafür braucht es zuerst die Monatsberichte von {{period}}",
     "noEntries": "In diesem Zeitraum gibt es keine Einträge mit Text",

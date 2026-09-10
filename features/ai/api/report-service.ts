@@ -11,6 +11,7 @@ import {
 } from '@/features/ai/api/report-repository';
 import {
   fetchRegenerablePeriods,
+  fetchServerReports,
   fetchStoredReport,
   requestReport,
   type AiFail,
@@ -480,6 +481,64 @@ export async function createReport(
 
   await persist(response, reportId);
   return { ok: true, reportId };
+}
+
+/**
+ * **서버에 있는데 로컬에 없는 리포트를 되살린다** (`docs/AI_REPORT_SYSTEM.md` §5.6).
+ *
+ * 🔴 **묘비를 보고 지운 것은 되살리지 않는다.** `findByPeriod()` 는 살아 있는 행뿐 아니라
+ *   **묘비도 참으로** 돌려주므로(§11.9), 사용자가 지운 기간은 여기서 자동으로 걸러진다.
+ *   그 판단을 서버로 올리지 않는 이유는 삭제 의도까지 서버가 알아야 하기 때문이다.
+ *
+ * ⚠ **덮어쓰지 않는다.** 로컬에 있으면 그대로 둔다 — 로컬이 리포트의 진실이고,
+ *   서버 쪽이 더 새로울 수 있는 경우(재생성)는 `dropPeriodForRegenerate` 가 따로 다룬다.
+ *
+ * ⚠ 실패는 조용하다. 화면이 열릴 때마다 도는 일이라 못 받으면 **로컬만 보여준다.**
+ *
+ * @returns 되살린 개수와 오늘 한도. 서버에 못 닿으면 `null`
+ */
+export async function syncReportsFromServer(): Promise<{
+  restored: number;
+  dailyUsed: number;
+  dailyCap: number;
+} | null> {
+  const list = await fetchServerReports();
+  if (list === null) {
+    return null;
+  }
+  let restored = 0;
+  for (const row of list.reports) {
+    if ((await findByPeriod(row.kind, row.periodKey)) !== null) {
+      // 이미 있거나(살아 있음) 사용자가 지웠다(묘비) — 어느 쪽이든 건드리지 않는다
+      continue;
+    }
+    const createdAt = Date.parse(row.createdAt);
+    await saveReport({
+      id: Crypto.randomUUID(),
+      kind: row.kind,
+      periodKey: row.periodKey,
+      lang: row.lang,
+      headline: row.headline ?? null,
+      headlineFrom: row.headlineFrom ?? [],
+      summary: row.summary,
+      concern: row.concern,
+      sourceCount: row.sourceCount,
+      /*
+       * ⚠ **상위 리포트의 지표는 되살리지 않는다.** 월간·연간의 지표는 앱이 하위에서
+       *   합산하는 값이라(§8.4.1) 서버에 없다. 주간만 서버가 갖고 있다.
+       */
+      metrics:
+        row.metrics === undefined && row.topics === undefined
+          ? null
+          : { metrics: row.metrics ?? [], topics: row.topics ?? [] },
+      model: row.model,
+      promptVer: row.promptVer,
+      // 서버가 만든 시각을 쓴다. 지금 시각을 쓰면 목록 순서가 어긋난다
+      createdAt: Number.isNaN(createdAt) ? Date.now() : createdAt,
+    });
+    restored += 1;
+  }
+  return { restored, dailyUsed: list.dailyUsed, dailyCap: list.dailyCap };
 }
 
 /**
