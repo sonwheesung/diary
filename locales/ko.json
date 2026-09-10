@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "모든 조각",
-    "empty": "아직 모은 조각이 없어요"
+    "empty": "아직 모은 조각이 없어요",
+    "byDate": "날짜로 찾기",
+    "byDateHint": "점이 표시된 날의 조각으로 갑니다."
   },
   "calendar": {
     "prevMonth": "이전 달",

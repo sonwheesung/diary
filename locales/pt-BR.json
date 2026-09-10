@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Todos os pedaços",
-    "empty": "Ainda não há pedaços"
+    "empty": "Ainda não há pedaços",
+    "byDate": "Buscar por data",
+    "byDateHint": "Toque em um dia marcado para abrir esse registro."
   },
   "calendar": {
     "prevMonth": "Mês anterior",

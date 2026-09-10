@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "全部碎片",
-    "empty": "还没有任何碎片"
+    "empty": "还没有任何碎片",
+    "byDate": "按日期查找",
+    "byDateHint": "点按有圆点的日期，打开当天的记录。"
   },
   "calendar": {
     "prevMonth": "上个月",

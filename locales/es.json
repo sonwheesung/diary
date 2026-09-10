@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Todas las piezas",
-    "empty": "Aún no hay piezas"
+    "empty": "Aún no hay piezas",
+    "byDate": "Buscar por fecha",
+    "byDateHint": "Toca un día marcado para abrir esa entrada."
   },
   "calendar": {
     "prevMonth": "Mes anterior",

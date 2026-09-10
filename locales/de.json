@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Alle Stücke",
-    "empty": "Noch keine Stücke"
+    "empty": "Noch keine Stücke",
+    "byDate": "Nach Datum suchen",
+    "byDateHint": "Tippe auf einen markierten Tag, um den Eintrag zu öffnen."
   },
   "calendar": {
     "prevMonth": "Vorheriger Monat",

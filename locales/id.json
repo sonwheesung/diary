@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Semua kepingan",
-    "empty": "Belum ada kepingan"
+    "empty": "Belum ada kepingan",
+    "byDate": "Cari menurut tanggal",
+    "byDateHint": "Ketuk hari bertanda untuk membuka catatan itu."
   },
   "calendar": {
     "prevMonth": "Bulan sebelumnya",

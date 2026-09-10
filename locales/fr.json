@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Tous les fragments",
-    "empty": "Aucun fragment pour l'instant"
+    "empty": "Aucun fragment pour l'instant",
+    "byDate": "Rechercher par date",
+    "byDateHint": "Touchez un jour marqué pour ouvrir cette entrée."
   },
   "calendar": {
     "prevMonth": "Mois précédent",

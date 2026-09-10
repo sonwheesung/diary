@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Tüm parçalar",
-    "empty": "Henüz parça yok"
+    "empty": "Henüz parça yok",
+    "byDate": "Tarihe göre bul",
+    "byDateHint": "İşaretli bir güne dokunarak o günün kaydını aç."
   },
   "calendar": {
     "prevMonth": "Önceki ay",

@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "全部碎片",
-    "empty": "還沒有任何碎片"
+    "empty": "還沒有任何碎片",
+    "byDate": "依日期尋找",
+    "byDateHint": "點選有圓點的日期，開啟當天的紀錄。"
   },
   "calendar": {
     "prevMonth": "上個月",

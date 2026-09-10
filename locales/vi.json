@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "Tất cả các mảnh",
-    "empty": "Chưa có mảnh nào"
+    "empty": "Chưa có mảnh nào",
+    "byDate": "Tìm theo ngày",
+    "byDateHint": "Chạm vào ngày có dấu chấm để mở nhật ký của ngày đó."
   },
   "calendar": {
     "prevMonth": "Tháng trước",

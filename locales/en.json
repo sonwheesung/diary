@@ -169,7 +169,9 @@
   },
   "diaries": {
     "title": "All pieces",
-    "empty": "No pieces yet"
+    "empty": "No pieces yet",
+    "byDate": "Find by date",
+    "byDateHint": "Tap a marked day to open that entry."
   },
   "calendar": {
     "prevMonth": "Previous month",
