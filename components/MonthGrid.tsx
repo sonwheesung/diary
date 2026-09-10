@@ -60,10 +60,15 @@ export function MonthGrid({
 
   return (
     <View>
+      {/*
+        🔴 **주말은 색으로 읽는다**(2026-09-10 사용자 요청) — 일요일 빨강 · 토요일 파랑.
+          격자가 **일요일부터** 시작하므로 위치가 고정이라 인덱스로 가른다(0=일 · 6=토).
+          요일 이름은 언어를 타지만 **자리는 안 탄다** — 그래서 문자열이 아니라 인덱스로 판정한다.
+      */}
       <View style={styles.week}>
-        {weekdays.map((label) => (
+        {weekdays.map((label, index) => (
           <View key={label} style={styles.headerCell}>
-            <Text style={styles.weekday}>{label}</Text>
+            <Text style={[styles.weekday, weekendStyle(styles, index)]}>{label}</Text>
           </View>
         ))}
       </View>
@@ -109,6 +114,12 @@ export function MonthGrid({
                 <Text
                   style={[
                     styles.dayLabel,
+                    /*
+                     * ⚠ 주말 색은 **기본색을 대신할 뿐** 상태를 이기지 않는다.
+                     *   아래 줄들이 뒤에 와서 덮는다 — 쓴 날(강조)·고른 날·못 고르는 날은
+                     *   그 사실이 먼저 읽혀야 한다. 주말은 '언제인가'이고 나머지는 '무엇인가'다.
+                     */
+                    weekendStyle(styles, (leading + index) % 7),
                     marked && !taken && styles.dayLabelMarked,
                     isSelected && styles.dayLabelSelected,
                     taken && styles.dayLabelTaken,
@@ -135,6 +146,25 @@ export function MonthGrid({
       </View>
     </View>
   );
+}
+
+/**
+ * 요일 자리(0=일 … 6=토)에 맞는 주말 색. 평일이면 `undefined` 라 아무것도 덮지 않는다.
+ *
+ * 🔴 색은 팔레트가 준다(`colors.weekend`). 여기서 hex 를 쓰면 다크에서 바탕에 잠긴다 —
+ *   `CLAUDE.md` §10.1 이 색을 직접 import 하지 말라고 못박은 그 자리다.
+ */
+function weekendStyle(
+  styles: ReturnType<typeof createStyles>,
+  weekdayPosition: number,
+): { color: string } | undefined {
+  if (weekdayPosition === 0) {
+    return styles.sunday;
+  }
+  if (weekdayPosition === 6) {
+    return styles.saturday;
+  }
+  return undefined;
 }
 
 /** 7칸을 정확히 나눈 값. 100/7을 계산해 넣으면 타입이 string으로 넓어져 style에 못 들어간다 */
@@ -165,6 +195,8 @@ const createStyles = (colors: Palette) =>
       ...typography.caption,
       color: colors.textMuted,
     },
+    sunday: { color: colors.weekend.sun },
+    saturday: { color: colors.weekend.sat },
     day: {
       width: 36,
       height: 36,
