@@ -40,6 +40,7 @@
     "scan:silent": "node scripts/scan-silent-failures.mjs",
     "check:timezone": "node --experimental-strip-types --no-warnings scripts/check-timezone.mjs",
     "check:release-bundle": "node scripts/check-release-bundle.mjs",
+    "check:embedded-manifest": "node scripts/check-embedded-manifest.mjs",
     "licenses:build": "node scripts/make-licenses.mjs",
     "check:licenses": "node scripts/check-licenses.mjs",
     "check:ota-bundle": "node scripts/check-ota-bundle.mjs"

@@ -49,8 +49,13 @@ test "$(grep -c JOGAK_UPLOAD_STORE_FILE android/app/build.gradle)" -gt 0
 test -d "$ANDROID_HOME/platform-tools"
 
 # 🔴 gradle 은 JS 번들을 up-to-date 로 보고 다시 안 만든다 — env 를 바꿔도 옛 번들이 실린다.
-echo; echo "=== ④ 낡은 번들 산출물 제거 ==="
+echo; echo "=== ④ 낡은 번들·매니페스트 산출물 제거 ==="
+# 🔴 **매니페스트 산출물도 함께 지운다**(2026-09-10, common/OTA_RULES.md §3.1).
+#    `createReleaseUpdatesResources` 가 UP-TO-DATE 로 건너뛰면 **옛 commitTime 이 그대로
+#    패키징**되고, 기기는 임베드와 서버 OTA 중 새 쪽을 실행하므로 **새 빌드를 깔아도
+#    옛 OTA 로 돈다.** 배구명가가 이걸로 versionCode 하나를 버렸다(INC-007).
 rm -rf android/app/build/generated/assets/createBundleReleaseJsAndAssets \
+       android/app/build/generated/assets/createReleaseUpdatesResources \
        android/app/build/intermediates/intermediary_bundle \
        android/app/build/outputs/bundle/release 2>/dev/null || true
 
@@ -60,4 +65,9 @@ cd android
 ./gradlew bundleRelease --no-daemon 2>&1 | tail -30
 rc=${PIPESTATUS[0]}
 echo "gradle exit=$rc"
-exit "$rc"
+test "$rc" -eq 0
+
+cd "$ROOT"
+echo; echo "=== ⑥ 🔴 임베드 매니페스트가 서버 최신 OTA 보다 새로운가 ==="
+# 업로드 **전에** 본다 — versionCode 는 한 번 올리면 영구 소모다.
+npm run --silent check:embedded-manifest
