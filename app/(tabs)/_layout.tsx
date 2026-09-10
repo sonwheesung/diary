@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
 import Calendar from 'lucide-react-native/icons/calendar';
 import FileText from 'lucide-react-native/icons/file-text';
 import House from 'lucide-react-native/icons/house';
@@ -96,6 +96,23 @@ export default function TabsLayout() {
           title: '',
           tabBarIcon: () => <WriteTabIcon />,
           tabBarAccessibilityLabel: t('tabs.write'),
+        }}
+        /*
+         * 🔴 **눌림을 여기서 가로챈다 — 탭으로 이동시키지 않는다.**
+         *
+         * 위 주석이 처음부터 *"탭 자체는 비워두고 눌림만 가로챈다"* 라고 적어놨는데
+         * **가로채는 코드가 없었다.** 대신 `write-tab.tsx` 가 포커스를 받은 뒤
+         * `router.back()` 으로 되돌아가고 `push('/write')` 를 불렀고, 그 둘이 한 틱에서
+         * 실행되는 순서·히스토리에 의존해 **두 번째 누름부터 빈 탭이 남았다**(2026-09-10 실기기).
+         *
+         * `preventDefault()` 로 탭 이동 자체를 막으면 그 화면은 **포커스를 받을 일이 없어**
+         * 빈 탭이 구조적으로 불가능해진다. 홈의 `조각 쓰기` 버튼과도 같은 한 줄이 된다.
+         */
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.push('/write');
+          },
         }}
       />
       {/*
