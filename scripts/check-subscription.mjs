@@ -5,6 +5,8 @@
  * 날짜가 하루만 어긋나도 "언제 결제되는지"를 잘못 고지하는 것이고,
  * 그건 화면을 눈으로 봐서는 알 수 없다.
  */
+import { readFileSync } from 'node:fs';
+
 import { GRACE_DAYS, GRACE_MS, daysUntil, purgeAtFrom } from '../features/backup/policy.ts';
 import { GRACE_MS as SERVER_GRACE_MS } from '../server/lib/policy.ts';
 import { trialTerms } from '../features/subscription/trial.ts';
@@ -311,6 +313,48 @@ check('🔴 빈 값·null 로는 파기 예정일을 만들지 않는다 — 없
   assert(purgeAtFrom('never') === null, 'never(기한 없음)는 파기 대상이 아니다');
   assert(purgeAtFrom('말도 안 되는 값') === null, '파싱 불가');
 });
+
+/*
+ * ── 🔴 §13⑥ · 안드로이드 체험 자격 — **자격 API 를 부르지 않는다** (2026-09-10) ──────
+ *
+ * 2026-09-10 에 *"자격 API 를 안 불러서 위험하다"* 로 진단했다가 **전제가 틀린 것을 확인**했다.
+ * `checkTrialOrIntroductoryPriceEligibility` 는 SDK 주석이 **`iOS only` · Android 는 언제나
+ * `INTRO_ELIGIBILITY_STATUS_UNKNOWN`** 이라고 못박는다. 부르면 **고친 것처럼 보이면서
+ * 아무것도 안 바뀌는 코드**가 되고, 그건 안 부르는 것보다 나쁘다.
+ *
+ * 안드로이드에서 자격을 거르는 것은 **Play 자신**이다 — 자격 없는 계정에는 그 오퍼를 아예
+ * 안 돌려주고, RC 는 거르지 않고 그대로 싣는다. 그래서 `introPrice` 가 없고, 동의 화면이
+ * 안 뜨고, 곧장 결제로 간다. **지금 배선이 맞다.**
+ *
+ * ⚠ 이 검사는 *"부르지 마라"* 를 지키는 것이지 자격을 재는 것이 아니다.
+ *   근거와 실측 계획은 `docs/MONETIZATION_SYSTEM.md` §5(§13⑥ 절).
+ */
+{
+  const purchases = readFileSync(
+    new URL('../features/subscription/api/purchases.ts', import.meta.url),
+    'utf8',
+  );
+
+  check('🔴 대조군 — 구매 계층에서 introPrice 를 실제로 읽는다', () => {
+    /* 이게 0 이면 아래 두 검사는 **대상을 잃은 것**이지 통과가 아니다 */
+    assert(purchases.includes('introPrice'), 'purchases.ts 가 introPrice 를 안 읽는다 — 배선이 바뀌었다');
+  });
+
+  check('🔴 안드로이드 전용 앱에서 iOS 전용 자격 API 를 부르지 않는다', () => {
+    assert(
+      !/checkTrialOrIntroductoryPrice/.test(purchases),
+      'iOS 전용 API 다 — 안드로이드에서는 언제나 UNKNOWN 이라 판정이 안 된다. ' +
+        'Play 가 자격 없는 오퍼를 아예 안 보내므로 introPrice 가 null 인 것으로 충분하다',
+    );
+  });
+
+  check('🔴 체험 판정은 실제로 구매될 값에 묶인다 — trialTermsOf 가 introPrice 를 쓴다', () => {
+    assert(
+      /introPrice[\s\S]{0,400}trialTerms\(/.test(purchases),
+      'trialTermsOf 가 introPrice 말고 다른 것을 본다 — 동의 화면 조건과 실제 청구가 갈릴 수 있다',
+    );
+  });
+}
 
 console.log(
   failures.length === 0
