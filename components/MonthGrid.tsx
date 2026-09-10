@@ -22,6 +22,17 @@ interface MonthGridProps {
   disabledDates?: ReadonlySet<string>;
   /** 이 날짜 이후는 누를 수 없다 */
   maxDate?: string;
+  /**
+   * 날짜 뒤의 **채운 원을 그리지 않는다**(2026-09-10 사용자 요청).
+   *
+   * 원은 *"이 날은 특별하다"* 를 몇 칸에만 칠할 때 값을 한다. 그런데 목록의 날짜 건너뛰기
+   * 시트는 **거의 모든 칸이 칠해진다** — 쓴 날은 강조라서, 안 쓴 날은 못 누른다고 죽여서.
+   * 전부 칠하면 아무것도 강조되지 않고 화면만 시끄럽다(기둥 2).
+   * 거기서는 **점 하나와 글자 색**으로 충분하다.
+   *
+   * ⚠ `오늘` 만은 **테두리**로 남긴다. 표시를 통째로 빼면 달력에서 지금이 어디인지 잃는다.
+   */
+  flat?: boolean;
 }
 
 /**
@@ -35,6 +46,7 @@ export function MonthGrid({
   markedDates,
   disabledDates,
   maxDate,
+  flat = false,
 }: MonthGridProps) {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
@@ -85,11 +97,12 @@ export function MonthGrid({
               <View
                 style={[
                   styles.day,
-                  isToday && styles.dayToday,
+                  isToday && (flat ? styles.dayTodayRing : styles.dayToday),
                   // 조각을 쓴 날은 **한눈에** 보여야 한다. 점만으로는 눈에 안 들어온다.
-                  marked && !taken && styles.dayMarked,
+                  marked && !taken && !flat && styles.dayMarked,
                   // 이미 쓴 날(고를 수 없는 날)은 '있다'는 것만 옅게 남긴다.
-                  taken && styles.dayTaken,
+                  taken && !flat && styles.dayTaken,
+                  // 고른 날은 flat 에서도 채운다 — 이건 강조가 아니라 **지금 무엇을 골랐나**다.
                   isSelected && styles.daySelected,
                 ]}
               >
@@ -161,6 +174,12 @@ const createStyles = (colors: Palette) =>
     },
     dayToday: {
       backgroundColor: colors.accentSoft,
+    },
+    // flat 에서의 오늘 — 채우지 않고 테두리만 두른다(§10 규약대로 반지름을 다시 적는다)
+    dayTodayRing: {
+      borderRadius: radius.full,
+      borderWidth: 1,
+      borderColor: colors.accentMuted,
     },
     /*
      * 배경색을 바꾸는 스타일마다 반지름을 **다시 적어준다**.

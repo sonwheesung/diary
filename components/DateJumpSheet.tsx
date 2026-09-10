@@ -102,12 +102,18 @@ export function DateJumpSheet({
         </Pressable>
       </View>
 
+      {/*
+        🔴 `flat` — 여기서는 **채운 원을 그리지 않는다**(2026-09-10 사용자 요청).
+          이 시트는 쓴 날을 강조하고 안 쓴 날을 죽이느라 **거의 모든 칸이 칠해진다.**
+          전부 칠하면 아무것도 강조되지 않는다 — 점 하나와 글자 색이면 읽힌다.
+      */}
       <MonthGrid
         month={month}
         selected={null}
         onSelect={onSelect}
         markedDates={writtenDates}
         disabledDates={blocked}
+        flat
       />
 
       <Text style={styles.hint}>{t('diaries.byDateHint')}</Text>
