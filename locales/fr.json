@@ -559,7 +559,7 @@
       "cooling-down": "Un problème est survenu de notre côté. Vous pourrez réessayer dans une heure.",
       "coolingDownAt": "Un problème est survenu de notre côté. Vous pourrez réessayer à partir de {{time}}.",
       "rateLimitedAt": "Vous avez créé tous les rapports disponibles aujourd'hui. Vous pourrez en créer d'autres après {{time}}.",
-      "rate-limited": "Vous avez créé tous les rapports disponibles aujourd'hui. Vous pourrez en créer d'autres après la réinitialisation.",
+      "rate-limited": "Vous avez créé tous les rapports disponibles aujourd'hui. Vous pourrez en créer d'autres après la réinitialisation de la limite.",
       "upstream": "Le serveur rencontre un problème. Réessayez bientôt.",
       "error": "Un problème est survenu.",
       "too-early": "Une période n'est pas encore terminée. En créant le bilan après sa fin, il ne manquera rien.",

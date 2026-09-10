@@ -559,7 +559,7 @@
       "cooling-down": "Something went wrong on our side. You can try again in an hour.",
       "coolingDownAt": "Something went wrong on our side. You can try again after {{time}}.",
       "rateLimitedAt": "You've created all the reports available for today. You can make more after {{time}}.",
-      "rate-limited": "You've created all the reports available for today. You can make more once the day resets.",
+      "rate-limited": "You've created all the reports available for today. You can make more once the limit resets.",
       "upstream": "The server is having trouble. Please try again shortly.",
       "error": "Something went wrong.",
       "too-early": "Some periods haven't ended yet. Create it after they end and nothing will be left out.",
