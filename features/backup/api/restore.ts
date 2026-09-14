@@ -265,8 +265,8 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
         await db.runAsync(
           `INSERT OR REPLACE INTO ai_reports
              (id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver,
-              metrics, created_at, deleted_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              metrics, insights, created_at, deleted_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           row.id,
           row.kind,
           row.period_key,
@@ -288,6 +288,8 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
            *   정상이다(캡이 평생 1번이라 소급이 애초에 불가능하다, §8.4).
            */
           row.metrics ?? null,
+          /* ⚠ v6 이하 백업에는 없다 → `undefined`. 발견·권유 없는 리포트가 정상이다(§8.5) */
+          row.insights ?? null,
           row.created_at,
           /*
            * ⚠ **묘비를 그대로 옮긴다**(§11.9). 안 옮기면 복원한 기기에서 지운 기간이

@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '135c6fcd',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: 'c1b13f32',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Vivace Games Studio (“işletmeci”), Kişisel Bilgilerin Korunması Kanunu ile ilgili diğer mevzuata uyar ve “Jogak” (“hizmet”) kullanıcılarının kişisel verilerini aşağıda belirtildiği şekilde işler. Jogak, ilke olarak yazdığın günlük kayıtlarını senin cihazında tutar; kayıtların sunucuya yalnızca kendin açtığın yedekleme ile kendin oluşturduğun yapay zekâ özet raporu kapsamında gönderilir. Bunların dışında yalnızca gereken en az bilgiyi toplarız.',
   sections: [
@@ -60,9 +60,9 @@ export const PRIVACY_TR: LegalDoc = {
         '⚠ Kredi kartı veya hesap numarası gibi ödeme bilgilerini Google Play işler ve bunlar işletmeciye iletilmez. İşletmeci yalnızca ödeme yaptığını ve aboneliğin ne zamana kadar geçerli olduğunu bilebilir.',
         'e. Yapay zekâ özet raporu oluşturursan (abonelik gerekir)',
         '• İşletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına iletilenler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi',
-        '• İşletmecinin sakladıkları: yapay zekânın oluşturduğu özet, raporu oluşturan hesabın kimliği, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı',
-        '⚠ Tam olarak: işletmeci günlük içeriğinin kendisini saklamaz. Ancak ① özet oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana “işletmeci göremez” diyemeyiz ve ② oluşturulan özeti 90 gün saklarız. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.',
-        '⚠ Özet, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir.',
+        "• İşletmecinin sakladıkları: yapay zekânın oluşturduğu rapor (özet; örüntü, başarı ve öneri cümleleri ile kanıt olarak alıntıladığı günlük cümleleri), raporu oluşturan hesabın kimliği, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı",
+        "⚠ Tam olarak: işletmeci günlük içeriğinin kendisini saklamaz. Ancak ① rapor oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana “işletmeci göremez” diyemeyiz ve ② oluşturulan raporu 90 gün saklarız. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.",
+        "⚠ Rapor, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir ve bir örüntünün kanıtı olarak günlük cümleleri olduğu gibi alıntılanabilir.",
         '• Hassas bilgiler için ayrı rıza: bir günlük, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruhsal durum gibi hassas bilgiler içerebilir. Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında hassas bilgilerin işlenmesine ilişkin ayrı bir rıza alırız. Bu rıza, 6. bölümdeki yurt dışına aktarım rızasından ayrıdır ve her birini ayrı ayrı seçebilirsin.',
         'Rıza vermesen de yapay zekâ raporları dışındaki tüm özellikleri aynen kullanabilirsin. Raporlar yalnızca sen oluşturduğunda üretilir ve asla kendiliğinden oluşturulmaz.',
         'f. Uygulamayı açtığınızda veya uygulamaya geri döndüğünüzde (oturum açmış olun ya da olmayın)',
@@ -86,7 +86,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• Reklam gösterimi: ücretsiz sürümü kullananlara reklam sunmak ve reklam performansını ölçmek',
         '• Yedekleme ve geri yükleme: yedeklemeyi açtıysan kayıtlarının şifrelenmiş kopyasını saklamak ve talebin üzerine sana geri vermek',
         '• Abonelik hakkının doğrulanması: ödeme yapan kullanıcılara reklamsız kullanım, yedekleme ve yapay zekâ raporları sunmak, ödeme sorularını ve iadeleri ele almak',
-        '• Yapay zekâ özet raporlarının oluşturulması ve kalitesinin iyileştirilmesi: istediğin döneme ait özeti hazırlamak ve sonucu inceleyerek kaliteyi geliştirmek',
+        "• Yapay zekâ özet raporlarının oluşturulması ve kalitesinin iyileştirilmesi: istediğin dönemi değerlendiren bir rapor (özet, örüntüler, başarılar ve öneriler) hazırlamak ve sonucu inceleyerek kaliteyi geliştirmek",
         'İşletmeci kişisel verileri yukarıdaki amaçlar dışında kullanmaz; amaç değişirse önceden onay alır.',
       ],
     },
@@ -99,7 +99,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• Cihaz tanımlayıcısı ve kullanım günü kayıtları: son kullanım gününden itibaren 400 gün. Ardından otomatik olarak silinir.',
         '• Şifrelenmiş yedek kopyası: yedekleme açık kaldığı sürece ve abonelik bittikten sonra 90 güne kadar saklanır, ardından otomatik olarak imha edilir. Yedeklemeyi kapatırsan, silinmesini istersen veya hesabını silersen 90 günü beklemeden gecikmeksizin imha ederiz. 3 yıl veya daha uzun süre erişilmeyen yedekler imha edilir (bu, uygulamayı silip hesabını silmeyenler için geçerlidir).',
         '• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için tutulur; hesap kimliği bununla birlikte saklanmaz.',
-        '• Yapay zekânın oluşturduğu özet: oluşturulduğu günden itibaren 90 gün. Bu sürenin sonunda otomatik olarak silinir.',
+        "• Yapay zekânın oluşturduğu rapor (kanıt olarak alıntılanan günlük cümleleri dahil): oluşturulduğu günden itibaren 90 gün. Bu sürenin sonunda otomatik olarak silinir.",
         '• Rapor kullanım kayıtları (hesap kimliği, dönem, kaç kez oluşturulduğu, jeton sayısı): işleme amacı gerçekleşene kadar ya da hesabını silene kadar',
         '• Sözleşme veya cayma ile ödeme ve malların sağlanmasına ilişkin kayıtlar: 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
         'Hesabını silersen hesap kimlikleri (e-posta adresi ve Google “sub”) gecikmeksizin izi sürülemez hâle getirilir; yukarıdaki işlem kayıtları ise yazarına ulaşılamayacak biçimde, belirtilen süre boyunca ayrı saklanır ve ardından imha edilir.',
@@ -161,8 +161,8 @@ export const PRIVACY_TR: LegalDoc = {
         'Bu hakları 11. bölümdeki iletişim adresi üzerinden yazılı olarak veya e-postayla kullanabilirsin; işletmeci gecikmeksizin işlem yapar.',
         'Verilerindeki bir hatanın düzeltilmesini talep edersen, düzeltme tamamlanana kadar o veriyi kullanmaz ve aktarmayız.',
         '⚠ Yedeğe ilişkin erişim hakkının sınırı: yedeğine erişim talep edersen işletmecinin sana verebileceği tek şey, şifresi çözülemeyen metin ile 2(c) bendindeki üst verilerdir. Kayıtlarını insanın okuyabileceği biçimde veremeyiz — çünkü işletmecide anahtar yoktur. Kendin, kurtarma kodunla istediğin zaman uygulamada geri yükleyebilirsin.',
-        'Oluşturduğun yapay zekâ raporlarını uygulamada istediğin zaman silebilirsin. Uygulamada sildiğinde rapor cihazından kaybolur; sunucuda saklanan özet ise 90 gün sonra otomatik olarak silinir. Daha erken silinmesini istersen “İletişim” üzerinden talep edebilirsin.',
-        '⚠ Yapay zekânın oluşturduğu özetler gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis veya tavsiye değildir. Uygulama, bir raporu bildirmen için bir yol sunar.',
+        "Oluşturduğun yapay zekâ raporlarını uygulamada istediğin zaman silebilirsin. Uygulamada sildiğinde rapor cihazından kaybolur; sunucuda saklanan rapor ise 90 gün sonra otomatik olarak silinir. Daha erken silinmesini istersen “İletişim” üzerinden talep edebilirsin.",
+        "⚠ Yapay zekânın oluşturduğu raporlar gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis değildir. Rapordaki öneriler yalnızca bilgi amaçlıdır ve uymak zorunda değilsin. Uygulama, bir raporu bildirmen için bir yol sunar.",
         '14 yaşından küçük bir çocuğun yasal temsilcisi, yukarıdaki hakları çocuk adına kullanabilir.',
       ],
     },
@@ -210,6 +210,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• 2026-09-01 değişiklik — hizmet kullanım istatistikleri (etkin kullanıcı sayımı) için cihaz tanımlayıcısı toplanması 2., 3. ve 4. maddelere eklendi ve 2. maddedeki yaş doğrulama bildirimi genişletildi.',
         '• 2026-09-02 değişiklik — 2. maddede, kullanım tarihinin yalnızca uygulama başlatıldığında değil, uygulamaya geri dönüldüğünde de (en fazla beş dakikada bir) kaydedildiği ve oturum açılmışsa cihaz tanımlayıcısı yerine hesaba kaydedildiği belirtilmiştir.',
         "• 2026-09-09 değişiklik — uygulama açılırken yapılan güncelleme denetimi (cihaz işletim sistemi ve rastgele belirtecin gönderilmesi) 2. bölümde açıklandı ve 6. bölümdeki alıcılara 650 Industries, Inc. eklendi.",
+        "• 2026-09-14 değişiklik — yapay zekâ özet raporları artık özete ek olarak örüntüler, başarılar ve öneriler üretiyor ve kanıt olarak günlük cümlelerini alıntılıyor; saklanan bilgiler (2. bölüm), işleme amacı (3. bölüm), saklama süresi (4. bölüm) ve raporların niteliğine ilişkin açıklama (9. bölüm) güncellendi.",
       ],
     },
   ],
@@ -232,9 +233,9 @@ export const PRIVACY_TR: LegalDoc = {
  */
 export const DELETE_ACCOUNT_TR: LegalDoc = {
   title: 'Jogak — Hesabını nasıl silersin',
-  sourceFingerprint: 'a8b0c8b9',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: 'e36bafaa',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Bu sayfada Jogak uygulamasındaki hesabını ve onunla ilgili verileri nasıl sileceğin anlatılıyor. Uygulamayı zaten sildiysen ya da giriş yapamıyorsan e-postayla da talepte bulunabilirsin.',
   sections: [
@@ -267,7 +268,7 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
         '• Başvurular ile bunları yazan hesap arasındaki bağlantı',
         '• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası (yedeklemeyi açtıysan) — 90 günlük süreyi beklemeden birlikte silinir.',
         '• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)',
-        '• Sunucuda saklanan yapay zekâ rapor özetleri (en fazla 90 gün) ve rapor kullanım kayıtları (dönem, kaç kez oluşturulduğu, jeton sayısı)',
+        "• Sunucuda saklanan yapay zekâ raporları (kanıt olarak alıntılanan günlük cümleleri dahil, en fazla 90 gün) ve rapor kullanım kayıtları (dönem, kaç kez oluşturulduğu, jeton sayısı)",
         '⚠ Hesap silmede önce yedeği imha eder, sonra hesabı sileriz — çünkü hesap önce yok olursa o yedeği silmeye yetkili kimse kalmaz. Yedeğin silinmesi başarısız olursa hesap silme işlemi hiç başlamaz; lütfen biraz sonra yeniden dene.',
         '⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile sunucudaki yedeği geri yükleyemezsin.',
       ],
@@ -337,9 +338,9 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
  */
 export const TERMS_TR: LegalDoc = {
   title: 'Jogak Kullanım Koşulları',
-  sourceFingerprint: 'f4233a8a',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: '234878ab',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Bu koşullar, Hwiseong Games’in (marka: Vivace Games Studio, “işletmeci”) sunduğu “Jogak” adlı mobil uygulamanın (“hizmet”) kullanımına ilişkin olarak işletmeci ile kullanıcı arasındaki hakları, yükümlülükleri ve sorumlulukları belirler. Hizmeti kullanmadan önce lütfen bunları oku.',
   sections: [
@@ -529,7 +530,7 @@ export const TERMS_TR: LegalDoc = {
       body: [
         'İşletmeci, hizmetin sunulmasıyla ilgili olarak ilgili mevzuatın öngördüğü sorumluluğu taşır. Bu koşulların hiçbir hükmü, işletmecinin kanunla öngörülmüş sorumluluğunu ortadan kaldırmaz veya sınırlamaz.',
         'İşletmeci; doğal afet, kullanıcının cihazının arızalanması, kaybolması veya sıfırlanması, kullanıcının kurtarma kodunu ya da uygulama kilidi sırrını kaybetmesi gibi kendisine yüklenemeyen nedenlerden doğan zararlardan sorumlu değildir.',
-        'Yapay zekâ özet raporu, yapay zekânın ürettiği bir başvuru materyalidir; tıbbi, psikolojik veya hukuki bir teşhis ya da tavsiye değildir. İşletmeci içeriğinin doğruluğunu garanti etmez.',
+        "Yapay zekâ özet raporu, yapay zekânın ürettiği bir başvuru materyalidir; tıbbi, psikolojik veya hukuki bir teşhis değildir. Rapordaki öneriler yalnızca bilgi amaçlıdır ve kullanıcının bunlara uyma yükümlülüğü yoktur. İşletmeci içeriğinin doğruluğunu garanti etmez.",
         'Açık pazar üzerinden yapılan ödeme sürecinde açık pazara yüklenebilen nedenlerle doğan zararlar açık pazarın politikasına tabidir. Bununla birlikte işletmeci, kullanıcının zararının giderilmesi için gereken her türlü iş birliğini gösterir.',
       ],
     },
@@ -553,6 +554,7 @@ export const TERMS_TR: LegalDoc = {
         'Bu koşulların Korece metni esastır. Başka bir dile yapılan çeviri anlam bakımından farklılık gösterirse Korece metin üstün tutulur.',
         'Ek hüküm: Bu koşullar 17 Ağustos 2026 tarihinde yürürlüğe girer.',
         "Son hüküm: bu koşullar 9 Eylül 2026 tarihinde yürürlüğe girer. (10. maddeye uygulamanın otomatik güncelleme denetimine ilişkin açıklama eklenmiştir.)",
+        "Son hüküm: bu koşullar 14 Eylül 2026 tarihinden itibaren yürürlüğe girer. (20. maddeye yapay zekâ raporlarındaki önerilere ilişkin bir açıklama eklendi.)",
       ],
     },
   ],

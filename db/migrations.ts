@@ -196,6 +196,20 @@ const MIGRATIONS: readonly string[] = [
   `
   ALTER TABLE ai_reports ADD COLUMN headline_from TEXT;
   `,
+
+  // v10 — 발견·해낸 것·권유·셀 수 있는 사실·요일 한 줄 + 타인 위해 신호 (AI_REPORT_SYSTEM §8.5 · §3.1)
+  /*
+   * 🔴 **컬럼 하나에 JSON 이다** — 칸이 여섯이고 개수가 변한다. 정규화하면 테이블이 넷 늘고
+   *   백업 매니페스트·복원·묘비가 전부 네 벌이 된다(`metrics`·`headline_from` 과 같은 판단).
+   *
+   * 🔴 **스토어 릴리스로만 나간다** — OTA 로 보내지 않는다(`docs/README.md` §3 규칙 ①).
+   *
+   * ⚠ **NULL 이 정상값이다.** 프롬프트 v14 이전 리포트에는 없고 캡이 평생 1번이라 영원히 안 생긴다.
+   *   화면은 그때 그 블록들을 안 그린다.
+   */
+  `
+  ALTER TABLE ai_reports ADD COLUMN insights TEXT;
+  `,
 ];
 
 export const LATEST_DB_VERSION = MIGRATIONS.length;

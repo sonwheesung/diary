@@ -15,7 +15,7 @@ import { and, eq, sql } from 'drizzle-orm';
  */
 import { isCreatablePeriod } from '@shared/ai/period';
 import { buildSystem, buildUser, isEmpty, withBody } from '@shared/ai/prompt';
-import { PROMPT_VERSION, schemaFor } from '@shared/ai/types';
+import { PROMPT_VERSION, sanitizeInsights, schemaFor } from '@shared/ai/types';
 import type { BuildPromptArgs, ReportKind } from '@shared/ai/types';
 import { db } from '@/db';
 import { aiCalls, aiCooldowns, aiReports, aiUsage } from '@/db/schema';
@@ -161,6 +161,7 @@ export async function GET(req: Request): Promise<Response> {
         summary: aiReports.summary,
         concern: aiReports.concern,
         metrics: aiReports.metrics,
+        insights: aiReports.insights,
         model: aiReports.model,
         promptVer: aiReports.promptVer,
         revision: aiReports.revision,
@@ -202,6 +203,15 @@ export async function GET(req: Request): Promise<Response> {
         // 근거 키가 없으면 화면이 그 블록을 안 그린다. 본문은 온전하다
       }
     }
+    /* v15 칸. 없으면(v14 이전 행) 앱이 그 블록들을 안 그린다 — 깨져 있어도 본문은 준다 */
+    let parsedInsights: unknown;
+    if (latest.insights !== null) {
+      try {
+        parsedInsights = JSON.parse(latest.insights);
+      } catch {
+        // 발견·권유 없이 간다
+      }
+    }
 
     /*
      * 🔴 `POST` 의 성공 응답과 **키가 같아야 한다** — 앱이 한 파서·한 저장 경로를 공유한다.
@@ -218,6 +228,7 @@ export async function GET(req: Request): Promise<Response> {
       concern: latest.concern,
       metrics: parsedMetrics,
       topics: parsedTopics,
+      insights: parsedInsights,
       model: latest.model ?? '',
       promptVer: latest.promptVer ?? 0,
     });
@@ -447,9 +458,15 @@ export async function POST(req: Request): Promise<Response> {
        *   그건 사용자 잘못이 아니라 **배포 사고**라 잠그면 애먼 사람을 막는다.
        */
       const calledModel = result.reason !== 'not-configured';
+      /*
+       * 🔴 잠근 시각을 응답에 싣는다(2026-09-14). 앱 문구가 *"횟수에 포함되지 않아요"* 만 말하고
+       *   **1시간 잠긴다는 것을 말하지 않았다** — 사용자는 바로 다시 누르고 `cooling-down` 을 만난다.
+       */
+      let cooledUntil: Date | null = null;
       if (calledModel) {
         try {
           const until = new Date(Date.now() + FAILURE_COOLDOWN_MS);
+          cooledUntil = until;
           await db
             .insert(aiCooldowns)
             .values({ subjectId: id.subjectId, until, reason: result.reason })
@@ -497,10 +514,30 @@ export async function POST(req: Request): Promise<Response> {
       }
 
       if (result.reason === 'not-configured') return fail('not-configured');
-      if (result.reason === 'refused' || result.reason === 'malformed') return fail('refused');
+      if (result.reason === 'refused' || result.reason === 'malformed') {
+        return cooledUntil === null
+          ? fail('refused')
+          : fail('refused', { retryAt: cooledUntil.toISOString() });
+      }
       if (result.reason === 'truncated') return fail('error');
       return fail('upstream');
     }
+
+    /*
+     * 🔴 **v15 칸을 검증한다**(§8.5 · §3.1) — 저장·응답 **전에** 한 번만.
+     *
+     * ① 근거 인용을 **그날 일기와 대조**해 없는 것을 버린다(맥락 오류는 문자열 검사로 못 잡는다).
+     * ② **위기 리포트는 칸을 비운다** — *"안전화한 최종본만 저장한다"* 를 코드가 지킨다.
+     * ⚠ 저장과 응답이 **같은 값**을 쓴다. 따로 거르면 되찾기(§5.3)가 다른 리포트를 돌려준다.
+     */
+    const cleaned = sanitizeInsights({
+      kind,
+      entries: kind === 'weekly' ? withBody(args.entries) : [],
+      raw: result.raw,
+      metrics: result.metrics,
+      topics: result.topics,
+      concern: result.concern,
+    });
 
     /*
      * 성공했을 때만 +1. 순서가 중요하다 — 먼저 쓰면 실패한 호출이 캡을 먹는다.
@@ -627,8 +664,10 @@ export async function POST(req: Request): Promise<Response> {
          */
         metrics:
           kind === 'weekly'
-            ? JSON.stringify({ metrics: result.metrics, topics: result.topics })
+            ? JSON.stringify({ metrics: cleaned.metrics, topics: cleaned.topics })
             : null,
+        /* v15 칸 — 상위도 넣는다(타인 위해 신호가 있다). 배열은 비어 있다 */
+        insights: JSON.stringify(cleaned.insights),
       });
     } catch (error) {
       reportError(error, 'ai.report-write');
@@ -639,8 +678,9 @@ export async function POST(req: Request): Promise<Response> {
       headlineFrom: result.headlineFrom,
       summary: result.summary,
       concern: result.concern,
-      metrics: result.metrics,
-      topics: result.topics,
+      metrics: cleaned.metrics,
+      topics: cleaned.topics,
+      insights: cleaned.insights,
       model: result.model,
       promptVer: PROMPT_VERSION,
     });

@@ -38,7 +38,16 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 import { buildSystem, buildUser, isEmpty, hasBody, withBody } from '../features/ai/prompt.ts';
-import { METRIC_CODES, REPORT_SCHEMA, PROMPT_VERSION, TOPIC_CODES, schemaFor, pickHeadlineFrom } from '../features/ai/types.ts';
+import {
+  METRIC_CODES,
+  REPORT_SCHEMA,
+  PROMPT_VERSION,
+  TOPIC_CODES,
+  schemaFor,
+  pickHeadlineFrom,
+  sanitizeInsights,
+  readInsights,
+} from '../features/ai/types.ts';
 import { rollupMetrics } from '../features/ai/rollup.ts';
 import { AI_VENDOR, vendorContactReady } from '../features/ai/vendor.ts';
 import {
@@ -758,7 +767,13 @@ check('🔴 프롬프트가 "평가하지 않는다"와 점수를 동시에 말�
    * 무조건적 평가 금지는 **글에 한정**돼야 한다. 점수를 매기면서 그냥 두면 프롬프트가
    * 자기모순이고, 모델이 지표를 뭉개거나 요약문에 점수 이야기를 옮겨 적는다.
    */
-  assert(sys.includes('**글에서는**'), '평가 금지가 글에 한정되지 않았다');
+  /*
+   * ⚠ v15 부터 주간은 *"본문(summary)에서는"* 으로 한정한다 — 해낸 것·권유가 **칸으로** 생겼다(§8.5).
+   *   상위는 칸이 없어 옛 문장 그대로다. 둘 다 무조건 금지가 아니라 **글에 한정**된 것만 본다.
+   */
+  assert(sys.includes('**본문(summary)에서는**'), '주간의 평가 금지가 본문에 한정되지 않았다');
+  const up = buildSystem({ kind: 'monthly', lang: 'ko', periodKey: '2026-08' });
+  assert(up.includes('**글에서는**'), '상위의 평가 금지가 글에 한정되지 않았다');
   // 병명 금지는 **남아야 한다** — 지표와 무관하게 지킨다
   assert(sys.includes('병명'), '병명 금지가 사라졌다');
   assert(sys.includes('요약문에 옮겨 적지 않습니다'), '숫자를 글에 옮기지 말라는 지시가 없다');
@@ -1115,6 +1130,194 @@ console.log('');
     assert(guard >= 0, '동기화가 findByPeriod 를 안 본다 — 지운 것까지 되살린다(§11.9)');
     assert(write >= 0, '동기화가 saveReport 를 안 부른다 — 되살리는 코드가 없다');
     assert(guard < write, '묘비 확인이 저장보다 뒤다 — 순서가 곧 규약이다');
+  });
+}
+
+/* ── ⑪ v15 — 발견·권유 검증과 위기 비움 (§8.5 · §3.1, 2026-09-14) ─────────────────
+ *
+ * 🔴 이 층의 실패는 둘 다 조용하다.
+ *   ① **맥락 오류** — 인용은 원문 그대로인데 다른 날 이야기에 붙었다. 문자열 존재만 보면 통과한다.
+ *   ② **위기 리포트의 칸** — 위험 신호 행동을 *"해낸 것"* 으로 칭찬하거나, 남을 해치려는 계획을
+ *      흐름 카드로 재구성해 **서버에 90일 저장**한다. 프롬프트 한 줄에만 기대면 틀린 날 그대로 나간다.
+ * → 검증 함수를 직접 부르고, 라우트가 그 함수를 **저장 전에** 부르는지 소스로 본다.
+ */
+{
+  console.log('\nv15 — 발견·권유 검증과 위기 비움 (§8.5 · §3.1)');
+  const E = [
+    { date: '2026-06-01', emotion: null, title: null, text: '회의에서 발표를 맡기로 했다. 준비가 걱정된다.' },
+    { date: '2026-06-02', emotion: null, title: null, text: '발표 자료를 절반 만들었다. 저녁에 러닝을 했다.' },
+    { date: '2026-06-03', emotion: null, title: null, text: '발표를 끝냈다. 생각보다 괜찮았다.' },
+  ];
+  const METRICS = [
+    { code: 'stress', value: 50, days: null, basis: '발표 걱정', verdict: '발표 준비에 대한 걱정이 적혀 있습니다.' },
+  ];
+  const TOPICS = [{ code: 'work', days: 9, note: '발표' }];
+  const ev = (date, quote, role = '결정') => ({ date, quote, role });
+  const disc = (over = {}) => ({
+    shape: 'decision',
+    title: '걱정이 아니라 끝낸 발표였습니다',
+    selfCheck: 'combined',
+    evidence: [ev('2026-06-01', '회의에서 발표를 맡기로 했다'), ev('2026-06-03', '발표를 끝냈다', '결과')],
+    ...over,
+  });
+  const run = (raw, { concern = false, kind = 'weekly' } = {}) =>
+    sanitizeInsights({ kind, entries: E, raw, metrics: METRICS, topics: TOPICS, concern });
+
+  check('멀쩡한 발견은 그대로 남는다 — 대조군', () => {
+    eq(run({ discoveries: [disc()] }).insights.discoveries.length, 1, '발견 수');
+  });
+
+  check('🔴 그날 일기에 없는 인용은 버린다 — 맥락 오류(§8.5)', () => {
+    /* 6/3 에 적힌 문장을 6/2 에 붙였다. 문장은 일기에 **있다** — 문자열 존재만 보면 통과한다 */
+    const out = run({
+      discoveries: [disc({ evidence: [ev('2026-06-01', '회의에서 발표를 맡기로 했다'), ev('2026-06-02', '발표를 끝냈다')] })],
+    });
+    eq(out.insights.discoveries.length, 0, '다른 날에 붙인 인용으로 선 발견이 살아남았다');
+  });
+
+  check('인용 대조는 마침표·띄어쓰기 차이를 넘는다 — 멀쩡한 근거를 잃지 않는다', () => {
+    const out = run({
+      discoveries: [disc({ evidence: [ev('2026-06-01', '회의에서  발표를 맡기로 했다.'), ev('2026-06-03', '발표를 끝냈다!')] })],
+    });
+    eq(out.insights.discoveries.length, 1, '문장부호 차이로 근거가 버려졌다');
+  });
+
+  check('🔴 single 인 발견은 버린다 — 한 날에 이미 적힌 문장은 발견이 아니다', () => {
+    eq(run({ discoveries: [disc({ selfCheck: 'single' })] }).insights.discoveries.length, 0, '발견 수');
+  });
+
+  check('🔴 근거가 한 날뿐이면 발견이 아니다', () => {
+    const out = run({
+      discoveries: [disc({ evidence: [ev('2026-06-02', '발표 자료를 절반 만들었다'), ev('2026-06-02', '저녁에 러닝을 했다')] })],
+    });
+    eq(out.insights.discoveries.length, 0, '한 날짜짜리 발견이 살아남았다');
+  });
+
+  check('🔴 권유는 두 날 이상 반복된 것에서만 — 한 날짜짜리는 뜬금없는 조언이다', () => {
+    const out = run({
+      suggestions: [
+        { pattern: '발표 준비', text: '미리 나눠 준비해보는 건 어떨까요', dates: ['2026-06-01'] },
+        { pattern: '발표 준비', text: '준비를 이틀에 나눠보는 건 어떨까요', dates: ['2026-06-01', '2026-06-02'] },
+      ],
+    });
+    eq(out.insights.suggestions.length, 1, '권유 수');
+    eq(out.insights.suggestions[0].dates.length, 2, '남은 권유의 날짜 수');
+  });
+
+  check('🔴 자료에 없는 날짜는 권유에서 지운다 — 지우고 나서 둘 미만이면 버린다', () => {
+    const out = run({
+      suggestions: [{ pattern: 'x', text: 'y', dates: ['2026-06-01', '1999-01-01'] }],
+    });
+    eq(out.insights.suggestions.length, 0, '없는 날짜로 두 날을 채운 권유가 살아남았다');
+  });
+
+  check('🔴 체중·식단 권유와 성취는 버린다(§3.1 eating) — 리포트는 나이를 모른다', () => {
+    const out = run({
+      suggestions: [
+        { pattern: '저녁 과식', text: '저녁 칼로리를 줄여보는 건 어떨까요', dates: ['2026-06-01', '2026-06-02'] },
+        { pattern: '발표 준비', text: '준비를 나눠보는 건 어떨까요', dates: ['2026-06-01', '2026-06-02'] },
+      ],
+      achievements: [
+        { text: '체중을 1kg 줄였습니다', dates: ['2026-06-02'] },
+        { text: '발표를 끝냈습니다', dates: ['2026-06-03'] },
+      ],
+    });
+    eq(out.insights.suggestions.length, 1, '칼로리 권유가 살아남았다');
+    eq(out.insights.achievements.length, 1, '체중 성취가 살아남았다');
+  });
+
+  const FULL = {
+    harmToOthers: false,
+    discoveries: [disc()],
+    achievements: [{ text: '방을 정리했습니다', dates: ['2026-06-02'] }],
+    suggestions: [{ pattern: 'a', text: 'b', dates: ['2026-06-01', '2026-06-02'] }],
+    counts: [{ label: '적은 날', value: 3, unit: '일', dates: ['2026-06-01'] }],
+    dayNotes: [{ date: '2026-06-01', note: '발표를 맡음' }],
+  };
+  const blanked = (out) =>
+    out.insights.discoveries.length +
+      out.insights.achievements.length +
+      out.insights.suggestions.length +
+      out.insights.counts.length +
+      out.insights.dayNotes.length ===
+      0 &&
+    out.metrics.every((m) => (m.verdict ?? '') === '' && m.basis === '') &&
+    out.topics.every((t) => t.note === '');
+
+  check('🔴 자해·자살 신호면 칸을 전부 비운다 — "방 정리"를 칭찬하던 자리(§3.1 ④)', () => {
+    const out = run(FULL, { concern: true });
+    assert(blanked(out), '위기 리포트에 칸·지표 문장·근거·주제 설명이 남았다 — 그대로 서버에 90일 저장된다');
+    eq(out.insights.harmToOthers, false, 'harmToOthers');
+  });
+
+  check('🔴 타인 위해 신호면 같은 비움 + 신호가 남는다 — 배너의 유일한 근거다', () => {
+    const out = run({ ...FULL, harmToOthers: true });
+    assert(blanked(out), '타인 위해 리포트에 계획을 재구성할 칸이 남았다');
+    eq(out.insights.harmToOthers, true, 'harmToOthers 가 사라졌다 — 1577-0199 배너가 안 뜬다');
+  });
+
+  check('🔴 신호는 true 만 켠다 — 문자열 "true" 로 배너를 켜지 않는다', () => {
+    eq(run({ harmToOthers: 'true' }).insights.harmToOthers, false, 'harmToOthers');
+  });
+
+  check('상위 리포트는 신호만 남긴다 — 원문이 없어 근거를 대조할 수 없다', () => {
+    const out = run(FULL, { kind: 'monthly' });
+    eq(out.insights.discoveries.length + out.insights.suggestions.length, 0, '상위에 발견·권유가 남았다');
+  });
+
+  check('주제 날 수는 조각 있는 날 수를 넘지 않는다 — 넘으면 화면이 거짓 숫자를 그린다', () => {
+    eq(run({}).topics[0].days, 3, '주제 날 수');
+  });
+
+  check('readInsights — 깨진 값은 null, 모르는 모양의 카드는 버린다', () => {
+    eq(readInsights(null), null, 'null');
+    eq(readInsights([1, 2]), null, '배열');
+    const read = readInsights({ harmToOthers: true, discoveries: [{ shape: 'unknown', title: 'x' }, disc()] });
+    eq(read.discoveries.length, 1, '모르는 모양이 살아남았다');
+    eq(read.harmToOthers, true, 'harmToOthers');
+  });
+
+  check('🔴 스키마 — 위기 신호가 맨 앞이다(구조화 출력은 속성 순서대로 쓴다)', () => {
+    eq(Object.keys(REPORT_SCHEMA.properties).slice(0, 3).join(','), 'concern,harmToOthers,eating', '앞 세 칸');
+    for (const key of Object.keys(REPORT_SCHEMA.properties)) {
+      assert(REPORT_SCHEMA.required.includes(key), `${key} 가 required 에 없다 — 모델이 안 줘도 통과한다`);
+    }
+  });
+
+  check('🔴 상위 스키마에도 harmToOthers 가 있고, 발견·권유는 없다', () => {
+    const up = schemaFor('yearly');
+    assert(up.required.includes('harmToOthers'), '상위에서 타인 위해 신호를 못 받는다');
+    assert(!('discoveries' in up.properties) && !('suggestions' in up.properties), '원문 없는 상위에 발견·권유가 딸려갔다');
+  });
+
+  check('🔴 프롬프트 — 타인 위해는 concern 이 아니고, 화풀이는 신호가 아니다', () => {
+    for (const kind of ['weekly', 'monthly']) {
+      const sys = buildSystem({ kind, lang: 'ko', periodKey: kind === 'weekly' ? '2026-W33' : '2026-08' });
+      assert(sys.includes('harmToOthers'), `${kind}: 타인 위해 신호 지시가 없다`);
+      assert(sys.includes('화풀이'), `${kind}: 화풀이 오탐 기준이 없다 — 욕 한 줄에 배너가 뜬다`);
+    }
+  });
+
+  check('🔴 프롬프트 — 자해 위기의 한 줄은 일상 변화만, 정리 행동은 인용하지 않는다', () => {
+    const sys = buildSystem({ kind: 'weekly', lang: 'ko', periodKey: '2026-W33' });
+    assert(sys.includes('정리하는 행동'), '위험 신호 행동을 막는 문장이 없다');
+    assert(sys.includes('일상의 변화만'), '위기 한 줄 규칙이 없다');
+  });
+
+  check('🔴 프롬프트 — 발견 절은 주간에만', () => {
+    assert(buildSystem({ kind: 'weekly', lang: 'ko', periodKey: '2026-W33' }).includes('selfCheck'), '주간에 발견 절이 없다');
+    assert(!buildSystem({ kind: 'monthly', lang: 'ko', periodKey: '2026-08' }).includes('selfCheck'), '월간에 발견 절이 딸려갔다');
+  });
+
+  const routeSrc = readFileSync(join(HERE, '../server/app/api/v1/ai/report/route.ts'), 'utf8').split('\r\n').join('\n');
+  check('🔴 라우트가 저장 전에 sanitizeInsights 를 부른다 — "안전화한 최종본만 저장"의 유일한 집행', () => {
+    const clean = routeSrc.indexOf('sanitizeInsights({');
+    const write = routeSrc.indexOf('db.insert(aiReports)');
+    assert(clean >= 0, '라우트가 sanitizeInsights 를 안 부른다');
+    assert(write >= 0, '대조군 — ai_reports 쓰기를 못 찾았다');
+    assert(clean < write, '검증이 저장보다 뒤다 — 걸러지기 전의 칸이 90일 저장된다');
+    assert(routeSrc.includes('insights: JSON.stringify(cleaned.insights)'), '저장이 검증된 값을 안 쓴다');
+    assert(!/insights:\s*result\./.test(routeSrc), '응답·저장에 검증 전 값(result.*)을 쓴다');
   });
 }
 

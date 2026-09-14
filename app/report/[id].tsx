@@ -8,14 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '@/components/Screen';
-import {
-  deleteReport,
-  findByPeriod,
-  getReport,
-  type Report,
-  type ReportMetrics,
-} from '@/features/ai/api/report-repository';
+import { deleteReport, findByPeriod, getReport, type Report } from '@/features/ai/api/report-repository';
 import { PeriodShape } from '@/features/ai/components/PeriodShape';
+import {
+  AchievementsBlock,
+  DiscoveryCards,
+  SuggestionsBlock,
+} from '@/features/ai/components/ReportInsightsBlocks';
 import { ReportMetricsBlock } from '@/features/ai/components/ReportMetricsBlock';
 import { keyRange } from '@/features/ai/period';
 import { periodShape, previousPeriodKey, type Shape } from '@/features/ai/stats';
@@ -47,8 +46,6 @@ export default function ReportDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [shape, setShape] = useState<Shape | null>(null);
   const [prevShape, setPrevShape] = useState<Shape | null>(null);
-  /** 지난 기간 지표 — 게이지의 옅은 눈금(§8.3.2). `null`이 흔한 값이다 */
-  const [prevMetrics, setPrevMetrics] = useState<ReportMetrics | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -96,16 +93,9 @@ export default function ReportDetailScreen() {
         if (alive) setPrevShape(periodShape(report.kind, prevKey, facts));
       });
       /*
-       * 지표 비교는 **조건이 한 칸 더 세다**(§8.3.2). 위의 짝 막대는 조각만 있으면 서지만,
-       * 지표는 **지난 기간 리포트가 있고 거기 지표가 있어야** 한다 — 모델이 만든 층이라
-       * 조각에서 유도할 수 없다.
-       *
-       * ⚠ `findByPeriod`는 묘비도 돌려준다(그게 그 함수의 계약이다). 묘비는 `metrics`가
-       *   `NULL`이라 여기서 자동으로 걸러진다 — 따로 분기하지 않는다.
+       * ~~지난 기간 지표를 읽어 게이지에 옅은 눈금으로 얹는다(§8.3.2)~~ → **지웠다**(2026-09-14).
+       *   화면에서 숫자·게이지가 내려가 눈금을 얹을 자리가 없다(§8.5 결정 4).
        */
-      void findByPeriod(report.kind, prevKey).then((row) => {
-        if (alive) setPrevMetrics(row?.metrics ?? null);
-      });
     }
     return () => {
       alive = false;
@@ -245,6 +235,22 @@ export default function ReportDetailScreen() {
         </View>
       )}
 
+      {/*
+        🔴 **타인 위해 배너는 따로다**(§3.1). 자살예방 배너(109)를 남을 해치려는 사람에게 띄우던 것이
+          v14 의 결함이었다. 🚫 112 를 기본으로 띄우지 않는다 — 쓴 사람은 피해자가 아니다.
+        ⚠ `insights` 가 없는 옛 리포트에는 이 신호가 없다(그 시절엔 가르지 않았다).
+      */}
+      {report.insights?.harmToOthers === true && (
+        <View style={styles.concern}>
+          <LifeBuoy size={20} color={colors.accent} />
+          <View style={styles.concernBody}>
+            <Text style={styles.concernTitle}>{t('report.harmTitle')}</Text>
+            <Text style={styles.concernText}>{t('report.harmBody')}</Text>
+            <Text style={styles.concernChannel}>{t('report.harmChannel')}</Text>
+          </View>
+        </View>
+      )}
+
       <View style={styles.meta}>
         <Text style={styles.period}>{periodLabel(report.kind, report.periodKey)}</Text>
         {report.kind === 'weekly' && (
@@ -291,7 +297,18 @@ export default function ReportDetailScreen() {
         </View>
       )}
 
+      {/* v15 — 한 줄 아래 발견 카드(§8.5 화면 순서). 근거 날짜를 누르면 그날 조각으로 */}
+      {report.insights !== null && (
+        <DiscoveryCards
+          items={report.insights.discoveries}
+          onOpenDate={(date) => openSource('weekly', date)}
+        />
+      )}
+
       <Text style={styles.summary}>{report.summary}</Text>
+
+      {report.insights !== null && <AchievementsBlock items={report.insights.achievements} />}
+      {report.insights !== null && <SuggestionsBlock items={report.insights.suggestions} />}
 
       {/*
         ⚠ **글 아래다.** 상세는 읽는 자리라 그림이 위로 올라오면 요약문이 밀린다(기둥 2).
@@ -303,10 +320,17 @@ export default function ReportDetailScreen() {
         캡이 평생 1번이라 **영원히 안 생기므로** 빈 자리를 남기지 않는다.
       */}
       {report.metrics !== null && (
-        <ReportMetricsBlock data={report.metrics} prev={prevMetrics} kind={report.kind} />
+        <ReportMetricsBlock data={report.metrics} counts={report.insights?.counts ?? []} />
       )}
 
-      {shape !== null && <PeriodShape shape={shape} prev={prevShape} kind={report.kind} />}
+      {shape !== null && (
+        <PeriodShape
+          shape={shape}
+          prev={prevShape}
+          kind={report.kind}
+          dayNotes={report.insights?.dayNotes}
+        />
+      )}
 
       <View style={styles.footer}>
         <Text style={styles.disclaimer}>{t('report.disclaimer')}</Text>

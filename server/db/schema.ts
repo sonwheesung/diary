@@ -380,6 +380,16 @@ export const aiReports = pgTable(
      * ⚠ **NULL이 정상값이다** — 프롬프트 v8 이전 리포트.
      */
     metrics: text('metrics'),
+    /*
+     * v15 칸(`docs/AI_REPORT_SYSTEM.md` §8.5 · §3.1) — `ReportInsights` JSON 문자열.
+     * 발견·해낸 것·권유·셀 수 있는 사실·요일 한 줄 + **타인 위해 신호**.
+     *
+     * ⚠ **nullable** — v14 이전 행에는 없다(순수 추가라 옛 행·옛 앱에 영향 0).
+     * 🔴 **서버가 검증한 뒤의 것만 들어온다**(`sanitizeInsights`) — 그날 일기에 없는 인용은 버렸고,
+     *   위기 리포트는 칸이 비어 있다. *"안전화한 최종본만 저장한다"*(§3.1 ④)가 여기서 지켜진다.
+     * ⚠ 근거 인용에는 **일기 문장이 그대로** 들어 있다 — 처리방침 §2 마목이 그 사실을 적는다.
+     */
+    insights: text('insights'),
     /** 사용자가 [신고]를 눌렀나 — 우선해서 볼 것을 고르는 기준 */
     flagged: boolean('flagged').notNull().default(false),
     /**

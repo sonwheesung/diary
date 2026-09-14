@@ -450,6 +450,11 @@ export async function createReport(
           : rollupMetrics(
               subReportMetrics.filter((m): m is NonNullable<typeof m> => m !== null),
             ),
+      /*
+       * v15 칸(§8.5 · §3.1). ⚠ **서버가 검증해서 준 그대로** 저장한다 — 인용 대조는 원문을 가진
+       *   서버가 만들 때 했다. 낡은 서버면 안 오고 그때는 `null`(그 블록들을 안 그린다).
+       */
+      insights: payload.insights ?? null,
       model: payload.model,
       promptVer: payload.promptVer,
       createdAt: Date.now(),
@@ -531,6 +536,8 @@ export async function syncReportsFromServer(): Promise<{
         row.metrics === undefined && row.topics === undefined
           ? null
           : { metrics: row.metrics ?? [], topics: row.topics ?? [] },
+      // 되살릴 때도 v15 칸을 함께 — 빼면 재설치한 기기에서 발견·권유가 영영 없다
+      insights: row.insights ?? null,
       model: row.model,
       promptVer: row.promptVer,
       // 서버가 만든 시각을 쓴다. 지금 시각을 쓰면 목록 순서가 어긋난다

@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { EMOTION_CODES_ORDER, type EmotionCode } from '@/features/diary/emotions';
 import type { BucketCell, Shape } from '@/features/ai/stats';
 import { weekKeyRange } from '@/features/ai/period';
+import type { DayNote } from '@/features/ai/types';
+import { formatShortDate } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -29,6 +31,7 @@ export function PeriodShape({
   shape,
   prev,
   kind,
+  dayNotes,
 }: {
   shape: Shape;
   /**
@@ -40,10 +43,32 @@ export function PeriodShape({
    */
   prev: Shape | null;
   kind: Kind;
+  /** v15 요일 한 줄(§8.5 결정 8). 가장 길게 쓴 두 날에만 붙인다. 옛 리포트는 없다 */
+  dayNotes?: DayNote[];
 }) {
   const { t } = useTranslation();
   const colors = useColors();
   const styles = useStyles(createStyles);
+
+  /*
+   * 🔴 **주간 비교는 기록한 날 4일 이상인 주끼리만**(§8.5 결정 6).
+   *   1일짜리 지난주와 7일짜리 이번 주를 나란히 두면 *"달라졌다"* 가 아니라 *"그때 안 썼다"* 일 뿐이다 —
+   *   외부 평가 셋이 모두 비교를 숨긴 판단이 맞다고 했다. 월간·연간은 총계 한 줄이라 그대로 둔다.
+   */
+  const comparable =
+    kind !== 'weekly' ||
+    (prev !== null && shape.writtenDays >= MIN_COMPARABLE_DAYS && prev.writtenDays >= MIN_COMPARABLE_DAYS);
+
+  /* 가장 길게 쓴 두 날의 한 줄. 요일 격자만으로는 *"그날 뭘 썼지"* 가 안 보인다 */
+  const longest =
+    shape.days === null || dayNotes === undefined || dayNotes.length === 0
+      ? []
+      : [...shape.days]
+          .filter((d) => d.written && d.chars > 0)
+          .sort((a, b) => b.chars - a.chars)
+          .slice(0, 2)
+          .map((d) => ({ date: d.date, note: dayNotes.find((n) => n.date === d.date)?.note ?? '' }))
+          .filter((d) => d.note.length > 0);
 
   const emotionColor = (code: string | null): string =>
     code !== null && isEmotionCode(code) ? colors.emotion[code] : colors.border;
@@ -67,16 +92,18 @@ export function PeriodShape({
     1,
     ...(shape.days ?? []).map((d) => d.chars),
     ...(shape.buckets ?? []).map((b) => b.chars),
-    ...(prev?.days ?? []).map((d) => d.chars),
+    ...(comparable ? (prev?.days ?? []).map((d) => d.chars) : []),
     ...(prev?.buckets ?? []).map((b) => b.chars),
   );
 
   /* 주간만 요일이 정렬되므로 짝 막대를 그린다 — 월간·연간은 아래 요약 줄로만 비교한다 */
-  const prevDays = kind === 'weekly' ? (prev?.days ?? null) : null;
+  const prevDays = kind === 'weekly' && comparable ? (prev?.days ?? null) : null;
 
   return (
     <View style={styles.wrap}>
       <Text style={styles.label}>{t('report.shapeTitle')}</Text>
+      {/* 🔴 막대가 무엇인지 말한다(§8.5 결정 8). 이름 없는 막대는 감정 점수로 오독됐다 */}
+      <Text style={styles.summary}>{t('report.barUnit')}</Text>
 
       {/*
         🔴 **막대는 조용한 단색이고 감정은 점에만 있다** (2026-08-25 에뮬레이터에서 고침).
@@ -181,17 +208,37 @@ export function PeriodShape({
       */}
       {prev !== null && prev.count > 0 && (
         <Text style={styles.summaryPast}>
-          {t('report.shapePrevious', {
-            label: t(`report.prevLabel.${kind}`),
-            written: String(prev.writtenDays),
-            total: String(prev.totalDays),
-            count: String(prev.count),
-          })}
+          {comparable
+            ? t('report.shapePrevious', {
+                label: t(`report.prevLabel.${kind}`),
+                written: String(prev.writtenDays),
+                total: String(prev.totalDays),
+                count: String(prev.count),
+              })
+            : t('report.prevSkipped', {
+                label: t(`report.prevLabel.${kind}`),
+                written: String(prev.writtenDays),
+                total: String(prev.totalDays),
+              })}
         </Text>
+      )}
+
+      {longest.length > 0 && (
+        <View style={styles.notes}>
+          <Text style={styles.label}>{t('report.longestDays')}</Text>
+          {longest.map((d) => (
+            <Text key={d.date} style={styles.note}>
+              {formatShortDate(d.date)} · {d.note}
+            </Text>
+          ))}
+        </View>
       )}
     </View>
   );
 }
+
+/** 비교를 그리는 최소 기록일(§8.5 결정 6) */
+const MIN_COMPARABLE_DAYS = 4;
 
 /**
  * 월간·연간의 한 칸. 높이는 글자 수, **안쪽 칸은 감정 비율**이다.
@@ -352,6 +399,15 @@ const createStyles = (colors: Palette) =>
     summary: {
       ...typography.caption,
       color: colors.textMuted,
+      flexShrink: 1,
+    },
+    notes: {
+      gap: 2,
+      marginTop: spacing.xs,
+    },
+    note: {
+      ...typography.caption,
+      color: colors.text,
       flexShrink: 1,
     },
   });

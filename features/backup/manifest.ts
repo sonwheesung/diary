@@ -25,6 +25,7 @@
  * **2 → 3**(2026-08-18): `reports.deleted_at`을 추가했다 — 리포트 삭제가 묘비가 됐다
  * **3 → 4**(2026-08-25): `reports.metrics`를 추가했다 — 리포트에 지표가 붙었다(§8.4).
  * **4 → 5**(2026-09-03): `reports.headline`을 추가했다 — 핵심 한 줄이 붙었다(§8.2).
+ * **6 → 7**(2026-09-14): `reports.insights`를 추가했다 — 발견·권유·해낸 것(§8.5). 옛 백업은 `undefined`.
  * **5 → 6**(2026-09-03): `reports.headline_from`을 추가했다 — 한 줄이 기댄 자료(§8.2.1).
  *   ⚠ 옛 백업에는 없고 `undefined`로 읽힌다. **한 줄 없는 리포트는 정상이다** —
  *     `metrics`와 같은 이유로 소급이 애초에 불가능하다(캡이 평생 1번).
@@ -37,7 +38,7 @@
  *   알려주므로 **조용한 손실이 아니다** — 매니페스트 규약이 그렇게 설계돼 있다.
  *   반대로 새 앱이 v1을 복원하면 `reports`가 없을 뿐이고, 그때는 빈 배열로 읽는다.
  */
-export const MANIFEST_FORMAT = 6;
+export const MANIFEST_FORMAT = 7;
 
 /** `diaries` 원본 행. 컬럼 이름을 그대로 쓴다 — 매핑 층을 하나 없앤다 */
 export interface DiaryRow {
@@ -124,6 +125,13 @@ export interface ReportRow {
    *   남길 이유가 없고, 남기면 지웠는데 그림이 남는다.
    */
   metrics?: string | null;
+  /**
+   * v15 칸 JSON(`ReportInsights`). **v6 이하 백업에는 없다** → `undefined`.
+   *
+   * ⚠ 근거 인용에 **일기 문장이 그대로** 들어 있다 — 그래도 매니페스트는 암호화되어 나가므로 서버는 못 읽는다.
+   * ⚠ 묘비면 비운다(`deleteReport` 가 `NULL` 로 만든다).
+   */
+  insights?: string | null;
   /**
    * 묘비. `null`이 아니면 사용자가 지운 리포트다 — `summary`는 비어 있다(§11.9).
    *

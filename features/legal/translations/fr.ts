@@ -20,9 +20,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_FR: LegalDoc = {
   title: 'Politique de confidentialité de Jogak',
-  sourceFingerprint: '135c6fcd',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: 'c1b13f32',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Vivace Games Studio (« l’exploitant ») respecte la loi sur la protection des informations personnelles et les autres textes applicables, et traite les données personnelles des utilisateurs de « Jogak » (« le service ») comme indiqué ci-dessous. Par principe, Jogak conserve sur votre appareil les entrées de journal que vous écrivez ; celles-ci ne sont transmises à un serveur que dans deux cas : la sauvegarde que vous activez vous-même et les rapports de synthèse par IA que vous créez vous-même. Pour le reste, nous ne recueillons que le minimum d’informations.',
   sections: [
@@ -70,9 +70,9 @@ export const PRIVACY_FR: LegalDoc = {
         '⚠ Les données de paiement telles que les numéros de carte ou de compte sont gérées par Google Play et ne sont pas transmises à l’exploitant. L’exploitant sait seulement que vous avez payé et jusqu’à quand l’abonnement est valable.',
         'e. Si vous créez des rapports de synthèse par IA (abonnement requis)',
         '• Ce qui est remis au fournisseur d’IA via le serveur de l’exploitant : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport',
-        '• Ce que l’exploitant conserve : la synthèse générée par l’IA, l’identifiant du compte ayant créé le rapport, la période, le nombre de fois et le nombre de jetons utilisés',
-        '⚠ Pour être précis : l’exploitant ne conserve pas le contenu du journal lui-même. Toutefois, ① au moment où la synthèse est produite, ce contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② la synthèse générée est conservée 90 jours. Nous vous le disons tel quel, sans l’atténuer.',
-        '⚠ La synthèse est rédigée à partir de vos entrées ; elle peut donc contenir le contenu de votre journal.',
+        "• Ce que l’exploitant conserve : le rapport généré par l’IA (la synthèse, les phrases de tendances, de réussites et de suggestions, et les phrases du journal qu’il cite comme preuves), l’identifiant du compte ayant créé le rapport, la période, le nombre de fois et le nombre de jetons utilisés",
+        "⚠ Pour être précis : l’exploitant ne conserve pas le contenu du journal lui-même. Toutefois, ① au moment où le rapport est produit, ce contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② le rapport généré est conservé 90 jours. Nous vous le disons tel quel, sans l’atténuer.",
+        "⚠ Le rapport est rédigé à partir de vos entrées ; il peut donc contenir le contenu de votre journal, et des phrases du journal peuvent être citées mot pour mot comme preuves d’une tendance.",
         '• Consentement distinct pour les informations sensibles : un journal peut contenir des informations sensibles, telles que l’état de santé ou psychologique, au sens de l’art. 23 de la loi sur la protection des informations personnelles. Les rapports de synthèse par IA traitant ce contenu non chiffré, nous recueillons un consentement distinct au traitement des informations sensibles lors de votre première utilisation de la fonctionnalité. Ce consentement est distinct du consentement au transfert hors du pays de la section 6, et vous pouvez choisir chacun séparément.',
         'Même si vous ne le donnez pas, vous pouvez continuer à utiliser normalement toutes les fonctionnalités autres que les rapports par IA. Les rapports ne sont générés que lorsque vous les créez vous-même ; ils ne le sont jamais automatiquement.',
         'f. Lorsque vous lancez l’application ou y revenez (que vous soyez connecté ou non)',
@@ -96,7 +96,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• Diffusion de publicités : proposer des publicités aux utilisateurs de la version gratuite et en mesurer la performance',
         '• Sauvegarde et restauration : si vous l’activez, conserver une copie chiffrée de vos entrées et vous la restituer à votre demande',
         '• Vérification du droit d’abonnement : fournir aux personnes ayant payé la suppression des publicités, la sauvegarde et les rapports par IA, et traiter les demandes de paiement et les remboursements',
-        '• Génération des rapports de synthèse par IA et amélioration de leur qualité : produire la synthèse de la période que vous avez demandée et en examiner le résultat pour améliorer la qualité',
+        "• Génération des rapports de synthèse par IA et amélioration de leur qualité : produire un rapport revenant sur la période que vous avez demandée (synthèse, tendances, réussites et suggestions) et en examiner le résultat pour améliorer la qualité",
         'L’exploitant n’utilise pas les données personnelles à d’autres fins que celles ci-dessus et, en cas de changement de finalité, recueillera votre consentement au préalable.',
       ],
     },
@@ -109,7 +109,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• Identifiant d’appareil et relevé des jours d’utilisation : 400 jours à compter du dernier jour d’utilisation. Supprimé automatiquement ensuite.',
         '• Copie de sauvegarde chiffrée : conservée tant que la sauvegarde est activée et jusqu’à 90 jours après la fin de l’abonnement, puis détruite automatiquement. Si vous désactivez la sauvegarde, demandez sa suppression ou supprimez votre compte, nous la détruisons sans délai, sans attendre les 90 jours. Les sauvegardes sans accès depuis 3 ans ou plus sont détruites (cas où l’application a été désinstallée sans suppression du compte).',
         '• Relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne pas » ; l’identifiant du compte n’est pas conservé avec lui.',
-        '• Synthèse générée par l’IA : 90 jours à compter du jour de sa création. Elle est ensuite supprimée automatiquement.',
+        "• Rapport généré par l’IA (y compris les phrases du journal citées comme preuves) : 90 jours à compter du jour de sa création. Il est ensuite supprimé automatiquement.",
         '• Relevés d’utilisation des rapports (identifiant du compte, période, nombre de fois, nombre de jetons) : jusqu’à la réalisation de la finalité ou jusqu’à la suppression de votre compte',
         '• Relevés relatifs aux contrats ou à la rétractation, et au paiement et à la fourniture de biens : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
         'Si vous supprimez votre compte, les identifiants de compte (e-mail, « sub » Google) sont rendus non traçables sans délai, et les relevés de transaction ci-dessus sont conservés séparément et sous une forme non traçable pendant la durée indiquée, puis détruits.',
@@ -171,8 +171,8 @@ export const PRIVACY_FR: LegalDoc = {
         'Vous pouvez les exercer par écrit ou par e-mail à l’adresse figurant à la section 11, et l’exploitant agira sans délai.',
         'Si vous demandez la rectification d’une erreur dans vos données, nous ne les utiliserons ni ne les communiquerons tant que la rectification n’est pas achevée.',
         '⚠ Limites du droit d’accès à la sauvegarde : si vous en demandez l’accès, l’exploitant ne peut vous remettre que le texte chiffré, indéchiffrable, et les métadonnées de la section 2(c). Nous ne pouvons pas vous fournir le contenu de vos entrées sous une forme lisible par un être humain — l’exploitant n’a pas la clé. Vous pouvez vous-même restaurer à tout moment dans l’application à l’aide de votre code de récupération.',
-        'Vous pouvez supprimer à tout moment dans l’application un rapport par IA déjà créé. La suppression dans l’application l’efface de votre appareil, et la synthèse conservée sur le serveur est supprimée automatiquement au bout de 90 jours. Si vous souhaitez une suppression plus rapide, vous pouvez en faire la demande via « Nous contacter ».',
-        '⚠ Les synthèses générées par IA peuvent différer des faits et ne constituent ni un diagnostic ni un conseil médical ou psychologique. L’application propose un moyen de signaler un rapport.',
+        "Vous pouvez supprimer à tout moment dans l’application un rapport par IA déjà créé. La suppression dans l’application l’efface de votre appareil, et le rapport conservé sur le serveur est supprimé automatiquement au bout de 90 jours. Si vous souhaitez une suppression plus rapide, vous pouvez en faire la demande via « Nous contacter ».",
+        "⚠ Les rapports générés par IA peuvent différer des faits et ne constituent pas un diagnostic médical ou psychologique. Les suggestions d’un rapport sont données à titre indicatif et vous n’êtes pas tenu·e de les suivre. L’application propose un moyen de signaler un rapport.",
         'Le représentant légal d’un enfant de moins de 14 ans peut exercer les droits ci-dessus en son nom.',
       ],
     },
@@ -220,6 +220,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• 2026-09-01 modification — la collecte d’un identifiant d’appareil à des fins de statistiques d’utilisation du service (comptage des utilisateurs actifs) a été ajoutée aux articles 2, 3 et 4, et l’avis de vérification de l’âge de l’article 2 a été élargi.',
         '• 2026-09-02 modification — l’article 2 précise désormais que la date d’utilisation est enregistrée non seulement au lancement de l’application mais aussi lorsque vous y revenez (au plus une fois toutes les cinq minutes), et qu’elle est enregistrée sur votre compte plutôt que sur l’identifiant d’appareil lorsque vous êtes connecté.',
         "• 2026-09-09 modification — la vérification des mises à jour effectuée au lancement de l’application (envoi du système d’exploitation de l’appareil et d’un jeton aléatoire) est indiquée à la section 2, et 650 Industries, Inc. est ajoutée aux destinataires de la section 6.",
+        "• 2026-09-14 modification — les rapports de synthèse par IA produisent désormais, en plus de la synthèse, des tendances, des réussites et des suggestions, et citent des phrases du journal comme preuves ; nous avons révisé les éléments conservés (section 2), la finalité du traitement (section 3), la durée de conservation (section 4) et la mention sur la nature des rapports (section 9).",
       ],
     },
   ],
@@ -241,9 +242,9 @@ export const PRIVACY_FR: LegalDoc = {
  */
 export const DELETE_ACCOUNT_FR: LegalDoc = {
   title: 'Comment supprimer votre compte Jogak',
-  sourceFingerprint: 'a8b0c8b9',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: 'e36bafaa',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Cette page explique comment supprimer votre compte Jogak et les données qui y sont associées. Vous pouvez aussi en faire la demande par e-mail si vous avez déjà désinstallé l’application ou si vous ne parvenez pas à vous connecter.',
   sections: [
@@ -276,7 +277,7 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
         '• Le lien entre vos demandes et le compte de leur auteur',
         '• La copie chiffrée de votre journal conservée sur le serveur (si vous avez activé la sauvegarde) — supprimée en même temps que le compte, sans attendre le délai de grâce de 90 jours.',
         '• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)',
-        '• Les synthèses de rapports par IA conservées sur le serveur (au maximum 90 jours) et les relevés d’utilisation des rapports (période, nombre de fois, nombre de jetons)',
+        "• Les rapports par IA conservés sur le serveur (y compris les phrases du journal citées comme preuves, au maximum 90 jours) et les relevés d’utilisation des rapports (période, nombre de fois, nombre de jetons)",
         '⚠ Lors de la suppression du compte, nous détruisons d’abord la sauvegarde puis le compte : si le compte disparaissait d’abord, plus personne n’aurait le droit d’effacer cette sauvegarde. Si la destruction de la sauvegarde échoue, la suppression du compte n’a pas lieu ; il vous suffit de réessayer un peu plus tard.',
         '⚠ La suppression est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer la sauvegarde présente sur le serveur.',
       ],
@@ -346,9 +347,9 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
  */
 export const TERMS_FR: LegalDoc = {
   title: 'Conditions d’utilisation de Jogak',
-  sourceFingerprint: 'f4233a8a',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: '234878ab',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Les présentes conditions définissent les droits, obligations et responsabilités entre Hwiseong Games (marque : Vivace Games Studio, « l’exploitant ») et les utilisateurs, concernant l’utilisation de l’application mobile « Jogak » (« le service ») fournie par l’exploitant. Merci de les lire avant d’utiliser le service.',
   sections: [
@@ -538,7 +539,7 @@ export const TERMS_FR: LegalDoc = {
       body: [
         'L’exploitant assume, pour la fourniture du service, la responsabilité prévue par les textes applicables. Aucune stipulation des présentes conditions n’exclut ni ne limite une responsabilité de l’exploitant prévue par la loi.',
         'L’exploitant n’est pas responsable des dommages résultant de causes qui ne lui sont pas imputables, telles que la force majeure, la panne, la perte ou la réinitialisation de l’appareil de l’utilisateur, ou la perte par ce dernier de son code de récupération ou du secret de verrouillage de l’application.',
-        'Le rapport de synthèse par IA est un document de référence généré par une intelligence artificielle ; il ne constitue ni un diagnostic ni un conseil médical, psychologique ou juridique. L’exploitant ne garantit pas l’exactitude de son contenu.',
+        "Le rapport de synthèse par IA est un document de référence généré par une intelligence artificielle ; il ne constitue pas un diagnostic médical, psychologique ou juridique. Les suggestions du rapport sont données à titre indicatif et l’utilisateur n’est pas tenu de les suivre. L’exploitant ne garantit pas l’exactitude de son contenu.",
         'Les dommages survenus lors du paiement via la boutique d’applications pour des causes imputables à celle-ci relèvent de la politique de cette boutique. L’exploitant apporte néanmoins toute la coopération nécessaire à la réparation du préjudice de l’utilisateur.',
       ],
     },
@@ -562,6 +563,7 @@ export const TERMS_FR: LegalDoc = {
         'La version coréenne des présentes conditions fait foi. En cas de divergence de sens avec une traduction dans une autre langue, la version coréenne prévaut.',
         'Disposition finale : les présentes conditions entrent en vigueur le 17 août 2026.',
         "Disposition finale : les présentes conditions entrent en vigueur le 9 septembre 2026. (Une information sur la vérification automatique des mises à jour a été ajoutée à l’article 10.)",
+        "Disposition finale : les présentes conditions entrent en vigueur le 14 septembre 2026. (Une mention sur les suggestions des rapports par IA a été ajoutée à l’article 20.)",
       ],
     },
   ],

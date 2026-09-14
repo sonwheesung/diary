@@ -66,6 +66,14 @@ export interface GenerateOk {
    */
   metrics: MetricValue[];
   topics: TopicValue[];
+  /**
+   * 모델이 준 JSON 그대로 — v15 칸(발견·권유 …)은 **라우트가** `sanitizeInsights` 로 거른다.
+   *
+   * ⚠ 이 파일은 벤더 경계라 일기 구조를 모른다. 인용을 그날 일기와 대조하려면 원문이 필요하고
+   *   원문은 라우트가 갖고 있다 — 그래서 검증을 여기서 하지 않고 넘긴다(`allowed` 와 같은 분담).
+   * 🔴 **로그에 넣지 않는다.** 근거 인용에 일기 문장이 그대로 들어 있다(§5.1-5).
+   */
+  raw: Record<string, unknown>;
   model: string;
   inputTokens: number;
   outputTokens: number;
@@ -117,6 +125,7 @@ function parseOutput(
   concern: boolean;
   metrics: MetricValue[];
   topics: TopicValue[];
+  raw: Record<string, unknown>;
 } | null {
   let parsed: unknown;
   try {
@@ -144,6 +153,7 @@ function parseOutput(
     concern,
     metrics: pickMetrics(obj.metrics),
     topics: pickTopics(obj.topics),
+    raw: obj,
   };
 }
 
@@ -171,6 +181,8 @@ function pickMetrics(value: unknown): MetricValue[] {
             ? Math.max(0, Math.round(row.days))
             : null,
       basis: typeof row.basis === 'string' ? row.basis : '',
+      /* v15 — 화면에 숫자 대신 나가는 문장(§8.5 결정 4). 상위 스키마에는 없어 안 온다 */
+      ...(typeof row.verdict === 'string' ? { verdict: row.verdict.trim() } : {}),
     });
   }
   return METRIC_CODES.map((code) => byCode.get(code)).filter(
@@ -285,6 +297,7 @@ export async function generateReport(args: GenerateArgs): Promise<GenerateResult
     concern: parsed.concern,
     metrics: parsed.metrics,
     topics: parsed.topics,
+    raw: parsed.raw,
     model: typeof response.model === 'string' ? response.model : model,
     inputTokens: response.usage?.input_tokens ?? 0,
     outputTokens: response.usage?.output_tokens ?? 0,

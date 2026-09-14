@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '135c6fcd',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: 'c1b13f32',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Vivace Games Studio (“nhà vận hành”) tuân thủ Luật Bảo vệ thông tin cá nhân và các quy định liên quan, đồng thời xử lý dữ liệu cá nhân của người dùng “Jogak” (“dịch vụ”) như trình bày dưới đây. Về nguyên tắc, Jogak giữ các mảnh nhật ký bạn viết ngay trong thiết bị của bạn; nhật ký chỉ được truyền lên máy chủ trong phạm vi bản sao lưu do chính bạn bật và báo cáo tóm tắt bằng AI do chính bạn tạo. Ngoài ra, chúng tôi chỉ thu thập lượng thông tin tối thiểu.',
   sections: [
@@ -60,9 +60,9 @@ export const PRIVACY_VI: LegalDoc = {
         '⚠ Thông tin thanh toán như số thẻ hay số tài khoản do Google Play xử lý và không được chuyển cho nhà vận hành. Nhà vận hành chỉ biết bạn đã thanh toán và gói đăng ký có hiệu lực đến khi nào.',
         'e. Khi bạn tạo báo cáo tóm tắt bằng AI (cần gói đăng ký)',
         '• Những gì đi qua máy chủ của nhà vận hành tới nhà cung cấp AI: tiêu đề, nội dung, cảm xúc và ngày viết của các mảnh trong kỳ bạn yêu cầu báo cáo',
-        '• Những gì nhà vận hành lưu: bản tóm tắt do AI tạo ra, mã định danh tài khoản đã tạo báo cáo, kỳ, số lần và số token đã dùng',
-        '⚠ Nói cho chính xác: nhà vận hành không lưu bản thân nội dung nhật ký. Tuy nhiên ① tại thời điểm tạo bản tóm tắt, nội dung đi qua máy chủ của nhà vận hành nên chúng tôi không thể nói rằng “nhà vận hành không thể xem”, và ② bản tóm tắt được tạo ra sẽ được lưu 90 ngày. Chúng tôi nói rõ điều này chứ không làm mờ đi.',
-        '⚠ Bản tóm tắt được viết dựa trên nhật ký của bạn nên có thể chứa nội dung nhật ký.',
+        "• Những gì nhà vận hành lưu: báo cáo do AI tạo ra (bản tóm tắt, các câu về mạch, điều đã làm được và gợi ý, cùng các câu nhật ký được trích dẫn làm căn cứ), mã định danh tài khoản đã tạo báo cáo, kỳ, số lần và số token đã dùng",
+        "⚠ Nói cho chính xác: nhà vận hành không lưu bản thân nội dung nhật ký. Tuy nhiên ① tại thời điểm tạo báo cáo, nội dung đi qua máy chủ của nhà vận hành nên chúng tôi không thể nói rằng “nhà vận hành không thể xem”, và ② báo cáo được tạo ra sẽ được lưu 90 ngày. Chúng tôi nói rõ điều này chứ không làm mờ đi.",
+        "⚠ Báo cáo được viết dựa trên nhật ký của bạn nên có thể chứa nội dung nhật ký, và các câu nhật ký có thể được trích nguyên văn làm căn cứ cho một mạch.",
         '• Đồng ý riêng đối với thông tin nhạy cảm: nhật ký có thể chứa thông tin nhạy cảm như tình trạng sức khoẻ hoặc tâm lý theo Điều 23 Luật Bảo vệ thông tin cá nhân. Vì báo cáo tóm tắt bằng AI xử lý nội dung đó ở dạng không mã hoá, chúng tôi lấy sự đồng ý riêng cho việc xử lý thông tin nhạy cảm khi bạn dùng tính năng lần đầu. Sự đồng ý này tách biệt với đồng ý chuyển ra nước ngoài ở mục 6, và bạn có thể chọn riêng từng mục.',
         'Dù không đồng ý, bạn vẫn dùng được đầy đủ mọi tính năng ngoài báo cáo AI. Báo cáo chỉ được tạo khi chính bạn tạo và không bao giờ được tạo tự động.',
         'f. Khi bạn mở ứng dụng hoặc quay lại ứng dụng (dù có đăng nhập hay không)',
@@ -86,7 +86,7 @@ export const PRIVACY_VI: LegalDoc = {
         '• Hiển thị quảng cáo: cung cấp quảng cáo cho người dùng bản miễn phí và đo lường hiệu quả',
         '• Sao lưu và khôi phục: khi bạn bật tính năng này, lưu giữ bản sao nhật ký đã mã hoá và trả lại cho bạn theo yêu cầu',
         '• Xác nhận quyền lợi đăng ký: cung cấp việc bỏ quảng cáo, sao lưu và báo cáo AI cho người đã thanh toán, đồng thời xử lý thắc mắc thanh toán và hoàn tiền',
-        '• Tạo báo cáo tóm tắt bằng AI và cải thiện chất lượng: soạn bản tóm tắt cho kỳ bạn yêu cầu rồi kiểm tra kết quả để nâng cao chất lượng',
+        "• Tạo báo cáo tóm tắt bằng AI và cải thiện chất lượng: soạn báo cáo nhìn lại kỳ bạn yêu cầu (tóm tắt, mạch, điều đã làm được và gợi ý) rồi kiểm tra kết quả để nâng cao chất lượng",
         'Nhà vận hành không dùng dữ liệu cá nhân cho mục đích khác ngoài những mục đích trên, và nếu mục đích thay đổi sẽ xin sự đồng ý trước.',
       ],
     },
@@ -99,7 +99,7 @@ export const PRIVACY_VI: LegalDoc = {
         '• Mã định danh thiết bị và bản ghi ngày sử dụng: 400 ngày kể từ ngày sử dụng cuối cùng. Sau đó sẽ tự động bị xóa.',
         '• Bản sao lưu đã mã hoá: được lưu trong thời gian bạn bật sao lưu và tối đa 90 ngày sau khi gói đăng ký kết thúc, sau đó tự động tiêu huỷ. Nếu bạn tắt sao lưu, yêu cầu xoá hoặc xoá tài khoản, chúng tôi tiêu huỷ ngay mà không chờ đủ 90 ngày. Bản sao lưu không được truy cập từ 3 năm trở lên sẽ bị tiêu huỷ (áp dụng cho trường hợp chỉ gỡ ứng dụng mà không xoá tài khoản).',
         '• Bản ghi về việc tiêu huỷ bản sao lưu (mã bản sao lưu và thời điểm tiêu huỷ): 1 năm — để bạn có thể biết “vì sao không khôi phục được”; mã định danh tài khoản không được lưu kèm.',
-        '• Bản tóm tắt do AI tạo ra: 90 ngày kể từ ngày tạo. Sau đó tự động bị xoá.',
+        "• Báo cáo do AI tạo ra (gồm cả các câu nhật ký được trích dẫn làm căn cứ): 90 ngày kể từ ngày tạo. Sau đó tự động bị xoá.",
         '• Bản ghi sử dụng báo cáo (mã định danh tài khoản, kỳ, số lần, số token): đến khi đạt được mục đích xử lý hoặc đến khi bạn xoá tài khoản',
         '• Hồ sơ về hợp đồng hoặc rút lại đề nghị, về thanh toán và cung ứng hàng hoá: 5 năm (Luật Bảo vệ người tiêu dùng trong thương mại điện tử, Điều 6)',
         'Khi bạn xoá tài khoản, mã định danh tài khoản (email và “sub” của Google) được chuyển ngay sang dạng không thể truy vết, còn các hồ sơ giao dịch trên được lưu tách biệt ở dạng không truy vết được người tạo trong thời hạn nêu trên rồi mới tiêu huỷ.',
@@ -161,8 +161,8 @@ export const PRIVACY_VI: LegalDoc = {
         'Bạn có thể thực hiện bằng văn bản hoặc email theo thông tin liên hệ ở mục 11, và nhà vận hành sẽ xử lý ngay.',
         'Nếu bạn yêu cầu chỉnh sửa một sai sót trong dữ liệu, chúng tôi sẽ không sử dụng hay cung cấp dữ liệu đó cho đến khi việc chỉnh sửa hoàn tất.',
         '⚠ Giới hạn của quyền truy cập đối với bản sao lưu: nếu bạn yêu cầu truy cập bản sao lưu, thứ nhà vận hành có thể cung cấp chỉ là bản mã hoá không thể giải mã cùng siêu dữ liệu ở mục 2(c). Chúng tôi không thể cung cấp nội dung nhật ký ở dạng con người đọc được — nhà vận hành không có khoá. Chính bạn có thể khôi phục bất cứ lúc nào trong ứng dụng bằng mã khôi phục của mình.',
-        'Bạn có thể xoá báo cáo AI đã tạo bất cứ lúc nào trong ứng dụng. Khi xoá trong ứng dụng, báo cáo biến mất khỏi thiết bị, còn bản tóm tắt lưu trên máy chủ sẽ tự động xoá sau 90 ngày. Nếu muốn xoá sớm hơn, bạn có thể yêu cầu qua mục “Liên hệ”.',
-        '⚠ Bản tóm tắt do AI tạo ra có thể khác với sự thật và không phải là chẩn đoán hay lời khuyên y tế, tâm lý. Ứng dụng cung cấp cách báo cáo một bản tóm tắt.',
+        "Bạn có thể xoá báo cáo AI đã tạo bất cứ lúc nào trong ứng dụng. Khi xoá trong ứng dụng, báo cáo biến mất khỏi thiết bị, còn báo cáo lưu trên máy chủ sẽ tự động xoá sau 90 ngày. Nếu muốn xoá sớm hơn, bạn có thể yêu cầu qua mục “Liên hệ”.",
+        "⚠ Báo cáo do AI tạo ra có thể khác với sự thật và không phải là chẩn đoán y tế, tâm lý. Các gợi ý trong báo cáo chỉ để tham khảo và bạn không bắt buộc phải làm theo. Ứng dụng cung cấp cách báo cáo một bản tóm tắt.",
         'Người đại diện hợp pháp của trẻ dưới 14 tuổi có thể thực hiện các quyền trên thay cho trẻ.',
       ],
     },
@@ -210,6 +210,7 @@ export const PRIVACY_VI: LegalDoc = {
         '• 2026-09-01 sửa đổi — đã bổ sung vào mục 2, 3 và 4 việc thu thập mã định danh thiết bị phục vụ thống kê sử dụng dịch vụ (đếm người dùng hoạt động), và mở rộng thông báo xác minh độ tuổi tại mục 2.',
         '• 2026-09-02 sửa đổi — tại Điều 2 đã nêu rõ rằng ngày sử dụng được ghi nhận không chỉ khi mở ứng dụng mà còn khi bạn quay lại ứng dụng (tối thiểu cách nhau năm phút), và rằng nếu bạn đã đăng nhập thì ngày đó được ghi theo tài khoản thay vì mã nhận dạng thiết bị.',
         "• 2026-09-09 sửa đổi — nêu rõ tại mục 2 việc kiểm tra cập nhật diễn ra khi mở ứng dụng (gửi hệ điều hành thiết bị và mã thông báo ngẫu nhiên), và bổ sung 650 Industries, Inc. vào bên nhận tại mục 6.",
+        "• 2026-09-14 sửa đổi — báo cáo tóm tắt bằng AI nay tạo thêm mạch, điều đã làm được và gợi ý bên cạnh bản tóm tắt, đồng thời trích dẫn các câu nhật ký làm căn cứ; chúng tôi đã sửa các mục được lưu (mục 2), mục đích xử lý (mục 3), thời hạn lưu giữ (mục 4) và phần lưu ý về tính chất của báo cáo (mục 9).",
       ],
     },
   ],
@@ -230,9 +231,9 @@ export const PRIVACY_VI: LegalDoc = {
  */
 export const DELETE_ACCOUNT_VI: LegalDoc = {
   title: 'Jogak — Cách xoá tài khoản của bạn',
-  sourceFingerprint: 'a8b0c8b9',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: 'e36bafaa',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Trang này hướng dẫn cách xoá tài khoản của ứng dụng Jogak và dữ liệu liên quan. Ngay cả khi bạn đã gỡ ứng dụng hoặc không thể đăng nhập, bạn vẫn có thể yêu cầu qua email.',
   sections: [
@@ -265,7 +266,7 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
         '• Mối liên kết giữa lịch sử liên hệ và tài khoản của người gửi',
         '• Bản sao nhật ký đã mã hoá lưu trên máy chủ (nếu bạn đã bật sao lưu) — bị xoá cùng lúc mà không chờ hết 90 ngày ân hạn.',
         '• Mã định danh bản sao lưu và các bản ghi sao lưu (thời điểm, dung lượng, số thế hệ)',
-        '• Bản tóm tắt báo cáo AI đang lưu trên máy chủ (tối đa 90 ngày) và bản ghi sử dụng báo cáo (kỳ, số lần, số token)',
+        "• Báo cáo AI đang lưu trên máy chủ (gồm cả các câu nhật ký được trích dẫn làm căn cứ, tối đa 90 ngày) và bản ghi sử dụng báo cáo (kỳ, số lần, số token)",
         '⚠ Khi bạn xoá tài khoản, chúng tôi tiêu huỷ bản sao lưu trước rồi mới xoá tài khoản — vì nếu tài khoản biến mất trước thì không còn ai có quyền xoá bản sao lưu đó nữa. Nếu việc xoá bản sao lưu thất bại, việc xoá tài khoản sẽ không được tiến hành; xin bạn thử lại sau ít phút.',
         '⚠ Đã xoá thì không thể hoàn tác. Dù bạn còn giữ mã khôi phục, bạn cũng không thể khôi phục bản sao lưu trên máy chủ được nữa.',
       ],
@@ -334,9 +335,9 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
  */
 export const TERMS_VI: LegalDoc = {
   title: 'Điều khoản sử dụng Jogak',
-  sourceFingerprint: 'f4233a8a',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: '234878ab',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Bản điều khoản này quy định quyền, nghĩa vụ và trách nhiệm giữa Hwiseong Games (tên thương hiệu Vivace Games Studio, sau đây gọi là “nhà vận hành”) và người dùng, liên quan đến việc sử dụng ứng dụng di động “Jogak” (sau đây gọi là “dịch vụ”) do nhà vận hành cung cấp. Xin bạn đọc trước khi sử dụng dịch vụ.',
   sections: [
@@ -526,7 +527,7 @@ export const TERMS_VI: LegalDoc = {
       body: [
         'Nhà vận hành chịu trách nhiệm theo pháp luật có liên quan trong việc cung cấp dịch vụ. Không một điều khoản nào trong bản điều khoản này loại trừ hay giới hạn trách nhiệm của nhà vận hành do pháp luật quy định.',
         'Nhà vận hành không chịu trách nhiệm về thiệt hại phát sinh từ những nguyên nhân không do lỗi của nhà vận hành, như thiên tai, hỏng hóc, mất mát hay việc đặt lại thiết bị của người dùng, hoặc việc người dùng làm mất mã khôi phục hay mật khẩu khoá ứng dụng.',
-        'Báo cáo tóm tắt bằng AI là tài liệu tham khảo do trí tuệ nhân tạo tạo ra, không phải chẩn đoán hay lời khuyên về y tế, tâm lý hoặc pháp lý. Nhà vận hành không bảo đảm tính chính xác của nội dung đó.',
+        "Báo cáo tóm tắt bằng AI là tài liệu tham khảo do trí tuệ nhân tạo tạo ra, không phải chẩn đoán về y tế, tâm lý hoặc pháp lý. Các gợi ý trong báo cáo chỉ để tham khảo và người dùng không có nghĩa vụ làm theo. Nhà vận hành không bảo đảm tính chính xác của nội dung đó.",
         'Thiệt hại phát sinh trong quá trình thanh toán qua chợ ứng dụng do lỗi của chợ ứng dụng sẽ theo chính sách của chợ ứng dụng. Tuy vậy, nhà vận hành vẫn dành mọi sự hợp tác cần thiết để khắc phục thiệt hại cho người dùng.',
       ],
     },
@@ -550,6 +551,7 @@ export const TERMS_VI: LegalDoc = {
         'Bản tiếng Hàn của bản điều khoản này là bản chính thức. Nếu bản dịch sang ngôn ngữ khác có nghĩa khác biệt thì bản tiếng Hàn được ưu tiên áp dụng.',
         'Điều khoản thi hành: Bản điều khoản này có hiệu lực từ ngày 17 tháng 8 năm 2026.',
         "Điều khoản thi hành: các điều khoản này có hiệu lực từ ngày 9 tháng 9 năm 2026. (Đã bổ sung vào Điều 10 hướng dẫn về việc kiểm tra cập nhật tự động của ứng dụng.)",
+        "Điều khoản thi hành: các điều khoản này có hiệu lực từ ngày 14 tháng 9 năm 2026. (Đã bổ sung vào Điều 20 phần lưu ý về các gợi ý trong báo cáo AI.)",
       ],
     },
   ],

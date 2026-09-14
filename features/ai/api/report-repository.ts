@@ -6,7 +6,8 @@
  *   (`docs/AI_REPORT_SYSTEM.md` §11.3). 저장소가 구독을 알면 그 규칙이 두 곳으로 갈라진다.
  */
 import { getDatabase } from '@/db/client';
-import type { MetricValue, ReportKind, TopicValue } from '@/features/ai/types';
+import { readInsights } from '@/features/ai/types';
+import type { MetricValue, ReportInsights, ReportKind, TopicValue } from '@/features/ai/types';
 
 /**
  * 🔴 **묘비를 뺀다** (`docs/AI_REPORT_SYSTEM.md` §11.9). `diaries`의 `ALIVE`와 같은 규약.
@@ -53,6 +54,13 @@ export interface Report {
    * 캡이 평생 1번이라 **영원히 안 생긴다**(§8.4). 화면은 그때 지표 블록을 안 그린다.
    */
   metrics: ReportMetrics | null;
+  /**
+   * v15 칸 — 발견·해낸 것·권유·셀 수 있는 사실·요일 한 줄 + 타인 위해 신호(§8.5 · §3.1, DB v10).
+   *
+   * 🔴 **`null` 이 정상값이다** — v14 이전 리포트에는 없고 캡이 평생 1번이라 영원히 안 생긴다.
+   *   화면은 그때 그 블록들을 안 그리고, 타인 위해 배너도 안 뜬다(그 시절엔 신호가 없었다).
+   */
+  insights: ReportInsights | null;
   createdAt: number;
 }
 
@@ -81,6 +89,7 @@ interface Row {
   headline: string | null;
   headline_from: string | null;
   metrics: string | null;
+  insights: string | null;
   created_at: number;
 }
 
@@ -120,8 +129,19 @@ const toReport = (r: Row): Report => ({
   headline: r.headline,
   headlineFrom: parseFrom(r.headline_from),
   metrics: parseMetrics(r.metrics),
+  insights: parseInsightsColumn(r.insights),
   createdAt: r.created_at,
 });
+
+/** `insights` 컬럼을 읽는다. 깨져 있으면 `null` — 그 블록들만 안 그린다(`parseMetrics` 와 같은 규약) */
+function parseInsightsColumn(raw: string | null): ReportInsights | null {
+  if (raw === null || raw.length === 0) return null;
+  try {
+    return readInsights(JSON.parse(raw));
+  } catch {
+    return null;
+  }
+}
 
 /**
  * 종류별 목록. 최신순.
@@ -132,7 +152,7 @@ const toReport = (r: Row): Report => ({
 export async function listReports(kind: ReportKind): Promise<Report[]> {
   const db = await getDatabase();
   const rows = await db.getAllAsync<Row>(
-    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, insights, created_at
        FROM ai_reports
       WHERE kind = ? AND ${ALIVE}
       ORDER BY period_key DESC`,
@@ -159,7 +179,7 @@ export async function listUsedPeriodKeys(kind: ReportKind): Promise<string[]> {
 export async function getReport(id: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, insights, created_at
        FROM ai_reports WHERE id = ? AND ${ALIVE}`,
     id,
   );
@@ -175,7 +195,7 @@ export async function getReport(id: string): Promise<Report | null> {
 export async function findByPeriod(kind: ReportKind, periodKey: string): Promise<Report | null> {
   const db = await getDatabase();
   const row = await db.getFirstAsync<Row>(
-    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at
+    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, insights, created_at
        FROM ai_reports WHERE kind = ? AND period_key = ?`,
     kind,
     periodKey,
@@ -217,8 +237,8 @@ export async function saveReport(report: Report): Promise<void> {
   const db = await getDatabase();
   await db.runAsync(
     `INSERT OR REPLACE INTO ai_reports
-       (id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver, metrics, insights, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     report.id,
     report.kind,
     report.periodKey,
@@ -232,6 +252,8 @@ export async function saveReport(report: Report): Promise<void> {
     report.promptVer,
     // 지표가 없는 리포트가 정상이다(v8 이전). 그때는 컬럼이 NULL로 남는다
     report.metrics === null ? null : JSON.stringify(report.metrics),
+    // v14 이전 리포트는 NULL 로 남는다(§8.5)
+    report.insights === null ? null : JSON.stringify(report.insights),
     report.createdAt,
   );
 }
@@ -253,7 +275,11 @@ export async function deleteReport(id: string): Promise<void> {
      * 🔴 `metrics`도 **함께 비운다.** `summary`만 지우면 지운 리포트의 지표 그림이 남는다 —
      *   지표는 일기에서 뽑은 것이라 그것도 사용자가 지우려던 것이다(§8.4).
      */
-    `UPDATE ai_reports SET summary = '', headline = NULL, headline_from = NULL, concern = 0, metrics = NULL, deleted_at = ? WHERE id = ?`,
+    /*
+     * 🔴 `insights` 도 비운다(v10) — 근거 인용에 **일기 문장이 그대로** 들어 있어서,
+     *   남기면 지운 리포트에서 일기 조각이 기기에 남는다.
+     */
+    `UPDATE ai_reports SET summary = '', headline = NULL, headline_from = NULL, concern = 0, metrics = NULL, insights = NULL, deleted_at = ? WHERE id = ?`,
     Date.now(),
     id,
   );

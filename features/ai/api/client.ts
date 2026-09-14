@@ -1,7 +1,8 @@
 import { DEV_SESSION_TOKEN } from '@/features/support/dev-auth';
 import { BACKUP_SERVER_URL } from '@/features/backup/api/client';
 import { readSessionToken } from '@/lib/common-server/client';
-import type { MetricValue, ReportKind, TopicValue } from '@/features/ai/types';
+import { readInsights } from '@/features/ai/types';
+import type { MetricValue, ReportInsights, ReportKind, TopicValue } from '@/features/ai/types';
 
 /**
  * 조각 서버 AI 프록시 클라이언트.
@@ -81,6 +82,12 @@ export interface AiReportResponse {
    */
   metrics?: MetricValue[];
   topics?: TopicValue[];
+  /**
+   * v15 칸 — 발견·해낸 것·권유·셀 수 있는 사실·요일 한 줄 + 타인 위해 신호(§8.5 · §3.1).
+   *
+   * ⚠ **없을 수 있다** — 낡은 서버·v14 이전 리포트. 서버가 이미 검증해서 준다(인용 대조·위기 비움).
+   */
+  insights?: ReportInsights;
   model: string;
   promptVer: number;
 }
@@ -219,6 +226,8 @@ function parseReportPayload(json: Record<string, unknown>): AiResult<AiReportRes
    */
   const metrics = Array.isArray(json.metrics) ? (json.metrics as MetricValue[]) : undefined;
   const topics = Array.isArray(json.topics) ? (json.topics as TopicValue[]) : undefined;
+  /* 🔴 v15 칸 — **읽는 줄이 없으면 영원히 저장되지 않는다**(위 `metrics` 사고와 같은 자리) */
+  const insights = readInsights(json.insights);
 
   return {
     ok: true,
@@ -232,6 +241,7 @@ function parseReportPayload(json: Record<string, unknown>): AiResult<AiReportRes
     concern: json.concern === true,
     ...(metrics === undefined ? {} : { metrics }),
     ...(topics === undefined ? {} : { topics }),
+    ...(insights === null ? {} : { insights }),
     model: typeof json.model === 'string' ? json.model : 'unknown',
     promptVer: typeof json.promptVer === 'number' ? json.promptVer : 0,
   };

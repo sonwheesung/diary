@@ -61,6 +61,7 @@ export async function GET(req: Request): Promise<Response> {
         concern: aiReports.concern,
         sourceCount: aiReports.sourceCount,
         metrics: aiReports.metrics,
+        insights: aiReports.insights,
         model: aiReports.model,
         promptVer: aiReports.promptVer,
         revision: aiReports.revision,
@@ -111,6 +112,15 @@ export async function GET(req: Request): Promise<Response> {
           /* 근거 키가 없으면 화면이 그 블록을 안 그린다 */
         }
       }
+      /* v15 칸. v14 이전 행은 `null` — 앱이 그 블록들을 안 그린다 */
+      let insights: unknown;
+      if (row.insights !== null) {
+        try {
+          insights = JSON.parse(row.insights);
+        } catch {
+          /* 발견·권유 없이 간다 */
+        }
+      }
       return {
         kind: row.kind,
         periodKey: row.periodKey,
@@ -122,6 +132,7 @@ export async function GET(req: Request): Promise<Response> {
         sourceCount: row.sourceCount,
         metrics,
         topics,
+        insights,
         model: row.model ?? '',
         promptVer: row.promptVer ?? 0,
         createdAt: row.createdAt.toISOString(),

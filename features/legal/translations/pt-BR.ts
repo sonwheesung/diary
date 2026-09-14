@@ -16,9 +16,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_PT_BR: LegalDoc = {
   title: 'Política de Privacidade do Jogak',
-  sourceFingerprint: '135c6fcd',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: 'c1b13f32',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'A Vivace Games Studio (“a operadora”) cumpre a Lei de Proteção de Informações Pessoais e demais normas aplicáveis e trata os dados pessoais das pessoas usuárias do “Jogak” (“o serviço”) conforme descrito abaixo. Por princípio, o Jogak guarda no seu dispositivo os registros de diário que você escreve, e eles só são enviados a um servidor em dois casos: o backup que você mesmo ativar e os relatórios de resumo por IA que você mesmo criar. No mais, coletamos apenas as informações mínimas necessárias.',
   sections: [
@@ -66,9 +66,9 @@ export const PRIVACY_PT_BR: LegalDoc = {
         '⚠ Dados de pagamento, como números de cartão ou de conta, são tratados pelo Google Play e não são repassados à operadora. A operadora só consegue saber que você pagou e até quando a assinatura é válida.',
         'e. Se você criar relatórios de resumo por IA (exige assinatura)',
         '• O que é entregue ao provedor de IA por meio do servidor da operadora: o título, o texto, a emoção e a data dos registros do período para o qual você pediu um relatório',
-        '• O que a operadora armazena: o resumo gerado pela IA, o identificador da conta que criou o relatório, o período, o número de vezes e a quantidade de tokens usados',
-        '⚠ Para ser preciso: a operadora não armazena o conteúdo do diário em si. No entanto, ① no momento em que o resumo é feito esse conteúdo passa pelo servidor da operadora, então não podemos dizer que “a operadora não consegue ver”, e ② o resumo gerado é mantido por 90 dias. Dizemos isso tal como é, sem suavizar.',
-        '⚠ O resumo é escrito a partir dos seus registros, portanto pode conter o conteúdo do seu diário.',
+        "• O que a operadora armazena: o relatório gerado pela IA (o resumo, as frases de padrões, conquistas e sugestões, e as frases do diário que cita como evidência), o identificador da conta que criou o relatório, o período, o número de vezes e a quantidade de tokens usados",
+        "⚠ Para ser preciso: a operadora não armazena o conteúdo do diário em si. No entanto, ① no momento em que o relatório é feito esse conteúdo passa pelo servidor da operadora, então não podemos dizer que “a operadora não consegue ver”, e ② o relatório gerado é mantido por 90 dias. Dizemos isso tal como é, sem suavizar.",
+        "⚠ O relatório é escrito a partir dos seus registros, portanto pode conter o conteúdo do seu diário, e frases do diário podem ser citadas literalmente como evidência de um padrão.",
         '• Consentimento específico para informações sensíveis: um diário pode conter informações sensíveis, como estado de saúde ou psicológico, nos termos do art. 23 da Lei de Proteção de Informações Pessoais. Como os relatórios de resumo por IA tratam esse conteúdo sem criptografia, coletamos um consentimento específico para o tratamento de informações sensíveis na primeira vez que você usa o recurso. Esse consentimento é separado do consentimento de transferência internacional da seção 6, e você pode escolher cada um de forma independente.',
         'Mesmo que você não consinta, pode continuar usando normalmente todas as funções, exceto os relatórios por IA. Os relatórios só são gerados quando você mesmo os cria; nunca são gerados automaticamente.',
         'f. Quando você abre o app ou volta para ele (estando ou não com login)',
@@ -92,7 +92,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
         '• Exibir anúncios: oferecer publicidade a quem usa a versão gratuita e medir seu desempenho',
         '• Backup e restauração: se você ativar, guardar uma cópia criptografada dos seus registros e devolvê-la quando você pedir',
         '• Conferir o direito de assinatura: oferecer a quem pagou a remoção de anúncios, o backup e os relatórios por IA, e tratar dúvidas de pagamento e reembolsos',
-        '• Gerar relatórios de resumo por IA e melhorar sua qualidade: produzir o resumo do período que você pediu e conferir o resultado para melhorar a qualidade',
+        "• Gerar relatórios de resumo por IA e melhorar sua qualidade: produzir um relatório que revisita o período que você pediu (resumo, padrões, conquistas e sugestões) e conferir o resultado para melhorar a qualidade",
         'A operadora não usa os dados pessoais para finalidades diferentes das acima e, se a finalidade mudar, obterá consentimento previamente.',
       ],
     },
@@ -105,7 +105,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
         '• Identificador de dispositivo e registro dos dias de uso: 400 dias a contar do último dia de uso. Depois disso é excluído automaticamente.',
         '• Cópia de backup criptografada: guardada enquanto o backup estiver ativado e por até 90 dias após o término da assinatura, e depois destruída automaticamente. Se você desativar o backup, pedir a exclusão ou excluir sua conta, destruímos sem demora, sem esperar os 90 dias. Backups sem acesso por 3 anos ou mais são destruídos (é o caso de quem desinstalou o app sem excluir a conta).',
         '• Registro da destruição de um backup (identificador do backup e horário da destruição): 1 ano — para que você possa descobrir “por que a restauração não funciona”; o identificador da conta não é mantido junto.',
-        '• Resumo gerado pela IA: 90 dias a contar do dia da criação. Depois é excluído automaticamente.',
+        "• Relatório gerado pela IA (incluindo frases do diário citadas como evidência): 90 dias a contar do dia da criação. Depois é excluído automaticamente.",
         '• Registros de uso dos relatórios (identificador da conta, período, número de vezes, quantidade de tokens): até que a finalidade seja cumprida ou até você excluir sua conta',
         '• Registros sobre contratos ou arrependimento e sobre pagamento e fornecimento de bens: 5 anos (Lei de Proteção ao Consumidor no Comércio Eletrônico, art. 6)',
         'Se você excluir sua conta, os identificadores de conta (e-mail, “sub” do Google) são deixados sem demora em forma não rastreável, e os registros de transação acima são guardados separadamente e de forma não rastreável pelo prazo indicado e depois destruídos.',
@@ -167,8 +167,8 @@ export const PRIVACY_PT_BR: LegalDoc = {
         'Você pode exercê-los por escrito ou por e-mail usando o contato da seção 11, e a operadora agirá sem demora.',
         'Se você solicitar a correção de um erro nos seus dados, não os usaremos nem os forneceremos até que a correção esteja concluída.',
         '⚠ Limites do direito de acesso quanto ao backup: se você pedir acesso a ele, tudo o que a operadora pode entregar é o texto criptografado, que não pode ser descriptografado, e os metadados da seção 2(c). Não podemos fornecer o conteúdo dos seus registros em formato legível por uma pessoa, porque a operadora não tem a chave. Você mesmo pode restaurá-los a qualquer momento no app usando seu código de recuperação.',
-        'Você pode excluir a qualquer momento no app um relatório por IA já criado. Ao excluí-lo no app, ele some do seu dispositivo, e o resumo mantido no servidor é excluído automaticamente após 90 dias. Se quiser que seja excluído antes, pode solicitar pelo “Contato”.',
-        '⚠ Os resumos gerados por IA podem divergir dos fatos e não constituem diagnóstico ou orientação médica ou psicológica. O app oferece uma forma de denunciar um relatório.',
+        "Você pode excluir a qualquer momento no app um relatório por IA já criado. Ao excluí-lo no app, ele some do seu dispositivo, e o relatório mantido no servidor é excluído automaticamente após 90 dias. Se quiser que seja excluído antes, pode solicitar pelo “Contato”.",
+        "⚠ Os relatórios gerados por IA podem divergir dos fatos e não constituem diagnóstico médico ou psicológico. As sugestões de um relatório servem apenas como referência e você não precisa segui-las. O app oferece uma forma de denunciar um relatório.",
         'O representante legal de uma criança menor de 14 anos pode exercer os direitos acima em nome dela.',
       ],
     },
@@ -216,6 +216,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
         '• 2026-09-01 alteração — foi acrescentada aos itens 2, 3 e 4 a coleta de um identificador de dispositivo para estatísticas de uso do serviço (contagem de usuários ativos), e o aviso de verificação de idade do item 2 foi ampliado.',
         '• 2026-09-02 alteração — no item 2 ficou esclarecido que a data de uso é registrada não só ao abrir o app, mas também ao voltar para ele (no máximo uma vez a cada cinco minutos), e que ela é registrada na sua conta em vez do identificador de dispositivo quando você está com login.',
         "• 2026-09-09 alteração — informamos no item 2 a verificação de atualizações que ocorre ao abrir o app (envio do sistema operacional do aparelho e de um token aleatório) e acrescentamos a 650 Industries, Inc. aos destinatários do item 6.",
+        "• 2026-09-14 alteração — os relatórios de resumo por IA passaram a gerar, além do resumo, padrões, conquistas e sugestões, citando frases do diário como evidência; revisamos os itens armazenados (item 2), a finalidade do tratamento (item 3), o prazo de conservação (item 4) e o aviso sobre a natureza dos relatórios (item 9).",
       ],
     },
   ],
@@ -237,9 +238,9 @@ export const PRIVACY_PT_BR: LegalDoc = {
  */
 export const DELETE_ACCOUNT_PT_BR: LegalDoc = {
   title: 'Como excluir sua conta do Jogak',
-  sourceFingerprint: 'a8b0c8b9',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: 'e36bafaa',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Esta página explica como excluir sua conta do Jogak e os dados associados a ela. Você também pode pedir a exclusão por e-mail caso já tenha desinstalado o app ou não consiga fazer login.',
   sections: [
@@ -272,7 +273,7 @@ export const DELETE_ACCOUNT_PT_BR: LegalDoc = {
         '• O vínculo entre suas mensagens e a conta de quem as escreveu',
         '• A cópia criptografada do seu diário guardada no servidor (se você ativou o backup) — excluída junto com a conta, sem esperar os 90 dias de carência.',
         '• O identificador do backup e os registros de backup (horário, tamanho, número da geração)',
-        '• Os resumos de relatórios por IA mantidos no servidor (por até 90 dias) e os registros de uso dos relatórios (período, número de vezes, quantidade de tokens)',
+        "• Os relatórios por IA mantidos no servidor (incluindo frases do diário citadas como evidência, por até 90 dias) e os registros de uso dos relatórios (período, número de vezes, quantidade de tokens)",
         '⚠ Na exclusão da conta, destruímos primeiro o backup e depois a conta: se a conta sumisse antes, não sobraria ninguém com permissão para apagar esse backup. Se a exclusão do backup falhar, a exclusão da conta não chega a acontecer; basta tentar de novo daqui a pouco.',
         '⚠ A exclusão não pode ser desfeita. Mesmo que você ainda tenha seu código de recuperação, não será possível restaurar o backup do servidor.',
       ],
@@ -341,9 +342,9 @@ export const DELETE_ACCOUNT_PT_BR: LegalDoc = {
  */
 export const TERMS_PT_BR: LegalDoc = {
   title: 'Termos de Uso do Jogak',
-  sourceFingerprint: 'f4233a8a',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: '234878ab',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Estes termos definem os direitos, as obrigações e as responsabilidades entre a Hwiseong Games (marca: Vivace Games Studio, “a operadora”) e as pessoas usuárias, quanto ao uso do aplicativo móvel “Jogak” (“o serviço”) oferecido pela operadora. Leia-os antes de usar o serviço.',
   sections: [
@@ -533,7 +534,7 @@ export const TERMS_PT_BR: LegalDoc = {
       body: [
         'A operadora responde, quanto à prestação do serviço, nos termos da legislação aplicável. Nenhuma cláusula destes termos exclui ou limita a responsabilidade da operadora prevista em lei.',
         'A operadora não responde por danos decorrentes de causas que não lhe sejam imputáveis, como caso fortuito ou força maior, falha, perda ou restauração do dispositivo da pessoa usuária, ou a perda, por ela, do código de recuperação ou do segredo de bloqueio do aplicativo.',
-        'O relatório de resumo com IA é material de referência gerado por inteligência artificial e não é diagnóstico nem aconselhamento médico, psicológico ou jurídico. A operadora não garante a exatidão de seu conteúdo.',
+        "O relatório de resumo com IA é material de referência gerado por inteligência artificial e não é diagnóstico médico, psicológico ou jurídico. As sugestões do relatório servem apenas como referência e o usuário não tem obrigação de segui-las. A operadora não garante a exatidão de seu conteúdo.",
         'Os danos ocorridos no processo de pagamento pela loja de aplicativos por causas imputáveis a ela seguem a política dessa loja. Ainda assim, a operadora prestará toda a cooperação necessária para a reparação do prejuízo da pessoa usuária.',
       ],
     },
@@ -557,6 +558,7 @@ export const TERMS_PT_BR: LegalDoc = {
         'A versão coreana destes termos é a versão autêntica. Havendo divergência de sentido com uma tradução para outro idioma, prevalece a versão coreana.',
         'Disposição final: estes termos entram em vigor em 17 de agosto de 2026.',
         "Disposição final: estes termos entram em vigor em 9 de setembro de 2026. (Foi acrescentada ao artigo 10 a informação sobre a verificação automática de atualizações.)",
+        "Disposição final: estes termos entram em vigor em 14 de setembro de 2026. (Foi acrescentado ao artigo 20 um aviso sobre as sugestões dos relatórios por IA.)",
       ],
     },
   ],

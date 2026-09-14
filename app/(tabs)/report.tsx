@@ -539,6 +539,14 @@ function failMessage(
       return retryAt === undefined
         ? t('report.fail.rate-limited')
         : t('report.fail.rateLimitedAt', { time: formatDateTime(retryAt) });
+    /*
+     * 🔴 거부도 **1시간 잠긴다**(`AI_REPORT_SYSTEM` §4.3). 옛 문구는 *"횟수에 포함되지 않아요"* 만
+     *   말해서 바로 다시 누른 사람이 `cooling-down` 을 만났다. 서버가 잠근 시각을 준다(2026-09-14).
+     */
+    case 'refused':
+      return retryAt === undefined
+        ? t('report.fail.refused')
+        : t('report.fail.refusedAt', { time: formatDateTime(retryAt) });
     // ⚠ "주에 한 번"으로 뭉치지 않는다 — 월간 탭에서 그 문장은 거짓이다.
     //   무엇이 이미 있는지를 기간으로 말해야 다음에 할 일이 분명해진다
     case 'exists':

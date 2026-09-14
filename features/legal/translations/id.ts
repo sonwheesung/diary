@@ -10,9 +10,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ID: LegalDoc = {
   title: 'Kebijakan Privasi Jogak',
-  sourceFingerprint: '135c6fcd',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: 'c1b13f32',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Vivace Games Studio (“operator”) mematuhi Undang-Undang Perlindungan Informasi Pribadi dan peraturan terkait lainnya, serta memproses data pribadi pengguna “Jogak” (“layanan”) sebagaimana dijelaskan di bawah ini. Pada prinsipnya Jogak menyimpan catatan harian yang kamu tulis di dalam perangkatmu sendiri, dan catatanmu dikirim ke server hanya sebatas pencadangan yang kamu aktifkan sendiri serta laporan ringkasan AI yang kamu buat sendiri. Selebihnya kami hanya mengumpulkan informasi seminimal mungkin.',
   sections: [
@@ -60,9 +60,9 @@ export const PRIVACY_ID: LegalDoc = {
         '⚠ Data pembayaran seperti nomor kartu kredit atau nomor rekening ditangani Google Play dan tidak diteruskan ke operator. Operator hanya dapat mengetahui bahwa kamu telah membayar dan sampai kapan langganan itu berlaku.',
         'e. Bila kamu membuat laporan ringkasan AI (perlu berlangganan)',
         '• Yang dikirim melalui server operator kepada penyedia AI: judul, isi, emosi, dan tanggal catatan pada periode yang kamu mintakan laporannya',
-        '• Yang disimpan operator: ringkasan yang dihasilkan AI, pengenal akun yang membuat laporan, periode, jumlah kali, dan jumlah token yang digunakan',
-        '⚠ Ketepatannya: operator tidak menyimpan isi catatan itu sendiri. Namun ① pada saat ringkasan dibuat, isinya melewati server operator, sehingga kami tidak dapat mengatakan bahwa “operator tidak dapat melihatnya”, dan ② ringkasan yang dihasilkan kami simpan selama 90 hari. Kami sampaikan hal ini apa adanya tanpa mengaburkannya.',
-        '⚠ Ringkasan ditulis berdasarkan catatanmu, sehingga isi catatan itu dapat termuat di dalamnya.',
+        "• Yang disimpan operator: laporan yang dihasilkan AI (ringkasan, kalimat pola, pencapaian, dan saran, serta kalimat catatan yang dikutip sebagai bukti), pengenal akun yang membuat laporan, periode, jumlah kali, dan jumlah token yang digunakan",
+        "⚠ Ketepatannya: operator tidak menyimpan isi catatan itu sendiri. Namun ① pada saat laporan dibuat, isinya melewati server operator, sehingga kami tidak dapat mengatakan bahwa “operator tidak dapat melihatnya”, dan ② laporan yang dihasilkan kami simpan selama 90 hari. Kami sampaikan hal ini apa adanya tanpa mengaburkannya.",
+        "⚠ Laporan ditulis berdasarkan catatanmu, sehingga isi catatan itu dapat termuat di dalamnya, dan kalimat catatan dapat dikutip apa adanya sebagai bukti sebuah pola.",
         '• Persetujuan terpisah untuk informasi sensitif: catatan harian dapat memuat informasi sensitif seperti kondisi kesehatan atau psikologis sebagaimana dimaksud Pasal 23 Undang-Undang Perlindungan Informasi Pribadi. Karena laporan ringkasan AI memproses isi tersebut tanpa enkripsi, kami meminta persetujuan terpisah untuk pemrosesan informasi sensitif saat kamu pertama kali menggunakan fitur ini. Persetujuan ini terpisah dari persetujuan transfer ke luar negeri pada bagian 6, dan kamu dapat memilih masing-masing secara sendiri-sendiri.',
         'Meski tidak menyetujuinya, semua fitur selain laporan AI tetap dapat kamu gunakan seperti biasa. Laporan hanya dibuat ketika kamu sendiri membuatnya dan tidak pernah dibuat secara otomatis.',
         'f. Saat Anda membuka aplikasi atau kembali ke aplikasi (baik masuk maupun tidak)',
@@ -86,7 +86,7 @@ export const PRIVACY_ID: LegalDoc = {
         '• Menayangkan iklan: menampilkan iklan kepada pengguna versi gratis dan mengukur kinerjanya',
         '• Pencadangan dan pemulihan: bila kamu mengaktifkannya, menyimpan salinan catatanmu yang terenkripsi dan mengembalikannya atas permintaanmu',
         '• Memastikan hak langganan: memberikan penghapusan iklan, pencadangan, dan laporan AI kepada pengguna yang telah membayar, serta menangani pertanyaan pembayaran dan pengembalian dana',
-        '• Membuat laporan ringkasan AI dan meningkatkan kualitasnya: menyusun ringkasan untuk periode yang kamu minta lalu memeriksa hasilnya untuk memperbaiki kualitas',
+        "• Membuat laporan ringkasan AI dan meningkatkan kualitasnya: menyusun laporan yang meninjau periode yang kamu minta (ringkasan, pola, pencapaian, dan saran) lalu memeriksa hasilnya untuk memperbaiki kualitas",
         'Operator tidak menggunakan data pribadi untuk tujuan selain di atas, dan bila tujuannya berubah akan meminta persetujuan terlebih dahulu.',
       ],
     },
@@ -99,7 +99,7 @@ export const PRIVACY_ID: LegalDoc = {
         '• Pengidentifikasi perangkat dan catatan hari penggunaan: 400 hari sejak hari penggunaan terakhir. Setelah itu dihapus secara otomatis.',
         '• Salinan cadangan yang terenkripsi: disimpan selama pencadangan aktif dan sampai 90 hari setelah langganan berakhir, lalu dimusnahkan otomatis. Bila kamu menonaktifkan pencadangan, meminta penghapusan, atau menghapus akun, kami memusnahkannya tanpa penundaan tanpa menunggu 90 hari. Cadangan yang tidak diakses selama 3 tahun atau lebih akan dimusnahkan (ini berlaku bila aplikasi dihapus tetapi akun tidak).',
         '• Catatan mengenai pemusnahan cadangan (pengenal cadangan dan waktu pemusnahan): 1 tahun — agar kamu dapat mengetahui “mengapa pemulihan tidak berhasil”; pengenal akun tidak disimpan bersamanya.',
-        '• Ringkasan yang dihasilkan AI: 90 hari sejak dibuat. Setelah itu dihapus secara otomatis.',
+        "• Laporan yang dihasilkan AI (termasuk kalimat catatan yang dikutip sebagai bukti): 90 hari sejak dibuat. Setelah itu dihapus secara otomatis.",
         '• Catatan penggunaan laporan (pengenal akun, periode, jumlah kali, jumlah token): sampai tujuan pemrosesan tercapai atau sampai kamu menghapus akun',
         '• Catatan mengenai kontrak atau penarikan penawaran, serta pembayaran dan penyediaan barang: 5 tahun (Undang-Undang Perlindungan Konsumen dalam Perdagangan Elektronik, Pasal 6)',
         'Bila kamu menghapus akun, pengenal akun (alamat email dan Google “sub”) segera dijadikan tidak dapat ditelusuri, sedangkan catatan transaksi di atas disimpan terpisah dalam bentuk yang tidak dapat ditelusuri selama jangka waktu tersebut lalu dimusnahkan.',
@@ -161,8 +161,8 @@ export const PRIVACY_ID: LegalDoc = {
         'Hak tersebut dapat digunakan secara tertulis atau melalui email ke kontak pada bagian 11, dan operator akan bertindak tanpa penundaan.',
         'Bila kamu meminta koreksi atas kesalahan dalam datamu, kami tidak akan menggunakan atau memberikan data itu sampai koreksinya selesai.',
         '⚠ Batas hak akses terhadap cadangan: bila kamu meminta akses ke cadanganmu, yang dapat diberikan operator hanyalah teks terenkripsi yang tidak dapat didekripsi beserta metadata pada bagian 2(c). Kami tidak dapat memberikan isi catatanmu dalam bentuk yang terbaca manusia — operator tidak memegang kuncinya. Kamu sendiri dapat memulihkannya kapan saja di aplikasi dengan kode pemulihanmu.',
-        'Laporan AI yang sudah jadi dapat kamu hapus kapan saja di aplikasi. Menghapusnya di aplikasi menghilangkannya dari perangkatmu, sedangkan ringkasan yang tersimpan di server dihapus otomatis setelah 90 hari. Bila kamu ingin dihapus lebih cepat, kamu dapat memintanya melalui “Hubungi kami”.',
-        '⚠ Ringkasan yang dihasilkan AI dapat berbeda dari fakta dan bukan merupakan diagnosis maupun saran medis atau psikologis. Aplikasi menyediakan cara untuk melaporkan sebuah laporan.',
+        "Laporan AI yang sudah jadi dapat kamu hapus kapan saja di aplikasi. Menghapusnya di aplikasi menghilangkannya dari perangkatmu, sedangkan laporan yang tersimpan di server dihapus otomatis setelah 90 hari. Bila kamu ingin dihapus lebih cepat, kamu dapat memintanya melalui “Hubungi kami”.",
+        "⚠ Laporan yang dihasilkan AI dapat berbeda dari fakta dan bukan merupakan diagnosis medis atau psikologis. Saran dalam laporan hanya sebagai rujukan, dan kamu tidak wajib mengikutinya. Aplikasi menyediakan cara untuk melaporkan sebuah laporan.",
         'Wali sah anak di bawah 14 tahun dapat menggunakan hak di atas atas nama anak tersebut.',
       ],
     },
@@ -210,6 +210,7 @@ export const PRIVACY_ID: LegalDoc = {
         '• 2026-09-01 perubahan — pengumpulan pengidentifikasi perangkat untuk statistik penggunaan layanan (penghitungan pengguna aktif) ditambahkan pada butir 2, 3, dan 4, serta pemberitahuan verifikasi usia pada butir 2 diperluas.',
         '• 2026-09-02 perubahan — pada pasal 2 dijelaskan bahwa tanggal penggunaan dicatat tidak hanya saat aplikasi dibuka, tetapi juga saat Anda kembali ke aplikasi (paling cepat setiap lima menit), dan bahwa pencatatan dilakukan pada akun Anda, bukan identifikasi perangkat, jika Anda masuk.',
         "• 2026-09-09 perubahan — mengungkapkan pada bagian 2 pemeriksaan pembaruan yang terjadi saat aplikasi dibuka (pengiriman sistem operasi perangkat dan token acak), dan menambahkan 650 Industries, Inc. ke penerima pada bagian 6.",
+        "• 2026-09-14 perubahan — laporan ringkasan AI kini juga menghasilkan pola, pencapaian, dan saran selain ringkasan, serta mengutip kalimat catatan sebagai bukti; kami merevisi data yang disimpan (bagian 2), tujuan pemrosesan (bagian 3), masa penyimpanan (bagian 4), dan keterangan tentang sifat laporan (bagian 9).",
       ],
     },
   ],
@@ -230,9 +231,9 @@ export const PRIVACY_ID: LegalDoc = {
  */
 export const DELETE_ACCOUNT_ID: LegalDoc = {
   title: 'Jogak — Cara menghapus akunmu',
-  sourceFingerprint: 'a8b0c8b9',
-  effective: '2026-08-23',
-  updated: '2026-08-23',
+  sourceFingerprint: 'e36bafaa',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Halaman ini menjelaskan cara menghapus akun aplikasi Jogak beserta data yang terkait dengannya. Kamu juga dapat mengajukan permintaan lewat email bila sudah menghapus aplikasinya atau tidak dapat masuk.',
   sections: [
@@ -265,7 +266,7 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
         '• Keterkaitan antara riwayat pertanyaan dan akun penulisnya',
         '• Salinan catatanmu yang terenkripsi di server (bila kamu mengaktifkan pencadangan) — ikut dihapus tanpa menunggu tenggang 90 hari.',
         '• Pengenal cadangan dan catatan pencadangan (waktu, ukuran, nomor generasi)',
-        '• Ringkasan laporan AI yang tersimpan di server (paling lama 90 hari) dan catatan penggunaan laporan (periode, jumlah kali, jumlah token)',
+        "• Laporan AI yang tersimpan di server (termasuk kalimat catatan yang dikutip sebagai bukti, paling lama 90 hari) dan catatan penggunaan laporan (periode, jumlah kali, jumlah token)",
         '⚠ Saat kamu menghapus akun, kami memusnahkan cadangan lebih dulu baru menghapus akunnya — sebab bila akunnya lenyap lebih dulu, tidak ada lagi orang yang berwenang menghapus cadangan itu. Bila penghapusan cadangan gagal, penghapusan akun tidak dilanjutkan; silakan coba lagi beberapa saat kemudian.',
         '⚠ Setelah dihapus, hal ini tidak dapat dibatalkan. Meski kamu masih memegang kode pemulihan, kamu tidak akan dapat memulihkan cadangan yang ada di server.',
       ],
@@ -335,9 +336,9 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
  */
 export const TERMS_ID: LegalDoc = {
   title: 'Ketentuan Penggunaan Jogak',
-  sourceFingerprint: 'f4233a8a',
-  effective: '2026-09-09',
-  updated: '2026-09-09',
+  sourceFingerprint: '234878ab',
+  effective: '2026-09-14',
+  updated: '2026-09-14',
   intro:
     'Ketentuan ini mengatur hak, kewajiban, dan tanggung jawab antara Hwiseong Games (nama merek Vivace Games Studio, selanjutnya “operator”) dan pengguna, sehubungan dengan penggunaan aplikasi seluler “Jogak” (selanjutnya “layanan”) yang disediakan operator. Mohon dibaca sebelum kamu menggunakan layanan.',
   sections: [
@@ -527,7 +528,7 @@ export const TERMS_ID: LegalDoc = {
       body: [
         'Operator memikul tanggung jawab sebagaimana ditetapkan peraturan perundang-undangan yang berlaku sehubungan dengan penyediaan layanan. Tidak satu pun ketentuan dalam dokumen ini mengecualikan atau membatasi tanggung jawab operator yang ditetapkan peraturan perundang-undangan.',
         'Operator tidak bertanggung jawab atas kerugian yang timbul dari sebab yang tidak dapat dipersalahkan kepada operator, seperti keadaan kahar, kerusakan, kehilangan, atau pengaturan ulang perangkat pengguna, maupun hilangnya kode pemulihan atau kata sandi kunci aplikasi pengguna.',
-        'Laporan ringkasan AI adalah bahan rujukan yang dihasilkan kecerdasan buatan, dan bukan diagnosis atau saran medis, psikologis, maupun hukum. Operator tidak menjamin ketepatan isinya.',
+        "Laporan ringkasan AI adalah bahan rujukan yang dihasilkan kecerdasan buatan, dan bukan diagnosis medis, psikologis, maupun hukum. Saran dalam laporan hanya sebagai rujukan, dan pengguna tidak wajib mengikutinya. Operator tidak menjamin ketepatan isinya.",
         'Kerugian yang timbul dalam proses pembayaran melalui pasar aplikasi karena hal yang dapat dipersalahkan kepada pasar aplikasi tunduk pada kebijakan pasar aplikasi. Meskipun demikian, operator memberikan seluruh kerja sama yang diperlukan untuk memulihkan kerugian pengguna.',
       ],
     },
@@ -551,6 +552,7 @@ export const TERMS_ID: LegalDoc = {
         'Versi bahasa Korea dari ketentuan ini adalah versi yang mengikat. Bila terjemahan dalam bahasa lain berbeda maknanya, versi bahasa Korea yang berlaku.',
         'Ketentuan penutup: Ketentuan ini mulai berlaku pada 17 Agustus 2026.',
         "Ketentuan penutup: syarat dan ketentuan ini berlaku mulai 9 September 2026. (Penjelasan mengenai pemeriksaan pembaruan otomatis ditambahkan pada Pasal 10.)",
+        "Ketentuan penutup: ketentuan ini berlaku mulai 14 September 2026. (Keterangan tentang saran dalam laporan AI telah ditambahkan ke Pasal 20.)",
       ],
     },
   ],
