@@ -1226,6 +1226,49 @@ console.log('');
     eq(out.insights.achievements.length, 1, '체중 성취가 살아남았다');
   });
 
+  check('🔴 식단 필터는 리포트 언어 전부를 본다 — 아랍어 일기 → 영어 리포트처럼 일기 언어와 무관하다', () => {
+    const texts = [
+      'Que diriez-vous de suivre un régime ?',
+      '¿Y si intentas bajar de peso poco a poco?',
+      'Wie wäre es, abzunehmen?',
+      'Как насчёт диеты?',
+      'Bagaimana kalau menurunkan berat badan?',
+      'Thử giảm cân xem sao?',
+      'ลองลดน้ำหนักดูไหม',
+      'Diyet yapmayı denesen?',
+    ];
+    for (const text of texts) {
+      const out = run({ suggestions: [{ pattern: 'x', text, dates: ['2026-06-01', '2026-06-02'] }] });
+      eq(out.insights.suggestions.length, 0, `감량 권유가 살아남았다: ${text}`);
+    }
+  });
+
+  check('식단 필터가 흔한 낱말을 잡지 않는다 — 봄·전부(러시아어 весна·весь)는 권유가 버려지면 안 된다', () => {
+    const out = run({
+      suggestions: [{ pattern: 'x', text: 'Как насчёт весенней прогулки со всеми?', dates: ['2026-06-01', '2026-06-02'] }],
+    });
+    eq(out.insights.suggestions.length, 1, '평범한 권유가 버려졌다');
+  });
+
+  check('인용 대조가 언어별 문장부호를 넘는다 — 일본어 。、 · 아랍어 ،', () => {
+    const E2 = [
+      { date: '2026-06-01', emotion: null, title: null, text: 'チーム会議で発表を引き受けた。準備が不安だ。' },
+      { date: '2026-06-02', emotion: null, title: null, text: 'راجعت الشرائح، والتسلسل فوضوي.' },
+    ];
+    const out = sanitizeInsights({
+      kind: 'weekly',
+      entries: E2,
+      raw: {
+        discoveries: [{
+          shape: 'change', title: 't', selfCheck: 'combined',
+          evidence: [ev('2026-06-01', 'チーム会議で発表を引き受けた'), ev('2026-06-02', 'راجعت الشرائح والتسلسل فوضوي')],
+        }],
+      },
+      metrics: [], topics: [], concern: false,
+    });
+    eq(out.insights.discoveries.length, 1, '문장부호 차이로 다국어 근거가 버려졌다');
+  });
+
   const FULL = {
     harmToOthers: false,
     discoveries: [disc()],

@@ -476,7 +476,11 @@ export function normalizeQuote(text: string): string {
   return text
     .toLowerCase()
     .replace(/\s+/g, '')
-    .replace(/[.,!?…~·:;'"“”‘’「」『』()\[\]\-—–]/g, '');
+    /*
+     * ⚠ 언어별 문장부호도 지운다(2026-09-14 다국어 실험) — 일본어 `。、`, 스페인어 `¿¡`,
+     *   프랑스어 `«»`, 아랍어 `،؛؟`. 모델이 옮기며 하나만 바꿔도 멀쩡한 근거가 버려진다.
+     */
+    .replace(/[.,!?…~·:;'"“”‘’「」『』()\[\]\-—–。、！？，．：；«»¿¡،؛؟]/g, '');
 }
 
 /**
@@ -486,7 +490,30 @@ export function normalizeQuote(text: string): string {
  * 연령 게이트가 13·14·16세다. 모델 규칙 한 줄에만 기대기엔 틀렸을 때의 값이 크다.
  * ⚠ 넓게 잡는다. 식사 관찰 권유 하나를 잃는 것이 감량 권유 하나가 나가는 것보다 싸다.
  */
-const DIET = /(칼로리|kcal|감량|체중|몸무게|다이어트|굶|단식|식단|살\s*(을|이)?\s*빼|calori|diet|weight|fasting|体重|ダイエット|減量|カロリー|节食|減肥|减肥|热量|熱量)/i;
+/*
+ * ⚠ 일기 언어는 앱 언어와 무관하다(2026-09-14 실험: 아랍어 일기 → 영어 리포트). 권유는 **리포트 언어**로
+ *   나오므로 15개 리포트 언어의 감량·식단 어휘를 넣는다. 흔한 낱말의 일부가 되는 짧은 어간(러시아어 `вес`
+ *   → `весна`·`весь`)은 넣지 않고 두 낱말 구로 잡는다 — 봄 이야기 권유가 버려지면 안 된다.
+ */
+const DIET = new RegExp(
+  [
+    '칼로리', 'kcal', '감량', '체중', '몸무게', '다이어트', '굶', '단식', '식단', '살\\s*(을|이)?\\s*빼',
+    'calori', 'diet', 'weight', 'fasting',
+    '体重', 'ダイエット', '減量', 'カロリー', '节食', '減肥', '减肥', '热量', '熱量',
+    'régime', 'maigrir', 'poids', // fr
+    'dieta', 'adelgaz', 'peso corporal', 'bajar de peso', // es
+    'emagrec', 'perder peso', // pt
+    'abnehm', 'abzunehm', 'diät', 'gewicht', 'kalorien', // de — 분리동사라 zu 가 끼어든다(abzunehmen)
+    'dimagr', 'perdere peso', // it
+    'похуд', 'диет', 'калори', 'сбросить вес', 'лишний вес', // ru
+    'berat badan', 'kalori', // id · tr
+    'giảm cân', 'ăn kiêng', 'cân nặng', // vi
+    'ลดน้ำหนัก', 'น้ำหนัก', 'แคลอรี่', 'อดอาหาร', // th
+    'kilo ver', 'diyet', // tr
+    'رجيم', 'حمية', 'سعرات', 'إنقاص الوزن', // ar — 앱 언어는 아니지만 모델이 원문 표현을 섞을 수 있다
+  ].join('|'),
+  'i',
+);
 
 /** 그 목록 안의 날짜만, 중복 없이 */
 function datesIn(value: unknown, allowed: ReadonlySet<string>): string[] {
