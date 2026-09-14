@@ -301,6 +301,7 @@ export default function ReportDetailScreen() {
       {report.insights !== null && (
         <DiscoveryCards
           items={report.insights.discoveries}
+          headline={report.headline}
           onOpenDate={(date) => openSource('weekly', date)}
         />
       )}

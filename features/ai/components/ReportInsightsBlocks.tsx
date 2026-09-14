@@ -20,6 +20,13 @@ import { typography } from '@/theme/typography';
 
 const joinDates = (dates: string[]): string => dates.map((d) => formatShortDate(d)).join(' · ');
 
+/** 띄어쓰기·문장부호만 다른 같은 문장인가 */
+function sameSentence(a: string, b: string | null | undefined): boolean {
+  if (b === null || b === undefined) return false;
+  const norm = (s: string) => s.replace(/[\s.,!?…·'"“”‘’]/g, '');
+  return norm(a).length > 0 && norm(a) === norm(b);
+}
+
 /**
  * 발견 카드 — 한 줄 아래, 본문 위.
  *
@@ -29,9 +36,16 @@ const joinDates = (dates: string[]): string => dates.map((d) => formatShortDate(
 export function DiscoveryCards({
   items,
   onOpenDate,
+  headline,
 }: {
   items: Discovery[];
   onOpenDate: (date: string) => void;
+  /**
+   * 🔴 한 줄과 **같은 문장**인 카드는 제목을 숨긴다(2026-09-14 에뮬레이터).
+   *   프롬프트가 *"한 줄 = 가장 좋은 발견"* 이라 모델이 카드 문장을 그대로 옮기면 바로 아래에
+   *   같은 문장이 두 번 뜬다. 근거 인용은 그 카드에만 있으므로 **카드는 남기고 제목만** 뺀다.
+   */
+  headline?: string | null;
 }) {
   const { t } = useTranslation();
   const styles = useStyles(createStyles);
@@ -43,7 +57,7 @@ export function DiscoveryCards({
       {items.map((item, index) => (
         <View key={`${item.shape}-${index}`} style={styles.card}>
           <Text style={styles.shape}>{t(`report.shape.${item.shape}`)}</Text>
-          <Text style={styles.title}>{item.title}</Text>
+          {!sameSentence(item.title, headline) && <Text style={styles.title}>{item.title}</Text>}
           <View style={styles.evidenceList}>
             {item.evidence.map((ev, i) => (
               <Pressable
