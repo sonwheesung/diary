@@ -115,11 +115,12 @@
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
-### ⏳ `23 (1.1.0)` 준비 — 리포트 v15 화면 + R8 권장 두 줄 (2026-09-15)
+### ⏳ ~~`23 (1.1.0)`~~ → `24 (1.1.0)` 준비 — 리포트 v15 화면 + R8 권장 두 줄 + 수정사항 시트 #1·#2 (2026-09-15)
 
 | | |
 |---|---|
 | 담는 것 | 리포트 v15 새 칸(흐름 카드 · 해낸 것 · 권유 · 문장 지표) · DB v10 · 매니페스트 7 · 동의 v2 · R8 권장 두 줄 |
+| 🔴 versionCode 23 도 건너뛴다 | `jogak-vc23.aab`(12:47) 를 콘솔 초안에 올린 **뒤에** 시트 #2(서버 리포트 보관 90일 → 탈퇴 시까지)와 #1(생성 중 이탈)을 고쳤다. 그 AAB 는 처리방침·AI 동의에 **옛 90일 문구**가 박혀 있어 이미 배포된 서버와 어긋나고 #1 도 없다. Play 는 올린 번호를 다시 받지 않으므로 **24** 로 굽는다. 초안에서 vc23 파일은 사용자가 뺀다. ⚠ 22 에 이어 두 번째로 *"올린 뒤에 고쳤다"* 이다. 교훈은 **작업 목록이 남아 있으면 업로드 전에 말한다**는 것이다 |
 | 🔴 versionCode 22 를 건너뛴다 | `22 (1.1.0)` AAB 를 콘솔에 올린 뒤에 R8 두 줄을 넣기로 했다(사용자 결정). Play 는 한 번 올린 번호를 다시 받지 않으므로 23 으로 굽는다. 22 는 라이브러리에만 남고 트랙에는 나가지 않는다. `D:\builds\diary\jogak-vc22.aab` 는 올린 파일이라 지우지 않는다(`common/BUILD_ARTIFACTS.md` §2) |
 | R8 ① | `proguard-android.txt` → `proguard-android-optimize.txt`. `expo-build-properties` 로는 못 바꾸므로 빌드 스크립트가 prebuild 직후 `build.gradle` 을 고치고, 안 바뀌었으면 빌드를 멈춘다 |
 | R8 ② | `android.r8.optimizedShrinking=true`. AGP **8.11.0** 실측이라 이 이름이다(8.13 부터는 `optimizedResourceShrinking`). AGP 는 모르는 속성을 조용히 무시하므로 **이름을 틀리면 아무 일도 안 일어난다**(`common/R8_OBFUSCATION.md` §6.2) |

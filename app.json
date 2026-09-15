@@ -21,7 +21,7 @@
     },
     "android": {
       "package": "com.son0925.jogak",
-      "versionCode": 23,
+      "versionCode": 24,
       "backgroundColor": "#F5F7FA",
       "allowBackup": false,
       "adaptiveIcon": {
