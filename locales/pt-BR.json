@@ -527,6 +527,10 @@
     "empty": "Ainda não há relatórios",
     "create": "Criar relatório",
     "creating": "Escrevendo seu relatório",
+    "creatingElsewhere": "Você pode sair desta tela. Avisamos quando estiver pronto.",
+    "busyOther": "Escrevendo o relatório de {{period}}. Quando terminar, você pode criar outro.",
+    "ready": "Seu relatório de {{period}} está pronto",
+    "viewReport": "Ver",
     "onceAWeek": "Você pode criar um relatório por semana",
     "dailyLeft": "Relatórios que você pode criar hoje: {{count}}",
     "needWeekly": "Primeiro são necessários os relatórios semanais de {{period}}",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Há um período ainda em andamento",
     "tooEarlyAt": "Há um período ainda em andamento. Se criar a partir de {{date}}, nada fica de fora.",
     "detailTitle": "Relatório",
-    "creatingNote": "Termina em instantes. Mantenha o aplicativo aberto.",
     "shapeTitle": "O formato do período",
     "shapeSummary": "Dias escritos {{written}}/{{total}} · Registros {{count}}",
     "prevLabel": {

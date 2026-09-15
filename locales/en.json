@@ -527,6 +527,10 @@
     "empty": "No reports yet",
     "create": "Create report",
     "creating": "Writing your report",
+    "creatingElsewhere": "You can leave this screen. We'll let you know when it's ready.",
+    "busyOther": "Writing your report for {{period}}. You can start another when it's done.",
+    "ready": "Your report for {{period}} is ready",
+    "viewReport": "View",
     "onceAWeek": "You can create one report per week",
     "dailyLeft": "Reports you can create today: {{count}}",
     "needWeekly": "Weekly reports for {{period}} are needed first",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Some periods haven't ended yet",
     "tooEarlyAt": "Some periods haven't ended yet. Create it from {{date}} and nothing will be left out.",
     "detailTitle": "Report",
-    "creatingNote": "It only takes a moment. Please keep the app open.",
     "shapeTitle": "The shape of it",
     "shapeSummary": "Days written {{written}}/{{total}} · Entries {{count}}",
     "prevLabel": {

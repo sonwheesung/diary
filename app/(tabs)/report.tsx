@@ -1,7 +1,7 @@
 import { router, useFocusEffect } from 'expo-router';
 import ChevronDown from 'lucide-react-native/icons/chevron-down';
 import Sparkles from 'lucide-react-native/icons/sparkles';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -10,14 +10,11 @@ import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { useOnce } from '@/hooks/use-once';
 import { AdBanner } from '@/features/ads/components/AdBanner';
-import { CreatingOverlay } from '@/features/ai/components/CreatingOverlay';
 import { listReports, type Report } from '@/features/ai/api/report-repository';
 import {
   canCreate,
-  createReport,
   listPeriodOptions,
   subGaps,
-  subPeriodsOpenOn,
   syncReportsFromServer,
   targetPeriodKey,
   weeklyGaps,
@@ -26,10 +23,12 @@ import {
 } from '@/features/ai/api/report-service';
 import { PeriodSheet } from '@/features/ai/components/PeriodSheet';
 import { hasAiConsent } from '@/features/ai/consent';
+import { failMessage } from '@/features/ai/fail-message';
+import { useGenerationStore } from '@/features/ai/generation-store';
 import { periodLabel } from '@/features/ai/labels';
 import type { ReportKind } from '@/features/ai/types';
-import { isAwaitingEntitlementConfirm, useEntitlementStore } from '@/features/entitlement/store';
-import { formatDateTime, formatFullDate, formatWeekNumber, formatWeekdayList } from '@/lib/format';
+import { useEntitlementStore } from '@/features/entitlement/store';
+import { formatWeekNumber, formatWeekdayList } from '@/lib/format';
 import type { Palette } from '@/theme/palettes';
 import { useColors } from '@/theme/theme';
 import { useStyles } from '@/theme/use-styles';
@@ -56,7 +55,11 @@ export default function ReportScreen() {
   const [reports, setReports] = useState<Report[]>([]);
   const [blocked, setBlocked] = useState<CreateFail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
+  /*
+   * 🔴 생성은 **스토어가 든다**(§11.8, 2026-09-15). 화면을 떠나도 요청이 살고, 끝나면
+   *   `GenerationNotice` 가 어느 화면에서든 알린다. 여기서는 보여주기만 한다.
+   */
+  const job = useGenerationStore((state) => state.job);
   /*
    * 오늘 몇 개 더 만들 수 있나. **서버가 진실**이라 못 받으면 `null` 이고, 그때는
    * 아무 말도 하지 않는다 — 짐작한 숫자를 보여주는 것이 안 보여주는 것보다 나쁘다.
@@ -67,6 +70,8 @@ export default function ReportScreen() {
    * 주간에서 고른 `2026-W20`을 월간 탭이 들고 있으면 아무 뜻도 없는 키가 된다.
    */
   const [periodKey, setPeriodKey] = useState(() => targetPeriodKey('weekly'));
+  // 지금 이 탭·기간을 만드는 중인가. 다른 기간이 돌고 있으면 false 이고 버튼만 막힌다
+  const creating = job !== null && job.kind === kind && job.periodKey === periodKey;
   const [options, setOptions] = useState<PeriodOption[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -95,6 +100,22 @@ export default function ReportScreen() {
     setBlocked(verdict.ok ? null : verdict.reason);
     setLoading(false);
   }, []);
+
+  /*
+   * 생성이 끝나면(성공이든 실패든) 목록과 판정을 다시 읽는다. 상세로 가는 것은 `GenerationNotice` 가 한다.
+   * ⚠ 기간은 유지한다. 방금 만든 것의 결과가 그 자리에 보여야 한다.
+   */
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    if (job !== null) {
+      wasRunning.current = true;
+      return;
+    }
+    if (wasRunning.current) {
+      wasRunning.current = false;
+      void load(kind, periodKey);
+    }
+  }, [job, kind, periodKey, load]);
 
   /** 시트에서 고른 기간 — 판정만 다시 하고 목록은 그대로 둔다 */
   const onPickPeriod = useCallback(
@@ -217,23 +238,11 @@ export default function ReportScreen() {
         return;
       }
     }
-    setCreating(true);
-    try {
-      const result = await createReport(kind, periodKey);
-      if (result.ok) {
-        await load(kind);
-        router.push(`/report/${result.reportId}`);
-        return;
-      }
-      Alert.alert(
-        t('report.title'),
-        failMessage(result.reason, kind, periodKey, t, result.retryAt),
-      );
-      // 실패 사유가 바뀌었을 수 있다(누가 다른 기기에서 만들었다든지) — 다시 판정한다
-      await load(kind, periodKey);
-    } finally {
-      setCreating(false);
-    }
+    /*
+     * 🔴 **기다리지 않는다.** 스토어에 맡기고 돌아간다(§11.8). 끝나면 리포트 탭이면 상세로,
+     *   다른 화면이면 알림창으로 알린다. 이미 하나가 돌고 있으면 스토어가 거절한다(버튼도 막혀 있다).
+     */
+    useGenerationStore.getState().start(kind, periodKey);
   });
 
   const header = (
@@ -324,10 +333,20 @@ export default function ReportScreen() {
               label={creating ? t('report.creating') : t('report.create')}
               fullWidth
               loading={creating}
-              disabled={creating || blocked !== null || !pro}
+              disabled={job !== null || blocked !== null || !pro}
               icon={<Sparkles size={18} color={colors.textOnAccent} />}
               onPress={() => void onCreate()}
             />
+            {/*
+              생성 중이면 **떠나도 된다고** 말한다. 다른 기간이 돌고 있으면 무엇이 막고 있는지 말한다.
+            */}
+            {job !== null && (
+              <Text style={styles.createNote}>
+                {creating
+                  ? t('report.creatingElsewhere')
+                  : t('report.busyOther', { period: periodLabel(job.kind, job.periodKey) })}
+              </Text>
+            )}
             {!pro && (
               <Pressable accessibilityRole="button" onPress={() => router.push('/subscribe')}>
                 <Text style={styles.subscribeLink}>{t('report.seeSubscription')}</Text>
@@ -336,12 +355,6 @@ export default function ReportScreen() {
           </View>
         </>
       )}
-      {/*
-        🔴 생성은 **5초 안팎**이고 그동안 화면이 그대로면 눌렸는지 알 수 없다.
-          더 중요한 건 **이탈 방지**다 — 서버 왕복 뒤에 로컬 저장이라 그 사이 앱이 죽으면
-          캡만 소모되고 리포트가 없다(재생성도 회수 경로도 없다).
-      */}
-      <CreatingOverlay visible={creating} />
       <PeriodSheet
         visible={sheetOpen}
         kind={kind}
@@ -492,93 +505,6 @@ function LockedPreview({ kind }: { kind: ReportKind }) {
       <Text style={styles.disclaimer}>{t('report.disclaimer')}</Text>
     </>
   );
-}
-
-/**
- * 실패 사유 → 사람이 읽는 문장.
- *
- * 사유마다 **다음에 할 일**이 다르므로 뭉뚱그리지 않는다. 서버가 준 사유는
- * `report.fail.*`에 코드 그대로 들어 있고(백업의 `backup.fail.*`과 같은 규약),
- * 앱에서만 나는 네 가지는 이미 화면에 쓰는 안내 문구를 재사용한다.
- */
-function failMessage(
-  reason: CreateFail,
-  kind: ReportKind,
-  periodKey: string,
-  t: (key: string, opts?: Record<string, string>) => string,
-  retryAt?: number,
-): string {
-  const period = periodLabel(kind, periodKey);
-  /*
-   * 🔴 결제 직후 낙관 구간이면 서버만 아직 모르는 상태다. 앱은 `pro`로 보이는데
-   *   서버가 `not-subscribed`를 준 것이므로, *"구독하면 이용할 수 있어요"* 는
-   *   **방금 결제한 사람에게 하는 거짓말**이다(2026-08-19 실기기 재현).
-   */
-  if (reason === 'not-subscribed' && isAwaitingEntitlementConfirm()) {
-    return t('subscribe.confirming');
-  }
-  switch (reason) {
-    /*
-     * ⚠ 서버가 정확한 시각을 준다(`retryAt`). *"한 시간 뒤"* 는 잠금이 걸린 시점 기준이라
-     *   5분 뒤에 다시 눌러본 사람에게 **틀린 안내**가 된다 — 실제로는 55분 남았다.
-     *   시각을 못 받았을 때만 뭉뚱그린 문장으로 떨어진다.
-     */
-    case 'cooling-down':
-      return retryAt === undefined
-        ? t('report.fail.cooling-down')
-        : t('report.fail.coolingDownAt', { time: formatDateTime(retryAt) });
-    /*
-     * 🔴 **하루 캡이다. *"잠시 뒤"* 가 아니다**(2026-09-10 사용자 지적).
-     *   그 문구가 오래 살아 있었던 이유는 캡이 30 이라 **아무도 못 채웠기 때문**이다 —
-     *   10 으로 낮추면서 비로소 보이는 문구가 됐다.
-     *
-     * ⚠ **"내일" 이라고도 못 쓴다.** 기준이 UTC 날짜라 한국은 오전 9시, 미주는 같은 날
-     *   오후에 풀린다. 서버가 다음 UTC 자정을 주고 여기서 **기기 시간대로** 그린다.
-     */
-    case 'rate-limited':
-      return retryAt === undefined
-        ? t('report.fail.rate-limited')
-        : t('report.fail.rateLimitedAt', { time: formatDateTime(retryAt) });
-    /*
-     * 🔴 거부도 **1시간 잠긴다**(`AI_REPORT_SYSTEM` §4.3). 옛 문구는 *"횟수에 포함되지 않아요"* 만
-     *   말해서 바로 다시 누른 사람이 `cooling-down` 을 만났다. 서버가 잠근 시각을 준다(2026-09-14).
-     */
-    case 'refused':
-      return retryAt === undefined
-        ? t('report.fail.refused')
-        : t('report.fail.refusedAt', { time: formatDateTime(retryAt) });
-    // ⚠ "주에 한 번"으로 뭉치지 않는다 — 월간 탭에서 그 문장은 거짓이다.
-    //   무엇이 이미 있는지를 기간으로 말해야 다음에 할 일이 분명해진다
-    case 'exists':
-    case 'cap-exceeded':
-      return t('report.alreadyExists', { period });
-    case 'empty':
-      return t('report.noEntries');
-    /*
-     * ⚠ **기간을 반드시 넣는다.** 처음엔 "이 달의 주간 리포트를 먼저"라고 썼는데,
-     *   월간이 겨냥하는 것은 **지난달**이라 그 문장이 틀렸다. 연간은 작년이라 더 틀렸다.
-     *   화면에서 눈으로 보고 잡았다 — 코드만 봐서는 맞는 것처럼 읽힌다.
-     */
-    case 'need-weekly':
-      return t('report.needWeekly', { period });
-    case 'need-monthly':
-      return t('report.needMonthly', { period });
-    /*
-     * 🔴 **언제부터 되는지를 말한다**(§6.5). *"나중에 다시 오세요"* 로 끝내면 사람은
-     *   매일 눌러본다. 마지막 하위 기간이 끝나는 날 다음이 그 날짜다.
-     *
-     * ⚠ 날짜를 못 구하면(키가 깨졌으면) 날짜 없는 문장으로 떨어진다 —
-     *   `cooling-down`이 `retryAt` 없이 떨어지는 것과 같은 규약이다.
-     */
-    case 'too-early': {
-      const opens = subPeriodsOpenOn(kind, periodKey);
-      return opens === null
-        ? t('report.fail.too-early')
-        : t('report.tooEarlyAt', { date: formatFullDate(opens) });
-    }
-    default:
-      return t(`report.fail.${reason}`);
-  }
 }
 
 const createStyles = (colors: Palette) =>

@@ -527,6 +527,10 @@
     "empty": "Pas encore de bilan",
     "create": "Créer un bilan",
     "creating": "Rédaction de votre bilan",
+    "creatingElsewhere": "Vous pouvez quitter cet écran. Nous vous préviendrons quand il sera prêt.",
+    "busyOther": "Rédaction du bilan de {{period}}. Vous pourrez en créer un autre ensuite.",
+    "ready": "Votre bilan de {{period}} est prêt",
+    "viewReport": "Voir",
     "onceAWeek": "Vous pouvez créer un bilan par semaine",
     "dailyLeft": "Rapports que vous pouvez créer aujourd'hui : {{count}}",
     "needWeekly": "Les bilans hebdomadaires de {{period}} sont nécessaires d'abord",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Une période n'est pas terminée",
     "tooEarlyAt": "Une période n'est pas encore terminée. À partir du {{date}}, il ne manquera rien.",
     "detailTitle": "Bilan",
-    "creatingNote": "C'est l'affaire d'un instant. Gardez l'application ouverte.",
     "shapeTitle": "La forme de la période",
     "shapeSummary": "Jours écrits {{written}}/{{total}} · Entrées {{count}}",
     "prevLabel": {

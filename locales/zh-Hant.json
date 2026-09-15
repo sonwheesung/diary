@@ -527,6 +527,10 @@
     "empty": "還沒有報告",
     "create": "產生報告",
     "creating": "正在產生報告",
+    "creatingElsewhere": "可以離開這個頁面，產生好後會通知您。",
+    "busyOther": "正在產生 {{period}} 的報告，完成後才能產生下一份。",
+    "ready": "{{period}} 的報告已產生",
+    "viewReport": "查看",
     "onceAWeek": "報告每週可以產生一次",
     "dailyLeft": "今天可建立的報告：{{count}}",
     "needWeekly": "需要先有 {{period}} 的每週報告",
@@ -579,7 +583,6 @@
     "periodTooEarly": "還有尚未結束的期間",
     "tooEarlyAt": "還有尚未結束的期間。{{date}} 之後產生就不會遺漏。",
     "detailTitle": "報告",
-    "creatingNote": "很快就好，請先不要關閉應用程式。",
     "shapeTitle": "這段期間的樣子",
     "shapeSummary": "記錄天數 {{written}}/{{total}} · 碎片 {{count}}",
     "prevLabel": {

@@ -527,6 +527,10 @@
     "empty": "Belum ada laporan",
     "create": "Buat laporan",
     "creating": "Sedang menulis laporan",
+    "creatingElsewhere": "Kamu boleh pindah ke layar lain. Kami kabari saat laporannya jadi.",
+    "busyOther": "Sedang menulis laporan {{period}}. Setelah selesai, kamu bisa membuat yang lain.",
+    "ready": "Laporan {{period}} sudah jadi",
+    "viewReport": "Lihat",
     "onceAWeek": "Laporan dapat dibuat sekali seminggu",
     "dailyLeft": "Laporan yang bisa dibuat hari ini: {{count}}",
     "needWeekly": "Perlu laporan mingguan {{period}} terlebih dahulu",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Ada periode yang belum berakhir",
     "tooEarlyAt": "Ada periode yang belum berakhir. Jika dibuat mulai {{date}}, tidak ada yang terlewat.",
     "detailTitle": "Laporan",
-    "creatingNote": "Sebentar saja. Jangan tutup aplikasi dulu, ya.",
     "shapeTitle": "Bentuk periode ini",
     "shapeSummary": "Hari menulis {{written}}/{{total}} · Entri {{count}}",
     "prevLabel": {

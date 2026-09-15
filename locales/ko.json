@@ -527,6 +527,10 @@
     "empty": "아직 리포트가 없어요",
     "create": "리포트 만들기",
     "creating": "리포트를 만들고 있어요",
+    "creatingElsewhere": "다른 화면에 다녀오셔도 돼요. 다 만들어지면 알려 드릴게요.",
+    "busyOther": "{{period}} 리포트를 만드는 중이에요. 끝나면 이어서 만들 수 있어요.",
+    "ready": "{{period}} 리포트가 만들어졌어요.",
+    "viewReport": "리포트 보기",
     "onceAWeek": "리포트는 일주일에 한 번 만들 수 있어요.",
     "dailyLeft": "오늘 만들 수 있는 리포트: {{count}}개",
     "needWeekly": "{{period}} 주간 리포트가 먼저 필요해요.",
@@ -579,7 +583,6 @@
     "periodTooEarly": "아직 끝나지 않은 기간이 있어요",
     "tooEarlyAt": "아직 끝나지 않은 기간이 있어요. {{date}}부터 만들면 빠짐없이 반영돼요.",
     "detailTitle": "리포트",
-    "creatingNote": "잠시만 기다려 주세요. 앱을 닫지 말아 주세요.",
     "shapeTitle": "이 기간의 기록",
     "shapeSummary": "기록한 날 {{written}}/{{total}} · 조각 {{count}}개",
     "prevLabel": {

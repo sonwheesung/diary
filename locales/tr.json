@@ -527,6 +527,10 @@
     "empty": "Henüz rapor yok",
     "create": "Rapor oluştur",
     "creating": "Raporun yazılıyor",
+    "creatingElsewhere": "Bu ekrandan çıkabilirsin. Hazır olunca haber vereceğiz.",
+    "busyOther": "{{period}} raporu yazılıyor. Bitince başka bir rapor oluşturabilirsin.",
+    "ready": "{{period}} raporun hazır",
+    "viewReport": "Gör",
     "onceAWeek": "Haftada bir rapor oluşturabilirsin",
     "dailyLeft": "Bugün oluşturabileceğiniz rapor: {{count}}",
     "needWeekly": "Önce {{period}} haftalık raporları gerekiyor",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Henüz bitmemiş bir dönem var",
     "tooEarlyAt": "Henüz bitmemiş bir dönem var. {{date}} tarihinden itibaren oluşturursan hiçbir şey eksik kalmaz.",
     "detailTitle": "Rapor",
-    "creatingNote": "Birazdan biter. Uygulamayı açık tut.",
     "shapeTitle": "Bu dönemin şekli",
     "shapeSummary": "Yazılan gün {{written}}/{{total}} · Kayıt {{count}}",
     "prevLabel": {

@@ -527,6 +527,10 @@
     "empty": "Ancora nessun resoconto",
     "create": "Crea resoconto",
     "creating": "Stiamo scrivendo il resoconto",
+    "creatingElsewhere": "Puoi lasciare questa schermata. Ti avviseremo quando sarà pronto.",
+    "busyOther": "Stiamo scrivendo il resoconto di {{period}}. Quando finisce potrai crearne un altro.",
+    "ready": "Il resoconto di {{period}} è pronto",
+    "viewReport": "Apri",
     "onceAWeek": "Puoi creare un resoconto a settimana",
     "dailyLeft": "Report che puoi creare oggi: {{count}}",
     "needWeekly": "Servono prima i resoconti settimanali di {{period}}",
@@ -579,7 +583,6 @@
     "periodTooEarly": "C'è un periodo non ancora concluso",
     "tooEarlyAt": "C'è un periodo non ancora concluso. Creandolo dal {{date}} non manca nulla.",
     "detailTitle": "Resoconto",
-    "creatingNote": "Ci vuole solo un attimo. Tieni l'app aperta.",
     "shapeTitle": "La forma del periodo",
     "shapeSummary": "Giorni scritti {{written}}/{{total}} · Voci {{count}}",
     "prevLabel": {

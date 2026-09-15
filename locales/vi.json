@@ -527,6 +527,10 @@
     "empty": "Chưa có báo cáo nào",
     "create": "Tạo báo cáo",
     "creating": "Đang viết báo cáo",
+    "creatingElsewhere": "Bạn có thể rời màn hình này. Khi xong chúng tôi sẽ báo.",
+    "busyOther": "Đang viết báo cáo {{period}}. Xong rồi bạn có thể tạo báo cáo khác.",
+    "ready": "Báo cáo {{period}} đã xong",
+    "viewReport": "Xem",
     "onceAWeek": "Mỗi tuần bạn có thể tạo một báo cáo",
     "dailyLeft": "Số báo cáo có thể tạo hôm nay: {{count}}",
     "needWeekly": "Cần có báo cáo tuần của {{period}} trước",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Có khoảng thời gian chưa kết thúc",
     "tooEarlyAt": "Có khoảng thời gian chưa kết thúc. Nếu tạo từ {{date}} thì sẽ không bỏ sót phần nào.",
     "detailTitle": "Báo cáo",
-    "creatingNote": "Chỉ một lát thôi. Bạn giữ ứng dụng mở nhé.",
     "shapeTitle": "Hình dạng của giai đoạn",
     "shapeSummary": "Ngày đã viết {{written}}/{{total}} · Mục {{count}}",
     "prevLabel": {

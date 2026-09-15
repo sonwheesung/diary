@@ -527,6 +527,10 @@
     "empty": "Aún no hay informes",
     "create": "Crear informe",
     "creating": "Escribiendo tu informe",
+    "creatingElsewhere": "Puedes salir de esta pantalla. Te avisaremos cuando esté listo.",
+    "busyOther": "Escribiendo el informe de {{period}}. Cuando termine podrás crear otro.",
+    "ready": "Tu informe de {{period}} está listo",
+    "viewReport": "Ver",
     "onceAWeek": "Puedes crear un informe por semana",
     "dailyLeft": "Informes que puedes crear hoy: {{count}}",
     "needWeekly": "Primero hacen falta los informes semanales de {{period}}",
@@ -579,7 +583,6 @@
     "periodTooEarly": "Hay un periodo sin terminar",
     "tooEarlyAt": "Hay un periodo sin terminar. Si lo creas a partir del {{date}}, no faltará nada.",
     "detailTitle": "Informe",
-    "creatingNote": "Termina enseguida. No cierres la aplicación, por favor.",
     "shapeTitle": "La forma del periodo",
     "shapeSummary": "Días escritos {{written}}/{{total}} · Entradas {{count}}",
     "prevLabel": {

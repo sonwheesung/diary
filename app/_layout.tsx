@@ -7,6 +7,7 @@ import { AppState } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initializeAds } from '@/features/ads/api/ads';
+import { GenerationNotice } from '@/features/ai/components/GenerationNotice';
 import { useEntitlementStore } from '@/features/entitlement/store';
 import { bootGateDecision } from '@/features/auth/api/age-store';
 import { beat, ensureDeviceSession } from '@/lib/common-server/client';
@@ -218,6 +219,8 @@ function ThemedApp() {
             options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
           />
         </Stack>
+        {/* 리포트 생성이 끝나면 어느 화면에서든 알린다(docs/AI_REPORT_SYSTEM.md §11.8) */}
+        <GenerationNotice />
       </LockGate>
       {/*
         연령 게이트는 `signIn()`이 여는 층이다 — 라우트가 아니다(docs/AUTH_SYSTEM.md §1.2).
