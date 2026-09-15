@@ -2,7 +2,7 @@
   "expo": {
     "name": "조각",
     "slug": "jogak",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "scheme": "jogak",
     "userInterfaceStyle": "automatic",
@@ -21,7 +21,7 @@
     },
     "android": {
       "package": "com.son0925.jogak",
-      "versionCode": 24,
+      "versionCode": 25,
       "backgroundColor": "#F5F7FA",
       "allowBackup": false,
       "adaptiveIcon": {
