@@ -48,6 +48,21 @@ echo "서명 앵커 $(grep -c JOGAK_UPLOAD_STORE_FILE android/app/build.gradle) 
 test "$(grep -c JOGAK_UPLOAD_STORE_FILE android/app/build.gradle)" -gt 0
 test -d "$ANDROID_HOME/platform-tools"
 
+echo; echo "=== ③-2 R8 권장 두 줄 (common/R8_OBFUSCATION.md §6.1·§6.2 · 2026-09-15) ==="
+# expo-build-properties 로는 못 넣는다. prebuild 가 매번 android/ 를 새로 만들므로 여기서 매번 고친다.
+# ① 기본판 proguard-android.txt 에는 -dontoptimize 가 있어 콘솔이 "최적화가 사용 설정되지 않음" 을 띄운다
+sed -i 's/getDefaultProguardFile("proguard-android.txt")/getDefaultProguardFile("proguard-android-optimize.txt")/' android/app/build.gradle
+test "$(grep -c 'proguard-android-optimize.txt' android/app/build.gradle)" -gt 0
+# ② 🔴 AGP 8.11 의 이름이다. 8.13 부터는 android.r8.optimizedResourceShrinking 이고,
+#    AGP 는 모르는 android.* 속성을 오류 없이 무시한다. 그래서 AGP 버전을 같이 못박는다.
+if ! grep -q '^android.r8.optimizedShrinking=true' android/gradle.properties; then
+  printf '\nandroid.r8.optimizedShrinking=true\n' >> android/gradle.properties
+fi
+grep -q '^android.r8.optimizedShrinking=true' android/gradle.properties
+AGP=$(grep -E '^agp' node_modules/@react-native/gradle-plugin/gradle/libs.versions.toml | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+echo "AGP $AGP · optimize.txt 적용 · optimizedShrinking 켬"
+test "$AGP" = "8.11.0"   # 🔴 바뀌면 속성 이름을 다시 재고 이 줄을 고친다
+
 # 🔴 gradle 은 JS 번들을 up-to-date 로 보고 다시 안 만든다 — env 를 바꿔도 옛 번들이 실린다.
 echo; echo "=== ④ 낡은 번들·매니페스트 산출물 제거 ==="
 # 🔴 **매니페스트 산출물도 함께 지운다**(2026-09-10, common/OTA_RULES.md §3.1).
@@ -57,12 +72,18 @@ echo; echo "=== ④ 낡은 번들·매니페스트 산출물 제거 ==="
 rm -rf android/app/build/generated/assets/createBundleReleaseJsAndAssets \
        android/app/build/generated/assets/createReleaseUpdatesResources \
        android/app/build/intermediates/intermediary_bundle \
-       android/app/build/outputs/bundle/release 2>/dev/null || true
+       android/app/build/outputs/bundle/release \
+       android/app/build/outputs/apk/release 2>/dev/null || true
 
-echo; echo "=== ⑤ bundleRelease ==="
+# WITH_APK=1 이면 E2E 용 릴리스 APK 도 같은 gradle 한 번에 굽는다.
+# R8(minify)이 두 산출물에 공유되므로 따로 굽는 것보다 훨씬 짧다. R8 설정을 바꾼 릴리스는 이걸로 E2E 를 돈다.
+TASKS="bundleRelease"
+if [ "${WITH_APK:-0}" = "1" ]; then TASKS="bundleRelease assembleRelease"; fi
+
+echo; echo "=== ⑤ $TASKS ==="
 cd android
 # 🔴 `| tail` 은 gradle 의 종료코드를 먹는다(2026-08-31 에 실패가 exit 0 으로 보고됐다).
-./gradlew bundleRelease --no-daemon 2>&1 | tail -30
+./gradlew $TASKS --no-daemon 2>&1 | tail -30
 rc=${PIPESTATUS[0]}
 echo "gradle exit=$rc"
 test "$rc" -eq 0

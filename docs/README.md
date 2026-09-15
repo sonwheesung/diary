@@ -114,6 +114,22 @@
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
+### ⏳ `23 (1.1.0)` 준비 — 리포트 v15 화면 + R8 권장 두 줄 (2026-09-15)
+
+| | |
+|---|---|
+| 담는 것 | 리포트 v15 새 칸(흐름 카드 · 해낸 것 · 권유 · 문장 지표) · DB v10 · 매니페스트 7 · 동의 v2 · R8 권장 두 줄 |
+| 🔴 versionCode 22 를 건너뛴다 | `22 (1.1.0)` AAB 를 콘솔에 올린 뒤에 R8 두 줄을 넣기로 했다(사용자 결정). Play 는 한 번 올린 번호를 다시 받지 않으므로 23 으로 굽는다. 22 는 라이브러리에만 남고 트랙에는 나가지 않는다. `D:\builds\diary\jogak-vc22.aab` 는 올린 파일이라 지우지 않는다(`common/BUILD_ARTIFACTS.md` §2) |
+| R8 ① | `proguard-android.txt` → `proguard-android-optimize.txt`. `expo-build-properties` 로는 못 바꾸므로 빌드 스크립트가 prebuild 직후 `build.gradle` 을 고치고, 안 바뀌었으면 빌드를 멈춘다 |
+| R8 ② | `android.r8.optimizedShrinking=true`. AGP **8.11.0** 실측이라 이 이름이다(8.13 부터는 `optimizedResourceShrinking`). AGP 는 모르는 속성을 조용히 무시하므로 **이름을 틀리면 아무 일도 안 일어난다**(`common/R8_OBFUSCATION.md` §6.2) |
+| 🔴 검증 조건 | 둘 다 R8 동작을 바꾸므로 **릴리스 APK E2E 를 다시 통과해야** 올린다. ②는 Experimental 이라 **알림 아이콘이 흰 사각형이 되는지** 실물로 본다 |
+| ⚠ 놓친 것 | 이 두 줄은 아래 `21 (1.0.1)` 표에 *"다음 릴리스로"* 라고 적혀 있었는데 처음 구운 22 에서 빠졌다. 압축 뒤 문서를 다시 읽지 않고 빌드를 시작한 탓이다. AAB 보관 위치(`D:\builds`)도 같은 이유로 처음엔 틀렸다 |
+| 출시 노트 | 13개 언어 기능 설명. 한국어는 **ChatGPT 임시 채팅으로 검수**했다(2026-09-15 · 의미는 그대로 두고 표현만 다듬음 · `common/KOREAN_WRITING.md` §2) |
+| AAB | ✅ 로컬 `bundleRelease` **4분 43초**(R8 과 무관한 작업은 gradle 캐시로 건너뜀) · 66.6MB · 서명 `B9:A7:29:0A:FF:E8:…` 일치 · `check:release-bundle` 7개 · 임베드 매니페스트가 서버 최신 OTA 보다 새로움 · `D:\builds\diary\jogak-vc23.aab` |
+| 🔴 R8 두 줄이 **실제로 먹었나** | 빌드가 짧아서 산출물로 확인했다. `mapping.txt` 가 이번 빌드에서 새로 생겼고(56MB → **93MB**) · 적용된 `configuration.txt` 에 `-dontoptimize` **0줄** · optimize 기본판 포함 · `android.r8.optimizedShrinking=true` 반영 |
+| 🟢 **릴리스 APK E2E 통과** | AVD `diary`(5568) · `jogak-vc23-r8-e2e.apk`(D: 보관). 크래시 **0** · OTA 모듈 생존(`dev.expo.EASSharedPreferences.xml` · `databases/updates.db`) · 새 기기에서 `No update available`(임베드가 서버 OTA 보다 새롭다) · `expo-sqlite` **v10** + `insights` 칸 · AdMob `admob.xml` · 연령 게이트가 벽이 아님 · **v15 리포트 화면**(더미 DB): 흐름 카드 · 해낸 것 · 권유 · 문장 지표 · 셀 수 있는 사실 · 주제 설명 · 막대 · 4일 비교 안내 전부 정상, 위기 리포트는 배너만 뜨고 칸이 빔 · **잠금**: SecureStore 키 7개 · 평문 PIN 0 · 재실행 후 잠금이 서고 PIN 으로 해제 · 잠금을 켜면 캡처가 검게 나온다(`FLAG_SECURE` 동작) · **오프라인 부팅** 오류 문구 0 · **알림 아이콘**: 리마인더 알림이 앱 아이콘(`ic_launcher_round`)으로 떴고 흰 사각형이 아니다 |
+| ⚠ E2E 중 겪은 것 | ① 리마인더 알람은 **허용 오차 +1시간 부정확 알람**이라 시계를 20:59:40 으로 옮기고 45초 기다려서는 안 울렸다. 22:00:10 으로 옮겨서 받았다(고장이 아니라 설계다) ② 공용 `adb` 서버가 멈춰 명령이 전부 시간 초과됐다. 사용자 허락을 받고 서버 프로세스만 재시작했고 던전가이드 에뮬레이터(5562)는 다시 붙었다. 멈춘 동안 **출처를 모르는 `settings put system screen_off_timeout` 명령 17개**가 5568 에 쌓여 있었다(확인 안 됨) ③ 제 추출 스크립트가 UI 트리 속성 순서를 잘못 가정해 잠금 켜기를 한 번 놓쳤다. 누르기 전에 화면 글자를 확인하는 방식으로 다시 했다 · ⏸ R8 두 줄을 넣기 **전**의 알림 아이콘 모양과는 비교하지 않았다 |
+
 ### 🟢 `21 (1.0.1)` 승인 — OTA + R8 (2026-09-09)
 
 | | |
