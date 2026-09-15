@@ -616,7 +616,7 @@
     "lead": "Creare un resoconto richiede due consensi distinti. Puoi scegliere ciascuno separatamente.",
     "whatSent": "• Cosa viene inviato: titolo, testo, emozione e data delle voci di quel periodo",
     "whenSent": "• Quando: solo quando tocchi [Crea resoconto]. Nulla viene generato automaticamente",
-    "notStored": "• Non conserviamo il testo del tuo diario. Ma mentre il resoconto viene scritto il testo passa non cifrato dal nostro server al fornitore IA — non possiamo dire di non poterlo vedere. Il resoconto ottenuto (comprese le frasi del diario citate come prova) resta sul nostro server per 90 giorni.",
+    "notStored": "• Non conserviamo il testo del tuo diario. Ma mentre il resoconto viene scritto il testo passa non cifrato dal nostro server al fornitore IA — non possiamo dire di non poterlo vedere. Il resoconto ottenuto (comprese le frasi del diario citate come prova) resta sul nostro server fino all’eliminazione del tuo account.",
     "vendorRetention": "• Il fornitore IA lo conserva fino a 30 giorni per monitorare gli abusi e poi lo elimina; non lo usa mai per addestrare modelli",
     "sensitiveTitle": "(Obbligatorio) Trattamento di dati sensibili",
     "sensitiveBody": "I diari possono contenere informazioni su salute e stato psicologico. I resoconti trattano quel testo senza cifratura.",

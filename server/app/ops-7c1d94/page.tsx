@@ -689,7 +689,10 @@ function ReportsTab({
           ))}
         </div>
         <div className="oc-crumb">
-          최근 {fmt(data.limit)}건 · {fmt(data.retentionDays)}일 보관
+          최근 {fmt(data.limit)}건 ·{' '}
+          {data.retentionDays === null || data.retentionDays === undefined
+            ? '탈퇴 시까지 보관'
+            : `${fmt(data.retentionDays)}일 보관`}
         </div>
       </div>
 
@@ -738,7 +741,7 @@ function ReportsTab({
       {rows.length === 0 ? (
         <div className="oc-empty">
           {data.scoped === true
-            ? '이 사용자의 리포트가 없습니다 — id가 맞는지, 90일이 지나지 않았는지 확인하세요.'
+            ? '이 사용자의 리포트가 없습니다. id가 맞는지, 탈퇴했거나 삭제 요청으로 지워지지 않았는지 확인하세요.'
             : '아직 리포트가 없습니다.'}
         </div>
       ) : (
@@ -782,8 +785,16 @@ function ReportsTab({
         🔴 이 화면에는 <strong>누가 썼는지가 없다.</strong> 요약문은 품질을 보려고 읽는 것이지 누가
         썼는지 알려고 읽는 것이 아니다 — <code>subject_id</code>는 라우트가 아예 내려주지 않는다.
         <br />
-        ⚠ 요약문은 이용자의 일기를 바탕으로 만들어진 글이다. <strong>{fmt(data.retentionDays)}일</strong>{' '}
-        뒤 리퍼가 지우며, 그 기간은 처리방침에 적혀 있다.
+        ⚠ 요약문은 이용자의 일기를 바탕으로 만들어진 글이다.{' '}
+        {data.retentionDays === null || data.retentionDays === undefined ? (
+          <>
+            <strong>탈퇴 시까지</strong> 보관하며(2026-09-15~), 그 전에는 문의로 받은 삭제 요청으로만 지운다. 이 기간은 처리방침에 적혀 있다.
+          </>
+        ) : (
+          <>
+            <strong>{fmt(data.retentionDays)}일</strong> 뒤 리퍼가 지우며, 그 기간은 처리방침에 적혀 있다.
+          </>
+        )}
       </div>
     </>
   );

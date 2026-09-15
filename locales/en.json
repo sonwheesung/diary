@@ -616,7 +616,7 @@
     "lead": "Creating a report needs two separate consents. You can choose each one on its own.",
     "whatSent": "• What's sent: the title, text, emotion and date of the entries in that period",
     "whenSent": "• When: only when you tap [Create report]. Nothing is generated automatically",
-    "notStored": "• We don't store your diary text. But while the report is being written, the text passes through our server unencrypted on its way to the AI provider — we can't claim we're unable to see it. The finished report (including diary sentences it quotes as evidence) is kept on our server for 90 days.",
+    "notStored": "• We don't store your diary text. But while the report is being written, the text passes through our server unencrypted on its way to the AI provider — we can't claim we're unable to see it. The finished report (including diary sentences it quotes as evidence) is kept on our server until you delete your account.",
     "vendorRetention": "• The AI provider keeps it up to 30 days for abuse monitoring, then deletes it, and never uses it for model training",
     "sensitiveTitle": "(Required) Processing of sensitive information",
     "sensitiveBody": "Diaries can contain health and mental-state information. Reports process that text without encryption.",

@@ -8,7 +8,7 @@ description: 프로젝트 별 수정사항 시트에서 이 프로젝트 탭을 
 정본 규칙은 `C:/project/common/FIX_REQUESTS.md` 다. 이 스킬은 **읽고 알려 주기만** 한다.
 
 1. 크롬 **새 탭**으로 시트를 연다: https://docs.google.com/spreadsheets/d/1w09QLGQKidkDqsPyBJbfy1hT-RCoIyDEbT05Qt7vf8c/edit
-2. 그 탭에서 `FIX_REQUESTS.md` §7.4 의 읽기 코드를 실행한다. `TAB` 은 `diary` 이다
+2. 그 탭에서 `FIX_REQUESTS.md` §7.4 의 읽기 코드를 실행한다. `TAB` 은 `조각` 이다 (⚠ 폴더 이름 `diary` 가 아니다. 2026-09-15 관리자가 만든 탭 이름을 쓰기로 했다)
 3. 결과가 `ok: false` 면 멈추고 알린다
    - `tab-missing` 이면 내 탭이 없다는 뜻이다. `FIX_REQUESTS.md` §2 대로 탭을 만들지 관리자에게 묻는다
    - `tab-list-unreadable` 이면 시트 화면이 바뀐 것이다. 추측해서 읽지 않는다

@@ -10,7 +10,8 @@
  *   이메일과 맞춰 *"이 사람은 이런 일기를 쓴다"* 가 만들어진다. 그런데 *"리포트가 별로예요"*
  *   라고 **문의를 보낸 사람의 리포트를 여는 것**은 그것이 아니다 — 문의가 입구이고,
  *   그 사람이 스스로 연 문이다. 그리고 처리방침이 이미 *"리포트를 만든 계정 식별자"* 를
- *   저장한다고 고지했고, *"90일 전에 삭제를 원하시면 문의하기로 요청"* 까지 약속해뒀다.
+ *   저장한다고 고지했고, *"서버의 리포트 삭제를 원하시면 문의하기로 요청"* 까지 약속해뒀다
+ *   (2026-09-15 부터 보관이 탈퇴 시까지라 이 요청이 **탈퇴 전 유일한 삭제 경로**다).
  *
  *   그래서 선은 여기다:
  *
@@ -32,7 +33,6 @@ import { and, desc, eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { aiReports } from '@/db/schema';
 import { isAdmin } from '@/lib/admin';
-import { REPORT_RETENTION_MS } from '@/lib/ai-policy';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
 
@@ -101,8 +101,11 @@ export async function GET(req: Request): Promise<Response> {
     return ok({
       reports: rows,
       counts: counts ?? { total: 0, flagged: 0, concern: 0 },
-      /** 화면이 "왜 옛 것이 없는지"를 설명할 수 있게 함께 내린다 */
-      retentionDays: REPORT_RETENTION_MS / 86_400_000,
+      /**
+       * 보관 기간(일). **`null` = 기간 없음, 탈퇴 시까지**(2026-09-15 · `ai-policy.ts`).
+       * ⚠ 필드는 남긴다 — 화면이 "몇 일 보관"을 지어내지 않고 이 값으로 문구를 고른다.
+       */
+      retentionDays: null,
       limit: LIMIT,
       /*
        * 🔴 **한 사람으로 좁혀 보는 중인가**(불리언 하나). 그 사람의 id는 **안 돌려준다** —

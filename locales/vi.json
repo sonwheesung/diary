@@ -616,7 +616,7 @@
     "lead": "Tạo báo cáo cần hai sự đồng ý riêng biệt. Bạn có thể chọn từng mục.",
     "whatSent": "• Nội dung được gửi: tiêu đề, nội dung, cảm xúc và ngày của các mảnh trong kỳ đó",
     "whenSent": "• Khi nào: chỉ khi bạn nhấn [Tạo báo cáo]. Không có gì được tạo tự động",
-    "notStored": "• Chúng tôi không lưu nội dung nhật ký. Nhưng trong lúc viết báo cáo, nội dung đi qua máy chủ của chúng tôi ở dạng không mã hoá để đến nhà cung cấp AI — chúng tôi không thể nói là mình không thể xem. Báo cáo đã tạo (gồm cả các câu nhật ký được trích dẫn làm căn cứ) được lưu trên máy chủ của chúng tôi trong 90 ngày.",
+    "notStored": "• Chúng tôi không lưu nội dung nhật ký. Nhưng trong lúc viết báo cáo, nội dung đi qua máy chủ của chúng tôi ở dạng không mã hoá để đến nhà cung cấp AI — chúng tôi không thể nói là mình không thể xem. Báo cáo đã tạo (gồm cả các câu nhật ký được trích dẫn làm căn cứ) được lưu trên máy chủ của chúng tôi cho đến khi bạn xoá tài khoản.",
     "vendorRetention": "• Nhà cung cấp AI giữ tối đa 30 ngày để giám sát lạm dụng rồi xoá, và không dùng để huấn luyện mô hình",
     "sensitiveTitle": "(Bắt buộc) Đồng ý xử lý thông tin nhạy cảm",
     "sensitiveBody": "Nhật ký có thể chứa thông tin sức khoẻ và trạng thái tinh thần. Báo cáo xử lý nội dung đó ở dạng không mã hoá.",

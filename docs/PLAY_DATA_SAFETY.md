@@ -92,7 +92,7 @@ in your form response"* 다. **같은 문서 안에서 정반대다.** 2026-08-2
 
 | # | 사실 | 코드 근거(2026-08-24 재실측) | 왜 기준을 깨나 |
 |---|---|---|---|
-| ① | 서버가 **모델이 쓴 요약문을 90일 저장**한다 | `server/db/schema.ts` `aiReports.summary` · `server/lib/ai-policy.ts:95` `REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000` · 리퍼가 실제로 지운다(`server/app/api/cron/reap/route.ts:213`) | 일기에서 파생된 콘텐츠가 *"retained for no longer than necessary to service the specific request in real-time"* 을 명백히 넘는다 |
+| ① | 서버가 **모델이 쓴 요약문을 90일 저장**한다(2026-09-15 부터 **탈퇴 시까지**로 더 길어졌다. 판정은 같다) | `server/db/schema.ts` `aiReports.summary` · `server/lib/ai-policy.ts:95` `REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000` · 리퍼가 실제로 지운다(`server/app/api/cron/reap/route.ts:213`) | 일기에서 파생된 콘텐츠가 *"retained for no longer than necessary to service the specific request in real-time"* 을 명백히 넘는다 |
 | ② | **AI 사업자가 남용 감시 목적으로 최대 30일 보관**한다 | `features/legal/legal-text.ts` PRIVACY §6 — *"AI 사업자는 남용 감시 목적으로 최대 30일간 보관한 뒤 삭제하며"* · [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §9.2 | 우리가 전송한 데이터가 위탁사 손에서 30일 남는다. 위탁사 처리는 우리 처리다 |
 | ③ | 서버가 `ai_usage`에 **subject·기간·토큰 수를 영구 저장**한다 | `server/db/schema.ts` `aiUsage` — 리퍼가 지우는 것은 `aiReports`·`aiCooldowns`뿐이고 `aiUsage`는 **어디서도 지우지 않는다**(2026-08-24 재확인) | 본문은 아니지만 요청에서 파생된 기록이 남는다. FAQ가 말하는 *"any use of that user data beyond the ephemeral processing … that you log"* 에 해당 |
 
@@ -188,7 +188,7 @@ AppsFlyer 모두 `package.json`에 없다.
 | 6 | 백업 — **요청 메타** | `vault_id` · `authKey`(hex 64) · `blobKey` 목록 · `seq` · `genId` · 파트 수 | 조각 서버 DB/로그 | **평문**(TLS만) — `authKey`는 `sha256`으로 저장 | 세대와 함께 / 툼스톤 1년 | `features/backup/api/client.ts:178,294` · `server/db/schema.ts:36,45,173` |
 | 7 | 백업 — 서버 파생 | 객체 바이트 수(서버가 직접 잰다) · 각종 시각 · **`subject_id`** | 조각 서버 DB | **평문** | `subject_id`는 파기 시 삭제 | `server/app/api/v1/backup/commit/route.ts:100` · `server/db/schema.ts:82` |
 | 8 | **AI — 입력** | `{date, emotion(코드), title, text}` 배열. 월간·연간은 하위 **요약문** | 조각 서버 메모리 → OpenAI | **평문** | 우리 서버 **무저장**(라우트에 쓰는 코드 없음) · OpenAI `store:false` + 남용감시 최대 30일 | `features/ai/api/client.ts:96-132` · `server/lib/ai.ts:138` |
-| 9 | **AI — 출력** | 모델이 쓴 **요약문** · `concern` · `source_count` · 언어 · 모델 · 프롬프트 판 · `subject_id` | 조각 서버 DB | 평문 | **90일** (`REPORT_RETENTION_MS`, 리퍼가 지운다) | `server/db/schema.ts` `aiReports` · `cron/reap/route.ts:213` |
+| 9 | **AI — 출력** | 모델이 쓴 **요약문** · `concern` · `source_count` · 언어 · 모델 · 프롬프트 판 · `subject_id` | 조각 서버 DB | 평문 | ~~**90일** (`REPORT_RETENTION_MS`, 리퍼가 지운다)~~ → **탈퇴 시까지**(2026-09-15). 탈퇴(`ai/purge`)와 문의 요청으로만 지운다 | `server/db/schema.ts` `aiReports` · `server/app/api/v1/ai/purge/route.ts` |
 | 10 | AI — 계량 | `subject_id` · 종류 · 기간 키 · 일자 · 토큰 수 · 모델 | 조각 서버 DB | 평문 | 🔴 **영구 — 지우는 코드가 0건** | `server/db/schema.ts` `aiUsage` |
 | 11 | 🆕 AI — 실패 알림 | 실패 사유 · 종류 · 기간 키 · **`sha256(subject_id)` 앞 8자** · 잠금 여부 | **Discord 웹훅** | 평문(가명) | Discord 정책 | `server/lib/notify.ts:39-63` |
 | 12 | 구독 | **`Purchases.logIn(subject_id)`** — RC `appUserID`가 곧 우리 `subject_id`다. + 스토어 영수증·상품·기기 | RevenueCat → common_server 웹훅 | 평문 | 영구 | `features/subscription/api/purchases.ts:74` · `auth-gate.ts:205` |
@@ -299,7 +299,7 @@ or open-ended responses."* — 일기가 정확히 `notes`다.
   or prominent in-app disclosure and consent*: 리포트는 사용자가 [만들기]를 눌러야만 나가고
   `app/ai-consent.tsx`가 §23·§28-8 동의를 따로 받는다.
 - **선택**: 구독 + 동의 2종 + 수동 버튼. 게이트가 [만들기] 하나에만 걸려 있어 거부해도 앱은 그대로 쓴다.
-- **목적**: `앱 기능`(리포트 생성) + `분석`(요약문 90일 보관의 목적이 프롬프트 품질 개선 —
+- **목적**: `앱 기능`(리포트 생성) + `분석`(요약문 보관(~~90일~~ 2026-09-15 부터 탈퇴 시까지)의 목적이 프롬프트 품질 개선 —
   처리방침 §3이 *"그 결과를 확인해 품질을 개선하기 위함"* 이라고 이미 적었다).
 
 ### 3.4 ⚠ 판단이 갈리는 두 항목 — 사용자가 정한다
@@ -392,7 +392,7 @@ deleteAccount()
 | 남는 것 | 얼마나 | Play 판정 | 우리 판정 |
 |---|---|---|---|
 | `tickets` 문의 본문 | 3년 | ✅ *"legitimate reasons such as legal compliance"* — 소비자 분쟁 기록 | 의도된 설계. 처리방침 §4가 고지 |
-| `ai_reports.summary` (+`subject_id`) | **90일** — 탈퇴로는 안 지워지고 리퍼가 시간으로 지운다 | ✅ 두 번째 조건 *"automatically initiate deletion … within 90 days"* 를 **정확히** 충족 | ✅ §4.4 해소 — 탈퇴가 지운다 |
+| `ai_reports.summary` (+`subject_id`) | ~~**90일** — 탈퇴로는 안 지워지고 리퍼가 시간으로 지운다~~ → **탈퇴 시까지**(2026-09-15). 탈퇴가 지운다 | ~~✅ 두 번째 조건 *"automatically initiate deletion … within 90 days"* 를 **정확히** 충족~~ → 90일 자동 삭제 조건은 **더 이상 충족하지 않는다.** 배지는 첫 조건(계정 삭제 경로)으로 선다(`or`). 폼에서 바꿀 칸은 없다(부분 삭제 질문은 이미 `아니요`다) | ✅ §4.4 해소 — 탈퇴가 지운다 |
 | `ai_usage` (`subject_id`·기간 키·토큰 수) | **영구** — 지우는 코드가 없다 | ✅ 배지 조건은 **하나만** 충족하면 된다(`or`)이고 메커니즘 조건을 이미 충족 | ✅ §4.4 해소 — 탈퇴가 지운다 |
 | `purchase_events`·`entitlements` | 영구 | ✅ 거래 기록 | 처리방침 §4가 5년 법정 보관으로 고지 |
 

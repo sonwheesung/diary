@@ -616,7 +616,7 @@
     "lead": "Für einen Bericht braucht es zwei getrennte Einwilligungen. Du kannst jede einzeln wählen.",
     "whatSent": "• Was gesendet wird: Titel, Text, Gefühl und Datum der Einträge aus diesem Zeitraum",
     "whenSent": "• Wann: nur wenn du auf [Bericht erstellen] tippst. Nichts entsteht automatisch",
-    "notStored": "• Deinen Tagebuchtext speichern wir nicht. Aber während der Bericht geschrieben wird, läuft der Text unverschlüsselt durch unseren Server zum KI-Anbieter — wir können nicht behaupten, ihn nicht sehen zu können. Der fertige Bericht (einschließlich Tagebuchsätzen, die er als Beleg zitiert) wird 90 Tage auf unserem Server aufbewahrt.",
+    "notStored": "• Deinen Tagebuchtext speichern wir nicht. Aber während der Bericht geschrieben wird, läuft der Text unverschlüsselt durch unseren Server zum KI-Anbieter — wir können nicht behaupten, ihn nicht sehen zu können. Der fertige Bericht (einschließlich Tagebuchsätzen, die er als Beleg zitiert) wird bis zur Löschung deines Kontos auf unserem Server aufbewahrt.",
     "vendorRetention": "• Der KI-Anbieter bewahrt ihn bis zu 30 Tage zur Missbrauchskontrolle auf und löscht ihn dann; für Modelltraining wird er nie verwendet",
     "sensitiveTitle": "(Erforderlich) Verarbeitung sensibler Daten",
     "sensitiveBody": "Tagebücher können Angaben zu Gesundheit und seelischem Zustand enthalten. Berichte verarbeiten diesen Text unverschlüsselt.",

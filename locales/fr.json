@@ -616,7 +616,7 @@
     "lead": "Créer un bilan demande deux consentements distincts. Vous pouvez choisir chacun séparément.",
     "whatSent": "• Ce qui est envoyé : le titre, le texte, l'émotion et la date des entrées de cette période",
     "whenSent": "• Quand : uniquement lorsque vous appuyez sur [Créer un bilan]. Rien n'est généré automatiquement",
-    "notStored": "• Nous ne conservons pas le texte de votre journal. Mais pendant la rédaction du bilan, le texte passe non chiffré par notre serveur jusqu'au prestataire IA — nous ne pouvons pas prétendre ne pas pouvoir le voir. Le bilan obtenu (y compris les phrases du journal citées comme preuves) est conservé 90 jours sur notre serveur.",
+    "notStored": "• Nous ne conservons pas le texte de votre journal. Mais pendant la rédaction du bilan, le texte passe non chiffré par notre serveur jusqu'au prestataire IA — nous ne pouvons pas prétendre ne pas pouvoir le voir. Le bilan obtenu (y compris les phrases du journal citées comme preuves) est conservé sur notre serveur jusqu’à la suppression de votre compte.",
     "vendorRetention": "• Le prestataire IA le conserve jusqu'à 30 jours pour surveiller les abus, puis le supprime ; il ne l'utilise jamais pour entraîner ses modèles",
     "sensitiveTitle": "(Obligatoire) Traitement d'informations sensibles",
     "sensitiveBody": "Un journal peut contenir des informations de santé et d'état psychique. Les bilans traitent ce texte sans chiffrement.",

@@ -1138,7 +1138,7 @@ console.log('');
  * 🔴 이 층의 실패는 둘 다 조용하다.
  *   ① **맥락 오류** — 인용은 원문 그대로인데 다른 날 이야기에 붙었다. 문자열 존재만 보면 통과한다.
  *   ② **위기 리포트의 칸** — 위험 신호 행동을 *"해낸 것"* 으로 칭찬하거나, 남을 해치려는 계획을
- *      흐름 카드로 재구성해 **서버에 90일 저장**한다. 프롬프트 한 줄에만 기대면 틀린 날 그대로 나간다.
+ *      흐름 카드로 재구성해 **서버에 탈퇴 시까지 저장**한다. 프롬프트 한 줄에만 기대면 틀린 날 그대로 나간다.
  * → 검증 함수를 직접 부르고, 라우트가 그 함수를 **저장 전에** 부르는지 소스로 본다.
  */
 {
@@ -1289,7 +1289,7 @@ console.log('');
 
   check('🔴 자해·자살 신호면 칸을 전부 비운다 — "방 정리"를 칭찬하던 자리(§3.1 ④)', () => {
     const out = run(FULL, { concern: true });
-    assert(blanked(out), '위기 리포트에 칸·지표 문장·근거·주제 설명이 남았다 — 그대로 서버에 90일 저장된다');
+    assert(blanked(out), '위기 리포트에 칸·지표 문장·근거·주제 설명이 남았다 — 그대로 서버에 탈퇴 시까지 저장된다');
     eq(out.insights.harmToOthers, false, 'harmToOthers');
   });
 
@@ -1358,7 +1358,7 @@ console.log('');
     const write = routeSrc.indexOf('db.insert(aiReports)');
     assert(clean >= 0, '라우트가 sanitizeInsights 를 안 부른다');
     assert(write >= 0, '대조군 — ai_reports 쓰기를 못 찾았다');
-    assert(clean < write, '검증이 저장보다 뒤다 — 걸러지기 전의 칸이 90일 저장된다');
+    assert(clean < write, '검증이 저장보다 뒤다 — 걸러지기 전의 칸이 탈퇴 시까지 저장된다');
     assert(routeSrc.includes('insights: JSON.stringify(cleaned.insights)'), '저장이 검증된 값을 안 쓴다');
     assert(!/insights:\s*result\./.test(routeSrc), '응답·저장에 검증 전 값(result.*)을 쓴다');
   });

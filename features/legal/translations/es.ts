@@ -17,9 +17,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_ES: LegalDoc = {
   title: 'Política de privacidad de Jogak',
-  sourceFingerprint: 'c1b13f32',
-  effective: '2026-09-14',
-  updated: '2026-09-14',
+  sourceFingerprint: '1ca1cd4b',
+  effective: '2026-09-15',
+  updated: '2026-09-15',
   intro:
     'Vivace Games Studio (en adelante, «el operador») cumple la Ley de Protección de Información Personal y demás normativa aplicable, y trata los datos personales de las personas usuarias de «Jogak» (en adelante, «el servicio») como se indica a continuación. Por principio, Jogak guarda en tu dispositivo las entradas de diario que escribes, y estas solo se transmiten a un servidor en dos casos: la copia de seguridad que actives tú y los informes de resumen con IA que crees tú. Por lo demás, recogemos únicamente la información mínima necesaria.',
   sections: [
@@ -68,7 +68,7 @@ export const PRIVACY_ES: LegalDoc = {
         'e. Si creas informes de resumen con IA (requiere suscripción)',
         '• Lo que se entrega al proveedor de IA a través del servidor del operador: el título, el texto, la emoción y la fecha de las entradas del periodo para el que solicitaste un informe',
         "• Lo que almacena el operador: el informe generado por la IA (el resumen, las frases de patrones, logros y sugerencias, y las frases del diario que cita como evidencia), el identificador de la cuenta que creó el informe, el periodo, el número de veces y el número de tokens utilizados",
-        "⚠ Con precisión: el operador no almacena el contenido del diario en sí. No obstante, ① en el momento en que se elabora el informe ese contenido pasa por el servidor del operador, por lo que no podemos decirte que «el operador no puede verlo», y ② el informe generado se conserva 90 días. Te lo decimos tal cual, sin difuminarlo.",
+        "⚠ Con precisión: el operador no almacena el contenido del diario en sí. No obstante, ① en el momento en que se elabora el informe ese contenido pasa por el servidor del operador, por lo que no podemos decirte que «el operador no puede verlo», y ② el informe generado se conserva hasta que elimines tu cuenta. Te lo decimos tal cual, sin difuminarlo.",
         "⚠ El informe se redacta a partir de tus entradas, por lo que puede contener el contenido de tu diario, y algunas frases del diario pueden citarse textualmente como evidencia de un patrón.",
         '• Consentimiento específico para información sensible: un diario puede contener información sensible, como el estado de salud o psicológico, en el sentido del art. 23 de la Ley de Protección de Información Personal. Como los informes de resumen con IA tratan ese contenido sin cifrar, recabamos un consentimiento específico para el tratamiento de información sensible la primera vez que usas la función. Este consentimiento es independiente del consentimiento de transferencia internacional del apartado 6, y puedes elegir cada uno por separado.',
         'Aunque no lo otorgues, puedes seguir usando con normalidad todas las funciones salvo los informes con IA. Los informes solo se generan cuando los creas tú; nunca se generan automáticamente.',
@@ -93,7 +93,7 @@ export const PRIVACY_ES: LegalDoc = {
         '• Mostrar anuncios: ofrecer publicidad a quienes usan la versión gratuita y medir su rendimiento',
         '• Copia de seguridad y restauración: si la activas, conservar una copia cifrada de tus entradas y devolvértela cuando lo pidas',
         '• Comprobar el derecho de suscripción: ofrecer a quienes han pagado la eliminación de anuncios, la copia de seguridad y los informes con IA, y atender consultas de pago y reembolsos',
-        "• Generar informes de resumen con IA y mejorar su calidad: elaborar un informe que repasa el periodo que has pedido (resumen, patrones, logros y sugerencias) y revisar el resultado para mejorar la calidad",
+        "• Generar y conservar informes de resumen con IA y mejorar su calidad: elaborar un informe que repasa el periodo que has pedido (resumen, patrones, logros y sugerencias), conservarlo para que puedas recuperarlo si reinstalas la aplicación o cambias de dispositivo, y revisar el resultado para mejorar la calidad",
         'El operador no usa los datos personales para fines distintos de los anteriores y, si la finalidad cambia, recabará el consentimiento previamente.',
       ],
     },
@@ -106,7 +106,7 @@ export const PRIVACY_ES: LegalDoc = {
         '• Identificador de dispositivo y registro de días de uso: 400 días desde el último día de uso. Después se elimina automáticamente.',
         '• Copia de seguridad cifrada: se conserva mientras la copia esté activada y hasta 90 días después de que finalice la suscripción, y luego se destruye automáticamente. Si desactivas la copia, solicitas su supresión o eliminas tu cuenta, la destruimos sin demora, sin esperar los 90 días. Las copias sin acceso durante 3 años o más se destruyen (es el caso de quien desinstala la aplicación sin eliminar su cuenta).',
         '• Registro de la destrucción de una copia (identificador de la copia y hora de la destrucción): 1 año, para que puedas averiguar «por qué no funciona la restauración»; el identificador de la cuenta no se conserva junto a él.',
-        "• Informe generado por la IA (incluidas las frases del diario citadas como evidencia): 90 días desde el día de su creación. Después se elimina automáticamente.",
+        "• Informe generado por la IA (incluidas las frases del diario citadas como evidencia): hasta que elimines tu cuenta. En ese momento se elimina sin demora.",
         '• Registros de uso de los informes (identificador de la cuenta, periodo, número de veces, número de tokens): hasta que se cumpla la finalidad o hasta que elimines tu cuenta',
         '• Registros sobre contratos o desistimiento y sobre el pago y suministro de bienes: 5 años (Ley de Protección del Consumidor en el Comercio Electrónico, art. 6)',
         'Si eliminas tu cuenta, los identificadores de cuenta (correo, «sub» de Google) se dejan sin demora en una forma no rastreable, y los registros de transacción anteriores se conservan separados y en forma no rastreable durante el plazo indicado y después se destruyen.',
@@ -168,7 +168,7 @@ export const PRIVACY_ES: LegalDoc = {
         'Puedes ejercerlos por escrito o por correo electrónico usando el contacto del apartado 11, y el operador actuará sin demora.',
         'Si solicitas la rectificación de un error en tus datos, no los usaremos ni los cederemos hasta que la rectificación esté completa.',
         '⚠ Límites del derecho de acceso respecto de la copia de seguridad: si solicitas acceder a ella, lo único que el operador puede entregarte es el texto cifrado, que no se puede descifrar, y los metadatos del apartado 2(c). No podemos facilitarte el contenido de tus entradas en un formato legible por una persona, porque el operador no tiene la clave. Tú misma o tú mismo puedes restaurarlas en cualquier momento desde la aplicación con tu código de recuperación.',
-        "Puedes eliminar en cualquier momento desde la aplicación un informe con IA ya creado. Al eliminarlo en la aplicación desaparece de tu dispositivo, y el informe conservado en el servidor se elimina automáticamente pasados 90 días. Si deseas que se elimine antes, puedes solicitarlo mediante «Contacto».",
+        "Puedes eliminar en cualquier momento desde la aplicación un informe con IA ya creado. Al eliminarlo en la aplicación desaparece de tu dispositivo, pero el informe conservado en el servidor se mantiene hasta que elimines tu cuenta (entonces también se elimina), por lo que puede volver a aparecer si reinstalas la aplicación. Si deseas que se elimine el informe del servidor, puedes solicitarlo mediante «Contacto».",
         "⚠ Los informes generados por IA pueden no coincidir con los hechos y no constituyen un diagnóstico médico o psicológico. Las sugerencias de un informe son solo orientativas y no tienes por qué seguirlas. La aplicación ofrece una forma de denunciar un informe.",
         'El representante legal de un menor de 14 años puede ejercer los derechos anteriores en su nombre.',
       ],
@@ -218,6 +218,7 @@ export const PRIVACY_ES: LegalDoc = {
         '• 2026-09-02 modificación — en el apartado 2 se aclara que la fecha de uso se registra no solo al abrir la app, sino también al volver a ella (como máximo una vez cada cinco minutos), y que se registra en tu cuenta en lugar del identificador de dispositivo cuando has iniciado sesión.',
         "• 2026-09-09 modificación — se indica en el apartado 2 la comprobación de actualizaciones que se realiza al abrir la app (envío del sistema operativo del dispositivo y de un token aleatorio) y se añade 650 Industries, Inc. a los destinatarios del apartado 6.",
         "• 2026-09-14 modificación — los informes de resumen con IA ahora generan, además del resumen, patrones, logros y sugerencias, y citan frases del diario como evidencia; se han revisado los datos almacenados (apartado 2), la finalidad del tratamiento (apartado 3), el plazo de conservación (apartado 4) y la nota sobre la naturaleza de los informes (apartado 9).",
+        "• 2026-09-15 modificación — para que puedas recuperar tus informes con IA si reinstalas la aplicación o cambias de dispositivo, los informes conservados en el servidor se guardan ahora hasta que elimines tu cuenta en lugar de 90 días desde su creación; se han revisado la nota sobre la conservación (apartado 2), la finalidad del tratamiento (apartado 3), el plazo de conservación (apartado 4) y la forma de eliminar los informes (apartado 9).",
       ],
     },
   ],
@@ -239,9 +240,9 @@ export const PRIVACY_ES: LegalDoc = {
  */
 export const DELETE_ACCOUNT_ES: LegalDoc = {
   title: 'Cómo eliminar tu cuenta de Jogak',
-  sourceFingerprint: 'e36bafaa',
-  effective: '2026-09-14',
-  updated: '2026-09-14',
+  sourceFingerprint: '77275107',
+  effective: '2026-09-15',
+  updated: '2026-09-15',
   intro:
     'Esta página explica cómo eliminar tu cuenta de Jogak y los datos asociados a ella. También puedes solicitarlo por correo electrónico si ya has desinstalado la aplicación o no puedes iniciar sesión.',
   sections: [
@@ -274,7 +275,7 @@ export const DELETE_ACCOUNT_ES: LegalDoc = {
         '• El vínculo entre tus consultas y la cuenta de quien las escribió',
         '• La copia cifrada de tu diario guardada en el servidor (si activaste la copia de seguridad): se elimina con la cuenta, sin esperar los 90 días de gracia.',
         '• El identificador de la copia y los registros de copia (hora, tamaño, número de generación)',
-        "• Los informes con IA conservados en el servidor (incluidas las frases del diario citadas como evidencia, hasta 90 días) y los registros de uso de los informes (periodo, número de veces, número de tokens)",
+        "• Los informes con IA conservados en el servidor (incluidas las frases del diario citadas como evidencia) y los registros de uso de los informes (periodo, número de veces, número de tokens)",
         '⚠ Al eliminar la cuenta destruimos primero la copia de seguridad y después la cuenta: si la cuenta desapareciera antes, ya no quedaría nadie con permiso para borrar esa copia. Si la eliminación de la copia falla, la eliminación de la cuenta no llega a realizarse; basta con que lo intentes de nuevo un poco más tarde.',
         '⚠ La eliminación no se puede deshacer. Aunque conserves tu código de recuperación, no podrás restaurar la copia guardada en el servidor.',
       ],

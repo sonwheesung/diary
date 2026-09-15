@@ -21,9 +21,9 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_DE: LegalDoc = {
   title: 'Datenschutzerklärung für Jogak',
-  sourceFingerprint: 'c1b13f32',
-  effective: '2026-09-14',
-  updated: '2026-09-14',
+  sourceFingerprint: '1ca1cd4b',
+  effective: '2026-09-15',
+  updated: '2026-09-15',
   intro:
     'Vivace Games Studio („der Betreiber“) hält das Gesetz zum Schutz personenbezogener Daten und weitere einschlägige Vorschriften ein und verarbeitet die personenbezogenen Daten der Nutzerinnen und Nutzer von „Jogak“ („der Dienst“) wie nachstehend beschrieben. Jogak bewahrt die von dir geschriebenen Tagebucheinträge grundsätzlich auf deinem Gerät auf; an einen Server übermittelt werden sie ausschließlich beim Backup, das du selbst einschaltest, und bei den KI-Zusammenfassungsberichten, die du selbst erstellst. Im Übrigen erheben wir nur die notwendigen Mindestangaben.',
   sections: [
@@ -72,7 +72,7 @@ export const PRIVACY_DE: LegalDoc = {
         'e. Wenn du KI-Zusammenfassungsberichte erstellst (Abo erforderlich)',
         '• Was über den Server des Betreibers an den KI-Anbieter übermittelt wird: Titel, Text, Gefühl und Datum der Einträge aus dem Zeitraum, für den du einen Bericht angefordert hast',
         "• Was der Betreiber speichert: den von der KI erzeugten Bericht (die Zusammenfassung, die Sätze zu Mustern, Geschafftem und Vorschlägen sowie die Tagebuchsätze, die er als Beleg zitiert), die Kennung des Kontos, das den Bericht erstellt hat, den Zeitraum, die Anzahl der Male und die Anzahl der verwendeten Token",
-        "⚠ Genau gesagt: Der Betreiber speichert den Tagebuchinhalt selbst nicht. Allerdings ① durchläuft der Inhalt in dem Moment, in dem der Bericht entsteht, den Server des Betreibers, weshalb wir dir nicht sagen können, dass „der Betreiber ihn nicht sehen kann“, und ② wird der erzeugte Bericht 90 Tage lang aufbewahrt. Wir sagen das klar und verschleiern es nicht.",
+        "⚠ Genau gesagt: Der Betreiber speichert den Tagebuchinhalt selbst nicht. Allerdings ① durchläuft der Inhalt in dem Moment, in dem der Bericht entsteht, den Server des Betreibers, weshalb wir dir nicht sagen können, dass „der Betreiber ihn nicht sehen kann“, und ② wird der erzeugte Bericht bis zur Löschung deines Kontos aufbewahrt. Wir sagen das klar und verschleiern es nicht.",
         "⚠ Der Bericht wird auf Grundlage deines Tagebuchs verfasst und kann daher Tagebuchinhalte enthalten; Tagebuchsätze können als Beleg für ein Muster wörtlich zitiert werden.",
         '• Gesonderte Einwilligung für sensible Daten: Ein Tagebuch kann sensible Daten wie Gesundheits- oder psychische Zustände im Sinne von Art. 23 des Gesetzes zum Schutz personenbezogener Daten enthalten. Da KI-Zusammenfassungsberichte diesen Inhalt unverschlüsselt verarbeiten, holen wir bei der ersten Nutzung der Funktion eine gesonderte Einwilligung zur Verarbeitung sensibler Daten ein. Diese Einwilligung ist von der Einwilligung zur Übermittlung ins Ausland nach Abschnitt 6 getrennt; du kannst beide unabhängig voneinander wählen.',
         'Auch ohne Einwilligung bleiben alle Funktionen außer den KI-Berichten vollständig nutzbar. Berichte entstehen nur, wenn du sie selbst erstellst; sie werden nie automatisch erzeugt.',
@@ -97,7 +97,7 @@ export const PRIVACY_DE: LegalDoc = {
         '• Auslieferung von Werbung: Nutzerinnen und Nutzern der kostenlosen Version Werbung anzeigen und deren Leistung messen',
         '• Backup und Wiederherstellung: wenn du es eingeschaltet hast, die verschlüsselte Kopie deiner Einträge aufbewahren und sie dir auf Verlangen zurückgeben',
         '• Prüfung der Aboberechtigung: zahlenden Nutzerinnen und Nutzern Werbefreiheit, Backup und KI-Berichte bereitstellen sowie Zahlungsanfragen und Erstattungen bearbeiten',
-        "• Erstellung von KI-Zusammenfassungsberichten und Verbesserung ihrer Qualität: einen Rückblick auf den von dir angeforderten Zeitraum erstellen (Zusammenfassung, Muster, Geschafftes und Vorschläge) und anhand des Ergebnisses die Qualität verbessern",
+        "• Erstellung und Aufbewahrung von KI-Zusammenfassungsberichten und Verbesserung ihrer Qualität: einen Rückblick auf den von dir angeforderten Zeitraum erstellen (Zusammenfassung, Muster, Geschafftes und Vorschläge), ihn aufbewahren, damit du ihn nach einer Neuinstallation der App oder einem Gerätewechsel zurückerhältst, und anhand des Ergebnisses die Qualität verbessern",
         'Der Betreiber verwendet personenbezogene Daten nicht für andere als die oben genannten Zwecke und holt bei einer Zweckänderung vorab die Einwilligung ein.',
       ],
     },
@@ -110,7 +110,7 @@ export const PRIVACY_DE: LegalDoc = {
         '• Gerätekennung und Aufzeichnung der Nutzungstage: 400 Tage ab dem letzten Nutzungstag. Danach automatische Löschung.',
         '• Verschlüsselte Backup-Kopie: gespeichert, solange das Backup eingeschaltet ist, und bis zu 90 Tage nach dem Ende des Abos; danach automatische Vernichtung. Schaltest du das Backup aus, verlangst du die Löschung oder löschst du dein Konto, vernichten wir sie unverzüglich, ohne die 90 Tage abzuwarten. Backups, auf die seit 3 Jahren oder länger nicht zugegriffen wurde, werden vernichtet (das betrifft den Fall, dass die App gelöscht, das Konto aber nicht gelöscht wurde).',
         '• Aufzeichnung der Vernichtung eines Backups (Backup-Kennung und Zeitpunkt der Vernichtung): 1 Jahr — damit du herausfinden kannst, „warum die Wiederherstellung nicht funktioniert“; die Kontokennung wird nicht mit aufbewahrt.',
-        "• Von der KI erzeugter Bericht (einschließlich als Beleg zitierter Tagebuchsätze): 90 Tage ab dem Tag der Erstellung. Danach wird er automatisch gelöscht.",
+        "• Von der KI erzeugter Bericht (einschließlich als Beleg zitierter Tagebuchsätze): bis zur Löschung deines Kontos. Dann wird er unverzüglich gelöscht.",
         '• Nutzungsaufzeichnungen der Berichte (Kontokennung, Zeitraum, Anzahl der Male, Anzahl der Token): bis der Zweck erfüllt ist oder bis du dein Konto löschst',
         '• Aufzeichnungen über Verträge oder Widerruf sowie über Zahlung und Lieferung von Waren: 5 Jahre (Gesetz zum Verbraucherschutz im elektronischen Handel, Art. 6)',
         'Löschst du dein Konto, werden die Kontokennungen (E-Mail, Google „sub“) unverzüglich in eine nicht rückverfolgbare Form überführt; die obigen Transaktionsaufzeichnungen werden für die genannte Dauer getrennt und in nicht rückverfolgbarer Form aufbewahrt und danach vernichtet.',
@@ -172,7 +172,7 @@ export const PRIVACY_DE: LegalDoc = {
         'Die Ausübung ist schriftlich oder per E-Mail über den Kontakt in Abschnitt 11 möglich; der Betreiber handelt unverzüglich.',
         'Verlangst du die Berichtigung eines Fehlers, verwenden wir die betreffenden Daten bis zum Abschluss der Berichtigung weder noch geben wir sie weiter.',
         '⚠ Grenzen des Auskunftsrechts beim Backup: Verlangst du Auskunft über dein Backup, kann der Betreiber dir nur den nicht entschlüsselbaren Chiffretext und die Metadaten aus Abschnitt 2(c) herausgeben. Deine Einträge in menschenlesbarer Form können wir nicht bereitstellen — der Betreiber hat den Schlüssel nicht. Du selbst kannst jederzeit in der App mit deinem Wiederherstellungscode wiederherstellen.',
-        "Einen erstellten KI-Bericht kannst du jederzeit in der App löschen. Beim Löschen in der App verschwindet er von deinem Gerät; der auf dem Server aufbewahrte Bericht wird nach 90 Tagen automatisch gelöscht. Wünschst du eine frühere Löschung, kannst du sie über „Kontakt“ anfordern.",
+        "Einen erstellten KI-Bericht kannst du jederzeit in der App löschen. Beim Löschen in der App verschwindet er von deinem Gerät, der auf dem Server aufbewahrte Bericht bleibt jedoch bis zur Löschung deines Kontos erhalten (dann wird er ebenfalls gelöscht) und kann nach einer Neuinstallation der App wieder erscheinen. Die Löschung des Berichts auf dem Server kannst du über „Kontakt“ anfordern.",
         "⚠ Von der KI erzeugte Berichte können von den Tatsachen abweichen und sind keine medizinische oder psychologische Diagnose. Vorschläge in einem Bericht dienen nur zur Orientierung, und du musst ihnen nicht folgen. Die App bietet eine Möglichkeit, einen Bericht zu melden.",
         'Die gesetzliche Vertretung eines Kindes unter 14 Jahren kann die vorstehenden Rechte in dessen Namen ausüben.',
       ],
@@ -222,6 +222,7 @@ export const PRIVACY_DE: LegalDoc = {
         '• 2026-09-02 Änderung — In Abschnitt 2 wird nun klargestellt, dass der Nutzungstag nicht nur beim Start der App, sondern auch bei der Rückkehr zur App erfasst wird (höchstens alle fünf Minuten), und dass er bei angemeldeten Nutzern dem Konto statt der Gerätekennung zugeordnet wird.',
         "• 2026-09-09 geändert — die beim App-Start erfolgende Update-Prüfung (Übertragung von Geräte-Betriebssystem und zufälligem Token) wurde in Abschnitt 2 offengelegt und 650 Industries, Inc. den Empfängern in Abschnitt 6 hinzugefügt.",
         "• 2026-09-14 geändert — KI-Zusammenfassungsberichte erzeugen jetzt neben der Zusammenfassung auch Muster, Geschafftes und Vorschläge und zitieren Tagebuchsätze als Beleg; angepasst wurden die gespeicherten Angaben (Abschnitt 2), der Verarbeitungszweck (Abschnitt 3), die Aufbewahrungsdauer (Abschnitt 4) und der Hinweis zur Art der Berichte (Abschnitt 9).",
+        "• 2026-09-15 geändert — damit du deine KI-Berichte nach einer Neuinstallation der App oder einem Gerätewechsel zurückerhältst, werden die auf dem Server aufbewahrten Berichte nicht mehr 90 Tage ab Erstellung, sondern bis zur Löschung deines Kontos aufbewahrt; angepasst wurden der Hinweis zur Aufbewahrung (Abschnitt 2), der Verarbeitungszweck (Abschnitt 3), die Aufbewahrungsdauer (Abschnitt 4) und die Löschmöglichkeiten (Abschnitt 9).",
       ],
     },
   ],
@@ -244,9 +245,9 @@ export const PRIVACY_DE: LegalDoc = {
  */
 export const DELETE_ACCOUNT_DE: LegalDoc = {
   title: 'Jogak — So löschst du dein Konto',
-  sourceFingerprint: 'e36bafaa',
-  effective: '2026-09-14',
-  updated: '2026-09-14',
+  sourceFingerprint: '77275107',
+  effective: '2026-09-15',
+  updated: '2026-09-15',
   intro:
     'Diese Seite erklärt, wie du dein Konto bei der App Jogak und die damit verbundenen Daten löschst. Wenn du die App bereits gelöscht hast oder dich nicht anmelden kannst, kannst du die Löschung auch per E-Mail verlangen.',
   sections: [
@@ -279,7 +280,7 @@ export const DELETE_ACCOUNT_DE: LegalDoc = {
         '• Die Verknüpfung zwischen deinen Anfragen und dem Konto, das sie verfasst hat',
         '• Die auf dem Server gespeicherte verschlüsselte Kopie deiner Einträge (wenn du das Backup eingeschaltet hast) — sie wird mit gelöscht, ohne die 90 Tage Kulanzfrist abzuwarten.',
         '• Backup-Kennung und Backup-Aufzeichnungen (Zeitpunkt, Größe, Generationsnummer)',
-        "• Die auf dem Server aufbewahrten KI-Berichte (einschließlich als Beleg zitierter Tagebuchsätze, höchstens 90 Tage) und die Nutzungsaufzeichnungen der Berichte (Zeitraum, Anzahl der Male, Anzahl der Token)",
+        "• Die auf dem Server aufbewahrten KI-Berichte (einschließlich als Beleg zitierter Tagebuchsätze) und die Nutzungsaufzeichnungen der Berichte (Zeitraum, Anzahl der Male, Anzahl der Token)",
         '⚠ Beim Löschen des Kontos vernichten wir zuerst das Backup und löschen danach das Konto. Verschwindet das Konto zuerst, gibt es niemanden mehr, der berechtigt wäre, dieses Backup zu löschen. Schlägt die Löschung des Backups fehl, wird auch das Löschen des Kontos nicht durchgeführt; versuche es dann bitte etwas später erneut.',
         '⚠ Einmal gelöscht, lässt es sich nicht rückgängig machen. Auch wenn du deinen Wiederherstellungscode noch hast, kannst du das Backup auf dem Server nicht wiederherstellen.',
       ],
