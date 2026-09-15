@@ -1,7 +1,7 @@
 import { and, eq, lt, sql } from 'drizzle-orm';
 
 import { db } from '@/db';
-import { aiCooldowns, generationParts, generations, vaultBlobs, vaults } from '@/db/schema';
+import { aiCooldowns, aiReports, generationParts, generations, vaultBlobs, vaults } from '@/db/schema';
 import { COOLDOWN_TTL_MS } from '@/lib/ai-policy';
 import { notifyOps } from '@/lib/notify';
 import { reportError } from '@/lib/observability';
@@ -240,8 +240,19 @@ export async function POST(req: Request) {
      * ⚠ 잠금 기록 정리는 남는다. 이건 사용자 데이터가 아니라 만료된 잠금이다.
      * ⚠ 백업 정리가 실패해도 이건 돌아야 하고 반대도 마찬가지다. 그래서 따로 try 로 감싼다.
      */
+    let reapedReports = 0;
     let reapedCooldowns = 0;
     try {
+      /*
+       * 🔴 **탈퇴 뒤 유예(30일)가 지난 리포트만 지운다**(2026-09-15 · §5.7). `purge_after` 가
+       *   없는 행은 탈퇴하지 않은 사람의 것이라 절대 안 건드린다(NULL 과의 비교는 참이 아니다).
+       */
+      const expiredReports = await db
+        .delete(aiReports)
+        .where(lt(aiReports.purgeAfter, new Date(now)))
+        .returning({ id: aiReports.id });
+      reapedReports = expiredReports.length;
+
       const oldCooldowns = await db
         .delete(aiCooldowns)
         .where(lt(aiCooldowns.until, new Date(now - COOLDOWN_TTL_MS)))
@@ -258,6 +269,7 @@ export async function POST(req: Request) {
       purgedExpired,
       purgedAbandoned,
       reapedTombstones,
+      reapedReports,
       reapedCooldowns,
     });
   } catch (error) {

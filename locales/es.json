@@ -612,14 +612,16 @@
     "suggestionFrom": "{{pattern}} · {{dates}}",
     "barUnit": "Las barras muestran cuántos caracteres escribiste ese día.",
     "prevSkipped": "Solo se comparan semanas con al menos 4 días escritos ({{label}}: {{written}}/{{total}}).",
-    "longestDays": "Días en que más escribiste"
+    "longestDays": "Días en que más escribiste",
+    "needServer": "Los informes se guardan en nuestro servidor. Conéctate a internet e inicia sesión para verlos.",
+    "deleteFailed": "No se pudo eliminar el informe. Revisa tu conexión e inténtalo de nuevo."
   },
   "aiConsent": {
     "title": "Consentimiento para informes de IA",
     "lead": "Crear un informe requiere dos consentimientos separados. Puedes elegir cada uno por separado.",
     "whatSent": "• Qué se envía: el título, el texto, la emoción y la fecha de las entradas de ese periodo",
     "whenSent": "• Cuándo: solo cuando pulsas [Crear informe]. Nada se genera automáticamente",
-    "notStored": "• No almacenamos el texto de tu diario. Pero mientras se escribe el informe, el texto pasa sin cifrar por nuestro servidor hacia el proveedor de IA: no podemos afirmar que no podamos verlo. El informe resultante (incluidas las frases del diario que cita como evidencia) se guarda en nuestro servidor hasta que elimines tu cuenta.",
+    "notStored": "• No almacenamos el texto de tu diario. Pero mientras se escribe el informe, el texto pasa sin cifrar por nuestro servidor hacia el proveedor de IA: no podemos afirmar que no podamos verlo. El informe resultante (incluidas las frases del diario que cita como evidencia) se guarda solo en nuestro servidor y se borra 30 días después de que elimines tu cuenta.",
     "vendorRetention": "• El proveedor de IA lo conserva hasta 30 días para vigilar abusos y luego lo borra; nunca lo usa para entrenar modelos",
     "sensitiveTitle": "(Obligatorio) Tratamiento de información sensible",
     "sensitiveBody": "Los diarios pueden contener información de salud y estado anímico. Los informes tratan ese texto sin cifrar.",

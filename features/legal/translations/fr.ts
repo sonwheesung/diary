@@ -20,7 +20,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_FR: LegalDoc = {
   title: 'Politique de confidentialité de Jogak',
-  sourceFingerprint: '3042bb99',
+  sourceFingerprint: '65022c5b',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
@@ -71,7 +71,7 @@ export const PRIVACY_FR: LegalDoc = {
         'e. Si vous créez des rapports de synthèse par IA (abonnement requis)',
         '• Ce qui est remis au fournisseur d’IA via le serveur de l’exploitant : le titre, le texte, l’émotion et la date des entrées de la période pour laquelle vous avez demandé un rapport',
         "• Ce que l’exploitant conserve : le rapport généré par l’IA (la synthèse, les phrases de tendances, de réussites et de suggestions, et les phrases du journal qu’il cite comme preuves), l’identifiant du compte ayant créé le rapport, la période, le nombre de fois et le nombre de jetons utilisés",
-        "⚠ Pour être précis : l’exploitant ne conserve pas le contenu du journal lui-même. Toutefois, ① au moment où le rapport est produit, ce contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② le rapport généré est conservé jusqu’à la suppression de votre compte. Nous vous le disons tel quel, sans l’atténuer.",
+        "⚠ Pour être précis : l’exploitant ne conserve pas le contenu du journal lui-même. Toutefois, ① au moment où le rapport est produit, ce contenu transite par le serveur de l’exploitant : nous ne pouvons donc pas vous dire que « l’exploitant ne peut pas le voir », et ② le rapport généré est conservé uniquement sur le serveur de l’exploitant et détruit 30 jours après la suppression de votre compte. Nous vous le disons tel quel, sans l’atténuer.",
         "⚠ Le rapport est rédigé à partir de vos entrées ; il peut donc contenir le contenu de votre journal, et des phrases du journal peuvent être citées mot pour mot comme preuves d’une tendance.",
         '• Consentement distinct pour les informations sensibles : un journal peut contenir des informations sensibles, telles que l’état de santé ou psychologique, au sens de l’art. 23 de la loi sur la protection des informations personnelles. Les rapports de synthèse par IA traitant ce contenu non chiffré, nous recueillons un consentement distinct au traitement des informations sensibles lors de votre première utilisation de la fonctionnalité. Ce consentement est distinct du consentement au transfert hors du pays de la section 6, et vous pouvez choisir chacun séparément.',
         'Même si vous ne le donnez pas, vous pouvez continuer à utiliser normalement toutes les fonctionnalités autres que les rapports par IA. Les rapports ne sont générés que lorsque vous les créez vous-même ; ils ne le sont jamais automatiquement.',
@@ -96,7 +96,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• Diffusion de publicités : proposer des publicités aux utilisateurs de la version gratuite et en mesurer la performance',
         '• Sauvegarde et restauration : si vous l’activez, conserver une copie chiffrée de vos entrées et vous la restituer à votre demande',
         '• Vérification du droit d’abonnement : fournir aux personnes ayant payé la suppression des publicités, la sauvegarde et les rapports par IA, et traiter les demandes de paiement et les remboursements',
-        "• Génération et conservation des rapports de synthèse par IA et amélioration de leur qualité : produire un rapport revenant sur la période que vous avez demandée (synthèse, tendances, réussites et suggestions), le conserver pour que vous puissiez le récupérer après une réinstallation de l’application ou un changement d’appareil, et en examiner le résultat pour améliorer la qualité",
+        "• Génération et conservation des rapports de synthèse par IA et amélioration de leur qualité : produire un rapport revenant sur la période que vous avez demandée (synthèse, tendances, réussites et suggestions), le conserver sur le serveur de l’exploitant pour l’afficher dans l’application, et en examiner le résultat pour améliorer la qualité",
         'L’exploitant n’utilise pas les données personnelles à d’autres fins que celles ci-dessus et, en cas de changement de finalité, recueillera votre consentement au préalable.',
       ],
     },
@@ -109,7 +109,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• Identifiant d’appareil et relevé des jours d’utilisation : 400 jours à compter du dernier jour d’utilisation. Supprimé automatiquement ensuite.',
         '• Copie de sauvegarde chiffrée : conservée tant que la sauvegarde est activée et jusqu’à 90 jours après la fin de l’abonnement, puis détruite automatiquement. Si vous désactivez la sauvegarde, demandez sa suppression ou supprimez votre compte, nous la détruisons sans délai, sans attendre les 90 jours. Les sauvegardes sans accès depuis 3 ans ou plus sont détruites (cas où l’application a été désinstallée sans suppression du compte).',
         '• Relevé de la destruction d’une sauvegarde (identifiant de sauvegarde et heure de la destruction) : 1 an — afin que vous puissiez savoir « pourquoi la restauration ne fonctionne pas » ; l’identifiant du compte n’est pas conservé avec lui.',
-        "• Rapport généré par l’IA (y compris les phrases du journal citées comme preuves) : jusqu’à la suppression de votre compte. Il est alors supprimé sans délai.",
+        "• Rapport généré par l’IA (y compris les phrases du journal citées comme preuves) : jusqu’à 30 jours après la suppression de votre compte. Nous le conservons pendant ces 30 jours pour répondre aux demandes faites juste après la suppression, puis nous le détruisons.",
         '• Relevés d’utilisation des rapports (identifiant du compte, période, nombre de fois, nombre de jetons) : jusqu’à la réalisation de la finalité ou jusqu’à la suppression de votre compte',
         '• Relevés relatifs aux contrats ou à la rétractation, et au paiement et à la fourniture de biens : 5 ans (loi sur la protection des consommateurs dans le commerce électronique, art. 6)',
         'Si vous supprimez votre compte, les identifiants de compte (e-mail, « sub » Google) sont rendus non traçables sans délai, et les relevés de transaction ci-dessus sont conservés séparément et sous une forme non traçable pendant la durée indiquée, puis détruits.',
@@ -171,7 +171,7 @@ export const PRIVACY_FR: LegalDoc = {
         'Vous pouvez les exercer par écrit ou par e-mail à l’adresse figurant à la section 11, et l’exploitant agira sans délai.',
         'Si vous demandez la rectification d’une erreur dans vos données, nous ne les utiliserons ni ne les communiquerons tant que la rectification n’est pas achevée.',
         '⚠ Limites du droit d’accès à la sauvegarde : si vous en demandez l’accès, l’exploitant ne peut vous remettre que le texte chiffré, indéchiffrable, et les métadonnées de la section 2(c). Nous ne pouvons pas vous fournir le contenu de vos entrées sous une forme lisible par un être humain — l’exploitant n’a pas la clé. Vous pouvez vous-même restaurer à tout moment dans l’application à l’aide de votre code de récupération.',
-        "Vous pouvez supprimer à tout moment dans l’application un rapport par IA déjà créé. La suppression dans l’application l’efface de votre appareil, mais le rapport conservé sur le serveur est gardé jusqu’à la suppression de votre compte (il est alors supprimé lui aussi) et peut donc réapparaître si vous réinstallez l’application. Pour faire supprimer le rapport conservé sur le serveur, vous pouvez en faire la demande via « Nous contacter ».",
+        "Vous pouvez supprimer à tout moment dans l’application un rapport par IA déjà créé ; il est alors effacé sans délai du serveur de l’exploitant. Les rapports ne sont pas enregistrés sur votre appareil : vous devez être connecté à internet et à votre compte pour les voir. Après la suppression de votre compte, ils sont détruits au bout de 30 jours.",
         "⚠ Les rapports générés par IA peuvent différer des faits et ne constituent pas un diagnostic médical ou psychologique. Les suggestions d’un rapport sont données à titre indicatif et vous n’êtes pas tenu·e de les suivre. L’application propose un moyen de signaler un rapport.",
         'Le représentant légal d’un enfant de moins de 14 ans peut exercer les droits ci-dessus en son nom.',
       ],
@@ -221,7 +221,7 @@ export const PRIVACY_FR: LegalDoc = {
         '• 2026-09-02 modification — l’article 2 précise désormais que la date d’utilisation est enregistrée non seulement au lancement de l’application mais aussi lorsque vous y revenez (au plus une fois toutes les cinq minutes), et qu’elle est enregistrée sur votre compte plutôt que sur l’identifiant d’appareil lorsque vous êtes connecté.',
         "• 2026-09-09 modification — la vérification des mises à jour effectuée au lancement de l’application (envoi du système d’exploitation de l’appareil et d’un jeton aléatoire) est indiquée à la section 2, et 650 Industries, Inc. est ajoutée aux destinataires de la section 6.",
         "• 2026-09-14 modification — les rapports de synthèse par IA produisent désormais, en plus de la synthèse, des tendances, des réussites et des suggestions, et citent des phrases du journal comme preuves ; nous avons révisé les éléments conservés (section 2), la finalité du traitement (section 3), la durée de conservation (section 4) et la mention sur la nature des rapports (section 9).",
-        "• 2026-09-15 modification — pour que vous puissiez récupérer vos rapports par IA après une réinstallation de l’application ou un changement d’appareil, les rapports conservés sur le serveur sont désormais gardés jusqu’à la suppression de votre compte au lieu de 90 jours après leur création ; nous avons révisé la mention sur la conservation (section 2), la finalité du traitement (section 3), la durée de conservation (section 4) et la manière de supprimer les rapports (section 9).",
+        "• 2026-09-15 modification — les rapports par IA ne sont plus enregistrés sur votre appareil et sont conservés uniquement sur le serveur de l’exploitant ; leur durée de conservation passe de 90 jours après leur création à 30 jours après la suppression de votre compte ; nous avons révisé la mention sur la conservation (section 2), la finalité du traitement (section 3), la durée de conservation (section 4) et la manière de supprimer les rapports (section 9).",
       ],
     },
   ],
@@ -243,7 +243,7 @@ export const PRIVACY_FR: LegalDoc = {
  */
 export const DELETE_ACCOUNT_FR: LegalDoc = {
   title: 'Comment supprimer votre compte Jogak',
-  sourceFingerprint: '77275107',
+  sourceFingerprint: '83671566',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
@@ -278,7 +278,7 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
         '• Le lien entre vos demandes et le compte de leur auteur',
         '• La copie chiffrée de votre journal conservée sur le serveur (si vous avez activé la sauvegarde) — supprimée en même temps que le compte, sans attendre le délai de grâce de 90 jours.',
         '• L’identifiant de sauvegarde et les relevés de sauvegarde (heure, taille, numéro de génération)',
-        "• Les rapports par IA conservés sur le serveur (y compris les phrases du journal citées comme preuves) et les relevés d’utilisation des rapports (période, nombre de fois, nombre de jetons)",
+        "• Les relevés d’utilisation des rapports (période, nombre de fois, nombre de jetons). Les rapports par IA conservés sur le serveur (y compris les phrases du journal citées comme preuves) sont détruits 30 jours après la suppression.",
         '⚠ Lors de la suppression du compte, nous détruisons d’abord la sauvegarde puis le compte : si le compte disparaissait d’abord, plus personne n’aurait le droit d’effacer cette sauvegarde. Si la destruction de la sauvegarde échoue, la suppression du compte n’a pas lieu ; il vous suffit de réessayer un peu plus tard.',
         '⚠ La suppression est irréversible. Même si vous conservez votre code de récupération, vous ne pourrez pas restaurer la sauvegarde présente sur le serveur.',
       ],
@@ -296,8 +296,8 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
     {
       h: '5. Ce qui reste sur votre appareil — la suppression du compte ne l’efface pas',
       body: [
-        'Les entrées de Jogak (titres, texte, photos, tags et émotions) et le texte des rapports par IA sont enregistrés à l’intérieur de votre appareil.',
-        'La suppression de votre compte laisse donc intacts les entrées et les rapports présents sur votre appareil. Pour les effacer aussi de l’appareil, désinstallez l’application ou lancez la réinitialisation dans les [Réglages] de l’application.',
+        'Les entrées de Jogak (titres, texte, photos, tags et émotions) sont enregistrées à l’intérieur de votre appareil. Les rapports par IA ne sont pas enregistrés sur l’appareil ; ils sont conservés uniquement sur le serveur de l’exploitant.',
+        'La suppression de votre compte laisse donc intactes les entrées présentes sur votre appareil. Pour les effacer aussi de l’appareil, désinstallez l’application ou lancez la réinitialisation dans les [Réglages] de l’application.',
         'À l’inverse, si vous désinstallez l’application, les entrées de votre appareil ne pourront pas être récupérées. Vous ne pourrez les restaurer que si vous aviez activé la sauvegarde et conservé votre code de récupération, et uniquement avant la suppression de votre compte.',
         '⚠ Si vous n’avez pas activé la sauvegarde, l’exploitant ne détient pas les entrées présentes sur votre appareil : il ne peut donc ni les supprimer ni vous les restituer.',
       ],

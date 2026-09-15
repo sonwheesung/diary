@@ -1,4 +1,4 @@
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 
 /*
  * 🔴 **앱과 갈라지지 않는다.** `@shared/*`는 `features/ai/*`를 **생성 복사**한 것이고
@@ -172,6 +172,8 @@ export async function GET(req: Request): Promise<Response> {
           eq(aiReports.subjectId, id.subjectId),
           eq(aiReports.kind, kind),
           eq(aiReports.periodKey, periodKey),
+          // 탈퇴 유예 중인 행은 없는 것으로 본다(§5.7)
+          isNull(aiReports.purgeAfter),
         ),
       );
 
@@ -689,3 +691,49 @@ export async function POST(req: Request): Promise<Response> {
     inFlight.delete(reportId);
   }
 }
+
+/**
+ * DELETE /api/v1/ai/report?kind=&periodKey= — **앱에서 리포트를 지운다**(2026-09-15 · `docs/AI_REPORT_SYSTEM.md` §5.7).
+ *
+ * 🔴 리포트가 서버에만 있게 되어 삭제도 서버에서 한다. 전에는 로컬 묘비였고(§11.9)
+ *   그래서 재설치하면 서버 사본이 되살아났다.
+ *
+ * ⚠ **`ai_usage` 는 남긴다.** 그 행이 `uq_ai_usage_period` 로 기간을 평생 1회 센다. 같이 지우면
+ *   지운 기간을 다시 만들 수 있게 되어 캡이 뚫린다. 앱은 쓴 기간 목록(`GET /ai/reports` 의 `usedPeriods`)으로
+ *   이 기간이 이미 쓰였음을 안다.
+ * ⚠ 재생성 이력까지 **그 기간의 모든 리비전**을 지운다. 사용자는 최종본만 봤지만 지운다는 뜻은 그 기간 전체다.
+ * ⚠ 멱등이다. 지울 것이 없어도 200 이다.
+ * 🚫 구독을 보지 않는다. 자기 글을 지우는 것을 막을 이유가 없다.
+ */
+export async function DELETE(req: Request): Promise<Response> {
+  const id = await identify(req);
+  if (id === 'unauthenticated') return fail('unauthorized');
+  if (id === 'upstream') return fail('upstream');
+
+  const url = new URL(req.url);
+  const kind = url.searchParams.get('kind');
+  const periodKey = url.searchParams.get('periodKey');
+  if (kind === null || !KINDS.includes(kind as ReportKind)) return fail('error');
+  if (periodKey === null || periodKey.length === 0 || periodKey.length > 32) return fail('error');
+
+  try {
+    const deleted = await db
+      .delete(aiReports)
+      .where(
+        and(
+          eq(aiReports.subjectId, id.subjectId),
+          eq(aiReports.kind, kind),
+          eq(aiReports.periodKey, periodKey),
+        ),
+      )
+      .returning({ id: aiReports.id });
+    // ⚠ 본문 없는 작은 응답이다. 생성·되찾기의 성공 응답 블록(check:ai 대조군)과 모양을 섞지 않는다
+    const body = { deleted: deleted.length };
+    return ok(body);
+  } catch (error) {
+    // 🔴 본문은 없지만 규약대로 에러와 태그만 넘긴다(CLAUDE.md §5.1-5)
+    reportError(error, 'ai/report.delete');
+    return fail('error');
+  }
+}
+

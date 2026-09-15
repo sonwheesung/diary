@@ -254,54 +254,10 @@ async function replaceInto(db: SQLite.SQLiteDatabase, manifest: Manifest): Promi
   });
 
   /*
-   * AI 리포트. **교체 대상**이다 — 조각과 같이 사용자의 기록이므로 복원한 세대의 것으로 바뀐다.
-   *
-   * ⚠ v1 매니페스트에는 `reports`가 없다. `joinManifest`가 빈 배열로 채워주므로
-   *   여기서 따로 분기하지 않는다 — 없으면 아무것도 안 넣는다.
+   * ~~AI 리포트. 교체 대상이다~~ → 🔴 **복원하지 않는다**(2026-09-15 · `docs/AI_REPORT_SYSTEM.md` §5.7).
+   *   리포트는 서버에만 있고 앱은 로컬 표를 읽지 않는다. 옛 백업에 `reports` 가 들어 있어도 버린다.
+   *   `ai_reports` 는 `REPLACED` 에 남아 복원 뒤 비워진다(읽는 곳이 없어 무해하다).
    */
-  await chunked(manifest.reports, async (rows) => {
-    await db.withTransactionAsync(async () => {
-      for (const row of rows) {
-        await db.runAsync(
-          `INSERT OR REPLACE INTO ai_reports
-             (id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver,
-              metrics, insights, created_at, deleted_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-          row.id,
-          row.kind,
-          row.period_key,
-          row.lang,
-          /*
-           * ⚠ **v4 이하 백업에는 없다** → `undefined`. `null`로 내린다 — 한 줄 없는 리포트가
-           *   정상이다(`metrics`와 같은 이유, §8.2).
-           */
-          row.headline ?? null,
-          /* ⚠ v5 이하 백업에는 없다 → `undefined`. `null` 로 내린다(§8.2.1) */
-          row.headline_from ?? null,
-          row.summary,
-          row.concern,
-          row.source_count,
-          row.model,
-          row.prompt_ver,
-          /*
-           * ⚠ **v3 이하 백업에는 없다** → `undefined`. `null`로 내린다 — 지표 없는 리포트가
-           *   정상이다(캡이 평생 1번이라 소급이 애초에 불가능하다, §8.4).
-           */
-          row.metrics ?? null,
-          /* ⚠ v6 이하 백업에는 없다 → `undefined`. 발견·권유 없는 리포트가 정상이다(§8.5) */
-          row.insights ?? null,
-          row.created_at,
-          /*
-           * ⚠ **묘비를 그대로 옮긴다**(§11.9). 안 옮기면 복원한 기기에서 지운 기간이
-           *   되살아나 다시 만들 수 있는 것처럼 보이고, 서버 캡이 거기서 막는다.
-           * ⚠ v2 백업에는 이 필드가 없다 → `undefined`. `null`로 내려 살아있는 것으로 둔다 —
-           *   그 시절 삭제는 하드 삭제였으므로 묘비가 애초에 없었다.
-           */
-          row.deleted_at ?? null,
-        );
-      }
-    });
-  });
 }
 
 /**

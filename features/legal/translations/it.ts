@@ -19,7 +19,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_IT: LegalDoc = {
   title: 'Informativa sulla privacy di Jogak',
-  sourceFingerprint: '3042bb99',
+  sourceFingerprint: '65022c5b',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
@@ -70,7 +70,7 @@ export const PRIVACY_IT: LegalDoc = {
         'e. Se crei report di sintesi con IA (è necessario l’abbonamento)',
         '• Ciò che transita per il server del gestore ed è inviato al fornitore di IA: titolo, testo, emozione e data delle voci del periodo per cui hai richiesto un report',
         "• Ciò che il gestore conserva: il report generato dall’IA (la sintesi, le frasi su schemi, risultati e suggerimenti, e le frasi del diario che cita come prova), l’identificativo dell’account che ha creato il report, il periodo, il numero di volte e il numero di token utilizzati",
-        "⚠ Per essere precisi: il gestore non conserva il contenuto del diario in sé. Tuttavia ① nel momento in cui il report viene prodotto il contenuto transita nel server del gestore, quindi non possiamo dirti che «il gestore non può vederlo», e ② il report generato è conservato fino all’eliminazione del tuo account. Lo diciamo chiaramente, senza attenuarlo.",
+        "⚠ Per essere precisi: il gestore non conserva il contenuto del diario in sé. Tuttavia ① nel momento in cui il report viene prodotto il contenuto transita nel server del gestore, quindi non possiamo dirti che «il gestore non può vederlo», e ② il report generato è conservato solo sul server del gestore e distrutto 30 giorni dopo l’eliminazione del tuo account. Lo diciamo chiaramente, senza attenuarlo.",
         "⚠ Il report è scritto a partire dal tuo diario, quindi può contenerne il contenuto, e alcune frasi del diario possono essere citate testualmente come prova di uno schema.",
         '• Consenso specifico per le informazioni sensibili: un diario può contenere informazioni sensibili, come lo stato di salute o psicologico, ai sensi dell’art. 23 della Legge sulla protezione delle informazioni personali. Poiché i report di sintesi con IA trattano tale contenuto non cifrato, al primo utilizzo della funzione raccogliamo un consenso specifico al trattamento di informazioni sensibili. Questo consenso è distinto dal consenso al trasferimento all’estero di cui alla sezione 6, e puoi sceglierli separatamente.',
         'Anche senza il consenso, tutte le funzioni diverse dai report con IA restano pienamente disponibili. I report sono generati soltanto quando li crei tu e non vengono mai prodotti automaticamente.',
@@ -95,7 +95,7 @@ export const PRIVACY_IT: LegalDoc = {
         '• Pubblicazione di annunci: mostrare pubblicità a chi usa la versione gratuita e misurarne il rendimento',
         '• Backup e ripristino: se lo hai attivato, conservare la copia cifrata delle tue voci e restituirtela su tua richiesta',
         '• Verifica del diritto di abbonamento: fornire a chi ha pagato la rimozione degli annunci, il backup e i report con IA, e gestire richieste di pagamento e rimborsi',
-        "• Creazione e conservazione dei report di sintesi con IA e miglioramento della qualità: produrre un report che ripercorre il periodo che hai richiesto (sintesi, schemi, risultati e suggerimenti), conservarlo perché tu possa recuperarlo se reinstalli l’app o cambi dispositivo e, esaminandone il risultato, migliorarne la qualità",
+        "• Creazione e conservazione dei report di sintesi con IA e miglioramento della qualità: produrre un report che ripercorre il periodo che hai richiesto (sintesi, schemi, risultati e suggerimenti), conservarlo sul server del gestore per mostrarlo nell’app e, esaminandone il risultato, migliorarne la qualità",
         'Il gestore non usa i dati personali per finalità diverse da quelle sopra indicate e, in caso di cambio di finalità, acquisirà il consenso in anticipo.',
       ],
     },
@@ -108,7 +108,7 @@ export const PRIVACY_IT: LegalDoc = {
         '• Identificativo del dispositivo e registro dei giorni di utilizzo: 400 giorni dall’ultimo giorno di utilizzo. Successivamente eliminati automaticamente.',
         '• Copia di backup cifrata: conservata finché il backup resta attivo e fino a 90 giorni dopo la fine dell’abbonamento, poi distrutta automaticamente. Se disattivi il backup, ne chiedi la cancellazione o elimini il tuo account, la distruggiamo senza indugio, senza attendere quei 90 giorni. I backup a cui non si accede da 3 anni o più vengono distrutti (riguarda chi ha disinstallato l’app senza eliminare l’account).',
         '• Registro dell’avvenuta distruzione di un backup (identificatore del backup e ora della distruzione): 1 anno dalla distruzione — perché tu possa capire “perché il ripristino non funziona”; l’identificatore dell’account non viene conservato insieme.',
-        "• Report generato dall’IA (comprese le frasi del diario citate come prova): fino all’eliminazione del tuo account. A quel punto viene eliminato senza ritardo.",
+        "• Report generato dall’IA (comprese le frasi del diario citate come prova): fino a 30 giorni dopo l’eliminazione del tuo account. Lo conserviamo per quei 30 giorni per rispondere alle richieste fatte subito dopo l’eliminazione, poi lo distruggiamo.",
         '• Registri di utilizzo dei report (identificatore dell’account, periodo, numero di volte, numero di token): fino al raggiungimento della finalità o fino all’eliminazione dell’account',
         '• Registri su contratti o recesso e su pagamento e fornitura di beni: 5 anni (Legge sulla tutela dei consumatori nel commercio elettronico, art. 6)',
         'Se elimini l’account, gli identificatori dell’account (e-mail, “sub” di Google) sono resi non tracciabili senza indugio, e i registri delle transazioni sopra indicati sono conservati separatamente e in forma non tracciabile per il periodo indicato e poi distrutti.',
@@ -170,7 +170,7 @@ export const PRIVACY_IT: LegalDoc = {
         'Puoi esercitarli per iscritto o via e-mail usando il contatto della sezione 11, e il gestore agirà senza indugio.',
         'Se chiedi la rettifica di un errore nei tuoi dati, non li useremo né li comunicheremo fino al completamento della rettifica.',
         '⚠ Limiti del diritto di accesso al backup: se chiedi l’accesso al tuo backup, il gestore può consegnarti soltanto il testo cifrato, non decifrabile, e i metadati di cui alla sezione 2(c). Non possiamo fornirti le tue voci in forma leggibile da una persona — il gestore non ha la chiave. Tu stesso puoi ripristinare in qualsiasi momento nell’app con il tuo codice di recupero.',
-        "Puoi eliminare in qualsiasi momento dall’app un report con IA che hai creato. Eliminandolo nell’app sparisce dal tuo dispositivo, ma il report conservato sul server resta fino all’eliminazione del tuo account (quando viene eliminato anch’esso) e può quindi ricomparire se reinstalli l’app. Se desideri che il report conservato sul server venga eliminato, puoi richiederlo tramite “Contatti”.",
+        "Puoi eliminare in qualsiasi momento dall’app un report con IA che hai creato; eliminandolo viene cancellato senza ritardo dal server del gestore. I report non sono salvati sul tuo dispositivo, quindi per vederli servono una connessione a internet e l’accesso al tuo account. Dopo l’eliminazione del tuo account vengono distrutti trascorsi 30 giorni.",
         "⚠ I report generati dall’IA possono discostarsi dai fatti e non costituiscono una diagnosi medica o psicologica. I suggerimenti di un report sono solo indicativi e non sei tenuto/a a seguirli. L’app offre un modo per segnalare un report.",
         'Il rappresentante legale di un minore di 14 anni può esercitare i diritti sopra indicati per suo conto.',
       ],
@@ -220,7 +220,7 @@ export const PRIVACY_IT: LegalDoc = {
         '• 2026-09-02 modifica — nell’articolo 2 è stato chiarito che la data di utilizzo viene registrata non solo all’avvio dell’app ma anche quando vi ritorni (al massimo una volta ogni cinque minuti), e che con l’accesso effettuato viene registrata sull’account anziché sull’identificativo del dispositivo.',
         "• 2026-09-09 modifica — nella sezione 2 è stato indicato il controllo degli aggiornamenti che avviene all’avvio dell’app (invio del sistema operativo del dispositivo e di un token casuale) e nella sezione 6 è stata aggiunta 650 Industries, Inc. tra i destinatari.",
         "• 2026-09-14 modifica — i report di sintesi con IA ora producono, oltre alla sintesi, schemi, risultati e suggerimenti, citando frasi del diario come prova; sono stati rivisti i dati conservati (sezione 2), la finalità del trattamento (sezione 3), il periodo di conservazione (sezione 4) e l’avviso sulla natura dei report (sezione 9).",
-        "• 2026-09-15 modifica — perché tu possa recuperare i report con IA se reinstalli l’app o cambi dispositivo, i report conservati sul server sono ora mantenuti fino all’eliminazione del tuo account anziché per 90 giorni dalla creazione; sono stati rivisti l’avviso sulla conservazione (sezione 2), la finalità del trattamento (sezione 3), il periodo di conservazione (sezione 4) e le modalità di eliminazione dei report (sezione 9).",
+        "• 2026-09-15 modifica — i report con IA non sono più salvati sul tuo dispositivo e sono conservati solo sul server del gestore, quindi il periodo di conservazione passa da 90 giorni dalla creazione a 30 giorni dopo l’eliminazione del tuo account; sono stati rivisti l’avviso sulla conservazione (sezione 2), la finalità del trattamento (sezione 3), il periodo di conservazione (sezione 4) e le modalità di eliminazione dei report (sezione 9).",
       ],
     },
   ],
@@ -242,7 +242,7 @@ export const PRIVACY_IT: LegalDoc = {
  */
 export const DELETE_ACCOUNT_IT: LegalDoc = {
   title: 'Come eliminare il tuo account Jogak',
-  sourceFingerprint: '77275107',
+  sourceFingerprint: '83671566',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
@@ -277,7 +277,7 @@ export const DELETE_ACCOUNT_IT: LegalDoc = {
         '• Il collegamento tra le tue richieste e l’account di chi le ha scritte',
         '• La copia cifrata del tuo diario conservata sul server (se hai attivato il backup) — viene eliminata insieme all’account, senza attendere i 90 giorni di tolleranza.',
         '• L’identificatore del backup e i registri di backup (ora, dimensione, numero di generazione)',
-        "• I report con IA conservati sul server (comprese le frasi del diario citate come prova) e i registri di utilizzo dei report (periodo, numero di volte, numero di token)",
+        "• I registri di utilizzo dei report (periodo, numero di volte, numero di token). I report con IA conservati sul server (comprese le frasi del diario citate come prova) vengono distrutti 30 giorni dopo l’eliminazione.",
         '⚠ In caso di eliminazione dell’account distruggiamo prima il backup e solo dopo eliminiamo l’account: se sparisse prima l’account, non resterebbe nessuno con il diritto di cancellare quel backup. Se la cancellazione del backup non riesce, neppure l’eliminazione dell’account viene portata a termine; riprova poco più tardi.',
         '⚠ L’operazione non è reversibile. Anche se conservi il tuo codice di recupero, non potrai ripristinare il backup presente sul server.',
       ],
@@ -295,8 +295,8 @@ export const DELETE_ACCOUNT_IT: LegalDoc = {
     {
       h: '5. Ciò che resta sul dispositivo — l’eliminazione dell’account non lo cancella',
       body: [
-        'Le voci di Jogak (titoli, testo, foto, tag ed emozioni) e il testo dei report con IA sono salvati all’interno del tuo dispositivo.',
-        'Perciò, eliminando l’account, le voci e i report presenti sul dispositivo restano intatti. Per cancellarli anche dal dispositivo, disinstalla l’app oppure usa la funzione di ripristino nelle [Impostazioni] dell’app.',
+        'Le voci di Jogak (titoli, testo, foto, tag ed emozioni) sono salvate all’interno del tuo dispositivo. I report con IA non sono salvati sul dispositivo e sono conservati solo sul server del gestore.',
+        'Perciò, eliminando l’account, le voci presenti sul dispositivo restano intatte. Per cancellarle anche dal dispositivo, disinstalla l’app oppure usa la funzione di ripristino nelle [Impostazioni] dell’app.',
         'Al contrario, se disinstalli l’app, le voci presenti sul dispositivo non potranno essere recuperate. Puoi recuperarle solo se avevi attivato il backup e conservi il codice di recupero, e soltanto finché non hai eliminato l’account.',
         '⚠ Se non hai attivato il backup, il gestore non dispone delle voci presenti sul tuo dispositivo e quindi non può né eliminarle né restituirtele.',
       ],

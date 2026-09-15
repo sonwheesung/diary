@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_TR: LegalDoc = {
   title: 'Jogak Gizlilik Politikası',
-  sourceFingerprint: '3042bb99',
+  sourceFingerprint: '65022c5b',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
@@ -61,7 +61,7 @@ export const PRIVACY_TR: LegalDoc = {
         'e. Yapay zekâ özet raporu oluşturursan (abonelik gerekir)',
         '• İşletmecinin sunucusundan geçerek yapay zekâ sağlayıcısına iletilenler: rapor istediğin döneme ait kayıtların başlığı, metni, duygusu ve tarihi',
         "• İşletmecinin sakladıkları: yapay zekânın oluşturduğu rapor (özet; örüntü, başarı ve öneri cümleleri ile kanıt olarak alıntıladığı günlük cümleleri), raporu oluşturan hesabın kimliği, dönem, kaç kez oluşturulduğu ve kullanılan jeton sayısı",
-        "⚠ Tam olarak: işletmeci günlük içeriğinin kendisini saklamaz. Ancak ① rapor oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana “işletmeci göremez” diyemeyiz ve ② oluşturulan raporu hesabını silene kadar saklarız. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.",
+        "⚠ Tam olarak: işletmeci günlük içeriğinin kendisini saklamaz. Ancak ① rapor oluşturulduğu anda içerik işletmecinin sunucusundan geçtiği için sana “işletmeci göremez” diyemeyiz ve ② oluşturulan raporu yalnızca işletmecinin sunucusunda saklarız ve hesabını sildikten 30 gün sonra imha ederiz. Bunu bulanıklaştırmadan olduğu gibi bildiriyoruz.",
         "⚠ Rapor, senin günlüğün temel alınarak yazıldığı için içinde günlük içeriği yer alabilir ve bir örüntünün kanıtı olarak günlük cümleleri olduğu gibi alıntılanabilir.",
         '• Hassas bilgiler için ayrı rıza: bir günlük, Kişisel Bilgilerin Korunması Kanunu’nun 23. maddesi anlamında sağlık veya ruhsal durum gibi hassas bilgiler içerebilir. Yapay zekâ özet raporları bu içeriği şifrelenmemiş hâlde işlediğinden, özelliği ilk kez kullandığında hassas bilgilerin işlenmesine ilişkin ayrı bir rıza alırız. Bu rıza, 6. bölümdeki yurt dışına aktarım rızasından ayrıdır ve her birini ayrı ayrı seçebilirsin.',
         'Rıza vermesen de yapay zekâ raporları dışındaki tüm özellikleri aynen kullanabilirsin. Raporlar yalnızca sen oluşturduğunda üretilir ve asla kendiliğinden oluşturulmaz.',
@@ -86,7 +86,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• Reklam gösterimi: ücretsiz sürümü kullananlara reklam sunmak ve reklam performansını ölçmek',
         '• Yedekleme ve geri yükleme: yedeklemeyi açtıysan kayıtlarının şifrelenmiş kopyasını saklamak ve talebin üzerine sana geri vermek',
         '• Abonelik hakkının doğrulanması: ödeme yapan kullanıcılara reklamsız kullanım, yedekleme ve yapay zekâ raporları sunmak, ödeme sorularını ve iadeleri ele almak',
-        "• Yapay zekâ özet raporlarının oluşturulması, saklanması ve kalitesinin iyileştirilmesi: istediğin dönemi değerlendiren bir rapor (özet, örüntüler, başarılar ve öneriler) hazırlamak, uygulamayı yeniden yüklediğinde veya cihaz değiştirdiğinde geri alabilmen için saklamak ve sonucu inceleyerek kaliteyi geliştirmek",
+        "• Yapay zekâ özet raporlarının oluşturulması, saklanması ve kalitesinin iyileştirilmesi: istediğin dönemi değerlendiren bir rapor (özet, örüntüler, başarılar ve öneriler) hazırlamak, uygulamada gösterebilmek için işletmecinin sunucusunda saklamak ve sonucu inceleyerek kaliteyi geliştirmek",
         'İşletmeci kişisel verileri yukarıdaki amaçlar dışında kullanmaz; amaç değişirse önceden onay alır.',
       ],
     },
@@ -99,7 +99,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• Cihaz tanımlayıcısı ve kullanım günü kayıtları: son kullanım gününden itibaren 400 gün. Ardından otomatik olarak silinir.',
         '• Şifrelenmiş yedek kopyası: yedekleme açık kaldığı sürece ve abonelik bittikten sonra 90 güne kadar saklanır, ardından otomatik olarak imha edilir. Yedeklemeyi kapatırsan, silinmesini istersen veya hesabını silersen 90 günü beklemeden gecikmeksizin imha ederiz. 3 yıl veya daha uzun süre erişilmeyen yedekler imha edilir (bu, uygulamayı silip hesabını silmeyenler için geçerlidir).',
         '• Bir yedeğin imha edildiğine dair kayıt (yedek kimliği ve imha zamanı): 1 yıl — “geri yükleme neden çalışmıyor” sorusunu yanıtlayabilmen için tutulur; hesap kimliği bununla birlikte saklanmaz.',
-        "• Yapay zekânın oluşturduğu rapor (kanıt olarak alıntılanan günlük cümleleri dahil): hesabını silene kadar. Hesabını sildiğinde gecikmeksizin silinir.",
+        "• Yapay zekânın oluşturduğu rapor (kanıt olarak alıntılanan günlük cümleleri dahil): hesabını sildikten sonraki 30 güne kadar. Silme işleminin hemen ardından gelen taleplere yanıt verebilmek için bu 30 gün boyunca saklar, ardından imha ederiz.",
         '• Rapor kullanım kayıtları (hesap kimliği, dönem, kaç kez oluşturulduğu, jeton sayısı): işleme amacı gerçekleşene kadar ya da hesabını silene kadar',
         '• Sözleşme veya cayma ile ödeme ve malların sağlanmasına ilişkin kayıtlar: 5 yıl (Elektronik Ticarette Tüketicinin Korunması Kanunu md. 6)',
         'Hesabını silersen hesap kimlikleri (e-posta adresi ve Google “sub”) gecikmeksizin izi sürülemez hâle getirilir; yukarıdaki işlem kayıtları ise yazarına ulaşılamayacak biçimde, belirtilen süre boyunca ayrı saklanır ve ardından imha edilir.',
@@ -161,7 +161,7 @@ export const PRIVACY_TR: LegalDoc = {
         'Bu hakları 11. bölümdeki iletişim adresi üzerinden yazılı olarak veya e-postayla kullanabilirsin; işletmeci gecikmeksizin işlem yapar.',
         'Verilerindeki bir hatanın düzeltilmesini talep edersen, düzeltme tamamlanana kadar o veriyi kullanmaz ve aktarmayız.',
         '⚠ Yedeğe ilişkin erişim hakkının sınırı: yedeğine erişim talep edersen işletmecinin sana verebileceği tek şey, şifresi çözülemeyen metin ile 2(c) bendindeki üst verilerdir. Kayıtlarını insanın okuyabileceği biçimde veremeyiz — çünkü işletmecide anahtar yoktur. Kendin, kurtarma kodunla istediğin zaman uygulamada geri yükleyebilirsin.',
-        "Oluşturduğun yapay zekâ raporlarını uygulamada istediğin zaman silebilirsin. Uygulamada sildiğinde rapor cihazından kaybolur; ancak sunucuda saklanan rapor hesabını silene kadar kalır (o zaman o da silinir), bu yüzden uygulamayı yeniden yüklersen tekrar görünebilir. Sunucudaki raporun silinmesini istersen “İletişim” üzerinden talep edebilirsin.",
+        "Oluşturduğun yapay zekâ raporlarını uygulamada istediğin zaman silebilirsin; sildiğinde rapor işletmecinin sunucusundan gecikmeksizin silinir. Raporlar cihazında saklanmadığı için görmek üzere internete bağlı olman ve giriş yapman gerekir. Hesabını sildikten sonra raporlar 30 gün geçince imha edilir.",
         "⚠ Yapay zekânın oluşturduğu raporlar gerçeklerden farklı olabilir ve tıbbi ya da psikolojik bir teşhis değildir. Rapordaki öneriler yalnızca bilgi amaçlıdır ve uymak zorunda değilsin. Uygulama, bir raporu bildirmen için bir yol sunar.",
         '14 yaşından küçük bir çocuğun yasal temsilcisi, yukarıdaki hakları çocuk adına kullanabilir.',
       ],
@@ -211,7 +211,7 @@ export const PRIVACY_TR: LegalDoc = {
         '• 2026-09-02 değişiklik — 2. maddede, kullanım tarihinin yalnızca uygulama başlatıldığında değil, uygulamaya geri dönüldüğünde de (en fazla beş dakikada bir) kaydedildiği ve oturum açılmışsa cihaz tanımlayıcısı yerine hesaba kaydedildiği belirtilmiştir.',
         "• 2026-09-09 değişiklik — uygulama açılırken yapılan güncelleme denetimi (cihaz işletim sistemi ve rastgele belirtecin gönderilmesi) 2. bölümde açıklandı ve 6. bölümdeki alıcılara 650 Industries, Inc. eklendi.",
         "• 2026-09-14 değişiklik — yapay zekâ özet raporları artık özete ek olarak örüntüler, başarılar ve öneriler üretiyor ve kanıt olarak günlük cümlelerini alıntılıyor; saklanan bilgiler (2. bölüm), işleme amacı (3. bölüm), saklama süresi (4. bölüm) ve raporların niteliğine ilişkin açıklama (9. bölüm) güncellendi.",
-        "• 2026-09-15 değişiklik — uygulamayı yeniden yüklediğinde veya cihaz değiştirdiğinde yapay zekâ raporlarını geri alabilmen için sunucuda saklanan raporlar artık oluşturulduğu günden itibaren 90 gün yerine hesabını silene kadar saklanıyor; saklamaya ilişkin açıklama (2. bölüm), işleme amacı (3. bölüm), saklama süresi (4. bölüm) ve raporların nasıl silineceği (9. bölüm) güncellendi.",
+        "• 2026-09-15 değişiklik — yapay zekâ raporları artık cihazında saklanmıyor, yalnızca işletmecinin sunucusunda saklanıyor; bu nedenle saklama süresi oluşturulduğu günden itibaren 90 gün yerine hesabını sildikten sonraki 30 gün oldu; saklamaya ilişkin açıklama (2. bölüm), işleme amacı (3. bölüm), saklama süresi (4. bölüm) ve raporların nasıl silineceği (9. bölüm) güncellendi.",
       ],
     },
   ],
@@ -234,7 +234,7 @@ export const PRIVACY_TR: LegalDoc = {
  */
 export const DELETE_ACCOUNT_TR: LegalDoc = {
   title: 'Jogak — Hesabını nasıl silersin',
-  sourceFingerprint: '77275107',
+  sourceFingerprint: '83671566',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
@@ -269,7 +269,7 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
         '• Başvurular ile bunları yazan hesap arasındaki bağlantı',
         '• Sunucuda saklanan, kayıtlarının şifrelenmiş kopyası (yedeklemeyi açtıysan) — 90 günlük süreyi beklemeden birlikte silinir.',
         '• Yedek kimliği ve yedekleme kayıtları (zaman, boyut, kuşak numarası)',
-        "• Sunucuda saklanan yapay zekâ raporları (kanıt olarak alıntılanan günlük cümleleri dahil) ve rapor kullanım kayıtları (dönem, kaç kez oluşturulduğu, jeton sayısı)",
+        "• Rapor kullanım kayıtları (dönem, kaç kez oluşturulduğu, jeton sayısı). Sunucuda saklanan yapay zekâ raporları (kanıt olarak alıntılanan günlük cümleleri dahil) silme işleminden 30 gün sonra imha edilir.",
         '⚠ Hesap silmede önce yedeği imha eder, sonra hesabı sileriz — çünkü hesap önce yok olursa o yedeği silmeye yetkili kimse kalmaz. Yedeğin silinmesi başarısız olursa hesap silme işlemi hiç başlamaz; lütfen biraz sonra yeniden dene.',
         '⚠ Silindikten sonra geri alınamaz. Kurtarma kodun elinde olsa bile sunucudaki yedeği geri yükleyemezsin.',
       ],
@@ -287,8 +287,8 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
     {
       h: '5. Cihazında kalanlar — hesabını silmek bunları silmez',
       body: [
-        'Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) ve yapay zekâ raporlarının metni cihazının içinde saklanır.',
-        'Bu nedenle hesabını silsen de cihazındaki kayıtlar ve raporlar olduğu gibi kalır. Bunları cihazdan da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.',
+        'Jogak’taki kayıtlar (başlık, metin, fotoğraflar, etiketler, duygular) cihazının içinde saklanır. Yapay zekâ raporları cihazda saklanmaz, yalnızca işletmecinin sunucusunda tutulur.',
+        'Bu nedenle hesabını silsen de cihazındaki kayıtlar olduğu gibi kalır. Bunları cihazdan da silmek istersen uygulamayı sil ya da uygulamanın [Ayarlar] bölümünden sıfırlama yap.',
         'Bunun tersine, uygulamayı silersen cihazdaki kayıtlar geri getirilemez. Yalnızca yedeklemeyi açtıysan ve kurtarma kodunu sakladıysan, üstelik yalnızca hesabını silmeden önce bunları geri alabilirsin.',
         '⚠ Yedeklemeyi açmadıysan cihazındaki kayıtlar işletmecide bulunmadığından işletmeci bunları ne silebilir ne de sana geri verebilir.',
       ],

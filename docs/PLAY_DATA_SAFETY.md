@@ -182,13 +182,13 @@ AppsFlyer 모두 `package.json`에 없다.
 |---|---|---|---|---|---|---|
 | 1 | 구글 로그인 | `idToken`(구글 sub·이메일이 든 JWT) | common_server | 평문(서명 JWT) | 영구(탈퇴 시 이메일 즉시 파기, sub 가명화) | `features/support/auth-gate.ts:178` · `lib/common-server/index.ts:208` |
 | 2 | 문의하기 | 분류 · 본문 · `platform` · `appVersion` (+ Bearer) | common_server | 평문 | 3년(법정) | `lib/common-server/index.ts:147` |
-| 3 | 백업 — 내용 | 일기 행 · 사진 행 · 태그 · **AI 리포트 행** · `dbVersion` | 조각 서버 Storage | **암호문** (XChaCha20-Poly1305) | 최근 3세대(`KEEP_GENERATIONS`) · 구독 만료 +90일(`GRACE_MS`) · 3년 방치(`ABANDONED_MS`) | `features/backup/api/manifest-builder.ts:38-68` · `seal.ts:42` |
+| 3 | 백업 — 내용 | 일기 행 · 사진 행 · 태그 · ~~**AI 리포트 행**~~(2026-09-15 부터 안 싣는다 · `MANIFEST_FORMAT` 8) · `dbVersion` | 조각 서버 Storage | **암호문** (XChaCha20-Poly1305) | 최근 3세대(`KEEP_GENERATIONS`) · 구독 만료 +90일(`GRACE_MS`) · 3년 방치(`ABANDONED_MS`) | `features/backup/api/manifest-builder.ts:38-68` · `seal.ts:42` |
 | 4 | 백업 — 사진 원본 | 원본 파일 바이트 | 조각 서버 Storage | **암호문** | 미참조 7일(`BLOB_ORPHAN_MS`) | `features/backup/api/photos.ts:184` |
 | 5 | 백업 — **봉투 헤더** | `JGKB` 매직 · 버전 · `kid` · `seq` · `genId` · `part` · nonce · (blob은 `blobKey`) | Storage 객체 앞에 붙는다 | **평문** | 객체와 함께 | `features/backup/envelope.ts:127-171` |
 | 6 | 백업 — **요청 메타** | `vault_id` · `authKey`(hex 64) · `blobKey` 목록 · `seq` · `genId` · 파트 수 | 조각 서버 DB/로그 | **평문**(TLS만) — `authKey`는 `sha256`으로 저장 | 세대와 함께 / 툼스톤 1년 | `features/backup/api/client.ts:178,294` · `server/db/schema.ts:36,45,173` |
 | 7 | 백업 — 서버 파생 | 객체 바이트 수(서버가 직접 잰다) · 각종 시각 · **`subject_id`** | 조각 서버 DB | **평문** | `subject_id`는 파기 시 삭제 | `server/app/api/v1/backup/commit/route.ts:100` · `server/db/schema.ts:82` |
 | 8 | **AI — 입력** | `{date, emotion(코드), title, text}` 배열. 월간·연간은 하위 **요약문** | 조각 서버 메모리 → OpenAI | **평문** | 우리 서버 **무저장**(라우트에 쓰는 코드 없음) · OpenAI `store:false` + 남용감시 최대 30일 | `features/ai/api/client.ts:96-132` · `server/lib/ai.ts:138` |
-| 9 | **AI — 출력** | 모델이 쓴 **요약문** · `concern` · `source_count` · 언어 · 모델 · 프롬프트 판 · `subject_id` | 조각 서버 DB | 평문 | ~~**90일** (`REPORT_RETENTION_MS`, 리퍼가 지운다)~~ → **탈퇴 시까지**(2026-09-15). 탈퇴(`ai/purge`)와 문의 요청으로만 지운다 | `server/db/schema.ts` `aiReports` · `server/app/api/v1/ai/purge/route.ts` |
+| 9 | **AI — 출력** | 모델이 쓴 **요약문** · `concern` · `source_count` · 언어 · 모델 · 프롬프트 판 · `subject_id` | 조각 서버 DB | 평문 | ~~**90일** (`REPORT_RETENTION_MS`, 리퍼가 지운다)~~ → ~~**탈퇴 시까지**(2026-09-15)~~ → **서버에만 · 탈퇴 후 30일**(2026-09-15 같은 날 다시 · `AI_REPORT_SYSTEM` §5.7). 앱 안 삭제(`DELETE /ai/report`) · 탈퇴 30일 뒤 리퍼 · 문의로 지운다 | `server/db/schema.ts` `aiReports` · `server/app/api/v1/ai/purge/route.ts` |
 | 10 | AI — 계량 | `subject_id` · 종류 · 기간 키 · 일자 · 토큰 수 · 모델 | 조각 서버 DB | 평문 | 🔴 **영구 — 지우는 코드가 0건** | `server/db/schema.ts` `aiUsage` |
 | 11 | 🆕 AI — 실패 알림 | 실패 사유 · 종류 · 기간 키 · **`sha256(subject_id)` 앞 8자** · 잠금 여부 | **Discord 웹훅** | 평문(가명) | Discord 정책 | `server/lib/notify.ts:39-63` |
 | 12 | 구독 | **`Purchases.logIn(subject_id)`** — RC `appUserID`가 곧 우리 `subject_id`다. + 스토어 영수증·상품·기기 | RevenueCat → common_server 웹훅 | 평문 | 영구 | `features/subscription/api/purchases.ts:74` · `auth-gate.ts:205` |
@@ -402,7 +402,7 @@ deleteAccount()
 ### ~~4.4 🔴 신규 발견 — 탈퇴가 AI 테이블을 건드리지 않는다~~ → ✅ **해소(2026-08-24)**
 
 > `POST /api/v1/ai/purge`를 만들어 탈퇴 흐름에 **차단형으로** 끼웠다 — 백업 파기와 같은 자리·같은 규율이다.
-> `e2e:ai`에 파기 검사 4개를 더해 15개가 됐고, **일부러 망가뜨려 실제로 실패하는 것까지** 확인했다.
+> `e2e:ai`에 파기 검사 4개를 더해 15개가 됐고(2026-09-15 앱 안 삭제 1개를 더해 지금은 16개), **일부러 망가뜨려 실제로 실패하는 것까지** 확인했다.
 > 설계와 근거는 [`AI_REPORT_SYSTEM.md`](./AI_REPORT_SYSTEM.md) §7.1. 아래는 발견 당시의 기록으로 남긴다.
 
 Play 블로커는 아니다(배지 조건은 `or`이고 우리는 메커니즘 조건을 충족한다).

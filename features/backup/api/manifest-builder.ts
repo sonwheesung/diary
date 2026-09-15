@@ -55,17 +55,10 @@ export async function buildManifest(): Promise<Manifest> {
   const diaryTags = await db.getAllAsync<DiaryTagRow>(`SELECT diary_id, tag_id FROM diary_tags`);
 
   /*
-   * AI 리포트도 싣는다. 본문이 로컬에만 있어서 기기를 잃으면 그대로 사라지고,
-   * 같은 일기로 다시 만들어도 결과가 달라 복구가 아니다.
-   *
-   * ⚠ 요약에는 일기 내용이 녹아 있으므로 당연히 암호화되어 나간다. 서버는 못 읽는다.
+   * ~~AI 리포트도 싣는다~~ → 🔴 **싣지 않는다**(2026-09-15 · `docs/AI_REPORT_SYSTEM.md` §5.7).
+   *   리포트는 서버에만 있다. 백업은 일기·사진·태그만 싣는다. 칸은 옛 형식과 모양을 맞추려고 빈 배열로 둔다.
    */
-  const reports = await db.getAllAsync<ReportRow>(
-    `SELECT id, kind, period_key, lang, headline, headline_from, summary, concern, source_count, model, prompt_ver,
-            metrics, insights, created_at, deleted_at
-       FROM ai_reports
-      ORDER BY created_at ASC`,
-  );
+  const reports: ReportRow[] = [];
 
   return {
     dbVersion: LATEST_DB_VERSION,

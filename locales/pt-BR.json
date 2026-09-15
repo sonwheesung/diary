@@ -612,14 +612,16 @@
     "suggestionFrom": "{{pattern}} · {{dates}}",
     "barUnit": "As barras mostram quantos caracteres você escreveu naquele dia.",
     "prevSkipped": "Só comparamos semanas com pelo menos 4 dias escritos ({{label}}: {{written}}/{{total}}).",
-    "longestDays": "Dias em que você mais escreveu"
+    "longestDays": "Dias em que você mais escreveu",
+    "needServer": "Os relatórios ficam guardados no nosso servidor. Conecte-se à internet e entre na sua conta para vê-los.",
+    "deleteFailed": "Não foi possível excluir o relatório. Verifique sua conexão e tente de novo."
   },
   "aiConsent": {
     "title": "Consentimento para relatórios de IA",
     "lead": "Criar um relatório exige dois consentimentos separados. Você pode escolher cada um deles.",
     "whatSent": "• O que é enviado: título, texto, emoção e data dos registros daquele período",
     "whenSent": "• Quando: apenas ao tocar em [Criar relatório]. Nada é gerado automaticamente",
-    "notStored": "• Não armazenamos o texto do seu diário. Mas, enquanto o relatório é escrito, o texto passa sem criptografia pelo nosso servidor até o provedor de IA — não podemos dizer que não conseguimos vê-lo. O relatório gerado (incluindo frases do diário citadas como evidência) fica guardado no nosso servidor até você excluir sua conta.",
+    "notStored": "• Não armazenamos o texto do seu diário. Mas, enquanto o relatório é escrito, o texto passa sem criptografia pelo nosso servidor até o provedor de IA — não podemos dizer que não conseguimos vê-lo. O relatório gerado (incluindo frases do diário citadas como evidência) fica guardado somente no nosso servidor e é apagado 30 dias depois que você excluir sua conta.",
     "vendorRetention": "• O provedor de IA guarda por até 30 dias para monitorar abusos e depois exclui; nunca usa para treinar modelos",
     "sensitiveTitle": "(Obrigatório) Tratamento de informações sensíveis",
     "sensitiveBody": "Diários podem conter informações de saúde e estado emocional. Os relatórios tratam esse texto sem criptografia.",

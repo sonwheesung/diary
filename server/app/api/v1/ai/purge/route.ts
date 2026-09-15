@@ -1,7 +1,8 @@
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 
 import { db } from '@/db';
 import { aiCalls, aiCooldowns, aiReports, aiUsage } from '@/db/schema';
+import { REPORT_PURGE_GRACE_MS } from '@/lib/ai-policy';
 import { identify } from '@/lib/auth';
 import { reportError } from '@/lib/observability';
 import { fail, ok } from '@/lib/respond';
@@ -49,9 +50,16 @@ export async function POST(req: Request) {
      * 진행하면, 남은 행을 지울 권한이 있는 사람이 사라진다 — 부분 성공이 가장 나쁘다.
      */
     const counts = await db.transaction(async (tx) => {
+      /*
+       * 🔴 **리포트는 바로 지우지 않는다**(2026-09-15 · `docs/AI_REPORT_SYSTEM.md` §5.7).
+       *   `purge_after` 를 적고 30일 뒤 리퍼가 지운다. 그 사이 이 `subject_id` 로는 아무도 못 읽고
+       *   (조회 라우트가 `purge_after` 가 있는 행을 뺀다) 탈퇴 직후 문의로 되찾기만 가능하다.
+       * ⚠ 이미 표시된 행은 건드리지 않는다. 재시도가 유예를 늘리면 처리방침의 30일이 거짓이 된다.
+       */
       const reports = await tx
-        .delete(aiReports)
-        .where(eq(aiReports.subjectId, subjectId))
+        .update(aiReports)
+        .set({ purgeAfter: new Date(Date.now() + REPORT_PURGE_GRACE_MS) })
+        .where(and(eq(aiReports.subjectId, subjectId), isNull(aiReports.purgeAfter)))
         .returning({ id: aiReports.id });
       const usage = await tx
         .delete(aiUsage)

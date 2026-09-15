@@ -10,12 +10,11 @@ import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { useOnce } from '@/hooks/use-once';
 import { AdBanner } from '@/features/ads/components/AdBanner';
-import { listReports, type Report } from '@/features/ai/api/report-repository';
+import { listReports, refreshReports, useReportsStore, type Report } from '@/features/ai/api/report-repository';
 import {
   canCreate,
   listPeriodOptions,
   subGaps,
-  syncReportsFromServer,
   targetPeriodKey,
   weeklyGaps,
   type CreateFail,
@@ -50,6 +49,8 @@ export default function ReportScreen() {
   const colors = useColors();
   const styles = useStyles(createStyles);
   const pro = useEntitlementStore((state) => state.pro);
+  // 🔴 리포트는 서버에만 있다(§5.7). 못 받았으면 이 값이 이유를 말한다
+  const reportsStatus = useReportsStore((state) => state.status);
 
   const [kind, setKind] = useState<ReportKind>('weekly');
   const [reports, setReports] = useState<Report[]>([]);
@@ -142,33 +143,24 @@ export default function ReportScreen() {
     }, [kind, load]),
   );
 
-  /*
-   * 🔴 **서버에 있는데 로컬에 없는 리포트를 되살린다**(§5.6). 로컬이 없어지는 경로가 셋이다 —
-   *   생성 중 앱이 죽거나, 재설치하거나, 기기를 바꾸거나. 캡이 평생 1회라 다시 못 만드는데
-   *   글은 서버에 탈퇴 시까지 남아 있다(2026-09-15). **묘비는 되살리지 않는다** — 지운 것은 지운 것이다(§11.9).
-   *
-   * ⚠ **구독자에게만 부른다.** 비구독자 화면은 잠금 미리보기라 되살릴 것도 한도도 없다.
-   * ⚠ 실패는 조용하다. 못 받으면 로컬만 보여주고 한도 문구를 안 그린다.
-   */
   useFocusEffect(
     useCallback(() => {
-      if (!pro) {
-        return;
-      }
       let alive = true;
-      void syncReportsFromServer()
+      /*
+       * 🔴 **돌아올 때마다 서버에서 다시 받는다**(§5.7). 리포트는 서버에만 있고, 다른 기기에서 만들거나
+       *   지운 것이 바로 보여야 한다. 구독이 끝난 사람도 받는다. 만든 리포트는 계속 본다(§11.3).
+       */
+      void refreshReports()
         .then((result) => {
-          if (!alive || result === null) {
+          if (!alive) {
             return;
           }
-          setDailyLeft(Math.max(0, result.dailyCap - result.dailyUsed));
-          // 되살린 게 있을 때만 다시 읽는다 — 없는데 읽으면 화면이 헛되이 깜빡인다
-          if (result.restored > 0) {
-            void load(kind);
-          }
+          // ⚠ 오늘 한도는 구독자에게만 뜻이 있다. 못 받았으면 아무 말도 안 한다(짐작한 숫자는 안 보여준다)
+          setDailyLeft(result.ok && pro ? result.dailyLeft : null);
+          void load(kind);
         })
         .catch(() => {
-          /* 조용히 넘어간다 */
+          /* 조용히 넘어간다. 화면은 reportsStatus 로 이유를 말한다 */
         });
       return () => {
         alive = false;
@@ -286,7 +278,12 @@ export default function ReportScreen() {
                 ⚠ 빈 화면 설명이 **종류마다 다르다.** 월간 탭에서 "한 주가 지나면…"을 보여주면
                   무엇을 기다려야 하는지 틀리게 알려주는 것이다 — 월간은 주간 리포트를 기다린다.
               */}
-              <Text style={styles.emptyBody}>{t(`report.empty${capitalize(kind)}`)}</Text>
+              <Text style={styles.emptyBody}>
+                {/* 🔴 못 받아서 빈 것과 정말 없는 것을 가른다(§5.7). 연결·로그인이 없으면 볼 방법이 없다 */}
+                {reportsStatus === 'offline' || reportsStatus === 'signed-out'
+                  ? t('report.needServer')
+                  : t(`report.empty${capitalize(kind)}`)}
+              </Text>
             </Card>
           ) : (
             reports.map((report) => <ReportRow key={report.id} report={report} />)

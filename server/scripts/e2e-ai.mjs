@@ -238,7 +238,7 @@ await check('지울 것이 없어도 200 — 멱등이라 앱이 재시도할 �
   eq(r.json.ok, true, 'ok');
 });
 
-await check('🔴 심어둔 리포트·이용기록·잠금이 실제로 사라진다', async () => {
+await check('🔴 심어둔 이용기록·잠금은 사라지고 리포트는 30일 유예로 표시된다', async () => {
   /*
    * 🔴 이 검사가 이 라우트의 전부다. `DELETE_ACCOUNT` §3이 "탈퇴하면 파기된다"고 게시돼
    *   있는데 그렇게 하는 코드가 **없었다**(2026-08-24). 지운다고 적어놓고 안 지우는 것이
@@ -261,19 +261,22 @@ await check('🔴 심어둔 리포트·이용기록·잠금이 실제로 사라�
 
   const r = await purge();
   eq(r.status, 200, 'status');
-  assert(r.json.reports >= 1, `reports가 안 지워졌다: ${JSON.stringify(r.json)}`);
+  // 2026-09-15 §5.7: 리포트는 바로 안 지우고 purge_after 를 적는다
+  assert(r.json.reports >= 1, `reports에 유예가 안 적혔다: ${JSON.stringify(r.json)}`);
   assert(r.json.usage >= 1, `usage가 안 지워졌다: ${JSON.stringify(r.json)}`);
   assert(r.json.cooldowns >= 1, `cooldowns가 안 지워졌다: ${JSON.stringify(r.json)}`);
 
-  const reports = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT}`;
+  const unmarked = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT} and purge_after is null`;
+  const marked = await sql`select min(purge_after - now()) as left from ai_reports where subject_id = ${SUBJECT} and purge_after is not null`;
   const usage = await sql`select count(*)::int as n from ai_usage where subject_id = ${SUBJECT}`;
   const cools = await sql`select count(*)::int as n from ai_cooldowns where subject_id = ${SUBJECT}`;
-  eq(reports[0].n, 0, 'ai_reports 잔여');
+  eq(unmarked[0].n, 0, '유예 표시가 안 된 리포트 잔여');
+  assert(marked[0].left !== null, '유예 시각이 비었다');
   eq(usage[0].n, 0, 'ai_usage 잔여');
   eq(cools[0].n, 0, 'ai_cooldowns 잔여');
 });
 
-await check('묘비를 남기지 않는다 — 탈퇴는 앱 내 삭제와 다르다', async () => {
+await check('탈퇴 유예 중인 리포트는 목록에 안 나오고, 리퍼 전까지 행은 남는다', async () => {
   /*
    * 앱 안에서 리포트를 지울 때는 `(kind, period_key)`를 남긴다(캡과 로컬이 갈라지는 것을
    * 막으려고, CLAUDE.md §12 2026-08-18). **탈퇴는 그럴 이유가 없다** — 그 subject_id 로는
@@ -284,8 +287,36 @@ await check('묘비를 남기지 않는다 — 탈퇴는 앱 내 삭제와 다�
     insert into ai_reports (id, subject_id, kind, period_key, lang, summary)
     values (${id}, ${SUBJECT}, 'weekly', '2026-W08', 'ko', '')`;
   await purge();
-  const rows = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT}`;
-  eq(rows[0].n, 0, '본문만 비운 행이 남았다');
+  const rows = await sql`select count(*)::int as n from ai_reports where subject_id = ${SUBJECT} and purge_after is null`;
+  eq(rows[0].n, 0, '유예 표시가 안 된 행이 남았다');
+  const list = await fetch(`${BASE}/api/v1/ai/reports`, { headers: { authorization: `Bearer ${TOKEN}` } });
+  const body = await list.json();
+  eq(Array.isArray(body.reports) ? body.reports.length : -1, 0, '유예 중인 리포트가 목록에 나왔다');
+  // 🔴 이 검사가 심은 행은 리퍼를 기다리지 않고 직접 치운다(개발 DB 에 30일 남기지 않는다)
+  await sql`delete from ai_reports where subject_id = ${SUBJECT}`;
+});
+
+await check('🔴 앱 안 삭제는 리포트를 지우고 이용 기록(캡)은 남긴다', async () => {
+  const id = `e2e-del-${Date.now()}`;
+  await sql`
+    insert into ai_reports (id, subject_id, kind, period_key, lang, summary)
+    values (${id}, ${SUBJECT}, 'weekly', '2026-W07', 'ko', 'e2e 삭제')`;
+  await sql`
+    insert into ai_usage (id, subject_id, kind, period_key, day)
+    values (${id}, ${SUBJECT}, 'weekly', '2026-W07', '2026-02-09')`;
+  seeded.usage.push(id);
+  const res = await fetch(`${BASE}/api/v1/ai/report?kind=weekly&periodKey=2026-W07`, {
+    method: 'DELETE',
+    headers: { authorization: `Bearer ${TOKEN}` },
+  });
+  eq(res.status, 200, 'status');
+  const rep = await sql`select count(*)::int as n from ai_reports where id = ${id}`;
+  const use = await sql`select count(*)::int as n from ai_usage where id = ${id}`;
+  eq(rep[0].n, 0, '리포트가 남았다');
+  eq(use[0].n, 1, '이용 기록이 지워졌다 — 캡이 뚫린다');
+  const list = await fetch(`${BASE}/api/v1/ai/reports`, { headers: { authorization: `Bearer ${TOKEN}` } });
+  const body = await list.json();
+  assert(Array.isArray(body.usedPeriods) && body.usedPeriods.some((p) => p.periodKey === '2026-W07'), '쓴 기간 목록에 지운 기간이 없다');
 });
 } finally {
   /*

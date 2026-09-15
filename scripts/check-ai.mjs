@@ -1087,11 +1087,9 @@ console.log('');
     );
   });
 
-  check('🔴 앱은 옛 리포트를 교체한다 — 같은 기간이 목록에 두 번 뜨면 고장으로 보인다', () => {
-    const drop = SERVICE.indexOf('dropPeriodForRegenerate(kind, periodKey)');
-    const save = SERVICE.indexOf('await saveReport({');
-    assert(drop > 0, '재생성 시 옛 리포트를 치우지 않는다');
-    assert(drop < save, '치우는 것이 저장보다 뒤에 있다');
+  check('🔴 앱은 리포트를 로컬에 저장하지 않고 생성 뒤 서버 목록을 다시 받는다(§5.7)', () => {
+    assert(!SERVICE.includes('saveReport('), '서비스가 아직 로컬에 저장한다. 로컬과 서버가 다시 갈라진다');
+    assert(SERVICE.includes('await refreshReports()'), '생성 뒤 서버 목록을 다시 받지 않는다. 방금 만든 것이 안 보인다');
   });
 
   check('🔴 서버는 리비전을 쌓는다 — 사용자는 최종본만, 우리는 전부', () => {
@@ -1105,31 +1103,26 @@ console.log('');
   });
 }
 
-/* ── ⑩ 서버 동기화가 **묘비를 존중하는가** (§5.6, 2026-09-10) ─────────────
+/* ── ⑩ 리포트는 **서버에만** 있는가 (§5.7, 2026-09-15) ─────────────
  *
- * 🔴 서버에 있는 리포트를 되살릴 때 **사용자가 지운 것까지 되살리면** 삭제가 무의미해진다.
- *   `findByPeriod()` 가 묘비도 참으로 돌려주므로(§11.9) 그것만 먼저 보면 자동으로 걸러지는데,
- *   그 순서가 사라지면 **지운 리포트가 조용히 되살아난다** — 화면에는 정상으로 보인다.
- * ⚠ 순수 계층으로는 못 잡는다(로컬 DB 상태다). 소스를 읽는다.
+ * 🔴 로컬 표를 다시 읽거나 쓰기 시작하면 *"지워도 재설치하면 되살아난다"* 가 조용히 돌아온다.
+ * ⚠ 순수 계층으로는 못 잡는다. 소스를 읽는다.
  */
 {
-  const service = readFileSync(
-    new URL('../features/ai/api/report-service.ts', import.meta.url),
+  const repo = readFileSync(
+    new URL('../features/ai/api/report-repository.ts', import.meta.url),
     'utf8',
   ).replaceAll(String.fromCharCode(13), '');
-  const at = service.indexOf('export async function syncReportsFromServer');
+  const code = repo.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
 
-  check('🔴 대조군 — 서버 동기화 함수가 있다', () => {
-    assert(at >= 0, 'syncReportsFromServer 가 없다 — 이름이 바뀌었으면 이 검사도 고친다');
+  check('🔴 리포트 저장소가 SQLite 를 열지 않는다', () => {
+    assert(!/getDatabase|ai_reports/.test(code), '저장소가 로컬 DB 를 쓴다');
   });
 
-  check('🔴 동기화가 묘비를 먼저 본다 — 지운 리포트를 되살리지 않는다', () => {
-    const body = service.slice(at, at + 2400);
-    const guard = body.indexOf('findByPeriod');
-    const write = body.indexOf('saveReport');
-    assert(guard >= 0, '동기화가 findByPeriod 를 안 본다 — 지운 것까지 되살린다(§11.9)');
-    assert(write >= 0, '동기화가 saveReport 를 안 부른다 — 되살리는 코드가 없다');
-    assert(guard < write, '묘비 확인이 저장보다 뒤다 — 순서가 곧 규약이다');
+  check('🔴 앱 안 삭제가 서버를 부른다. 로컬에서만 빼면 다음 조회에 되살아난다', () => {
+    const at = code.indexOf('export async function deleteReport');
+    assert(at >= 0, 'deleteReport 가 없다. 이름이 바뀌었으면 이 검사도 고친다');
+    assert(code.slice(at, at + 600).includes('deleteServerReport('), '삭제가 서버를 안 부른다');
   });
 }
 

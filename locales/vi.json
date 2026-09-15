@@ -612,14 +612,16 @@
     "suggestionFrom": "{{pattern}} · {{dates}}",
     "barUnit": "Cột thể hiện số ký tự bạn viết trong ngày đó.",
     "prevSkipped": "Chỉ so sánh các tuần có ít nhất 4 ngày ghi chép ({{label}}: {{written}}/{{total}} ngày).",
-    "longestDays": "Những ngày viết dài nhất"
+    "longestDays": "Những ngày viết dài nhất",
+    "needServer": "Báo cáo được lưu trên máy chủ của chúng tôi. Hãy kết nối internet và đăng nhập để xem.",
+    "deleteFailed": "Không xoá được báo cáo. Hãy kiểm tra kết nối rồi thử lại."
   },
   "aiConsent": {
     "title": "Đồng ý cho báo cáo AI",
     "lead": "Tạo báo cáo cần hai sự đồng ý riêng biệt. Bạn có thể chọn từng mục.",
     "whatSent": "• Nội dung được gửi: tiêu đề, nội dung, cảm xúc và ngày của các mảnh trong kỳ đó",
     "whenSent": "• Khi nào: chỉ khi bạn nhấn [Tạo báo cáo]. Không có gì được tạo tự động",
-    "notStored": "• Chúng tôi không lưu nội dung nhật ký. Nhưng trong lúc viết báo cáo, nội dung đi qua máy chủ của chúng tôi ở dạng không mã hoá để đến nhà cung cấp AI — chúng tôi không thể nói là mình không thể xem. Báo cáo đã tạo (gồm cả các câu nhật ký được trích dẫn làm căn cứ) được lưu trên máy chủ của chúng tôi cho đến khi bạn xoá tài khoản.",
+    "notStored": "• Chúng tôi không lưu nội dung nhật ký. Nhưng trong lúc viết báo cáo, nội dung đi qua máy chủ của chúng tôi ở dạng không mã hoá để đến nhà cung cấp AI — chúng tôi không thể nói là mình không thể xem. Báo cáo đã tạo (gồm cả các câu nhật ký được trích dẫn làm căn cứ) chỉ được lưu trên máy chủ của chúng tôi và bị xoá sau 30 ngày kể từ khi bạn xoá tài khoản.",
     "vendorRetention": "• Nhà cung cấp AI giữ tối đa 30 ngày để giám sát lạm dụng rồi xoá, và không dùng để huấn luyện mô hình",
     "sensitiveTitle": "(Bắt buộc) Đồng ý xử lý thông tin nhạy cảm",
     "sensitiveBody": "Nhật ký có thể chứa thông tin sức khoẻ và trạng thái tinh thần. Báo cáo xử lý nội dung đó ở dạng không mã hoá.",

@@ -409,6 +409,12 @@ export const aiReports = pgTable(
      */
     revision: integer('revision').notNull().default(1),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    /**
+     * 🔴 **탈퇴 뒤 지울 시각**(2026-09-15 · `docs/AI_REPORT_SYSTEM.md` §5.7). `NULL` 이 정상값이다.
+     *   `ai/purge` 가 `탈퇴 + 30일` 을 적고 리퍼가 그 뒤 지운다. 값이 있는 행은 조회에서 뺀다.
+     * ⚠ 순수 추가 컬럼이다. 옛 서버 코드는 이 칸을 모르고 그대로 돈다.
+     */
+    purgeAfter: timestamp('purge_after', { withTimezone: true }),
   },
   (table) => [
     /** 리퍼가 90일 지난 것을 지운다 */

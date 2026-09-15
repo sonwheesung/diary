@@ -141,6 +141,7 @@ magic "JGKB" 4 | version 1 | suite 1 | flags 1 | kid 4 | type 1 | ctxLen 1 | con
 | 3 → 4 | 2026-08-25 | `reports.metrics` — 지표 넷 |
 | 4 → 5 | 2026-09-03 | `reports.headline` — 핵심 한 줄 |
 | 5 → 6 | 2026-09-03 | `reports.headline_from` — 한 줄이 기댄 자료 |
+| 7 → 8 | 2026-09-15 | 🔴 `reports` 를 **더 싣지 않는다**. 리포트는 서버에만 있다(`AI_REPORT_SYSTEM.md` §5.7). 칸은 빈 배열로 남기고 옛 백업의 `reports` 는 복원이 버린다. 백업은 일기·사진·태그만이다 |
 
 ⚠ **옛 백업에는 새 필드가 없고 `undefined`로 읽힌다. 그게 정상이다** — 리포트 캡이
   평생 1번이라 소급이 애초에 불가능하다. 이 표는 `features/backup/manifest.ts` 상단 주석이

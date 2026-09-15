@@ -612,14 +612,16 @@
     "suggestionFrom": "{{pattern}} · {{dates}}",
     "barUnit": "Çubuklar o gün yazdığın karakter sayısını gösterir.",
     "prevSkipped": "Yalnızca en az 4 gün yazılan haftalar karşılaştırılır ({{label}}: {{written}}/{{total}} gün).",
-    "longestDays": "En uzun yazdığın günler"
+    "longestDays": "En uzun yazdığın günler",
+    "needServer": "Raporlar sunucumuzda saklanır. Görmek için internete bağlan ve giriş yap.",
+    "deleteFailed": "Rapor silinemedi. Bağlantını kontrol edip tekrar dene."
   },
   "aiConsent": {
     "title": "Yapay zekâ raporu onayı",
     "lead": "Rapor oluşturmak için iki ayrı onay gerekiyor. Her birini ayrı ayrı seçebilirsin.",
     "whatSent": "• Gönderilenler: o dönemdeki kayıtların başlığı, metni, duygusu ve tarihi",
     "whenSent": "• Ne zaman: yalnızca [Rapor oluştur]'a dokunduğunda. Hiçbir şey kendiliğinden üretilmez",
-    "notStored": "• Günlük metnini saklamıyoruz. Ama rapor yazılırken metin şifrelenmeden sunucumuzdan geçip yapay zekâ sağlayıcısına gider — göremediğimizi söyleyemeyiz. Oluşan rapor (kanıt olarak alıntıladığı günlük cümleleri dahil) hesabını silene kadar sunucumuzda saklanır.",
+    "notStored": "• Günlük metnini saklamıyoruz. Ama rapor yazılırken metin şifrelenmeden sunucumuzdan geçip yapay zekâ sağlayıcısına gider — göremediğimizi söyleyemeyiz. Oluşan rapor (kanıt olarak alıntıladığı günlük cümleleri dahil) yalnızca sunucumuzda saklanır ve hesabını sildikten 30 gün sonra silinir.",
     "vendorRetention": "• Yapay zekâ sağlayıcısı kötüye kullanımı izlemek için en fazla 30 gün saklar, sonra siler; model eğitiminde asla kullanmaz",
     "sensitiveTitle": "(Zorunlu) Hassas bilgilerin işlenmesi onayı",
     "sensitiveBody": "Günlükler sağlık ve ruh durumu bilgisi içerebilir. Raporlar bu metni şifrelenmemiş hâlde işler.",

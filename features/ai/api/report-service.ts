@@ -2,20 +2,18 @@ import * as Crypto from 'expo-crypto';
 
 import { listDiariesBetween, listEntryTexts } from '@/features/diary/api/diary-repository';
 import {
-  dropPeriodForRegenerate,
-  findByPeriod,
+  isPeriodUsed,
   listReports,
   listUsedPeriodKeys,
-  saveReport,
+  refreshReports,
+  reportIdFor,
   type ReportMetrics,
 } from '@/features/ai/api/report-repository';
 import {
   fetchRegenerablePeriods,
-  fetchServerReports,
   fetchStoredReport,
   requestReport,
   type AiFail,
-  type AiReportResponse,
 } from '@/features/ai/api/client';
 import {
   creatableMonthKeys,
@@ -37,7 +35,6 @@ import {
   yearKeyRange,
 } from '@/features/ai/period';
 import { hasBody } from '@/features/ai/prompt';
-import { rollupMetrics } from '@/features/ai/rollup';
 import type { ReportKind } from '@/features/ai/types';
 import { SETTING_KEYS, getSetting } from '@/features/settings/api/settings-store';
 import { i18next } from '@/lib/i18n';
@@ -311,7 +308,8 @@ export async function createReport(
   const periodKey = chosenPeriodKey ?? targetPeriodKey(kind, now);
 
   // 1차 방어. 서버 캡에 도달하기 전에 앱이 먼저 막는다 — 있는 걸 또 만들 이유가 없다
-  if ((await findByPeriod(kind, periodKey)) !== null) {
+  // 🔴 *"썼는가"* 는 서버의 쓴 기간 목록이 답한다(지운 기간 포함, §5.7). 운영자가 다시 열어준 기간만 예외다(§6.6)
+  if ((await isPeriodUsed(kind, periodKey)) && !(await isReopened(kind, periodKey))) {
     return { ok: false, reason: 'exists' };
   }
   /*
@@ -375,16 +373,6 @@ export async function createReport(
   }
 
   /*
-   * 🔴 **상위 지표의 재료**(§8.4.1). 모델에게 다시 묻지 않고 여기서 모은다 —
-   *   계층 요약은 하위 요약문만 받고 그 요약문에는 숫자가 없어서, 상위에서 모델이 매기는
-   *   지표는 근거가 없다.
-   *
-   * ⚠ 지표가 **없는 하위(v8 이전)는 자연히 빠진다.** 그러면 `from`이 실제 하위 수보다 작아지고,
-   *   화면이 *"주간 2개에서"* 라고 적는다 — 몇 개짜리인지 말하는 것이 유일하게 정직한 처리다.
-   */
-  const subReportMetrics = subReports.map((report) => report.metrics);
-
-  /*
    * 멱등 키를 **호출 전에** 만든다. 서버가 진행 중인 키를 기억해 **동시 중복 요청**을 막는다.
    *
    * ⚠ **재시도까지 막지는 못한다.** 이 함수가 불릴 때마다 새 UUID가 나오고 요청 전에
@@ -405,147 +393,36 @@ export async function createReport(
     subReports: subReports.map((r) => ({ periodKey: r.periodKey, summary: r.summary })),
   });
 
-  /*
-   * 🔴 **저장은 한 곳에서 한다.** 아래 되찾기 경로와 성공 경로가 같은 행을 만들어야 한다 —
-   *   각자 저장하면 언젠가 한쪽만 새 필드를 채운다(`client.ts` 의 `metrics` 사고가 그 모양이다).
-   */
-  const persist = async (payload: AiReportResponse, id: string): Promise<void> => {
-    /*
-     * 🔴 **재생성이면 옛 것을 먼저 치운다**(§6.6). 새 `reportId`로 오기 때문에 그냥 넣으면
-     *   같은 기간이 목록에 두 번 뜬다. 처음 만드는 기간이면 지울 것이 없어 무해하다.
-     */
-    await dropPeriodForRegenerate(kind, periodKey);
-    await saveReport({
-      id,
-      kind,
-      periodKey,
-      lang,
-      /*
-       * 핵심 한 줄(§8.2). ⚠ **`null`이 정상값이다** — 낡은 서버이거나 프롬프트 v12 이전이면
-       *   안 온다. 화면은 그때 이 블록을 아예 안 그린다.
-       */
-      headline: payload.headline ?? null,
-      /* ⚠ 빈 배열이 정상값이다 — 모델이 안 줬거나 서버가 지어낸 키를 다 걸렀을 때(§8.2.1) */
-      headlineFrom: payload.headlineFrom ?? [],
-      summary: payload.summary,
-      concern: payload.concern,
-      // 무엇을 보고 쓴 요약인지. 목록의 부제로 쓰고, 문의가 왔을 때 재현의 단서가 된다
-      sourceCount: kind === 'weekly' ? entries.length : subReports.length,
-      /*
-       * 지표·주제 (§8.4).
-       *
-       * 🔴 **주간은 모델, 상위는 하위에서 합산**(§8.4.1). 상위에서 모델에게 다시 물으면
-       *   근거가 없다 — 계층 요약은 요약문만 받고 거기엔 숫자가 없다. 실측에서 실제로 어긋났다.
-       *
-       * ⚠ 주간에서 **둘 다 오지 않으면 `null`** — 낡은 서버이거나 스키마가 어긋난 것이고,
-       *   그때 리포트는 지표 없이 저장된다. 본문은 온전하므로 실패로 만들지 않는다.
-       * ⚠ 되찾기로 온 것도 같은 규칙이다 — 서버가 그때 저장한 값을 그대로 돌려주므로
-       *   주간이면 지표가 실려 오고, 상위면 여기서 다시 합산한다(원래 저장과 같은 결과다).
-       */
-      metrics:
-        kind === 'weekly'
-          ? payload.metrics === undefined && payload.topics === undefined
-            ? null
-            : { metrics: payload.metrics ?? [], topics: payload.topics ?? [] }
-          : rollupMetrics(
-              subReportMetrics.filter((m): m is NonNullable<typeof m> => m !== null),
-            ),
-      /*
-       * v15 칸(§8.5 · §3.1). ⚠ **서버가 검증해서 준 그대로** 저장한다 — 인용 대조는 원문을 가진
-       *   서버가 만들 때 했다. 낡은 서버면 안 오고 그때는 `null`(그 블록들을 안 그린다).
-       */
-      insights: payload.insights ?? null,
-      model: payload.model,
-      promptVer: payload.promptVer,
-      createdAt: Date.now(),
-    });
-  };
-
   if (!response.ok) {
     /*
-     * 🔴 **캡이 찼다면 이미 만든 것이 서버에 있을 수 있다**(§5.3, 2026-09-10).
-     *
-     * 생성은 동기 왕복이고 저장은 응답을 받은 뒤다. 그 사이에 앱이 죽으면 — 사용자가 끄거나
-     * OS 가 죽이거나 — **캡은 나갔는데 로컬에 아무것도 없다.** 그러면 다음에 눌렀을 때
-     * 서버가 `cap-exceeded` 로 막는데, 그 순간 사용자가 보는 것은 *"이미 만들었어요"* 이고
-     * **정작 만든 것은 어디에도 없다.** 캡이 평생 1회라 그 기간을 영영 잃던 자리다.
-     *
-     * 🟢 되찾기는 **모델을 안 부른다** — 캡도 잠금도 안 건드리고 원가가 0이다.
-     * ⚠ 못 찾으면 **원래 하려던 말을 그대로 한다.** 여기서 새 실패를 만들지 않는다.
+     * 🔴 **캡이 찼다면 이미 만든 것이 서버에 있을 수 있다**(§5.3). 앱이 응답을 받기 전에 죽었거나
+     *   목록이 낡았다. 서버에 있으면 목록을 다시 받아 그것을 보여준다. 모델은 안 부른다.
+     * ⚠ 못 찾으면 원래 하려던 말을 그대로 한다. 여기서 새 실패를 만들지 않는다.
      */
     if (response.reason === 'cap-exceeded') {
       const stored = await fetchStoredReport(kind, periodKey);
       if (stored !== null) {
-        await persist(stored, Crypto.randomUUID());
-        return { ok: true, reportId, recovered: true };
+        await refreshReports();
+        return { ok: true, reportId: reportIdFor(kind, periodKey), recovered: true };
       }
     }
-    // `retryAt`은 `cooling-down`에만 실려 온다. 그대로 흘려보낸다 — 화면이 시각을 말한다
+    // `retryAt`은 `cooling-down`에만 실려 온다. 그대로 흘려보낸다. 화면이 시각을 말한다
     return { ok: false, reason: response.reason, ...(response.retryAt !== undefined && { retryAt: response.retryAt }) };
   }
 
-  await persist(response, reportId);
-  return { ok: true, reportId };
+  /*
+   * 🔴 **로컬에 저장하지 않는다**(2026-09-15 · §5.7). 서버가 응답 전에 이미 저장했다.
+   *   목록을 다시 받아 방금 만든 것이 보이게 한다. 상위 지표도 목록이 받을 때 합산한다.
+   */
+  await refreshReports();
+  return { ok: true, reportId: reportIdFor(kind, periodKey) };
 }
 
 /**
- * **서버에 있는데 로컬에 없는 리포트를 되살린다** (`docs/AI_REPORT_SYSTEM.md` §5.6).
- *
- * 🔴 **묘비를 보고 지운 것은 되살리지 않는다.** `findByPeriod()` 는 살아 있는 행뿐 아니라
- *   **묘비도 참으로** 돌려주므로(§11.9), 사용자가 지운 기간은 여기서 자동으로 걸러진다.
- *   그 판단을 서버로 올리지 않는 이유는 삭제 의도까지 서버가 알아야 하기 때문이다.
- *
- * ⚠ **덮어쓰지 않는다.** 로컬에 있으면 그대로 둔다 — 로컬이 리포트의 진실이고,
- *   서버 쪽이 더 새로울 수 있는 경우(재생성)는 `dropPeriodForRegenerate` 가 따로 다룬다.
- *
- * ⚠ 실패는 조용하다. 화면이 열릴 때마다 도는 일이라 못 받으면 **로컬만 보여준다.**
- *
- * @returns 되살린 개수와 오늘 한도. 서버에 못 닿으면 `null`
+ * 운영자가 다시 열어준 기간인가(§6.6). 못 물어보면 아니라고 본다. 평소의 판정을 서버 상태에 묶지 않는다.
  */
-export async function syncReportsFromServer(): Promise<{
-  restored: number;
-  dailyUsed: number;
-  dailyCap: number;
-} | null> {
-  const list = await fetchServerReports();
-  if (list === null) {
-    return null;
-  }
-  let restored = 0;
-  for (const row of list.reports) {
-    if ((await findByPeriod(row.kind, row.periodKey)) !== null) {
-      // 이미 있거나(살아 있음) 사용자가 지웠다(묘비) — 어느 쪽이든 건드리지 않는다
-      continue;
-    }
-    const createdAt = Date.parse(row.createdAt);
-    await saveReport({
-      id: Crypto.randomUUID(),
-      kind: row.kind,
-      periodKey: row.periodKey,
-      lang: row.lang,
-      headline: row.headline ?? null,
-      headlineFrom: row.headlineFrom ?? [],
-      summary: row.summary,
-      concern: row.concern,
-      sourceCount: row.sourceCount,
-      /*
-       * ⚠ **상위 리포트의 지표는 되살리지 않는다.** 월간·연간의 지표는 앱이 하위에서
-       *   합산하는 값이라(§8.4.1) 서버에 없다. 주간만 서버가 갖고 있다.
-       */
-      metrics:
-        row.metrics === undefined && row.topics === undefined
-          ? null
-          : { metrics: row.metrics ?? [], topics: row.topics ?? [] },
-      // 되살릴 때도 v15 칸을 함께 — 빼면 재설치한 기기에서 발견·권유가 영영 없다
-      insights: row.insights ?? null,
-      model: row.model,
-      promptVer: row.promptVer,
-      // 서버가 만든 시각을 쓴다. 지금 시각을 쓰면 목록 순서가 어긋난다
-      createdAt: Number.isNaN(createdAt) ? Date.now() : createdAt,
-    });
-    restored += 1;
-  }
-  return { restored, dailyUsed: list.dailyUsed, dailyCap: list.dailyCap };
+async function isReopened(kind: ReportKind, periodKey: string): Promise<boolean> {
+  return (await fetchRegenerablePeriods()).some((p) => p.kind === kind && p.periodKey === periodKey);
 }
 
 /**
@@ -560,7 +437,8 @@ export async function canCreate(
   now: Date = new Date(),
 ): Promise<{ ok: true } | { ok: false; reason: CreateFail }> {
   const periodKey = chosenPeriodKey ?? targetPeriodKey(kind, now);
-  if ((await findByPeriod(kind, periodKey)) !== null) {
+  // 🔴 *"썼는가"* 는 서버의 쓴 기간 목록이 답한다(지운 기간 포함, §5.7). 운영자가 다시 열어준 기간만 예외다(§6.6)
+  if ((await isPeriodUsed(kind, periodKey)) && !(await isReopened(kind, periodKey))) {
     return { ok: false, reason: 'exists' };
   }
   if (!inHorizon(kind, periodKey, now)) {

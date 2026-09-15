@@ -321,6 +321,8 @@ export interface ServerReport extends AiReportResponse {
 
 export interface ServerReportList {
   reports: ServerReport[];
+  /** 이미 쓴 기간(서버 이용 기록). **지운 기간도 들어 있다**(§5.7) */
+  usedPeriods: { kind: ReportKind; periodKey: string }[];
   dailyUsed: number;
   dailyCap: number;
 }
@@ -336,13 +338,20 @@ export interface ServerReportList {
  * ⚠ 실패는 `null` 로 삼킨다 — 사용자가 시킨 일이 아니라 화면이 열릴 때 조용히 도는 일이다.
  *   못 받으면 **로컬만 보여준다**. 그건 지금까지의 동작이고 고장이 아니다.
  */
-export async function fetchServerReports(): Promise<ServerReportList | null> {
+export async function fetchServerReports(): Promise<
+  { ok: true; list: ServerReportList } | { ok: false; reason: 'offline' | 'signed-out' }
+> {
+  /*
+   * 🔴 **실패의 이유를 가른다**(2026-09-15 · §5.7). 리포트가 서버에만 있게 되어 못 받으면 화면이 비는데,
+   *   *"로그인이 필요해요"* 와 *"연결이 없어요"* 는 할 일이 다르다.
+   * ⚠ 서버 주소가 없는 빌드는 연결 없음으로 본다. 사용자가 할 수 있는 일이 없는 것은 같다.
+   */
   if (BACKUP_SERVER_URL.length === 0) {
-    return null;
+    return { ok: false, reason: 'offline' };
   }
   const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
   if (token === null) {
-    return null;
+    return { ok: false, reason: 'signed-out' };
   }
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
@@ -354,27 +363,27 @@ export async function fetchServerReports(): Promise<ServerReportList | null> {
       signal: controller.signal,
     });
   } catch {
-    return null;
+    return { ok: false, reason: 'offline' };
   } finally {
     clearTimeout(timer);
   }
   if (!res.ok) {
-    return null;
+    return { ok: false, reason: res.status === 401 ? 'signed-out' : 'offline' };
   }
   let json: Record<string, unknown>;
   try {
     json = (await res.json()) as Record<string, unknown>;
   } catch {
-    return null;
+    return { ok: false, reason: 'offline' };
   }
   if (!Array.isArray(json.reports)) {
-    return null;
+    return { ok: false, reason: 'offline' };
   }
   const reports: ServerReport[] = [];
   for (const raw of json.reports as Record<string, unknown>[]) {
     const parsed = parseReportPayload(raw);
     if (!parsed.ok) {
-      // 본문이 빈 행은 되살릴 것이 없다. 그 하나만 건너뛴다
+      // 본문이 빈 행은 보여줄 것이 없다. 그 하나만 건너뛴다
       continue;
     }
     const { kind, periodKey, lang, createdAt } = raw;
@@ -395,11 +404,55 @@ export async function fetchServerReports(): Promise<ServerReportList | null> {
       createdAt,
     });
   }
+  const usedPeriods: { kind: ReportKind; periodKey: string }[] = [];
+  if (Array.isArray(json.usedPeriods)) {
+    for (const p of json.usedPeriods as Record<string, unknown>[]) {
+      if (
+        (p.kind === 'weekly' || p.kind === 'monthly' || p.kind === 'yearly') &&
+        typeof p.periodKey === 'string'
+      ) {
+        usedPeriods.push({ kind: p.kind, periodKey: p.periodKey });
+      }
+    }
+  }
   return {
-    reports,
-    dailyUsed: typeof json.dailyUsed === 'number' ? json.dailyUsed : 0,
-    dailyCap: typeof json.dailyCap === 'number' ? json.dailyCap : 0,
+    ok: true,
+    list: {
+      reports,
+      usedPeriods,
+      dailyUsed: typeof json.dailyUsed === 'number' ? json.dailyUsed : 0,
+      dailyCap: typeof json.dailyCap === 'number' ? json.dailyCap : 0,
+    },
   };
+}
+
+/**
+ * **앱에서 리포트를 지운다.** 서버 행을 지운다(2026-09-15 · §5.7). 캡(이용 기록)은 서버가 남긴다.
+ * @returns 지웠으면 true
+ */
+export async function deleteServerReport(kind: ReportKind, periodKey: string): Promise<boolean> {
+  if (BACKUP_SERVER_URL.length === 0) {
+    return false;
+  }
+  const token = (await readSessionToken()) ?? DEVICE_CHECK_TOKEN;
+  if (token === null) {
+    return false;
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const query = `kind=${encodeURIComponent(kind)}&periodKey=${encodeURIComponent(periodKey)}`;
+    const res = await fetch(`${BACKUP_SERVER_URL}/api/v1/ai/report?${query}`, {
+      method: 'DELETE',
+      headers: { authorization: `Bearer ${token}` },
+      signal: controller.signal,
+    });
+    return res.ok;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /**

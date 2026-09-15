@@ -612,14 +612,16 @@
     "suggestionFrom": "{{pattern}} · {{dates}}",
     "barUnit": "Batang menunjukkan jumlah karakter yang kamu tulis hari itu.",
     "prevSkipped": "Hanya minggu dengan minimal 4 hari tercatat yang dibandingkan ({{label}}: {{written}}/{{total}} hari).",
-    "longestDays": "Hari dengan tulisan terpanjang"
+    "longestDays": "Hari dengan tulisan terpanjang",
+    "needServer": "Laporan disimpan di server kami. Sambungkan ke internet dan masuk untuk melihatnya.",
+    "deleteFailed": "Laporan tidak dapat dihapus. Periksa koneksi lalu coba lagi."
   },
   "aiConsent": {
     "title": "Persetujuan laporan AI",
     "lead": "Membuat laporan memerlukan dua persetujuan terpisah. Kamu bisa memilih masing-masing.",
     "whatSent": "• Yang dikirim: judul, isi, emosi, dan tanggal catatan pada periode itu",
     "whenSent": "• Kapan: hanya saat kamu menekan [Buat laporan]. Tidak ada yang dibuat otomatis",
-    "notStored": "• Kami tidak menyimpan teks buku harianmu. Namun saat laporan ditulis, teksnya melewati server kami tanpa enkripsi menuju penyedia AI — kami tidak bisa mengklaim tidak dapat melihatnya. Laporan yang jadi (termasuk kalimat buku harian yang dikutip sebagai bukti) disimpan di server kami sampai kamu menghapus akunmu.",
+    "notStored": "• Kami tidak menyimpan teks buku harianmu. Namun saat laporan ditulis, teksnya melewati server kami tanpa enkripsi menuju penyedia AI — kami tidak bisa mengklaim tidak dapat melihatnya. Laporan yang jadi (termasuk kalimat buku harian yang dikutip sebagai bukti) hanya disimpan di server kami dan dihapus 30 hari setelah kamu menghapus akunmu.",
     "vendorRetention": "• Penyedia AI menyimpannya maksimal 30 hari untuk pemantauan penyalahgunaan lalu menghapusnya, dan tidak pernah memakainya untuk melatih model",
     "sensitiveTitle": "(Wajib) Pemrosesan informasi sensitif",
     "sensitiveBody": "Catatan harian bisa memuat kondisi kesehatan dan psikologis. Laporan memproses teks itu tanpa enkripsi.",

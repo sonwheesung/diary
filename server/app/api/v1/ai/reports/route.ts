@@ -17,7 +17,7 @@
  *   말해야 하는데(§6.3), 그 값의 진실은 서버다. 같은 화면이 같은 순간에 쓰는 두 값이라
  *   왕복을 둘로 나누지 않는다.
  */
-import { and, eq, gte, sql } from 'drizzle-orm';
+import { and, eq, gte, isNull, sql } from 'drizzle-orm';
 
 import { db } from '@/db';
 import { aiReports, aiUsage } from '@/db/schema';
@@ -68,7 +68,8 @@ export async function GET(req: Request): Promise<Response> {
         createdAt: aiReports.createdAt,
       })
       .from(aiReports)
-      .where(eq(aiReports.subjectId, id.subjectId))
+      // 탈퇴 유예 중인 행은 없는 것으로 본다(§5.7)
+      .where(and(eq(aiReports.subjectId, id.subjectId), isNull(aiReports.purgeAfter)))
       .orderBy(
         aiReports.kind,
         aiReports.periodKey,
@@ -139,8 +140,20 @@ export async function GET(req: Request): Promise<Response> {
       };
     });
 
+    /*
+     * 🔴 **쓴 기간 목록**(2026-09-15 · §5.7). 리포트가 서버에만 있게 되어 *"이 기간을 이미 썼나"* 를
+     *   앱이 로컬 묘비로 알 수 없다. `ai_usage` 가 `uq_ai_usage_period` 로 기간을 평생 1회 세므로
+     *   **지운 기간도 여기 들어 있다.** 목록(`reports`)과 다르게 읽는 이유가 이것이다.
+     * ⚠ 본문이 없는 키만 준다. 원가 0 이다.
+     */
+    const usedPeriods = await db
+      .select({ kind: aiUsage.kind, periodKey: aiUsage.periodKey })
+      .from(aiUsage)
+      .where(eq(aiUsage.subjectId, id.subjectId));
+
     return ok({
       reports,
+      usedPeriods,
       /* 오늘 몇 개 썼고 몇 개까지인가. 화면이 **누르기 전에** 말한다 */
       dailyUsed: dayRow?.n ?? 0,
       dailyCap: DAILY_CALL_CAP,

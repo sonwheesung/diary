@@ -140,7 +140,11 @@ export default function ReportDetailScreen() {
         text: t('common.delete'),
         style: 'destructive',
         onPress: () => {
-          void deleteReport(id).then(() => router.back());
+          // 🔴 서버에서 지운다(§5.7). 연결이 없으면 못 지웠다고 말한다. 지운 척 목록에서만 빼지 않는다
+          void deleteReport(id).then((done) => {
+            if (done) router.back();
+            else Alert.alert(t('report.delete'), t('report.deleteFailed'));
+          });
         },
       },
     ]);
