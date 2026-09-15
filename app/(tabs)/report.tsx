@@ -301,11 +301,17 @@ export default function ReportScreen() {
               🔴 **기간을 고를 수 있다**(§6.4). 기본값은 지난주·지난달·작년이라
                 안 건드리면 예전과 똑같이 1탭이다 — 고르는 것은 선택이지 절차가 아니다.
             */}
+            {/*
+              🔴 **구독이 없으면 누를 수 없다**(2026-09-15 · 시트 #4). 후보를 구독자에게만 읽으므로
+                열면 빈 시트가 올라와 고장처럼 보였다. 무엇을 해야 하는지는 아래 [구독 보기] 가 말한다.
+            */}
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t('report.periodSheet')}
+              accessibilityState={{ disabled: !pro }}
+              disabled={!pro}
               onPress={() => setSheetOpen(true)}
-              style={styles.periodPicker}
+              style={[styles.periodPicker, !pro && styles.periodPickerDisabled]}
             >
               <Text style={styles.periodValue}>{periodLabel(kind, periodKey)}</Text>
               <ChevronDown size={18} color={colors.textMuted} />
@@ -598,6 +604,10 @@ const createStyles = (colors: Palette) =>
       borderWidth: 1,
       borderColor: colors.border,
       backgroundColor: colors.surface,
+    },
+    // 누를 수 없음이 보여야 한다. 색을 새로 만들지 않고 흐리게만 한다(버튼의 disabled 와 같은 결)
+    periodPickerDisabled: {
+      opacity: 0.5,
     },
     periodValue: {
       ...typography.body,
