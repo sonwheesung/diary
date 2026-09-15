@@ -116,7 +116,7 @@
 | ESLint · Prettier | ✅ | ESLint 9 flat config + eslint-config-expo@10. `any` 금지를 린트로 강제 |
 | EAS 빌드 설정 | ✅ | 2026-08-13 정정 — `eas.json`(internal·production). v7 AAB를 `eas submit`으로 올렸다([`MONETIZATION_SYSTEM.md`](./MONETIZATION_SYSTEM.md) §6.1) |
 
-### ⏳ `25 (1.1.1)` 준비 — 수정사항 시트 #3·#4 (리포트 서버 전용 · 탈퇴 후 30일 · 기간 선택 비활성화) (2026-09-15)
+### ⏳ `25 (1.1.1)` **검토 제출됨**(2026-09-15 · 세션이 사용자 지시로 제출 · 업로드는 사용자) — 수정사항 시트 #3·#4 (리포트 서버 전용 · 탈퇴 후 30일 · 기간 선택 비활성화) (2026-09-15)
 
 | | |
 |---|---|
