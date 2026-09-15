@@ -10,7 +10,7 @@ import type { LegalDoc } from '@/features/legal/legal-text';
  */
 export const PRIVACY_VI: LegalDoc = {
   title: 'Chính sách quyền riêng tư của Jogak',
-  sourceFingerprint: '1ca1cd4b',
+  sourceFingerprint: '3042bb99',
   effective: '2026-09-15',
   updated: '2026-09-15',
   intro:
