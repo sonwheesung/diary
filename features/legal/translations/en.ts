@@ -186,7 +186,7 @@ export const PRIVACY_EN: LegalDoc = {
       h: '11. Privacy officer, and the department that receives and handles access requests',
       body: [
         'The operator takes overall responsibility for work relating to the processing of personal data and designates a privacy officer as below to handle users’ complaints and remedies relating to personal data processing.',
-        '• Privacy officer: Son Hwi-seong (position: representative)',
+        '• Privacy officer: SON WHEESUNG (position: representative)',
         '• Contact: support@vivace-games.com',
         '• Department receiving and handling access requests: as above',
         'You may raise with the privacy officer any question, complaint or request for remedy relating to privacy that arises while using the service. The operator will answer and act without delay.',
@@ -341,7 +341,7 @@ export const DELETE_ACCOUNT_EN: LegalDoc = {
  */
 export const TERMS_EN: LegalDoc = {
   title: 'Jogak Terms of Service',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -360,12 +360,12 @@ export const TERMS_EN: LegalDoc = {
       body: [
         'Company name: Hwiseong Games (brand: Vivace Games Studio)',
         // ⚠ `PRIVACY_EN` §11이 이미 쓰는 표기다. 두 문서가 같은 사람을 다르게 부르면 안 된다
-        'Representative: Son Hwi-seong',
-        'Business address: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Representative: SON WHEESUNG',
+        'Business address: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Telephone: +82 10-9926-0925',
         'Email address: support@vivace-games.com',
         'Business registration number: 749-25-02260',
-        'Mail-Order Business Registration No. 2026-Ulsan Jung-gu-0170 (authority that received the registration: Jung-gu, Ulsan Metropolitan City)',
+        'Mail-Order Business Registration No. 2026-Gyeongbuk Gyeongju-0475 (authority that received the registration: Gyeongju City, Gyeongsangbuk-do)',
       ],
     },
     {

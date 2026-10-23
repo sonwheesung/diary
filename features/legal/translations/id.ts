@@ -180,7 +180,7 @@ export const PRIVACY_ID: LegalDoc = {
       h: '11. Penanggung jawab perlindungan data dan unit penerima permintaan akses',
       body: [
         'Operator memikul tanggung jawab menyeluruh atas pemrosesan data pribadi dan menunjuk penanggung jawab berikut untuk menangani keluhan dan pemulihan hak pengguna.',
-        '• Penanggung jawab perlindungan data: Son Hwi-seong (jabatan: perwakilan)',
+        '• Penanggung jawab perlindungan data: SON WHEESUNG (jabatan: perwakilan)',
         '• Kontak: support@vivace-games.com',
         '• Unit penerima dan pengelola permintaan akses: sama seperti di atas',
         'Kamu dapat menyampaikan kepada penanggung jawab setiap pertanyaan, keluhan, atau permintaan pemulihan terkait perlindungan data yang muncul saat menggunakan layanan. Operator akan menjawab dan menindaklanjuti tanpa penundaan.',
@@ -337,7 +337,7 @@ export const DELETE_ACCOUNT_ID: LegalDoc = {
  */
 export const TERMS_ID: LegalDoc = {
   title: 'Ketentuan Penggunaan Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -356,12 +356,12 @@ export const TERMS_ID: LegalDoc = {
       body: [
         'Nama badan usaha: Hwiseong Games (nama merek Vivace Games Studio)',
         // ⚠ Ejaan yang sudah dipakai `PRIVACY_ID` bagian 11. Dua dokumen tidak boleh menyebut orang yang sama dengan cara berbeda
-        'Perwakilan: Son Hwi-seong',
-        'Alamat tempat usaha: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Perwakilan: SON WHEESUNG',
+        'Alamat tempat usaha: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Nomor telepon: +82 10-9926-0925',
         'Alamat surel: support@vivace-games.com',
         'Nomor pendaftaran usaha: 749-25-02260',
-        'Nomor pendaftaran usaha penjualan jarak jauh: 2026-Ulsan Jung-gu-0170 (instansi yang menerima pendaftaran: Jung-gu, Kota Metropolitan Ulsan)',
+        'Nomor pendaftaran usaha penjualan jarak jauh: 2026-Gyeongbuk Gyeongju-0475 (instansi yang menerima pendaftaran: Pemerintah Kota Gyeongju, Gyeongsangbuk-do)',
       ],
     },
     {

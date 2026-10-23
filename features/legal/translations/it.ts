@@ -189,7 +189,7 @@ export const PRIVACY_IT: LegalDoc = {
       h: '11. Responsabile della privacy e ufficio che riceve e gestisce le richieste di accesso',
       body: [
         'Il gestore assume la responsabilità complessiva del trattamento dei dati personali e designa il seguente responsabile della privacy per gestire reclami e richieste di tutela.',
-        '• Responsabile della privacy: Son Hwi-seong (ruolo: rappresentante)',
+        '• Responsabile della privacy: SON WHEESUNG (ruolo: rappresentante)',
         '• Contatto: support@vivace-games.com',
         '• Ufficio che riceve e gestisce le richieste di accesso: il medesimo',
         'Puoi rivolgere al responsabile della privacy qualsiasi domanda, reclamo o richiesta di tutela in materia di privacy che sorga usando il servizio. Il gestore risponderà e agirà senza indugio.',
@@ -347,7 +347,7 @@ export const DELETE_ACCOUNT_IT: LegalDoc = {
  */
 export const TERMS_IT: LegalDoc = {
   title: 'Condizioni d’uso di Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -366,12 +366,12 @@ export const TERMS_IT: LegalDoc = {
       body: [
         'Denominazione: Hwiseong Games (marchio: Vivace Games Studio)',
         // ⚠ È la grafia che `PRIVACY_IT` §11 già usa. Due documenti non possono chiamare in modo diverso la stessa persona
-        'Rappresentante: Son Hwi-seong',
-        'Sede operativa: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Rappresentante: SON WHEESUNG',
+        'Sede operativa: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Telefono: +82 10-9926-0925',
         'Indirizzo e-mail: support@vivace-games.com',
         'Numero di registrazione dell’impresa: 749-25-02260',
-        'Numero di registrazione come attività di vendita a distanza: 2026-Ulsan Jung-gu-0170 (autorità che ha ricevuto la registrazione: Jung-gu, Città metropolitana di Ulsan)',
+        'Numero di registrazione come attività di vendita a distanza: 2026-Gyeongbuk Gyeongju-0475 (autorità che ha ricevuto la registrazione: Comune di Gyeongju, Gyeongsangbuk-do)',
       ],
     },
     {

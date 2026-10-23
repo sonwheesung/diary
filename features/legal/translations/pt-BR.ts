@@ -186,7 +186,7 @@ export const PRIVACY_PT_BR: LegalDoc = {
       h: '11. Encarregado de privacidade e departamento que recebe e trata pedidos de acesso',
       body: [
         'A operadora assume a responsabilidade geral pelo tratamento de dados pessoais e designa o encarregado de privacidade abaixo para tratar reclamações e pedidos de reparação relacionados a esse tratamento.',
-        '• Encarregado de privacidade: Son Hwi-seong (cargo: representante)',
+        '• Encarregado de privacidade: SON WHEESUNG (cargo: representante)',
         '• Contato: support@vivace-games.com',
         '• Departamento que recebe e trata pedidos de acesso: o mesmo',
         'Você pode dirigir ao encarregado de privacidade qualquer dúvida, reclamação ou pedido de reparação sobre privacidade que surja ao usar o serviço. A operadora responderá e agirá sem demora.',
@@ -343,7 +343,7 @@ export const DELETE_ACCOUNT_PT_BR: LegalDoc = {
  */
 export const TERMS_PT_BR: LegalDoc = {
   title: 'Termos de Uso do Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -362,12 +362,12 @@ export const TERMS_PT_BR: LegalDoc = {
       body: [
         'Razão social: Hwiseong Games (marca: Vivace Games Studio)',
         // ⚠ É a grafia que a `PRIVACY_PT_BR` §11 já usa. Dois documentos não podem chamar a mesma pessoa de formas diferentes
-        'Representante: Son Hwi-seong',
-        'Endereço comercial: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Representante: SON WHEESUNG',
+        'Endereço comercial: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Telefone: +82 10-9926-0925',
         'E-mail: support@vivace-games.com',
         'Número de registro empresarial: 749-25-02260',
-        'Número de registro de comércio a distância: 2026-Ulsan Jung-gu-0170 (órgão que recebeu o registro: Jung-gu, Cidade Metropolitana de Ulsan)',
+        'Número de registro de comércio a distância: 2026-Gyeongbuk Gyeongju-0475 (órgão que recebeu o registro: Prefeitura de Gyeongju, Gyeongsangbuk-do)',
       ],
     },
     {

@@ -190,7 +190,7 @@ export const PRIVACY_FR: LegalDoc = {
       h: '11. Responsable de la protection des données et service chargé des demandes d’accès',
       body: [
         'L’exploitant assume la responsabilité générale du traitement des données personnelles et désigne le responsable ci-dessous pour traiter les réclamations et les demandes de réparation des utilisateurs.',
-        '• Responsable de la protection des données : Son Hwi-seong (fonction : représentant)',
+        '• Responsable de la protection des données : SON WHEESUNG (fonction : représentant)',
         '• Contact : support@vivace-games.com',
         '• Service chargé de recevoir et de traiter les demandes d’accès : le même',
         'Vous pouvez adresser au responsable toute question, réclamation ou demande de réparation en matière de protection des données survenant lors de l’utilisation du service. L’exploitant répondra et agira sans délai.',
@@ -348,7 +348,7 @@ export const DELETE_ACCOUNT_FR: LegalDoc = {
  */
 export const TERMS_FR: LegalDoc = {
   title: 'Conditions d’utilisation de Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -367,12 +367,12 @@ export const TERMS_FR: LegalDoc = {
       body: [
         'Dénomination sociale : Hwiseong Games (marque : Vivace Games Studio)',
         // ⚠ C’est la graphie qu’emploie déjà `PRIVACY_FR` §11. Deux documents ne peuvent pas nommer différemment la même personne
-        'Représentant : Son Hwi-seong',
-        'Adresse de l’établissement : 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Représentant : SON WHEESUNG',
+        'Adresse de l’établissement : 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Téléphone : +82 10-9926-0925',
         'Adresse e-mail : support@vivace-games.com',
         'Numéro d’immatriculation de l’entreprise : 749-25-02260',
-        'Numéro de déclaration d’activité de vente à distance : 2026-Ulsan Jung-gu-0170 (autorité ayant reçu la déclaration : Jung-gu, ville métropolitaine d’Ulsan)',
+        'Numéro de déclaration d’activité de vente à distance : 2026-Gyeongbuk Gyeongju-0475 (autorité ayant reçu la déclaration : mairie de Gyeongju, Gyeongsangbuk-do)',
       ],
     },
     {

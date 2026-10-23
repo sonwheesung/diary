@@ -334,7 +334,7 @@ export const DELETE_ACCOUNT_TH: LegalDoc = {
  */
 export const TERMS_TH: LegalDoc = {
   title: 'ข้อกำหนดการใช้บริการ Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -353,12 +353,12 @@ export const TERMS_TH: LegalDoc = {
       body: [
         'ชื่อกิจการ: Hwiseong Games (ชื่อแบรนด์ Vivace Games Studio)',
         // ⚠ `PRIVACY_TH` ข้อ 11 เขียนชื่อเป็นภาษาไทย จึงคงชื่อไทยไว้และวงเล็บอักษรโรมันตามค่าที่กำหนด
-        'ผู้แทน: ซน ฮวีซอง (Son Hwi-seong)',
-        'ที่อยู่สถานประกอบการ: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'ผู้แทน: ซน ฮวีซอง (SON WHEESUNG)',
+        'ที่อยู่สถานประกอบการ: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'หมายเลขโทรศัพท์: +82 10-9926-0925',
         'ที่อยู่อีเมล: support@vivace-games.com',
         'เลขทะเบียนธุรกิจ: 749-25-02260',
-        'เลขจดแจ้งธุรกิจขายสินค้าทางอิเล็กทรอนิกส์: 2026-Ulsan Jung-gu-0170 (หน่วยงานที่รับจดแจ้ง: เขตจุง นครอุลซัน)',
+        'เลขจดแจ้งธุรกิจขายสินค้าทางอิเล็กทรอนิกส์: 2026-Gyeongbuk Gyeongju-0475 (หน่วยงานที่รับจดแจ้ง: ศาลาว่าการเมืองคย็องจู จังหวัดคย็องซังเหนือ)',
       ],
     },
     {

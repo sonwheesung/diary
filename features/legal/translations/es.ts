@@ -187,7 +187,7 @@ export const PRIVACY_ES: LegalDoc = {
       h: '11. Responsable de privacidad y departamento que recibe y atiende las solicitudes de acceso',
       body: [
         'El operador asume la responsabilidad general del tratamiento de datos personales y designa al siguiente responsable de privacidad para atender reclamaciones y remedios relacionados con dicho tratamiento.',
-        '• Responsable de privacidad: Son Hwi-seong (cargo: representante)',
+        '• Responsable de privacidad: SON WHEESUNG (cargo: representante)',
         '• Contacto: support@vivace-games.com',
         '• Departamento que recibe y atiende las solicitudes de acceso: el mismo',
         'Puedes dirigir al responsable de privacidad cualquier consulta, reclamación o solicitud de remedio en materia de privacidad que surja al usar el servicio. El operador responderá y actuará sin demora.',
@@ -344,7 +344,7 @@ export const DELETE_ACCOUNT_ES: LegalDoc = {
  */
 export const TERMS_ES: LegalDoc = {
   title: 'Condiciones de uso de Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -363,12 +363,12 @@ export const TERMS_ES: LegalDoc = {
       body: [
         'Razón social: Hwiseong Games (marca: Vivace Games Studio)',
         // ⚠ Es la grafía que ya usa `PRIVACY_ES` §11. Dos documentos no pueden nombrar distinto a la misma persona
-        'Representante: Son Hwi-seong',
-        'Domicilio del establecimiento: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Representante: SON WHEESUNG',
+        'Domicilio del establecimiento: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Teléfono: +82 10-9926-0925',
         'Correo electrónico: support@vivace-games.com',
         'Número de registro de la empresa: 749-25-02260',
-        'Número de registro como empresa de venta a distancia: 2026-Ulsan Jung-gu-0170 (organismo que recibió la declaración: Jung-gu, Ciudad Metropolitana de Ulsan)',
+        'Número de registro como empresa de venta a distancia: 2026-Gyeongbuk Gyeongju-0475 (organismo que recibió la declaración: Ayuntamiento de Gyeongju, Gyeongsangbuk-do)',
       ],
     },
     {

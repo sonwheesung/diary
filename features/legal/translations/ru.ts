@@ -350,7 +350,7 @@ export const DELETE_ACCOUNT_RU: LegalDoc = {
  */
 export const TERMS_RU: LegalDoc = {
   title: 'Условия использования Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -371,11 +371,11 @@ export const TERMS_RU: LegalDoc = {
         // ⚠ То же написание, что в `PRIVACY_RU`, раздел 11. Два документа не могут называть
         //   одного и того же человека по-разному.
         'Представитель: Сон Хвисон',
-        'Адрес места деятельности: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Адрес места деятельности: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Телефон: +82 10-9926-0925',
         'Адрес электронной почты: support@vivace-games.com',
         'Регистрационный номер предпринимателя: 749-25-02260',
-        'Номер уведомления о торговле дистанционным способом: 2026-Ulsan Jung-gu-0170 (орган, принявший уведомление: район Чунгу города Ульсан)',
+        'Номер уведомления о торговле дистанционным способом: 2026-Gyeongbuk Gyeongju-0475 (орган, принявший уведомление: мэрия города Кёнджу, провинция Кёнсан-Пукто)',
       ],
     },
     {

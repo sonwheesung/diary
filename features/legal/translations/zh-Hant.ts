@@ -330,7 +330,7 @@ export const DELETE_ACCOUNT_ZH_HANT: LegalDoc = {
  */
 export const TERMS_ZH_HANT: LegalDoc = {
   title: 'Jogak 使用條款',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -349,12 +349,12 @@ export const TERMS_ZH_HANT: LegalDoc = {
       body: [
         '商號：Hwiseong Games（品牌名 Vivace Games Studio）',
         // ⚠ 與 `PRIVACY_ZH_HANT` 第11條的寫法一致，並附上正式羅馬拼音
-        '代表人：孫輝星（Son Hwi-seong）',
-        '營業場所地址：204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        '代表人：孫輝星（SON WHEESUNG）',
+        '營業場所地址：401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         '電話號碼：+82 10-9926-0925',
         '電子郵件地址：support@vivace-games.com',
         '營業登記號碼：749-25-02260',
-        '通訊販賣業申報號碼：第2026-蔚山中區-0170號（受理申報的機關：蔚山廣域市中區）',
+        '通訊販賣業申報號碼：第2026-慶北慶州-0475號（受理申報的機關：慶尚北道慶州市廳）',
       ],
     },
     {

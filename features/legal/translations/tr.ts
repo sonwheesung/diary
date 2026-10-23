@@ -180,7 +180,7 @@ export const PRIVACY_TR: LegalDoc = {
       h: '11. Veri koruma sorumlusu ile erişim taleplerini alan ve işleyen birim',
       body: [
         'İşletmeci, kişisel verilerin işlenmesine ilişkin işlerin genel sorumluluğunu üstlenir ve kullanıcıların şikâyetleri ile zararın giderilmesi taleplerini karşılamak üzere aşağıdaki veri koruma sorumlusunu görevlendirir.',
-        '• Veri koruma sorumlusu: Son Hwi-seong (görevi: temsilci)',
+        '• Veri koruma sorumlusu: SON WHEESUNG (görevi: temsilci)',
         '• İletişim: support@vivace-games.com',
         '• Erişim taleplerini alan ve işleyen birim: yukarıdakiyle aynı',
         'Hizmeti kullanırken doğan her türlü veri koruma sorusunu, şikâyetini veya zararın giderilmesi talebini veri koruma sorumlusuna iletebilirsin. İşletmeci gecikmeksizin yanıtlar ve gereğini yapar.',
@@ -339,7 +339,7 @@ export const DELETE_ACCOUNT_TR: LegalDoc = {
  */
 export const TERMS_TR: LegalDoc = {
   title: 'Jogak Kullanım Koşulları',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -358,12 +358,12 @@ export const TERMS_TR: LegalDoc = {
       body: [
         'Unvan: Hwiseong Games (marka: Vivace Games Studio)',
         // ⚠ `PRIVACY_TR` 11. bölümde kullanılan yazım. İki belge aynı kişiyi farklı adlandıramaz.
-        'Temsilci: Son Hwi-seong',
-        'İşyeri adresi: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Temsilci: SON WHEESUNG',
+        'İşyeri adresi: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Telefon: +82 10-9926-0925',
         'E-posta adresi: support@vivace-games.com',
         'İşletme kayıt numarası: 749-25-02260',
-        'Mesafeli satış işletmesi bildirim numarası: 2026-Ulsan Jung-gu-0170 (bildirimi alan kurum: Ulsan Büyükşehir Jung-gu İlçesi)',
+        'Mesafeli satış işletmesi bildirim numarası: 2026-Gyeongbuk Gyeongju-0475 (bildirimi alan kurum: Gyeongsangbuk-do Gyeongju Belediyesi)',
       ],
     },
     {

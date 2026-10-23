@@ -191,7 +191,7 @@ export const PRIVACY_DE: LegalDoc = {
       h: '11. Datenschutzbeauftragte Person und Stelle für Auskunftsersuchen',
       body: [
         'Der Betreiber trägt die Gesamtverantwortung für die Verarbeitung personenbezogener Daten und benennt die folgende datenschutzbeauftragte Person zur Bearbeitung von Beschwerden und Abhilfeersuchen.',
-        '• Datenschutzbeauftragte Person: Son Hwi-seong (Funktion: Vertretungsberechtigter)',
+        '• Datenschutzbeauftragte Person: SON WHEESUNG (Funktion: Vertretungsberechtigter)',
         '• Kontakt: support@vivace-games.com',
         '• Stelle für Entgegennahme und Bearbeitung von Auskunftsersuchen: dieselbe',
         'Du kannst jede Frage, Beschwerde oder jedes Abhilfeersuchen zum Datenschutz, das bei der Nutzung des Dienstes entsteht, an die datenschutzbeauftragte Person richten. Der Betreiber antwortet und handelt unverzüglich.',
@@ -356,7 +356,7 @@ export const DELETE_ACCOUNT_DE: LegalDoc = {
  */
 export const TERMS_DE: LegalDoc = {
   title: 'Jogak Nutzungsbedingungen',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -376,12 +376,12 @@ export const TERMS_DE: LegalDoc = {
         'Firma: Hwiseong Games (Marke: Vivace Games Studio)',
         // ⚠ Dieselbe Schreibweise wie in `PRIVACY_DE` Abschnitt 11. Zwei Dokumente dürfen
         //   dieselbe Person nicht unterschiedlich benennen.
-        'Vertretungsberechtigter: Son Hwi-seong',
-        'Anschrift der Niederlassung: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Vertretungsberechtigter: SON WHEESUNG',
+        'Anschrift der Niederlassung: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Telefon: +82 10-9926-0925',
         'E-Mail-Adresse: support@vivace-games.com',
         'Handelsregisternummer: 749-25-02260',
-        'Anmeldenummer für das Fernabsatzgewerbe: 2026-Ulsan Jung-gu-0170 (Stelle, welche die Anmeldung entgegengenommen hat: Jung-gu, Metropolstadt Ulsan)',
+        'Anmeldenummer für das Fernabsatzgewerbe: 2026-Gyeongbuk Gyeongju-0475 (Stelle, welche die Anmeldung entgegengenommen hat: Stadt Gyeongju, Gyeongsangbuk-do)',
       ],
     },
     {

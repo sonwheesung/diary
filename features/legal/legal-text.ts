@@ -104,15 +104,15 @@ export const OPERATOR = {
   /** 스토어·웹 노출명. 법적 상호와 분리 운영한다 */
   brand: 'Vivace Games Studio',
   representative: '손휘성',
-  address: '울산광역시 중구 성안 5길 22, 2층 204호(성안동) (우) 44421',
-  addressEn: '204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+  address: '경상북도 경주시 원화로 345, 4층 401-9호(성동동) (우) 38138',
+  addressEn: '401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
   phone: '+82 10-9926-0925',
   /** 개인정보 보호책임자 연락처. 도메인 메일이 개인 gmail로 포워딩된다 */
   contactEmail: 'support@vivace-games.com',
   businessNumber: '749-25-02260',
   /** 전자상거래법 §13①3호는 신고번호 **와 신고를 받은 기관**을 함께 요구한다 */
-  mailOrderNumber: '제2026-울산중구-0170호',
-  mailOrderAuthority: '울산광역시 중구',
+  mailOrderNumber: '제2026-경북경주-0475호',
+  mailOrderAuthority: '경상북도 경주시청',
 } as const;
 
 export const PRIVACY: LegalDoc = {

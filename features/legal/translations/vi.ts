@@ -180,7 +180,7 @@ export const PRIVACY_VI: LegalDoc = {
       h: '11. Người phụ trách bảo vệ dữ liệu và bộ phận tiếp nhận yêu cầu truy cập',
       body: [
         'Nhà vận hành chịu trách nhiệm chung về công việc xử lý dữ liệu cá nhân và chỉ định người phụ trách sau để giải quyết khiếu nại và yêu cầu khắc phục của người dùng.',
-        '• Người phụ trách bảo vệ dữ liệu: Son Hwi-seong (chức vụ: người đại diện)',
+        '• Người phụ trách bảo vệ dữ liệu: SON WHEESUNG (chức vụ: người đại diện)',
         '• Liên hệ: support@vivace-games.com',
         '• Bộ phận tiếp nhận và xử lý yêu cầu truy cập: như trên',
         'Bạn có thể gửi tới người phụ trách mọi câu hỏi, khiếu nại hay yêu cầu khắc phục liên quan đến bảo vệ dữ liệu phát sinh khi dùng dịch vụ. Nhà vận hành sẽ trả lời và xử lý ngay.',
@@ -336,7 +336,7 @@ export const DELETE_ACCOUNT_VI: LegalDoc = {
  */
 export const TERMS_VI: LegalDoc = {
   title: 'Điều khoản sử dụng Jogak',
-  sourceFingerprint: '234878ab',
+  sourceFingerprint: '2c44222a',
   effective: '2026-09-14',
   updated: '2026-09-14',
   intro:
@@ -355,12 +355,12 @@ export const TERMS_VI: LegalDoc = {
       body: [
         'Tên doanh nghiệp: Hwiseong Games (tên thương hiệu Vivace Games Studio)',
         // ⚠ Đây là cách viết mà `PRIVACY_VI` mục 11 đang dùng. Hai tài liệu không được gọi cùng một người theo hai cách
-        'Người đại diện: Son Hwi-seong',
-        'Địa chỉ trụ sở kinh doanh: 204, 2F, 22 Seongan 5-gil, Jung-gu, Ulsan, 44421, Republic of Korea',
+        'Người đại diện: SON WHEESUNG',
+        'Địa chỉ trụ sở kinh doanh: 401-9, 4F, 345 Wonhwa-ro, Gyeongju-si, Gyeongsangbuk-do, 38138, Republic of Korea',
         'Số điện thoại: +82 10-9926-0925',
         'Địa chỉ thư điện tử: support@vivace-games.com',
         'Mã số đăng ký kinh doanh: 749-25-02260',
-        'Số đăng ký kinh doanh bán hàng qua phương tiện điện tử: 2026-Ulsan Jung-gu-0170 (cơ quan tiếp nhận đăng ký: Quận Jung, Thành phố Ulsan)',
+        'Số đăng ký kinh doanh bán hàng qua phương tiện điện tử: 2026-Gyeongbuk Gyeongju-0475 (cơ quan tiếp nhận đăng ký: Ủy ban thành phố Gyeongju, tỉnh Gyeongsangbuk)',
       ],
     },
     {
